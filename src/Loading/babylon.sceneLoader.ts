@@ -8,8 +8,8 @@
     export interface ISceneLoaderPlugin {
         name: string;
         extensions: string | ISceneLoaderPluginExtensions;
-        importMesh: (meshesNames: any, scene: Scene, data: any, rootUrl: string, meshes: AbstractMesh[], particleSystems: ParticleSystem[], skeletons: Skeleton[], onError: (message: string) => void) => boolean;
-        load: (scene: Scene, data: string, rootUrl: string, onError: (message: string) => void) => boolean;
+        importMesh: (meshesNames: any, scene: Scene, data: any, rootUrl: string, meshes: AbstractMesh[], particleSystems: ParticleSystem[], skeletons: Skeleton[], onError?: (message: string, exception?: any) => void) => boolean;
+        load: (scene: Scene, data: string, rootUrl: string, onError?: (message: string, exception?: any) => void) => boolean;
         canDirectLoad?: (data: string) => boolean;
     }
 
@@ -17,7 +17,7 @@
         name: string;
         extensions: string | ISceneLoaderPluginExtensions;
         importMeshAsync: (meshesNames: any, scene: Scene, data: any, rootUrl: string, onSuccess: (meshes: AbstractMesh[], particleSystems: ParticleSystem[], skeletons: Skeleton[]) => void, onProgress: (event: ProgressEvent) => void, onError: (message: string) => void) => void;
-        loadAsync: (scene: Scene, data: string, rootUrl: string, onSuccess: () => void, onProgress: (event: ProgressEvent) => void, onError: (message: string) => void) => void;
+        loadAsync: (scene: Scene, data: string, rootUrl: string, onSuccess: () => void, onProgress: (event: ProgressEvent) => void, onError: (message: string, exception?: any) => void) => void;
         canDirectLoad?: (data: string) => boolean;
     }
 
@@ -80,7 +80,7 @@
 
         public static set CleanBoneMatrixWeights(value: boolean) {
             SceneLoader._CleanBoneMatrixWeights = value;
-        }        
+        }
 
         // Members
         public static OnPluginActivatedObservable = new Observable<ISceneLoaderPlugin | ISceneLoaderPluginAsync>();
@@ -234,7 +234,7 @@
 
             var errorHandler = (message?: string, exception?: any) => {
                 if (onError) {
-                    onError(scene, "Unable to import meshes from " + rootUrl + sceneFilename + (message ? ": " + message : ""));
+                    onError(scene, "Unable to import meshes from " + rootUrl + sceneFilename + (message ? ": " + message : ""), exception);
                 }
                 scene._removePendingData(loadingToken);
             };
@@ -311,7 +311,7 @@
 
             var errorHandler = (message?: string, exception?: any) => {
                 if (onError) {
-                    onError(scene, "Unable to load from " + rootUrl + sceneFilename + (message ? ": " + message : ""));
+                    onError(scene, "Unable to load from " + rootUrl + sceneFilename + (message ? ": " + message : ""), exception);
                 }
                 scene._removePendingData(loadingToken);
                 scene.getEngine().hideLoadingUI();
@@ -342,7 +342,7 @@
                         if (onSuccess) {
                             onSuccess(scene);
                         }
-                        
+
                         scene.loadingPluginName = plugin.name;
                         scene._removePendingData(loadingToken);
                     }, progressHandler, errorHandler);
