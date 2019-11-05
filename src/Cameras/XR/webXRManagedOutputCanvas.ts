@@ -68,7 +68,7 @@ export class WebXRManagedOutputCanvas implements WebXRRenderTarget {
         // support canvases without makeXRCompatible
         if (!(this.canvasContext as any).makeXRCompatible) {
             this.xrLayer = createLayer();
-            return Promise.resolve(true);
+            return Promise.resolve(this.xrLayer);
         }
 
         return (this.canvasContext as any).makeXRCompatible().then(() => {

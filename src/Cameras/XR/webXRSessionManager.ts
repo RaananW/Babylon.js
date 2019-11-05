@@ -88,7 +88,7 @@ export class WebXRSessionManager implements IDisposable {
      * @returns a promise which will resolve once the session has been initialized
      */
     public initializeSessionAsync(xrSessionMode: XRSessionMode, optionalFeatures: any = {}) {
-        return this._xrNavigator.xr.requestSession(xrSessionMode, optionalFeatures).then((session: XRSession) => {
+        return this._xrNavigator.xr.requestSession(xrSessionMode).then((session: XRSession) => {
             this.session = session;
             this._sessionEnded = false;
 

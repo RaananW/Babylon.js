@@ -5,6 +5,8 @@ import { FreeCamera } from "../../Cameras/freeCamera";
 import { TargetCamera } from "../../Cameras/targetCamera";
 import { WebXRSessionManager } from "./webXRSessionManager";
 import { Viewport } from '../../Maths/math.viewport';
+import { Logger } from '../../Misc/logger';
+import { VRMultiviewToSingleviewPostProcess } from '../../PostProcesses/vrMultiviewToSingleviewPostProcess';
 
 /**
  * WebXR Camera which holds the views for the xrSession
@@ -47,6 +49,16 @@ export class WebXRCamera extends FreeCamera {
             if (removedCamera) {
                 removedCamera.dispose();
             }
+        }
+    }
+
+    public enableMultiview() {
+        if (!this.getScene().getEngine().getCaps().multiview) {
+            Logger.Warn("Multiview is not supported, falling back to standard rendering");
+            this._useMultiviewToSingleView = false;
+        } else {
+            this._useMultiviewToSingleView = true;
+            this._rigPostProcess = new VRMultiviewToSingleviewPostProcess("VRMultiviewToSingleview", this, 1.0);
         }
     }
 
