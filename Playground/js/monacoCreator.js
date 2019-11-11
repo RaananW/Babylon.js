@@ -6,6 +6,8 @@ class MonacoCreator {
         this.parent = parent;
         
         this.jsEditor = null;
+        this.diffEditor = null;
+        this.diffNavigator = null;
         this.monacoMode = "javascript";
         this.blockEditorChange = false;
 
@@ -58,27 +60,8 @@ class MonacoCreator {
                 if (xhr.status === 200) {
                     require.config({ paths: { 'vs': 'node_modules/monaco-editor/min/vs' } });
                     require(['vs/editor/editor.main'], function () {
-                        const typescript = monaco.languages.typescript;
-
-                        if (this.monacoMode === "javascript") {
-                            typescript.javascriptDefaults.setCompilerOptions({
-                                noLib: false,
-                                allowNonTsExtensions: true // required to prevent Uncaught Error: Could not find file: 'inmemory://model/1'.
-                            });
-
-                            typescript.javascriptDefaults.addExtraLib(xhr.responseText, 'babylon.d.ts');
-                        } else {
-                            typescript.typescriptDefaults.setCompilerOptions({
-                                module: typescript.ModuleKind.AMD,
-                                target: typescript.ScriptTarget.ES6,
-                                noLib: false,
-                                noResolve: true,
-                                suppressOutputPathCheck: true,
-
-                                allowNonTsExtensions: true // required to prevent Uncaught Error: Could not find file: 'inmemory://model/1'.
-                            });
-                            typescript.typescriptDefaults.addExtraLib(xhr.responseText, 'babylon.d.ts');
-                        }
+                        this.setupMonacoCompilationPipeline(xhr.responseText);
+                        this.setupMonacoColorProvider();
 
                         this.parent.main.run();
                     }.bind(this));
@@ -88,38 +71,31 @@ class MonacoCreator {
         xhr.send(null);
     };
 
-    /**
-     * Function to (re)create the editor
-     */
-    createMonacoEditor() {
-        var oldCode = "";
-        if (this.jsEditor) {
-            oldCode = this.jsEditor.getValue();
-            this.jsEditor.dispose();
+    setupMonacoCompilationPipeline(libContent) {
+        const typescript = monaco.languages.typescript;
+
+        if (this.monacoMode === "javascript") {
+            typescript.javascriptDefaults.setCompilerOptions({
+                noLib: false,
+                allowNonTsExtensions: true // required to prevent Uncaught Error: Could not find file: 'inmemory://model/1'.
+            });
+
+            typescript.javascriptDefaults.addExtraLib(libContent, 'babylon.d.ts');
+        } else {
+            typescript.typescriptDefaults.setCompilerOptions({
+                module: typescript.ModuleKind.AMD,
+                target: typescript.ScriptTarget.ES5,
+                noLib: false,
+                noResolve: true,
+                suppressOutputPathCheck: true,
+
+                allowNonTsExtensions: true // required to prevent Uncaught Error: Could not find file: 'inmemory://model/1'.
+            });
+            typescript.typescriptDefaults.addExtraLib(libContent, 'babylon.d.ts');
         }
+    }
 
-        var editorOptions = {
-            value: "",
-            language: this.monacoMode,
-            lineNumbers: true,
-            tabSize: "auto",
-            insertSpaces: "auto",
-            roundedSelection: true,
-            automaticLayout: true,
-            scrollBeyondLastLine: false,
-            readOnly: false,
-            theme: this.parent.settingsPG.vsTheme,
-            contextmenu: false,
-            folding: true,
-            showFoldingControls: "always",
-            renderIndentGuides: true,
-            minimap: {
-                enabled: true
-            }
-        };
-        editorOptions.minimap.enabled = document.getElementById("minimapToggle1280").classList.contains('checked');
-        this.jsEditor = monaco.editor.create(document.getElementById('jsEditor'), editorOptions);
-
+    setupMonacoColorProvider() {
         monaco.languages.registerColorProvider(this.monacoMode, {
             provideColorPresentations: (model, colorInfo) => {
                 const color = colorInfo.color;
@@ -161,6 +137,39 @@ class MonacoCreator {
                 }));
             }
         });
+    }
+
+    /**
+     * Function to (re)create the editor
+     */
+    createMonacoEditor() {
+        var oldCode = "";
+        if (this.jsEditor) {
+            oldCode = this.jsEditor.getValue();
+            this.jsEditor.dispose();
+        }
+
+        var editorOptions = {
+            value: "",
+            language: this.monacoMode,
+            lineNumbers: true,
+            tabSize: "auto",
+            insertSpaces: "auto",
+            roundedSelection: true,
+            automaticLayout: true,
+            scrollBeyondLastLine: false,
+            readOnly: false,
+            theme: this.parent.settingsPG.vsTheme,
+            contextmenu: false,
+            folding: true,
+            showFoldingControls: "always",
+            renderIndentGuides: true,
+            minimap: {
+                enabled: true
+            }
+        };
+        editorOptions.minimap.enabled = document.getElementById("minimapToggle1280").classList.contains('checked');
+        this.jsEditor = monaco.editor.create(document.getElementById('jsEditor'), editorOptions);
 
         this.jsEditor.setValue(oldCode);
         this.jsEditor.onKeyUp(function () {
@@ -184,23 +193,47 @@ class MonacoCreator {
             contextmenu: false,
             fontSize: this.parent.settingsPG.fontSize
         }
-       
-        const diffEditor = monaco.editor.createDiffEditor(diffView, diffOptions);
-        diffEditor.setModel({
+
+        this.diffEditor = monaco.editor.createDiffEditor(diffView, diffOptions);
+        this.diffEditor.setModel({
             original: leftModel,
             modified: rightModel
         });
 
-        const cleanup = function() {
-            diffView.style.display = "none";
-            // We need to properly dispose, else the monaco script editor will use those models in the editor compilation pipeline!
-            leftModel.dispose();
-            rightModel.dispose();
-            diffEditor.dispose();
-        }
+        this.diffNavigator = monaco.editor.createDiffNavigator(this.diffEditor, {
+            followsCaret: true,
+            ignoreCharChanges: true
+        });
+        
+        const menuPG = this.parent.menuPG;
+        const main = this.parent.main;
+        const monacoCreator = this;
 
-        diffEditor.addCommand(monaco.KeyCode.Escape, cleanup);
-        diffEditor.focus();
+        this.diffEditor.addCommand(monaco.KeyCode.Escape, function() { main.toggleDiffEditor(monacoCreator, menuPG); });
+        // Adding default VSCode bindinds for previous/next difference
+        this.diffEditor.addCommand(monaco.KeyMod.Alt | monaco.KeyCode.F5, function() { main.navigateToNext(); });
+        this.diffEditor.addCommand(monaco.KeyMod.Shift | monaco.KeyMod.Alt | monaco.KeyCode.F5, function() { main.navigateToPrevious(); });
+
+        this.diffEditor.focus();
+    }
+
+    disposeDiff() {
+        if (!this.diffEditor)
+            return;
+
+        // We need to properly dispose, else the monaco script editor will use those models in the editor compilation pipeline!
+        let model = this.diffEditor.getModel();
+        let leftModel = model.original;
+        let rightModel = model.modified;
+        
+        leftModel.dispose();
+        rightModel.dispose();
+
+        this.diffNavigator.dispose();
+        this.diffEditor.dispose();
+
+        this.diffNavigator = null;
+        this.diffEditor = null;
     }
 
     /**
