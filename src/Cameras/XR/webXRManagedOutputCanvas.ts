@@ -46,6 +46,12 @@ export class WebXRManagedOutputCanvas implements WebXRRenderTarget {
     private _canvas: Nullable<HTMLCanvasElement> = null;
 
     /**
+     * WebXR canvas options used on this render target.
+     * This is a readonly variable that cannot be altered.
+     */
+    readonly canvasOptions?: XRWebGLLayerOptions;
+
+    /**
      * xrpresent context of the canvas which can be used to display/mirror xr content
      */
     public canvasContext: WebGLRenderingContext;
@@ -62,7 +68,8 @@ export class WebXRManagedOutputCanvas implements WebXRRenderTarget {
     public initializeXRLayerAsync(xrSession: any) {
 
         const createLayer = () => {
-            return this.xrLayer = new XRWebGLLayer(xrSession, this.canvasContext, this.configuration.canvasOptions);
+            this.xrLayer = new XRWebGLLayer(xrSession, this.canvasContext, this.configuration.canvasOptions);
+            return this.xrLayer;
         };
 
         // support canvases without makeXRCompatible
@@ -84,8 +91,10 @@ export class WebXRManagedOutputCanvas implements WebXRRenderTarget {
      * @param onStateChangedObservable the mechanism by which the canvas will be added/removed based on XR state
      * @param configuration optional configuration for this canvas output. defaults will be used if not provided
      */
-    constructor(engine: ThinEngine, canvas?: HTMLCanvasElement, onStateChangedObservable?: Observable<WebXRState>, private configuration: WebXRManagedOutputCanvasOptions = WebXRManagedOutputCanvasOptions.GetDefaults()) {
+    constructor(engine: ThinEngine, canvas?: HTMLCanvasElement, onStateChangedObservable?: Observable<WebXRState>, private readonly configuration: WebXRManagedOutputCanvasOptions = WebXRManagedOutputCanvasOptions.GetDefaults()) {
         this._engine = engine;
+        // make sure the canvas configuration object is exposed
+        this.canvasOptions = this.configuration.canvasOptions;
         if (!canvas) {
             canvas = document.createElement('canvas');
             canvas.style.cssText = this.configuration.newCanvasCssStyle || "position:absolute; bottom:0px;right:0px;";

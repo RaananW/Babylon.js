@@ -27,6 +27,12 @@ export enum WebXRState {
  * Abstraction of the XR render target
  */
 export interface WebXRRenderTarget extends IDisposable {
+
+    /**
+     * WebXR canvas options used on this render target.
+     * This is a readonly variable that cannot be altered.
+     */
+    readonly canvasOptions?: XRWebGLLayerOptions;
     /**
      * xrpresent context of the canvas which can be used to display/mirror xr content
      */

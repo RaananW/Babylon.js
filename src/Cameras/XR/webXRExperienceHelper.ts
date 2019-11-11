@@ -104,7 +104,10 @@ export class WebXRExperienceHelper implements IDisposable {
         return this.sessionManager.initializeSessionAsync(sessionMode, sessionCreationOptions).then(() => {
             return this.sessionManager.setReferenceSpaceAsync(referenceSpaceType);
         }).then(() => {
-            return renderTarget.initializeXRLayerAsync(this.sessionManager.session);
+            renderTarget.initializeXRLayerAsync(this.sessionManager.session);
+            if (renderTarget.canvasOptions && renderTarget.canvasOptions.multiview) {
+                this.camera.enableMultiview();
+            }
         }).then(() => {
             return this.sessionManager.updateRenderStateAsync({ depthFar: this.camera.maxZ, depthNear: this.camera.minZ, baseLayer: renderTarget.xrLayer! });
         }).then(() => {
