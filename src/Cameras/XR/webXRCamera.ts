@@ -57,6 +57,7 @@ export class WebXRCamera extends FreeCamera {
             Logger.Warn("Multiview is not supported, falling back to standard rendering");
             this._useMultiviewToSingleView = false;
         } else {
+            this._updateNumberOfRigCameras(2);
             this._useMultiviewToSingleView = true;
             this._rigPostProcess = new VRMultiviewToSingleviewPostProcess("VRMultiviewToSingleview", this, 1.0);
         }
@@ -104,6 +105,8 @@ export class WebXRCamera extends FreeCamera {
         this._updateNumberOfRigCameras(pose.views.length);
         pose.views.forEach((view: any, i: number) => {
             const currentRig = <TargetCamera>this.rigCameras[i];
+            currentRig._isLeftCamera = view.eye === "left";
+            currentRig._isRightCamera = view.eye === "right";
             // Update view/projection matrix
             if (view.transform.position && view.transform.orientation) {
                 currentRig.position.copyFrom(view.transform.position);

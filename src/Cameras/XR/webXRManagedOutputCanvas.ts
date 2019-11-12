@@ -127,9 +127,9 @@ export class WebXRManagedOutputCanvas implements WebXRRenderTarget {
             (this.canvasContext as any) = null;
         } else {
             this._canvas = canvas;
-            this.canvasContext = <any>this._canvas.getContext('webgl');
+            this.canvasContext = <any>this._canvas.getContext('webgl2');
             if (!this.canvasContext) {
-                this.canvasContext = <any>this._canvas.getContext('webgl2');
+                this.canvasContext = <any>this._canvas.getContext('webgl');
             }
         }
     }
