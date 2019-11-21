@@ -108,6 +108,9 @@ export class WebXRExperienceHelper implements IDisposable {
         }).then(() => {
             return this.sessionManager.updateRenderStateAsync({ depthFar: this.camera.maxZ, depthNear: this.camera.minZ, baseLayer: renderTarget.xrLayer! });
         }).then(() => {
+            if (renderTarget.canvasOptions && renderTarget.canvasOptions.multiview) {
+                this.camera.enableMultiview();
+            }
             return this.sessionManager.startRenderingToXRAsync();
         }).then(() => {
             // Cache pre xr scene settings
@@ -117,9 +120,6 @@ export class WebXRExperienceHelper implements IDisposable {
             // Overwrite current scene settings
             this.scene.autoClear = false;
             this.scene.activeCamera = this.camera;
-            if (renderTarget.canvasOptions && renderTarget.canvasOptions.multiview) {
-                this.camera.enableMultiview();
-            }
 
             this.sessionManager.onXRFrameObservable.add(() => {
                 this.camera.updateFromXRSessionManager(this.sessionManager);

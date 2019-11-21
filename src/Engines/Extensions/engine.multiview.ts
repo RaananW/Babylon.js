@@ -15,9 +15,10 @@ declare module "../../Engines/engine" {
          * Creates a new multiview render target
          * @param width defines the width of the texture
          * @param height defines the height of the texture
+         * @param framebuffer an optional framebuffer. if not provided, a new one will be created.
          * @returns the created multiview texture
          */
-        createMultiviewRenderTargetTexture(width: number, height: number): InternalTexture;
+        createMultiviewRenderTargetTexture(width: number, height: number, framebuffer?: WebGLFramebuffer): InternalTexture;
 
         /**
          * Binds a multiview framebuffer to be drawn to
@@ -27,7 +28,7 @@ declare module "../../Engines/engine" {
     }
 }
 
-Engine.prototype.createMultiviewRenderTargetTexture = function(width: number, height: number) {
+Engine.prototype.createMultiviewRenderTargetTexture = function(width: number, height: number, framebuffer?: WebGLFramebuffer) {
     var gl = this._gl;
 
     if (!this.getCaps().multiview) {
@@ -37,7 +38,7 @@ Engine.prototype.createMultiviewRenderTargetTexture = function(width: number, he
     var internalTexture = new InternalTexture(this, InternalTextureSource.Unknown, true);
     internalTexture.width = width;
     internalTexture.height = height;
-    internalTexture._framebuffer = gl.createFramebuffer();
+    internalTexture._framebuffer = framebuffer || gl.createFramebuffer();
 
     internalTexture._colorTextureArray = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D_ARRAY, internalTexture._colorTextureArray);

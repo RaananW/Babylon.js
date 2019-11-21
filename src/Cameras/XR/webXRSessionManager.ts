@@ -23,6 +23,40 @@ class RenderTargetProvider implements IRenderTargetProvider {
     }
 }
 
+class WebXRMultiviewRenderTarget extends RenderTargetTexture {
+    /**
+     * Creates a multiview render target
+     * @param scene scene used with the render target
+     * @param size the size of the render target (used for each view)
+     */
+    constructor(scene: Scene, baseLayer: XRWebGLLayer) {
+        const size = { width: baseLayer.framebufferWidth, height: baseLayer.framebufferHeight };
+        super("webxr multiview rtt", size, scene, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true);
+        var internalTexture = scene.getEngine().createMultiviewRenderTargetTexture(size.width, size.height, baseLayer.framebuffer);
+        internalTexture.isMultiview = true;
+        this._texture = internalTexture;
+        this.samples = this._engine.getCaps().maxSamples || this.samples;
+    }
+
+    /**
+     * @hidden
+     * @param faceIndex the face index, if its a cube texture
+     */
+    public _bindFrameBuffer(faceIndex: number = 0) {
+        if (!this._texture) {
+            return;
+        }
+        this.getScene()!.getEngine().bindMultiviewFramebuffer(this._texture);
+    }
+
+    /**
+     * Gets the number of views the corresponding to the texture (eg. a MultiviewRenderTarget will have > 1)
+     * @returns the view count
+     */
+    public getViewCount() {
+        return 2;
+    }
+}
 /**
  * Manages an XRSession to work with Babylon's engine
  * @see https://doc.babylonjs.com/how_to/webxr
@@ -55,6 +89,7 @@ export class WebXRSessionManager implements IDisposable {
     private _xrNavigator: any;
     private baseLayer: Nullable<XRWebGLLayer> = null;
     private _rttProvider: Nullable<IRenderTargetProvider>;
+    private _renderTarget: WebXRRenderTarget;
 
     private _sessionEnded: boolean = false;
 
@@ -152,7 +187,7 @@ export class WebXRSessionManager implements IDisposable {
         // Tell the engine's render loop to be driven by the xr session's refresh rate and provide xr pose information
         this.scene.getEngine().customAnimationFrameRequester = {
             requestAnimationFrame: this.session.requestAnimationFrame.bind(this.session),
-            renderFunction: (timestamp: number, xrFrame: Nullable<XRFrame>) => {
+            renderFunction: (_timestamp: number, xrFrame: Nullable<XRFrame>) => {
                 if (this._sessionEnded) {
                     return;
                 }
@@ -169,7 +204,15 @@ export class WebXRSessionManager implements IDisposable {
             });
         } else {
             // Create render target texture from xr's webgl render target
-            this._rttProvider = new RenderTargetProvider(WebXRSessionManager._CreateRenderTargetTextureFromSession(this.session, this.scene, this.baseLayer!));
+            let texture : RenderTargetTexture;
+            // multiview?
+            if (this._renderTarget && this._renderTarget.canvasOptions && this._renderTarget.canvasOptions.multiview) {
+                texture = new WebXRMultiviewRenderTarget(this.scene, this.baseLayer!);
+            } else {
+                texture = WebXRSessionManager._CreateRenderTargetTextureFromSession(this.session, this.scene, this.baseLayer!);
+            }
+
+            this._rttProvider = new RenderTargetProvider(texture);
         }
 
         // Stop window's animation frame and trigger sessions animation frame
@@ -229,15 +272,22 @@ export class WebXRSessionManager implements IDisposable {
      * Creates a WebXRRenderTarget object for the XR session
      * @param onStateChangedObservable optional, mechanism for enabling/disabling XR rendering canvas, used only on Web
      * @param options optional options to provide when creating a new render target
+     * @param force force the creation of a new render target, if one already exists
      * @returns a WebXR render target to which the session can render
      */
-    public getWebXRRenderTarget(onStateChangedObservable?: Observable<WebXRState>, options?: WebXRManagedOutputCanvasOptions): WebXRRenderTarget {
+    public getWebXRRenderTarget(onStateChangedObservable?: Observable<WebXRState>, options?: WebXRManagedOutputCanvasOptions, force?: boolean): WebXRRenderTarget {
+        if (!force && this._renderTarget) {
+            // if not force to recreate, and already exists, return the existing renderTarget
+            return this._renderTarget;
+        }
         if (this._xrNavigator.xr.native) {
-            return this._xrNavigator.xr.getWebXRRenderTarget(this.scene.getEngine());
+            this._renderTarget = this._xrNavigator.xr.getWebXRRenderTarget(this.scene.getEngine());
         }
         else {
-            return new WebXRManagedOutputCanvas(this.scene.getEngine(), this.scene.getEngine().getRenderingCanvas() as HTMLCanvasElement, onStateChangedObservable!, options);
+            this._renderTarget = new WebXRManagedOutputCanvas(this.scene.getEngine(), this.scene.getEngine().getRenderingCanvas() as HTMLCanvasElement, onStateChangedObservable!, options);
         }
+
+        return this._renderTarget;
     }
 
     /**
@@ -245,8 +295,10 @@ export class WebXRSessionManager implements IDisposable {
      * Converts the render layer of xrSession to a render target
      * @param session session to create render target for
      * @param scene scene the new render target should be created for
+     * @param baseLayer the WebXR GL Layer to be used
+     * @return renderTargetTexture related to this webxr session
      */
-    public static _CreateRenderTargetTextureFromSession(session: XRSession, scene: Scene, baseLayer: XRWebGLLayer) {
+    public static _CreateRenderTargetTextureFromSession(session: XRSession, scene: Scene, baseLayer: XRWebGLLayer) : RenderTargetTexture {
         if (!baseLayer) {
             throw "no layer";
         }
