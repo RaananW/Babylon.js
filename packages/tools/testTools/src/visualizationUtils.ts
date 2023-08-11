@@ -212,6 +212,7 @@ export const evaluateRenderSceneForVisualization = async (renderCount: number) =
         }
         BABYLON.SceneLoader.ShowLoadingScreen = false;
         window.scene.useConstantAnimationDeltaTime = true;
+        BABYLON.Tools.PerformanceLogLevel = 2;
 
         window.scene.executeWhenReady(function () {
             console.log("Scene is ready", performance.now() - n);
