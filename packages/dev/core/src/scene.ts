@@ -4529,6 +4529,7 @@ export class Scene extends AbstractScene implements IAnimatable, IClipPlanesHold
      * @param ignoreAnimations defines a boolean indicating if animations should not be executed (false by default)
      */
     public render(updateCameras = true, ignoreAnimations = false): void {
+        Tools.StartPerformanceCounter("Init");
         if (this.isDisposed) {
             return;
         }
@@ -4553,18 +4554,23 @@ export class Scene extends AbstractScene implements IAnimatable, IClipPlanesHold
         this._activeBones.fetchNewFrame();
         this._meshesForIntersections.reset();
         this.resetCachedMaterial();
+        Tools.EndPerformanceCounter("Init");
 
         this.onBeforeAnimationsObservable.notifyObservers(this);
 
         // Actions
+        Tools.StartPerformanceCounter("actions");
         if (this.actionManager) {
             this.actionManager.processTrigger(Constants.ACTION_OnEveryFrameTrigger);
         }
+        Tools.EndPerformanceCounter("actions");
 
+        Tools.StartPerformanceCounter("Animations");
         // Animations
         if (!ignoreAnimations) {
             this.animate();
         }
+        Tools.EndPerformanceCounter("Animations");
 
         // Before camera update steps
         for (const step of this._beforeCameraUpdateStage) {
@@ -4572,6 +4578,7 @@ export class Scene extends AbstractScene implements IAnimatable, IClipPlanesHold
         }
 
         // Update Cameras
+        Tools.StartPerformanceCounter("update cameras");
         if (updateCameras) {
             if (this.activeCameras && this.activeCameras.length > 0) {
                 for (let cameraIndex = 0; cameraIndex < this.activeCameras.length; cameraIndex++) {
@@ -4594,9 +4601,12 @@ export class Scene extends AbstractScene implements IAnimatable, IClipPlanesHold
                 }
             }
         }
+        Tools.EndPerformanceCounter("update cameras");
 
         // Before render
+        Tools.StartPerformanceCounter("onBeforeRenderObservable");
         this.onBeforeRenderObservable.notifyObservers(this);
+        Tools.EndPerformanceCounter("onBeforeRenderObservable");
 
         const engine = this.getEngine();
 
@@ -4635,10 +4645,12 @@ export class Scene extends AbstractScene implements IAnimatable, IClipPlanesHold
         this._engine.currentRenderPassId = currentActiveCamera?.renderPassId ?? Constants.RENDERPASS_MAIN;
 
         // Restore back buffer
+        Tools.StartPerformanceCounter("restore back buffer");
         this.activeCamera = currentActiveCamera;
         if (this._activeCamera && this._activeCamera.cameraRigMode !== Constants.RIG_MODE_CUSTOM && !this.prePass) {
             this._bindFrameBuffer(this._activeCamera, false);
         }
+        Tools.EndPerformanceCounter("restore back buffer");
         this.onAfterRenderTargetsRenderObservable.notifyObservers(this);
 
         for (const step of this._beforeClearStage) {
@@ -4646,7 +4658,9 @@ export class Scene extends AbstractScene implements IAnimatable, IClipPlanesHold
         }
 
         // Clear
+        Tools.StartPerformanceCounter("clear");
         this._clearFrameBuffer(this.activeCamera);
+        Tools.EndPerformanceCounter("clear");
 
         // Collects render targets from external components.
         for (const step of this._gatherRenderTargetsStage) {
@@ -4654,6 +4668,7 @@ export class Scene extends AbstractScene implements IAnimatable, IClipPlanesHold
         }
 
         // Multi-cameras?
+        Tools.StartPerformanceCounter("camera render");
         if (this.activeCameras && this.activeCameras.length > 0) {
             for (let cameraIndex = 0; cameraIndex < this.activeCameras.length; cameraIndex++) {
                 this._processSubCameras(this.activeCameras[cameraIndex], cameraIndex > 0);
@@ -4665,7 +4680,9 @@ export class Scene extends AbstractScene implements IAnimatable, IClipPlanesHold
 
             this._processSubCameras(this.activeCamera, !!this.activeCamera.outputRenderTarget);
         }
+        Tools.EndPerformanceCounter("camera render");
 
+        Tools.StartPerformanceCounter("the rest");
         // Intersection checks
         this._checkIntersections();
 
@@ -4702,6 +4719,7 @@ export class Scene extends AbstractScene implements IAnimatable, IClipPlanesHold
         this._activeParticles.addCount(0, true);
 
         this._engine.restoreDefaultFramebuffer();
+        Tools.EndPerformanceCounter("the rest");
     }
 
     /**
