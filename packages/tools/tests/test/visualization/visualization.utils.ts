@@ -150,10 +150,15 @@ export const evaluateTests = async (engineType = "webgl2", testFileName = "confi
         .each(tests)(
         "$title",
         async (test) => {
+            const n = performance.now();
             log(`Running - ${test.title}`);
             try {
+                let nn = performance.now();
                 // set the screenshot fail rate
                 expect(await page.evaluate(evaluatePrepareScene, test, getGlobalConfig({ root: config.root }))).toBeTruthy();
+
+                console.log(`Scene prepared in ${performance.now() - nn}ms`);
+                nn = performance.now();
 
                 const renderCount = /*getGlobalConfig().qs && getGlobalConfig().qs.checkresourcecreation ? 50 : */ test.renderCount || 1;
 
@@ -165,8 +170,13 @@ export const evaluateTests = async (engineType = "webgl2", testFileName = "confi
                     const glError = await page.evaluate(evaluateIsGLError);
                     expect(glError).toBe(false);
                 }
+                console.log(`Scene rendered in ${performance.now() - nn}ms`);
+                nn = performance.now();
                 // Take screenshot
                 const screenshot = await page.screenshot();
+
+                console.log(`Screenshot taken in ${performance.now() - nn}ms`);
+                nn = performance.now();
 
                 const directory = path.resolve(__dirname, "../../../../../jest-screenshot-report");
 
@@ -181,11 +191,13 @@ export const evaluateTests = async (engineType = "webgl2", testFileName = "confi
                     failureThresholdType: "percent",
                     customDiffDir: directory,
                 });
+                log(`Screenshot matching in ${performance.now() - nn}ms`);
             } finally {
                 // dispose the scene
                 const disposeResult = await page.evaluate(evaluateDisposeSceneForVisualization, engineFlags);
                 expect(disposeResult).toBe(true);
             }
+            log(`Finished - ${test.title} in ${performance.now() - n}ms`);
         },
         debug ? 1000000 : 40000
     );
