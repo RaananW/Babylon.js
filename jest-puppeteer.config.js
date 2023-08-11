@@ -12,6 +12,7 @@ const headless = process.env.HEADLESS === "true";
 const browser = process.env.BROWSER || "chrome";
 const gpuType = process.env.TEST_GPU || ""; // egl, desktop or nothing
 const customFlags = process.env.CUSTOM_FLAGS ? process.env.CUSTOM_FLAGS.split(" ") : [];
+const customDisableFlags = process.env.CUSTOM_DISABLE_FLAGS ? process.env.CUSTOM_DISABLE_FLAGS.split(" ") : false;
 const browserPath = process.env.BROWSER_PATH || "";
 // for linux and WebGPU make sure to enable the following flags:
 // --enable-unsafe-webgpu --enable-features=Vulkan,UseSkiaRenderer
@@ -43,6 +44,7 @@ module.exports = {
         // channel: "chrome-canary",
         args: browser === "chrome" ? chromeFlags : firefoxFlags, // additional arguments for Chrome
         executablePath: browserPath,
+        ignoreDefaultArgs: customDisableFlags
     },
     browserContext: process.env.BROWSER_CONTEXT || "default", // "incognito" or "default"
 };
