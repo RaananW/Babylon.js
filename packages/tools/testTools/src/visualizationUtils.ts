@@ -206,6 +206,7 @@ export const evaluatePrepareScene = async (
 
 export const evaluateRenderSceneForVisualization = async (renderCount: number) => {
     return new Promise((resolve) => {
+        let n = performance.now();
         if (!window.scene || !window.engine) {
             return resolve(false);
         }
@@ -213,6 +214,8 @@ export const evaluateRenderSceneForVisualization = async (renderCount: number) =
         window.scene.useConstantAnimationDeltaTime = true;
 
         window.scene.executeWhenReady(function () {
+            console.log("Scene is ready", performance.now() - n);
+            const renderTimes: number[] = [];
             if (!window.scene || !window.engine) {
                 return resolve(false);
             }
@@ -229,13 +232,16 @@ export const evaluateRenderSceneForVisualization = async (renderCount: number) =
                     if (renderCount <= 0 && renderAfterGuiIsReadyCount <= 0) {
                         if (window.scene!.isReady()) {
                             window.engine && window.engine.stopRenderLoop();
+                            console.log("Scene is ready after rendering is done", renderTimes);
                             return resolve(true);
                         } else {
                             console.error("Scene is not ready after rendering is done");
                             return resolve(false);
                         }
                     } else {
+                        n = performance.now();
                         window.scene && window.scene.render();
+                        renderTimes.push(performance.now() - n);
                         renderCount--;
                         if (adtsAreReady()) {
                             renderAfterGuiIsReadyCount--;
