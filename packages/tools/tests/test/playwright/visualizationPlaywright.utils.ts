@@ -276,7 +276,9 @@ export const evaluatePrepareScene = async ({
             sceneMetadata.playgroundId += "#0";
         }
 
-        console.log("Loading scene from PG: " + sceneMetadata.playgroundId);
+        let time = Date.now();
+
+        console.log(Date.now() - time, "Loading scene from PG: " + sceneMetadata.playgroundId);
 
         const retryTime = 200;
         const maxRetry = 2;
@@ -303,7 +305,7 @@ export const evaluatePrepareScene = async ({
                 }
             }
 
-            console.log("Running code from PG: " + sceneMetadata.playgroundId);
+            console.log(Date.now() - time, "Running code from PG: " + sceneMetadata.playgroundId);
 
             const loadedScene = eval(code + "\ncreateScene(engine)");
 
@@ -319,11 +321,11 @@ export const evaluatePrepareScene = async ({
             try {
                 await runSnippet();
             } catch (e) {
-                console.error("Error loading scene from PG: " + sceneMetadata.playgroundId);
+                console.error(Date.now() - time, "Error loading scene from PG: " + sceneMetadata.playgroundId);
                 if (retry < maxRetry) {
                     retry++;
                     // wait for retryTime
-                    console.log("Retrying in " + retryTime + "ms");
+                    console.log(Date.now() - time, "Retrying in " + retryTime + "ms");
                     await new Promise((resolve) => setTimeout(resolve, retryTime));
                     await run();
                 } else {
@@ -371,10 +373,12 @@ export const evaluateRenderSceneForVisualization = async ({ renderCount }: { ren
         if (!window.scene || !window.engine) {
             return resolve(false);
         }
+        window.timeNow = Date.now();
         BABYLON.SceneLoader.ShowLoadingScreen = false;
         window.scene.useConstantAnimationDeltaTime = true;
 
         window.scene.executeWhenReady(function () {
+            console.log(Date.now() - window.timeNow, "Scene is ready for rendering");
             if (!window.scene || !window.engine) {
                 return resolve(false);
             }
@@ -389,6 +393,7 @@ export const evaluateRenderSceneForVisualization = async ({ renderCount }: { ren
             window.engine.runRenderLoop(function () {
                 try {
                     if (renderCount <= 0 && renderAfterGuiIsReadyCount <= 0) {
+                        console.log(Date.now() - window.timeNow, "Rendering is done");
                         if (window.scene!.isReady()) {
                             window.engine && window.engine.stopRenderLoop();
                             return resolve(true);
@@ -397,7 +402,9 @@ export const evaluateRenderSceneForVisualization = async ({ renderCount }: { ren
                             return resolve(false);
                         }
                     } else {
+                        console.log(Date.now() - window.timeNow, "Rendering...");
                         window.scene && window.scene.render();
+                        console.log(Date.now() - window.timeNow, "Rendering done", renderCount);
                         renderCount--;
                         if (adtsAreReady()) {
                             renderAfterGuiIsReadyCount--;
