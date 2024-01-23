@@ -234,6 +234,9 @@ export const evaluateInitEngineForVisualization = async ({
         engine.compatibilityMode = !window.forceUseNonCompatibilityMode;
         window.engine = engine;
     }
+    window.engine._queueNewFrame = (func, requester) => {
+        func();
+    };
     window.engine!.renderEvenInBackground = true;
     window.engine!.getCaps().parallelShaderCompile = undefined;
     return {
@@ -393,13 +396,13 @@ export const evaluateRenderSceneForVisualization = async ({ renderCount }: { ren
             window.engine.runRenderLoop(function () {
                 console.log(Date.now() - window.timeNow, "Running render loop...");
                 // check setTimeout
-                setTimeout(() => {
-                    console.log(Date.now() - window.timeNow, "Checking setTimeout...");
-                }, 0);
-                // checking window.requestAnimationFrame
-                window.requestAnimationFrame(() => {
-                    console.log(Date.now() - window.timeNow, "Checking requestAnimationFrame...");
-                });
+                // setTimeout(() => {
+                //     console.log(Date.now() - window.timeNow, "Checking setTimeout...");
+                // }, 0);
+                // // checking window.requestAnimationFrame
+                // window.requestAnimationFrame(() => {
+                //     console.log(Date.now() - window.timeNow, "Checking requestAnimationFrame...");
+                // });
                 try {
                     if (renderCount <= 0 && renderAfterGuiIsReadyCount <= 0) {
                         console.log(Date.now() - window.timeNow, "Rendering is done");
