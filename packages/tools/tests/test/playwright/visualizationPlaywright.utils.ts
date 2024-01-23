@@ -235,7 +235,9 @@ export const evaluateInitEngineForVisualization = async ({
         window.engine = engine;
     }
     window.engine._queueNewFrame = (func, requester) => {
-        func();
+        setTimeout(() => {
+            func();
+        })
     };
     window.engine!.renderEvenInBackground = true;
     window.engine!.getCaps().parallelShaderCompile = undefined;
