@@ -19,7 +19,7 @@ export const evaluatePlaywrightVisTests = async (engineType = "webgl2", testFile
 
     const configPath = process.env.CONFIG_PATH || path.resolve(__dirname, "../visualization", testFileName + ".json");
     //TODO
-    const useStandardTestList = testFileName === "config";
+    // const useStandardTestList = testFileName === "config";
     // load the config
     const rawJsonData = fs.readFileSync(configPath, "utf8");
     // console.log(data);
@@ -70,6 +70,8 @@ export const evaluatePlaywrightVisTests = async (engineType = "webgl2", testFile
         await page.close();
     });
 
+    let time = 0;
+
     test.beforeEach(async () => {
         await page.evaluate(() => {
             if (window.scene && window.scene.dispose) {
@@ -111,25 +113,30 @@ export const evaluatePlaywrightVisTests = async (engineType = "webgl2", testFile
             const logCallback = (msg: any) => {
                 log(msg, testCase.title);
             };
+            let now = Date.now();
             page.on("console", logCallback);
-            console.log("Running test: " + testCase.title, ". Meta: ", testCase.playgroundId || testCase.scriptToRun || testCase.sceneFilename);
+            console.log(Date.now() - now, "Running test: " + testCase.title, ". Meta: ", testCase.playgroundId || testCase.scriptToRun || testCase.sceneFilename);
             test.setTimeout(timeout);
             await page.evaluate(evaluatePrepareScene, {
                 sceneMetadata: testCase,
                 globalConfig: getGlobalConfig({ root: config.root }),
             });
+            console.log(Date.now() - now, "Scene prepared for test: " + testCase.title);
             const renderCount = testCase.renderCount || 1;
             const renderResult = await page.evaluate(evaluateRenderSceneForVisualization, { renderCount });
             expect(renderResult).toBeTruthy();
+            console.log("Scene rendered for test: " + testCase.title);
             if (engineType.startsWith("webgl")) {
                 const glError = await page.evaluate(evaluateIsGLError);
                 expect(glError).toBe(false);
             }
+            console.log(Date.now() - now, "No GL error for test: " + testCase.title);
             await expect(page).toHaveScreenshot((testCase.referenceImage || testCase.title).replace(".png", "") + ".png", {
                 // omitBackground: true,
                 threshold: 0.1,
                 maxDiffPixelRatio: (testCase.errorRatio || 3) / 100,
             });
+            console.log(Date.now() - now, "Screenshot taken for test: " + testCase.title);
             page.off("console", logCallback);
         });
     }
@@ -269,8 +276,10 @@ export const evaluatePrepareScene = async ({
             sceneMetadata.playgroundId += "#0";
         }
 
-        const retryTime = 500;
-        const maxRetry = 5;
+        console.log("Loading scene from PG: " + sceneMetadata.playgroundId);
+
+        const retryTime = 200;
+        const maxRetry = 2;
         let retry = 0;
 
         const runSnippet = async function () {
@@ -294,6 +303,8 @@ export const evaluatePrepareScene = async ({
                 }
             }
 
+            console.log("Running code from PG: " + sceneMetadata.playgroundId);
+
             const loadedScene = eval(code + "\ncreateScene(engine)");
 
             if (loadedScene.then) {
@@ -308,9 +319,11 @@ export const evaluatePrepareScene = async ({
             try {
                 await runSnippet();
             } catch (e) {
+                console.error("Error loading scene from PG: " + sceneMetadata.playgroundId);
                 if (retry < maxRetry) {
                     retry++;
                     // wait for retryTime
+                    console.log("Retrying in " + retryTime + "ms");
                     await new Promise((resolve) => setTimeout(resolve, retryTime));
                     await run();
                 } else {
