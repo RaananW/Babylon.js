@@ -235,7 +235,7 @@ export const evaluateInitEngineForVisualization = async ({
         window.engine = engine;
     }
     window.engine._queueNewFrame = (func, requester) => {
-        setTimeout(() => {
+        return setTimeout(() => {
             func();
         })
     };
