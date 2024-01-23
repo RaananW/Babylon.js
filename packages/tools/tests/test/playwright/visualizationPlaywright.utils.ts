@@ -391,6 +391,7 @@ export const evaluateRenderSceneForVisualization = async ({ renderCount }: { ren
             };
             let renderAfterGuiIsReadyCount = 1;
             window.engine.runRenderLoop(function () {
+                console.log(Date.now() - window.timeNow, "Running render loop...");
                 try {
                     if (renderCount <= 0 && renderAfterGuiIsReadyCount <= 0) {
                         console.log(Date.now() - window.timeNow, "Rendering is done");
@@ -404,11 +405,11 @@ export const evaluateRenderSceneForVisualization = async ({ renderCount }: { ren
                     } else {
                         console.log(Date.now() - window.timeNow, "Rendering...");
                         window.scene && window.scene.render();
-                        console.log(Date.now() - window.timeNow, "Rendering done", renderCount);
                         renderCount--;
                         if (adtsAreReady()) {
                             renderAfterGuiIsReadyCount--;
                         }
+                        console.log(Date.now() - window.timeNow, "Rendering done", renderCount);
                     }
                 } catch (e) {
                     window.engine && window.engine.stopRenderLoop();
