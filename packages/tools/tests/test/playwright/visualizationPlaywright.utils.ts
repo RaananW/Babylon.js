@@ -392,6 +392,14 @@ export const evaluateRenderSceneForVisualization = async ({ renderCount }: { ren
             let renderAfterGuiIsReadyCount = 1;
             window.engine.runRenderLoop(function () {
                 console.log(Date.now() - window.timeNow, "Running render loop...");
+                // check setTimeout
+                setTimeout(() => {
+                    console.log(Date.now() - window.timeNow, "Checking setTimeout...");
+                }, 0);
+                // checking window.requestAnimationFrame
+                window.requestAnimationFrame(() => {
+                    console.log(Date.now() - window.timeNow, "Checking requestAnimationFrame...");
+                });
                 try {
                     if (renderCount <= 0 && renderAfterGuiIsReadyCount <= 0) {
                         console.log(Date.now() - window.timeNow, "Rendering is done");
