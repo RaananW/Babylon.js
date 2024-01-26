@@ -53,15 +53,7 @@ export const evaluatePlaywrightVisTests = async (engineType = "webgl2", testFile
 
     test.beforeAll(async ({ browser }) => {
         page = await browser.newPage();
-        await page.goto(getGlobalConfig({ root: config.root }).baseUrl + `/empty.html`, {
-            // waitUntil: "load", // for chrome should be "networkidle0"
-            timeout: 0,
-        });
-        await page.waitForSelector("#babylon-canvas", { timeout: 20000 });
 
-        await page.waitForFunction(() => {
-            return window.BABYLON;
-        });
         page.setDefaultTimeout(0);
         page.setViewportSize({ width: 600, height: 400 });
     });
@@ -73,6 +65,15 @@ export const evaluatePlaywrightVisTests = async (engineType = "webgl2", testFile
     let time = 0;
 
     test.beforeEach(async () => {
+        await page.goto(getGlobalConfig({ root: config.root }).baseUrl + `/empty.html`, {
+            // waitUntil: "load", // for chrome should be "networkidle0"
+            timeout: 0,
+        });
+        await page.waitForSelector("#babylon-canvas", { timeout: 20000 });
+
+        await page.waitForFunction(() => {
+            return window.BABYLON;
+        });
         await page.evaluate(() => {
             if (window.scene && window.scene.dispose) {
                 // run the dispose function here
@@ -237,7 +238,7 @@ export const evaluateInitEngineForVisualization = async ({
     window.engine._queueNewFrame = (func, requester) => {
         return setTimeout(() => {
             func();
-        })
+        });
     };
     window.engine!.renderEvenInBackground = true;
     window.engine!.getCaps().parallelShaderCompile = undefined;
