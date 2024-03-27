@@ -319,7 +319,7 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
                     (!isXRPointer || pointerInfo.pickInfo.aimTransform) &&
                     pickPredicate(pointerInfo.pickInfo.pickedMesh)
                 ) {
-                    if (!this.allowMultiPointer && this.currentDraggingPointerIds.length > 0) {
+                    if ((!this.allowMultiPointer || isXRPointer) && this.currentDraggingPointerIds.length > 0) {
                         return;
                     }
 
