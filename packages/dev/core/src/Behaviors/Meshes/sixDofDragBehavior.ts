@@ -158,16 +158,16 @@ export class SixDofDragBehavior extends BaseSixDofDragBehavior {
     }
 
     private _twoPointersPositionUpdated() {
-        const startingPosition0 = this._virtualMeshesInfo[this.currentDraggingPointerIds[0]].startingPosition;
-        const startingPosition1 = this._virtualMeshesInfo[this.currentDraggingPointerIds[1]].startingPosition;
+        const startingPosition0 = this._virtualMeshesInfo[this.currentDraggingPointerIds[0]]!.startingPosition;
+        const startingPosition1 = this._virtualMeshesInfo[this.currentDraggingPointerIds[1]]!.startingPosition;
         const startingCenter = TmpVectors.Vector3[0];
         startingPosition0.addToRef(startingPosition1, startingCenter);
         startingCenter.scaleInPlace(0.5);
         const startingVector = TmpVectors.Vector3[1];
         startingPosition1.subtractToRef(startingPosition0, startingVector);
 
-        const currentPosition0 = this._virtualMeshesInfo[this.currentDraggingPointerIds[0]].dragMesh.absolutePosition;
-        const currentPosition1 = this._virtualMeshesInfo[this.currentDraggingPointerIds[1]].dragMesh.absolutePosition;
+        const currentPosition0 = this._virtualMeshesInfo[this.currentDraggingPointerIds[0]]!.dragMesh.absolutePosition;
+        const currentPosition1 = this._virtualMeshesInfo[this.currentDraggingPointerIds[1]]!.dragMesh.absolutePosition;
         const currentCenter = TmpVectors.Vector3[2];
         currentPosition0.addToRef(currentPosition1, currentCenter);
         currentCenter.scaleInPlace(0.5);
@@ -204,7 +204,7 @@ export class SixDofDragBehavior extends BaseSixDofDragBehavior {
 
         if (pointerCount === 1) {
             this._targetPosition.copyFrom(this._ownerNode.absolutePosition);
-            this._targetOrientation.copyFrom(this._ownerNode.absoluteRotationQuaternion);
+            this._targetOrientation.copyFrom(this._ownerNode.rotationQuaternion);
             this._targetScaling.copyFrom(this._ownerNode.absoluteScaling);
 
             if (this.faceCameraOnDragStart && this._scene.activeCamera) {
@@ -228,7 +228,7 @@ export class SixDofDragBehavior extends BaseSixDofDragBehavior {
             this._virtualTransformNode.setPivotPoint(new Vector3(0, 0, 0), Space.LOCAL);
             this._virtualTransformNode.position.copyFrom(this._ownerNode.absolutePosition);
             this._virtualTransformNode.scaling.copyFrom(this._ownerNode.absoluteScaling);
-            this._virtualTransformNode.rotationQuaternion!.copyFrom(this._ownerNode.absoluteRotationQuaternion);
+            this._virtualTransformNode.rotationQuaternion!.copyFrom(this._ownerNode.rotationQuaternion);
             this._virtualTransformNode.setPivotPoint(worldPivot, Space.WORLD);
             this._resetVirtualMeshesPosition();
         }
@@ -243,14 +243,16 @@ export class SixDofDragBehavior extends BaseSixDofDragBehavior {
     }
 
     protected _targetDragEnd() {
-        if (this.currentDraggingPointerIds.length === 1) {
-            // We still have 1 active pointer, we must simulate a dragstart with a reseted position/orientation
-            this._resetVirtualMeshesPosition();
-            const previousFaceCameraFlag = this.faceCameraOnDragStart;
-            this.faceCameraOnDragStart = false;
-            this._targetDragStart();
-            this.faceCameraOnDragStart = previousFaceCameraFlag;
-        }
+        // if (this.currentDraggingPointerIds.length === 1) {
+        //     // We still have 1 active pointer, we must simulate a dragstart with a reset position/orientation
+        //     this._virtualTransformNode.setPivotPoint(new Vector3(0, 0, 0), Space.LOCAL);
+        //     this._virtualTransformNode.computeWorldMatrix(true);
+        //     this._resetVirtualMeshesPosition();
+        //     const previousFaceCameraFlag = this.faceCameraOnDragStart;
+        //     this.faceCameraOnDragStart = false;
+        //     this._targetDragStart();
+        //     this.faceCameraOnDragStart = previousFaceCameraFlag;
+        // }
     }
 
     /**

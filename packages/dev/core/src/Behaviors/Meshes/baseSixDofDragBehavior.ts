@@ -44,7 +44,7 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
     private _pointerObserver: Nullable<Observer<PointerInfo>>;
     private _attachedToElement: boolean = false;
     protected _virtualMeshesInfo: {
-        [id: number]: VirtualMeshInfo;
+        [id: number]: VirtualMeshInfo | undefined;
     } = {};
 
     private _tmpVector: Vector3 = new Vector3();
@@ -182,18 +182,16 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
 
     protected _resetVirtualMeshesPosition() {
         for (let i = 0; i < this.currentDraggingPointerIds.length; i++) {
-            this._virtualMeshesInfo[this.currentDraggingPointerIds[i]].pivotMesh.position.copyFrom(this._ownerNode.getAbsolutePivotPoint());
-            this._virtualMeshesInfo[this.currentDraggingPointerIds[i]].pivotMesh.rotationQuaternion!.copyFrom(this._ownerNode.rotationQuaternion!);
-            this._virtualMeshesInfo[this.currentDraggingPointerIds[i]].startingPivotPosition.copyFrom(
-                this._virtualMeshesInfo[this.currentDraggingPointerIds[i]].pivotMesh.position
-            );
-            this._virtualMeshesInfo[this.currentDraggingPointerIds[i]].startingPivotOrientation.copyFrom(
-                this._virtualMeshesInfo[this.currentDraggingPointerIds[i]].pivotMesh.rotationQuaternion!
-            );
-            this._virtualMeshesInfo[this.currentDraggingPointerIds[i]].startingPosition.copyFrom(this._virtualMeshesInfo[this.currentDraggingPointerIds[i]].dragMesh.position);
-            this._virtualMeshesInfo[this.currentDraggingPointerIds[i]].startingOrientation.copyFrom(
-                this._virtualMeshesInfo[this.currentDraggingPointerIds[i]].dragMesh.rotationQuaternion!
-            );
+            const info = this._virtualMeshesInfo[this.currentDraggingPointerIds[i]];
+            if (!info) {
+                continue;
+            }
+            info.pivotMesh.position.copyFrom(this._ownerNode.getAbsolutePivotPoint());
+            info.pivotMesh.rotationQuaternion!.copyFrom(this._ownerNode.rotationQuaternion!);
+            info.startingPivotPosition.copyFrom(info.pivotMesh.position);
+            info.startingPivotOrientation.copyFrom(info.pivotMesh.rotationQuaternion!);
+            info.startingPosition.copyFrom(info.dragMesh.absolutePosition);
+            info.startingOrientation.copyFrom(info.dragMesh.rotationQuaternion!);
         }
     }
 
@@ -204,6 +202,9 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
         }
 
         const virtualMeshesInfo = this._virtualMeshesInfo[pointerId];
+        if (!virtualMeshesInfo) {
+            return;
+        }
 
         // Calculate controller drag distance in controller space
         const originDragDifference = TmpVectors.Vector3[0];
@@ -229,6 +230,9 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
 
     private _pointerUpdateXR(controllerAimTransform: TransformNode, controllerGripTransform: Nullable<TransformNode>, pointerId: number, zDragFactor: number) {
         const virtualMeshesInfo = this._virtualMeshesInfo[pointerId];
+        if (!virtualMeshesInfo) {
+            return;
+        }
         virtualMeshesInfo.originMesh.position.copyFrom(controllerAimTransform.position);
         if (this._dragging === this._dragType.NEAR_DRAG && controllerGripTransform) {
             virtualMeshesInfo.originMesh.rotationQuaternion!.copyFrom(controllerGripTransform.rotationQuaternion!);
@@ -293,14 +297,19 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
 
         this._pointerObserver = this._scene.onPointerObservable.add((pointerInfo) => {
             const pointerId = (<IPointerEvent>pointerInfo.event).pointerId;
-            if (!this._virtualMeshesInfo[pointerId]) {
-                this._virtualMeshesInfo[pointerId] = this._createVirtualMeshInfo();
-            }
-            const virtualMeshesInfo = this._virtualMeshesInfo[pointerId];
+            let virtualMeshesInfo = this._virtualMeshesInfo[pointerId];
             const isXRPointer = (<IPointerEvent>pointerInfo.event).pointerType === "xr-near" || (<IPointerEvent>pointerInfo.event).pointerType === "xr";
 
             if (pointerInfo.type == PointerEventTypes.POINTERDOWN) {
+                if (virtualMeshesInfo) {
+                    virtualMeshesInfo.originMesh.dispose();
+                    virtualMeshesInfo.dragMesh.dispose();
+                    this._virtualMeshesInfo[pointerId] = undefined;
+                }
+                this._virtualMeshesInfo[pointerId] = this._createVirtualMeshInfo();
+                virtualMeshesInfo = this._virtualMeshesInfo[pointerId];
                 if (
+                    virtualMeshesInfo &&
                     !virtualMeshesInfo.dragging &&
                     pointerInfo.pickInfo &&
                     pointerInfo.pickInfo.hit &&
@@ -310,7 +319,7 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
                     (!isXRPointer || pointerInfo.pickInfo.aimTransform) &&
                     pickPredicate(pointerInfo.pickInfo.pickedMesh)
                 ) {
-                    if ((!this.allowMultiPointer || isXRPointer) && this.currentDraggingPointerIds.length > 0) {
+                    if (!this.allowMultiPointer && this.currentDraggingPointerIds.length > 0) {
                         return;
                     }
 
@@ -324,7 +333,6 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
                     }
 
                     this._ownerNode.computeWorldMatrix(true);
-                    const virtualMeshesInfo = this._virtualMeshesInfo[pointerId];
 
                     if (isXRPointer) {
                         this._dragging = pointerInfo.pickInfo.originMesh ? this._dragType.NEAR_DRAG : this._dragType.DRAG_WITH_CONTROLLER;
@@ -381,7 +389,9 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
                 }
             } else if (pointerInfo.type == PointerEventTypes.POINTERUP || pointerInfo.type == PointerEventTypes.POINTERDOUBLETAP) {
                 const registeredPointerIndex = this.currentDraggingPointerIds.indexOf(pointerId);
-
+                if (!virtualMeshesInfo) {
+                    return;
+                }
                 // Update state
                 virtualMeshesInfo.dragging = false;
 
@@ -401,9 +411,26 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
                     virtualMeshesInfo.originMesh.removeChild(virtualMeshesInfo.dragMesh);
                     virtualMeshesInfo.originMesh.removeChild(virtualMeshesInfo.pivotMesh);
                     this._targetDragEnd(pointerId);
+                    // clear all virtual mesh infos
+                    for (const pointerId in this._virtualMeshesInfo) {
+                        if (!this._virtualMeshesInfo[pointerId]) {
+                            continue;
+                        }
+                        this._virtualMeshesInfo[pointerId]!.originMesh.dispose();
+                        this._virtualMeshesInfo[pointerId]!.dragMesh.dispose();
+                        this._virtualMeshesInfo[pointerId] = undefined;
+                    }
+                    this.currentDraggingPointerIds.length = 0;
                     this.onDragEndObservable.notifyObservers({});
                 }
             } else if (pointerInfo.type == PointerEventTypes.POINTERMOVE) {
+                if (!virtualMeshesInfo) {
+                    // if (pointerInfo.pickInfo) {
+                    //     this._scene.simulatePointerDown(pointerInfo.pickInfo, pointerInfo.event);
+                    // }
+                    return;
+                }
+
                 const registeredPointerIndex = this.currentDraggingPointerIds.indexOf(pointerId);
 
                 if (registeredPointerIndex !== -1 && virtualMeshesInfo.dragging && pointerInfo.pickInfo && (pointerInfo.pickInfo.ray || pointerInfo.pickInfo.aimTransform)) {
@@ -432,7 +459,7 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
 
                     this.onDragObservable.notifyObservers({ delta: this._tmpVector, position: virtualMeshesInfo.pivotMesh.position, pickInfo: pointerInfo.pickInfo });
 
-                    // Notify herited methods and observables
+                    // Notify inherited methods and observables
                     this._targetDrag(this._tmpVector, this._tmpQuaternion, pointerId);
                     virtualMeshesInfo.lastDragPosition.copyFrom(virtualMeshesInfo.dragMesh.absolutePosition);
 
@@ -494,8 +521,11 @@ export class BaseSixDofDragBehavior implements Behavior<Mesh> {
         }
 
         for (const pointerId in this._virtualMeshesInfo) {
-            this._virtualMeshesInfo[pointerId].originMesh.dispose();
-            this._virtualMeshesInfo[pointerId].dragMesh.dispose();
+            if (!this._virtualMeshesInfo[pointerId]) {
+                continue;
+            }
+            this._virtualMeshesInfo[pointerId]!.originMesh.dispose();
+            this._virtualMeshesInfo[pointerId]!.dragMesh.dispose();
         }
 
         this.onDragEndObservable.clear();
