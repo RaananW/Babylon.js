@@ -3,6 +3,10 @@
         "babylonjs-nme": {
             "command": "node",
             "args": ["./packages/tools/nme-mcp-server/dist/index.js"]
+        },
+        "babylonjs-flow-graph": {
+            "command": "node",
+            "args": ["./packages/tools/flow-graph-mcp-server/dist/index.js"]
         }
     }
 }
