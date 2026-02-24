@@ -139,17 +139,17 @@ export class InputDisplayManager implements IDisplayManager {
                     if (inputBlock.animationType !== AnimatedInputBlockTypes.None) {
                         value = AnimatedInputBlockTypes[inputBlock.animationType];
                     } else {
-                        value = inputBlock.value.toFixed(4);
+                        value = inputBlock.value != null ? inputBlock.value.toFixed(4) : "0";
                     }
                     break;
                 case NodeMaterialBlockConnectionPointTypes.Vector2: {
                     const vec2Value = inputBlock.value as Vector2;
-                    value = `(${vec2Value.x.toFixed(2)}, ${vec2Value.y.toFixed(2)})`;
+                    value = vec2Value ? `(${vec2Value.x.toFixed(2)}, ${vec2Value.y.toFixed(2)})` : "(0, 0)";
                     break;
                 }
                 case NodeMaterialBlockConnectionPointTypes.Vector3: {
                     const vec3Value = inputBlock.value as Vector3;
-                    value = `(${vec3Value.x.toFixed(2)}, ${vec3Value.y.toFixed(2)}, ${vec3Value.z.toFixed(2)})`;
+                    value = vec3Value ? `(${vec3Value.x.toFixed(2)}, ${vec3Value.y.toFixed(2)}, ${vec3Value.z.toFixed(2)})` : "(0, 0, 0)";
                     break;
                 }
                 case NodeMaterialBlockConnectionPointTypes.Vector4: {
@@ -157,7 +157,7 @@ export class InputDisplayManager implements IDisplayManager {
                         value = AnimatedInputBlockTypes[inputBlock.animationType];
                     } else {
                         const vec4Value = inputBlock.value as Vector4;
-                        value = `(${vec4Value.x.toFixed(2)}, ${vec4Value.y.toFixed(2)}, ${vec4Value.z.toFixed(2)}, ${vec4Value.w.toFixed(2)})`;
+                        value = vec4Value ? `(${vec4Value.x.toFixed(2)}, ${vec4Value.y.toFixed(2)}, ${vec4Value.z.toFixed(2)}, ${vec4Value.w.toFixed(2)})` : "(0, 0, 0, 0)";
                     }
                     break;
                 }
