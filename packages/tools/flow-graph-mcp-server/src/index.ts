@@ -339,14 +339,27 @@ server.tool(
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Added block [${result.id}] "${result.name}" (${blockType}). Use id ${result.id} in connect_signal/connect_data.`,
-                },
-            ],
-        };
+
+        let msg = `Added block [${result.id}] "${result.name}" (${blockType}). Use id ${result.id} in connect_signal/connect_data.`;
+
+        // Surface config warnings from the manager
+        if (result.warnings && result.warnings.length > 0) {
+            msg += `\n⚠ ${result.warnings.join("\n⚠ ")}`;
+        }
+
+        // Warn about event blocks that silently fail without a mesh target
+        const meshTargetEventTypes = ["MeshPickEvent", "PointerOverEvent", "PointerOutEvent"];
+        if (meshTargetEventTypes.includes(blockType)) {
+            const cfg = config as Record<string, unknown> | undefined;
+            if (!cfg || !("targetMesh" in cfg)) {
+                msg +=
+                    `\n⚠ "${blockType}" requires a target mesh to fire events. ` +
+                    `Set config.targetMesh to a mesh reference, e.g.: { type: "Mesh", name: "myMeshName" }. ` +
+                    `Without it, events will silently never fire.`;
+            }
+        }
+
+        return { content: [{ type: "text", text: msg }] };
     }
 );
 

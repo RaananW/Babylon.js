@@ -214,7 +214,12 @@ export class FlowGraphManager {
      * @param config - Optional configuration for the block.
      * @returns An object with the block id and name, or a string error message.
      */
-    public addBlock(graphName: string, blockType: string, blockName?: string, config?: Record<string, unknown>): { id: number; name: string; uniqueId: string } | string {
+    public addBlock(
+        graphName: string,
+        blockType: string,
+        blockName?: string,
+        config?: Record<string, unknown>
+    ): { id: number; name: string; uniqueId: string; warnings?: string[] } | string {
         const graph = this._graphs.get(graphName);
         if (!graph) {
             return `Graph "${graphName}" not found. Create it first with create_graph.`;
