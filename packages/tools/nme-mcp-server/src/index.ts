@@ -79,6 +79,100 @@ server.resource("enums", "nme://enums", async (uri) => ({
     ],
 }));
 
+server.resource("concepts", "nme://concepts", async (uri) => ({
+    contents: [
+        {
+            uri: uri.href,
+            mimeType: "text/markdown",
+            text: [
+                "# Node Material Concepts",
+                "",
+                "## What is a Node Material?",
+                "A Node Material is a visual, graph-based shader builder in Babylon.js. Instead of writing",
+                "GLSL/HLSL code directly, you connect typed blocks that represent shader operations.",
+                "The graph compiles into a GPU shader program at runtime.",
+                "",
+                "## Graph Structure — Two Required Outputs",
+                "Every standard material (mode='Material') MUST have exactly these two output blocks:",
+                "  • **VertexOutputBlock** — receives the clip-space position (the final transformed vertex position)",
+                "  • **FragmentOutputBlock** — receives the final pixel color (rgb and/or rgba)",
+                "Without BOTH, the material will fail to compile.",
+                "",
+                "## InputBlock — The Most Important Block Type",
+                "InputBlock is the source of all data entering the graph. It has three modes:",
+                "",
+                "### Mode 1: Attribute (mode=1)",
+                "Reads per-vertex data from the mesh's vertex buffer.",
+                "  • Set `attributeName` to one of: position, normal, tangent, uv, uv2, color, etc.",
+                "  • Set `type` to the matching type: Vector3 for position/normal, Vector2 for uv, etc.",
+                "  • Example: `{ type: 'Vector3', attributeName: 'position' }`",
+                "",
+                "### Mode 2: Uniform / Constant (mode=0)",
+                "Provides a constant or system-provided value.",
+                "  • For **system values**: set `systemValue` (e.g. 'WorldViewProjection', 'World', 'CameraPosition')",
+                "    and set `type` to the matching type (Matrix for transforms, Vector3 for CameraPosition).",
+                "    Example: `{ type: 'Matrix', systemValue: 'WorldViewProjection' }`",
+                "  • For **custom constants**: set `type` and `value`.",
+                "    Example: `{ type: 'Color3', value: { r: 0.8, g: 0.2, b: 0.2 } }`",
+                "    Example: `{ type: 'Float', value: 0.5 }`",
+                "",
+                "### ⚠ InputBlock Gotcha",
+                "An InputBlock MUST have a `type` property. Without it, the block cannot determine",
+                "what kind of data it provides and connections will fail silently.",
+                "Additionally, every InputBlock needs at least one of:",
+                "  • `attributeName` — for mesh vertex data",
+                "  • `systemValue` — for engine-provided values (matrices, camera pos, etc.)",
+                "  • `value` — for custom constant values",
+                "An InputBlock with none of these is effectively useless.",
+                "",
+                "## The Minimal Vertex Pipeline",
+                "Every material needs to transform vertex positions from object space to clip space:",
+                "```",
+                "InputBlock(position, attribute, Vector3)",
+                "  └→ TransformBlock.vector",
+                "InputBlock(worldViewProjection, systemValue, Matrix)",
+                "  └→ TransformBlock.transform",
+                "TransformBlock.output",
+                "  └→ VertexOutputBlock.vector",
+                "```",
+                "This is the minimum vertex shader — it positions the mesh correctly on screen.",
+                "",
+                "## The Minimal Fragment Pipeline",
+                "At minimum, the fragment output needs an rgb (Color3) or rgba (Color4) color:",
+                "```",
+                "InputBlock(color, constant, Color3, value={r:1,g:0,b:0})",
+                "  └→ FragmentOutputBlock.rgb",
+                "```",
+                "",
+                "## PBR Materials — Additional Requirements",
+                "PBRMetallicRoughnessBlock needs several inputs connected:",
+                "  • **worldPosition** — from TransformBlock(position × world matrix), NOT the clip-space position",
+                "  • **worldNormal** — from TransformBlock(normal × world matrix)",
+                "  • **view** — from InputBlock(systemValue: 'View')",
+                "  • **cameraPosition** — from InputBlock(systemValue: 'CameraPosition')",
+                "  • **baseColor** — Color3 input for the material's base color",
+                "  • **metallic** — Float input (0=dielectric, 1=metal)",
+                "  • **roughness** — Float input (0=smooth/mirror, 1=rough/matte)",
+                "Then connect PBRMetallicRoughnessBlock.lighting → FragmentOutputBlock.rgb",
+                "",
+                "## Connection Rules",
+                "• Connections go from an output of one block to an input of another",
+                "• Types must be compatible (Color3→Color3, Float→Float, etc.)",
+                "• Some inputs accept AutoDetect and will adapt to whatever is connected",
+                "• Use describe_block or get_block_type_info to see available inputs/outputs",
+                "",
+                "## Common Mistakes",
+                "1. Forgetting VertexOutputBlock or FragmentOutputBlock → material won't compile",
+                "2. Creating InputBlock without `type` → block is broken",
+                "3. Creating InputBlock without value/systemValue/attributeName → useless block",
+                "4. Connecting position directly to VertexOutput without TransformBlock → mesh renders at origin",
+                "5. Using the wrong transform matrix (World instead of WorldViewProjection for vertex output)",
+                "6. Not connecting worldPosition/worldNormal/view/cameraPosition to PBR block → black material",
+            ].join("\n"),
+        },
+    ],
+}));
+
 // ═══════════════════════════════════════════════════════════════════════════
 //  Prompts (reusable prompt templates)
 // ═══════════════════════════════════════════════════════════════════════════
@@ -221,11 +315,15 @@ server.tool(
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
+        const lines = [`Added block [${result.block.id}] "${result.block.name}" (${blockType}). Use this id (${result.block.id}) to connect it.`];
+        if (result.warnings) {
+            lines.push("", "Warnings:", ...result.warnings);
+        }
         return {
             content: [
                 {
                     type: "text",
-                    text: `Added block [${result.id}] "${result.name}" (${blockType}). Use this id (${result.id}) to connect it.`,
+                    text: lines.join("\n"),
                 },
             ],
         };
@@ -513,7 +611,11 @@ server.tool(
             if (typeof result === "string") {
                 results.push(`Error adding ${blockDef.blockType}: ${result}`);
             } else {
-                results.push(`[${result.id}] ${result.name} (${blockDef.blockType})`);
+                let line = `[${result.block.id}] ${result.block.name} (${blockDef.blockType})`;
+                if (result.warnings) {
+                    line += `\n  ⚠ ${result.warnings.join("\n  ⚠ ")}`;
+                }
+                results.push(line);
             }
         }
         return { content: [{ type: "text", text: `Added blocks:\n${results.join("\n")}` }] };

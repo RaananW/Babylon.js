@@ -216,7 +216,7 @@ export class MaterialGraphManager {
      * @param properties    Extra key-value properties to set on the block JSON.
      * @returns The serialised block, or an error string.
      */
-    addBlock(materialName: string, blockType: string, blockName?: string, properties?: Record<string, unknown>): ISerializedBlock | string {
+    addBlock(materialName: string, blockType: string, blockName?: string, properties?: Record<string, unknown>): { block: ISerializedBlock; warnings?: string[] } | string {
         const mat = this._materials.get(materialName);
         if (!mat) {
             return `Material "${materialName}" not found. Create it first.`;
@@ -226,6 +226,8 @@ export class MaterialGraphManager {
         if (!info) {
             return `Unknown block type "${blockType}". Use list_block_types to see available blocks.`;
         }
+
+        const warnings: string[] = [];
 
         const id = this._nextId.get(materialName)!;
         this._nextId.set(materialName, id + 1);
@@ -321,8 +323,30 @@ export class MaterialGraphManager {
         }
         mat.editorData.locations.push({ blockId: id, x, y: 0 });
 
+        // ── InputBlock-specific warnings ────────────────────────────────
+        if (blockType === "InputBlock") {
+            if (block["type"] === undefined) {
+                warnings.push(
+                    `⚠ InputBlock "${block.name}" has no 'type' property. ` +
+                        `Set type to one of: Float, Int, Vector2, Vector3, Vector4, Color3, Color4, Matrix. ` +
+                        `Without a type, connections will fail.`
+                );
+            }
+            const hasValue = block["value"] !== undefined;
+            const hasSysVal = block["systemValue"] !== undefined;
+            const hasAttr = block["attributeName"] !== undefined;
+            if (!hasValue && !hasSysVal && !hasAttr) {
+                warnings.push(
+                    `⚠ InputBlock "${block.name}" has no value, systemValue, or attributeName. ` +
+                        `It won't provide any data. Set one of: ` +
+                        `value (constant), systemValue (e.g. 'WorldViewProjection'), ` +
+                        `or attributeName (e.g. 'position', 'normal', 'uv').`
+                );
+            }
+        }
+
         mat.blocks.push(block);
-        return block;
+        return { block, warnings: warnings.length > 0 ? warnings : undefined };
     }
 
     /**
@@ -1047,6 +1071,39 @@ export class MaterialGraphManager {
                         );
                     }
                 }
+            }
+        }
+
+        // Check InputBlock-specific issues
+        for (const block of mat.blocks) {
+            if (block.customType !== "BABYLON.InputBlock") {
+                continue;
+            }
+            if (block["type"] === undefined) {
+                issues.push(
+                    `ERROR: InputBlock [${block.id}] "${block.name}" has no 'type' property. ` + `Set type to: Float, Int, Vector2, Vector3, Vector4, Color3, Color4, or Matrix.`
+                );
+            }
+            const hasValue = block["value"] !== undefined;
+            const hasSysVal = block["systemValue"] !== undefined;
+            const hasAttr = block["attributeName"] !== undefined;
+            if (!hasValue && !hasSysVal && !hasAttr) {
+                issues.push(`WARNING: InputBlock [${block.id}] "${block.name}" has no value, systemValue, or attributeName — it provides no data.`);
+            }
+        }
+
+        // Check for orphan blocks (no connections in or out, not an output block)
+        for (const block of mat.blocks) {
+            if (block.customType === "BABYLON.VertexOutputBlock" || block.customType === "BABYLON.FragmentOutputBlock") {
+                continue; // Output blocks are sinks — they only have inputs
+            }
+            if (block.customType === "BABYLON.InputBlock") {
+                continue; // InputBlocks are sources — they only have outputs, checked separately above
+            }
+            const hasIncomingConnection = block.inputs.some((inp) => inp.targetBlockId !== undefined);
+            const hasOutgoingConnection = mat.blocks.some((other) => other.inputs.some((inp) => inp.targetBlockId === block.id));
+            if (!hasIncomingConnection && !hasOutgoingConnection) {
+                issues.push(`WARNING: Block [${block.id}] "${block.name}" (${block.customType.replace("BABYLON.", "")}) has no connections — it is an orphan and does nothing.`);
             }
         }
 
