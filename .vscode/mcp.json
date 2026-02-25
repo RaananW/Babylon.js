@@ -7,6 +7,14 @@
         "babylonjs-flow-graph": {
             "command": "node",
             "args": ["./packages/tools/flow-graph-mcp-server/dist/index.js"]
+        },
+        "babylonjs-scene": {
+            "command": "node",
+            "args": ["./packages/tools/scene-mcp-server/dist/index.js"]
+        },
+        "babylonjs-gui": {
+            "command": "node",
+            "args": ["./packages/tools/gui-mcp-server/dist/index.js"]
         }
     }
 }
