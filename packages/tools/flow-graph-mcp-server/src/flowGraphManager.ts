@@ -822,6 +822,46 @@ export class FlowGraphManager {
             }
         }
 
+        // Check event blocks that need a target mesh (MeshPickEvent, PointerOverEvent, PointerOutEvent)
+        const meshTargetEventClassNames = new Set(["FlowGraphMeshPickEventBlock", "FlowGraphPointerOverEventBlock", "FlowGraphPointerOutEventBlock"]);
+        for (const block of graph.blocks) {
+            if (meshTargetEventClassNames.has(block.serialized.className)) {
+                const config = block.serialized.config as Record<string, unknown>;
+                const hasTargetMesh = config && "targetMesh" in config;
+                const assetInput = block.serialized.dataInputs.find((di) => di.name === "asset" || di.name === "targetMesh");
+                const assetConnected = assetInput && assetInput.connectedPointIds.length > 0;
+                if (!hasTargetMesh && !assetConnected) {
+                    issues.push(
+                        `WARNING: [${block.id}] ${block.displayName} — no target mesh configured. ` +
+                            `Set config.targetMesh (e.g. { type: "Mesh", name: "myMesh" }) or connect the "asset" data input. ` +
+                            `Without a target, events will silently never fire.`
+                    );
+                }
+            }
+        }
+
+        // Check for likely "out" vs "done" signal misuse on event blocks
+        // Event blocks with a "done" signal: if "out" is connected but "done" is not,
+        // the agent probably meant to use "done" (per-event) instead of "out" (startup-only).
+        for (const block of eventBlocks) {
+            const outSignal = block.serialized.signalOutputs.find((so) => so.name === "out");
+            const doneSignal = block.serialized.signalOutputs.find((so) => so.name === "done");
+            if (outSignal && doneSignal) {
+                const outConnected = outSignal.connectedPointIds.length > 0;
+                const doneConnected = doneSignal.connectedPointIds.length > 0;
+                if (outConnected && !doneConnected) {
+                    // SceneReadyEvent is the exception — "out" is correct there
+                    if (block.serialized.className !== "FlowGraphSceneReadyEventBlock") {
+                        issues.push(
+                            `WARNING: [${block.id}] ${block.displayName} — signal "out" is connected but "done" is not. ` +
+                                `"out" fires once at startup; "done" fires each time the event occurs (e.g. each click). ` +
+                                `Did you mean to connect "done" instead?`
+                        );
+                    }
+                }
+            }
+        }
+
         if (issues.length === 0) {
             issues.push("OK: No issues found.");
         }
