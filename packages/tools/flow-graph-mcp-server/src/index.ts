@@ -40,7 +40,7 @@ const server = new McpServer({
 //  Resources (read-only reference data)
 // ═══════════════════════════════════════════════════════════════════════════
 
-server.resource("block-catalog", "flow-graph://block-catalog", async (uri) => ({
+server.registerResource("block-catalog", "flow-graph://block-catalog", {}, async (uri) => ({
     contents: [
         {
             uri: uri.href,
@@ -50,7 +50,7 @@ server.resource("block-catalog", "flow-graph://block-catalog", async (uri) => ({
     ],
 }));
 
-server.resource("rich-types", "flow-graph://rich-types", async (uri) => ({
+server.registerResource("rich-types", "flow-graph://rich-types", {}, async (uri) => ({
     contents: [
         {
             uri: uri.href,
@@ -97,7 +97,7 @@ server.resource("rich-types", "flow-graph://rich-types", async (uri) => ({
     ],
 }));
 
-server.resource("concepts", "flow-graph://concepts", async (uri) => ({
+server.registerResource("concepts", "flow-graph://concepts", {}, async (uri) => ({
     contents: [
         {
             uri: uri.href,
@@ -160,7 +160,7 @@ server.resource("concepts", "flow-graph://concepts", async (uri) => ({
 //  Prompts (reusable prompt templates)
 // ═══════════════════════════════════════════════════════════════════════════
 
-server.prompt("create-click-handler", "Create a flow graph that responds to mesh clicks", () => ({
+server.registerPrompt("create-click-handler", { description: "Create a flow graph that responds to mesh clicks" }, () => ({
     messages: [
         {
             role: "user",
@@ -182,7 +182,7 @@ server.prompt("create-click-handler", "Create a flow graph that responds to mesh
     ],
 }));
 
-server.prompt("create-toggle-visibility", "Create a flow graph that toggles mesh visibility on click", () => ({
+server.registerPrompt("create-toggle-visibility", { description: "Create a flow graph that toggles mesh visibility on click" }, () => ({
     messages: [
         {
             role: "user",
@@ -211,7 +211,7 @@ server.prompt("create-toggle-visibility", "Create a flow graph that toggles mesh
     ],
 }));
 
-server.prompt("create-animation-on-ready", "Create a flow graph that plays an animation when the scene is ready", () => ({
+server.registerPrompt("create-animation-on-ready", { description: "Create a flow graph that plays an animation when the scene is ready" }, () => ({
     messages: [
         {
             role: "user",
@@ -236,7 +236,7 @@ server.prompt("create-animation-on-ready", "Create a flow graph that plays an an
     ],
 }));
 
-server.prompt("create-tick-counter", "Create a flow graph that counts frames using SceneTick", () => ({
+server.registerPrompt("create-tick-counter", { description: "Create a flow graph that counts frames using SceneTick" }, () => ({
     messages: [
         {
             role: "user",
@@ -274,11 +274,13 @@ server.prompt("create-tick-counter", "Create a flow graph that counts frames usi
 
 // ── Graph lifecycle ───────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "create_graph",
-    "Create a new empty Flow Graph in memory. This is always the first step.",
     {
-        name: z.string().describe("Unique name for the flow graph (e.g. 'ClickHandler', 'AnimationController')"),
+        description: "Create a new empty Flow Graph in memory. This is always the first step.",
+        inputSchema: {
+            name: z.string().describe("Unique name for the flow graph (e.g. 'ClickHandler', 'AnimationController')"),
+        },
     },
     async ({ name }) => {
         manager.createGraph(name);
@@ -293,11 +295,13 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "delete_graph",
-    "Delete a flow graph from memory.",
     {
-        name: z.string().describe("Name of the flow graph to delete"),
+        description: "Delete a flow graph from memory.",
+        inputSchema: {
+            name: z.string().describe("Name of the flow graph to delete"),
+        },
     },
     async ({ name }) => {
         const ok = manager.deleteGraph(name);
@@ -307,7 +311,7 @@ server.tool(
     }
 );
 
-server.tool("list_graphs", "List all flow graphs currently in memory.", {}, async () => {
+server.registerTool("list_graphs", { description: "List all flow graphs currently in memory." }, async () => {
     const names = manager.listGraphs();
     return {
         content: [
@@ -321,31 +325,33 @@ server.tool("list_graphs", "List all flow graphs currently in memory.", {}, asyn
 
 // ── Block operations ────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "add_block",
-    "Add a new block to a flow graph. Returns the block's id for use in connect_signal/connect_data.",
     {
-        graphName: z.string().describe("Name of the flow graph to add the block to"),
-        blockType: z
-            .string()
-            .describe(
-                "The block type from the registry (e.g. 'SceneReadyEvent', 'Branch', 'ConsoleLog', 'Add', 'SetProperty'). " + "Use list_block_types to see all available types."
-            ),
-        name: z.string().optional().describe("Human-friendly name for this block instance (e.g. 'checkCondition', 'logResult')"),
-        config: z
-            .record(z.string(), z.unknown())
-            .optional()
-            .describe(
-                "Block-specific configuration. Examples:\n" +
-                    '  - Constant: { value: 42 } or { value: { "value": [1,2,3], "className": "Vector3" } }\n' +
-                    '  - GetVariable: { variable: "myVar" }\n' +
-                    '  - SetVariable: { variable: "myVar" }\n' +
-                    '  - SetProperty: { propertyName: "position" }\n' +
-                    '  - GetProperty: { propertyName: "isVisible" }\n' +
-                    "  - Sequence: { outputSignalCount: 3 }\n" +
-                    "  - Switch: { cases: [0, 1, 2] }\n" +
-                    '  - SendCustomEvent/ReceiveCustomEvent: { eventId: "myEvent" }'
-            ),
+        description: "Add a new block to a flow graph. Returns the block's id for use in connect_signal/connect_data.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph to add the block to"),
+            blockType: z
+                .string()
+                .describe(
+                    "The block type from the registry (e.g. 'SceneReadyEvent', 'Branch', 'ConsoleLog', 'Add', 'SetProperty'). " + "Use list_block_types to see all available types."
+                ),
+            name: z.string().optional().describe("Human-friendly name for this block instance (e.g. 'checkCondition', 'logResult')"),
+            config: z
+                .record(z.string(), z.unknown())
+                .optional()
+                .describe(
+                    "Block-specific configuration. Examples:\n" +
+                        '  - Constant: { value: 42 } or { value: { "value": [1,2,3], "className": "Vector3" } }\n' +
+                        '  - GetVariable: { variable: "myVar" }\n' +
+                        '  - SetVariable: { variable: "myVar" }\n' +
+                        '  - SetProperty: { propertyName: "position" }\n' +
+                        '  - GetProperty: { propertyName: "isVisible" }\n' +
+                        "  - Sequence: { outputSignalCount: 3 }\n" +
+                        "  - Switch: { cases: [0, 1, 2] }\n" +
+                        '  - SendCustomEvent/ReceiveCustomEvent: { eventId: "myEvent" }'
+                ),
+        },
     },
     async ({ graphName, blockType, name, config }) => {
         const result = manager.addBlock(graphName, blockType, name, config as Record<string, unknown>);
@@ -376,12 +382,14 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "remove_block",
-    "Remove a block from a flow graph. Also removes all connections to/from it.",
     {
-        graphName: z.string().describe("Name of the flow graph"),
-        blockId: z.number().describe("The block id to remove"),
+        description: "Remove a block from a flow graph. Also removes all connections to/from it.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph"),
+            blockId: z.number().describe("The block id to remove"),
+        },
     },
     async ({ graphName, blockId }) => {
         const result = manager.removeBlock(graphName, blockId);
@@ -392,13 +400,15 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "set_block_config",
-    "Set or update configuration on an existing block.",
     {
-        graphName: z.string().describe("Name of the flow graph"),
-        blockId: z.number().describe("The block id to modify"),
-        config: z.record(z.string(), z.unknown()).describe("Configuration key-value pairs to set or update."),
+        description: "Set or update configuration on an existing block.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph"),
+            blockId: z.number().describe("The block id to modify"),
+            config: z.record(z.string(), z.unknown()).describe("Configuration key-value pairs to set or update."),
+        },
     },
     async ({ graphName, blockId, config }) => {
         const result = manager.setBlockConfig(graphName, blockId, config as Record<string, unknown>);
@@ -411,17 +421,20 @@ server.tool(
 
 // ── Signal connections ──────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "connect_signal",
-    "Connect a signal output of one block to a signal input of another. " +
-        "Signal connections control execution flow (WHEN blocks execute). " +
-        "Flow: source block's signal output → target block's signal input.",
     {
-        graphName: z.string().describe("Name of the flow graph"),
-        sourceBlockId: z.number().describe("Block id with the signal output (e.g. the event or execution block)"),
-        signalOutputName: z.string().describe("Name of the signal output on the source block (e.g. 'out', 'onTrue', 'onFalse', 'executionFlow', 'completed')"),
-        targetBlockId: z.number().describe("Block id with the signal input (the block to trigger)"),
-        signalInputName: z.string().default("in").describe("Name of the signal input on the target block (usually 'in')"),
+        description:
+            "Connect a signal output of one block to a signal input of another. " +
+            "Signal connections control execution flow (WHEN blocks execute). " +
+            "Flow: source block's signal output → target block's signal input.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph"),
+            sourceBlockId: z.number().describe("Block id with the signal output (e.g. the event or execution block)"),
+            signalOutputName: z.string().describe("Name of the signal output on the source block (e.g. 'out', 'onTrue', 'onFalse', 'executionFlow', 'completed')"),
+            targetBlockId: z.number().describe("Block id with the signal input (the block to trigger)"),
+            signalInputName: z.string().default("in").describe("Name of the signal input on the target block (usually 'in')"),
+        },
     },
     async ({ graphName, sourceBlockId, signalOutputName, targetBlockId, signalInputName }) => {
         const result = manager.connectSignal(graphName, sourceBlockId, signalOutputName, targetBlockId, signalInputName);
@@ -437,13 +450,15 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "disconnect_signal",
-    "Disconnect a signal output from its target(s).",
     {
-        graphName: z.string().describe("Name of the flow graph"),
-        blockId: z.number().describe("Block id that has the signal output"),
-        signalOutputName: z.string().describe("Name of the signal output to disconnect"),
+        description: "Disconnect a signal output from its target(s).",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph"),
+            blockId: z.number().describe("Block id that has the signal output"),
+            signalOutputName: z.string().describe("Name of the signal output to disconnect"),
+        },
     },
     async ({ graphName, blockId, signalOutputName }) => {
         const result = manager.disconnectSignal(graphName, blockId, signalOutputName);
@@ -456,17 +471,20 @@ server.tool(
 
 // ── Data connections ────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "connect_data",
-    "Connect a data output of one block to a data input of another. " +
-        "Data connections carry typed values (WHAT blocks process). " +
-        "Flow: source block's data output → target block's data input.",
     {
-        graphName: z.string().describe("Name of the flow graph"),
-        sourceBlockId: z.number().describe("Block id with the data output (the value provider)"),
-        outputName: z.string().describe("Name of the data output on the source block (e.g. 'value', 'output', 'pickedPoint')"),
-        targetBlockId: z.number().describe("Block id with the data input (the value consumer)"),
-        inputName: z.string().describe("Name of the data input on the target block (e.g. 'message', 'condition', 'a', 'b')"),
+        description:
+            "Connect a data output of one block to a data input of another. " +
+            "Data connections carry typed values (WHAT blocks process). " +
+            "Flow: source block's data output → target block's data input.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph"),
+            sourceBlockId: z.number().describe("Block id with the data output (the value provider)"),
+            outputName: z.string().describe("Name of the data output on the source block (e.g. 'value', 'output', 'pickedPoint')"),
+            targetBlockId: z.number().describe("Block id with the data input (the value consumer)"),
+            inputName: z.string().describe("Name of the data input on the target block (e.g. 'message', 'condition', 'a', 'b')"),
+        },
     },
     async ({ graphName, sourceBlockId, outputName, targetBlockId, inputName }) => {
         const result = manager.connectData(graphName, sourceBlockId, outputName, targetBlockId, inputName);
@@ -482,13 +500,15 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "disconnect_data",
-    "Disconnect a data input from its source.",
     {
-        graphName: z.string().describe("Name of the flow graph"),
-        blockId: z.number().describe("Block id that has the data input"),
-        inputName: z.string().describe("Name of the data input to disconnect"),
+        description: "Disconnect a data input from its source.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph"),
+            blockId: z.number().describe("Block id that has the data input"),
+            inputName: z.string().describe("Name of the data input to disconnect"),
+        },
     },
     async ({ graphName, blockId, inputName }) => {
         const result = manager.disconnectData(graphName, blockId, inputName);
@@ -501,19 +521,21 @@ server.tool(
 
 // ── Context variables ───────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "set_variable",
-    "Set a context variable on the flow graph. Variables can be read by GetVariable blocks and written by SetVariable blocks.",
     {
-        graphName: z.string().describe("Name of the flow graph"),
-        variableName: z.string().describe("Name of the variable"),
-        value: z
-            .unknown()
-            .describe(
-                "The variable value. For complex types, use serialized format:\n" +
-                    '  - number: 42\n  - string: "hello"\n  - boolean: true\n' +
-                    '  - Vector3: { "value": [1, 2, 3], "className": "Vector3" }'
-            ),
+        description: "Set a context variable on the flow graph. Variables can be read by GetVariable blocks and written by SetVariable blocks.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph"),
+            variableName: z.string().describe("Name of the variable"),
+            value: z
+                .unknown()
+                .describe(
+                    "The variable value. For complex types, use serialized format:\n" +
+                        '  - number: 42\n  - string: "hello"\n  - boolean: true\n' +
+                        '  - Vector3: { "value": [1, 2, 3], "className": "Vector3" }'
+                ),
+        },
     },
     async ({ graphName, variableName, value }) => {
         const result = manager.setVariable(graphName, variableName, value);
@@ -531,11 +553,13 @@ server.tool(
 
 // ── Query tools ─────────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "describe_graph",
-    "Get a human-readable description of a flow graph, including all blocks, their connections, and context variables.",
     {
-        graphName: z.string().describe("Name of the flow graph to describe"),
+        description: "Get a human-readable description of a flow graph, including all blocks, their connections, and context variables.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph to describe"),
+        },
     },
     async ({ graphName }) => {
         const desc = manager.describeGraph(graphName);
@@ -543,12 +567,14 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "describe_block",
-    "Get detailed information about a specific block instance, including all its connections and configuration.",
     {
-        graphName: z.string().describe("Name of the flow graph"),
-        blockId: z.number().describe("The block id to describe"),
+        description: "Get detailed information about a specific block instance, including all its connections and configuration.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph"),
+            blockId: z.number().describe("The block id to describe"),
+        },
     },
     async ({ graphName, blockId }) => {
         const desc = manager.describeBlock(graphName, blockId);
@@ -556,14 +582,16 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "list_block_types",
-    "List all available Flow Graph block types, grouped by category. Use this to discover which blocks you can add.",
     {
-        category: z
-            .string()
-            .optional()
-            .describe("Optionally filter by category (Event, Execution, ControlFlow, Animation, Data, Math, Vector, Matrix, Combine, Extract, Conversion, Utility)"),
+        description: "List all available Flow Graph block types, grouped by category. Use this to discover which blocks you can add.",
+        inputSchema: {
+            category: z
+                .string()
+                .optional()
+                .describe("Optionally filter by category (Event, Execution, ControlFlow, Animation, Data, Math, Vector, Matrix, Combine, Extract, Conversion, Utility)"),
+        },
     },
     async ({ category }) => {
         if (category) {
@@ -584,11 +612,13 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "get_block_type_info",
-    "Get detailed info about a specific block type — its signal/data connections, config options, and description.",
     {
-        blockType: z.string().describe("The block type name (e.g. 'Branch', 'SetProperty', 'FlowGraphBranchBlock')"),
+        description: "Get detailed info about a specific block type — its signal/data connections, config options, and description.",
+        inputSchema: {
+            blockType: z.string().describe("The block type name (e.g. 'Branch', 'SetProperty', 'FlowGraphBranchBlock')"),
+        },
     },
     async ({ blockType }) => {
         const info = GetBlockTypeDetails(blockType);
@@ -650,11 +680,13 @@ server.tool(
 
 // ── Validation ──────────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "validate_graph",
-    "Run validation checks on a flow graph. Reports missing connections, unreachable blocks, and broken references.",
     {
-        graphName: z.string().describe("Name of the flow graph to validate"),
+        description: "Run validation checks on a flow graph. Reports missing connections, unreachable blocks, and broken references.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph to validate"),
+        },
     },
     async ({ graphName }) => {
         const issues = manager.validateGraph(graphName);
@@ -667,15 +699,17 @@ server.tool(
 
 // ── Export / Import ─────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "export_graph_json",
-    "Export the flow graph as Babylon.js-compatible JSON at the coordinator level. " + "This JSON can be loaded via FlowGraphCoordinator.parse() at runtime.",
     {
-        graphName: z.string().describe("Name of the flow graph to export"),
-        graphOnly: z
-            .boolean()
-            .default(false)
-            .describe("If true, exports only the graph-level JSON (without the coordinator wrapper). Useful for embedding in glTF or other formats."),
+        description: "Export the flow graph as Babylon.js-compatible JSON at the coordinator level. " + "This JSON can be loaded via FlowGraphCoordinator.parse() at runtime.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph to export"),
+            graphOnly: z
+                .boolean()
+                .default(false)
+                .describe("If true, exports only the graph-level JSON (without the coordinator wrapper). Useful for embedding in glTF or other formats."),
+        },
     },
     async ({ graphName, graphOnly }) => {
         const json = graphOnly ? manager.exportGraphJSON(graphName) : manager.exportJSON(graphName);
@@ -686,12 +720,14 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "import_graph_json",
-    "Import an existing Flow Graph JSON into memory for editing. Accepts either coordinator-level or graph-level JSON.",
     {
-        graphName: z.string().describe("Name to give the imported flow graph"),
-        json: z.string().describe("The Flow Graph JSON string to import"),
+        description: "Import an existing Flow Graph JSON into memory for editing. Accepts either coordinator-level or graph-level JSON.",
+        inputSchema: {
+            graphName: z.string().describe("Name to give the imported flow graph"),
+            json: z.string().describe("The Flow Graph JSON string to import"),
+        },
     },
     async ({ graphName, json }) => {
         const result = manager.importJSON(graphName, json);
@@ -705,20 +741,22 @@ server.tool(
 
 // ── Batch operations ────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "add_blocks_batch",
-    "Add multiple blocks at once. More efficient than calling add_block repeatedly. Returns all created block ids.",
     {
-        graphName: z.string().describe("Name of the flow graph"),
-        blocks: z
-            .array(
-                z.object({
-                    blockType: z.string().describe("Block type name from the registry"),
-                    name: z.string().optional().describe("Instance name for the block"),
-                    config: z.record(z.string(), z.unknown()).optional().describe("Block configuration"),
-                })
-            )
-            .describe("Array of blocks to add"),
+        description: "Add multiple blocks at once. More efficient than calling add_block repeatedly. Returns all created block ids.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph"),
+            blocks: z
+                .array(
+                    z.object({
+                        blockType: z.string().describe("Block type name from the registry"),
+                        name: z.string().optional().describe("Instance name for the block"),
+                        config: z.record(z.string(), z.unknown()).optional().describe("Block configuration"),
+                    })
+                )
+                .describe("Array of blocks to add"),
+        },
     },
     async ({ graphName, blocks }) => {
         const results: string[] = [];
@@ -734,21 +772,23 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "connect_signals_batch",
-    "Connect multiple signal pairs at once.",
     {
-        graphName: z.string().describe("Name of the flow graph"),
-        connections: z
-            .array(
-                z.object({
-                    sourceBlockId: z.number(),
-                    signalOutputName: z.string(),
-                    targetBlockId: z.number(),
-                    signalInputName: z.string().default("in"),
-                })
-            )
-            .describe("Array of signal connections to make"),
+        description: "Connect multiple signal pairs at once.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph"),
+            connections: z
+                .array(
+                    z.object({
+                        sourceBlockId: z.number(),
+                        signalOutputName: z.string(),
+                        targetBlockId: z.number(),
+                        signalInputName: z.string().default("in"),
+                    })
+                )
+                .describe("Array of signal connections to make"),
+        },
     },
     async ({ graphName, connections }) => {
         const results: string[] = [];
@@ -760,21 +800,23 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "connect_data_batch",
-    "Connect multiple data pairs at once.",
     {
-        graphName: z.string().describe("Name of the flow graph"),
-        connections: z
-            .array(
-                z.object({
-                    sourceBlockId: z.number(),
-                    outputName: z.string(),
-                    targetBlockId: z.number(),
-                    inputName: z.string(),
-                })
-            )
-            .describe("Array of data connections to make"),
+        description: "Connect multiple data pairs at once.",
+        inputSchema: {
+            graphName: z.string().describe("Name of the flow graph"),
+            connections: z
+                .array(
+                    z.object({
+                        sourceBlockId: z.number(),
+                        outputName: z.string(),
+                        targetBlockId: z.number(),
+                        inputName: z.string(),
+                    })
+                )
+                .describe("Array of data connections to make"),
+        },
     },
     async ({ graphName, connections }) => {
         const results: string[] = [];

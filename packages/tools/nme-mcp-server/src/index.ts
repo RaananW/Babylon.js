@@ -39,7 +39,7 @@ const server = new McpServer({
 //  Resources (read-only reference data)
 // ═══════════════════════════════════════════════════════════════════════════
 
-server.resource("block-catalog", "nme://block-catalog", async (uri) => ({
+server.registerResource("block-catalog", "nme://block-catalog", {}, async (uri) => ({
     contents: [
         {
             uri: uri.href,
@@ -49,7 +49,7 @@ server.resource("block-catalog", "nme://block-catalog", async (uri) => ({
     ],
 }));
 
-server.resource("enums", "nme://enums", async (uri) => ({
+server.registerResource("enums", "nme://enums", {}, async (uri) => ({
     contents: [
         {
             uri: uri.href,
@@ -79,7 +79,7 @@ server.resource("enums", "nme://enums", async (uri) => ({
     ],
 }));
 
-server.resource("concepts", "nme://concepts", async (uri) => ({
+server.registerResource("concepts", "nme://concepts", {}, async (uri) => ({
     contents: [
         {
             uri: uri.href,
@@ -177,7 +177,7 @@ server.resource("concepts", "nme://concepts", async (uri) => ({
 //  Prompts (reusable prompt templates)
 // ═══════════════════════════════════════════════════════════════════════════
 
-server.prompt("create-pbr-material", "Step-by-step instructions for building a basic PBR material", () => ({
+server.registerPrompt("create-pbr-material", { description: "Step-by-step instructions for building a basic PBR material" }, () => ({
     messages: [
         {
             role: "user",
@@ -208,7 +208,7 @@ server.prompt("create-pbr-material", "Step-by-step instructions for building a b
     ],
 }));
 
-server.prompt("create-simple-color-material", "Create the simplest possible unlit colored material", () => ({
+server.registerPrompt("create-simple-color-material", { description: "Create the simplest possible unlit colored material" }, () => ({
     messages: [
         {
             role: "user",
@@ -236,16 +236,18 @@ server.prompt("create-simple-color-material", "Create the simplest possible unli
 
 // ── Material lifecycle ─────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "create_material",
-    "Create a new empty Node Material graph in memory. This is always the first step.",
     {
-        name: z.string().describe("Unique name for the material (e.g. 'MyPBR', 'GlowEffect')"),
-        mode: z
-            .enum(["Material", "PostProcess", "Particle", "ProceduralTexture", "GaussianSplatting", "SFE"])
-            .default("Material")
-            .describe("The material mode. Use 'Material' for standard mesh materials."),
-        comment: z.string().optional().describe("An optional description of what this material does"),
+        description: "Create a new empty Node Material graph in memory. This is always the first step.",
+        inputSchema: {
+            name: z.string().describe("Unique name for the material (e.g. 'MyPBR', 'GlowEffect')"),
+            mode: z
+                .enum(["Material", "PostProcess", "Particle", "ProceduralTexture", "GaussianSplatting", "SFE"])
+                .default("Material")
+                .describe("The material mode. Use 'Material' for standard mesh materials."),
+            comment: z.string().optional().describe("An optional description of what this material does"),
+        },
     },
     async ({ name, mode, comment }) => {
         manager.createMaterial(name, mode, comment);
@@ -260,11 +262,13 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "delete_material",
-    "Delete a material graph from memory.",
     {
-        name: z.string().describe("Name of the material to delete"),
+        description: "Delete a material graph from memory.",
+        inputSchema: {
+            name: z.string().describe("Name of the material to delete"),
+        },
     },
     async ({ name }) => {
         const ok = manager.deleteMaterial(name);
@@ -274,7 +278,7 @@ server.tool(
     }
 );
 
-server.tool("list_materials", "List all material graphs currently in memory.", {}, async () => {
+server.registerTool("list_materials", { description: "List all material graphs currently in memory." }, async () => {
     const names = manager.listMaterials();
     return {
         content: [
@@ -288,27 +292,29 @@ server.tool("list_materials", "List all material graphs currently in memory.", {
 
 // ── Block operations ────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "add_block",
-    "Add a new block to a material graph. Returns the block's id for use in connect_blocks.",
     {
-        materialName: z.string().describe("Name of the material to add the block to"),
-        blockType: z
-            .string()
-            .describe(
-                "The block type from the registry (e.g. 'InputBlock', 'MultiplyBlock', 'PBRMetallicRoughnessBlock', 'TransformBlock', etc.). Use list_block_types to see all."
-            ),
-        name: z.string().optional().describe("Human-friendly name for this block instance (e.g. 'myColor', 'worldMatrix')"),
-        properties: z
-            .record(z.string(), z.unknown())
-            .optional()
-            .describe(
-                "Key-value properties to set on the block. For InputBlock: type (Float/Vector2/Vector3/Vector4/Color3/Color4/Matrix), " +
-                    "value (the constant value), systemValue (World/View/Projection/etc.), attributeName (position/normal/uv/etc.), " +
-                    "isConstant (boolean), animationType (None/Time), min/max (number). " +
-                    "For TrigonometryBlock: operation (Cos/Sin/Abs/etc.). " +
-                    "For ConditionalBlock: condition (Equal/LessThan/etc.)."
-            ),
+        description: "Add a new block to a material graph. Returns the block's id for use in connect_blocks.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material to add the block to"),
+            blockType: z
+                .string()
+                .describe(
+                    "The block type from the registry (e.g. 'InputBlock', 'MultiplyBlock', 'PBRMetallicRoughnessBlock', 'TransformBlock', etc.). Use list_block_types to see all."
+                ),
+            name: z.string().optional().describe("Human-friendly name for this block instance (e.g. 'myColor', 'worldMatrix')"),
+            properties: z
+                .record(z.string(), z.unknown())
+                .optional()
+                .describe(
+                    "Key-value properties to set on the block. For InputBlock: type (Float/Vector2/Vector3/Vector4/Color3/Color4/Matrix), " +
+                        "value (the constant value), systemValue (World/View/Projection/etc.), attributeName (position/normal/uv/etc.), " +
+                        "isConstant (boolean), animationType (None/Time), min/max (number). " +
+                        "For TrigonometryBlock: operation (Cos/Sin/Abs/etc.). " +
+                        "For ConditionalBlock: condition (Equal/LessThan/etc.)."
+                ),
+        },
     },
     async ({ materialName, blockType, name, properties }) => {
         const result = manager.addBlock(materialName, blockType, name, properties as Record<string, unknown>);
@@ -330,12 +336,14 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "remove_block",
-    "Remove a block from a material graph. Also removes any connections to/from it.",
     {
-        materialName: z.string().describe("Name of the material"),
-        blockId: z.number().describe("The block id to remove"),
+        description: "Remove a block from a material graph. Also removes any connections to/from it.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material"),
+            blockId: z.number().describe("The block id to remove"),
+        },
     },
     async ({ materialName, blockId }) => {
         const result = manager.removeBlock(materialName, blockId);
@@ -346,13 +354,15 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "set_block_properties",
-    "Set or update properties on an existing block (e.g. change an InputBlock value, set a TrigonometryBlock operation).",
     {
-        materialName: z.string().describe("Name of the material"),
-        blockId: z.number().describe("The block id to modify"),
-        properties: z.record(z.string(), z.unknown()).describe("Key-value properties to set. Same keys as add_block's properties parameter."),
+        description: "Set or update properties on an existing block (e.g. change an InputBlock value, set a TrigonometryBlock operation).",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material"),
+            blockId: z.number().describe("The block id to modify"),
+            properties: z.record(z.string(), z.unknown()).describe("Key-value properties to set. Same keys as add_block's properties parameter."),
+        },
     },
     async ({ materialName, blockId, properties }) => {
         const result = manager.setBlockProperties(materialName, blockId, properties as Record<string, unknown>);
@@ -365,15 +375,17 @@ server.tool(
 
 // ── Connections ──────────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "connect_blocks",
-    "Connect an output of one block to an input of another block. Data flows from source output → target input.",
     {
-        materialName: z.string().describe("Name of the material"),
-        sourceBlockId: z.number().describe("Block id to connect FROM (the one with the output)"),
-        outputName: z.string().describe("Name of the output on the source block (e.g. 'output', 'rgb', 'xyz')"),
-        targetBlockId: z.number().describe("Block id to connect TO (the one with the input)"),
-        inputName: z.string().describe("Name of the input on the target block (e.g. 'vector', 'left', 'color')"),
+        description: "Connect an output of one block to an input of another block. Data flows from source output → target input.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material"),
+            sourceBlockId: z.number().describe("Block id to connect FROM (the one with the output)"),
+            outputName: z.string().describe("Name of the output on the source block (e.g. 'output', 'rgb', 'xyz')"),
+            targetBlockId: z.number().describe("Block id to connect TO (the one with the input)"),
+            inputName: z.string().describe("Name of the input on the target block (e.g. 'vector', 'left', 'color')"),
+        },
     },
     async ({ materialName, sourceBlockId, outputName, targetBlockId, inputName }) => {
         const result = manager.connectBlocks(materialName, sourceBlockId, outputName, targetBlockId, inputName);
@@ -389,13 +401,15 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "disconnect_input",
-    "Disconnect an input on a block (remove an existing connection).",
     {
-        materialName: z.string().describe("Name of the material"),
-        blockId: z.number().describe("The block id whose input to disconnect"),
-        inputName: z.string().describe("Name of the input to disconnect"),
+        description: "Disconnect an input on a block (remove an existing connection).",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material"),
+            blockId: z.number().describe("The block id whose input to disconnect"),
+            inputName: z.string().describe("Name of the input to disconnect"),
+        },
     },
     async ({ materialName, blockId, inputName }) => {
         const result = manager.disconnectInput(materialName, blockId, inputName);
@@ -408,11 +422,13 @@ server.tool(
 
 // ── Query tools ─────────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "describe_material",
-    "Get a human-readable description of the current state of a material graph, " + "including all blocks and their connections.",
     {
-        materialName: z.string().describe("Name of the material to describe"),
+        description: "Get a human-readable description of the current state of a material graph, " + "including all blocks and their connections.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material to describe"),
+        },
     },
     async ({ materialName }) => {
         const desc = manager.describeMaterial(materialName);
@@ -420,12 +436,14 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "describe_block",
-    "Get detailed information about a specific block instance in a material, including its connections and properties.",
     {
-        materialName: z.string().describe("Name of the material"),
-        blockId: z.number().describe("The block id to describe"),
+        description: "Get detailed information about a specific block instance in a material, including its connections and properties.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material"),
+            blockId: z.number().describe("The block id to describe"),
+        },
     },
     async ({ materialName, blockId }) => {
         const desc = manager.describeBlock(materialName, blockId);
@@ -433,11 +451,13 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "list_block_types",
-    "List all available NME block types, grouped by category. Use this to discover which blocks you can add.",
     {
-        category: z.string().optional().describe("Optionally filter by category (Input, Math, Vector, Color, Texture, PBR, Output, etc.)"),
+        description: "List all available NME block types, grouped by category. Use this to discover which blocks you can add.",
+        inputSchema: {
+            category: z.string().optional().describe("Optionally filter by category (Input, Math, Vector, Color, Texture, PBR, Output, etc.)"),
+        },
     },
     async ({ category }) => {
         if (category) {
@@ -458,11 +478,13 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "get_block_type_info",
-    "Get detailed info about a specific block type — its inputs, outputs, properties, and description.",
     {
-        blockType: z.string().describe("The block type name (e.g. 'PBRMetallicRoughnessBlock', 'InputBlock')"),
+        description: "Get detailed info about a specific block type — its inputs, outputs, properties, and description.",
+        inputSchema: {
+            blockType: z.string().describe("The block type name (e.g. 'PBRMetallicRoughnessBlock', 'InputBlock')"),
+        },
     },
     async ({ blockType }) => {
         const info = GetBlockTypeDetails(blockType);
@@ -509,11 +531,13 @@ server.tool(
 
 // ── Validation ──────────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "validate_material",
-    "Run validation checks on a material graph. Reports missing outputs, unconnected required inputs, and broken references.",
     {
-        materialName: z.string().describe("Name of the material to validate"),
+        description: "Run validation checks on a material graph. Reports missing outputs, unconnected required inputs, and broken references.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material to validate"),
+        },
     },
     async ({ materialName }) => {
         const issues = manager.validateMaterial(materialName);
@@ -526,11 +550,14 @@ server.tool(
 
 // ── Export / Import ─────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "export_material_json",
-    "Export the material graph as NME-compatible JSON. This JSON can be loaded in the Babylon.js Node Material Editor " + "or via NodeMaterial.Parse() at runtime.",
     {
-        materialName: z.string().describe("Name of the material to export"),
+        description:
+            "Export the material graph as NME-compatible JSON. This JSON can be loaded in the Babylon.js Node Material Editor " + "or via NodeMaterial.Parse() at runtime.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material to export"),
+        },
     },
     async ({ materialName }) => {
         const json = manager.exportJSON(materialName);
@@ -541,12 +568,14 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "import_material_json",
-    "Import an existing NME JSON into memory for editing. You can then modify blocks, connections, etc.",
     {
-        materialName: z.string().describe("Name to give the imported material"),
-        json: z.string().describe("The NME JSON string to import"),
+        description: "Import an existing NME JSON into memory for editing. You can then modify blocks, connections, etc.",
+        inputSchema: {
+            materialName: z.string().describe("Name to give the imported material"),
+            json: z.string().describe("The NME JSON string to import"),
+        },
     },
     async ({ materialName, json }) => {
         const result = manager.importJSON(materialName, json);
@@ -560,11 +589,13 @@ server.tool(
 
 // ── Snippet / URL helpers ───────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "get_snippet_url",
-    "Generate a URL that opens the material in the online Babylon.js Node Material Editor. " + "The JSON is encoded in the URL fragment.",
     {
-        materialName: z.string().describe("Name of the material"),
+        description: "Generate a URL that opens the material in the online Babylon.js Node Material Editor. " + "The JSON is encoded in the URL fragment.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material"),
+        },
     },
     async ({ materialName }) => {
         const json = manager.exportJSON(materialName);
@@ -587,21 +618,23 @@ server.tool(
 
 // ── Batch operations ────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "add_blocks_batch",
-    "Add multiple blocks at once. More efficient than calling add_block repeatedly. Returns all created block ids.",
     {
-        materialName: z.string().describe("Name of the material"),
-        blocks: z
-            .array(
-                z.object({
-                    blockType: z.string().describe("Block type name"),
-                    blockName: z.string().optional().describe("Instance name for the block"),
-                    name: z.string().optional().describe("Instance name (alias for blockName)"),
-                    properties: z.record(z.string(), z.unknown()).optional().describe("Block properties"),
-                })
-            )
-            .describe("Array of blocks to add"),
+        description: "Add multiple blocks at once. More efficient than calling add_block repeatedly. Returns all created block ids.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material"),
+            blocks: z
+                .array(
+                    z.object({
+                        blockType: z.string().describe("Block type name"),
+                        blockName: z.string().optional().describe("Instance name for the block"),
+                        name: z.string().optional().describe("Instance name (alias for blockName)"),
+                        properties: z.record(z.string(), z.unknown()).optional().describe("Block properties"),
+                    })
+                )
+                .describe("Array of blocks to add"),
+        },
     },
     async ({ materialName, blocks }) => {
         const results: string[] = [];
@@ -622,21 +655,23 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "connect_blocks_batch",
-    "Connect multiple block pairs at once. More efficient than calling connect_blocks repeatedly.",
     {
-        materialName: z.string().describe("Name of the material"),
-        connections: z
-            .array(
-                z.object({
-                    sourceBlockId: z.number(),
-                    outputName: z.string(),
-                    targetBlockId: z.number(),
-                    inputName: z.string(),
-                })
-            )
-            .describe("Array of connections to make"),
+        description: "Connect multiple block pairs at once. More efficient than calling connect_blocks repeatedly.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material"),
+            connections: z
+                .array(
+                    z.object({
+                        sourceBlockId: z.number(),
+                        outputName: z.string(),
+                        targetBlockId: z.number(),
+                        inputName: z.string(),
+                    })
+                )
+                .describe("Array of connections to make"),
+        },
     },
     async ({ materialName, connections }) => {
         const results: string[] = [];

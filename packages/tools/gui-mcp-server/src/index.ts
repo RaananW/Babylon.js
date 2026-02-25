@@ -41,7 +41,7 @@ const server = new McpServer({
 //  Resources (read-only reference data)
 // ═══════════════════════════════════════════════════════════════════════════
 
-server.resource("control-catalog", "gui://control-catalog", async (uri) => ({
+server.registerResource("control-catalog", "gui://control-catalog", {}, async (uri) => ({
     contents: [
         {
             uri: uri.href,
@@ -51,7 +51,7 @@ server.resource("control-catalog", "gui://control-catalog", async (uri) => ({
     ],
 }));
 
-server.resource("base-properties", "gui://base-properties", async (uri) => ({
+server.registerResource("base-properties", "gui://base-properties", {}, async (uri) => ({
     contents: [
         {
             uri: uri.href,
@@ -65,7 +65,7 @@ server.resource("base-properties", "gui://base-properties", async (uri) => ({
     ],
 }));
 
-server.resource("enums", "gui://enums", async (uri) => ({
+server.registerResource("enums", "gui://enums", {}, async (uri) => ({
     contents: [
         {
             uri: uri.href,
@@ -95,7 +95,7 @@ server.resource("enums", "gui://enums", async (uri) => ({
     ],
 }));
 
-server.resource("concepts", "gui://concepts", async (uri) => ({
+server.registerResource("concepts", "gui://concepts", {}, async (uri) => ({
     contents: [
         {
             uri: uri.href,
@@ -193,7 +193,7 @@ server.resource("concepts", "gui://concepts", async (uri) => ({
 //  Prompts (reusable prompt templates)
 // ═══════════════════════════════════════════════════════════════════════════
 
-server.prompt("create-hud", "Step-by-step instructions for building a basic game HUD", () => ({
+server.registerPrompt("create-hud", { description: "Step-by-step instructions for building a basic game HUD" }, () => ({
     messages: [
         {
             role: "user",
@@ -219,7 +219,7 @@ server.prompt("create-hud", "Step-by-step instructions for building a basic game
     ],
 }));
 
-server.prompt("create-menu", "Step-by-step instructions for building a settings/options menu", () => ({
+server.registerPrompt("create-menu", { description: "Step-by-step instructions for building a settings/options menu" }, () => ({
     messages: [
         {
             role: "user",
@@ -244,7 +244,7 @@ server.prompt("create-menu", "Step-by-step instructions for building a settings/
     ],
 }));
 
-server.prompt("create-dialog", "Step-by-step instructions for building a modal dialog", () => ({
+server.registerPrompt("create-dialog", { description: "Step-by-step instructions for building a modal dialog" }, () => ({
     messages: [
         {
             role: "user",
@@ -273,17 +273,20 @@ server.prompt("create-dialog", "Step-by-step instructions for building a modal d
 
 // ── GUI Texture lifecycle ─────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "create_gui",
-    "Create a new empty GUI (AdvancedDynamicTexture) in memory. This is always the first step. " +
-        "The GUI starts with an empty root container; add controls to 'root' to begin building.",
     {
-        name: z.string().describe("Unique name for this GUI (e.g. 'MainHUD', 'SettingsPanel')"),
-        width: z.number().default(1920).describe("Texture width in pixels"),
-        height: z.number().default(1080).describe("Texture height in pixels"),
-        isFullscreen: z.boolean().default(true).describe("Whether this is a fullscreen overlay GUI"),
-        idealWidth: z.number().optional().describe("Ideal width for adaptive scaling (optional)"),
-        idealHeight: z.number().optional().describe("Ideal height for adaptive scaling (optional)"),
+        description:
+            "Create a new empty GUI (AdvancedDynamicTexture) in memory. This is always the first step. " +
+            "The GUI starts with an empty root container; add controls to 'root' to begin building.",
+        inputSchema: {
+            name: z.string().describe("Unique name for this GUI (e.g. 'MainHUD', 'SettingsPanel')"),
+            width: z.number().default(1920).describe("Texture width in pixels"),
+            height: z.number().default(1080).describe("Texture height in pixels"),
+            isFullscreen: z.boolean().default(true).describe("Whether this is a fullscreen overlay GUI"),
+            idealWidth: z.number().optional().describe("Ideal width for adaptive scaling (optional)"),
+            idealHeight: z.number().optional().describe("Ideal height for adaptive scaling (optional)"),
+        },
     },
     async ({ name, width, height, isFullscreen, idealWidth, idealHeight }) => {
         manager.createTexture(name, { width, height, isFullscreen, idealWidth, idealHeight });
@@ -298,12 +301,16 @@ server.tool(
     }
 );
 
-server.tool("delete_gui", "Delete a GUI texture from memory.", { name: z.string().describe("Name of the GUI to delete") }, async ({ name }) => {
-    const ok = manager.deleteTexture(name);
-    return { content: [{ type: "text", text: ok ? `Deleted "${name}".` : `GUI "${name}" not found.` }] };
-});
+server.registerTool(
+    "delete_gui",
+    { description: "Delete a GUI texture from memory.", inputSchema: { name: z.string().describe("Name of the GUI to delete") } },
+    async ({ name }) => {
+        const ok = manager.deleteTexture(name);
+        return { content: [{ type: "text", text: ok ? `Deleted "${name}".` : `GUI "${name}" not found.` }] };
+    }
+);
 
-server.tool("list_guis", "List all GUI textures currently in memory.", {}, async () => {
+server.registerTool("list_guis", { description: "List all GUI textures currently in memory." }, async () => {
     const names = manager.listTextures();
     return {
         content: [
@@ -317,34 +324,37 @@ server.tool("list_guis", "List all GUI textures currently in memory.", {}, async
 
 // ── Control operations ────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "add_control",
-    "Add a new GUI control to a GUI texture. Returns the control's name for use in further operations. " +
-        "The control is added as a child of the specified parent (defaults to 'root'). " +
-        "For Grid parents, you can specify gridRow and gridColumn to place the control in a specific cell.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        controlType: z
-            .string()
-            .describe(
-                "The control type from the catalog (e.g. 'TextBlock', 'Rectangle', 'Button', 'Slider', 'Grid', 'StackPanel'). " +
-                    "Use list_control_types to see all available types."
-            ),
-        controlName: z.string().optional().describe("Name for the control (must be unique within the GUI). Auto-generated if omitted."),
-        parentName: z.string().default("root").describe("Name of the parent container to add this control to. Defaults to 'root'."),
-        properties: z
-            .record(z.string(), z.unknown())
-            .optional()
-            .describe(
-                "Key-value properties to set on the control. Examples: " +
-                    '{ text: "Hello", fontSize: "24px", color: "white" } for TextBlock, ' +
-                    '{ background: "#333", cornerRadius: 10, thickness: 2 } for Rectangle, ' +
-                    "{ minimum: 0, maximum: 100, value: 50 } for Slider, " +
-                    '{ buttonText: "Click me", background: "#4CAF50" } for Button (buttonText creates the internal TextBlock), ' +
-                    '{ buttonImage: "icon.png" } for Button with image.'
-            ),
-        gridRow: z.number().optional().describe("Row index when adding to a Grid parent (0-based)"),
-        gridColumn: z.number().optional().describe("Column index when adding to a Grid parent (0-based)"),
+        description:
+            "Add a new GUI control to a GUI texture. Returns the control's name for use in further operations. " +
+            "The control is added as a child of the specified parent (defaults to 'root'). " +
+            "For Grid parents, you can specify gridRow and gridColumn to place the control in a specific cell.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            controlType: z
+                .string()
+                .describe(
+                    "The control type from the catalog (e.g. 'TextBlock', 'Rectangle', 'Button', 'Slider', 'Grid', 'StackPanel'). " +
+                        "Use list_control_types to see all available types."
+                ),
+            controlName: z.string().optional().describe("Name for the control (must be unique within the GUI). Auto-generated if omitted."),
+            parentName: z.string().default("root").describe("Name of the parent container to add this control to. Defaults to 'root'."),
+            properties: z
+                .record(z.string(), z.unknown())
+                .optional()
+                .describe(
+                    "Key-value properties to set on the control. Examples: " +
+                        '{ text: "Hello", fontSize: "24px", color: "white" } for TextBlock, ' +
+                        '{ background: "#333", cornerRadius: 10, thickness: 2 } for Rectangle, ' +
+                        "{ minimum: 0, maximum: 100, value: 50 } for Slider, " +
+                        '{ buttonText: "Click me", background: "#4CAF50" } for Button (buttonText creates the internal TextBlock), ' +
+                        '{ buttonImage: "icon.png" } for Button with image.'
+                ),
+            gridRow: z.number().optional().describe("Row index when adding to a Grid parent (0-based)"),
+            gridColumn: z.number().optional().describe("Column index when adding to a Grid parent (0-based)"),
+        },
     },
     async ({ guiName, controlType, controlName, parentName, properties, gridRow, gridColumn }) => {
         const result = manager.addControl(guiName, controlType, controlName, parentName, properties as Record<string, unknown>, gridRow, gridColumn);
@@ -367,12 +377,14 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "remove_control",
-    "Remove a control (and all its descendants) from the GUI.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        controlName: z.string().describe("Name of the control to remove"),
+        description: "Remove a control (and all its descendants) from the GUI.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            controlName: z.string().describe("Name of the control to remove"),
+        },
     },
     async ({ guiName, controlName }) => {
         const result = manager.removeControl(guiName, controlName);
@@ -383,19 +395,21 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "set_control_properties",
-    "Set or update properties on an existing control.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        controlName: z.string().describe("Name of the control to modify"),
-        properties: z
-            .record(z.string(), z.unknown())
-            .describe(
-                "Key-value properties to set. Any base Control property (width, height, color, fontSize, etc.) " +
-                    "or type-specific property (text, source, isChecked, minimum, maximum, etc.). " +
-                    "For Buttons, use 'buttonText' to update the internal TextBlock's text."
-            ),
+        description: "Set or update properties on an existing control.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            controlName: z.string().describe("Name of the control to modify"),
+            properties: z
+                .record(z.string(), z.unknown())
+                .describe(
+                    "Key-value properties to set. Any base Control property (width, height, color, fontSize, etc.) " +
+                        "or type-specific property (text, source, isChecked, minimum, maximum, etc.). " +
+                        "For Buttons, use 'buttonText' to update the internal TextBlock's text."
+                ),
+        },
     },
     async ({ guiName, controlName, properties }) => {
         const result = manager.setControlProperties(guiName, controlName, properties as Record<string, unknown>);
@@ -406,15 +420,17 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "reparent_control",
-    "Move a control to a different parent container.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        controlName: z.string().describe("Name of the control to move"),
-        newParentName: z.string().describe("Name of the new parent container"),
-        gridRow: z.number().optional().describe("Row index if new parent is a Grid"),
-        gridColumn: z.number().optional().describe("Column index if new parent is a Grid"),
+        description: "Move a control to a different parent container.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            controlName: z.string().describe("Name of the control to move"),
+            newParentName: z.string().describe("Name of the new parent container"),
+            gridRow: z.number().optional().describe("Row index if new parent is a Grid"),
+            gridColumn: z.number().optional().describe("Column index if new parent is a Grid"),
+        },
     },
     async ({ guiName, controlName, newParentName, gridRow, gridColumn }) => {
         const result = manager.reparentControl(guiName, controlName, newParentName, gridRow, gridColumn);
@@ -433,14 +449,16 @@ server.tool(
 
 // ── Grid operations ───────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "add_grid_row",
-    "Add a row definition to a Grid control. Call this before placing controls in that row.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        gridName: z.string().describe("Name of the Grid control"),
-        value: z.number().describe("Size value — fraction (0–1) if isPixel=false, or pixel count if isPixel=true"),
-        isPixel: z.boolean().default(false).describe("Whether the value is in pixels (true) or a fraction (false)"),
+        description: "Add a row definition to a Grid control. Call this before placing controls in that row.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            gridName: z.string().describe("Name of the Grid control"),
+            value: z.number().describe("Size value — fraction (0–1) if isPixel=false, or pixel count if isPixel=true"),
+            isPixel: z.boolean().default(false).describe("Whether the value is in pixels (true) or a fraction (false)"),
+        },
     },
     async ({ guiName, gridName, value, isPixel }) => {
         const result = manager.addGridRow(guiName, gridName, value, isPixel);
@@ -452,14 +470,16 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "add_grid_column",
-    "Add a column definition to a Grid control.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        gridName: z.string().describe("Name of the Grid control"),
-        value: z.number().describe("Size value — fraction (0–1) if isPixel=false, or pixel count if isPixel=true"),
-        isPixel: z.boolean().default(false).describe("Whether the value is in pixels (true) or a fraction (false)"),
+        description: "Add a column definition to a Grid control.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            gridName: z.string().describe("Name of the Grid control"),
+            value: z.number().describe("Size value — fraction (0–1) if isPixel=false, or pixel count if isPixel=true"),
+            isPixel: z.boolean().default(false).describe("Whether the value is in pixels (true) or a fraction (false)"),
+        },
     },
     async ({ guiName, gridName, value, isPixel }) => {
         const result = manager.addGridColumn(guiName, gridName, value, isPixel);
@@ -471,15 +491,17 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "set_grid_row",
-    "Update an existing row definition on a Grid.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        gridName: z.string().describe("Name of the Grid control"),
-        index: z.number().describe("Row index (0-based)"),
-        value: z.number().describe("New size value"),
-        isPixel: z.boolean().default(false).describe("Whether the value is in pixels"),
+        description: "Update an existing row definition on a Grid.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            gridName: z.string().describe("Name of the Grid control"),
+            index: z.number().describe("Row index (0-based)"),
+            value: z.number().describe("New size value"),
+            isPixel: z.boolean().default(false).describe("Whether the value is in pixels"),
+        },
     },
     async ({ guiName, gridName, index, value, isPixel }) => {
         const result = manager.setGridRow(guiName, gridName, index, value, isPixel);
@@ -490,15 +512,17 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "set_grid_column",
-    "Update an existing column definition on a Grid.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        gridName: z.string().describe("Name of the Grid control"),
-        index: z.number().describe("Column index (0-based)"),
-        value: z.number().describe("New size value"),
-        isPixel: z.boolean().default(false).describe("Whether the value is in pixels"),
+        description: "Update an existing column definition on a Grid.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            gridName: z.string().describe("Name of the Grid control"),
+            index: z.number().describe("Column index (0-based)"),
+            value: z.number().describe("New size value"),
+            isPixel: z.boolean().default(false).describe("Whether the value is in pixels"),
+        },
     },
     async ({ guiName, gridName, index, value, isPixel }) => {
         const result = manager.setGridColumn(guiName, gridName, index, value, isPixel);
@@ -509,13 +533,15 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "remove_grid_row",
-    "Remove a row definition from a Grid.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        gridName: z.string().describe("Name of the Grid control"),
-        index: z.number().describe("Row index to remove (0-based)"),
+        description: "Remove a row definition from a Grid.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            gridName: z.string().describe("Name of the Grid control"),
+            index: z.number().describe("Row index to remove (0-based)"),
+        },
     },
     async ({ guiName, gridName, index }) => {
         const result = manager.removeGridRow(guiName, gridName, index);
@@ -526,13 +552,15 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "remove_grid_column",
-    "Remove a column definition from a Grid.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        gridName: z.string().describe("Name of the Grid control"),
-        index: z.number().describe("Column index to remove (0-based)"),
+        description: "Remove a column definition from a Grid.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            gridName: z.string().describe("Name of the Grid control"),
+            index: z.number().describe("Column index to remove (0-based)"),
+        },
     },
     async ({ guiName, gridName, index }) => {
         const result = manager.removeGridColumn(guiName, gridName, index);
@@ -545,11 +573,13 @@ server.tool(
 
 // ── Query tools ───────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "describe_gui",
-    "Get a human-readable description of the GUI, including the full control tree with properties.",
     {
-        guiName: z.string().describe("Name of the GUI texture to describe"),
+        description: "Get a human-readable description of the GUI, including the full control tree with properties.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture to describe"),
+        },
     },
     async ({ guiName }) => {
         const desc = manager.describeTexture(guiName);
@@ -557,12 +587,14 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "describe_control",
-    "Get detailed information about a specific control, including its properties, parent, and children.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        controlName: z.string().describe("Name of the control to describe"),
+        description: "Get detailed information about a specific control, including its properties, parent, and children.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            controlName: z.string().describe("Name of the control to describe"),
+        },
     },
     async ({ guiName, controlName }) => {
         const desc = manager.describeControl(guiName, controlName);
@@ -570,11 +602,13 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "list_control_types",
-    "List all available GUI control types, grouped by category.",
     {
-        category: z.string().optional().describe("Optionally filter by category (Container, Layout, Text, Input, Button, Indicator, Shape, Image, Misc)"),
+        description: "List all available GUI control types, grouped by category.",
+        inputSchema: {
+            category: z.string().optional().describe("Optionally filter by category (Container, Layout, Text, Input, Button, Indicator, Shape, Image, Misc)"),
+        },
     },
     async ({ category }) => {
         if (category) {
@@ -595,11 +629,13 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "get_control_type_info",
-    "Get detailed info about a specific control type — its properties, whether it's a container, and description.",
     {
-        controlType: z.string().describe("The control type name (e.g. 'TextBlock', 'Grid', 'Slider')"),
+        description: "Get detailed info about a specific control type — its properties, whether it's a container, and description.",
+        inputSchema: {
+            controlType: z.string().describe("The control type name (e.g. 'TextBlock', 'Grid', 'Slider')"),
+        },
     },
     async ({ controlType }) => {
         const info = GetControlTypeDetails(controlType);
@@ -636,11 +672,13 @@ server.tool(
 
 // ── Validation ────────────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "validate_gui",
-    "Run validation checks on a GUI. Reports issues like empty containers, invalid Grid cell assignments, and duplicates.",
     {
-        guiName: z.string().describe("Name of the GUI to validate"),
+        description: "Run validation checks on a GUI. Reports issues like empty containers, invalid Grid cell assignments, and duplicates.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI to validate"),
+        },
     },
     async ({ guiName }) => {
         const issues = manager.validateTexture(guiName);
@@ -653,12 +691,15 @@ server.tool(
 
 // ── Export / Import ───────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "export_gui_json",
-    "Export the GUI as Babylon.js-compatible JSON. This JSON can be loaded with " +
-        "AdvancedDynamicTexture.parseSerializedObject() or AdvancedDynamicTexture.ParseFromFileAsync().",
     {
-        guiName: z.string().describe("Name of the GUI to export"),
+        description:
+            "Export the GUI as Babylon.js-compatible JSON. This JSON can be loaded with " +
+            "AdvancedDynamicTexture.parseSerializedObject() or AdvancedDynamicTexture.ParseFromFileAsync().",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI to export"),
+        },
     },
     async ({ guiName }) => {
         const json = manager.exportJSON(guiName);
@@ -669,12 +710,14 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "import_gui_json",
-    "Import existing GUI JSON into memory for editing. You can then modify controls, rearrange hierarchy, etc.",
     {
-        guiName: z.string().describe("Name to give the imported GUI"),
-        json: z.string().describe("The Babylon.js GUI JSON string to import"),
+        description: "Import existing GUI JSON into memory for editing. You can then modify controls, rearrange hierarchy, etc.",
+        inputSchema: {
+            guiName: z.string().describe("Name to give the imported GUI"),
+            json: z.string().describe("The Babylon.js GUI JSON string to import"),
+        },
     },
     async ({ guiName, json }) => {
         const result = manager.importJSON(guiName, json);
@@ -688,23 +731,25 @@ server.tool(
 
 // ── Batch operations ──────────────────────────────────────────────────
 
-server.tool(
+server.registerTool(
     "add_controls_batch",
-    "Add multiple controls at once. More efficient than calling add_control repeatedly.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        controls: z
-            .array(
-                z.object({
-                    controlType: z.string().describe("Control type name"),
-                    controlName: z.string().optional().describe("Name for the control"),
-                    parentName: z.string().default("root").describe("Parent container name"),
-                    properties: z.record(z.string(), z.unknown()).optional().describe("Control properties"),
-                    gridRow: z.number().optional().describe("Grid row index"),
-                    gridColumn: z.number().optional().describe("Grid column index"),
-                })
-            )
-            .describe("Array of controls to add"),
+        description: "Add multiple controls at once. More efficient than calling add_control repeatedly.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            controls: z
+                .array(
+                    z.object({
+                        controlType: z.string().describe("Control type name"),
+                        controlName: z.string().optional().describe("Name for the control"),
+                        parentName: z.string().default("root").describe("Parent container name"),
+                        properties: z.record(z.string(), z.unknown()).optional().describe("Control properties"),
+                        gridRow: z.number().optional().describe("Grid row index"),
+                        gridColumn: z.number().optional().describe("Grid column index"),
+                    })
+                )
+                .describe("Array of controls to add"),
+        },
     },
     async ({ guiName, controls }) => {
         const results: string[] = [];
@@ -724,28 +769,30 @@ server.tool(
     }
 );
 
-server.tool(
+server.registerTool(
     "setup_grid",
-    "Configure a Grid all at once: add multiple row and column definitions in a single call.",
     {
-        guiName: z.string().describe("Name of the GUI texture"),
-        gridName: z.string().describe("Name of the Grid control"),
-        rows: z
-            .array(
-                z.object({
-                    value: z.number().describe("Size value"),
-                    isPixel: z.boolean().default(false).describe("Pixel (true) or fraction (false)"),
-                })
-            )
-            .describe("Array of row definitions"),
-        columns: z
-            .array(
-                z.object({
-                    value: z.number().describe("Size value"),
-                    isPixel: z.boolean().default(false).describe("Pixel (true) or fraction (false)"),
-                })
-            )
-            .describe("Array of column definitions"),
+        description: "Configure a Grid all at once: add multiple row and column definitions in a single call.",
+        inputSchema: {
+            guiName: z.string().describe("Name of the GUI texture"),
+            gridName: z.string().describe("Name of the Grid control"),
+            rows: z
+                .array(
+                    z.object({
+                        value: z.number().describe("Size value"),
+                        isPixel: z.boolean().default(false).describe("Pixel (true) or fraction (false)"),
+                    })
+                )
+                .describe("Array of row definitions"),
+            columns: z
+                .array(
+                    z.object({
+                        value: z.number().describe("Size value"),
+                        isPixel: z.boolean().default(false).describe("Pixel (true) or fraction (false)"),
+                    })
+                )
+                .describe("Array of column definitions"),
+        },
     },
     async ({ guiName, gridName, rows, columns }) => {
         const results: string[] = [];
