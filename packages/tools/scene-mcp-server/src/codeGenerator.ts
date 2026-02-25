@@ -29,6 +29,13 @@ import {
     type ISerializedRenderPipeline,
     type ISerializedGlowLayer,
     type ISerializedHighlightLayer,
+    type ISerializedIntegration,
+    type IPhysicsCollisionEventIntegration,
+    type IVariableToPropertyIntegration,
+    type IGuiButtonEventIntegration,
+    type ICollisionCounterIntegration,
+    type IPhysicsPositionResetIntegration,
+    type ISerializedInspector,
     type IVector3,
     type IColor3,
     type IColor4,
@@ -437,9 +444,9 @@ function generateMaterial(mat: ISerializedMaterial, sceneVar: string): string {
         } else if (mat.nmeJson) {
             lines.push(`// NodeMaterial from NME JSON`);
             lines.push(`const ${v}Json = ${mat.nmeJson};`);
-            lines.push(`const ${v} = await BABYLON.NodeMaterial.Parse(${v}Json, ${sceneVar});`);
+            lines.push(`const ${v} = BABYLON.NodeMaterial.Parse(${v}Json, ${sceneVar});`);
             lines.push(`${v}.name = "${sanitizeStringLiteral(mat.name)}";`);
-            lines.push(`${v}.build();`);
+            // Note: NodeMaterial.Parse() already calls .build() internally — no need to call it again
         } else {
             lines.push(`const ${v} = new BABYLON.NodeMaterial("${sanitizeStringLiteral(mat.name)}", ${sceneVar});`);
             lines.push(`// TODO: Configure NodeMaterial blocks programmatically or load from snippet/JSON`);
@@ -630,7 +637,7 @@ function generateAnimationGroup(ag: ISerializedAnimationGroup, scene: ISerialize
     return lines.join("\n");
 }
 
-function generatePhysicsBody(meshName: string, mesh: ISerializedMesh): string {
+function generatePhysicsBody(meshName: string, mesh: ISerializedMesh, enableCollisionCallbacks?: boolean): string {
     if (!mesh.physics) {
         return "";
     }
@@ -642,9 +649,19 @@ function generatePhysicsBody(meshName: string, mesh: ISerializedMesh): string {
     lines.push(`// Physics for ${meshName}`);
     lines.push(`const ${v}PhysicsBody = new BABYLON.PhysicsBody(${v}, ${bodyTypeStr}, false, ${v}.getScene());`);
 
-    // Shape
-    const shapeClassName = `BABYLON.PhysicsShape${p.shapeType}`;
-    lines.push(`const ${v}PhysicsShape = new ${shapeClassName}(${v}, ${v}.getScene());`);
+    // Shape — use FromMesh for geometric shapes (Box, Sphere, Capsule, Cylinder)
+    // and direct constructors for mesh-based shapes (Mesh, ConvexHull)
+    switch (p.shapeType) {
+        case "Box":
+        case "Sphere":
+        case "Capsule":
+        case "Cylinder":
+            lines.push(`const ${v}PhysicsShape = BABYLON.PhysicsShape${p.shapeType}.FromMesh(${v});`);
+            break;
+        default:
+            lines.push(`const ${v}PhysicsShape = new BABYLON.PhysicsShape${p.shapeType}(${v}, ${v}.getScene());`);
+            break;
+    }
 
     if (p.mass !== undefined) {
         lines.push(`${v}PhysicsBody.setMassProperties({ mass: ${p.mass} });`);
@@ -663,6 +680,10 @@ function generatePhysicsBody(meshName: string, mesh: ISerializedMesh): string {
 
     lines.push(`${v}PhysicsBody.shape = ${v}PhysicsShape;`);
 
+    if (enableCollisionCallbacks) {
+        lines.push(`${v}PhysicsBody.setCollisionCallbackEnabled(true);`);
+    }
+
     return lines.join("\n");
 }
 
@@ -672,10 +693,11 @@ function generateFlowGraph(fg: ISerializedFlowGraphRef, sceneVar: string): strin
 
     lines.push(`// Flow Graph: ${fg.name}`);
     lines.push(`const ${v}CoordinatorJson = ${fg.coordinatorJson};`);
-    lines.push(`await BABYLON.FlowGraph.ParseCoordinatorAsync(${v}CoordinatorJson, {`);
+    lines.push(`const ${v}Coordinator = await BABYLON.ParseCoordinatorAsync(${v}CoordinatorJson, {`);
     lines.push(`    scene: ${sceneVar},`);
-    lines.push(`    pathConverter: undefined, // Add a path converter if needed`);
+    lines.push(`    pathConverter: { convert: () => ({ object: null, info: null }) },`);
     lines.push(`});`);
+    lines.push(`${v}Coordinator.start();`);
 
     return lines.join("\n");
 }
@@ -1035,11 +1057,382 @@ function generateHighlightLayer(hl: ISerializedHighlightLayer, scene: ISerialize
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  GUI code generation
+// ═══════════════════════════════════════════════════════════════════════════
+
+interface IGUIControlDef {
+    name?: string;
+    className?: string;
+    text?: string;
+    textBlockName?: string;
+    width?: string | number;
+    height?: string | number;
+    color?: string;
+    background?: string;
+    fontSize?: number;
+    cornerRadius?: number;
+    thickness?: number;
+    left?: string | number;
+    top?: string | number;
+    horizontalAlignment?: number;
+    verticalAlignment?: number;
+    textHorizontalAlignment?: number;
+    children?: IGUIControlDef[];
+}
+
+interface IGUIDescriptor {
+    root?: IGUIControlDef;
+    width?: number;
+    height?: number;
+}
+
+interface IGUIGenResult {
+    code: string;
+    /** Map of GUI control name → JS variable name emitted in the generated code */
+    controlVarMap: Map<string, string>;
+}
+
+function generateGUI(guiJson: unknown, sceneVar: string): IGUIGenResult {
+    const gui = guiJson as IGUIDescriptor;
+    const controlVarMap = new Map<string, string>();
+    if (!gui?.root) {
+        return { code: "", controlVarMap };
+    }
+    const lines: string[] = [];
+    lines.push(`// ─── GUI ──────────────────────────────────────────────────────────────────`);
+    lines.push(`const advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, ${sceneVar});`);
+    lines.push(``);
+
+    // Alignment constant maps
+    lines.push(`// Alignment maps for GUI controls`);
+    lines.push(`const _HA = {`);
+    lines.push(`    0: BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT,`);
+    lines.push(`    1: BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT,`);
+    lines.push(`    2: BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER,`);
+    lines.push(`};`);
+    lines.push(`const _VA = {`);
+    lines.push(`    0: BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP,`);
+    lines.push(`    1: BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM,`);
+    lines.push(`    2: BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER,`);
+    lines.push(`};`);
+    lines.push(``);
+
+    // Generate controls recursively
+    function emitControl(def: IGUIControlDef, parentVar: string, indentLevel: number): void {
+        const v = varName(def.name ?? "ctrl");
+        // Track the mapping from control name → emitted variable name
+        if (def.name) {
+            controlVarMap.set(def.name, v);
+        }
+        const pad = "    ".repeat(indentLevel);
+
+        switch (def.className) {
+            case "Container":
+                lines.push(`${pad}const ${v} = new BABYLON.GUI.Container("${sanitizeStringLiteral(def.name ?? "")}");`);
+                break;
+            case "Rectangle":
+                lines.push(`${pad}const ${v} = new BABYLON.GUI.Rectangle("${sanitizeStringLiteral(def.name ?? "")}");`);
+                break;
+            case "Button":
+                lines.push(`${pad}const ${v} = BABYLON.GUI.Button.CreateSimpleButton("${sanitizeStringLiteral(def.name ?? "")}", "${sanitizeStringLiteral(def.text ?? "")}");`);
+                break;
+            case "TextBlock":
+                lines.push(`${pad}const ${v} = new BABYLON.GUI.TextBlock("${sanitizeStringLiteral(def.name ?? "")}", "${sanitizeStringLiteral(def.text ?? "")}");`);
+                break;
+            default:
+                lines.push(`${pad}// Unknown GUI class: ${def.className}`);
+                return;
+        }
+
+        // Set properties
+        if (def.width !== undefined) {
+            lines.push(`${pad}${v}.width = ${JSON.stringify(def.width)};`);
+        }
+        if (def.height !== undefined) {
+            lines.push(`${pad}${v}.height = ${JSON.stringify(def.height)};`);
+        }
+        if (def.color) {
+            lines.push(`${pad}${v}.color = "${sanitizeStringLiteral(def.color)}";`);
+        }
+        if (def.background) {
+            lines.push(`${pad}${v}.background = "${sanitizeStringLiteral(def.background)}";`);
+        }
+        if (def.fontSize) {
+            lines.push(`${pad}${v}.fontSize = ${def.fontSize};`);
+        }
+        if (def.cornerRadius) {
+            lines.push(`${pad}${v}.cornerRadius = ${def.cornerRadius};`);
+        }
+        if (def.thickness !== undefined) {
+            lines.push(`${pad}${v}.thickness = ${def.thickness};`);
+        }
+        if (def.left) {
+            lines.push(`${pad}${v}.left = ${JSON.stringify(def.left)};`);
+        }
+        if (def.top) {
+            lines.push(`${pad}${v}.top = ${JSON.stringify(def.top)};`);
+        }
+        if (def.horizontalAlignment !== undefined) {
+            lines.push(`${pad}${v}.horizontalAlignment = _HA[${def.horizontalAlignment}];`);
+        }
+        if (def.verticalAlignment !== undefined) {
+            lines.push(`${pad}${v}.verticalAlignment = _VA[${def.verticalAlignment}];`);
+        }
+        if (def.textHorizontalAlignment !== undefined) {
+            lines.push(`${pad}${v}.textHorizontalAlignment = _HA[${def.textHorizontalAlignment}];`);
+        }
+
+        lines.push(`${pad}${parentVar}.addControl(${v});`);
+
+        // Recurse into children, skipping auto-generated TextBlock for Buttons
+        if (def.children) {
+            for (const child of def.children) {
+                if (def.className === "Button" && child.name === def.textBlockName) {
+                    continue;
+                }
+                emitControl(child, v, indentLevel);
+            }
+        }
+
+        lines.push(``);
+    }
+
+    if (gui.root.children) {
+        for (const child of gui.root.children) {
+            emitControl(child, "advancedTexture", 0);
+        }
+    }
+
+    return { code: lines.join("\n"), controlVarMap };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  ES6 post-processor
+// ═══════════════════════════════════════════════════════════════════════════
+
+const BABYLON_GUI_CLASSES = new Set([
+    "AdvancedDynamicTexture",
+    "Button",
+    "TextBlock",
+    "Container",
+    "Rectangle",
+    "StackPanel",
+    "Grid",
+    "Image",
+    "Slider",
+    "InputText",
+    "Checkbox",
+    "RadioButton",
+    "Control",
+    "ScrollViewer",
+    "Ellipse",
+    "Line",
+]);
+
+/**
+ * Convert UMD-style code (using `BABYLON.*` globals) into ES module code
+ * with proper import statements from `@babylonjs/*` packages.
+ * @param code - The UMD-style code string to convert
+ * @param hasPhysics - Whether the scene uses physics (adds Havok import)
+ * @param hasGUI - Whether the scene uses GUI (adds GUI import)
+ * @param hasAudio - Whether the scene uses audio (adds Audio V2 import)
+ * @returns The converted ES6 module code string with import statements
+ */
+function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAudio: boolean): string {
+    // Helper: collect BABYLON.* references only OUTSIDE of quoted strings.
+    // The regex alternates between matching a quoted string (skip) vs BABYLON.X (capture).
+    // This prevents collecting/replacing BABYLON references inside JSON string values
+    // like "customType":"BABYLON.InputBlock" which NodeMaterial.Parse() needs.
+    const stringOrBabylonGUI = /(["'])(?:(?!\1)[^\\]|\\.)*\1|BABYLON\.GUI\.(\w+)/g;
+    const stringOrBabylon = /(["'])(?:(?!\1)[^\\]|\\.)*\1|BABYLON\.(?!GUI\.)(\w+)/g;
+
+    // ── 1. Collect all BABYLON.GUI.* references (outside strings) ────────
+    const guiRefs = new Set<string>();
+    let m: RegExpExecArray | null;
+    while ((m = stringOrBabylonGUI.exec(code)) !== null) {
+        if (m[2]) {
+            guiRefs.add(m[2]);
+        } // only the BABYLON.GUI.X capture, skip quoted strings
+    }
+
+    // ── 2. Collect all BABYLON.* references (outside strings) ────────────
+    const coreRefs = new Set<string>();
+    while ((m = stringOrBabylon.exec(code)) !== null) {
+        if (m[2]) {
+            coreRefs.add(m[2]);
+        } // only the BABYLON.X capture, skip quoted strings
+    }
+
+    // ── 3. Build imports ─────────────────────────────────────────────────
+    const importLines: string[] = [];
+
+    if (coreRefs.size > 0) {
+        const sorted = [...coreRefs].sort();
+        importLines.push(`import { ${sorted.join(", ")} } from "@babylonjs/core";`);
+    }
+
+    if (hasPhysics) {
+        importLines.push(`import HavokPhysics from "@babylonjs/havok";`);
+    }
+
+    if (guiRefs.size > 0 || hasGUI) {
+        const sorted = [...guiRefs].sort();
+        if (sorted.length > 0) {
+            importLines.push(`import { ${sorted.join(", ")} } from "@babylonjs/gui";`);
+        } else {
+            importLines.push(`import "@babylonjs/gui";`);
+        }
+    }
+
+    if (hasAudio) {
+        importLines.push(`import "@babylonjs/core/Audio/v2";`);
+    }
+
+    // ── 4. Replace BABYLON.GUI.* → just the class name (outside strings) ─
+    // Alternates: match a quoted string (return as-is) or BABYLON.GUI.X (strip prefix)
+    let result = code.replace(/(["'])(?:(?!\1)[^\\]|\\.)*\1|BABYLON\.GUI\.(\w+)/g, (match, _q, cls) => {
+        return cls ? cls : match; // if cls captured, strip prefix; otherwise keep the string literal
+    });
+
+    // ── 5. Replace BABYLON.* → just the class name (outside strings) ─────
+    result = result.replace(/(["'])(?:(?!\1)[^\\]|\\.)*\1|BABYLON\.(\w+)/g, (match, _q, cls) => {
+        return cls ? cls : match;
+    });
+
+    // ── 6. Remove the old commented-out import section ──────────────────
+    result = result.replace(/\/\/ ─── Imports ───.*?(?=\n(?!\/\/))/s, "");
+
+    // ── 7. Remove the old comment lines about ES modules ────────────────
+    result = result.replace(/^\/\/ If using ES modules.*\n/gm, "");
+    result = result.replace(/^\/\/ import .*\n/gm, "");
+
+    // ── 8. Prepend import block ─────────────────────────────────────────
+    const headerEnd = result.indexOf("*/");
+    if (headerEnd !== -1) {
+        const insertPos = result.indexOf("\n", headerEnd) + 1;
+        result = result.slice(0, insertPos) + "\n" + importLines.join("\n") + "\n" + result.slice(insertPos);
+    } else {
+        result = importLines.join("\n") + "\n\n" + result;
+    }
+
+    // ── 9. Fix `canvas` type annotation for plain JS ────────────────────
+    result = result.replace(`as HTMLCanvasElement`, "");
+
+    return result;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Project file generators
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Generate a package.json for an ES6 Babylon.js project.
+ * @param sceneName - The scene name used as the package name
+ * @param hasPhysics - Whether to include the Havok physics dependency
+ * @param hasGUI - Whether to include the GUI dependency
+ * @param hasInspector - Whether to include the Inspector dependency
+ * @returns The package.json content as a JSON string
+ */
+function generatePackageJson(sceneName: string, hasPhysics: boolean, hasGUI: boolean, hasInspector: boolean): string {
+    const deps: Record<string, string> = {
+        "@babylonjs/core": "^7.0.0",
+        "@babylonjs/loaders": "^7.0.0",
+    };
+    if (hasPhysics) {
+        deps["@babylonjs/havok"] = "^1.3.0";
+    }
+    if (hasGUI) {
+        deps["@babylonjs/gui"] = "^7.0.0";
+    }
+    if (hasInspector) {
+        deps["@babylonjs/inspector"] = "^7.0.0";
+    }
+
+    const pkg = {
+        name: varName(sceneName).toLowerCase(),
+        version: "1.0.0",
+        description: `Babylon.js scene: ${sceneName} — generated by Scene MCP Server`,
+        type: "module",
+        scripts: {
+            dev: "vite",
+            build: "vite build",
+            preview: "vite preview",
+        },
+        dependencies: deps,
+        devDependencies: {
+            vite: "^6.0.0",
+            typescript: "^5.5.0",
+        },
+    };
+
+    return JSON.stringify(pkg, null, 2);
+}
+
+/**
+ * Generate a tsconfig.json for the project.
+ * @returns The tsconfig.json content as a JSON string
+ */
+function generateTsConfig(): string {
+    const config = {
+        compilerOptions: {
+            target: "ES2022",
+            module: "ESNext",
+            moduleResolution: "bundler",
+            strict: true,
+            esModuleInterop: true,
+            skipLibCheck: true,
+            forceConsistentCasingInFileNames: true,
+            outDir: "./dist",
+            declaration: false,
+            sourceMap: true,
+        },
+        include: ["src/**/*.ts"],
+    };
+    return JSON.stringify(config, null, 2);
+}
+
+/**
+ * Generate a minimal vite.config.ts for the project.
+ * @returns The vite.config.ts content as a string
+ */
+function generateViteConfig(): string {
+    return [`import { defineConfig } from "vite";`, ``, `export default defineConfig({`, `    base: "./",`, `    build: {`, `        outDir: "dist",`, `    },`, `});`, ``].join(
+        "\n"
+    );
+}
+
+/**
+ * Generate the index.html entry file for the Vite project.
+ * @param sceneName - The scene name used as the page title
+ * @returns The index.html content as a string
+ */
+function generateIndexHtml(sceneName: string): string {
+    return [
+        `<!DOCTYPE html>`,
+        `<html lang="en">`,
+        `<head>`,
+        `    <meta charset="UTF-8" />`,
+        `    <meta name="viewport" content="width=device-width, initial-scale=1.0" />`,
+        `    <title>${sanitizeStringLiteral(sceneName)}</title>`,
+        `    <style>`,
+        `        html, body { overflow: hidden; width: 100%; height: 100%; margin: 0; padding: 0; }`,
+        `        #renderCanvas { width: 100%; height: 100%; touch-action: none; }`,
+        `    </style>`,
+        `</head>`,
+        `<body>`,
+        `    <canvas id="renderCanvas"></canvas>`,
+        `    <script type="module" src="./src/index.ts"></script>`,
+        `</body>`,
+        `</html>`,
+    ].join("\n");
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  Main generator
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
- *
+ * Options for controlling the output of the scene code generator.
  */
 export interface ICodeGeneratorOptions {
     /** Whether to wrap in an async function or emit top-level statements */
@@ -1054,6 +1447,259 @@ export interface ICodeGeneratorOptions {
     includeEngineSetup?: boolean;
     /** Whether to add a render loop at the end */
     includeRenderLoop?: boolean;
+    /**
+     * Output format.
+     * - "umd" (default): Uses `BABYLON.*` globals, suitable for CDN `<script>` tags.
+     * - "es6": Uses ES module imports from `@babylonjs/*` packages.
+     */
+    format?: "umd" | "es6";
+    /**
+     * Optional GUI JSON descriptor (from the GUI MCP server).
+     * When provided, GUI construction code will be generated.
+     */
+    guiJson?: unknown;
+    /**
+     * Whether to enable collision callbacks on physics bodies.
+     * When true, `body.setCollisionCallbackEnabled(true)` is generated.
+     */
+    enableCollisionCallbacks?: boolean;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Inspector code generator
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Generates code to show the Babylon.js Inspector v2 on the scene.
+ * For UMD format, loads the inspector script from CDN and uses scene.debugLayer.show().
+ * For ES6 format, imports from \@babylonjs/inspector and uses scene.debugLayer.show().
+ * @param inspector - The inspector configuration
+ * @param sceneVar - The variable name for the scene
+ * @param format - The output format (umd or es6)
+ * @returns The generated code string
+ */
+function generateInspector(inspector: ISerializedInspector, sceneVar: string, format: "umd" | "es6"): string {
+    const lines: string[] = [];
+    lines.push(`// ─── Inspector v2 ─────────────────────────────────────────────────────────`);
+
+    const configParts: string[] = [];
+    if (inspector.overlay) {
+        configParts.push(`overlay: true`);
+    }
+    if (inspector.initialTab) {
+        configParts.push(`initialTab: ${JSON.stringify(inspector.initialTab)}`);
+    }
+    const configArg = configParts.length > 0 ? `{ ${configParts.join(", ")} }` : "";
+
+    if (format === "es6") {
+        // ES6: import is handled by convertToES6 collecting the side-effect import;
+        // we just need to add the code to call debugLayer.show().
+        lines.push(`// Import "@babylonjs/inspector" to enable scene.debugLayer.show()`);
+        lines.push(`await import("@babylonjs/inspector");`);
+        lines.push(`${sceneVar}.debugLayer.show(${configArg});`);
+    } else {
+        // UMD: The script tag is added in the HTML boilerplate; just call the API.
+        // If not using HTML boilerplate, dynamically load the script.
+        lines.push(`// Dynamically load Inspector v2 from CDN if not already loaded`);
+        lines.push(`if (!BABYLON.Inspector) {`);
+        lines.push(`    await new Promise((resolve, reject) => {`);
+        lines.push(`        const script = document.createElement("script");`);
+        lines.push(`        script.src = "https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js";`);
+        lines.push(`        script.onload = resolve;`);
+        lines.push(`        script.onerror = reject;`);
+        lines.push(`        document.head.appendChild(script);`);
+        lines.push(`    });`);
+        lines.push(`}`);
+        lines.push(`${sceneVar}.debugLayer.show(${configArg});`);
+    }
+
+    return lines.join("\n");
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Integration glue-code generator
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Generates runtime bridge code that wires subsystems together:
+ * - Physics collision → FlowGraph custom events
+ * - FlowGraph variables → mesh/material properties
+ * - GUI button clicks → FlowGraph custom events
+ * - Collision counting → GUI text updates
+ * @param integrations - The integration descriptors to generate code for
+ * @param scene - The full serialized scene (used to resolve references)
+ * @param sceneVar - The variable name for the scene in the generated code
+ * @param guiControlVarMap - Optional map of GUI control names to variable names emitted by generateGUI, used to resolve controls for integrations like collision counters and buttons. If a control name is not found in the map, a runtime lookup using getControlByName() will be emitted as a fallback.
+ * @returns The generated integration glue-code string
+ */
+function generateIntegrations(integrations: ISerializedIntegration[], scene: ISerializedScene, sceneVar: string, guiControlVarMap?: Map<string, string>): string {
+    if (!integrations || integrations.length === 0) {
+        return "";
+    }
+
+    const lines: string[] = [];
+    lines.push(`// ─── Integrations (runtime bridges) ───────────────────────────────────────`);
+
+    // Determine the FlowGraph coordinator variable name (first one)
+    const fgCoordVar = scene.flowGraphs.length > 0 ? `${varName(scene.flowGraphs[0].name)}Coordinator` : null;
+
+    // Helper: resolve a GUI control name to the JS variable name used in generated code.
+    // If the name was emitted by generateGUI, use that variable. Otherwise, emit a
+    // runtime getControlByName() fallback so the code doesn't crash on name mismatches.
+    const _resolvedFallbacks = new Set<string>();
+    function resolveGuiVar(controlName: string): string {
+        if (guiControlVarMap) {
+            const mapped = guiControlVarMap.get(controlName);
+            if (mapped) {
+                return mapped;
+            }
+        }
+        // Fallback: emit a runtime lookup (once per unique name)
+        const v = varName(controlName);
+        if (!_resolvedFallbacks.has(controlName)) {
+            _resolvedFallbacks.add(controlName);
+            lines.push(`const ${v} = advancedTexture.getControlByName("${sanitizeStringLiteral(controlName)}");`);
+        }
+        return v;
+    }
+
+    // ── Collision counter state ───────────────────────────────────────────
+    const counterInt = integrations.find((i): i is ICollisionCounterIntegration => i.type === "collisionCounter");
+    if (counterInt) {
+        lines.push(`let _collisionCount = 0;`);
+    }
+
+    // ── Physics collision → FlowGraph events ──────────────────────────────
+    const collisions = integrations.filter((i): i is IPhysicsCollisionEventIntegration => i.type === "physicsCollision");
+    if (collisions.length > 0) {
+        lines.push(`havokPlugin.onCollisionObservable.add((event) => {`);
+        lines.push(`    const bodyA = event.collider;`);
+        lines.push(`    const bodyB = event.collidedAgainst;`);
+        for (const c of collisions) {
+            const srcBody = `${varName(c.sourceBody)}PhysicsBody`;
+            const tgtBody = `${varName(c.targetBody)}PhysicsBody`;
+            lines.push(`    if ((bodyA === ${srcBody} && bodyB === ${tgtBody}) || (bodyB === ${srcBody} && bodyA === ${tgtBody})) {`);
+            if (fgCoordVar) {
+                lines.push(`        ${fgCoordVar}.notifyCustomEvent("${sanitizeStringLiteral(c.eventId)}", {});`);
+            }
+            if (counterInt) {
+                const counterVar = resolveGuiVar(counterInt.textBlockName);
+                lines.push(`        _collisionCount++;`);
+                lines.push(`        ${counterVar}.text = "${sanitizeStringLiteral(counterInt.prefix)}" + _collisionCount;`);
+            }
+            lines.push(`    }`);
+        }
+        lines.push(`});`);
+    }
+
+    // ── FlowGraph variable → mesh property sync ──────────────────────────
+    const varToProps = integrations.filter((i): i is IVariableToPropertyIntegration => i.type === "variableToProperty");
+    if (varToProps.length > 0 && fgCoordVar) {
+        // Emit tracking variables for randomized Color3 integrations
+        const randomized = varToProps.filter((v) => v.randomize && v.valueType === "Color3");
+        for (const v of randomized) {
+            const trackVar = `_prev_${varName(v.variableName)}`;
+            lines.push(``);
+            lines.push(`let ${trackVar} = null; // tracks previous value for randomize`);
+        }
+        lines.push(``);
+        lines.push(`// FlowGraph variable → mesh/material property (checked each frame)`);
+        lines.push(`${sceneVar}.onBeforeRenderObservable.add(() => {`);
+        lines.push(`    const _fgCtx = ${fgCoordVar}.flowGraphs[0]?.getContext(0);`);
+        lines.push(`    if (!_fgCtx) return;`);
+        for (const v of varToProps) {
+            const meshVar = varName(v.meshName);
+            const tmpVar = `_${varName(v.variableName)}`;
+            lines.push(`    const ${tmpVar} = _fgCtx.getVariable("${v.variableName}");`);
+            if (v.valueType === "Color3") {
+                if (v.randomize) {
+                    // Randomized: detect when the FlowGraph variable changes, then apply a random color
+                    const trackVar = `_prev_${varName(v.variableName)}`;
+                    lines.push(`    if (${tmpVar}) {`);
+                    lines.push(`        const _cr = ${tmpVar}.r !== undefined ? ${tmpVar}.r : (${tmpVar}.x !== undefined ? ${tmpVar}.x : 0);`);
+                    lines.push(`        const _cg = ${tmpVar}.g !== undefined ? ${tmpVar}.g : (${tmpVar}.y !== undefined ? ${tmpVar}.y : 0);`);
+                    lines.push(`        const _cb = ${tmpVar}.b !== undefined ? ${tmpVar}.b : (${tmpVar}.z !== undefined ? ${tmpVar}.z : 0);`);
+                    lines.push(`        if (!${trackVar} || ${trackVar}.r !== _cr || ${trackVar}.g !== _cg || ${trackVar}.b !== _cb) {`);
+                    lines.push(`            ${trackVar} = { r: _cr, g: _cg, b: _cb };`);
+                    lines.push(`            ${meshVar}.material.${v.property} = new BABYLON.Color3(Math.random(), Math.random(), Math.random());`);
+                    lines.push(`        }`);
+                    lines.push(`    }`);
+                } else {
+                    // Handle Color3 (.r,.g,.b), Vector3 (.x,.y,.z), or raw serialized {className,value}
+                    lines.push(`    if (${tmpVar}) {`);
+                    lines.push(`        if (${tmpVar}.r !== undefined) ${meshVar}.material.${v.property} = new BABYLON.Color3(${tmpVar}.r, ${tmpVar}.g, ${tmpVar}.b);`);
+                    lines.push(`        else if (${tmpVar}.x !== undefined) ${meshVar}.material.${v.property} = new BABYLON.Color3(${tmpVar}.x, ${tmpVar}.y, ${tmpVar}.z);`);
+                    lines.push(`        else if (${tmpVar}.value) ${meshVar}.material.${v.property} = new BABYLON.Color3(${tmpVar}.value[0], ${tmpVar}.value[1], ${tmpVar}.value[2]);`);
+                    lines.push(`    }`);
+                }
+            } else if (v.valueType === "Vector3") {
+                lines.push(`    if (${tmpVar}) ${meshVar}.${v.property} = ${tmpVar};`);
+            } else {
+                lines.push(`    if (${tmpVar} !== undefined) ${meshVar}.${v.property} = ${tmpVar};`);
+            }
+        }
+        lines.push(`});`);
+    }
+
+    // ── GUI button → FlowGraph event ──────────────────────────────────────
+    const buttons = integrations.filter((i): i is IGuiButtonEventIntegration => i.type === "guiButton");
+    // Emit a shared pause flag if any button uses toggleLabels (implies pause/resume)
+    const pauseBtn = buttons.find((b) => b.toggleLabels && b.toggleLabels.length === 2);
+    if (pauseBtn) {
+        lines.push(``);
+        lines.push(`let _physicsPaused = false;`);
+    }
+    for (const btn of buttons) {
+        const btnVar = resolveGuiVar(btn.buttonName);
+        lines.push(``);
+        lines.push(`// Button "${btn.buttonName}" → FlowGraph event "${btn.eventId}"`);
+        lines.push(`${btnVar}.onPointerUpObservable.add(() => {`);
+        if (fgCoordVar) {
+            lines.push(`    try { ${fgCoordVar}.notifyCustomEvent("${sanitizeStringLiteral(btn.eventId)}", {}); } catch(e) { console.error("FlowGraph event error:", e); }`);
+        }
+        if (btn.toggleLabels && btn.toggleLabels.length === 2) {
+            lines.push(`    const _tb = ${btnVar}.textBlock;`);
+            lines.push(
+                `    if (_tb) _tb.text = _tb.text === "${sanitizeStringLiteral(btn.toggleLabels[0])}" ? "${sanitizeStringLiteral(btn.toggleLabels[1])}" : "${sanitizeStringLiteral(btn.toggleLabels[0])}";`
+            );
+            // Toggle physics simulation (pause / resume)
+            lines.push(`    _physicsPaused = !_physicsPaused;`);
+            lines.push(`    const _pe = ${sceneVar}.getPhysicsEngine();`);
+            lines.push(`    if (_pe) _pe.setTimeStep(_physicsPaused ? 0 : 1 / 60);`);
+        }
+        lines.push(`});`);
+    }
+
+    // ── Physics position reset on button click ────────────────────────────
+    const posResets = integrations.filter((i): i is IPhysicsPositionResetIntegration => i.type === "physicsPositionReset");
+    for (const pr of posResets) {
+        const btnVar = resolveGuiVar(pr.triggerButtonName);
+        lines.push(``);
+        lines.push(`// Physics position reset on "${pr.triggerButtonName}" click`);
+        lines.push(`${btnVar}.onPointerUpObservable.add(() => {`);
+        for (const r of pr.resets) {
+            const meshVar = varName(r.meshName);
+            lines.push(`    ${meshVar}PhysicsBody.disablePreStep = false;`);
+            lines.push(`    ${meshVar}.position.copyFromFloats(${r.position.x}, ${r.position.y}, ${r.position.z});`);
+            lines.push(`    ${meshVar}PhysicsBody.setLinearVelocity(BABYLON.Vector3.Zero());`);
+            lines.push(`    ${meshVar}PhysicsBody.setAngularVelocity(BABYLON.Vector3.Zero());`);
+        }
+        // Re-enable preStep after one frame so physics takes over again
+        lines.push(`    ${sceneVar}.onAfterRenderObservable.addOnce(() => {`);
+        for (const r of pr.resets) {
+            lines.push(`        ${varName(r.meshName)}PhysicsBody.disablePreStep = true;`);
+        }
+        lines.push(`    });`);
+        // Optionally reset collision counter
+        if (pr.resetCollisionCounter && counterInt) {
+            const counterVar = resolveGuiVar(counterInt.textBlockName);
+            lines.push(`    _collisionCount = 0;`);
+            lines.push(`    ${counterVar}.text = "${sanitizeStringLiteral(counterInt.prefix)}0";`);
+        }
+        lines.push(`});`);
+    }
+
+    return lines.join("\n");
 }
 
 /**
@@ -1070,6 +1716,9 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         sceneVarName: options?.sceneVarName ?? "scene",
         includeEngineSetup: options?.includeEngineSetup ?? true,
         includeRenderLoop: options?.includeRenderLoop ?? true,
+        format: options?.format ?? "umd",
+        guiJson: options?.guiJson ?? null,
+        enableCollisionCallbacks: options?.enableCollisionCallbacks ?? false,
     };
 
     const S = opts.sceneVarName;
@@ -1295,7 +1944,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
     if (physMeshes.length > 0) {
         bodyParts.push(`// ─── Physics Bodies ───────────────────────────────────────────────────────`);
         for (const mesh of physMeshes) {
-            bodyParts.push(generatePhysicsBody(mesh.name, mesh));
+            bodyParts.push(generatePhysicsBody(mesh.name, mesh, opts.enableCollisionCallbacks));
             bodyParts.push(``);
         }
     }
@@ -1367,6 +2016,29 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         }
     }
 
+    // ── GUI ───────────────────────────────────────────────────────────────
+    const hasGUI = !!opts.guiJson;
+    let guiControlVarMap: Map<string, string> | undefined;
+    if (hasGUI) {
+        const guiResult = generateGUI(opts.guiJson, S);
+        bodyParts.push(guiResult.code);
+        guiControlVarMap = guiResult.controlVarMap;
+        bodyParts.push(``);
+    }
+
+    // ── Integrations (runtime bridges) ────────────────────────────────────
+    if (scene.integrations && scene.integrations.length > 0) {
+        bodyParts.push(generateIntegrations(scene.integrations, scene, S, guiControlVarMap));
+        bodyParts.push(``);
+    }
+
+    // ── Inspector v2 ──────────────────────────────────────────────────────
+    const hasInspector = !!scene.inspector?.enabled;
+    if (hasInspector) {
+        bodyParts.push(generateInspector(scene.inspector!, S, opts.format));
+        bodyParts.push(``);
+    }
+
     // ── Render loop ───────────────────────────────────────────────────────
     if (opts.includeRenderLoop) {
         bodyParts.push(`// ─── Render Loop ──────────────────────────────────────────────────────────`);
@@ -1390,15 +2062,17 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         sections.push(`}`);
         sections.push(``);
         if (opts.includeRenderLoop) {
-            sections.push(`${opts.functionName}();`);
+            sections.push(`${opts.functionName}().catch(function(e) { console.error("Scene init error:", e); });`);
         }
     } else {
         sections.push(body);
     }
 
-    // ── HTML boilerplate ──────────────────────────────────────────────────
-    if (opts.includeHtmlBoilerplate) {
-        const codeContent = sections.join("\n");
+    // ── HTML boilerplate (UMD only) ───────────────────────────────────────
+    if (opts.includeHtmlBoilerplate && opts.format !== "es6") {
+        const hasAudio = (scene.sounds ?? []).length > 0;
+        // Strip TypeScript type assertions for inline <script> (must be valid JS)
+        const codeContent = sections.join("\n").replace(/ as \w+/g, "");
         return [
             `<!DOCTYPE html>`,
             `<html>`,
@@ -1412,10 +2086,12 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
             `    <script src="https://cdn.babylonjs.com/babylon.js"></script>`,
             `    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>`,
             hasPhysics ? `    <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>` : ``,
+            hasGUI ? `    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>` : ``,
+            hasInspector ? `    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>` : ``,
             `</head>`,
             `<body>`,
             `    <canvas id="renderCanvas"></canvas>`,
-            `    <script type="module">`,
+            `    <script>`,
             indent(codeContent, 2),
             `    </script>`,
             `</body>`,
@@ -1425,5 +2101,47 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
             .join("\n");
     }
 
-    return sections.join("\n");
+    let result = sections.join("\n");
+
+    // ── ES6 conversion ────────────────────────────────────────────────────
+    if (opts.format === "es6") {
+        const hasAudio = (scene.sounds ?? []).length > 0;
+        result = convertToES6(result, hasPhysics, hasGUI, hasAudio);
+    }
+
+    return result;
+}
+
+/**
+ * Generates a complete ES6 project structure from a serialized scene.
+ * Returns a map of relative file paths to their content strings.
+ *
+ * @param scene - The serialized scene definition
+ * @param options - Code generation options (format is forced to "es6")
+ * @returns Record of relative file path → file content
+ */
+export function generateProjectFiles(scene: ISerializedScene, options?: ICodeGeneratorOptions): Record<string, string> {
+    const hasPhysics = scene.environment.physicsEnabled || scene.meshes.some((m) => m.physics);
+    const hasGUI = !!options?.guiJson;
+    const hasInspector = !!scene.inspector?.enabled;
+
+    // Generate the main scene code in ES6 format
+    const sceneCode = generateSceneCode(scene, {
+        ...options,
+        format: "es6",
+        wrapInFunction: true,
+        includeEngineSetup: true,
+        includeRenderLoop: true,
+        includeHtmlBoilerplate: false,
+    });
+
+    const files: Record<string, string> = {
+        "package.json": generatePackageJson(scene.name, hasPhysics, hasGUI, hasInspector),
+        "tsconfig.json": generateTsConfig(),
+        "vite.config.ts": generateViteConfig(),
+        "index.html": generateIndexHtml(scene.name),
+        "src/index.ts": sceneCode,
+    };
+
+    return files;
 }

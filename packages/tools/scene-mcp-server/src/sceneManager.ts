@@ -29,7 +29,7 @@ import {
     PhysicsConstraintTypes,
 } from "./catalog.js";
 
-import { generateSceneCode, type ICodeGeneratorOptions } from "./codeGenerator.js";
+import { generateSceneCode, generateProjectFiles, type ICodeGeneratorOptions } from "./codeGenerator.js";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Serialized types — these form the scene descriptor JSON
@@ -683,7 +683,99 @@ export interface ISerializedScene {
     highlightLayers: ISerializedHighlightLayer[];
     /** Active camera ID */
     activeCameraId?: string;
+    /**
+     * Runtime integrations — declarative bridges between subsystems
+     * (physics↔FlowGraph, FlowGraph↔materials, GUI↔FlowGraph, etc.)
+     */
+    integrations?: ISerializedIntegration[];
+    /** Inspector v2 configuration (when enabled, shows the scene debugger/inspector) */
+    inspector?: ISerializedInspector;
+    /** GUI descriptor JSON (from the GUI MCP server). Stored here so the scene is the single source of truth. */
+    guiJson?: unknown;
 }
+
+/**
+ * Inspector v2 configuration — controls whether the Babylon.js Inspector
+ * is loaded and shown when the scene runs.
+ */
+export interface ISerializedInspector {
+    /** Whether the inspector is enabled */
+    enabled: boolean;
+    /** Whether to use overlay mode (floats on top of scene instead of side-by-side) */
+    overlay?: boolean;
+    /** Initial tab to open: 'scene' | 'properties' | 'debug' | 'stats' | 'tools' | 'settings' */
+    initialTab?: string;
+}
+
+// ─── Integration types ────────────────────────────────────────────────────
+
+/** Physics collision dispatches a FlowGraph custom event */
+export interface IPhysicsCollisionEventIntegration {
+    /** Type of integration */
+    type: "physicsCollision";
+    /** Mesh name whose physics body is one of the collision pair */
+    sourceBody: string;
+    /** Mesh name whose physics body is the other collision partner */
+    targetBody: string;
+    /** FlowGraph custom event ID to dispatch on collision */
+    eventId: string;
+}
+
+/** Syncs a FlowGraph variable to a mesh/material property each frame */
+export interface IVariableToPropertyIntegration {
+    type: "variableToProperty";
+    /** FlowGraph variable name (set by SetVariable block) */
+    variableName: string;
+    /** Mesh name to update */
+    meshName: string;
+    /** Property path on the material, e.g. "albedoColor" */
+    property: string;
+    /** How to interpret the value. Color3 converts Vector3→Color3 */
+    valueType: "Color3" | "Vector3" | "number" | "boolean";
+    /** When true and valueType is Color3, use a random color each time the variable changes */
+    randomize?: boolean;
+}
+
+/** GUI button click dispatches a FlowGraph custom event */
+export interface IGuiButtonEventIntegration {
+    type: "guiButton";
+    /** GUI button control name */
+    buttonName: string;
+    /** FlowGraph custom event ID to dispatch */
+    eventId: string;
+    /** If provided, button text toggles between these two labels */
+    toggleLabels?: [string, string];
+}
+
+/** Counts physics collisions and displays in a GUI TextBlock */
+export interface ICollisionCounterIntegration {
+    type: "collisionCounter";
+    /** GUI TextBlock name to update */
+    textBlockName: string;
+    /** Text prefix, e.g. "Collisions: " */
+    prefix: string;
+}
+
+/** Resets physics bodies back to given positions when a GUI button is clicked */
+export interface IPhysicsPositionResetIntegration {
+    type: "physicsPositionReset";
+    /** GUI button control name that triggers the reset */
+    triggerButtonName: string;
+    /** Meshes to teleport back to their positions */
+    resets: Array<{
+        meshName: string;
+        position: { x: number; y: number; z: number };
+    }>;
+    /** If true, also resets the _collisionCount variable and counter text */
+    resetCollisionCounter?: boolean;
+}
+
+export type ISerializedIntegration =
+    | IPhysicsCollisionEventIntegration
+    | IVariableToPropertyIntegration
+    | IGuiButtonEventIntegration
+    | ICollisionCounterIntegration
+    | IPhysicsPositionResetIntegration;
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Scene Manager
@@ -698,7 +790,7 @@ export class SceneManager {
 
     // ── Helpers ──────────────────────────────────────────────────────────
 
-    private getScene(name: string): ISerializedScene | undefined {
+    getScene(name: string): ISerializedScene | undefined {
         return this.scenes.get(name);
     }
 
@@ -1875,6 +1967,14 @@ export class SceneManager {
             for (const mat of scene.materials) {
                 const extra = mat.nmeJson ? " [NME]" : mat.snippetId ? ` [snippet:${mat.snippetId}]` : "";
                 lines.push(`  • [${mat.id}] "${mat.name}" (${mat.type})${extra}`);
+                // Show material properties for visibility
+                if (mat.properties && Object.keys(mat.properties).length > 0) {
+                    for (const [key, value] of Object.entries(mat.properties)) {
+                        lines.push(`      ${key}: ${JSON.stringify(value)}`);
+                    }
+                } else if (mat.type !== "NodeMaterial") {
+                    lines.push(`      (no properties set — using defaults)`);
+                }
             }
             lines.push("");
         }
@@ -2009,6 +2109,39 @@ export class SceneManager {
             lines.push(`## Highlight Layers (${scene.highlightLayers.length})`);
             for (const h of scene.highlightLayers) {
                 lines.push(`  • [${h.id}] "${h.name}" (${h.meshes.length} meshes)${h.isStroke ? " [stroke]" : ""}`);
+            }
+            lines.push("");
+        }
+
+        // GUI
+        if (scene.guiJson) {
+            const gui = scene.guiJson as { root?: { children?: Array<{ name?: string; className?: string }> } };
+            const controlCount = gui.root?.children?.length ?? 0;
+            lines.push(`## GUI (attached — ${controlCount} top-level controls)`);
+            lines.push("");
+        }
+
+        // Integrations
+        if (scene.integrations && scene.integrations.length > 0) {
+            lines.push(`## Integrations (${scene.integrations.length})`);
+            for (let i = 0; i < scene.integrations.length; i++) {
+                const integ = scene.integrations[i];
+                switch (integ.type) {
+                    case "physicsCollision":
+                        lines.push(`  [${i}] physicsCollision: "${integ.sourceBody}" ↔ "${integ.targetBody}" → event "${integ.eventId}"`);
+                        break;
+                    case "variableToProperty":
+                        lines.push(`  [${i}] variableToProperty: var "${integ.variableName}" → ${integ.meshName}.material.${integ.property} (${integ.valueType})`);
+                        break;
+                    case "guiButton":
+                        lines.push(`  [${i}] guiButton: "${integ.buttonName}" → event "${integ.eventId}"`);
+                        break;
+                    case "collisionCounter":
+                        lines.push(`  [${i}] collisionCounter: "${integ.textBlockName}" prefix="${integ.prefix}"`);
+                        break;
+                    default:
+                        lines.push(`  [${i}] ${JSON.stringify(integ)}`);
+                }
             }
             lines.push("");
         }
@@ -2207,6 +2340,186 @@ export class SceneManager {
         return issues;
     }
 
+    // ── Inspector ─────────────────────────────────────────────────────────
+
+    enableInspector(sceneName: string, enabled: boolean, options?: { overlay?: boolean; initialTab?: string }): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        if (enabled) {
+            scene.inspector = {
+                enabled: true,
+                overlay: options?.overlay,
+                initialTab: options?.initialTab,
+            };
+        } else {
+            delete scene.inspector;
+        }
+        return "OK";
+    }
+
+    // ── GUI ───────────────────────────────────────────────────────────────
+
+    /**
+     * Attach a GUI descriptor to the scene. This stores the GUI JSON as part of the scene state
+     * so that export tools automatically include it without needing external input.
+     * @param sceneName The scene to attach the GUI to
+     * @param guiJson The GUI descriptor JSON (from the GUI MCP server's export_gui_json)
+     * @returns "OK" or an error message
+     */
+    attachGUI(sceneName: string, guiJson: unknown): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        // Basic validation — must have a root container
+        if (typeof guiJson === "string") {
+            try {
+                guiJson = JSON.parse(guiJson);
+            } catch (e) {
+                return `Invalid GUI JSON: ${e instanceof Error ? e.message : String(e)}`;
+            }
+        }
+        const gui = guiJson as { root?: unknown };
+        if (!gui || typeof gui !== "object" || !gui.root) {
+            return "Invalid GUI JSON: must contain a 'root' object.";
+        }
+        scene.guiJson = guiJson;
+        return "OK";
+    }
+
+    /**
+     * Remove the GUI descriptor from the scene.
+     * @param sceneName The scene to detach the GUI from
+     * @returns "OK" or an error message
+     */
+    detachGUI(sceneName: string): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        delete scene.guiJson;
+        return "OK";
+    }
+
+    /**
+     * Describe the attached GUI (if any).
+     * This is a simple recursive traversal of the GUI JSON structure to list all controls and their types.
+     * @param sceneName The scene to describe the GUI of
+     * @returns A markdown string describing the GUI structure, or an error message
+     */
+    describeGUI(sceneName: string): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        if (!scene.guiJson) {
+            return "No GUI attached to this scene.";
+        }
+        const gui = scene.guiJson as { root?: { children?: Array<{ name?: string; className?: string; text?: string; children?: unknown[] }> } };
+        const lines: string[] = [];
+        lines.push("## GUI (attached)");
+        if (gui.root?.children) {
+            function describeControl(ctrl: { name?: string; className?: string; text?: string; children?: unknown[] }, indent: string): void {
+                const text = ctrl.text ? ` — "${ctrl.text}"` : "";
+                lines.push(`${indent}• "${ctrl.name ?? "unnamed"}" (${ctrl.className ?? "unknown"})${text}`);
+                if (ctrl.children) {
+                    for (const child of ctrl.children) {
+                        describeControl(child as { name?: string; className?: string; text?: string; children?: unknown[] }, indent + "  ");
+                    }
+                }
+            }
+            for (const child of gui.root.children) {
+                describeControl(child, "  ");
+            }
+        }
+        return lines.join("\n");
+    }
+
+    // ── Integrations ─────────────────────────────────────────────────────
+
+    /**
+     * Add a runtime integration (bridge between subsystems) to the scene.
+     * The integration will be included in exports so that the generated code sets it up at runtime.
+     * @param sceneName The scene to add the integration to
+     * @param integration The integration descriptor (type and parameters)
+     * @returns "OK" or an error message
+     */
+    addIntegration(sceneName: string, integration: ISerializedIntegration): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        if (!scene.integrations) {
+            scene.integrations = [];
+        }
+        scene.integrations.push(integration);
+        return "OK";
+    }
+
+    /**
+     * Remove an integration by index.
+     * Returns "OK" on success, or an error string.
+     * @param sceneName The scene to remove the integration from
+     * @param index The index of the integration to remove
+     * @returns "OK" or an error message
+     */
+    removeIntegration(sceneName: string, index: number): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        if (!scene.integrations || index < 0 || index >= scene.integrations.length) {
+            return `Integration index ${index} out of range.`;
+        }
+        scene.integrations.splice(index, 1);
+        return "OK";
+    }
+
+    /**
+     * List all integrations attached to the scene.
+     * @param sceneName The scene to list integrations of
+     * @returns A markdown string describing all integrations, or an error message
+     */
+    listIntegrations(sceneName: string): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        if (!scene.integrations || scene.integrations.length === 0) {
+            return "No integrations configured.";
+        }
+        const lines: string[] = [`# Integrations for "${sceneName}" (${scene.integrations.length})`];
+        for (let i = 0; i < scene.integrations.length; i++) {
+            const integ = scene.integrations[i];
+            switch (integ.type) {
+                case "physicsCollision":
+                    lines.push(`  [${i}] physicsCollision: "${integ.sourceBody}" ↔ "${integ.targetBody}" → event "${integ.eventId}"`);
+                    break;
+                case "variableToProperty":
+                    lines.push(`  [${i}] variableToProperty: var "${integ.variableName}" → ${integ.meshName}.material.${integ.property} (${integ.valueType})`);
+                    break;
+                case "guiButton":
+                    lines.push(
+                        `  [${i}] guiButton: "${integ.buttonName}" → event "${integ.eventId}"${integ.toggleLabels ? ` (toggle: "${integ.toggleLabels[0]}"/"${integ.toggleLabels[1]}")` : ""}`
+                    );
+                    break;
+                case "collisionCounter":
+                    lines.push(`  [${i}] collisionCounter: "${integ.textBlockName}" prefix="${integ.prefix}"`);
+                    break;
+                case "physicsPositionReset":
+                    lines.push(
+                        `  [${i}] physicsPositionReset: button "${integ.triggerButtonName}" → reset ${integ.resets.map((r) => `"${r.meshName}" to (${r.position.x},${r.position.y},${r.position.z})`).join(", ")}${integ.resetCollisionCounter ? " + reset counter" : ""}`
+                    );
+                    break;
+                default:
+                    lines.push(`  [${i}] ${JSON.stringify(integ)}`);
+            }
+        }
+        return lines.join("\n");
+    }
+
     // ── Export / Import ──────────────────────────────────────────────────
 
     exportJSON(sceneName: string): string | null {
@@ -2222,7 +2535,33 @@ export class SceneManager {
         if (!scene) {
             return null;
         }
-        return generateSceneCode(scene, options);
+        // Auto-use stored GUI unless caller provides an explicit override
+        const opts = { ...options };
+        if (opts.guiJson === undefined && scene.guiJson) {
+            opts.guiJson = scene.guiJson;
+        }
+        return generateSceneCode(scene, opts);
+    }
+
+    /**
+     * Generate a complete ES6 project structure from a scene.
+     * Returns a map of relative file paths to file content strings.
+     * This includes package.json, tsconfig.json, vite.config.ts, index.html, and src/index.ts.
+     * @param sceneName The name of the scene to export
+     * @param options Optional code generation options
+     * @returns A map of relative file paths to file content strings, or null if scene not found
+     */
+    exportProject(sceneName: string, options?: ICodeGeneratorOptions): Record<string, string> | null {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return null;
+        }
+        // Auto-use stored GUI unless caller provides an explicit override
+        const opts = { ...options };
+        if (opts.guiJson === undefined && scene.guiJson) {
+            opts.guiJson = scene.guiJson;
+        }
+        return generateProjectFiles(scene, opts);
     }
 
     importJSON(sceneName: string, json: string): string {

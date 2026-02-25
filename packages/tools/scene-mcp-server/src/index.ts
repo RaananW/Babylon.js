@@ -49,6 +49,7 @@ import {
 } from "./catalog.js";
 
 import { SceneManager } from "./sceneManager.js";
+import { startPreview, stopPreview, isPreviewRunning, getPreviewUrl, getPreviewSceneName, setPreviewScene } from "./previewServer.js";
 
 // ─── Singleton scene manager ──────────────────────────────────────────────
 const manager = new SceneManager();
@@ -102,6 +103,7 @@ server.resource("scene-overview", "scene://overview", async (uri) => ({
                 "- **Glow Layers**: Per-mesh glow effects with include/exclude",
                 "- **Highlight Layers**: Colored outlines and glows on meshes",
                 "- **Flow Graphs**: Attach visual scripting behaviors",
+                "- **Inspector v2**: Enable the Babylon.js scene debugger/inspector",
                 "- **Environment**: Skybox, fog, HDR, clear color",
                 "",
                 "## Workflow",
@@ -110,13 +112,20 @@ server.resource("scene-overview", "scene://overview", async (uri) => ({
                 "3. Create materials and assign them to meshes",
                 "4. Define animations and physics",
                 "5. Attach flow graphs for interactivity",
-                "6. `validate_scene` to check for issues",
-                "7. `export_scene_code` to get runnable TypeScript code (recommended)",
-                "8. `export_scene_json` to get the raw scene descriptor JSON (for custom loaders)",
+                "6. Attach GUI via `attach_gui` (from the GUI MCP server's export_gui_json)",
+                "7. `validate_scene` to check for issues",
+                "8. `start_preview` to launch a live preview server — open the URL in a browser to see the scene instantly",
+                "9. `export_scene_code` to get runnable TypeScript code (recommended) — GUI is auto-included",
+                "10. `export_scene_json` to get the raw scene descriptor JSON (for custom loaders)",
+                "",
+                "## Live Preview",
+                "Use `start_preview` to host the scene on a local HTTP server. The preview always reflects the",
+                "latest scene state — just refresh the browser after making changes. No need to write files to disk.",
                 "",
                 "## Integration with other MCP servers",
                 "- **NME MCP server**: Export NME JSON → import here via `add_material` with type NodeMaterial",
                 "- **Flow Graph MCP server**: Export coordinator JSON → attach here via `attach_flow_graph`",
+                "- **GUI MCP server**: Export GUI JSON → attach here via `attach_gui` (auto-included in code exports)",
             ].join("\n"),
         },
     ],
@@ -533,8 +542,28 @@ server.tool(
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
         const extra = type === "NodeMaterial" ? (nmeJson ? " (NME JSON imported)" : snippetId ? ` (will load snippet ${snippetId})` : "") : "";
+        // Warn when Standard/PBR material has no distinguishing color property
+        let warning = "";
+        if (type === "StandardMaterial" || type === "PBRMaterial") {
+            const props = properties as Record<string, unknown> | undefined;
+            const colorKeys =
+                type === "StandardMaterial" ? ["diffuseColor", "specularColor", "emissiveColor", "diffuseTexture"] : ["albedoColor", "albedoTexture", "emissiveColor"];
+            const hasColor = props && colorKeys.some((k) => k in props);
+            if (!hasColor) {
+                const primaryKey = type === "StandardMaterial" ? "diffuseColor" : "albedoColor";
+                warning =
+                    `\n⚠ Note: No ${primaryKey} or texture specified — the material will be default white. ` + `Pass properties: { ${primaryKey}: [r, g, b] } to set a color.`;
+            }
+            // Show stored properties for visibility
+            if (props && Object.keys(props).length > 0) {
+                const summary = Object.entries(props)
+                    .map(([k, v]) => `${k}: ${JSON.stringify(v)}`)
+                    .join(", ");
+                warning += `\nStored properties: { ${summary} }`;
+            }
+        }
         return {
-            content: [{ type: "text", text: `Added material [${result.id}] "${name}" (${type})${extra}.` }],
+            content: [{ type: "text", text: `Added material [${result.id}] "${name}" (${type})${extra}.${warning}` }],
         };
     }
 );
@@ -1559,6 +1588,207 @@ server.tool(
 );
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  Tools — Inspector
+// ═══════════════════════════════════════════════════════════════════════════
+
+server.tool(
+    "enable_inspector",
+    "Enable or disable the Babylon.js Inspector v2 on the scene. " +
+        "When enabled, the Inspector will be loaded and shown when the scene runs, " +
+        "providing a full scene debugger with scene explorer, property editor, " +
+        "debug tools, statistics, and more. " +
+        "For UMD output, the inspector script is loaded from CDN. " +
+        "For ES6 output, it is imported from @babylonjs/inspector.",
+    {
+        sceneName: z.string().describe("Name of the scene"),
+        enabled: z.boolean().default(true).describe("Whether to enable the inspector (true) or disable it (false)"),
+        overlay: z.boolean().default(false).describe("Whether to use overlay mode (floats on top of scene instead of side-by-side). Default is side-by-side (embedded) mode."),
+        initialTab: z.string().optional().describe("Initial tab to open when the inspector is shown (e.g. 'scene', 'properties', 'debug', 'stats', 'tools', 'settings')"),
+    },
+    async ({ sceneName, enabled, overlay, initialTab }) => {
+        const result = manager.enableInspector(sceneName, enabled, { overlay, initialTab });
+        if (result !== "OK") {
+            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+        }
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: enabled
+                        ? `Inspector v2 enabled on scene "${sceneName}".${overlay ? " (overlay mode)" : " (embedded mode)"}${initialTab ? ` Initial tab: ${initialTab}.` : ""}`
+                        : `Inspector disabled on scene "${sceneName}".`,
+                },
+            ],
+        };
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Tools — GUI attachment
+// ═══════════════════════════════════════════════════════════════════════════
+
+server.tool(
+    "attach_gui",
+    "Attach a GUI descriptor (from the GUI MCP server's export_gui_json) to the scene. " +
+        "This stores the GUI as part of the scene state so that export tools automatically " +
+        "include it. The scene becomes the single source of truth for all subsystems " +
+        "(meshes, materials, physics, FlowGraph, AND GUI).",
+    {
+        sceneName: z.string().describe("Name of the scene to attach the GUI to"),
+        guiJson: z.string().describe("The GUI descriptor JSON string (from the GUI MCP server's export_gui_json)"),
+    },
+    async ({ sceneName, guiJson }) => {
+        let parsed: unknown;
+        try {
+            parsed = JSON.parse(guiJson);
+        } catch {
+            return { content: [{ type: "text", text: `Invalid GUI JSON: parse error.` }], isError: true };
+        }
+        const result = manager.attachGUI(sceneName, parsed);
+        if (result !== "OK") {
+            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+        }
+        return {
+            content: [{ type: "text", text: `GUI attached to scene "${sceneName}". It will be automatically included in all code exports.` }],
+        };
+    }
+);
+
+server.tool(
+    "detach_gui",
+    "Remove the attached GUI from the scene.",
+    {
+        sceneName: z.string().describe("Name of the scene"),
+    },
+    async ({ sceneName }) => {
+        const result = manager.detachGUI(sceneName);
+        return {
+            content: [{ type: "text", text: result === "OK" ? `GUI detached from scene "${sceneName}".` : `Error: ${result}` }],
+            isError: result !== "OK",
+        };
+    }
+);
+
+server.tool(
+    "describe_gui",
+    "Describe the GUI currently attached to the scene (control tree, names, types).",
+    {
+        sceneName: z.string().describe("Name of the scene"),
+    },
+    async ({ sceneName }) => {
+        const desc = manager.describeGUI(sceneName);
+        return { content: [{ type: "text", text: desc }] };
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Tools — Integrations (runtime bridges)
+// ═══════════════════════════════════════════════════════════════════════════
+
+const PhysicsCollisionSchema = z.object({
+    type: z.literal("physicsCollision"),
+    sourceBody: z.string().describe("Mesh name whose physics body is one of the collision pair"),
+    targetBody: z.string().describe("Mesh name whose physics body is the other collision partner"),
+    eventId: z.string().describe("FlowGraph custom event ID to dispatch on collision"),
+});
+
+const VariableToPropertySchema = z.object({
+    type: z.literal("variableToProperty"),
+    variableName: z.string().describe("FlowGraph variable name (set by SetVariable block)"),
+    meshName: z.string().describe("Mesh name to update"),
+    property: z.string().describe('Property path on the material, e.g. "albedoColor"'),
+    valueType: z.enum(["Color3", "Vector3", "number", "boolean"]).describe("How to interpret the value"),
+});
+
+const GuiButtonSchema = z.object({
+    type: z.literal("guiButton"),
+    buttonName: z.string().describe("GUI button control name"),
+    eventId: z.string().describe("FlowGraph custom event ID to dispatch"),
+    toggleLabels: z.tuple([z.string(), z.string()]).optional().describe("If provided, button text toggles between these two labels"),
+});
+
+const CollisionCounterSchema = z.object({
+    type: z.literal("collisionCounter"),
+    textBlockName: z.string().describe("GUI TextBlock name to update"),
+    prefix: z.string().describe('Text prefix, e.g. "Collisions: "'),
+});
+
+const IntegrationSchema = z.discriminatedUnion("type", [PhysicsCollisionSchema, VariableToPropertySchema, GuiButtonSchema, CollisionCounterSchema]);
+
+server.tool(
+    "add_integration",
+    "Add a runtime integration that bridges subsystems together. Integrations generate " +
+        "glue code that connects physics, FlowGraph, materials, and GUI at runtime.\n\n" +
+        "Supported integration types:\n" +
+        "- **physicsCollision**: When two physics bodies collide, dispatch a FlowGraph custom event\n" +
+        "- **variableToProperty**: Each frame, sync a FlowGraph variable to a mesh material property\n" +
+        "- **guiButton**: When a GUI button is clicked, dispatch a FlowGraph custom event (with optional toggle labels)\n" +
+        "- **collisionCounter**: Display a running collision count in a GUI TextBlock",
+    {
+        sceneName: z.string().describe("Name of the scene"),
+        integration: IntegrationSchema.describe("The integration descriptor to add"),
+    },
+    async ({ sceneName, integration }) => {
+        const result = manager.addIntegration(sceneName, integration);
+        if (result !== "OK") {
+            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+        }
+        return {
+            content: [{ type: "text", text: `Added ${integration.type} integration to "${sceneName}".` }],
+        };
+    }
+);
+
+server.tool(
+    "add_integrations_batch",
+    "Add multiple integrations at once. More efficient than calling add_integration repeatedly.",
+    {
+        sceneName: z.string().describe("Name of the scene"),
+        integrations: z.array(IntegrationSchema).describe("Array of integration descriptors to add"),
+    },
+    async ({ sceneName, integrations }) => {
+        const results: string[] = [];
+        for (const integ of integrations) {
+            const result = manager.addIntegration(sceneName, integ);
+            if (result !== "OK") {
+                results.push(`Error (${integ.type}): ${result}`);
+            } else {
+                results.push(`Added ${integ.type}`);
+            }
+        }
+        return { content: [{ type: "text", text: `Integrations:\n${results.join("\n")}` }] };
+    }
+);
+
+server.tool(
+    "remove_integration",
+    "Remove an integration by its index (use list_integrations to see indices).",
+    {
+        sceneName: z.string().describe("Name of the scene"),
+        index: z.number().int().min(0).describe("Index of the integration to remove"),
+    },
+    async ({ sceneName, index }) => {
+        const result = manager.removeIntegration(sceneName, index);
+        if (result !== "OK") {
+            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+        }
+        return { content: [{ type: "text", text: `Removed integration at index ${index}.` }] };
+    }
+);
+
+server.tool(
+    "list_integrations",
+    "List all integrations configured on a scene.",
+    {
+        sceneName: z.string().describe("Name of the scene"),
+    },
+    async ({ sceneName }) => {
+        const result = manager.listIntegrations(sceneName);
+        return { content: [{ type: "text", text: result }] };
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  Tools — Export / Import
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1566,28 +1796,85 @@ server.tool(
     "export_scene_code",
     "Export the scene as runnable TypeScript/JavaScript code that uses the Babylon.js API. " +
         "This is the RECOMMENDED export format because it supports ALL features including " +
-        "FlowGraph behaviors and NME materials (which the .babylon JSON format cannot represent together). " +
-        "The generated code is immediately runnable in a Babylon.js project.",
+        "FlowGraph behaviors, NME materials, and GUI (which the .babylon JSON format cannot represent together). " +
+        "If a GUI was attached via attach_gui, it is automatically included — no need to pass guiJson. " +
+        "The generated code is immediately runnable in a Babylon.js project. " +
+        "Use format='es6' to get ES module code with proper import statements instead of UMD/CDN globals.",
     {
         sceneName: z.string().describe("Name of the scene to export"),
         wrapInFunction: z.boolean().default(true).describe("Wrap all code in an async createScene() function"),
         functionName: z.string().default("createScene").describe("Name of the wrapper function"),
-        includeHtmlBoilerplate: z.boolean().default(false).describe("Include full HTML page boilerplate (canvas, script tags, CDN links) for a standalone page"),
+        includeHtmlBoilerplate: z
+            .boolean()
+            .default(false)
+            .describe("Include full HTML page boilerplate (canvas, script tags, CDN links) for a standalone page. Only applies to UMD format."),
         includeEngineSetup: z.boolean().default(true).describe("Include canvas and Engine creation code"),
         includeRenderLoop: z.boolean().default(true).describe("Include the render loop and resize handler"),
+        format: z.enum(["umd", "es6"]).default("umd").describe("Output format: 'umd' for CDN/global BABYLON.* style, 'es6' for ES module imports from @babylonjs/*"),
+        guiJson: z.string().optional().describe("Optional GUI JSON override. If omitted, the GUI attached via attach_gui is used automatically."),
+        enableCollisionCallbacks: z.boolean().default(false).describe("Enable collision callbacks on all physics bodies (needed for collision-driven behaviors)"),
     },
-    async ({ sceneName, wrapInFunction, functionName, includeHtmlBoilerplate, includeEngineSetup, includeRenderLoop }) => {
+    async ({ sceneName, wrapInFunction, functionName, includeHtmlBoilerplate, includeEngineSetup, includeRenderLoop, format, guiJson, enableCollisionCallbacks }) => {
+        let parsedGuiJson: unknown;
+        if (guiJson) {
+            try {
+                parsedGuiJson = JSON.parse(guiJson);
+            } catch {
+                return { content: [{ type: "text", text: `Invalid GUI JSON: ${(guiJson as string).slice(0, 100)}...` }], isError: true };
+            }
+        }
         const code = manager.exportCode(sceneName, {
             wrapInFunction,
             functionName,
             includeHtmlBoilerplate,
             includeEngineSetup,
             includeRenderLoop,
+            format,
+            guiJson: parsedGuiJson,
+            enableCollisionCallbacks,
         });
         if (!code) {
             return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
         }
         return { content: [{ type: "text", text: code }] };
+    }
+);
+
+server.tool(
+    "export_scene_project",
+    "Export the scene as a complete ES6 project with package.json, tsconfig.json, vite.config.ts, " +
+        "index.html, and src/index.ts. Ready to run with 'npm install && npm run dev'. " +
+        "If a GUI was attached via attach_gui, it is automatically included. " +
+        "This generates a full Vite-based TypeScript project using @babylonjs/* ES module imports.",
+    {
+        sceneName: z.string().describe("Name of the scene to export"),
+        guiJson: z.string().optional().describe("Optional GUI JSON override. If omitted, the GUI attached via attach_gui is used automatically."),
+        enableCollisionCallbacks: z.boolean().default(false).describe("Enable collision callbacks on all physics bodies"),
+    },
+    async ({ sceneName, guiJson, enableCollisionCallbacks }) => {
+        let parsedGuiJson: unknown;
+        if (guiJson) {
+            try {
+                parsedGuiJson = JSON.parse(guiJson);
+            } catch {
+                return { content: [{ type: "text", text: `Invalid GUI JSON: ${(guiJson as string).slice(0, 100)}...` }], isError: true };
+            }
+        }
+        const files = manager.exportProject(sceneName, {
+            format: "es6",
+            guiJson: parsedGuiJson,
+            enableCollisionCallbacks,
+        });
+        if (!files) {
+            return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+        }
+        const fileParts = Object.entries(files).map(([path, content]) => ({
+            type: "text" as const,
+            text: `--- ${path} ---\n${content}`,
+        }));
+        return {
+            content: [{ type: "text", text: `Generated ${Object.keys(files).length} project files:` }, ...fileParts],
+        };
     }
 );
 
@@ -1733,6 +2020,105 @@ server.tool(
         }
 
         return { content: [{ type: "text", text: results.join("\n") }] };
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Tools — Live Preview Server
+// ═══════════════════════════════════════════════════════════════════════════
+
+server.tool(
+    "start_preview",
+    "Start a built-in HTTP server that serves a live preview of the scene. " +
+        "The preview always reflects the LATEST scene state — every browser refresh shows the most recent changes. " +
+        "No need to write files to disk. The MCP server itself hosts the scene while you develop. " +
+        "Returns the URL to open in a browser. If a preview is already running, it restarts with the new settings.",
+    {
+        sceneName: z.string().describe("Name of the scene to preview"),
+        port: z.number().int().min(1024).max(65535).default(8765).describe("Port to serve on (default: 8765)"),
+    },
+    async ({ sceneName, port }) => {
+        const scene = manager.getScene(sceneName);
+        if (!scene) {
+            return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+        }
+        try {
+            const url = await startPreview(manager, sceneName, port);
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: [
+                            `Preview server started!`,
+                            ``,
+                            `  Scene:  ${sceneName}`,
+                            `  URL:    ${url}`,
+                            ``,
+                            `Open ${url} in a browser to see the scene.`,
+                            `The preview auto-updates on every browser refresh — no restart needed when you modify the scene.`,
+                            ``,
+                            `Other routes:`,
+                            `  ${url}/scenes        — list all available scenes`,
+                            `  ${url}/scene/<name>  — preview a specific scene`,
+                            `  ${url}/api/scene.json — raw scene JSON`,
+                            `  ${url}/api/code       — generated JavaScript code`,
+                        ].join("\n"),
+                    },
+                ],
+            };
+        } catch (err) {
+            return { content: [{ type: "text", text: `Failed to start preview: ${err instanceof Error ? err.message : String(err)}` }], isError: true };
+        }
+    }
+);
+
+server.tool("stop_preview", "Stop the built-in preview server.", {}, async () => {
+    if (!isPreviewRunning()) {
+        return { content: [{ type: "text", text: "No preview server is running." }] };
+    }
+    await stopPreview();
+    return { content: [{ type: "text", text: "Preview server stopped." }] };
+});
+
+server.tool("get_preview_url", "Get the URL of the currently running preview server, if any.", {}, async () => {
+    if (!isPreviewRunning()) {
+        return { content: [{ type: "text", text: "No preview server is running. Use start_preview to launch one." }] };
+    }
+    const url = getPreviewUrl()!;
+    const scene = getPreviewSceneName()!;
+    return {
+        content: [
+            {
+                type: "text",
+                text: `Preview running at ${url} (scene: "${scene}").\nRefresh the browser to see the latest changes.`,
+            },
+        ],
+    };
+});
+
+server.tool(
+    "set_preview_scene",
+    "Change which scene the preview server is showing, without restarting it. " + "Useful when you have multiple scenes and want to switch the live preview.",
+    {
+        sceneName: z.string().describe("Name of the scene to switch to"),
+    },
+    async ({ sceneName }) => {
+        if (!isPreviewRunning()) {
+            return { content: [{ type: "text", text: "No preview server is running. Use start_preview first." }], isError: true };
+        }
+        const scene = manager.getScene(sceneName);
+        if (!scene) {
+            return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+        }
+        setPreviewScene(sceneName);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: `Preview switched to scene "${sceneName}".\nRefresh the browser at ${getPreviewUrl()} to see it.`,
+                },
+            ],
+        };
     }
 );
 
