@@ -379,10 +379,10 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         target: "Neutral",
         defaultSerializedProperties: { xSwizzle: "x", ySwizzle: "y", zSwizzle: "z", wSwizzle: "w" },
         inputs: [
-            { name: "xyzw", type: "Vector4", isOptional: true },
-            { name: "xyz", type: "Vector3", isOptional: true },
-            { name: "xy", type: "Vector2", isOptional: true },
-            { name: "zw", type: "Vector2", isOptional: true },
+            { name: "xyzw ", type: "Vector4", isOptional: true },
+            { name: "xyz ", type: "Vector3", isOptional: true },
+            { name: "xy ", type: "Vector2", isOptional: true },
+            { name: "zw ", type: "Vector2", isOptional: true },
             { name: "x", type: "Float", isOptional: true },
             { name: "y", type: "Float", isOptional: true },
             { name: "z", type: "Float", isOptional: true },
@@ -402,8 +402,8 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         target: "Neutral",
         inputs: [
             { name: "xyzw", type: "Vector4", isOptional: true },
-            { name: "xyz", type: "Vector3", isOptional: true },
-            { name: "xy", type: "Vector2", isOptional: true },
+            { name: "xyz ", type: "Vector3", isOptional: true },
+            { name: "xy ", type: "Vector2", isOptional: true },
         ],
         outputs: [
             { name: "xyz", type: "Vector3" },
@@ -421,7 +421,7 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         description: "Merges R, G, B, A float components into a Color3 or Color4.",
         target: "Neutral",
         inputs: [
-            { name: "rgb", type: "Color3", isOptional: true },
+            { name: "rgb ", type: "Color3", isOptional: true },
             { name: "r", type: "Float", isOptional: true },
             { name: "g", type: "Float", isOptional: true },
             { name: "b", type: "Float", isOptional: true },
@@ -439,7 +439,7 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         target: "Neutral",
         inputs: [
             { name: "rgba", type: "Color4", isOptional: true },
-            { name: "rgb", type: "Color3", isOptional: true },
+            { name: "rgb ", type: "Color3", isOptional: true },
         ],
         outputs: [
             { name: "rgb", type: "Color3" },
@@ -454,11 +454,14 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         category: "Color",
         description: "Converts between RGB and HSL color spaces.",
         target: "Neutral",
-        inputs: [{ name: "input", type: "AutoDetect" }],
-        outputs: [{ name: "output", type: "BasedOnInput" }],
-        properties: {
-            conversion: "string — rgbToHsl or hslToRgb",
-        },
+        inputs: [
+            { name: "rgb ", type: "Color3", isOptional: true },
+            { name: "hsl ", type: "Color3", isOptional: true },
+        ],
+        outputs: [
+            { name: "rgb", type: "Color3" },
+            { name: "hsl", type: "Color3" },
+        ],
     },
     DesaturateBlock: {
         className: "DesaturateBlock",

@@ -291,10 +291,15 @@ export class MaterialGraphManager {
 
         // For InputBlock: auto-derive mode and normalise the value
         if (blockType === "InputBlock") {
-            // If systemValue is set, mode should be Uniform (0)
-            // If mode wasn't explicitly set (still Undefined=3) and no systemValue, default to Uniform (0)
-            if (block["systemValue"] === undefined && block["mode"] === 3) {
-                block["mode"] = 0; // Uniform
+            // Auto-derive mode from context when not explicitly set (still Undefined=3)
+            if (block["mode"] === 3) {
+                if (block["attributeName"] !== undefined) {
+                    block["mode"] = 1; // Attribute — reads from vertex buffer
+                } else if (block["systemValue"] !== undefined) {
+                    block["mode"] = 0; // Uniform — built-in system value
+                } else {
+                    block["mode"] = 0; // Uniform — user-defined constant
+                }
             }
             // Normalise value to flat array and set valueType
             this._normaliseInputBlockValue(block);
@@ -707,6 +712,35 @@ export class MaterialGraphManager {
             }
         }
 
+        // Convert bare-URL texture strings into proper serialized Texture objects
+        // so that NodeMaterial.Parse() → TextureBlock._deserialize() works correctly.
+        // _deserialize expects { name, url, ... } — a string URL is silently ignored.
+        for (const block of mat.blocks) {
+            for (const prop of ["texture", "reflectionTexture"] as const) {
+                if (typeof block[prop] === "string") {
+                    const url = block[prop] as string;
+                    block[prop] = {
+                        name: url,
+                        url: url,
+                        uOffset: 0,
+                        vOffset: 0,
+                        uScale: 1,
+                        vScale: 1,
+                        uAng: 0,
+                        vAng: 0,
+                        wAng: 0,
+                        invertY: true,
+                        samplingMode: 3,
+                        noMipmap: false,
+                        coordinatesMode: 0,
+                        coordinatesIndex: 0,
+                        hasAlpha: false,
+                        level: 1,
+                    };
+                }
+            }
+        }
+
         // Compute a proper layered graph layout for the editor
         this._layoutGraph(mat);
 
@@ -938,6 +972,10 @@ export class MaterialGraphManager {
 
         // Re-normalise InputBlock value after property changes
         if (typeName === "InputBlock") {
+            // Auto-set Attribute mode when attributeName is provided
+            if (block["attributeName"] !== undefined && (block["mode"] === 3 || block["mode"] === 0)) {
+                block["mode"] = 1; // Attribute — reads from vertex buffer
+            }
             this._normaliseInputBlockValue(block);
             this._ensureDefaultValue(block);
         }
