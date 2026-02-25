@@ -95,6 +95,100 @@ server.resource("enums", "gui://enums", async (uri) => ({
     ],
 }));
 
+server.resource("concepts", "gui://concepts", async (uri) => ({
+    contents: [
+        {
+            uri: uri.href,
+            mimeType: "text/markdown",
+            text: [
+                "# GUI Concepts",
+                "",
+                "## What is a Babylon.js GUI?",
+                "Babylon.js GUI is a 2D interface layer (AdvancedDynamicTexture) that renders controls",
+                "like buttons, text, sliders, and images as an overlay on top of a 3D scene.",
+                "The GUI is built as a tree of controls, starting from a root container.",
+                "",
+                "## Container Hierarchy",
+                "Controls are organized in a parent-child tree:",
+                "  • **Containers** (Rectangle, StackPanel, Grid, ScrollViewer, Ellipse) can hold children.",
+                "  • **Leaf controls** (TextBlock, Image, Slider, Checkbox, ColorPicker) cannot.",
+                "  • The root container is always named 'root' and is created automatically.",
+                "  • Every control must be added to a container parent.",
+                "",
+                "## ⚠ Grid Layout — CRITICAL Rules",
+                "Grid is the most powerful layout container but has strict requirements:",
+                "",
+                "1. **Define rows and columns BEFORE adding children.**",
+                "   Use `add_grid_row` and `add_grid_column` to define the grid structure first.",
+                "   A Grid with no rows/columns will not display children correctly.",
+                "",
+                "2. **Specify gridRow and gridColumn when adding children to a Grid.**",
+                "   If you omit these, the child is placed at cell [0, 0] by default.",
+                "   This is almost never what you want — be explicit!",
+                "",
+                "3. **Row/column indices are 0-based** and must be within the defined range.",
+                "",
+                "4. **Row/column sizes** use fractions (0–1, unit=0) or pixels (unit=1).",
+                "   Fractions are ratios of remaining space. `0.5` means 50% of the available space.",
+                "",
+                "## StackPanel Layout",
+                "StackPanel arranges children in a single direction:",
+                "  • `isVertical: true` (default) — children stack top to bottom",
+                "  • `isVertical: false` — children stack left to right",
+                "  • `spacing` — gap between children in pixels",
+                "  • ⚠ Children in a StackPanel should set their height (for vertical) or width (for horizontal)",
+                "    since StackPanel does NOT stretch children to fill.",
+                "",
+                "## Size System",
+                "Controls accept sizes in multiple formats:",
+                "  • `'200px'` — absolute pixels",
+                "  • `'50%'` — percentage of parent",
+                "  • `'0.5'` — fraction of parent (equivalent to 50%)",
+                "  • A number — treated as pixels",
+                "If no width/height is set, controls stretch to fill their parent container.",
+                "",
+                "## Alignment",
+                "Controls are positioned within their parent using alignment:",
+                "  • `horizontalAlignment`: LEFT (0), RIGHT (1), CENTER (2)",
+                "  • `verticalAlignment`: TOP (0), BOTTOM (1), CENTER (2)",
+                "  • Default is CENTER for both. Use alignment with explicit width/height.",
+                "  • `left` and `top` provide pixel offsets from the aligned position.",
+                "",
+                "## Button Special Behavior",
+                "Button is a container that auto-creates internal child controls:",
+                "  • Set `buttonText: 'Click me'` in properties — this creates an internal TextBlock.",
+                "  • Set `buttonImage: 'icon.png'` — this creates an internal Image child.",
+                "  • Do NOT manually add TextBlock children to a Button; use `buttonText` instead.",
+                "  • Style the button itself with `background`, `color` (border color), `cornerRadius`, `thickness`.",
+                "",
+                "## Common Patterns",
+                "",
+                "### Simple text overlay:",
+                "1. create_gui, 2. add_control TextBlock to root with text, fontSize, color",
+                "",
+                "### Grid-based layout (HUD):",
+                "1. create_gui",
+                "2. add_control Grid to root",
+                "3. add_grid_row × N, add_grid_column × N",
+                "4. add_control children with explicit gridRow, gridColumn for each",
+                "",
+                "### Settings panel with sliders:",
+                "1. create_gui",
+                "2. add_control Rectangle (panel background) to root",
+                "3. add_control StackPanel to the rectangle, isVertical: true",
+                "4. For each setting: add a horizontal StackPanel row, with TextBlock + Slider inside",
+                "",
+                "## Common Mistakes",
+                "1. Adding children to a Grid before defining rows/columns → misplaced controls",
+                "2. Forgetting gridRow/gridColumn when adding to a Grid → everything stacks at [0,0]",
+                "3. Adding a TextBlock child to a Button manually instead of using buttonText property",
+                "4. Not setting height on StackPanel children → children may collapse to zero height",
+                "5. Using alignment without explicit size → alignment has no visible effect",
+            ].join("\n"),
+        },
+    ],
+}));
+
 // ═══════════════════════════════════════════════════════════════════════════
 //  Prompts (reusable prompt templates)
 // ═══════════════════════════════════════════════════════════════════════════
@@ -258,11 +352,15 @@ server.tool(
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
         const cellInfo = gridRow !== undefined || gridColumn !== undefined ? ` in cell [${gridRow ?? 0}, ${gridColumn ?? 0}]` : "";
+        const lines = [`Added ${controlType} "${result.name}" to "${parentName}"${cellInfo}. Use "${result.name}" to reference this control.`];
+        if (result.warnings) {
+            lines.push("", "Warnings:", ...result.warnings);
+        }
         return {
             content: [
                 {
                     type: "text",
-                    text: `Added ${controlType} "${result.name}" to "${parentName}"${cellInfo}. Use "${result.name}" to reference this control.`,
+                    text: lines.join("\n"),
                 },
             ],
         };
@@ -615,7 +713,11 @@ server.tool(
             if (typeof result === "string") {
                 results.push(`Error adding ${def.controlType}: ${result}`);
             } else {
-                results.push(`"${result.name}" (${def.controlType}) → "${def.parentName}"`);
+                let line = `"${result.name}" (${def.controlType}) → "${def.parentName}"`;
+                if (result.warnings) {
+                    line += `\n  ⚠ ${result.warnings.join("\n  ⚠ ")}`;
+                }
+                results.push(line);
             }
         }
         return { content: [{ type: "text", text: `Added controls:\n${results.join("\n")}` }] };

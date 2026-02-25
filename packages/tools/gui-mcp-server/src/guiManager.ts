@@ -171,6 +171,10 @@ export class GuiManager {
                *
                */
               name: string;
+              /**
+               *
+               */
+              warnings?: string[];
           }
         | string {
         const tex = this._textures.get(textureName);
@@ -248,7 +252,33 @@ export class GuiManager {
         tex._parentIndex.set(name, targetParent);
         tex._nextId++;
 
-        return { name };
+        // ── Warnings ──────────────────────────────────────────────────
+        const warnings: string[] = [];
+
+        // Warn about Grid children without explicit cell placement
+        if (parent.className === "Grid" && gridRow === undefined && gridColumn === undefined) {
+            warnings.push(
+                `⚠ Control "${name}" was added to Grid "${targetParent}" without specifying gridRow/gridColumn. ` +
+                    `It will default to cell [0, 0]. Set gridRow and gridColumn explicitly to place it correctly.`
+            );
+        }
+
+        // Warn about Grid children when Grid has no rows/columns defined
+        if (parent.className === "Grid") {
+            if (!parent.rows || parent.rows.length === 0) {
+                warnings.push(`⚠ Grid "${targetParent}" has no row definitions yet. Use add_grid_row to define rows before adding children.`);
+            }
+            if (!parent.columns || parent.columns.length === 0) {
+                warnings.push(`⚠ Grid "${targetParent}" has no column definitions yet. Use add_grid_column to define columns before adding children.`);
+            }
+        }
+
+        // Warn about Button without buttonText
+        if ((controlType === "Button" || controlType === "FocusableButton") && (!properties || properties.buttonText === undefined)) {
+            warnings.push(`⚠ Button "${name}" has no buttonText. Set buttonText in properties to give it a label.`);
+        }
+
+        return { name, warnings: warnings.length > 0 ? warnings : undefined };
     }
 
     /**
@@ -728,6 +758,14 @@ export class GuiManager {
                 const parent = tex._parentIndex.get(ctrl.name);
                 if (parent === "root") {
                     // Still okay — they'll stretch to root. Don't warn.
+                }
+            }
+
+            // Warn about Buttons without text
+            if (ctrl.className === "Button" || ctrl.className === "FocusableButton") {
+                const hasTextChild = ctrl.children?.some((c) => c.className === "TextBlock");
+                if (!hasTextChild) {
+                    issues.push(`WARNING: Button "${ctrl.name}" has no text label. Set buttonText when creating it or add a TextBlock child.`);
                 }
             }
         }
