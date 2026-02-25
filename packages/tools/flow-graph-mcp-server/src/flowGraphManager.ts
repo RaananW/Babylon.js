@@ -244,6 +244,52 @@ export class FlowGraphManager {
             connectedPointIds: [],
         }));
 
+        // Add config-driven dynamic signal outputs for blocks like Sequence, MultiGate, Switch, WaitAll
+        if (config) {
+            const outputCount = config.outputSignalCount ?? config.outputCount;
+            if (typeof outputCount === "number" && outputCount > 0) {
+                for (let i = 0; i < outputCount; i++) {
+                    const outName = `out_${i}`;
+                    if (!signalOutputs.find((so) => so.name === outName)) {
+                        signalOutputs.push({
+                            uniqueId: generateUniqueId(),
+                            name: outName,
+                            _connectionType: 1,
+                            connectedPointIds: [],
+                        });
+                    }
+                }
+            }
+            // Switch block: generate case_N outputs based on cases array
+            if (Array.isArray(config.cases)) {
+                for (let i = 0; i < config.cases.length; i++) {
+                    const caseName = `case_${i}`;
+                    if (!signalOutputs.find((so) => so.name === caseName)) {
+                        signalOutputs.push({
+                            uniqueId: generateUniqueId(),
+                            name: caseName,
+                            _connectionType: 1,
+                            connectedPointIds: [],
+                        });
+                    }
+                }
+            }
+            // WaitAll block: generate in_N signal inputs based on inputCount
+            if (typeof config.inputSignalCount === "number" && config.inputSignalCount > 0) {
+                for (let i = 0; i < config.inputSignalCount; i++) {
+                    const inName = `in_${i}`;
+                    if (!signalInputs.find((si) => si.name === inName)) {
+                        signalInputs.push({
+                            uniqueId: generateUniqueId(),
+                            name: inName,
+                            _connectionType: 0,
+                            connectedPointIds: [],
+                        });
+                    }
+                }
+            }
+        }
+
         // Build data connections
         const dataInputs: ISerializedConnection[] = typeInfo.dataInputs.map((di) => ({
             uniqueId: generateUniqueId(),
@@ -264,14 +310,32 @@ export class FlowGraphManager {
             richType: { typeName: dout.type, defaultValue: getDefaultValue(dout.type) },
         }));
 
+        // Normalize common config key aliases to canonical names
+        if (config && typeInfo.config) {
+            const knownKeys = new Set(Object.keys(typeInfo.config));
+            const keysToRename: Array<[string, string]> = [];
+            for (const key of Object.keys(config)) {
+                if (!knownKeys.has(key)) {
+                    // Try case-insensitive match or known alias mapping
+                    const canonical = [...knownKeys].find((k) => k.toLowerCase() === key.toLowerCase());
+                    if (canonical) {
+                        keysToRename.push([key, canonical]);
+                    }
+                }
+            }
+            for (const [oldKey, newKey] of keysToRename) {
+                config[newKey] = config[oldKey];
+                delete config[oldKey];
+            }
+        }
+
         // Validate config keys against the block type's known config schema
         const configWarnings: string[] = [];
         if (config && typeInfo.config) {
             const knownKeys = new Set(Object.keys(typeInfo.config));
             for (const key of Object.keys(config)) {
                 if (!knownKeys.has(key)) {
-                    const suggestion = [...knownKeys].find((k) => k.toLowerCase() === key.toLowerCase());
-                    const hint = suggestion ? ` Did you mean "${suggestion}"?` : ` Known keys: ${[...knownKeys].join(", ")}`;
+                    const hint = ` Known keys: ${[...knownKeys].join(", ")}`;
                     configWarnings.push(`Unknown config key "${key}" for ${typeInfo.className}.${hint}`);
                 }
             }
