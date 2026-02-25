@@ -949,14 +949,11 @@ server.tool(
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Attached flow graph [${result.id}] "${name}".${scopeNodeIds?.length ? ` Scoped to: ${scopeNodeIds.join(", ")}` : ""}`,
-                },
-            ],
-        };
+        let msg = `Attached flow graph [${result.id}] "${name}".${scopeNodeIds?.length ? ` Scoped to: ${scopeNodeIds.join(", ")}` : ""}`;
+        if (result.warnings && result.warnings.length > 0) {
+            msg += `\n⚠ ${result.warnings.join("\n⚠ ")}`;
+        }
+        return { content: [{ type: "text", text: msg }] };
     }
 );
 

@@ -1238,7 +1238,7 @@ const BABYLON_GUI_CLASSES = new Set([
  * @param hasAudio - Whether the scene uses audio (adds Audio V2 import)
  * @returns The converted ES6 module code string with import statements
  */
-function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAudio: boolean): string {
+function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAudio: boolean, hasFlowGraph: boolean): string {
     // Helper: collect BABYLON.* references only OUTSIDE of quoted strings.
     // The regex alternates between matching a quoted string (skip) vs BABYLON.X (capture).
     // This prevents collecting/replacing BABYLON references inside JSON string values
@@ -1286,6 +1286,10 @@ function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAud
 
     if (hasAudio) {
         importLines.push(`import "@babylonjs/core/Audio/v2";`);
+    }
+
+    if (hasFlowGraph) {
+        importLines.push(`import "@babylonjs/core/FlowGraph";`);
     }
 
     // ── 4. Replace BABYLON.GUI.* → just the class name (outside strings) ─
@@ -1629,7 +1633,9 @@ function generateIntegrations(integrations: ISerializedIntegration[], scene: ISe
                     lines.push(`    if (${tmpVar}) {`);
                     lines.push(`        if (${tmpVar}.r !== undefined) ${meshVar}.material.${v.property} = new BABYLON.Color3(${tmpVar}.r, ${tmpVar}.g, ${tmpVar}.b);`);
                     lines.push(`        else if (${tmpVar}.x !== undefined) ${meshVar}.material.${v.property} = new BABYLON.Color3(${tmpVar}.x, ${tmpVar}.y, ${tmpVar}.z);`);
-                    lines.push(`        else if (${tmpVar}.value) ${meshVar}.material.${v.property} = new BABYLON.Color3(${tmpVar}.value[0], ${tmpVar}.value[1], ${tmpVar}.value[2]);`);
+                    lines.push(
+                        `        else if (${tmpVar}.value) ${meshVar}.material.${v.property} = new BABYLON.Color3(${tmpVar}.value[0], ${tmpVar}.value[1], ${tmpVar}.value[2]);`
+                    );
                     lines.push(`    }`);
                 }
             } else if (v.valueType === "Vector3") {
@@ -2106,7 +2112,8 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
     // ── ES6 conversion ────────────────────────────────────────────────────
     if (opts.format === "es6") {
         const hasAudio = (scene.sounds ?? []).length > 0;
-        result = convertToES6(result, hasPhysics, hasGUI, hasAudio);
+        const hasFlowGraph = scene.flowGraphs.length > 0;
+        result = convertToES6(result, hasPhysics, hasGUI, hasAudio, hasFlowGraph);
     }
 
     return result;

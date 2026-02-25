@@ -1471,6 +1471,7 @@ export class SceneManager {
         | string
         | {
               id: string;
+              warnings?: string[];
           } {
         const scene = this.getScene(sceneName);
         if (!scene) {
@@ -1478,7 +1479,46 @@ export class SceneManager {
         }
         const id = this.nextId(sceneName, "fg");
         scene.flowGraphs.push({ id, name, coordinatorJson, scopeNodeIds });
-        return { id };
+
+        // Validate mesh references inside the coordinator JSON
+        const warnings: string[] = [];
+        try {
+            const parsed = typeof coordinatorJson === "string" ? JSON.parse(coordinatorJson) : coordinatorJson;
+            const knownMeshNames = new Set([...scene.meshes.map((m) => m.name), ...scene.transformNodes.map((t) => t.name)]);
+            const knownMeshIds = new Set([...scene.meshes.map((m) => m.id), ...scene.transformNodes.map((t) => t.id)]);
+
+            // Walk all blocks in all flow graphs looking for mesh/camera references in config
+            const graphs = parsed.flowGraphs ?? parsed.graphs ?? [];
+            for (const fg of graphs) {
+                const blocks = fg.allBlocks ?? fg.blocks ?? [];
+                for (const block of blocks) {
+                    const config = block.config;
+                    if (!config) {
+                        continue;
+                    }
+                    for (const [key, val] of Object.entries(config)) {
+                        if (val && typeof val === "object" && "type" in (val as Record<string, unknown>) && "name" in (val as Record<string, unknown>)) {
+                            const ref = val as { type: string; name: string };
+                            const meshTypes = ["Mesh", "AbstractMesh", "InstancedMesh", "TransformNode", "GroundMesh", "LinesMesh"];
+                            if (meshTypes.includes(ref.type)) {
+                                if (!knownMeshNames.has(ref.name) && !knownMeshIds.has(ref.name)) {
+                                    const className = block.className ?? "unknown";
+                                    warnings.push(
+                                        `Block "${className}" config.${key} references ${ref.type} "${ref.name}" which was not found in the scene. ` +
+                                            `Available meshes/transforms: ${[...knownMeshNames].join(", ") || "(none)"}`
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch {
+            // JSON parsing failed — don't block attachment, but warn
+            warnings.push("Could not parse coordinator JSON to validate mesh references.");
+        }
+
+        return { id, ...(warnings.length > 0 ? { warnings } : {}) };
     }
 
     removeFlowGraph(sceneName: string, fgId: string): string {
@@ -2043,6 +2083,34 @@ export class SceneManager {
             for (const fg of scene.flowGraphs) {
                 const scope = fg.scopeNodeIds?.length ? ` scoped to: ${fg.scopeNodeIds.join(", ")}` : "";
                 lines.push(`  • [${fg.id}] "${fg.name}"${scope}`);
+                // Parse and summarize flow graph contents
+                try {
+                    const parsed = typeof fg.coordinatorJson === "string" ? JSON.parse(fg.coordinatorJson) : fg.coordinatorJson;
+                    const graphs = parsed.flowGraphs ?? parsed.graphs ?? [];
+                    for (const g of graphs) {
+                        const blocks = g.allBlocks ?? g.blocks ?? [];
+                        for (const block of blocks) {
+                            const displayName = block.metadata?.displayName ?? block.className ?? "?";
+                            const className = block.className ?? "";
+                            // Summarize config (especially mesh references)
+                            const configParts: string[] = [];
+                            if (block.config) {
+                                for (const [k, v] of Object.entries(block.config)) {
+                                    if (v && typeof v === "object" && "type" in (v as Record<string, unknown>) && "name" in (v as Record<string, unknown>)) {
+                                        configParts.push(`${k}: ${(v as { type: string }).type} "${(v as { name: string }).name}"`);
+                                    } else if (v !== undefined && v !== null) {
+                                        const str = JSON.stringify(v);
+                                        configParts.push(`${k}: ${str.length > 40 ? str.slice(0, 37) + "..." : str}`);
+                                    }
+                                }
+                            }
+                            const configStr = configParts.length > 0 ? ` { ${configParts.join(", ")} }` : "";
+                            lines.push(`      ◦ ${displayName} (${className})${configStr}`);
+                        }
+                    }
+                } catch {
+                    lines.push(`      (could not parse coordinator JSON)`);
+                }
             }
             lines.push("");
         }
