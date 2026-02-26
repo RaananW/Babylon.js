@@ -282,7 +282,8 @@ server.registerTool(
             "Create a new empty GUI (AdvancedDynamicTexture) in memory. This is always the first step. " +
             "The GUI starts with an empty root container; add controls to 'root' to begin building.",
         inputSchema: {
-            name: z.string().describe("Unique name for this GUI (e.g. 'MainHUD', 'SettingsPanel')"),
+            name: z.string().optional().describe("Unique name for this GUI (e.g. 'MainHUD', 'SettingsPanel')"),
+            guiName: z.string().optional().describe("Alias for name — unique name for this GUI"),
             width: z.number().default(1920).describe("Texture width in pixels"),
             height: z.number().default(1080).describe("Texture height in pixels"),
             isFullscreen: z.boolean().default(true).describe("Whether this is a fullscreen overlay GUI"),
@@ -290,13 +291,17 @@ server.registerTool(
             idealHeight: z.number().optional().describe("Ideal height for adaptive scaling (optional)"),
         },
     },
-    async ({ name, width, height, isFullscreen, idealWidth, idealHeight }) => {
-        manager.createTexture(name, { width, height, isFullscreen, idealWidth, idealHeight });
+    async ({ name, guiName, width, height, isFullscreen, idealWidth, idealHeight }) => {
+        const resolvedName = name ?? guiName;
+        if (!resolvedName) {
+            return { content: [{ type: "text", text: "Error: Either name or guiName must be provided." }], isError: true };
+        }
+        manager.createTexture(resolvedName, { width, height, isFullscreen, idealWidth, idealHeight });
         return {
             content: [
                 {
                     type: "text",
-                    text: `Created GUI "${name}" (${width}×${height}, fullscreen: ${isFullscreen}). The root container is named "root". Add controls to it with add_control.`,
+                    text: `Created GUI "${resolvedName}" (${width}×${height}, fullscreen: ${isFullscreen}). The root container is named "root". Add controls to it with add_control.`,
                 },
             ],
         };
@@ -342,6 +347,7 @@ server.registerTool(
                         "Use list_control_types to see all available types."
                 ),
             controlName: z.string().optional().describe("Name for the control (must be unique within the GUI). Auto-generated if omitted."),
+            name: z.string().optional().describe("Alias for controlName — name for the control."),
             parentName: z.string().default("root").describe("Name of the parent container to add this control to. Defaults to 'root'."),
             properties: z
                 .record(z.string(), z.unknown())
@@ -354,12 +360,37 @@ server.registerTool(
                         '{ buttonText: "Click me", background: "#4CAF50" } for Button (buttonText creates the internal TextBlock), ' +
                         '{ buttonImage: "icon.png" } for Button with image.'
                 ),
+            // Gap 16 — convenience aliases for common control properties at top level
+            text: z.string().optional().describe("Shorthand for properties.text (TextBlock, Button)"),
+            fontSize: z.union([z.string(), z.number()]).optional().describe("Shorthand for properties.fontSize"),
+            color: z.string().optional().describe("Shorthand for properties.color"),
+            background: z.string().optional().describe("Shorthand for properties.background"),
+            width: z.union([z.string(), z.number()]).optional().describe("Shorthand for properties.width"),
+            height: z.union([z.string(), z.number()]).optional().describe("Shorthand for properties.height"),
+            top: z.union([z.string(), z.number()]).optional().describe("Shorthand for properties.top"),
+            left: z.union([z.string(), z.number()]).optional().describe("Shorthand for properties.left"),
+            buttonText: z.string().optional().describe("Shorthand for properties.buttonText (Button)"),
+            isVertical: z.boolean().optional().describe("Shorthand for properties.isVertical (StackPanel)"),
+            thickness: z.number().optional().describe("Shorthand for properties.thickness"),
+            cornerRadius: z.number().optional().describe("Shorthand for properties.cornerRadius"),
+            horizontalAlignment: z.number().optional().describe("Shorthand for properties.horizontalAlignment (0=left,1=right,2=center)"),
+            verticalAlignment: z.number().optional().describe("Shorthand for properties.verticalAlignment (0=top,1=bottom,2=center)"),
             gridRow: z.number().optional().describe("Row index when adding to a Grid parent (0-based)"),
             gridColumn: z.number().optional().describe("Column index when adding to a Grid parent (0-based)"),
         },
     },
-    async ({ guiName, controlType, controlName, parentName, properties, gridRow, gridColumn }) => {
-        const result = manager.addControl(guiName, controlType, controlName, parentName, properties as Record<string, unknown>, gridRow, gridColumn);
+    async ({ guiName, controlType, controlName, name: nameAlias, parentName, properties, gridRow, gridColumn,
+             text, fontSize, color, background, width, height, top, left, buttonText, isVertical, thickness, cornerRadius, horizontalAlignment, verticalAlignment }) => {
+        // Gap 17 — resolve name alias for controlName
+        const resolvedControlName = controlName ?? nameAlias;
+        // Gap 16 — merge top-level convenience properties into properties object
+        const mergedProps: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
+        const aliases: Record<string, unknown> = { text, fontSize, color, background, width, height, top, left, buttonText, isVertical, thickness, cornerRadius, horizontalAlignment, verticalAlignment };
+        for (const [k, v] of Object.entries(aliases)) {
+            if (v !== undefined && !(k in mergedProps)) mergedProps[k] = v;
+        }
+        const resolvedProps = Object.keys(mergedProps).length > 0 ? mergedProps : (properties as Record<string, unknown>);
+        const result = manager.addControl(guiName, controlType, resolvedControlName, parentName, resolvedProps, gridRow, gridColumn);
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
@@ -773,8 +804,24 @@ server.registerTool(
                     z.object({
                         controlType: z.string().describe("Control type name"),
                         controlName: z.string().optional().describe("Name for the control"),
+                        name: z.string().optional().describe("Alias for controlName"),
                         parentName: z.string().default("root").describe("Parent container name"),
                         properties: z.record(z.string(), z.unknown()).optional().describe("Control properties"),
+                        // Gap 16 — convenience aliases for common control properties
+                        text: z.string().optional().describe("Shorthand for properties.text"),
+                        fontSize: z.union([z.string(), z.number()]).optional().describe("Shorthand for properties.fontSize"),
+                        color: z.string().optional().describe("Shorthand for properties.color"),
+                        background: z.string().optional().describe("Shorthand for properties.background"),
+                        width: z.union([z.string(), z.number()]).optional().describe("Shorthand for properties.width"),
+                        height: z.union([z.string(), z.number()]).optional().describe("Shorthand for properties.height"),
+                        top: z.union([z.string(), z.number()]).optional().describe("Shorthand for properties.top"),
+                        left: z.union([z.string(), z.number()]).optional().describe("Shorthand for properties.left"),
+                        buttonText: z.string().optional().describe("Shorthand for properties.buttonText"),
+                        isVertical: z.boolean().optional().describe("Shorthand for properties.isVertical"),
+                        thickness: z.number().optional().describe("Shorthand for properties.thickness"),
+                        cornerRadius: z.number().optional().describe("Shorthand for properties.cornerRadius"),
+                        horizontalAlignment: z.number().optional().describe("Shorthand for properties.horizontalAlignment"),
+                        verticalAlignment: z.number().optional().describe("Shorthand for properties.verticalAlignment"),
                         gridRow: z.number().optional().describe("Grid row index"),
                         gridColumn: z.number().optional().describe("Grid column index"),
                     })
@@ -785,7 +832,21 @@ server.registerTool(
     async ({ guiName, controls }) => {
         const results: string[] = [];
         for (const def of controls) {
-            const result = manager.addControl(guiName, def.controlType, def.controlName, def.parentName, def.properties as Record<string, unknown>, def.gridRow, def.gridColumn);
+            // Gap 17 — resolve name alias
+            const resolvedName = def.controlName ?? def.name;
+            // Gap 16 — merge top-level convenience properties into properties
+            const mergedProps: Record<string, unknown> = { ...((def.properties as Record<string, unknown>) || {}) };
+            const aliases: Record<string, unknown> = {
+                text: def.text, fontSize: def.fontSize, color: def.color, background: def.background,
+                width: def.width, height: def.height, top: def.top, left: def.left,
+                buttonText: def.buttonText, isVertical: def.isVertical, thickness: def.thickness,
+                cornerRadius: def.cornerRadius, horizontalAlignment: def.horizontalAlignment, verticalAlignment: def.verticalAlignment,
+            };
+            for (const [k, v] of Object.entries(aliases)) {
+                if (v !== undefined && !(k in mergedProps)) mergedProps[k] = v;
+            }
+            const resolvedProps = Object.keys(mergedProps).length > 0 ? mergedProps : (def.properties as Record<string, unknown>);
+            const result = manager.addControl(guiName, def.controlType, resolvedName, def.parentName, resolvedProps, def.gridRow, def.gridColumn);
             if (typeof result === "string") {
                 results.push(`Error adding ${def.controlType}: ${result}`);
             } else {

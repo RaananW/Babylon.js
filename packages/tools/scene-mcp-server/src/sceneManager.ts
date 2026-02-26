@@ -1501,7 +1501,13 @@ export class SceneManager {
             return `Scene "${sceneName}" not found.`;
         }
         const id = this.nextId(sceneName, "fg");
-        scene.flowGraphs.push({ id, name, coordinatorJson, scopeNodeIds });
+        // Gap 33: Replace existing flow graph with same name instead of duplicating
+        const existingIdx = scene.flowGraphs.findIndex((fg) => fg.name === name);
+        if (existingIdx >= 0) {
+            scene.flowGraphs[existingIdx] = { id, name, coordinatorJson, scopeNodeIds };
+        } else {
+            scene.flowGraphs.push({ id, name, coordinatorJson, scopeNodeIds });
+        }
 
         // Validate mesh references inside the coordinator JSON
         const warnings: string[] = [];

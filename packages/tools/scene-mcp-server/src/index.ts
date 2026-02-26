@@ -72,6 +72,21 @@ const TransformSchema = z
     .optional()
     .describe("Transform with position, rotation, and scaling");
 
+const PhysicsSchema = z
+    .object({
+        bodyType: z
+            .union([z.enum(["Static", "Dynamic", "Animated"]), z.number()])
+            .describe("Body type: Static (immovable), Dynamic (fully simulated), Animated (driven by animation)"),
+        shapeType: z.enum(["Box", "Sphere", "Capsule", "Cylinder", "ConvexHull", "Mesh", "Container"]).describe("Collision shape type"),
+        mass: z.number().optional().describe("Mass (kg). Use 0 for static bodies."),
+        friction: z.number().optional().describe("Friction coefficient (0-1)"),
+        restitution: z.number().optional().describe("Bounciness (0-1)"),
+        linearDamping: z.number().optional().describe("Linear damping (0-1)"),
+        angularDamping: z.number().optional().describe("Angular damping (0-1)"),
+    })
+    .optional()
+    .describe("Inline physics body. If provided, a physics body is automatically added to this mesh after creation.");
+
 // ─── MCP Server ───────────────────────────────────────────────────────────
 const server = new McpServer({
     name: "babylonjs-scene",
@@ -393,16 +408,36 @@ server.registerTool(
             fogDensity: z.number().optional().describe("Fog density"),
             fogStart: z.number().optional().describe("Fog start distance (linear mode)"),
             fogEnd: z.number().optional().describe("Fog end distance (linear mode)"),
-            gravity: z.unknown().optional().describe("Gravity vector as {x,y,z} or [x,y,z]"),
+            gravity: z.unknown().optional().describe("Gravity vector as {x,y,z} or [x,y,z]. Setting gravity automatically enables physics if not already enabled."),
             physicsEnabled: z.boolean().optional().describe("Enable physics simulation"),
             physicsPlugin: z.string().optional().describe("Physics plugin: 'havok' (recommended) or 'cannon'"),
+            physicsEngine: z.string().optional().describe("Alias for physicsPlugin — e.g. 'HavokPlugin' or 'havok'. Also auto-enables physics."),
             createDefaultGround: z.boolean().optional().describe("Auto-create a default ground plane"),
             groundSize: z.number().optional().describe("Size of default ground"),
             groundColor: z.unknown().optional().describe("Color of default ground"),
         },
     },
     async (params) => {
-        const { sceneName, ...env } = params;
+        const { sceneName, physicsEngine, ...env } = params;
+
+        // physicsEngine alias → resolve to physicsPlugin + physicsEnabled
+        if (physicsEngine !== undefined && env.physicsPlugin === undefined) {
+            // Normalize: "HavokPlugin" / "Havok" / "havok" → "havok"
+            const normalized = physicsEngine.toLowerCase().replace("plugin", "");
+            env.physicsPlugin = normalized;
+        }
+        if (physicsEngine !== undefined && env.physicsEnabled === undefined) {
+            env.physicsEnabled = true;
+        }
+
+        // Auto-enable physics when gravity is set
+        if (env.gravity !== undefined && env.physicsEnabled === undefined) {
+            env.physicsEnabled = true;
+            if (env.physicsPlugin === undefined) {
+                env.physicsPlugin = "havok";
+            }
+        }
+
         const result = manager.setEnvironment(sceneName, env as Record<string, unknown>);
         return {
             content: [{ type: "text", text: result === "OK" ? "Environment updated." : `Error: ${result}` }],
@@ -422,20 +457,100 @@ server.registerTool(
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().describe("Name for the camera (e.g. 'mainCamera', 'followCam')"),
-            type: z.enum(["ArcRotateCamera", "FreeCamera", "UniversalCamera", "FollowCamera"]).describe("Camera type"),
-            properties: z
-                .record(z.string(), z.unknown())
-                .optional()
-                .describe(
-                    "Camera properties. For ArcRotateCamera: alpha, beta, radius, target (Vector3). " +
-                        "For FreeCamera: position (Vector3), target (Vector3), speed. " +
-                        "For FollowCamera: radius, heightOffset, rotationOffset, lockedTarget (mesh name)."
-                ),
+            type: z.string().optional().describe("Camera type: ArcRotateCamera, FreeCamera, UniversalCamera, FollowCamera"),
+            cameraType: z.string().optional().describe("Alias for type — camera type name"),
+            properties: z.record(z.string(), z.unknown()).optional().describe("Camera properties object. You can also use the top-level convenience aliases below instead."),
+            // Convenience aliases — merged into properties (top-level wins)
+            alpha: z.number().optional().describe("ArcRotateCamera: horizontal rotation angle in radians (e.g. -Math.PI/2)"),
+            beta: z.number().optional().describe("ArcRotateCamera: vertical rotation angle in radians (e.g. Math.PI/3)"),
+            radius: z.number().optional().describe("ArcRotateCamera / FollowCamera: distance from target"),
+            target: z.unknown().optional().describe("Camera target as {x,y,z} or [x,y,z] — the point the camera looks at"),
+            position: z.unknown().optional().describe("Camera position as {x,y,z} or [x,y,z] — for FreeCamera/UniversalCamera"),
+            speed: z.number().optional().describe("Camera movement speed"),
+            heightOffset: z.number().optional().describe("FollowCamera: height offset above the target"),
+            rotationOffset: z.number().optional().describe("FollowCamera: rotation offset in degrees"),
+            lockedTarget: z.string().optional().describe("FollowCamera: name of the mesh to follow"),
+            minZ: z.number().optional().describe("Near clipping plane distance"),
+            maxZ: z.number().optional().describe("Far clipping plane distance"),
+            fov: z.number().optional().describe("Field of view in radians"),
             isActive: z.boolean().default(true).describe("Whether this should be the active camera"),
         },
     },
-    async ({ sceneName, name, type, properties, isActive }) => {
-        const result = manager.addCamera(sceneName, name, type, properties as Record<string, unknown>, isActive);
+    async ({
+        sceneName,
+        name,
+        type: rawType,
+        cameraType,
+        properties,
+        alpha,
+        beta,
+        radius,
+        target,
+        position,
+        speed,
+        heightOffset,
+        rotationOffset,
+        lockedTarget,
+        minZ,
+        maxZ,
+        fov,
+        isActive,
+    }) => {
+        // Gap 26: resolve cameraType alias
+        const resolvedRawType = rawType ?? cameraType;
+        if (!resolvedRawType) {
+            return { content: [{ type: "text", text: "Error: Either type or cameraType must be provided." }], isError: true };
+        }
+        // Validate camera type
+        const validCameraTypes = ["ArcRotateCamera", "FreeCamera", "UniversalCamera", "FollowCamera"];
+        const cameraTypeMap: Record<string, string> = {};
+        for (const t of validCameraTypes) {
+            cameraTypeMap[t.toLowerCase()] = t;
+        }
+        const resolvedType = cameraTypeMap[resolvedRawType.toLowerCase()];
+        if (!resolvedType) {
+            return { content: [{ type: "text", text: `Error: Invalid camera type "${resolvedRawType}". Valid types: ${validCameraTypes.join(", ")}` }], isError: true };
+        }
+        // Merge convenience aliases into properties (top-level wins)
+        const mergedProps: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
+        if (alpha !== undefined) {
+            mergedProps.alpha = alpha;
+        }
+        if (beta !== undefined) {
+            mergedProps.beta = beta;
+        }
+        if (radius !== undefined) {
+            mergedProps.radius = radius;
+        }
+        if (target !== undefined) {
+            mergedProps.target = target;
+        }
+        if (position !== undefined) {
+            mergedProps.position = position;
+        }
+        if (speed !== undefined) {
+            mergedProps.speed = speed;
+        }
+        if (heightOffset !== undefined) {
+            mergedProps.heightOffset = heightOffset;
+        }
+        if (rotationOffset !== undefined) {
+            mergedProps.rotationOffset = rotationOffset;
+        }
+        if (lockedTarget !== undefined) {
+            mergedProps.lockedTarget = lockedTarget;
+        }
+        if (minZ !== undefined) {
+            mergedProps.minZ = minZ;
+        }
+        if (maxZ !== undefined) {
+            mergedProps.maxZ = maxZ;
+        }
+        if (fov !== undefined) {
+            mergedProps.fov = fov;
+        }
+
+        const result = manager.addCamera(sceneName, name, resolvedType, Object.keys(mergedProps).length > 0 ? mergedProps : undefined, isActive);
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
@@ -443,7 +558,7 @@ server.registerTool(
             content: [
                 {
                     type: "text",
-                    text: `Added camera [${result.id}] "${name}" (${type}).${isActive ? " Set as active camera." : ""}`,
+                    text: `Added camera [${result.id}] "${name}" (${resolvedType}).${isActive ? " Set as active camera." : ""}`,
                 },
             ],
         };
@@ -499,18 +614,55 @@ server.registerTool(
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().describe("Name for the light"),
             type: z.enum(["HemisphericLight", "PointLight", "DirectionalLight", "SpotLight"]).describe("Light type"),
-            properties: z
-                .record(z.string(), z.unknown())
-                .optional()
-                .describe(
-                    "Light properties. Common: intensity, diffuse, specular. " +
-                        "HemisphericLight: direction, groundColor. PointLight: position, range. " +
-                        "DirectionalLight: direction, position, shadowEnabled. SpotLight: position, direction, angle, exponent."
-                ),
+            properties: z.record(z.string(), z.unknown()).optional().describe("Light properties object. You can also use the top-level convenience aliases below instead."),
+            // Convenience aliases — merged into properties (top-level wins)
+            direction: z.unknown().optional().describe("Light direction as {x,y,z} or [x,y,z] — required for Hemispheric/Directional/Spot"),
+            position: z.unknown().optional().describe("Light position as {x,y,z} or [x,y,z] — for Point/Directional/Spot"),
+            intensity: z.number().optional().describe("Light intensity (default 1.0)"),
+            diffuse: z.unknown().optional().describe("Diffuse color as {r,g,b} or [r,g,b]"),
+            specular: z.unknown().optional().describe("Specular color as {r,g,b} or [r,g,b]"),
+            groundColor: z.unknown().optional().describe("HemisphericLight: ground color as {r,g,b} or [r,g,b]"),
+            range: z.number().optional().describe("PointLight: light range"),
+            angle: z.number().optional().describe("SpotLight: cone angle in radians"),
+            exponent: z.number().optional().describe("SpotLight: light decay exponent"),
+            shadowEnabled: z.boolean().optional().describe("Enable shadow generation for this light"),
         },
     },
-    async ({ sceneName, name, type, properties }) => {
-        const result = manager.addLight(sceneName, name, type, properties as Record<string, unknown>);
+    async ({ sceneName, name, type, properties, direction, position, intensity, diffuse, specular, groundColor, range, angle, exponent, shadowEnabled }) => {
+        // Merge convenience aliases into properties (top-level wins)
+        const mergedProps: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
+        if (direction !== undefined) {
+            mergedProps.direction = direction;
+        }
+        if (position !== undefined) {
+            mergedProps.position = position;
+        }
+        if (intensity !== undefined) {
+            mergedProps.intensity = intensity;
+        }
+        if (diffuse !== undefined) {
+            mergedProps.diffuse = diffuse;
+        }
+        if (specular !== undefined) {
+            mergedProps.specular = specular;
+        }
+        if (groundColor !== undefined) {
+            mergedProps.groundColor = groundColor;
+        }
+        if (range !== undefined) {
+            mergedProps.range = range;
+        }
+        if (angle !== undefined) {
+            mergedProps.angle = angle;
+        }
+        if (exponent !== undefined) {
+            mergedProps.exponent = exponent;
+        }
+        if (shadowEnabled !== undefined) {
+            mergedProps.shadowEnabled = shadowEnabled;
+        }
+
+        const result = manager.addLight(sceneName, name, type, Object.keys(mergedProps).length > 0 ? mergedProps : undefined);
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
@@ -526,14 +678,51 @@ server.registerTool(
         description: "Update properties on an existing light.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
-            lightId: z.string().describe("Light ID or name"),
-            properties: z.record(z.string(), z.unknown()).describe("Properties to update"),
+            lightId: z.string().optional().describe("Light ID or name"),
+            name: z.string().optional().describe("Alias for lightId — light name or ID"),
+            properties: z.record(z.string(), z.unknown()).optional().describe("Properties to update (all configurable props nested here)"),
+            // Gap 23 — convenience aliases for common light properties (merged into properties)
+            direction: z.unknown().optional().describe("Shorthand for properties.direction — as {x,y,z} or [x,y,z]"),
+            intensity: z.number().optional().describe("Shorthand for properties.intensity"),
+            diffuse: z.unknown().optional().describe("Shorthand for properties.diffuse — as {r,g,b} or [r,g,b]"),
+            specular: z.unknown().optional().describe("Shorthand for properties.specular — as {r,g,b} or [r,g,b]"),
+            groundColor: z.unknown().optional().describe("Shorthand for properties.groundColor (HemisphericLight) — as {r,g,b} or [r,g,b]"),
+            range: z.number().optional().describe("Shorthand for properties.range"),
+            shadowEnabled: z.boolean().optional().describe("Shorthand for properties.shadowEnabled"),
         },
     },
-    async ({ sceneName, lightId, properties }) => {
-        const result = manager.configureLightProperties(sceneName, lightId, properties as Record<string, unknown>);
+    async ({ sceneName, lightId, name: nameAlias, properties, direction, intensity, diffuse, specular, groundColor, range, shadowEnabled }) => {
+        const resolvedLightId = lightId ?? nameAlias;
+        if (!resolvedLightId) {
+            return { content: [{ type: "text", text: "Error: Either lightId or name must be provided." }], isError: true };
+        }
+        // Gap 23: Merge convenience aliases into properties
+        const mergedProps: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
+        if (direction !== undefined) {
+            mergedProps.direction = direction;
+        }
+        if (intensity !== undefined) {
+            mergedProps.intensity = intensity;
+        }
+        if (diffuse !== undefined) {
+            mergedProps.diffuse = diffuse;
+        }
+        if (specular !== undefined) {
+            mergedProps.specular = specular;
+        }
+        if (groundColor !== undefined) {
+            mergedProps.groundColor = groundColor;
+        }
+        if (range !== undefined) {
+            mergedProps.range = range;
+        }
+        if (shadowEnabled !== undefined) {
+            mergedProps.shadowEnabled = shadowEnabled;
+        }
+
+        const result = manager.configureLightProperties(sceneName, resolvedLightId, mergedProps as Record<string, unknown>);
         return {
-            content: [{ type: "text", text: result === "OK" ? `Light "${lightId}" updated.` : `Error: ${result}` }],
+            content: [{ type: "text", text: result === "OK" ? `Light "${resolvedLightId}" updated.` : `Error: ${result}` }],
             isError: result !== "OK",
         };
     }
@@ -553,7 +742,11 @@ server.registerTool(
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().describe("Name for the material"),
-            type: z.enum(["StandardMaterial", "PBRMaterial", "NodeMaterial"]).describe("Material type"),
+            type: z
+                .string()
+                .describe(
+                    "Material type: 'StandardMaterial' (or 'Standard'), 'PBRMaterial' (or 'PBR'), 'NodeMaterial' (or 'Node'). " + "Short aliases are accepted and auto-resolved."
+                ),
             properties: z
                 .record(z.string(), z.unknown())
                 .optional()
@@ -563,13 +756,21 @@ server.registerTool(
                         "NodeMaterial: use nmeJson parameter instead."
                 ),
             // Convenience aliases — common material properties at top level
-            albedoColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+            albedoColor: z
+                .union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)])
+                .optional()
                 .describe("Shorthand for properties.albedoColor (PBRMaterial) — as {r,g,b} or [r,g,b]"),
-            diffuseColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+            diffuseColor: z
+                .union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)])
+                .optional()
                 .describe("Shorthand for properties.diffuseColor (StandardMaterial) — as {r,g,b} or [r,g,b]"),
-            specularColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+            specularColor: z
+                .union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)])
+                .optional()
                 .describe("Shorthand for properties.specularColor (StandardMaterial) — as {r,g,b} or [r,g,b]"),
-            emissiveColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+            emissiveColor: z
+                .union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)])
+                .optional()
                 .describe("Shorthand for properties.emissiveColor — as {r,g,b} or [r,g,b]"),
             metallic: z.number().optional().describe("Shorthand for properties.metallic (PBRMaterial) — 0 to 1"),
             roughness: z.number().optional().describe("Shorthand for properties.roughness (PBRMaterial) — 0 to 1"),
@@ -582,16 +783,62 @@ server.registerTool(
             snippetId: z.string().optional().describe("For NodeMaterial: a Babylon.js Snippet Server ID to load from"),
         },
     },
-    async ({ sceneName, name, type, properties, albedoColor, diffuseColor, specularColor, emissiveColor, metallic, roughness, alpha, nmeJson, nmeJsonFile, snippetId }) => {
+    async ({
+        sceneName,
+        name,
+        type: rawType,
+        properties,
+        albedoColor,
+        diffuseColor,
+        specularColor,
+        emissiveColor,
+        metallic,
+        roughness,
+        alpha,
+        nmeJson,
+        nmeJsonFile,
+        snippetId,
+    }) => {
+        // Gap 15 — resolve short material type aliases
+        const materialTypeAliases: Record<string, string> = {
+            pbr: "PBRMaterial",
+            standard: "StandardMaterial",
+            node: "NodeMaterial",
+            pbrmaterial: "PBRMaterial",
+            standardmaterial: "StandardMaterial",
+            nodematerial: "NodeMaterial",
+        };
+        const type = materialTypeAliases[rawType.toLowerCase()] ?? rawType;
+        const validTypes = ["StandardMaterial", "PBRMaterial", "NodeMaterial"];
+        if (!validTypes.includes(type)) {
+            return {
+                content: [{ type: "text", text: `Error: Unknown material type "${rawType}". Valid types: ${validTypes.join(", ")} (aliases: PBR, Standard, Node)` }],
+                isError: true,
+            };
+        }
         // Merge top-level convenience material properties into the properties object
         const mergedProperties: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
-        if (albedoColor !== undefined && !("albedoColor" in mergedProperties)) mergedProperties.albedoColor = albedoColor;
-        if (diffuseColor !== undefined && !("diffuseColor" in mergedProperties)) mergedProperties.diffuseColor = diffuseColor;
-        if (specularColor !== undefined && !("specularColor" in mergedProperties)) mergedProperties.specularColor = specularColor;
-        if (emissiveColor !== undefined && !("emissiveColor" in mergedProperties)) mergedProperties.emissiveColor = emissiveColor;
-        if (metallic !== undefined && !("metallic" in mergedProperties)) mergedProperties.metallic = metallic;
-        if (roughness !== undefined && !("roughness" in mergedProperties)) mergedProperties.roughness = roughness;
-        if (alpha !== undefined && !("alpha" in mergedProperties)) mergedProperties.alpha = alpha;
+        if (albedoColor !== undefined && !("albedoColor" in mergedProperties)) {
+            mergedProperties.albedoColor = albedoColor;
+        }
+        if (diffuseColor !== undefined && !("diffuseColor" in mergedProperties)) {
+            mergedProperties.diffuseColor = diffuseColor;
+        }
+        if (specularColor !== undefined && !("specularColor" in mergedProperties)) {
+            mergedProperties.specularColor = specularColor;
+        }
+        if (emissiveColor !== undefined && !("emissiveColor" in mergedProperties)) {
+            mergedProperties.emissiveColor = emissiveColor;
+        }
+        if (metallic !== undefined && !("metallic" in mergedProperties)) {
+            mergedProperties.metallic = metallic;
+        }
+        if (roughness !== undefined && !("roughness" in mergedProperties)) {
+            mergedProperties.roughness = roughness;
+        }
+        if (alpha !== undefined && !("alpha" in mergedProperties)) {
+            mergedProperties.alpha = alpha;
+        }
         const resolvedProperties = Object.keys(mergedProperties).length > 0 ? mergedProperties : (properties as Record<string, unknown>);
 
         let resolvedNmeJson = nmeJson;
@@ -690,18 +937,23 @@ server.registerTool(
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             materialId: z.string().describe("Material ID or name"),
-            properties: z
-                .record(z.string(), z.unknown())
-                .optional()
-                .describe("Material properties to update: albedoColor, metallic, roughness, diffuseColor, etc."),
+            properties: z.record(z.string(), z.unknown()).optional().describe("Material properties to update: albedoColor, metallic, roughness, diffuseColor, etc."),
             // Convenience aliases — same as add_material
-            albedoColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+            albedoColor: z
+                .union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)])
+                .optional()
                 .describe("Shorthand for properties.albedoColor (PBRMaterial)"),
-            diffuseColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+            diffuseColor: z
+                .union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)])
+                .optional()
                 .describe("Shorthand for properties.diffuseColor (StandardMaterial)"),
-            specularColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+            specularColor: z
+                .union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)])
+                .optional()
                 .describe("Shorthand for properties.specularColor"),
-            emissiveColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+            emissiveColor: z
+                .union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)])
+                .optional()
                 .describe("Shorthand for properties.emissiveColor"),
             metallic: z.number().optional().describe("Shorthand for properties.metallic — 0 to 1"),
             roughness: z.number().optional().describe("Shorthand for properties.roughness — 0 to 1"),
@@ -710,13 +962,27 @@ server.registerTool(
     },
     async ({ sceneName, materialId, properties, albedoColor, diffuseColor, specularColor, emissiveColor, metallic, roughness, alpha }) => {
         const mergedProperties: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
-        if (albedoColor !== undefined && !("albedoColor" in mergedProperties)) mergedProperties.albedoColor = albedoColor;
-        if (diffuseColor !== undefined && !("diffuseColor" in mergedProperties)) mergedProperties.diffuseColor = diffuseColor;
-        if (specularColor !== undefined && !("specularColor" in mergedProperties)) mergedProperties.specularColor = specularColor;
-        if (emissiveColor !== undefined && !("emissiveColor" in mergedProperties)) mergedProperties.emissiveColor = emissiveColor;
-        if (metallic !== undefined && !("metallic" in mergedProperties)) mergedProperties.metallic = metallic;
-        if (roughness !== undefined && !("roughness" in mergedProperties)) mergedProperties.roughness = roughness;
-        if (alpha !== undefined && !("alpha" in mergedProperties)) mergedProperties.alpha = alpha;
+        if (albedoColor !== undefined && !("albedoColor" in mergedProperties)) {
+            mergedProperties.albedoColor = albedoColor;
+        }
+        if (diffuseColor !== undefined && !("diffuseColor" in mergedProperties)) {
+            mergedProperties.diffuseColor = diffuseColor;
+        }
+        if (specularColor !== undefined && !("specularColor" in mergedProperties)) {
+            mergedProperties.specularColor = specularColor;
+        }
+        if (emissiveColor !== undefined && !("emissiveColor" in mergedProperties)) {
+            mergedProperties.emissiveColor = emissiveColor;
+        }
+        if (metallic !== undefined && !("metallic" in mergedProperties)) {
+            mergedProperties.metallic = metallic;
+        }
+        if (roughness !== undefined && !("roughness" in mergedProperties)) {
+            mergedProperties.roughness = roughness;
+        }
+        if (alpha !== undefined && !("alpha" in mergedProperties)) {
+            mergedProperties.alpha = alpha;
+        }
 
         if (Object.keys(mergedProperties).length === 0) {
             return { content: [{ type: "text", text: "Error: No properties provided to update." }], isError: true };
@@ -782,14 +1048,21 @@ server.registerTool(
             parentId: z.string().optional().describe("Parent node ID or name for hierarchy"),
             materialId: z.string().optional().describe("Material ID or name to assign"),
             material: z.string().optional().describe("Alias for materialId — material ID or name to assign"),
+            physics: PhysicsSchema,
         },
     },
-    async ({ sceneName, name, type, options, transform, position, rotation, scaling, parentId, materialId, material }) => {
+    async ({ sceneName, name, type, options, transform, position, rotation, scaling, parentId, materialId, material, physics }) => {
         // Merge convenience top-level position/rotation/scaling into transform (top-level wins)
         const mergedTransform: Record<string, unknown> = { ...((transform as Record<string, unknown>) || {}) };
-        if (position !== undefined) mergedTransform.position = position;
-        if (rotation !== undefined) mergedTransform.rotation = rotation;
-        if (scaling !== undefined) mergedTransform.scaling = scaling;
+        if (position !== undefined) {
+            mergedTransform.position = position;
+        }
+        if (rotation !== undefined) {
+            mergedTransform.rotation = rotation;
+        }
+        if (scaling !== undefined) {
+            mergedTransform.scaling = scaling;
+        }
         const resolvedMaterialId = materialId || material;
 
         const result = manager.addMesh(
@@ -804,11 +1077,29 @@ server.registerTool(
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
+
+        // Inline physics body
+        let physicsMsg = "";
+        if (physics) {
+            const pResult = manager.addPhysicsBody(sceneName, result.id, physics.bodyType, physics.shapeType, {
+                mass: physics.mass,
+                friction: physics.friction,
+                restitution: physics.restitution,
+                linearDamping: physics.linearDamping,
+                angularDamping: physics.angularDamping,
+            });
+            if (pResult === "OK") {
+                physicsMsg = ` Physics: ${physics.shapeType} (${physics.bodyType}).`;
+            } else {
+                physicsMsg = ` Physics error: ${pResult}`;
+            }
+        }
+
         return {
             content: [
                 {
                     type: "text",
-                    text: `Added mesh [${result.id}] "${name}" (${type}).${resolvedMaterialId ? ` Material: ${resolvedMaterialId}.` : ""}`,
+                    text: `Added mesh [${result.id}] "${name}" (${type}).${resolvedMaterialId ? ` Material: ${resolvedMaterialId}.` : ""}${physicsMsg}`,
                 },
             ],
         };
@@ -878,9 +1169,15 @@ server.registerTool(
     },
     async ({ sceneName, name, transform, position, rotation, scaling, parentId }) => {
         const mergedTransform: Record<string, unknown> = { ...((transform as Record<string, unknown>) || {}) };
-        if (position !== undefined) mergedTransform.position = position;
-        if (rotation !== undefined) mergedTransform.rotation = rotation;
-        if (scaling !== undefined) mergedTransform.scaling = scaling;
+        if (position !== undefined) {
+            mergedTransform.position = position;
+        }
+        if (rotation !== undefined) {
+            mergedTransform.rotation = rotation;
+        }
+        if (scaling !== undefined) {
+            mergedTransform.scaling = scaling;
+        }
         const result = manager.addTransformNode(sceneName, name, Object.keys(mergedTransform).length > 0 ? mergedTransform : undefined, parentId);
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
@@ -897,16 +1194,22 @@ server.registerTool(
         description: "Set the position, rotation, and/or scaling of any node (mesh, transform node, camera, light).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
-            nodeId: z.string().describe("Node ID or name"),
+            nodeId: z.string().optional().describe("Node ID or name"),
+            meshId: z.string().optional().describe("Alias for nodeId — mesh name or ID"),
+            name: z.string().optional().describe("Alias for nodeId — node name"),
             position: Vector3Schema.describe("New position as {x,y,z} or [x,y,z]"),
             rotation: Vector3Schema.describe("New rotation in radians as {x,y,z} or [x,y,z]"),
             scaling: Vector3Schema.describe("New scaling as {x,y,z} or [x,y,z]"),
         },
     },
-    async ({ sceneName, nodeId, position, rotation, scaling }) => {
-        const result = manager.setTransform(sceneName, nodeId, { position, rotation, scaling } as Record<string, unknown>);
+    async ({ sceneName, nodeId, meshId, name: nameAlias, position, rotation, scaling }) => {
+        const resolvedNodeId = nodeId ?? meshId ?? nameAlias;
+        if (!resolvedNodeId) {
+            return { content: [{ type: "text", text: "Error: Either nodeId, meshId, or name must be provided." }], isError: true };
+        }
+        const result = manager.setTransform(sceneName, resolvedNodeId, { position, rotation, scaling } as Record<string, unknown>);
         return {
-            content: [{ type: "text", text: result === "OK" ? `Transform of "${nodeId}" updated.` : `Error: ${result}` }],
+            content: [{ type: "text", text: result === "OK" ? `Transform of "${resolvedNodeId}" updated.` : `Error: ${result}` }],
             isError: result !== "OK",
         };
     }
@@ -982,10 +1285,20 @@ server.registerTool(
     },
     async ({ sceneName, name, url, transform, position, rotation, scaling, parentId, animationGroups, materialOverrides, pluginExtension }) => {
         const mergedTransform: Record<string, unknown> = { ...((transform as Record<string, unknown>) || {}) };
-        if (position !== undefined) mergedTransform.position = position;
-        if (rotation !== undefined) mergedTransform.rotation = rotation;
-        if (scaling !== undefined) mergedTransform.scaling = scaling;
-        const result = manager.addModel(sceneName, name, url, Object.keys(mergedTransform).length > 0 ? mergedTransform : undefined, parentId, { animationGroups, materialOverrides, pluginExtension });
+        if (position !== undefined) {
+            mergedTransform.position = position;
+        }
+        if (rotation !== undefined) {
+            mergedTransform.rotation = rotation;
+        }
+        if (scaling !== undefined) {
+            mergedTransform.scaling = scaling;
+        }
+        const result = manager.addModel(sceneName, name, url, Object.keys(mergedTransform).length > 0 ? mergedTransform : undefined, parentId, {
+            animationGroups,
+            materialOverrides,
+            pluginExtension,
+        });
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
@@ -1115,7 +1428,7 @@ server.registerTool(
             bodyType: z
                 .union([z.enum(["Static", "Dynamic", "Animated"]), z.number()])
                 .describe("Body type: Static (immovable), Dynamic (fully simulated), Animated (driven by animation)"),
-            shapeType: z.enum(["Box", "Sphere", "Capsule", "Cylinder", "ConvexHull", "Mesh", "Container"]).describe("Collision shape type"),
+            shapeType: z.string().describe("Collision shape type: Box, Sphere, Capsule, Cylinder, ConvexHull, Mesh, Container (case-insensitive)"),
             mass: z.number().optional().describe("Mass (kg). Use 0 for static bodies."),
             friction: z.number().optional().describe("Friction coefficient (0-1)"),
             restitution: z.number().optional().describe("Bounciness (0-1)"),
@@ -1124,7 +1437,28 @@ server.registerTool(
         },
     },
     async ({ sceneName, meshId, bodyType, shapeType, mass, friction, restitution, linearDamping, angularDamping }) => {
-        const result = manager.addPhysicsBody(sceneName, meshId, bodyType, shapeType, {
+        // Gap 21 fix: Normalize bodyType — accept case-insensitive strings and map to numbers
+        let resolvedBodyType = bodyType;
+        if (typeof resolvedBodyType === "string") {
+            const bodyTypeMap: Record<string, number> = { static: 0, animated: 1, dynamic: 2 };
+            const mapped = bodyTypeMap[resolvedBodyType.toLowerCase()];
+            if (mapped !== undefined) {
+                resolvedBodyType = mapped;
+            }
+        }
+        // Gap 21 fix: Normalize shapeType — accept case-insensitive strings and map to PascalCase
+        const shapeTypeMap: Record<string, string> = {
+            box: "Box",
+            sphere: "Sphere",
+            capsule: "Capsule",
+            cylinder: "Cylinder",
+            convexhull: "ConvexHull",
+            mesh: "Mesh",
+            container: "Container",
+        };
+        const resolvedShapeType = shapeTypeMap[shapeType.toLowerCase()] ?? shapeType;
+
+        const result = manager.addPhysicsBody(sceneName, meshId, resolvedBodyType, resolvedShapeType, {
             mass,
             friction,
             restitution,
@@ -1156,17 +1490,21 @@ server.registerTool(
             "Provide either the inline coordinatorJson string OR a coordinatorJsonFile path (not both).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
-            name: z.string().describe("Name for this flow graph attachment"),
+            name: z.string().optional().describe("Name for this flow graph attachment (defaults to 'flowGraph')"),
             coordinatorJson: z.string().optional().describe("The complete Flow Graph coordinator JSON string"),
             coordinatorJsonFile: z.string().optional().describe("Absolute path to a file containing the Flow Graph coordinator JSON (alternative to inline coordinatorJson)"),
+            flowGraphJsonFile: z.string().optional().describe("Alias for coordinatorJsonFile — path to the Flow Graph JSON file"),
+            flowGraphJson: z.string().optional().describe("Alias for coordinatorJson — the Flow Graph JSON string"),
             scopeNodeIds: z.array(z.string()).optional().describe("Optional: limit this flow graph to specific node IDs"),
         },
     },
-    async ({ sceneName, name, coordinatorJson, coordinatorJsonFile, scopeNodeIds }) => {
-        let resolvedJson = coordinatorJson;
-        if (!resolvedJson && coordinatorJsonFile) {
+    async ({ sceneName, name, coordinatorJson, coordinatorJsonFile, flowGraphJsonFile, flowGraphJson, scopeNodeIds }) => {
+        const resolvedName = name ?? "flowGraph";
+        let resolvedJson = coordinatorJson ?? flowGraphJson;
+        const resolvedFile = coordinatorJsonFile ?? flowGraphJsonFile;
+        if (!resolvedJson && resolvedFile) {
             try {
-                resolvedJson = readFileSync(coordinatorJsonFile, "utf-8");
+                resolvedJson = readFileSync(resolvedFile, "utf-8");
             } catch (e) {
                 return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
             }
@@ -1182,18 +1520,19 @@ server.registerTool(
                 content: [
                     {
                         type: "text",
-                        text: `Error: coordinatorJson must be a valid JSON string. Received a non-JSON value: "${resolvedJson.substring(0, 100)}...". ` +
+                        text:
+                            `Error: coordinatorJson must be a valid JSON string. Received a non-JSON value: "${resolvedJson.substring(0, 100)}...". ` +
                             `Use the flow graph MCP server's export_graph_json tool to get the full coordinator JSON, then pass that JSON string here.`,
                     },
                 ],
                 isError: true,
             };
         }
-        const result = manager.attachFlowGraph(sceneName, name, resolvedJson, scopeNodeIds);
+        const result = manager.attachFlowGraph(sceneName, resolvedName, resolvedJson, scopeNodeIds);
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
-        let msg = `Attached flow graph [${result.id}] "${name}".${scopeNodeIds?.length ? ` Scoped to: ${scopeNodeIds.join(", ")}` : ""}`;
+        let msg = `Attached flow graph [${result.id}] "${resolvedName}".${scopeNodeIds?.length ? ` Scoped to: ${scopeNodeIds.join(", ")}` : ""}`;
         if (result.warnings && result.warnings.length > 0) {
             msg += `\n⚠ ${result.warnings.join("\n⚠ ")}`;
         }
@@ -2171,7 +2510,27 @@ const CollisionCounterSchema = z.object({
     prefix: z.string().describe('Text prefix, e.g. "Collisions: "'),
 });
 
-const IntegrationSchema = z.discriminatedUnion("type", [PhysicsCollisionSchema, VariableToPropertySchema, GuiButtonSchema, CollisionCounterSchema]);
+// Gap 30: Accept aliases for collisionCounter
+const EventCounterSchema = z.object({
+    type: z.literal("eventCounter"),
+    textBlockName: z.string().describe("GUI TextBlock name to update"),
+    prefix: z.string().describe('Text prefix, e.g. "Score: "'),
+});
+
+const ScoreDisplaySchema = z.object({
+    type: z.literal("scoreDisplay"),
+    textBlockName: z.string().describe("GUI TextBlock name to update"),
+    prefix: z.string().describe('Text prefix, e.g. "Score: "'),
+});
+
+const IntegrationSchema = z.discriminatedUnion("type", [
+    PhysicsCollisionSchema,
+    VariableToPropertySchema,
+    GuiButtonSchema,
+    CollisionCounterSchema,
+    EventCounterSchema,
+    ScoreDisplaySchema,
+]);
 
 server.registerTool(
     "add_integration",
@@ -2183,14 +2542,20 @@ server.registerTool(
             "- **physicsCollision**: When two physics bodies collide, dispatch a FlowGraph custom event\n" +
             "- **variableToProperty**: Each frame, sync a FlowGraph variable to a mesh material property\n" +
             "- **guiButton**: When a GUI button is clicked, dispatch a FlowGraph custom event (with optional toggle labels)\n" +
-            "- **collisionCounter**: Display a running collision count in a GUI TextBlock",
+            "- **collisionCounter** (aliases: **eventCounter**, **scoreDisplay**): Display a running collision count in a GUI TextBlock",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             integration: IntegrationSchema.describe("The integration descriptor to add"),
         },
     },
     async ({ sceneName, integration }) => {
-        const result = manager.addIntegration(sceneName, integration);
+        // Gap 30: Normalize integration type aliases to canonical names
+        const typeAliases: Record<string, string> = { eventCounter: "collisionCounter", scoreDisplay: "collisionCounter" };
+        const normalized = { ...integration };
+        if (typeAliases[(normalized as Record<string, unknown>).type as string]) {
+            (normalized as Record<string, unknown>).type = typeAliases[(normalized as Record<string, unknown>).type as string];
+        }
+        const result = manager.addIntegration(sceneName, normalized as Parameters<typeof manager.addIntegration>[1]);
         if (result !== "OK") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
@@ -2210,9 +2575,15 @@ server.registerTool(
         },
     },
     async ({ sceneName, integrations }) => {
+        // Gap 30: Normalize integration type aliases
+        const typeAliases: Record<string, string> = { eventCounter: "collisionCounter", scoreDisplay: "collisionCounter" };
         const results: string[] = [];
         for (const integ of integrations) {
-            const result = manager.addIntegration(sceneName, integ);
+            const normalized = { ...integ };
+            if (typeAliases[(normalized as Record<string, unknown>).type as string]) {
+                (normalized as Record<string, unknown>).type = typeAliases[(normalized as Record<string, unknown>).type as string];
+            }
+            const result = manager.addIntegration(sceneName, normalized as Parameters<typeof manager.addIntegration>[1]);
             if (result !== "OK") {
                 results.push(`Error (${integ.type}): ${result}`);
             } else {
@@ -2474,6 +2845,7 @@ server.registerTool(
                         parentId: z.string().optional(),
                         materialId: z.string().optional(),
                         material: z.string().optional().describe("Alias for materialId"),
+                        physics: PhysicsSchema,
                     })
                 )
                 .describe("Array of meshes to add"),
@@ -2484,9 +2856,15 @@ server.registerTool(
         for (const m of meshes) {
             // Merge convenience aliases
             const mergedTransform: Record<string, unknown> = { ...((m.transform as Record<string, unknown>) || {}) };
-            if (m.position !== undefined) mergedTransform.position = m.position;
-            if (m.rotation !== undefined) mergedTransform.rotation = m.rotation;
-            if (m.scaling !== undefined) mergedTransform.scaling = m.scaling;
+            if (m.position !== undefined) {
+                mergedTransform.position = m.position;
+            }
+            if (m.rotation !== undefined) {
+                mergedTransform.rotation = m.rotation;
+            }
+            if (m.scaling !== undefined) {
+                mergedTransform.scaling = m.scaling;
+            }
             const resolvedMaterialId = m.materialId || m.material;
 
             const result = manager.addMesh(
@@ -2501,7 +2879,19 @@ server.registerTool(
             if (typeof result === "string") {
                 results.push(`Error adding "${m.name}": ${result}`);
             } else {
-                results.push(`[${result.id}] "${m.name}" (${m.type})`);
+                let line = `[${result.id}] "${m.name}" (${m.type})`;
+                // Inline physics body
+                if (m.physics) {
+                    const pResult = manager.addPhysicsBody(sceneName, result.id, m.physics.bodyType, m.physics.shapeType, {
+                        mass: m.physics.mass,
+                        friction: m.physics.friction,
+                        restitution: m.physics.restitution,
+                        linearDamping: m.physics.linearDamping,
+                        angularDamping: m.physics.angularDamping,
+                    });
+                    line += pResult === "OK" ? ` + physics (${m.physics.shapeType})` : ` [physics error: ${pResult}]`;
+                }
+                results.push(line);
             }
         }
         return { content: [{ type: "text", text: `Added meshes:\n${results.join("\n")}` }] };

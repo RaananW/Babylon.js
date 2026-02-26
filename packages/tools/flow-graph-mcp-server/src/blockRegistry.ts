@@ -720,16 +720,31 @@ export const FlowGraphBlockRegistry: Record<string, IFlowGraphBlockTypeInfo> = {
         className: "FlowGraphFunctionReference",
         category: "Utility",
         description:
-            "Creates a bound function reference from an object and a method name. " +
-            "The output is a callable function that can be connected to a CodeExecution block's 'function' input. " +
-            "For example, to call mesh.physicsBody.applyImpulse: connect a GetAsset block to 'object' (the mesh), " +
-            "set 'functionName' to 'physicsBody.applyImpulse', and the output is a bound reference to that method. " +
+            "Creates a callable function reference. Two modes of use:\n" +
+            "MODE A — Object method lookup: connect 'functionName' and 'object' data inputs. " +
+            "The block does object[functionName].bind(context) and outputs the bound function.\n" +
+            "MODE B — Inline code (config.code): put arbitrary JavaScript in config.code. " +
+            "The code generator will compile it into a real function and inject it at runtime. " +
+            "Leave 'functionName' and 'object' data inputs UNCONNECTED when using Mode B. " +
+            "The code has access to 'scene' (the Babylon.js scene) and 'BABYLON' (the namespace). " +
+            "The function signature is (value, fgContext) => result. Return a value if needed.\n" +
+            "Connect the 'output' to a CodeExecution block's 'function' input. " +
             "This is a DATA block — it evaluates lazily when its output is read.",
         signalInputs: [],
         signalOutputs: [],
+        config: {
+            code:
+                "string — Optional. Arbitrary JavaScript code compiled into a function by the code generator. " +
+                "Has access to 'scene' (via closure) and any BABYLON API. " +
+                "Example: const ball = scene.getMeshByName('ball'); ball.physicsBody.applyImpulse(...); return 1;",
+        },
         dataInputs: [
-            { name: "functionName", type: "string", description: "Dot-separated path to the method on the object (e.g. 'physicsBody.applyImpulse', 'clone')" },
-            { name: "object", type: "any", description: "The object containing the function (e.g. a mesh from GetAsset)" },
+            {
+                name: "functionName",
+                type: "string",
+                description: "Dot-separated path to the method on the object (e.g. 'physicsBody.applyImpulse', 'clone'). " + "Leave unconnected when using config.code.",
+            },
+            { name: "object", type: "any", description: "The object containing the function (e.g. a mesh from GetAsset). Leave unconnected when using config.code." },
             { name: "context", type: "any", description: "Optional 'this' context for the function call", isOptional: true },
         ],
         dataOutputs: [{ name: "output", type: "any", description: "The bound function reference, ready to be called or connected to CodeExecution" }],

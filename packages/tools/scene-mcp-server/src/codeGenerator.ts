@@ -86,6 +86,8 @@ function sanitizeStringLiteral(s: string): string {
  * Extract the numeric suffix from internal IDs like "mesh_5" → 5, "cam_1" → 1.
  * This is used to set `uniqueId` on generated objects so that FlowGraph's
  * GetAssetBlock (with useIndexAsUniqueId: true) can resolve assets correctly.
+ * @param internalId - The internal ID string to extract the numeric suffix from
+ * @returns The numeric suffix as a number, or null if no numeric suffix is found
  */
 function extractNumericId(internalId: string): number | null {
     const match = internalId.match(/_(\d+)$/);
@@ -163,8 +165,8 @@ const ANIM_LOOP_MODE_NAMES: Record<number, string> = {
 
 const PHYSICS_BODY_TYPE_NAMES: Record<number, string> = {
     0: "BABYLON.PhysicsMotionType.STATIC",
-    1: "BABYLON.PhysicsMotionType.DYNAMIC",
-    2: "BABYLON.PhysicsMotionType.ANIMATED",
+    1: "BABYLON.PhysicsMotionType.ANIMATED",
+    2: "BABYLON.PhysicsMotionType.DYNAMIC",
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -731,6 +733,105 @@ function generatePhysicsBody(meshName: string, mesh: ISerializedMesh, enableColl
     return lines.join("\n");
 }
 
+/**
+ * Extract blocks that have config.code from the coordinator JSON and need runtime
+ * function injection.  Two patterns are supported:
+ *
+ * 1. **FunctionReference + CodeExecution** (Gap 20):
+ *    The engine's FunctionReference block expects `functionName` + `object` data inputs
+ *    (to do `object[functionName].bind(context)`) and completely ignores `config.code`.
+ *    We compile config.code into a real function and inject it on the FunctionReference's
+ *    OUTPUT connection so the downstream CodeExecution block can pick it up.
+ *
+ * 2. **Standalone CodeExecution** (Gap 31):
+ *    The engine's CodeExecution block reads its `function` INPUT to get a callable.
+ *    When the LLM places code directly in a CodeExecution block's config.code (without
+ *    a FunctionReference upstream), the `function` input is unconnected → the block
+ *    produces `undefined`.  We compile config.code and inject it on the CodeExecution
+ *    block's `function` INPUT connection.
+ */
+interface _CodeInjection {
+    /** Unique id of the block (for comment/debugging) */
+    blockUniqueId: string;
+    /** Human-readable label from metadata.displayName, if any */
+    displayName: string;
+    /** The raw code string from config.code */
+    code: string;
+    /** The uniqueId of the connection to inject the compiled function into */
+    targetConnectionUniqueId: string;
+}
+
+function _extractCodeInjections(coordinatorJson: any): _CodeInjection[] {
+    const injections: _CodeInjection[] = [];
+    if (!coordinatorJson?._flowGraphs) return injections;
+    for (const graph of coordinatorJson._flowGraphs) {
+        if (!graph?.allBlocks) continue;
+        for (const block of graph.allBlocks) {
+            if (!block.config?.code) continue;
+
+            // Pattern 1: FunctionReference with config.code → inject on OUTPUT
+            if (block.className === "FlowGraphFunctionReference") {
+                const outputConn = block.dataOutputs?.find((o: any) => o.name === "output");
+                if (outputConn) {
+                    injections.push({
+                        blockUniqueId: block.uniqueId,
+                        displayName: block.metadata?.displayName ?? block.uniqueId,
+                        code: block.config.code,
+                        targetConnectionUniqueId: outputConn.uniqueId,
+                    });
+                }
+            }
+
+            // Pattern 2: CodeExecution with config.code and unconnected function input
+            if (block.className === "FlowGraphCodeExecutionBlock") {
+                const funcInput = block.dataInputs?.find((i: any) => i.name === "function");
+                if (funcInput && (!funcInput.connectedPointIds || funcInput.connectedPointIds.length === 0)) {
+                    injections.push({
+                        blockUniqueId: block.uniqueId,
+                        displayName: block.metadata?.displayName ?? block.uniqueId,
+                        code: block.config.code,
+                        targetConnectionUniqueId: funcInput.uniqueId,
+                    });
+                }
+            }
+        }
+    }
+    return injections;
+}
+
+/**
+ * Gap 34 fix: propagate block config values to matching unconnected data input defaults.
+ * When a block has e.g. config.duration = 4 and a data input named "duration" that is
+ * unconnected and has no explicit defaultValue, set defaultValue so the engine uses the
+ * intended value instead of the type-level default (e.g. 0 for numbers).
+ */
+function _fixupConfigDefaults(coordinatorJson: any): void {
+    if (!coordinatorJson?._flowGraphs) {
+        return;
+    }
+    for (const fg of coordinatorJson._flowGraphs) {
+        if (!fg.allBlocks) {
+            continue;
+        }
+        for (const block of fg.allBlocks) {
+            if (!block.config || !block.dataInputs) {
+                continue;
+            }
+            for (const di of block.dataInputs) {
+                // Only fix unconnected inputs that don't already have an explicit defaultValue
+                if (
+                    (!di.connectedPointIds || di.connectedPointIds.length === 0) &&
+                    di.name in block.config &&
+                    block.config[di.name] !== undefined &&
+                    di.defaultValue === undefined
+                ) {
+                    di.defaultValue = block.config[di.name];
+                }
+            }
+        }
+    }
+}
+
 function generateFlowGraph(fg: ISerializedFlowGraphRef, sceneVar: string): string {
     const lines: string[] = [];
     const v = varName(fg.name);
@@ -740,10 +841,13 @@ function generateFlowGraph(fg: ISerializedFlowGraphRef, sceneVar: string): strin
     // Ensure coordinatorJson is properly emitted as a JS object literal.
     // The stored value should be a valid JSON string; emit it directly as a JS expression.
     let jsonLiteral: string;
+    let parsedCoordinatorJson: any = null;
     try {
         // Parse to validate it's real JSON, then re-stringify with indentation for readability
-        const parsed = JSON.parse(fg.coordinatorJson);
-        jsonLiteral = JSON.stringify(parsed);
+        parsedCoordinatorJson = JSON.parse(fg.coordinatorJson);
+        // Gap 34 fix: propagate config values to unconnected data input defaults
+        _fixupConfigDefaults(parsedCoordinatorJson);
+        jsonLiteral = JSON.stringify(parsedCoordinatorJson);
     } catch {
         // Not valid JSON — wrap the raw string as a JSON string literal as a fallback,
         // and add a warning comment so the developer knows something went wrong.
@@ -756,6 +860,36 @@ function generateFlowGraph(fg: ISerializedFlowGraphRef, sceneVar: string): strin
     lines.push(`    scene: ${sceneVar},`);
     lines.push(`    pathConverter: { convert: () => ({ object: null, info: null }) },`);
     lines.push(`});`);
+
+    // ── Gap 20 + Gap 31 fix: inject real JS functions for blocks with config.code ──
+    // Handles both FunctionReference blocks (output injection) and standalone
+    // CodeExecution blocks (function-input injection).  See _extractCodeInjections.
+    if (parsedCoordinatorJson) {
+        const injections = _extractCodeInjections(parsedCoordinatorJson);
+        for (let i = 0; i < injections.length; i++) {
+            const inj = injections[i];
+            const fnVar = `${v}_codeFn${i}`;
+            lines.push(``);
+            lines.push(`// Injected runtime function for "${inj.displayName}" (${inj.blockUniqueId})`);
+            lines.push(`const ${fnVar} = function(value, context) {`);
+            // Emit each line of the user code, indented inside the function body.
+            // The code may reference "scene" (closure from createScene()) and
+            // "context" (FlowGraphContext, the second parameter).
+            for (const codeLine of inj.code.split("\n")) {
+                lines.push(`    ${codeLine}`);
+            }
+            lines.push(`};`);
+            // Inject the function into the target connection in every execution context.
+            lines.push(`for (const _fg of ${v}Coordinator.flowGraphs) {`);
+            lines.push(`    for (let _ci = 0; _ci < 10; _ci++) {`);
+            lines.push(`        const _ctx = _fg.getContext(_ci);`);
+            lines.push(`        if (!_ctx) break;`);
+            lines.push(`        _ctx._setConnectionValueByKey("${inj.targetConnectionUniqueId}", ${fnVar});`);
+            lines.push(`    }`);
+            lines.push(`}`);
+        }
+    }
+
     lines.push(`${v}Coordinator.start();`);
 
     return lines.join("\n");
@@ -1234,9 +1368,18 @@ function generateGUI(guiJson: unknown, sceneVar: string): IGUIGenResult {
             case "Rectangle":
                 lines.push(`${pad}const ${v} = new BABYLON.GUI.Rectangle("${sanitizeStringLiteral(def.name ?? "")}");`);
                 break;
-            case "Button":
-                lines.push(`${pad}const ${v} = BABYLON.GUI.Button.CreateSimpleButton("${sanitizeStringLiteral(def.name ?? "")}", "${sanitizeStringLiteral(def.text ?? "")}");`);
+            case "Button": {
+                // Button text lives on the auto-generated child TextBlock, not on .text directly
+                let btnText = def.text ?? "";
+                if (!btnText && def.textBlockName && def.children) {
+                    const tbChild = def.children.find((c) => c.name === def.textBlockName);
+                    if (tbChild?.text) {
+                        btnText = tbChild.text as string;
+                    }
+                }
+                lines.push(`${pad}const ${v} = BABYLON.GUI.Button.CreateSimpleButton("${sanitizeStringLiteral(def.name ?? "")}", "${sanitizeStringLiteral(btnText)}");`);
                 break;
+            }
             case "TextBlock":
                 lines.push(`${pad}const ${v} = new BABYLON.GUI.TextBlock("${sanitizeStringLiteral(def.name ?? "")}", "${sanitizeStringLiteral(def.text ?? "")}");`);
                 break;

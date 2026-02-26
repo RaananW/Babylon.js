@@ -36,6 +36,8 @@ export interface ISerializedConnection {
     richType?: { typeName: string; defaultValue: unknown };
     /** Whether this connection is optional. */
     optional?: boolean;
+    /** Instance-level default value (overrides richType.defaultValue during deserialization). */
+    defaultValue?: unknown;
 }
 
 /**
@@ -315,16 +317,41 @@ export class FlowGraphManager {
             richType: { typeName: dout.type, defaultValue: getDefaultValue(dout.type) },
         }));
 
+        // Gap 34 fix: Propagate config values to matching data input defaults.
+        // When a config key name matches a data input name (e.g. config.duration for SetDelay),
+        // set the instance-level defaultValue on the data input so the engine uses it
+        // instead of the type-level default (e.g. 0 for number).
+        if (config) {
+            for (const di of dataInputs) {
+                if (di.name in config && config[di.name] !== undefined) {
+                    di.defaultValue = config[di.name];
+                }
+            }
+        }
+
         // Normalize common config key aliases to canonical names
+        // Explicit alias map: maps common LLM-generated config key names to their canonical engine names
+        const CONFIG_ALIASES: Record<string, string> = {
+            variableName: "variable",
+            variableNames: "variables",
+            varName: "variable",
+            eventName: "eventId",
+        };
         if (config && typeInfo.config) {
             const knownKeys = new Set(Object.keys(typeInfo.config));
             const keysToRename: Array<[string, string]> = [];
             for (const key of Object.keys(config)) {
                 if (!knownKeys.has(key)) {
-                    // Try case-insensitive match or known alias mapping
-                    const canonical = [...knownKeys].find((k) => k.toLowerCase() === key.toLowerCase());
-                    if (canonical) {
-                        keysToRename.push([key, canonical]);
+                    // 1. Check explicit alias map
+                    const aliased = CONFIG_ALIASES[key];
+                    if (aliased && knownKeys.has(aliased)) {
+                        keysToRename.push([key, aliased]);
+                    } else {
+                        // 2. Try case-insensitive match
+                        const canonical = [...knownKeys].find((k) => k.toLowerCase() === key.toLowerCase());
+                        if (canonical) {
+                            keysToRename.push([key, canonical]);
+                        }
                     }
                 }
             }
@@ -467,12 +494,44 @@ export class FlowGraphManager {
 
         const output = sourceBlock.serialized.dataOutputs.find((o) => o.name === outputName);
         if (!output) {
+            // Gap 28: Try common port name aliases before failing
+            const PORT_OUTPUT_ALIASES: Record<string, string[]> = {
+                value: ["output"], // Constant block uses "output" but LLMs try "value"
+                output: ["value"], // Reverse mapping
+            };
+            const aliases = PORT_OUTPUT_ALIASES[outputName];
+            const aliasMatch = aliases ? sourceBlock.serialized.dataOutputs.find((o) => aliases.includes(o.name)) : undefined;
+            if (aliasMatch) {
+                // Found via alias — use the actual port
+                const input = targetBlock.serialized.dataInputs.find((i) => i.name === inputName);
+                if (!input) {
+                    const available = targetBlock.serialized.dataInputs.map((i) => i.name).join(", ");
+                    return `Input "${inputName}" not found on block ${targetBlockId} (${targetBlock.displayName}). Available inputs: ${available}`;
+                }
+                if (!input.connectedPointIds.includes(aliasMatch.uniqueId)) {
+                    input.connectedPointIds.push(aliasMatch.uniqueId);
+                }
+                return "OK";
+            }
             const available = sourceBlock.serialized.dataOutputs.map((o) => o.name).join(", ");
             return `Output "${outputName}" not found on block ${sourceBlockId} (${sourceBlock.displayName}). Available outputs: ${available}`;
         }
 
         const input = targetBlock.serialized.dataInputs.find((i) => i.name === inputName);
         if (!input) {
+            // Gap 28: Try common port name aliases for inputs too
+            const PORT_INPUT_ALIASES: Record<string, string[]> = {
+                value: ["input"],
+                input: ["value"],
+            };
+            const aliases = PORT_INPUT_ALIASES[inputName];
+            const aliasMatch = aliases ? targetBlock.serialized.dataInputs.find((i) => aliases.includes(i.name)) : undefined;
+            if (aliasMatch) {
+                if (!aliasMatch.connectedPointIds.includes(output.uniqueId)) {
+                    aliasMatch.connectedPointIds.push(output.uniqueId);
+                }
+                return "OK";
+            }
             const available = targetBlock.serialized.dataInputs.map((i) => i.name).join(", ");
             return `Input "${inputName}" not found on block ${targetBlockId} (${targetBlock.displayName}). Available inputs: ${available}`;
         }
@@ -510,7 +569,18 @@ export class FlowGraphManager {
             return `Target block ${targetBlockId} not found.`;
         }
 
-        const output = sourceBlock.serialized.signalOutputs.find((o) => o.name === signalOutputName);
+        // Gap 32: Auto-remap "out" → "done" for event blocks that have a "done" output.
+        // Event blocks (ReceiveCustomEvent, SceneReady, MeshPicked, etc.) fire "out" on startup
+        // and "done" when the event actually triggers. LLMs almost always mean "done".
+        let resolvedOutputName = signalOutputName;
+        if (signalOutputName === "out" && sourceBlock.typeInfo.category === "Event") {
+            const hasDone = sourceBlock.serialized.signalOutputs.some((o) => o.name === "done");
+            if (hasDone) {
+                resolvedOutputName = "done";
+            }
+        }
+
+        const output = sourceBlock.serialized.signalOutputs.find((o) => o.name === resolvedOutputName);
         if (!output) {
             const available = sourceBlock.serialized.signalOutputs.map((o) => o.name).join(", ");
             return `Signal output "${signalOutputName}" not found on block ${sourceBlockId} (${sourceBlock.displayName}). Available: ${available}`;

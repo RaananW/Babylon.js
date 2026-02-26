@@ -433,18 +433,29 @@ server.registerTool(
         inputSchema: {
             graphName: z.string().describe("Name of the flow graph"),
             sourceBlockId: z.number().describe("Block id with the signal output (e.g. the event or execution block)"),
-            signalOutputName: z.string().describe("Name of the signal output on the source block (e.g. 'out', 'onTrue', 'onFalse', 'executionFlow', 'completed')"),
+            signalOutputName: z.string().optional().describe("Name of the signal output on the source block (e.g. 'out', 'onTrue', 'onFalse', 'executionFlow', 'completed')"),
+            outputName: z.string().optional().describe("Alias for signalOutputName"),
             targetBlockId: z.number().describe("Block id with the signal input (the block to trigger)"),
             signalInputName: z.string().default("in").describe("Name of the signal input on the target block (usually 'in')"),
         },
     },
-    async ({ graphName, sourceBlockId, signalOutputName, targetBlockId, signalInputName }) => {
-        const result = manager.connectSignal(graphName, sourceBlockId, signalOutputName, targetBlockId, signalInputName);
+    async ({ graphName, sourceBlockId, signalOutputName, outputName: outputNameAlias, targetBlockId, signalInputName }) => {
+        const resolvedSignalOutputName = signalOutputName ?? outputNameAlias ?? "out";
+        const result = manager.connectSignal(graphName, sourceBlockId, resolvedSignalOutputName, targetBlockId, signalInputName);
+        // Gap 32: Detect if the manager auto-remapped "out" → "done" for event blocks
+        let note = "";
+        if (result === "OK" && resolvedSignalOutputName === "out") {
+            const graph = manager.getGraph(graphName);
+            const block = graph?.blocks.find((b) => b.id === sourceBlockId);
+            if (block?.typeInfo.category === "Event" && block.serialized.signalOutputs.some((o) => o.name === "done")) {
+                note = ` (Note: auto-remapped "out" → "done" for event block — "done" fires on event trigger, "out" fires on startup)`;
+            }
+        }
         return {
             content: [
                 {
                     type: "text",
-                    text: result === "OK" ? `Connected signal: [${sourceBlockId}].${signalOutputName} → [${targetBlockId}].${signalInputName}` : `Error: ${result}`,
+                    text: result === "OK" ? `Connected signal: [${sourceBlockId}].${resolvedSignalOutputName} → [${targetBlockId}].${signalInputName}${note}` : `Error: ${result}`,
                 },
             ],
             isError: result !== "OK",
@@ -783,7 +794,8 @@ server.registerTool(
             blocks: z
                 .array(
                     z.object({
-                        blockType: z.string().describe("Block type name from the registry"),
+                        blockType: z.string().optional().describe("Block type name from the registry"),
+                        type: z.string().optional().describe("Alias for blockType"),
                         name: z.string().optional().describe("Instance name for the block"),
                         config: z.record(z.string(), z.unknown()).optional().describe("Block configuration"),
                     })
@@ -794,11 +806,17 @@ server.registerTool(
     async ({ graphName, blocks }) => {
         const results: string[] = [];
         for (const blockDef of blocks) {
-            const result = manager.addBlock(graphName, blockDef.blockType, blockDef.name, blockDef.config as Record<string, unknown>);
+            // Gap 18 — resolve type alias for blockType
+            const resolvedBlockType = blockDef.blockType ?? blockDef.type;
+            if (!resolvedBlockType) {
+                results.push(`Error: block definition missing blockType (or type alias)`);
+                continue;
+            }
+            const result = manager.addBlock(graphName, resolvedBlockType, blockDef.name, blockDef.config as Record<string, unknown>);
             if (typeof result === "string") {
-                results.push(`Error adding ${blockDef.blockType}: ${result}`);
+                results.push(`Error adding ${resolvedBlockType}: ${result}`);
             } else {
-                results.push(`[${result.id}] ${result.name} (${blockDef.blockType})`);
+                results.push(`[${result.id}] ${result.name} (${resolvedBlockType})`);
             }
         }
         return { content: [{ type: "text", text: `Added blocks:\n${results.join("\n")}` }] };
@@ -815,7 +833,8 @@ server.registerTool(
                 .array(
                     z.object({
                         sourceBlockId: z.number(),
-                        signalOutputName: z.string(),
+                        signalOutputName: z.string().optional().describe("Signal output name on source block"),
+                        outputName: z.string().optional().describe("Alias for signalOutputName"),
                         targetBlockId: z.number(),
                         signalInputName: z.string().default("in"),
                     })
@@ -826,8 +845,10 @@ server.registerTool(
     async ({ graphName, connections }) => {
         const results: string[] = [];
         for (const conn of connections) {
-            const result = manager.connectSignal(graphName, conn.sourceBlockId, conn.signalOutputName, conn.targetBlockId, conn.signalInputName);
-            results.push(result === "OK" ? `[${conn.sourceBlockId}].${conn.signalOutputName} → [${conn.targetBlockId}].${conn.signalInputName}` : `Error: ${result}`);
+            // Gap 18 — resolve outputName alias for signalOutputName
+            const resolvedOutputName = conn.signalOutputName ?? conn.outputName ?? "out";
+            const result = manager.connectSignal(graphName, conn.sourceBlockId, resolvedOutputName, conn.targetBlockId, conn.signalInputName);
+            results.push(result === "OK" ? `[${conn.sourceBlockId}].${resolvedOutputName} → [${conn.targetBlockId}].${conn.signalInputName}` : `Error: ${result}`);
         }
         return { content: [{ type: "text", text: `Signal connections:\n${results.join("\n")}` }] };
     }
