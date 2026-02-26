@@ -15,6 +15,10 @@
         "babylonjs-gui": {
             "command": "node",
             "args": ["./packages/tools/gui-mcp-server/dist/index.js"]
+        },
+        "babylonjs-nge": {
+            "command": "node",
+            "args": ["./packages/tools/nge-mcp-server/dist/index.js"]
         }
     }
 }
