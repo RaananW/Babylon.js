@@ -692,6 +692,11 @@ export interface ISerializedScene {
     inspector?: ISerializedInspector;
     /** GUI descriptor JSON (from the GUI MCP server). Stored here so the scene is the single source of truth. */
     guiJson?: unknown;
+    /**
+     * Node Render Graph JSON (from the NRG MCP server).
+     * When present, the code generator emits NodeRenderGraph.Parse() + buildAsync() calls.
+     */
+    nodeRenderGraphJson?: unknown;
 }
 
 /**
@@ -2598,6 +2603,46 @@ export class SceneManager {
         return JSON.stringify(scene, null, 2);
     }
 
+    /**
+     * Attach a Node Render Graph JSON descriptor to a scene.
+     * The JSON must be NRGE-compatible (from the NRG MCP server's export_graph_json tool).
+     * @param sceneName The scene to attach the NRG to
+     * @param nrgJson The NRG descriptor JSON
+     * @returns "OK" or an error message
+     */
+    attachNodeRenderGraph(sceneName: string, nrgJson: unknown): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        if (typeof nrgJson === "string") {
+            try {
+                nrgJson = JSON.parse(nrgJson);
+            } catch (e) {
+                return `Invalid NRG JSON: ${(e as Error).message}`;
+            }
+        }
+        const nrg = nrgJson as { customType?: string };
+        if (nrg.customType !== "BABYLON.NodeRenderGraph") {
+            return `Invalid NRG JSON: customType must be "BABYLON.NodeRenderGraph" but got "${nrg.customType}".`;
+        }
+        scene.nodeRenderGraphJson = nrgJson;
+        return "OK";
+    }
+
+    /** Remove an attached Node Render Graph from a scene.
+     * @param sceneName The scene to detach the NRG from
+     * @returns "OK" or an error message
+     */
+    detachNodeRenderGraph(sceneName: string): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        delete scene.nodeRenderGraphJson;
+        return "OK";
+    }
+
     exportCode(sceneName: string, options?: ICodeGeneratorOptions): string | null {
         const scene = this.getScene(sceneName);
         if (!scene) {
@@ -2607,6 +2652,9 @@ export class SceneManager {
         const opts = { ...options };
         if (opts.guiJson === undefined && scene.guiJson) {
             opts.guiJson = scene.guiJson;
+        }
+        if (opts.nodeRenderGraphJson === undefined && scene.nodeRenderGraphJson) {
+            opts.nodeRenderGraphJson = scene.nodeRenderGraphJson;
         }
         return generateSceneCode(scene, opts);
     }
@@ -2628,6 +2676,9 @@ export class SceneManager {
         const opts = { ...options };
         if (opts.guiJson === undefined && scene.guiJson) {
             opts.guiJson = scene.guiJson;
+        }
+        if (opts.nodeRenderGraphJson === undefined && scene.nodeRenderGraphJson) {
+            opts.nodeRenderGraphJson = scene.nodeRenderGraphJson;
         }
         return generateProjectFiles(scene, opts);
     }

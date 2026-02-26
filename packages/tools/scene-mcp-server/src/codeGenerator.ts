@@ -196,6 +196,11 @@ function generateImports(scene: ISerializedScene): string {
         lines.push(`// import "@babylonjs/core/FlowGraph"; // For flow graph support`);
     }
 
+    const hasNRG = !!scene.nodeRenderGraphJson;
+    if (hasNRG) {
+        lines.push(`// import "@babylonjs/core/FrameGraph"; // For NodeRenderGraph support`);
+    }
+
     const hasAudio = (scene.sounds ?? []).length > 0;
     if (hasAudio) {
         lines.push(`// import "@babylonjs/core/Audio/v2"; // For Audio V2 support`);
@@ -699,6 +704,28 @@ function generateFlowGraph(fg: ISerializedFlowGraphRef, sceneVar: string): strin
     lines.push(`});`);
     lines.push(`${v}Coordinator.start();`);
 
+    return lines.join("\n");
+}
+
+/**
+ * Generate code to parse and build a Node Render Graph.
+ *
+ * Usage:  `const nrg = await BABYLON.NodeRenderGraph.ParseAsync(json, scene);`
+ *
+ * The graph is automatically enabled, replacing the default render pipeline.
+ * Make sure @babylonjs/core/FrameGraph is imported (or the UMD bundle includes it).
+ *
+ * @param nrgJson   The parsed NRG JSON object
+ * @param sceneVar  The scene variable name in the generated code
+ * @returns A string of code to create and build the Node Render Graph
+ */
+function generateNodeRenderGraph(nrgJson: unknown, sceneVar: string): string {
+    const lines: string[] = [];
+    const jsonStr = JSON.stringify(nrgJson);
+    lines.push(`// ─── Node Render Graph ───────────────────────────────────────────────────`);
+    lines.push(`const _nrgJson = JSON.parse(${JSON.stringify(jsonStr)});`);
+    lines.push(`const _nodeRenderGraph = await BABYLON.NodeRenderGraph.ParseAsync(_nrgJson, ${sceneVar}, { autoFillExternalInputs: true });`);
+    lines.push(`await _nodeRenderGraph.buildAsync();`);
     return lines.join("\n");
 }
 
@@ -1236,9 +1263,11 @@ const BABYLON_GUI_CLASSES = new Set([
  * @param hasPhysics - Whether the scene uses physics (adds Havok import)
  * @param hasGUI - Whether the scene uses GUI (adds GUI import)
  * @param hasAudio - Whether the scene uses audio (adds Audio V2 import)
+ * @param hasFlowGraph - Whether the scene uses Flow Graph (adds Flow Graph import)
+ * @param hasNRG - Whether the scene uses Node Render Graph (adds NRG import)
  * @returns The converted ES6 module code string with import statements
  */
-function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAudio: boolean, hasFlowGraph: boolean): string {
+function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAudio: boolean, hasFlowGraph: boolean, hasNRG?: boolean): string {
     // Helper: collect BABYLON.* references only OUTSIDE of quoted strings.
     // The regex alternates between matching a quoted string (skip) vs BABYLON.X (capture).
     // This prevents collecting/replacing BABYLON references inside JSON string values
@@ -1290,6 +1319,10 @@ function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAud
 
     if (hasFlowGraph) {
         importLines.push(`import "@babylonjs/core/FlowGraph";`);
+    }
+
+    if (hasNRG) {
+        importLines.push(`import "@babylonjs/core/FrameGraph";`);
     }
 
     // ── 4. Replace BABYLON.GUI.* → just the class name (outside strings) ─
@@ -1462,6 +1495,11 @@ export interface ICodeGeneratorOptions {
      * When provided, GUI construction code will be generated.
      */
     guiJson?: unknown;
+    /**
+     * Optional Node Render Graph JSON descriptor (from the NRG MCP server).
+     * When provided, NodeRenderGraph.Parse() + buildAsync() code will be generated.
+     */
+    nodeRenderGraphJson?: unknown;
     /**
      * Whether to enable collision callbacks on physics bodies.
      * When true, `body.setCollisionCallbackEnabled(true)` is generated.
@@ -1724,6 +1762,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         includeRenderLoop: options?.includeRenderLoop ?? true,
         format: options?.format ?? "umd",
         guiJson: options?.guiJson ?? null,
+        nodeRenderGraphJson: options?.nodeRenderGraphJson ?? null,
         enableCollisionCallbacks: options?.enableCollisionCallbacks ?? false,
     };
 
@@ -2032,6 +2071,13 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         bodyParts.push(``);
     }
 
+    // ── Node Render Graph ─────────────────────────────────────────────────
+    const nrgJson = opts.nodeRenderGraphJson;
+    if (nrgJson) {
+        bodyParts.push(generateNodeRenderGraph(nrgJson, S));
+        bodyParts.push(``);
+    }
+
     // ── Integrations (runtime bridges) ────────────────────────────────────
     if (scene.integrations && scene.integrations.length > 0) {
         bodyParts.push(generateIntegrations(scene.integrations, scene, S, guiControlVarMap));
@@ -2113,7 +2159,8 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
     if (opts.format === "es6") {
         const hasAudio = (scene.sounds ?? []).length > 0;
         const hasFlowGraph = scene.flowGraphs.length > 0;
-        result = convertToES6(result, hasPhysics, hasGUI, hasAudio, hasFlowGraph);
+        const hasNRG = !!opts.nodeRenderGraphJson;
+        result = convertToES6(result, hasPhysics, hasGUI, hasAudio, hasFlowGraph, hasNRG);
     }
 
     return result;

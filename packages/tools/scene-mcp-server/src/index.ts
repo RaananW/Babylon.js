@@ -126,6 +126,7 @@ server.registerResource("scene-overview", "scene://overview", {}, async (uri) =>
                 "- **NME MCP server**: Export NME JSON → import here via `add_material` with type NodeMaterial",
                 "- **Flow Graph MCP server**: Export coordinator JSON → attach here via `attach_flow_graph`",
                 "- **GUI MCP server**: Export GUI JSON → attach here via `attach_gui` (auto-included in code exports)",
+                "- **NRG MCP server** (babylonjs-nrg): Build a custom render pipeline → export JSON → attach here via `attach_node_render_graph`",
             ].join("\n"),
         },
     ],
@@ -1793,6 +1794,62 @@ server.registerTool(
     async ({ sceneName }) => {
         const desc = manager.describeGUI(sceneName);
         return { content: [{ type: "text", text: desc }] };
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Tools — Node Render Graph
+// ═══════════════════════════════════════════════════════════════════════════
+
+server.registerTool(
+    "attach_node_render_graph",
+    {
+        description:
+            "Attach a Node Render Graph JSON (from the NRG MCP server's export_graph_json) to the scene. " +
+            "Once attached, the exported code will call NodeRenderGraph.ParseAsync() + buildAsync() to apply the " +
+            "custom render pipeline. Only one render graph can be attached at a time; re-calling this " +
+            "tool replaces the previous one.",
+        inputSchema: {
+            sceneName: z.string().describe("Name of the scene to attach the render graph to"),
+            nrgJson: z.string().describe("The NRG JSON string (from the NRG MCP server's export_graph_json tool)"),
+        },
+    },
+    async ({ sceneName, nrgJson }) => {
+        let parsed: unknown;
+        try {
+            parsed = JSON.parse(nrgJson);
+        } catch {
+            return { content: [{ type: "text", text: "Invalid NRG JSON: parse error." }], isError: true };
+        }
+        const result = manager.attachNodeRenderGraph(sceneName, parsed);
+        if (result !== "OK") {
+            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+        }
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: `Node Render Graph attached to scene "${sceneName}". It will be included in all code exports automatically.`,
+                },
+            ],
+        };
+    }
+);
+
+server.registerTool(
+    "detach_node_render_graph",
+    {
+        description: "Remove the attached Node Render Graph from the scene, restoring the default render pipeline.",
+        inputSchema: {
+            sceneName: z.string().describe("Name of the scene"),
+        },
+    },
+    async ({ sceneName }) => {
+        const result = manager.detachNodeRenderGraph(sceneName);
+        return {
+            content: [{ type: "text", text: result === "OK" ? `Node Render Graph detached from scene "${sceneName}".` : `Error: ${result}` }],
+            isError: result !== "OK",
+        };
     }
 );
 
