@@ -22,6 +22,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
+import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { MaterialGraphManager } from "./materialGraph.js";
@@ -554,15 +556,31 @@ server.registerTool(
     "export_material_json",
     {
         description:
-            "Export the material graph as NME-compatible JSON. This JSON can be loaded in the Babylon.js Node Material Editor " + "or via NodeMaterial.Parse() at runtime.",
+            "Export the material graph as NME-compatible JSON. This JSON can be loaded in the Babylon.js Node Material Editor " +
+            "or via NodeMaterial.Parse() at runtime. " +
+            "When outputFile is provided, the JSON is written to disk and only the file path is returned " +
+            "(avoids large JSON payloads in the conversation context).",
         inputSchema: {
             materialName: z.string().describe("Name of the material to export"),
+            outputFile: z
+                .string()
+                .optional()
+                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
         },
     },
-    async ({ materialName }) => {
+    async ({ materialName, outputFile }) => {
         const json = manager.exportJSON(materialName);
         if (!json) {
             return { content: [{ type: "text", text: `Material "${materialName}" not found.` }], isError: true };
+        }
+        if (outputFile) {
+            try {
+                mkdirSync(dirname(outputFile), { recursive: true });
+                writeFileSync(outputFile, json, "utf-8");
+                return { content: [{ type: "text", text: `NME JSON written to: ${outputFile}` }] };
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+            }
         }
         return { content: [{ type: "text", text: json }] };
     }
@@ -571,14 +589,28 @@ server.registerTool(
 server.registerTool(
     "import_material_json",
     {
-        description: "Import an existing NME JSON into memory for editing. You can then modify blocks, connections, etc.",
+        description:
+            "Import an existing NME JSON into memory for editing. You can then modify blocks, connections, etc. " +
+            "Provide either the inline json string OR a jsonFile path (not both).",
         inputSchema: {
             materialName: z.string().describe("Name to give the imported material"),
-            json: z.string().describe("The NME JSON string to import"),
+            json: z.string().optional().describe("The NME JSON string to import"),
+            jsonFile: z.string().optional().describe("Absolute path to a file containing the NME JSON to import (alternative to inline json)"),
         },
     },
-    async ({ materialName, json }) => {
-        const result = manager.importJSON(materialName, json);
+    async ({ materialName, json, jsonFile }) => {
+        let jsonStr = json;
+        if (!jsonStr && jsonFile) {
+            try {
+                jsonStr = readFileSync(jsonFile, "utf-8");
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
+            }
+        }
+        if (!jsonStr) {
+            return { content: [{ type: "text", text: "Either json or jsonFile must be provided." }], isError: true };
+        }
+        const result = manager.importJSON(materialName, jsonStr);
         if (result !== "OK") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }

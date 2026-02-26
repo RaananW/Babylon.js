@@ -23,6 +23,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
+import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 
 import { FlowGraphBlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { FlowGraphManager } from "./flowGraphManager.js";
@@ -702,19 +704,36 @@ server.registerTool(
 server.registerTool(
     "export_graph_json",
     {
-        description: "Export the flow graph as Babylon.js-compatible JSON at the coordinator level. " + "This JSON can be loaded via FlowGraphCoordinator.parse() at runtime.",
+        description:
+            "Export the flow graph as Babylon.js-compatible JSON at the coordinator level. " +
+            "This JSON can be loaded via FlowGraphCoordinator.parse() at runtime. " +
+            "When outputFile is provided, the JSON is written to disk and only the file path is returned " +
+            "(avoids large JSON payloads in the conversation context).",
         inputSchema: {
             graphName: z.string().describe("Name of the flow graph to export"),
             graphOnly: z
                 .boolean()
                 .default(false)
                 .describe("If true, exports only the graph-level JSON (without the coordinator wrapper). Useful for embedding in glTF or other formats."),
+            outputFile: z
+                .string()
+                .optional()
+                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
         },
     },
-    async ({ graphName, graphOnly }) => {
+    async ({ graphName, graphOnly, outputFile }) => {
         const json = graphOnly ? manager.exportGraphJSON(graphName) : manager.exportJSON(graphName);
         if (!json) {
             return { content: [{ type: "text", text: `Graph "${graphName}" not found.` }], isError: true };
+        }
+        if (outputFile) {
+            try {
+                mkdirSync(dirname(outputFile), { recursive: true });
+                writeFileSync(outputFile, json, "utf-8");
+                return { content: [{ type: "text", text: `Flow Graph JSON written to: ${outputFile}` }] };
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+            }
         }
         return { content: [{ type: "text", text: json }] };
     }
@@ -723,14 +742,28 @@ server.registerTool(
 server.registerTool(
     "import_graph_json",
     {
-        description: "Import an existing Flow Graph JSON into memory for editing. Accepts either coordinator-level or graph-level JSON.",
+        description:
+            "Import an existing Flow Graph JSON into memory for editing. Accepts either coordinator-level or graph-level JSON. " +
+            "Provide either the inline json string OR a jsonFile path (not both).",
         inputSchema: {
             graphName: z.string().describe("Name to give the imported flow graph"),
-            json: z.string().describe("The Flow Graph JSON string to import"),
+            json: z.string().optional().describe("The Flow Graph JSON string to import"),
+            jsonFile: z.string().optional().describe("Absolute path to a file containing the Flow Graph JSON to import (alternative to inline json)"),
         },
     },
-    async ({ graphName, json }) => {
-        const result = manager.importJSON(graphName, json);
+    async ({ graphName, json, jsonFile }) => {
+        let jsonStr = json;
+        if (!jsonStr && jsonFile) {
+            try {
+                jsonStr = readFileSync(jsonFile, "utf-8");
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
+            }
+        }
+        if (!jsonStr) {
+            return { content: [{ type: "text", text: "Either json or jsonFile must be provided." }], isError: true };
+        }
+        const result = manager.importJSON(graphName, jsonStr);
         if (result !== "OK") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }

@@ -24,6 +24,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
+import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 
 import { ControlRegistry, BaseControlProperties, GetControlCatalogSummary, GetControlTypeDetails } from "./catalog.js";
 import { GuiManager } from "./guiManager.js";
@@ -696,15 +698,30 @@ server.registerTool(
     {
         description:
             "Export the GUI as Babylon.js-compatible JSON. This JSON can be loaded with " +
-            "AdvancedDynamicTexture.parseSerializedObject() or AdvancedDynamicTexture.ParseFromFileAsync().",
+            "AdvancedDynamicTexture.parseSerializedObject() or AdvancedDynamicTexture.ParseFromFileAsync(). " +
+            "When outputFile is provided, the JSON is written to disk and only the file path is returned " +
+            "(avoids large JSON payloads in the conversation context).",
         inputSchema: {
             guiName: z.string().describe("Name of the GUI to export"),
+            outputFile: z
+                .string()
+                .optional()
+                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
         },
     },
-    async ({ guiName }) => {
+    async ({ guiName, outputFile }) => {
         const json = manager.exportJSON(guiName);
         if (!json) {
             return { content: [{ type: "text", text: `GUI "${guiName}" not found.` }], isError: true };
+        }
+        if (outputFile) {
+            try {
+                mkdirSync(dirname(outputFile), { recursive: true });
+                writeFileSync(outputFile, json, "utf-8");
+                return { content: [{ type: "text", text: `GUI JSON written to: ${outputFile}` }] };
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+            }
         }
         return { content: [{ type: "text", text: json }] };
     }
@@ -713,14 +730,28 @@ server.registerTool(
 server.registerTool(
     "import_gui_json",
     {
-        description: "Import existing GUI JSON into memory for editing. You can then modify controls, rearrange hierarchy, etc.",
+        description:
+            "Import existing GUI JSON into memory for editing. You can then modify controls, rearrange hierarchy, etc. " +
+            "Provide either the inline json string OR a jsonFile path (not both).",
         inputSchema: {
             guiName: z.string().describe("Name to give the imported GUI"),
-            json: z.string().describe("The Babylon.js GUI JSON string to import"),
+            json: z.string().optional().describe("The Babylon.js GUI JSON string to import"),
+            jsonFile: z.string().optional().describe("Absolute path to a file containing the GUI JSON to import (alternative to inline json)"),
         },
     },
-    async ({ guiName, json }) => {
-        const result = manager.importJSON(guiName, json);
+    async ({ guiName, json, jsonFile }) => {
+        let jsonStr = json;
+        if (!jsonStr && jsonFile) {
+            try {
+                jsonStr = readFileSync(jsonFile, "utf-8");
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
+            }
+        }
+        if (!jsonStr) {
+            return { content: [{ type: "text", text: "Either json or jsonFile must be provided." }], isError: true };
+        }
+        const result = manager.importJSON(guiName, jsonStr);
         if (result !== "OK") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }

@@ -30,6 +30,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
+import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { RenderGraphManager } from "./renderGraph.js";
@@ -748,14 +750,30 @@ server.registerTool(
             "  • Passed to the Scene MCP server's `attach_node_render_graph` tool",
             "",
             "Always call validate_graph before exporting to catch issues early.",
+            "",
+            "When outputFile is provided, the JSON is written to disk and only the",
+            "file path is returned (avoids large JSON payloads in the conversation context).",
         ].join("\n"),
         inputSchema: {
             graphName: z.string().describe("Name of the render graph to export"),
+            outputFile: z
+                .string()
+                .optional()
+                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
         },
     },
-    async ({ graphName }) => {
+    async ({ graphName, outputFile }) => {
         try {
             const json = manager.exportJson(graphName);
+            if (outputFile) {
+                try {
+                    mkdirSync(dirname(outputFile), { recursive: true });
+                    writeFileSync(outputFile, json, "utf-8");
+                    return { content: [{ type: "text", text: `NRG JSON written to: ${outputFile}` }] };
+                } catch (e) {
+                    return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+                }
+            }
             return { content: [{ type: "text", text: json }] };
         } catch (e) {
             return { content: [{ type: "text", text: `Error: ${(e as Error).message}` }], isError: true };
@@ -773,16 +791,30 @@ server.registerTool(
             "The graph is stored under `graphName` (overrides the JSON's internal name).",
             "Blocks from the imported graph can then be modified with set_block_properties,",
             "connect_blocks, etc.",
+            "",
+            "Provide either the inline json string OR a jsonFile path (not both).",
         ].join("\n"),
         inputSchema: {
             graphName: z.string().describe("Name to assign to the imported graph in memory"),
-            json: z.string().describe("NRGE-compatible JSON string (output of export_graph_json or NodeRenderGraph.serialize())"),
+            json: z.string().optional().describe("NRGE-compatible JSON string (output of export_graph_json or NodeRenderGraph.serialize())"),
+            jsonFile: z.string().optional().describe("Absolute path to a file containing the NRGE JSON to import (alternative to inline json)"),
             overwrite: z.boolean().optional().describe("If true, replace any existing graph with the same name. Default: false."),
         },
     },
-    async ({ graphName, json, overwrite }) => {
+    async ({ graphName, json, jsonFile, overwrite }) => {
         try {
-            const graph = manager.importJson(graphName, json, overwrite ?? false);
+            let jsonStr = json;
+            if (!jsonStr && jsonFile) {
+                try {
+                    jsonStr = readFileSync(jsonFile, "utf-8");
+                } catch (e) {
+                    return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
+                }
+            }
+            if (!jsonStr) {
+                return { content: [{ type: "text", text: "Either json or jsonFile must be provided." }], isError: true };
+            }
+            const graph = manager.importJson(graphName, jsonStr, overwrite ?? false);
             return {
                 content: [
                     {

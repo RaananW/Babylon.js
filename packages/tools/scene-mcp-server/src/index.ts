@@ -30,6 +30,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
+import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
+import { dirname, join } from "node:path";
 
 import {
     MeshPrimitives,
@@ -128,6 +130,12 @@ server.registerResource("scene-overview", "scene://overview", {}, async (uri) =>
                 "- **GUI MCP server**: Export GUI JSON → attach here via `attach_gui` (auto-included in code exports)",
                 "- **NRG MCP server** (babylonjs-nrg): Build a custom render pipeline → export JSON → attach here via `attach_node_render_graph`",
                 "- **NGE MCP server** (babylonjs-nge): Design procedural geometry → export JSON → add as a mesh via `add_node_geometry_mesh`",
+                "",
+                "### File-based handoff (recommended for large payloads)",
+                "To avoid passing large JSON through the conversation context, use file-based handoff:",
+                "1. On the producing server, call the export tool with `outputFile` to write JSON to disk",
+                "2. On this server, call the import/attach tool with the corresponding `*File` parameter (e.g. `nmeJsonFile`, `coordinatorJsonFile`, `guiJsonFile`, `nrgJsonFile`, `ngeJsonFile`)",
+                "Only the file path passes through the conversation — the JSON never enters the context window.",
             ].join("\n"),
         },
     ],
@@ -540,7 +548,7 @@ server.registerTool(
     {
         description:
             "Create a material in the scene. Supports StandardMaterial, PBRMaterial, and NodeMaterial (NME JSON). " +
-            "For NodeMaterial, pass the exported NME JSON from the NME MCP server.",
+            "For NodeMaterial, pass the exported NME JSON from the NME MCP server (inline or via file path).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().describe("Name for the material"),
@@ -554,15 +562,27 @@ server.registerTool(
                         "NodeMaterial: use nmeJson parameter instead."
                 ),
             nmeJson: z.string().optional().describe("For NodeMaterial: the full NME JSON string exported from the NME MCP server"),
+            nmeJsonFile: z
+                .string()
+                .optional()
+                .describe("For NodeMaterial: absolute path to a file containing the NME JSON (alternative to inline nmeJson — avoids large payloads in context)"),
             snippetId: z.string().optional().describe("For NodeMaterial: a Babylon.js Snippet Server ID to load from"),
         },
     },
-    async ({ sceneName, name, type, properties, nmeJson, snippetId }) => {
-        const result = manager.addMaterial(sceneName, name, type, properties as Record<string, unknown>, nmeJson, snippetId);
+    async ({ sceneName, name, type, properties, nmeJson, nmeJsonFile, snippetId }) => {
+        let resolvedNmeJson = nmeJson;
+        if (!resolvedNmeJson && nmeJsonFile) {
+            try {
+                resolvedNmeJson = readFileSync(nmeJsonFile, "utf-8");
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error reading NME JSON file: ${(e as Error).message}` }], isError: true };
+            }
+        }
+        const result = manager.addMaterial(sceneName, name, type, properties as Record<string, unknown>, resolvedNmeJson, snippetId);
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
-        const extra = type === "NodeMaterial" ? (nmeJson ? " (NME JSON imported)" : snippetId ? ` (will load snippet ${snippetId})` : "") : "";
+        const extra = type === "NodeMaterial" ? (resolvedNmeJson ? " (NME JSON imported)" : snippetId ? ` (will load snippet ${snippetId})` : "") : "";
         // Warn when Standard/PBR material has no distinguishing color property
         let warning = "";
         if (type === "StandardMaterial" || type === "PBRMaterial") {
@@ -991,16 +1011,29 @@ server.registerTool(
     {
         description:
             "Attach a Flow Graph (exported from the Flow Graph MCP server) to the scene for interactive behavior. " +
-            "The coordinator JSON is the output of export_graph_json from the Flow Graph MCP server.",
+            "The coordinator JSON is the output of export_graph_json from the Flow Graph MCP server. " +
+            "Provide either the inline coordinatorJson string OR a coordinatorJsonFile path (not both).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().describe("Name for this flow graph attachment"),
-            coordinatorJson: z.string().describe("The complete Flow Graph coordinator JSON string"),
+            coordinatorJson: z.string().optional().describe("The complete Flow Graph coordinator JSON string"),
+            coordinatorJsonFile: z.string().optional().describe("Absolute path to a file containing the Flow Graph coordinator JSON (alternative to inline coordinatorJson)"),
             scopeNodeIds: z.array(z.string()).optional().describe("Optional: limit this flow graph to specific node IDs"),
         },
     },
-    async ({ sceneName, name, coordinatorJson, scopeNodeIds }) => {
-        const result = manager.attachFlowGraph(sceneName, name, coordinatorJson, scopeNodeIds);
+    async ({ sceneName, name, coordinatorJson, coordinatorJsonFile, scopeNodeIds }) => {
+        let resolvedJson = coordinatorJson;
+        if (!resolvedJson && coordinatorJsonFile) {
+            try {
+                resolvedJson = readFileSync(coordinatorJsonFile, "utf-8");
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
+            }
+        }
+        if (!resolvedJson) {
+            return { content: [{ type: "text", text: "Either coordinatorJson or coordinatorJsonFile must be provided." }], isError: true };
+        }
+        const result = manager.attachFlowGraph(sceneName, name, resolvedJson, scopeNodeIds);
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
@@ -1744,16 +1777,29 @@ server.registerTool(
             "Attach a GUI descriptor (from the GUI MCP server's export_gui_json) to the scene. " +
             "This stores the GUI as part of the scene state so that export tools automatically " +
             "include it. The scene becomes the single source of truth for all subsystems " +
-            "(meshes, materials, physics, FlowGraph, AND GUI).",
+            "(meshes, materials, physics, FlowGraph, AND GUI). " +
+            "Provide either the inline guiJson string OR a guiJsonFile path (not both).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to attach the GUI to"),
-            guiJson: z.string().describe("The GUI descriptor JSON string (from the GUI MCP server's export_gui_json)"),
+            guiJson: z.string().optional().describe("The GUI descriptor JSON string (from the GUI MCP server's export_gui_json)"),
+            guiJsonFile: z.string().optional().describe("Absolute path to a file containing the GUI JSON (alternative to inline guiJson)"),
         },
     },
-    async ({ sceneName, guiJson }) => {
+    async ({ sceneName, guiJson, guiJsonFile }) => {
+        let jsonStr = guiJson;
+        if (!jsonStr && guiJsonFile) {
+            try {
+                jsonStr = readFileSync(guiJsonFile, "utf-8");
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
+            }
+        }
+        if (!jsonStr) {
+            return { content: [{ type: "text", text: "Either guiJson or guiJsonFile must be provided." }], isError: true };
+        }
         let parsed: unknown;
         try {
-            parsed = JSON.parse(guiJson);
+            parsed = JSON.parse(jsonStr);
         } catch {
             return { content: [{ type: "text", text: `Invalid GUI JSON: parse error.` }], isError: true };
         }
@@ -1809,16 +1855,29 @@ server.registerTool(
             "Attach a Node Render Graph JSON (from the NRG MCP server's export_graph_json) to the scene. " +
             "Once attached, the exported code will call NodeRenderGraph.ParseAsync() + buildAsync() to apply the " +
             "custom render pipeline. Only one render graph can be attached at a time; re-calling this " +
-            "tool replaces the previous one.",
+            "tool replaces the previous one. " +
+            "Provide either the inline nrgJson string OR a nrgJsonFile path (not both).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to attach the render graph to"),
-            nrgJson: z.string().describe("The NRG JSON string (from the NRG MCP server's export_graph_json tool)"),
+            nrgJson: z.string().optional().describe("The NRG JSON string (from the NRG MCP server's export_graph_json tool)"),
+            nrgJsonFile: z.string().optional().describe("Absolute path to a file containing the NRG JSON (alternative to inline nrgJson)"),
         },
     },
-    async ({ sceneName, nrgJson }) => {
+    async ({ sceneName, nrgJson, nrgJsonFile }) => {
+        let jsonStr = nrgJson;
+        if (!jsonStr && nrgJsonFile) {
+            try {
+                jsonStr = readFileSync(nrgJsonFile, "utf-8");
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
+            }
+        }
+        if (!jsonStr) {
+            return { content: [{ type: "text", text: "Either nrgJson or nrgJsonFile must be provided." }], isError: true };
+        }
         let parsed: unknown;
         try {
-            parsed = JSON.parse(nrgJson);
+            parsed = JSON.parse(jsonStr);
         } catch {
             return { content: [{ type: "text", text: "Invalid NRG JSON: parse error." }], isError: true };
         }
@@ -1864,17 +1923,30 @@ server.registerTool(
         description:
             "Add a procedural mesh to the scene using a Node Geometry JSON (from the NGE MCP server's export_geometry_json). " +
             "The exported code will call NodeGeometry.Parse() + build() + createMesh() to create the mesh at runtime. " +
-            "If a mesh with the same name already exists on this scene, it is replaced.",
+            "If a mesh with the same name already exists on this scene, it is replaced. " +
+            "Provide either the inline ngeJson string OR a ngeJsonFile path (not both).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to add the mesh to"),
             meshName: z.string().describe("Name to give the created mesh"),
-            ngeJson: z.string().describe("The NGE JSON string (from the NGE MCP server's export_geometry_json tool)"),
+            ngeJson: z.string().optional().describe("The NGE JSON string (from the NGE MCP server's export_geometry_json tool)"),
+            ngeJsonFile: z.string().optional().describe("Absolute path to a file containing the NGE JSON (alternative to inline ngeJson)"),
         },
     },
-    async ({ sceneName, meshName, ngeJson }) => {
+    async ({ sceneName, meshName, ngeJson, ngeJsonFile }) => {
+        let jsonStr = ngeJson;
+        if (!jsonStr && ngeJsonFile) {
+            try {
+                jsonStr = readFileSync(ngeJsonFile, "utf-8");
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
+            }
+        }
+        if (!jsonStr) {
+            return { content: [{ type: "text", text: "Either ngeJson or ngeJsonFile must be provided." }], isError: true };
+        }
         let parsed: unknown;
         try {
-            parsed = JSON.parse(ngeJson);
+            parsed = JSON.parse(jsonStr);
         } catch {
             return { content: [{ type: "text", text: "Invalid NGE JSON: parse error." }], isError: true };
         }
@@ -2040,7 +2112,8 @@ server.registerTool(
             "FlowGraph behaviors, NME materials, and GUI (which the .babylon JSON format cannot represent together). " +
             "If a GUI was attached via attach_gui, it is automatically included — no need to pass guiJson. " +
             "The generated code is immediately runnable in a Babylon.js project. " +
-            "Use format='es6' to get ES module code with proper import statements instead of UMD/CDN globals.",
+            "Use format='es6' to get ES module code with proper import statements instead of UMD/CDN globals. " +
+            "When outputFile is provided, the code is written to disk and only the file path is returned.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to export"),
             wrapInFunction: z.boolean().default(true).describe("Wrap all code in an async createScene() function"),
@@ -2054,9 +2127,13 @@ server.registerTool(
             format: z.enum(["umd", "es6"]).default("umd").describe("Output format: 'umd' for CDN/global BABYLON.* style, 'es6' for ES module imports from @babylonjs/*"),
             guiJson: z.string().optional().describe("Optional GUI JSON override. If omitted, the GUI attached via attach_gui is used automatically."),
             enableCollisionCallbacks: z.boolean().default(false).describe("Enable collision callbacks on all physics bodies (needed for collision-driven behaviors)"),
+            outputFile: z
+                .string()
+                .optional()
+                .describe("Optional absolute file path. When provided, the code is written to this file and the path is returned instead of the full code."),
         },
     },
-    async ({ sceneName, wrapInFunction, functionName, includeHtmlBoilerplate, includeEngineSetup, includeRenderLoop, format, guiJson, enableCollisionCallbacks }) => {
+    async ({ sceneName, wrapInFunction, functionName, includeHtmlBoilerplate, includeEngineSetup, includeRenderLoop, format, guiJson, enableCollisionCallbacks, outputFile }) => {
         let parsedGuiJson: unknown;
         if (guiJson) {
             try {
@@ -2078,6 +2155,15 @@ server.registerTool(
         if (!code) {
             return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
         }
+        if (outputFile) {
+            try {
+                mkdirSync(dirname(outputFile), { recursive: true });
+                writeFileSync(outputFile, code, "utf-8");
+                return { content: [{ type: "text", text: `Scene code written to: ${outputFile}` }] };
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+            }
+        }
         return { content: [{ type: "text", text: code }] };
     }
 );
@@ -2089,14 +2175,19 @@ server.registerTool(
             "Export the scene as a complete ES6 project with package.json, tsconfig.json, vite.config.ts, " +
             "index.html, and src/index.ts. Ready to run with 'npm install && npm run dev'. " +
             "If a GUI was attached via attach_gui, it is automatically included. " +
-            "This generates a full Vite-based TypeScript project using @babylonjs/* ES module imports.",
+            "This generates a full Vite-based TypeScript project using @babylonjs/* ES module imports. " +
+            "When outputDir is provided, files are written to that directory on disk.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to export"),
             guiJson: z.string().optional().describe("Optional GUI JSON override. If omitted, the GUI attached via attach_gui is used automatically."),
             enableCollisionCallbacks: z.boolean().default(false).describe("Enable collision callbacks on all physics bodies"),
+            outputDir: z
+                .string()
+                .optional()
+                .describe("Optional absolute directory path. When provided, all project files are written to this directory and a summary is returned instead of file contents."),
         },
     },
-    async ({ sceneName, guiJson, enableCollisionCallbacks }) => {
+    async ({ sceneName, guiJson, enableCollisionCallbacks, outputDir }) => {
         let parsedGuiJson: unknown;
         if (guiJson) {
             try {
@@ -2112,6 +2203,21 @@ server.registerTool(
         });
         if (!files) {
             return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+        }
+        if (outputDir) {
+            try {
+                for (const [filePath, content] of Object.entries(files)) {
+                    const fullPath = join(outputDir, filePath);
+                    mkdirSync(dirname(fullPath), { recursive: true });
+                    writeFileSync(fullPath, content, "utf-8");
+                }
+                const fileList = Object.keys(files)
+                    .map((f) => `  • ${f}`)
+                    .join("\n");
+                return { content: [{ type: "text", text: `Wrote ${Object.keys(files).length} project files to ${outputDir}:\n${fileList}` }] };
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error writing project files: ${(e as Error).message}` }], isError: true };
+            }
         }
         const fileParts = Object.entries(files).map(([path, content]) => ({
             type: "text" as const,
@@ -2129,15 +2235,29 @@ server.registerTool(
         description:
             "Export the scene as a raw JSON descriptor (the internal scene format). " +
             "Note: For most use cases, prefer export_scene_code which generates runnable Babylon.js code. " +
-            "Use this JSON export if you have a custom loader or need to re-import the scene later.",
+            "Use this JSON export if you have a custom loader or need to re-import the scene later. " +
+            "When outputFile is provided, the JSON is written to disk and only the file path is returned.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to export"),
+            outputFile: z
+                .string()
+                .optional()
+                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
         },
     },
-    async ({ sceneName }) => {
+    async ({ sceneName, outputFile }) => {
         const json = manager.exportJSON(sceneName);
         if (!json) {
             return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+        }
+        if (outputFile) {
+            try {
+                mkdirSync(dirname(outputFile), { recursive: true });
+                writeFileSync(outputFile, json, "utf-8");
+                return { content: [{ type: "text", text: `Scene JSON written to: ${outputFile}` }] };
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+            }
         }
         return { content: [{ type: "text", text: json }] };
     }
@@ -2146,14 +2266,26 @@ server.registerTool(
 server.registerTool(
     "import_scene_json",
     {
-        description: "Import a scene descriptor JSON into memory for editing.",
+        description: "Import a scene descriptor JSON into memory for editing. " + "Provide either the inline json string OR a jsonFile path (not both).",
         inputSchema: {
             sceneName: z.string().describe("Name to give the imported scene"),
-            json: z.string().describe("The scene descriptor JSON string"),
+            json: z.string().optional().describe("The scene descriptor JSON string"),
+            jsonFile: z.string().optional().describe("Absolute path to a file containing the scene descriptor JSON (alternative to inline json)"),
         },
     },
-    async ({ sceneName, json }) => {
-        const result = manager.importJSON(sceneName, json);
+    async ({ sceneName, json, jsonFile }) => {
+        let jsonStr = json;
+        if (!jsonStr && jsonFile) {
+            try {
+                jsonStr = readFileSync(jsonFile, "utf-8");
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
+            }
+        }
+        if (!jsonStr) {
+            return { content: [{ type: "text", text: "Either json or jsonFile must be provided." }], isError: true };
+        }
+        const result = manager.importJSON(sceneName, jsonStr);
         if (result !== "OK") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
