@@ -201,6 +201,11 @@ function generateImports(scene: ISerializedScene): string {
         lines.push(`// import "@babylonjs/core/FrameGraph"; // For NodeRenderGraph support`);
     }
 
+    const hasNGE = (scene.nodeGeometryMeshes ?? []).length > 0;
+    if (hasNGE) {
+        lines.push(`// import "@babylonjs/core/Meshes/Node/nodeGeometry"; // For NodeGeometry support`);
+    }
+
     const hasAudio = (scene.sounds ?? []).length > 0;
     if (hasAudio) {
         lines.push(`// import "@babylonjs/core/Audio/v2"; // For Audio V2 support`);
@@ -726,6 +731,26 @@ function generateNodeRenderGraph(nrgJson: unknown, sceneVar: string): string {
     lines.push(`const _nrgJson = JSON.parse(${JSON.stringify(jsonStr)});`);
     lines.push(`const _nodeRenderGraph = await BABYLON.NodeRenderGraph.ParseAsync(_nrgJson, ${sceneVar}, { autoFillExternalInputs: true });`);
     lines.push(`await _nodeRenderGraph.buildAsync();`);
+    return lines.join("\n");
+}
+
+/**
+ * Generates code to create a mesh from a Node Geometry (NGE) JSON.
+ * Emits NodeGeometry.Parse() + build() + createMesh() calls.
+ * @param meshName  The name to pass to createMesh()
+ * @param ngeJson   The parsed NGE JSON object
+ * @param sceneVar  The scene variable name in the generated code
+ * @returns A string of code to create the mesh via Node Geometry
+ */
+function generateNodeGeometryMesh(meshName: string, ngeJson: unknown, sceneVar: string): string {
+    const lines: string[] = [];
+    const jsonStr = JSON.stringify(ngeJson);
+    const safeId = meshName.replace(/[^a-zA-Z0-9_]/g, "_");
+    lines.push(`// ─── Node Geometry: ${meshName} ─────────────────────────────────────────────`);
+    lines.push(`const _ngeJson_${safeId} = JSON.parse(${JSON.stringify(jsonStr)});`);
+    lines.push(`const _nodeGeometry_${safeId} = BABYLON.NodeGeometry.Parse(_ngeJson_${safeId});`);
+    lines.push(`_nodeGeometry_${safeId}.build();`);
+    lines.push(`const ${safeId} = _nodeGeometry_${safeId}.createMesh("${sanitizeStringLiteral(meshName)}", ${sceneVar});`);
     return lines.join("\n");
 }
 
@@ -1265,9 +1290,10 @@ const BABYLON_GUI_CLASSES = new Set([
  * @param hasAudio - Whether the scene uses audio (adds Audio V2 import)
  * @param hasFlowGraph - Whether the scene uses Flow Graph (adds Flow Graph import)
  * @param hasNRG - Whether the scene uses Node Render Graph (adds NRG import)
+ * @param hasNGE - Whether the scene uses Node Geometry (adds NodeGeometry import)
  * @returns The converted ES6 module code string with import statements
  */
-function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAudio: boolean, hasFlowGraph: boolean, hasNRG?: boolean): string {
+function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAudio: boolean, hasFlowGraph: boolean, hasNRG?: boolean, hasNGE?: boolean): string {
     // Helper: collect BABYLON.* references only OUTSIDE of quoted strings.
     // The regex alternates between matching a quoted string (skip) vs BABYLON.X (capture).
     // This prevents collecting/replacing BABYLON references inside JSON string values
@@ -1323,6 +1349,10 @@ function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAud
 
     if (hasNRG) {
         importLines.push(`import "@babylonjs/core/FrameGraph";`);
+    }
+
+    if (hasNGE) {
+        importLines.push(`import "@babylonjs/core/Meshes/Node/nodeGeometry";`);
     }
 
     // ── 4. Replace BABYLON.GUI.* → just the class name (outside strings) ─
@@ -1500,6 +1530,11 @@ export interface ICodeGeneratorOptions {
      * When provided, NodeRenderGraph.Parse() + buildAsync() code will be generated.
      */
     nodeRenderGraphJson?: unknown;
+    /**
+     * Optional list of Node Geometry meshes (from the NGE MCP server).
+     * Each entry generates NodeGeometry.Parse() + build() + createMesh() code.
+     */
+    nodeGeometryMeshes?: Array<{ name: string; ngeJson: unknown }>;
     /**
      * Whether to enable collision callbacks on physics bodies.
      * When true, `body.setCollisionCallbackEnabled(true)` is generated.
@@ -1763,6 +1798,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         format: options?.format ?? "umd",
         guiJson: options?.guiJson ?? null,
         nodeRenderGraphJson: options?.nodeRenderGraphJson ?? null,
+        nodeGeometryMeshes: options?.nodeGeometryMeshes ?? [],
         enableCollisionCallbacks: options?.enableCollisionCallbacks ?? false,
     };
 
@@ -2078,6 +2114,12 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         bodyParts.push(``);
     }
 
+    // ── Node Geometry meshes ──────────────────────────────────────────────
+    for (const entry of opts.nodeGeometryMeshes) {
+        bodyParts.push(generateNodeGeometryMesh(entry.name, entry.ngeJson, S));
+        bodyParts.push(``);
+    }
+
     // ── Integrations (runtime bridges) ────────────────────────────────────
     if (scene.integrations && scene.integrations.length > 0) {
         bodyParts.push(generateIntegrations(scene.integrations, scene, S, guiControlVarMap));
@@ -2160,7 +2202,8 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         const hasAudio = (scene.sounds ?? []).length > 0;
         const hasFlowGraph = scene.flowGraphs.length > 0;
         const hasNRG = !!opts.nodeRenderGraphJson;
-        result = convertToES6(result, hasPhysics, hasGUI, hasAudio, hasFlowGraph, hasNRG);
+        const hasNGE = (opts.nodeGeometryMeshes ?? []).length > 0;
+        result = convertToES6(result, hasPhysics, hasGUI, hasAudio, hasFlowGraph, hasNRG, hasNGE);
     }
 
     return result;

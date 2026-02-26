@@ -127,6 +127,7 @@ server.registerResource("scene-overview", "scene://overview", {}, async (uri) =>
                 "- **Flow Graph MCP server**: Export coordinator JSON → attach here via `attach_flow_graph`",
                 "- **GUI MCP server**: Export GUI JSON → attach here via `attach_gui` (auto-included in code exports)",
                 "- **NRG MCP server** (babylonjs-nrg): Build a custom render pipeline → export JSON → attach here via `attach_node_render_graph`",
+                "- **NGE MCP server** (babylonjs-nge): Design procedural geometry → export JSON → add as a mesh via `add_node_geometry_mesh`",
             ].join("\n"),
         },
     ],
@@ -1848,6 +1849,63 @@ server.registerTool(
         const result = manager.detachNodeRenderGraph(sceneName);
         return {
             content: [{ type: "text", text: result === "OK" ? `Node Render Graph detached from scene "${sceneName}".` : `Error: ${result}` }],
+            isError: result !== "OK",
+        };
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Tools — Node Geometry
+// ═══════════════════════════════════════════════════════════════════════════
+
+server.registerTool(
+    "add_node_geometry_mesh",
+    {
+        description:
+            "Add a procedural mesh to the scene using a Node Geometry JSON (from the NGE MCP server's export_geometry_json). " +
+            "The exported code will call NodeGeometry.Parse() + build() + createMesh() to create the mesh at runtime. " +
+            "If a mesh with the same name already exists on this scene, it is replaced.",
+        inputSchema: {
+            sceneName: z.string().describe("Name of the scene to add the mesh to"),
+            meshName: z.string().describe("Name to give the created mesh"),
+            ngeJson: z.string().describe("The NGE JSON string (from the NGE MCP server's export_geometry_json tool)"),
+        },
+    },
+    async ({ sceneName, meshName, ngeJson }) => {
+        let parsed: unknown;
+        try {
+            parsed = JSON.parse(ngeJson);
+        } catch {
+            return { content: [{ type: "text", text: "Invalid NGE JSON: parse error." }], isError: true };
+        }
+        const result = manager.addNodeGeometryMesh(sceneName, meshName, parsed);
+        if (result !== "OK") {
+            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+        }
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: `Node Geometry mesh "${meshName}" added to scene "${sceneName}". It will be included in all code exports automatically.`,
+                },
+            ],
+        };
+    }
+);
+
+server.registerTool(
+    "remove_node_geometry_mesh",
+    {
+        description: "Remove a Node Geometry mesh that was previously added via add_node_geometry_mesh.",
+        inputSchema: {
+            sceneName: z.string().describe("Name of the scene"),
+            meshName: z.string().describe("Name of the mesh to remove"),
+        },
+    },
+    async ({ sceneName, meshName }) => {
+        const result = manager.removeNodeGeometryMesh(sceneName, meshName);
+        return {
+            content: [{ type: "text", text: result === "OK" ? `Node Geometry mesh "${meshName}" removed from scene "${sceneName}".` : `Error: ${result}` }],
             isError: result !== "OK",
         };
     }

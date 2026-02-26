@@ -697,6 +697,11 @@ export interface ISerializedScene {
      * When present, the code generator emits NodeRenderGraph.Parse() + buildAsync() calls.
      */
     nodeRenderGraphJson?: unknown;
+    /**
+     * Node Geometry meshes (from the NGE MCP server).
+     * Each entry's ngeJson is used to emit NodeGeometry.Parse() + build() + createMesh() calls.
+     */
+    nodeGeometryMeshes?: Array<{ name: string; ngeJson: unknown }>;
 }
 
 /**
@@ -2643,6 +2648,65 @@ export class SceneManager {
         return "OK";
     }
 
+    /**
+     * Add (or replace) a Node Geometry mesh on a scene.
+     * The ngeJson must have customType === "BABYLON.NodeGeometry".
+     * @param sceneName The scene to add the mesh to
+     * @param meshName The name to give the created mesh
+     * @param ngeJson The NGE descriptor JSON (from the NGE MCP server's export_geometry_json)
+     * @returns "OK" or an error message
+     */
+    addNodeGeometryMesh(sceneName: string, meshName: string, ngeJson: unknown): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        if (typeof ngeJson === "string") {
+            try {
+                ngeJson = JSON.parse(ngeJson);
+            } catch (e) {
+                return `Invalid NGE JSON: ${(e as Error).message}`;
+            }
+        }
+        const nge = ngeJson as { customType?: string };
+        if (nge.customType !== "BABYLON.NodeGeometry") {
+            return `Invalid NGE JSON: customType must be "BABYLON.NodeGeometry" but got "${nge.customType}".`;
+        }
+        if (!scene.nodeGeometryMeshes) {
+            scene.nodeGeometryMeshes = [];
+        }
+        // Replace existing entry with same name, or push new one
+        const idx = scene.nodeGeometryMeshes.findIndex((e) => e.name === meshName);
+        if (idx >= 0) {
+            scene.nodeGeometryMeshes[idx] = { name: meshName, ngeJson };
+        } else {
+            scene.nodeGeometryMeshes.push({ name: meshName, ngeJson });
+        }
+        return "OK";
+    }
+
+    /**
+     * Remove a Node Geometry mesh from a scene.
+     * @param sceneName The scene to remove the mesh from
+     * @param meshName The name of the mesh to remove
+     * @returns "OK" or an error message
+     */
+    removeNodeGeometryMesh(sceneName: string, meshName: string): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        if (!scene.nodeGeometryMeshes) {
+            return `No node geometry meshes on scene "${sceneName}".`;
+        }
+        const before = scene.nodeGeometryMeshes.length;
+        scene.nodeGeometryMeshes = scene.nodeGeometryMeshes.filter((e) => e.name !== meshName);
+        if (scene.nodeGeometryMeshes.length === before) {
+            return `Mesh "${meshName}" not found in scene "${sceneName}".`;
+        }
+        return "OK";
+    }
+
     exportCode(sceneName: string, options?: ICodeGeneratorOptions): string | null {
         const scene = this.getScene(sceneName);
         if (!scene) {
@@ -2655,6 +2719,9 @@ export class SceneManager {
         }
         if (opts.nodeRenderGraphJson === undefined && scene.nodeRenderGraphJson) {
             opts.nodeRenderGraphJson = scene.nodeRenderGraphJson;
+        }
+        if (opts.nodeGeometryMeshes === undefined && scene.nodeGeometryMeshes) {
+            opts.nodeGeometryMeshes = scene.nodeGeometryMeshes;
         }
         return generateSceneCode(scene, opts);
     }
@@ -2679,6 +2746,9 @@ export class SceneManager {
         }
         if (opts.nodeRenderGraphJson === undefined && scene.nodeRenderGraphJson) {
             opts.nodeRenderGraphJson = scene.nodeRenderGraphJson;
+        }
+        if (opts.nodeGeometryMeshes === undefined && scene.nodeGeometryMeshes) {
+            opts.nodeGeometryMeshes = scene.nodeGeometryMeshes;
         }
         return generateProjectFiles(scene, opts);
     }

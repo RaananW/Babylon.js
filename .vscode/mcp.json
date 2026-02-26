@@ -19,6 +19,10 @@
         "babylonjs-nge": {
             "command": "node",
             "args": ["./packages/tools/nge-mcp-server/dist/index.js"]
+        },
+        "babylonjs-render-graph": {
+            "command": "node",
+            "args": ["./packages/tools/node-render-graph-mcp-server/dist/index.js"]
         }
     }
 }
