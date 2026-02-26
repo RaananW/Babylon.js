@@ -433,15 +433,24 @@ server.registerTool(
         inputSchema: {
             graphName: z.string().describe("Name of the flow graph"),
             sourceBlockId: z.number().describe("Block id with the signal output (e.g. the event or execution block)"),
-            signalOutputName: z.string().optional().describe("Name of the signal output on the source block (e.g. 'out', 'onTrue', 'onFalse', 'executionFlow', 'completed')"),
+            signalOutputName: z
+                .string()
+                .optional()
+                .describe("Name of the signal output on the source block (e.g. 'out', 'onTrue', 'onFalse', 'executionFlow', 'completed', 'done')"),
             outputName: z.string().optional().describe("Alias for signalOutputName"),
+            signalOut: z.string().optional().describe("Alias for signalOutputName"),
+            outName: z.string().optional().describe("Alias for signalOutputName"),
             targetBlockId: z.number().describe("Block id with the signal input (the block to trigger)"),
-            signalInputName: z.string().default("in").describe("Name of the signal input on the target block (usually 'in')"),
+            signalInputName: z.string().optional().describe("Name of the signal input on the target block (usually 'in')"),
+            inputName: z.string().optional().describe("Alias for signalInputName"),
+            signalIn: z.string().optional().describe("Alias for signalInputName"),
+            inName: z.string().optional().describe("Alias for signalInputName"),
         },
     },
-    async ({ graphName, sourceBlockId, signalOutputName, outputName: outputNameAlias, targetBlockId, signalInputName }) => {
-        const resolvedSignalOutputName = signalOutputName ?? outputNameAlias ?? "out";
-        const result = manager.connectSignal(graphName, sourceBlockId, resolvedSignalOutputName, targetBlockId, signalInputName);
+    async ({ graphName, sourceBlockId, signalOutputName, outputName: outputNameAlias, signalOut, outName, targetBlockId, signalInputName, inputName, signalIn, inName }) => {
+        const resolvedSignalOutputName = signalOutputName ?? outputNameAlias ?? signalOut ?? outName ?? "out";
+        const resolvedSignalInputName = signalInputName ?? inputName ?? signalIn ?? inName ?? "in";
+        const result = manager.connectSignal(graphName, sourceBlockId, resolvedSignalOutputName, targetBlockId, resolvedSignalInputName);
         // Gap 32: Detect if the manager auto-remapped "out" → "done" for event blocks
         let note = "";
         if (result === "OK" && resolvedSignalOutputName === "out") {
@@ -455,7 +464,10 @@ server.registerTool(
             content: [
                 {
                     type: "text",
-                    text: result === "OK" ? `Connected signal: [${sourceBlockId}].${resolvedSignalOutputName} → [${targetBlockId}].${signalInputName}${note}` : `Error: ${result}`,
+                    text:
+                        result === "OK"
+                            ? `Connected signal: [${sourceBlockId}].${resolvedSignalOutputName} → [${targetBlockId}].${resolvedSignalInputName}${note}`
+                            : `Error: ${result}`,
                 },
             ],
             isError: result !== "OK",

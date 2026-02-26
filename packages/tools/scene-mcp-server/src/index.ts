@@ -422,9 +422,9 @@ server.registerTool(
 
         // physicsEngine alias → resolve to physicsPlugin + physicsEnabled
         if (physicsEngine !== undefined && env.physicsPlugin === undefined) {
-            // Normalize: "HavokPlugin" / "Havok" / "havok" → "havok"
-            const normalized = physicsEngine.toLowerCase().replace("plugin", "");
-            env.physicsPlugin = normalized;
+            // Normalize: "HavokPlugin" / "HavokPhysics" / "Havok" / "havok" → "havok"
+            const normalized = physicsEngine.toLowerCase().replace("plugin", "").replace("physics", "");
+            env.physicsPlugin = normalized || "havok";
         }
         if (physicsEngine !== undefined && env.physicsEnabled === undefined) {
             env.physicsEnabled = true;
@@ -460,6 +460,7 @@ server.registerTool(
             type: z.string().optional().describe("Camera type: ArcRotateCamera, FreeCamera, UniversalCamera, FollowCamera"),
             cameraType: z.string().optional().describe("Alias for type — camera type name"),
             properties: z.record(z.string(), z.unknown()).optional().describe("Camera properties object. You can also use the top-level convenience aliases below instead."),
+            options: z.record(z.string(), z.unknown()).optional().describe("Alias for properties — camera properties object"),
             // Convenience aliases — merged into properties (top-level wins)
             alpha: z.number().optional().describe("ArcRotateCamera: horizontal rotation angle in radians (e.g. -Math.PI/2)"),
             beta: z.number().optional().describe("ArcRotateCamera: vertical rotation angle in radians (e.g. Math.PI/3)"),
@@ -482,6 +483,7 @@ server.registerTool(
         type: rawType,
         cameraType,
         properties,
+        options: optionsAlias,
         alpha,
         beta,
         radius,
@@ -512,7 +514,7 @@ server.registerTool(
             return { content: [{ type: "text", text: `Error: Invalid camera type "${resolvedRawType}". Valid types: ${validCameraTypes.join(", ")}` }], isError: true };
         }
         // Merge convenience aliases into properties (top-level wins)
-        const mergedProps: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
+        const mergedProps: Record<string, unknown> = { ...((optionsAlias as Record<string, unknown>) || {}), ...((properties as Record<string, unknown>) || {}) };
         if (alpha !== undefined) {
             mergedProps.alpha = alpha;
         }
@@ -615,6 +617,7 @@ server.registerTool(
             name: z.string().describe("Name for the light"),
             type: z.enum(["HemisphericLight", "PointLight", "DirectionalLight", "SpotLight"]).describe("Light type"),
             properties: z.record(z.string(), z.unknown()).optional().describe("Light properties object. You can also use the top-level convenience aliases below instead."),
+            options: z.record(z.string(), z.unknown()).optional().describe("Alias for properties — light properties object"),
             // Convenience aliases — merged into properties (top-level wins)
             direction: z.unknown().optional().describe("Light direction as {x,y,z} or [x,y,z] — required for Hemispheric/Directional/Spot"),
             position: z.unknown().optional().describe("Light position as {x,y,z} or [x,y,z] — for Point/Directional/Spot"),
@@ -628,9 +631,9 @@ server.registerTool(
             shadowEnabled: z.boolean().optional().describe("Enable shadow generation for this light"),
         },
     },
-    async ({ sceneName, name, type, properties, direction, position, intensity, diffuse, specular, groundColor, range, angle, exponent, shadowEnabled }) => {
+    async ({ sceneName, name, type, properties, options: optionsAlias, direction, position, intensity, diffuse, specular, groundColor, range, angle, exponent, shadowEnabled }) => {
         // Merge convenience aliases into properties (top-level wins)
-        const mergedProps: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
+        const mergedProps: Record<string, unknown> = { ...((optionsAlias as Record<string, unknown>) || {}), ...((properties as Record<string, unknown>) || {}) };
         if (direction !== undefined) {
             mergedProps.direction = direction;
         }
@@ -1425,9 +1428,7 @@ server.registerTool(
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             meshId: z.string().describe("Mesh ID or name"),
-            bodyType: z
-                .union([z.enum(["Static", "Dynamic", "Animated"]), z.number()])
-                .describe("Body type: Static (immovable), Dynamic (fully simulated), Animated (driven by animation)"),
+            bodyType: z.union([z.string(), z.number()]).describe("Body type: Static (immovable), Dynamic (fully simulated), Animated (driven by animation). Case-insensitive."),
             shapeType: z.string().describe("Collision shape type: Box, Sphere, Capsule, Cylinder, ConvexHull, Mesh, Container (case-insensitive)"),
             mass: z.number().optional().describe("Mass (kg). Use 0 for static bodies."),
             friction: z.number().optional().describe("Friction coefficient (0-1)"),

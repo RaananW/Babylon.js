@@ -834,6 +834,21 @@ export class SceneManager {
         return { x: 0, y: 0, z: 0 };
     }
 
+    /**
+     * Normalize a transform so position/rotation/scaling are always {x,y,z} objects,
+     * not raw arrays.  This prevents `vec3()` in the code generator from producing
+     * `undefined` when the LLM passes array notation like `[0, -10, 0]`.
+     */
+    private normalizeTransform(t?: Partial<ITransform>): ITransform {
+        const def: ITransform = { position: { x: 0, y: 0, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scaling: { x: 1, y: 1, z: 1 } };
+        if (!t) return def;
+        return {
+            position: t.position ? this.parseVector3(t.position) : def.position,
+            rotation: t.rotation ? this.parseVector3(t.rotation) : def.rotation,
+            scaling: t.scaling ? this.parseVector3(t.scaling) : def.scaling,
+        };
+    }
+
     private parseColor3(v: unknown): IColor3 {
         if (Array.isArray(v) && v.length >= 3) {
             return { r: v[0], g: v[1], b: v[2] };
@@ -1052,7 +1067,7 @@ export class SceneManager {
         scene.transformNodes.push({
             id,
             name,
-            transform: transform ?? { position: { x: 0, y: 0, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scaling: { x: 1, y: 1, z: 1 } },
+            transform: this.normalizeTransform(transform),
             parentId,
         });
         return { id };
@@ -1086,7 +1101,7 @@ export class SceneManager {
             name,
             primitiveType,
             primitiveOptions: options,
-            transform: transform ?? { position: { x: 0, y: 0, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scaling: { x: 1, y: 1, z: 1 } },
+            transform: this.normalizeTransform(transform),
             parentId,
             materialId,
             isVisible: true,

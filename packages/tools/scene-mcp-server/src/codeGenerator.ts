@@ -273,10 +273,17 @@ function generateEnvironment(env: ISerializedEnvironment, sceneVar: string): str
         lines.push(`const skybox = BABYLON.MeshBuilder.CreateBox("skybox", { size: ${env.skyboxSize} }, ${sceneVar});`);
         lines.push(`const skyboxMaterial = new BABYLON.StandardMaterial("skyboxMat", ${sceneVar});`);
         lines.push(`skyboxMaterial.backFaceCulling = false;`);
-        lines.push(
-            `skyboxMaterial.reflectionTexture = ${sceneVar}.environmentTexture?.clone?.() ?? new BABYLON.CubeTexture("${sanitizeStringLiteral(env.environmentTexture ?? "")}", ${sceneVar});`
-        );
-        lines.push(`skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;`);
+        if (env.environmentTexture) {
+            lines.push(
+                `skyboxMaterial.reflectionTexture = ${sceneVar}.environmentTexture?.clone?.() ?? new BABYLON.CubeTexture("${sanitizeStringLiteral(env.environmentTexture)}", ${sceneVar});`
+            );
+            lines.push(`skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;`);
+        } else {
+            // No environment texture – leave reflectionTexture unset so
+            // we don't create a CubeTexture("") that never becomes ready
+            // (which would block scene.whenReadyAsync() forever).
+            lines.push(`// No environmentTexture set – skybox will render as solid dark box.`);
+        }
         lines.push(`skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);`);
         lines.push(`skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);`);
         lines.push(`skybox.material = skyboxMaterial;`);
@@ -310,17 +317,18 @@ function generatePhysicsInit(env: ISerializedEnvironment, sceneVar: string): str
         return "";
     }
     const lines: string[] = [];
-    const plugin = env.physicsPlugin ?? "havok";
+    const plugin = (env.physicsPlugin ?? "havok").toLowerCase().replace("plugin", "").replace("physics", "") || "havok";
 
     lines.push(`// ─── Physics ──────────────────────────────────────────────────────────────`);
-    if (plugin === "havok") {
+    if (plugin.includes("havok") || plugin === "havok") {
         lines.push(`const havokInstance = await HavokPhysics();`);
         lines.push(`const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);`);
         lines.push(`${sceneVar}.enablePhysics(${vec3(env.gravity)}, havokPlugin);`);
     } else {
-        lines.push(`// Note: Cannon.js physics plugin — consider migrating to Havok for better performance`);
-        lines.push(`const cannonPlugin = new BABYLON.CannonJSPlugin();`);
-        lines.push(`${sceneVar}.enablePhysics(${vec3(env.gravity)}, cannonPlugin);`);
+        // Default to Havok Physics V2 — the only supported physics engine
+        lines.push(`const havokInstance = await HavokPhysics();`);
+        lines.push(`const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);`);
+        lines.push(`${sceneVar}.enablePhysics(${vec3(env.gravity)}, havokPlugin);`);
     }
     lines.push(``);
     return lines.join("\n");
@@ -2280,15 +2288,6 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         }
     }
 
-    // ── Flow graphs ───────────────────────────────────────────────────────
-    if (scene.flowGraphs.length > 0) {
-        bodyParts.push(`// ─── Flow Graphs (Behaviors) ──────────────────────────────────────────────`);
-        for (const fg of scene.flowGraphs) {
-            bodyParts.push(generateFlowGraph(fg, S));
-            bodyParts.push(``);
-        }
-    }
-
     // ── GUI ───────────────────────────────────────────────────────────────
     const hasGUI = !!opts.guiJson;
     let guiControlVarMap: Map<string, string> | undefined;
@@ -2326,6 +2325,10 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
     }
 
     // ── Render loop ───────────────────────────────────────────────────────
+    // Start the render loop BEFORE flow graphs so the scene renders while
+    // ParseCoordinatorAsync (which internally awaits scene.whenReadyAsync())
+    // runs.  PBR shaders may need a render pass to compile, so deferring
+    // the loop until after that await can deadlock.
     if (opts.includeRenderLoop) {
         bodyParts.push(`// ─── Render Loop ──────────────────────────────────────────────────────────`);
         bodyParts.push(`engine.runRenderLoop(() => {`);
@@ -2337,6 +2340,18 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         bodyParts.push(`});`);
     } else {
         bodyParts.push(`return ${S};`);
+    }
+
+    // ── Flow graphs ───────────────────────────────────────────────────────
+    // Placed after the render loop so the engine is actively rendering
+    // while ParseCoordinatorAsync awaits scene.whenReadyAsync().
+    if (scene.flowGraphs.length > 0) {
+        bodyParts.push(``);
+        bodyParts.push(`// ─── Flow Graphs (Behaviors) ──────────────────────────────────────────────`);
+        for (const fg of scene.flowGraphs) {
+            bodyParts.push(generateFlowGraph(fg, S));
+            bodyParts.push(``);
+        }
     }
 
     // ── Assemble ──────────────────────────────────────────────────────────

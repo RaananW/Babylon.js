@@ -68,7 +68,7 @@ function generatePreviewHtml(manager: SceneManager, sceneName: string): string {
         includeEngineSetup: true,
         includeRenderLoop: true,
         format: "umd",
-        enableCollisionCallbacks: true,
+        enableCollisionCallbacks: false,
     });
 
     if (!code) {
@@ -202,7 +202,7 @@ export async function startPreview(manager: SceneManager, sceneName: string, por
                     includeEngineSetup: true,
                     includeRenderLoop: true,
                     format: "umd",
-                    enableCollisionCallbacks: true,
+                    enableCollisionCallbacks: false,
                 });
                 if (!code) {
                     res.writeHead(404, { "Content-Type": "application/json" });
