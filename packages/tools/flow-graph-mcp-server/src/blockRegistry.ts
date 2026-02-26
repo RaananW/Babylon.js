@@ -154,80 +154,9 @@ export const FlowGraphBlockRegistry: Record<string, IFlowGraphBlockTypeInfo> = {
         config: { stopPropagation: "boolean", targetMesh: "AbstractMesh reference" },
     },
 
-    PointerEvent: {
-        className: "FlowGraphPointerEventBlock",
-        category: "Event",
-        description: "Generic pointer event block. Triggers on specified pointer event types.",
-        signalInputs: [{ name: "in" }],
-        signalOutputs: [
-            { name: "out", description: "Fires once at graph startup (initialization)" },
-            { name: "done", description: "Fires each time the pointer event occurs. USE THIS for event-driven logic." },
-            { name: "error" },
-        ],
-        dataInputs: [
-            { name: "targetMesh", type: "any", description: "Optional mesh filter", isOptional: true },
-            { name: "pointerType", type: "any", description: "PointerEventTypes filter", isOptional: true },
-        ],
-        dataOutputs: [
-            { name: "pointerId", type: "number" },
-            { name: "pickedPoint", type: "Vector3" },
-        ],
-        config: { stopPropagation: "boolean" },
-    },
-
-    PointerDownEvent: {
-        className: "FlowGraphPointerDownEventBlock",
-        category: "Event",
-        description: "Triggers when a pointer button is pressed down.",
-        signalInputs: [{ name: "in" }],
-        signalOutputs: [
-            { name: "out", description: "Fires once at graph startup (initialization)" },
-            { name: "done", description: "Fires each time a pointer button is pressed. USE THIS for click logic." },
-            { name: "error" },
-        ],
-        dataInputs: [{ name: "targetMesh", type: "any", isOptional: true }],
-        dataOutputs: [
-            { name: "pointerId", type: "number" },
-            { name: "pickedPoint", type: "Vector3" },
-        ],
-        config: { stopPropagation: "boolean" },
-    },
-
-    PointerUpEvent: {
-        className: "FlowGraphPointerUpEventBlock",
-        category: "Event",
-        description: "Triggers when a pointer button is released.",
-        signalInputs: [{ name: "in" }],
-        signalOutputs: [
-            { name: "out", description: "Fires once at graph startup (initialization)" },
-            { name: "done", description: "Fires each time a pointer button is released. USE THIS for release logic." },
-            { name: "error" },
-        ],
-        dataInputs: [{ name: "targetMesh", type: "any", isOptional: true }],
-        dataOutputs: [
-            { name: "pointerId", type: "number" },
-            { name: "pickedPoint", type: "Vector3" },
-        ],
-        config: { stopPropagation: "boolean" },
-    },
-
-    PointerMoveEvent: {
-        className: "FlowGraphPointerMoveEventBlock",
-        category: "Event",
-        description: "Triggers when the pointer moves.",
-        signalInputs: [{ name: "in" }],
-        signalOutputs: [
-            { name: "out", description: "Fires once at graph startup (initialization)" },
-            { name: "done", description: "Fires each time the pointer moves. USE THIS for move tracking." },
-            { name: "error" },
-        ],
-        dataInputs: [{ name: "targetMesh", type: "any", isOptional: true }],
-        dataOutputs: [
-            { name: "pointerId", type: "number" },
-            { name: "pickedPoint", type: "Vector3" },
-        ],
-        config: { stopPropagation: "boolean" },
-    },
+    // NOTE: PointerEvent, PointerDownEvent, PointerUpEvent, and PointerMoveEvent
+    // are defined in FlowGraphBlockNames but NOT yet implemented in core.
+    // Use MeshPickEvent (with pointerType filter) for click/pick interactions.
 
     SendCustomEvent: {
         className: "FlowGraphSendCustomEventBlock",
@@ -756,28 +685,54 @@ export const FlowGraphBlockRegistry: Record<string, IFlowGraphBlockTypeInfo> = {
     CodeExecution: {
         className: "FlowGraphCodeExecutionBlock",
         category: "Utility",
-        description: "Executes a custom function with the provided value.",
+        description:
+            "Executes an arbitrary JavaScript function inside the flow graph — the 'escape hatch' for any logic " +
+            "not covered by dedicated blocks. This is a DATA block (no signal inputs/outputs); it evaluates " +
+            "lazily when its 'result' output is read by a downstream block. " +
+            "The function signature is: (value: any, context: FlowGraphContext) => any. " +
+            "The 'value' input can carry any data (a mesh, a number, an object with multiple fields, etc.), " +
+            "and 'context' is the FlowGraphContext giving access to the scene via context.assetsContext. " +
+            "Use the FunctionReference block to create the function from an object + method name, " +
+            "or provide the function via the scene's glue code / code generator. " +
+            "Common use cases: physics (applyImpulse, setLinearVelocity), mesh cloning (mesh.clone), " +
+            "reading/writing complex properties, invoking any Babylon.js API not exposed as a dedicated block.",
         signalInputs: [],
         signalOutputs: [],
         dataInputs: [
-            { name: "function", type: "any", description: "The function to execute (CodeExecutionFunction)" },
-            { name: "value", type: "any", description: "The input value to pass" },
+            {
+                name: "function",
+                type: "any",
+                description:
+                    "A CodeExecutionFunction: (value, context) => result. " +
+                    "Can come from a FunctionReference block or be set in glue code. " +
+                    "For physics impulse example: (v, ctx) => { v.mesh.physicsBody.applyImpulse(v.impulse, v.point); return true; }",
+            },
+            {
+                name: "value",
+                type: "any",
+                description: "The input value passed as the first argument to the function. " + "Can be any type — a mesh, a Vector3, or a composite object with multiple fields.",
+            },
         ],
-        dataOutputs: [{ name: "result", type: "any", description: "The function return value" }],
+        dataOutputs: [{ name: "result", type: "any", description: "The return value of the function" }],
     },
 
     FunctionReference: {
         className: "FlowGraphFunctionReference",
         category: "Utility",
-        description: "Creates a bound function reference from an object and function name.",
+        description:
+            "Creates a bound function reference from an object and a method name. " +
+            "The output is a callable function that can be connected to a CodeExecution block's 'function' input. " +
+            "For example, to call mesh.physicsBody.applyImpulse: connect a GetAsset block to 'object' (the mesh), " +
+            "set 'functionName' to 'physicsBody.applyImpulse', and the output is a bound reference to that method. " +
+            "This is a DATA block — it evaluates lazily when its output is read.",
         signalInputs: [],
         signalOutputs: [],
         dataInputs: [
-            { name: "functionName", type: "string", description: "Name of the function on the object" },
-            { name: "object", type: "any", description: "The object containing the function" },
-            { name: "context", type: "any", description: "The 'this' context for the function", isOptional: true },
+            { name: "functionName", type: "string", description: "Dot-separated path to the method on the object (e.g. 'physicsBody.applyImpulse', 'clone')" },
+            { name: "object", type: "any", description: "The object containing the function (e.g. a mesh from GetAsset)" },
+            { name: "context", type: "any", description: "Optional 'this' context for the function call", isOptional: true },
         ],
-        dataOutputs: [{ name: "output", type: "any", description: "The bound function reference" }],
+        dataOutputs: [{ name: "output", type: "any", description: "The bound function reference, ready to be called or connected to CodeExecution" }],
     },
 
     // ═══════════════════════════════════════════════════════════════════
@@ -1258,31 +1213,8 @@ export const FlowGraphBlockRegistry: Record<string, IFlowGraphBlockTypeInfo> = {
         config: { inputIsColumnMajor: "boolean — whether inputs are in column-major order" },
     },
 
-    CombineMatrix2D: {
-        className: "FlowGraphCombineMatrix2DBlock",
-        category: "Combine",
-        description: "Combines numbers into a 2D matrix (Matrix2D).",
-        signalInputs: [],
-        signalOutputs: [],
-        dataInputs: Array.from({ length: 4 }, (_, i) => ({ name: `input_${i}`, type: "number" })),
-        dataOutputs: [
-            { name: "value", type: "Matrix2D" },
-            { name: "isValid", type: "boolean" },
-        ],
-    },
-
-    CombineMatrix3D: {
-        className: "FlowGraphCombineMatrix3DBlock",
-        category: "Combine",
-        description: "Combines numbers into a 3D matrix (Matrix3D).",
-        signalInputs: [],
-        signalOutputs: [],
-        dataInputs: Array.from({ length: 9 }, (_, i) => ({ name: `input_${i}`, type: "number" })),
-        dataOutputs: [
-            { name: "value", type: "Matrix3D" },
-            { name: "isValid", type: "boolean" },
-        ],
-    },
+    // NOTE: CombineMatrix2D and CombineMatrix3D are defined in FlowGraphBlockNames
+    // but NOT yet implemented in core.
 
     // ═══════════════════════════════════════════════════════════════════
     //  EXTRACT BLOCKS
@@ -1344,25 +1276,8 @@ export const FlowGraphBlockRegistry: Record<string, IFlowGraphBlockTypeInfo> = {
         })),
     },
 
-    ExtractMatrix2D: {
-        className: "FlowGraphExtractMatrix2DBlock",
-        category: "Extract",
-        description: "Extracts elements from a 2D matrix (Matrix2D).",
-        signalInputs: [],
-        signalOutputs: [],
-        dataInputs: [{ name: "input", type: "Matrix2D" }],
-        dataOutputs: Array.from({ length: 4 }, (_, i) => ({ name: `output_${i}`, type: "number" })),
-    },
-
-    ExtractMatrix3D: {
-        className: "FlowGraphExtractMatrix3DBlock",
-        category: "Extract",
-        description: "Extracts elements from a 3D matrix (Matrix3D).",
-        signalInputs: [],
-        signalOutputs: [],
-        dataInputs: [{ name: "input", type: "Matrix3D" }],
-        dataOutputs: Array.from({ length: 9 }, (_, i) => ({ name: `output_${i}`, type: "number" })),
-    },
+    // NOTE: ExtractMatrix2D and ExtractMatrix3D are defined in FlowGraphBlockNames
+    // but NOT yet implemented in core.
 
     // ═══════════════════════════════════════════════════════════════════
     //  TYPE CONVERSION BLOCKS

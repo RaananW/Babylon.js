@@ -83,6 +83,16 @@ function sanitizeStringLiteral(s: string): string {
 }
 
 /**
+ * Extract the numeric suffix from internal IDs like "mesh_5" → 5, "cam_1" → 1.
+ * This is used to set `uniqueId` on generated objects so that FlowGraph's
+ * GetAssetBlock (with useIndexAsUniqueId: true) can resolve assets correctly.
+ */
+function extractNumericId(internalId: string): number | null {
+    const match = internalId.match(/_(\d+)$/);
+    return match ? parseInt(match[1], 10) : null;
+}
+
+/**
  * Safely emit a value for properties like color/vector that can be obj or array.
  * @param key - The property key, used to infer the type (e.g. color vs vector)
  * @param value - The raw value to convert to a code string
@@ -351,6 +361,12 @@ function generateCamera(cam: ISerializedCamera, sceneVar: string): string {
             lines.push(`const ${v} = new BABYLON.${cam.type}("${sanitizeStringLiteral(cam.name)}", BABYLON.Vector3.Zero(), ${sceneVar});`);
     }
 
+    // Set uniqueId so FlowGraph GetAssetBlock (useIndexAsUniqueId) can resolve this camera
+    const camNumId = extractNumericId(cam.id);
+    if (camNumId !== null) {
+        lines.push(`${v}.uniqueId = ${camNumId};`);
+    }
+
     // Set remaining properties (skip the ones already used in constructor)
     const skipProps = new Set(["alpha", "beta", "radius", "target", "position", "attachControl"]);
     for (const [key, value] of Object.entries(props)) {
@@ -419,6 +435,12 @@ function generateLight(light: ISerializedLight, sceneVar: string): string {
             lines.push(`const ${v} = new BABYLON.${light.type}("${sanitizeStringLiteral(light.name)}", BABYLON.Vector3.Zero(), ${sceneVar});`);
     }
 
+    // Set uniqueId so FlowGraph GetAssetBlock (useIndexAsUniqueId) can resolve this light
+    const lightNumId = extractNumericId(light.id);
+    if (lightNumId !== null) {
+        lines.push(`${v}.uniqueId = ${lightNumId};`);
+    }
+
     // Set remaining properties
     const skipProps = new Set(["direction", "position", "angle", "exponent"]);
     for (const [key, value] of Object.entries(props)) {
@@ -465,6 +487,12 @@ function generateMaterial(mat: ISerializedMaterial, sceneVar: string): string {
         // Standard or PBR material
         const className = mat.type === "PBRMaterial" ? "PBRMaterial" : "StandardMaterial";
         lines.push(`const ${v} = new BABYLON.${className}("${sanitizeStringLiteral(mat.name)}", ${sceneVar});`);
+
+        // Set uniqueId so FlowGraph GetAssetBlock (useIndexAsUniqueId) can resolve this material
+        const matNumId = extractNumericId(mat.id);
+        if (matNumId !== null) {
+            lines.push(`${v}.uniqueId = ${matNumId};`);
+        }
 
         for (const [key, value] of Object.entries(mat.properties)) {
             if (value === undefined || value === null) {
@@ -520,6 +548,12 @@ function generateMesh(mesh: ISerializedMesh, sceneVar: string): string {
     const optsStr = optsEntries.length > 0 ? `{ ${optsEntries.map(([k, val]) => `${k}: ${JSON.stringify(val)}`).join(", ")} }` : "{}";
 
     lines.push(`const ${v} = BABYLON.MeshBuilder.Create${pType}("${sanitizeStringLiteral(mesh.name)}", ${optsStr}, ${sceneVar});`);
+
+    // Set uniqueId so FlowGraph GetAssetBlock (useIndexAsUniqueId) can resolve this mesh
+    const meshNumId = extractNumericId(mesh.id);
+    if (meshNumId !== null) {
+        lines.push(`${v}.uniqueId = ${meshNumId};`);
+    }
 
     // Transform
     const transformCode = generateTransformCode(v, mesh.transform);
@@ -702,7 +736,22 @@ function generateFlowGraph(fg: ISerializedFlowGraphRef, sceneVar: string): strin
     const v = varName(fg.name);
 
     lines.push(`// Flow Graph: ${fg.name}`);
-    lines.push(`const ${v}CoordinatorJson = ${fg.coordinatorJson};`);
+
+    // Ensure coordinatorJson is properly emitted as a JS object literal.
+    // The stored value should be a valid JSON string; emit it directly as a JS expression.
+    let jsonLiteral: string;
+    try {
+        // Parse to validate it's real JSON, then re-stringify with indentation for readability
+        const parsed = JSON.parse(fg.coordinatorJson);
+        jsonLiteral = JSON.stringify(parsed);
+    } catch {
+        // Not valid JSON — wrap the raw string as a JSON string literal as a fallback,
+        // and add a warning comment so the developer knows something went wrong.
+        lines.push(`// WARNING: coordinatorJson was not valid JSON — flow graph may not work.`);
+        lines.push(`// Received: ${sanitizeStringLiteral(fg.coordinatorJson)}`);
+        jsonLiteral = JSON.stringify(fg.coordinatorJson);
+    }
+    lines.push(`const ${v}CoordinatorJson = ${jsonLiteral};`);
     lines.push(`const ${v}Coordinator = await BABYLON.ParseCoordinatorAsync(${v}CoordinatorJson, {`);
     lines.push(`    scene: ${sceneVar},`);
     lines.push(`    pathConverter: { convert: () => ({ object: null, info: null }) },`);

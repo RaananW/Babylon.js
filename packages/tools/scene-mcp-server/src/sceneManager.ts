@@ -1019,6 +1019,19 @@ export class SceneManager {
         return "OK";
     }
 
+    configureMaterialProperties(sceneName: string, materialId: string, properties: Record<string, unknown>): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        const mat = scene.materials.find((m) => m.id === materialId || m.name === materialId);
+        if (!mat) {
+            return `Material "${materialId}" not found.`;
+        }
+        Object.assign(mat.properties, properties);
+        return "OK";
+    }
+
     // ── Transform nodes ──────────────────────────────────────────────────
 
     addTransformNode(

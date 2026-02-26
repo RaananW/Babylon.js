@@ -548,7 +548,8 @@ server.registerTool(
     {
         description:
             "Create a material in the scene. Supports StandardMaterial, PBRMaterial, and NodeMaterial (NME JSON). " +
-            "For NodeMaterial, pass the exported NME JSON from the NME MCP server (inline or via file path).",
+            "For NodeMaterial, pass the exported NME JSON from the NME MCP server (inline or via file path). " +
+            "Common material properties (albedoColor, diffuseColor, metallic, roughness, etc.) can be passed at top level as shortcuts for properties.{key}.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().describe("Name for the material"),
@@ -561,6 +562,18 @@ server.registerTool(
                         "PBRMaterial: albedoColor, metallic, roughness, albedoTexture (url), environmentTexture (url). " +
                         "NodeMaterial: use nmeJson parameter instead."
                 ),
+            // Convenience aliases — common material properties at top level
+            albedoColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+                .describe("Shorthand for properties.albedoColor (PBRMaterial) — as {r,g,b} or [r,g,b]"),
+            diffuseColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+                .describe("Shorthand for properties.diffuseColor (StandardMaterial) — as {r,g,b} or [r,g,b]"),
+            specularColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+                .describe("Shorthand for properties.specularColor (StandardMaterial) — as {r,g,b} or [r,g,b]"),
+            emissiveColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+                .describe("Shorthand for properties.emissiveColor — as {r,g,b} or [r,g,b]"),
+            metallic: z.number().optional().describe("Shorthand for properties.metallic (PBRMaterial) — 0 to 1"),
+            roughness: z.number().optional().describe("Shorthand for properties.roughness (PBRMaterial) — 0 to 1"),
+            alpha: z.number().optional().describe("Shorthand for properties.alpha — 0 (transparent) to 1 (opaque)"),
             nmeJson: z.string().optional().describe("For NodeMaterial: the full NME JSON string exported from the NME MCP server"),
             nmeJsonFile: z
                 .string()
@@ -569,7 +582,18 @@ server.registerTool(
             snippetId: z.string().optional().describe("For NodeMaterial: a Babylon.js Snippet Server ID to load from"),
         },
     },
-    async ({ sceneName, name, type, properties, nmeJson, nmeJsonFile, snippetId }) => {
+    async ({ sceneName, name, type, properties, albedoColor, diffuseColor, specularColor, emissiveColor, metallic, roughness, alpha, nmeJson, nmeJsonFile, snippetId }) => {
+        // Merge top-level convenience material properties into the properties object
+        const mergedProperties: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
+        if (albedoColor !== undefined && !("albedoColor" in mergedProperties)) mergedProperties.albedoColor = albedoColor;
+        if (diffuseColor !== undefined && !("diffuseColor" in mergedProperties)) mergedProperties.diffuseColor = diffuseColor;
+        if (specularColor !== undefined && !("specularColor" in mergedProperties)) mergedProperties.specularColor = specularColor;
+        if (emissiveColor !== undefined && !("emissiveColor" in mergedProperties)) mergedProperties.emissiveColor = emissiveColor;
+        if (metallic !== undefined && !("metallic" in mergedProperties)) mergedProperties.metallic = metallic;
+        if (roughness !== undefined && !("roughness" in mergedProperties)) mergedProperties.roughness = roughness;
+        if (alpha !== undefined && !("alpha" in mergedProperties)) mergedProperties.alpha = alpha;
+        const resolvedProperties = Object.keys(mergedProperties).length > 0 ? mergedProperties : (properties as Record<string, unknown>);
+
         let resolvedNmeJson = nmeJson;
         if (!resolvedNmeJson && nmeJsonFile) {
             try {
@@ -578,7 +602,37 @@ server.registerTool(
                 return { content: [{ type: "text", text: `Error reading NME JSON file: ${(e as Error).message}` }], isError: true };
             }
         }
-        const result = manager.addMaterial(sceneName, name, type, properties as Record<string, unknown>, resolvedNmeJson, snippetId);
+        // Validate that NodeMaterial has at least one source for its definition
+        if (type === "NodeMaterial" && !resolvedNmeJson && !snippetId) {
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text:
+                            `Error: NodeMaterial requires at least one of: nmeJson (inline JSON string), nmeJsonFile (path to exported NME JSON file), or snippetId. ` +
+                            `Use the NME MCP server's export_material_json tool to export the material to a file, then pass the file path via nmeJsonFile.`,
+                    },
+                ],
+                isError: true,
+            };
+        }
+        // Validate that NME JSON is actually valid JSON
+        if (type === "NodeMaterial" && resolvedNmeJson) {
+            try {
+                JSON.parse(resolvedNmeJson);
+            } catch {
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: `Error: nmeJson must be a valid JSON string. The provided value is not valid JSON. Use the NME MCP server's export_material_json tool to get properly formatted JSON.`,
+                        },
+                    ],
+                    isError: true,
+                };
+            }
+        }
+        const result = manager.addMaterial(sceneName, name, type, resolvedProperties as Record<string, unknown>, resolvedNmeJson, snippetId);
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
@@ -586,7 +640,7 @@ server.registerTool(
         // Warn when Standard/PBR material has no distinguishing color property
         let warning = "";
         if (type === "StandardMaterial" || type === "PBRMaterial") {
-            const props = properties as Record<string, unknown> | undefined;
+            const props = resolvedProperties as Record<string, unknown> | undefined;
             const colorKeys =
                 type === "StandardMaterial" ? ["diffuseColor", "specularColor", "emissiveColor", "diffuseTexture"] : ["albedoColor", "albedoTexture", "emissiveColor"];
             const hasColor = props && colorKeys.some((k) => k in props);
@@ -624,6 +678,57 @@ server.registerTool(
             content: [{ type: "text", text: result === "OK" ? `Removed material "${materialId}".` : `Error: ${result}` }],
             isError: result !== "OK",
         };
+    }
+);
+
+server.registerTool(
+    "configure_material",
+    {
+        description:
+            "Update properties on an existing material (color, roughness, metallic, etc.). " +
+            "Common properties can be passed at top level as convenience or inside properties object.",
+        inputSchema: {
+            sceneName: z.string().describe("Name of the scene"),
+            materialId: z.string().describe("Material ID or name"),
+            properties: z
+                .record(z.string(), z.unknown())
+                .optional()
+                .describe("Material properties to update: albedoColor, metallic, roughness, diffuseColor, etc."),
+            // Convenience aliases — same as add_material
+            albedoColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+                .describe("Shorthand for properties.albedoColor (PBRMaterial)"),
+            diffuseColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+                .describe("Shorthand for properties.diffuseColor (StandardMaterial)"),
+            specularColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+                .describe("Shorthand for properties.specularColor"),
+            emissiveColor: z.union([z.object({ r: z.number(), g: z.number(), b: z.number() }), z.array(z.number()).length(3)]).optional()
+                .describe("Shorthand for properties.emissiveColor"),
+            metallic: z.number().optional().describe("Shorthand for properties.metallic — 0 to 1"),
+            roughness: z.number().optional().describe("Shorthand for properties.roughness — 0 to 1"),
+            alpha: z.number().optional().describe("Shorthand for properties.alpha — 0 to 1"),
+        },
+    },
+    async ({ sceneName, materialId, properties, albedoColor, diffuseColor, specularColor, emissiveColor, metallic, roughness, alpha }) => {
+        const mergedProperties: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
+        if (albedoColor !== undefined && !("albedoColor" in mergedProperties)) mergedProperties.albedoColor = albedoColor;
+        if (diffuseColor !== undefined && !("diffuseColor" in mergedProperties)) mergedProperties.diffuseColor = diffuseColor;
+        if (specularColor !== undefined && !("specularColor" in mergedProperties)) mergedProperties.specularColor = specularColor;
+        if (emissiveColor !== undefined && !("emissiveColor" in mergedProperties)) mergedProperties.emissiveColor = emissiveColor;
+        if (metallic !== undefined && !("metallic" in mergedProperties)) mergedProperties.metallic = metallic;
+        if (roughness !== undefined && !("roughness" in mergedProperties)) mergedProperties.roughness = roughness;
+        if (alpha !== undefined && !("alpha" in mergedProperties)) mergedProperties.alpha = alpha;
+
+        if (Object.keys(mergedProperties).length === 0) {
+            return { content: [{ type: "text", text: "Error: No properties provided to update." }], isError: true };
+        }
+        const result = manager.configureMaterialProperties(sceneName, materialId, mergedProperties);
+        if (result !== "OK") {
+            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+        }
+        const summary = Object.entries(mergedProperties)
+            .map(([k, v]) => `${k}: ${JSON.stringify(v)}`)
+            .join(", ");
+        return { content: [{ type: "text", text: `Material "${materialId}" updated: { ${summary} }` }] };
     }
 );
 
@@ -670,12 +775,32 @@ server.registerTool(
             type: z.enum(["Box", "Sphere", "Cylinder", "Plane", "Ground", "Torus", "TorusKnot", "Disc", "Capsule", "IcoSphere"]).describe("Primitive mesh type"),
             options: z.record(z.string(), z.unknown()).optional().describe("Primitive creation options (e.g. {diameter: 2} for Sphere, {width: 5, height: 5} for Ground)"),
             transform: TransformSchema,
+            // Convenience aliases — position/rotation/scaling at top level are merged into transform
+            position: Vector3Schema.describe("Shorthand for transform.position — a 3D vector as {x,y,z} or [x,y,z]"),
+            rotation: Vector3Schema.describe("Shorthand for transform.rotation — a 3D vector as {x,y,z} or [x,y,z]"),
+            scaling: Vector3Schema.describe("Shorthand for transform.scaling — a 3D vector as {x,y,z} or [x,y,z]"),
             parentId: z.string().optional().describe("Parent node ID or name for hierarchy"),
             materialId: z.string().optional().describe("Material ID or name to assign"),
+            material: z.string().optional().describe("Alias for materialId — material ID or name to assign"),
         },
     },
-    async ({ sceneName, name, type, options, transform, parentId, materialId }) => {
-        const result = manager.addMesh(sceneName, name, type, options as Record<string, unknown>, transform as Record<string, unknown> | undefined, parentId, materialId);
+    async ({ sceneName, name, type, options, transform, position, rotation, scaling, parentId, materialId, material }) => {
+        // Merge convenience top-level position/rotation/scaling into transform (top-level wins)
+        const mergedTransform: Record<string, unknown> = { ...((transform as Record<string, unknown>) || {}) };
+        if (position !== undefined) mergedTransform.position = position;
+        if (rotation !== undefined) mergedTransform.rotation = rotation;
+        if (scaling !== undefined) mergedTransform.scaling = scaling;
+        const resolvedMaterialId = materialId || material;
+
+        const result = manager.addMesh(
+            sceneName,
+            name,
+            type,
+            options as Record<string, unknown>,
+            Object.keys(mergedTransform).length > 0 ? mergedTransform : undefined,
+            parentId,
+            resolvedMaterialId
+        );
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
@@ -683,7 +808,7 @@ server.registerTool(
             content: [
                 {
                     type: "text",
-                    text: `Added mesh [${result.id}] "${name}" (${type}).${materialId ? ` Material: ${materialId}.` : ""}`,
+                    text: `Added mesh [${result.id}] "${name}" (${type}).${resolvedMaterialId ? ` Material: ${resolvedMaterialId}.` : ""}`,
                 },
             ],
         };
@@ -744,11 +869,19 @@ server.registerTool(
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().describe("Name for the transform node"),
             transform: TransformSchema,
+            // Convenience aliases
+            position: Vector3Schema.describe("Shorthand for transform.position"),
+            rotation: Vector3Schema.describe("Shorthand for transform.rotation"),
+            scaling: Vector3Schema.describe("Shorthand for transform.scaling"),
             parentId: z.string().optional().describe("Parent node ID or name"),
         },
     },
-    async ({ sceneName, name, transform, parentId }) => {
-        const result = manager.addTransformNode(sceneName, name, transform as Record<string, unknown> | undefined, parentId);
+    async ({ sceneName, name, transform, position, rotation, scaling, parentId }) => {
+        const mergedTransform: Record<string, unknown> = { ...((transform as Record<string, unknown>) || {}) };
+        if (position !== undefined) mergedTransform.position = position;
+        if (rotation !== undefined) mergedTransform.rotation = rotation;
+        if (scaling !== undefined) mergedTransform.scaling = scaling;
+        const result = manager.addTransformNode(sceneName, name, Object.keys(mergedTransform).length > 0 ? mergedTransform : undefined, parentId);
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
@@ -837,14 +970,22 @@ server.registerTool(
             name: z.string().describe("Name for this model reference"),
             url: z.string().describe("URL or path to the model file (.glb, .gltf, .babylon, .obj, etc.)"),
             transform: TransformSchema,
+            // Convenience aliases
+            position: Vector3Schema.describe("Shorthand for transform.position"),
+            rotation: Vector3Schema.describe("Shorthand for transform.rotation"),
+            scaling: Vector3Schema.describe("Shorthand for transform.scaling"),
             parentId: z.string().optional().describe("Parent node ID for the imported root"),
             animationGroups: z.array(z.string()).optional().describe("Expected animation group names in the model (e.g. ['Walk', 'Idle', 'Run'])"),
             materialOverrides: z.record(z.string(), z.string()).optional().describe("Map of mesh name → material ID to override materials on imported meshes"),
             pluginExtension: z.string().optional().describe("Force a specific loader plugin (e.g. '.gltf', '.obj')"),
         },
     },
-    async ({ sceneName, name, url, transform, parentId, animationGroups, materialOverrides, pluginExtension }) => {
-        const result = manager.addModel(sceneName, name, url, transform as Record<string, unknown> | undefined, parentId, { animationGroups, materialOverrides, pluginExtension });
+    async ({ sceneName, name, url, transform, position, rotation, scaling, parentId, animationGroups, materialOverrides, pluginExtension }) => {
+        const mergedTransform: Record<string, unknown> = { ...((transform as Record<string, unknown>) || {}) };
+        if (position !== undefined) mergedTransform.position = position;
+        if (rotation !== undefined) mergedTransform.rotation = rotation;
+        if (scaling !== undefined) mergedTransform.scaling = scaling;
+        const result = manager.addModel(sceneName, name, url, Object.keys(mergedTransform).length > 0 ? mergedTransform : undefined, parentId, { animationGroups, materialOverrides, pluginExtension });
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
@@ -1032,6 +1173,21 @@ server.registerTool(
         }
         if (!resolvedJson) {
             return { content: [{ type: "text", text: "Either coordinatorJson or coordinatorJsonFile must be provided." }], isError: true };
+        }
+        // Validate that resolvedJson is valid JSON before passing to scene manager
+        try {
+            JSON.parse(resolvedJson);
+        } catch {
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: `Error: coordinatorJson must be a valid JSON string. Received a non-JSON value: "${resolvedJson.substring(0, 100)}...". ` +
+                            `Use the flow graph MCP server's export_graph_json tool to get the full coordinator JSON, then pass that JSON string here.`,
+                    },
+                ],
+                isError: true,
+            };
         }
         const result = manager.attachFlowGraph(sceneName, name, resolvedJson, scopeNodeIds);
         if (typeof result === "string") {
@@ -2311,8 +2467,13 @@ server.registerTool(
                         type: z.string(),
                         options: z.record(z.string(), z.unknown()).optional(),
                         transform: TransformSchema,
+                        // Convenience aliases
+                        position: Vector3Schema.describe("Shorthand for transform.position"),
+                        rotation: Vector3Schema.describe("Shorthand for transform.rotation"),
+                        scaling: Vector3Schema.describe("Shorthand for transform.scaling"),
                         parentId: z.string().optional(),
                         materialId: z.string().optional(),
+                        material: z.string().optional().describe("Alias for materialId"),
                     })
                 )
                 .describe("Array of meshes to add"),
@@ -2321,14 +2482,21 @@ server.registerTool(
     async ({ sceneName, meshes }) => {
         const results: string[] = [];
         for (const m of meshes) {
+            // Merge convenience aliases
+            const mergedTransform: Record<string, unknown> = { ...((m.transform as Record<string, unknown>) || {}) };
+            if (m.position !== undefined) mergedTransform.position = m.position;
+            if (m.rotation !== undefined) mergedTransform.rotation = m.rotation;
+            if (m.scaling !== undefined) mergedTransform.scaling = m.scaling;
+            const resolvedMaterialId = m.materialId || m.material;
+
             const result = manager.addMesh(
                 sceneName,
                 m.name,
                 m.type,
                 m.options as Record<string, unknown>,
-                m.transform as Record<string, unknown> | undefined,
+                Object.keys(mergedTransform).length > 0 ? mergedTransform : undefined,
                 m.parentId,
-                m.materialId
+                resolvedMaterialId
             );
             if (typeof result === "string") {
                 results.push(`Error adding "${m.name}": ${result}`);
