@@ -589,11 +589,18 @@ server.registerTool(
 server.registerTool(
     "configure_camera",
     {
-        description: "Update properties on an existing camera.",
+        description:
+            "Update properties on an existing camera. The 'properties' object accepts any camera property by name.\n" +
+            "Common properties by camera type:\n" +
+            "- ArcRotateCamera: target ({x,y,z}), alpha, beta, radius, lowerRadiusLimit, upperRadiusLimit, lowerBetaLimit, upperBetaLimit, wheelPrecision, panningSensibility\n" +
+            "- FreeCamera: position ({x,y,z}), rotation ({x,y,z}), speed, fov\n" +
+            "- All cameras: minZ, maxZ, fov, fovMode (0=vertical, 1=horizontal), speed",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             cameraId: z.string().describe("Camera ID or name"),
-            properties: z.record(z.string(), z.unknown()).describe("Properties to update"),
+            properties: z
+                .record(z.string(), z.unknown())
+                .describe("Properties to update — keys are Babylon.js camera property names, values are the new values. See description for common properties."),
         },
     },
     async ({ sceneName, cameraId, properties }) => {
@@ -702,7 +709,13 @@ server.registerTool(
 server.registerTool(
     "configure_light",
     {
-        description: "Update properties on an existing light.",
+        description:
+            "Update properties on an existing light. Accepts both the 'properties' bag and top-level convenience aliases.\n" +
+            "Common properties by light type:\n" +
+            "- HemisphericLight: direction, intensity, diffuse, specular, groundColor\n" +
+            "- PointLight: position, intensity, diffuse, specular, range\n" +
+            "- DirectionalLight: direction, position, intensity, diffuse, specular, shadowEnabled\n" +
+            "- SpotLight: direction, position, angle, exponent, intensity, diffuse, specular, range, shadowEnabled",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             lightId: z.string().optional().describe("Light ID or name"),
@@ -1038,7 +1051,11 @@ server.registerTool(
 server.registerTool(
     "add_texture",
     {
-        description: "Add a texture to the scene. Textures can be referenced by materials.",
+        description:
+            "Add a texture to the scene. After adding, assign it to a material using configure_material " +
+            "(e.g. configure_material with properties: { diffuseTexture: 'textureName' } for StandardMaterial, " +
+            "or { albedoTexture: 'textureName' } for PBRMaterial). " +
+            "The texture is NOT automatically linked to any material.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().describe("Name for the texture"),
@@ -1067,7 +1084,11 @@ server.registerTool(
 server.registerTool(
     "add_mesh",
     {
-        description: "Add a primitive mesh to the scene: Box, Sphere, Cylinder, Plane, Ground, Torus, Capsule, etc.",
+        description:
+            "Add a primitive mesh to the scene: Box, Sphere, Cylinder, Plane, Ground, Torus, Capsule, etc. " +
+            "IMPORTANT: Primitive creation options (diameter, width, height, segments, etc.) are set at creation time and CANNOT be changed afterward. " +
+            "To resize a primitive, you must remove_mesh and add_mesh again with new options. " +
+            "The 'options' parameter accepts the same keys as the Babylon.js MeshBuilder (e.g. {diameter: 2} for Sphere, {width: 5, height: 3, depth: 1} for Box, {width: 10, height: 10} for Ground).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().describe("Name for the mesh"),
@@ -1152,7 +1173,11 @@ server.registerTool(
 server.registerTool(
     "remove_mesh",
     {
-        description: "Remove a mesh from the scene.",
+        description:
+            "Remove a mesh (and its physics body, if any) from the scene. " +
+            "This disposes the mesh — it cannot be undone. " +
+            "To change a primitive's geometry (size, segments), remove it and re-add with add_mesh. " +
+            "If the mesh has children, they are NOT removed — they become root-level nodes.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             meshId: z.string().describe("Mesh ID or name"),
@@ -1170,7 +1195,10 @@ server.registerTool(
 server.registerTool(
     "set_mesh_properties",
     {
-        description: "Update properties on a mesh: visibility, pickability, shadow settings, tags, metadata.",
+        description:
+            "Update DISPLAY properties on a mesh: visibility, pickability, shadow settings, tags, metadata. " +
+            "This does NOT change the mesh's geometry or size — primitive dimensions (width, height, diameter) are fixed at creation time. " +
+            "To resize, use remove_mesh + add_mesh. To move/rotate/scale, use set_transform.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             meshId: z.string().describe("Mesh ID or name"),
@@ -1475,7 +1503,14 @@ server.registerTool("list_animatable_properties", { description: "List all commo
 server.registerTool(
     "add_physics_body",
     {
-        description: "Add a physics body to a mesh. Requires physics to be enabled in environment settings.",
+        description:
+            "Add a physics body to a mesh so it participates in physics simulation. " +
+            "PREREQUISITES: Physics must be enabled first via set_environment with physics: { enabled: true, engine: 'havok', gravity: {x:0,y:-9.81,z:0} }. " +
+            "Each mesh can have at most ONE physics body — calling this on a mesh that already has one will error. " +
+            "Use remove_physics_body first if you need to replace it.\n" +
+            "Body types: Static (immovable floors/walls, mass ignored), Dynamic (fully simulated, affected by gravity/forces), Animated (keyframe-driven, pushes dynamic bodies).\n" +
+            "Shape types: Box/Sphere/Capsule/Cylinder are fast approximations. ConvexHull wraps the mesh tightly but is more expensive. Mesh uses exact triangles (static only). " +
+            "TIP: For Torus meshes, ConvexHull fills the hole — there is no hollow torus collider. Use a Container shape with child shapes for complex hollow colliders.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             meshId: z.string().optional().describe("Mesh ID or name"),
@@ -2655,11 +2690,13 @@ server.registerTool(
         description:
             "Add a runtime integration that bridges subsystems together. Integrations generate " +
             "glue code that connects physics, FlowGraph, materials, and GUI at runtime.\n\n" +
+            "PREREQUISITES: The referenced meshes, GUI controls, and FlowGraph variables must already exist before adding integrations.\n\n" +
             "Supported integration types:\n" +
-            "- **physicsCollision**: When two physics bodies collide, dispatch a FlowGraph custom event\n" +
-            "- **variableToProperty**: Each frame, sync a FlowGraph variable to a mesh material property\n" +
-            "- **guiButton**: When a GUI button is clicked, dispatch a FlowGraph custom event (with optional toggle labels)\n" +
-            "- **collisionCounter** (aliases: **eventCounter**, **scoreDisplay**): Display a running collision count in a GUI TextBlock",
+            "- **physicsCollision**: When two physics bodies collide, dispatch a FlowGraph custom event. Both meshes must have physics bodies. Provide: meshA, meshB (mesh names), eventName (FlowGraph custom event name).\n" +
+            "- **variableToProperty**: Each frame, sync a FlowGraph variable to a mesh material property. Provide: variableName, meshName, propertyPath.\n" +
+            "- **guiButton**: When a GUI button is clicked, dispatch a FlowGraph custom event (with optional toggle labels). Provide: buttonName, eventName.\n" +
+            "- **collisionCounter** (aliases: **eventCounter**, **scoreDisplay**): Display a running collision count in a GUI TextBlock. Provide: textBlockName, prefix.\n" +
+            "- **physicsImpulse**: Apply an impulse to a mesh when a GUI button is clicked. The mesh must have a Dynamic physics body. Provide: triggerButtonName, meshName, strength.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             integration: IntegrationSchema.describe("The integration descriptor to add"),
@@ -2685,7 +2722,10 @@ server.registerTool(
 server.registerTool(
     "add_integrations_batch",
     {
-        description: "Add multiple integrations at once. More efficient than calling add_integration repeatedly.",
+        description:
+            "Add multiple integrations at once. More efficient than calling add_integration repeatedly. " +
+            "Supported types: physicsCollision, variableToProperty, guiButton, collisionCounter (aliases: eventCounter, scoreDisplay), physicsImpulse. " +
+            "See add_integration for details on each type.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             integrations: z.array(IntegrationSchema).describe("Array of integration descriptors to add"),
@@ -2945,7 +2985,10 @@ server.registerTool(
 server.registerTool(
     "add_meshes_batch",
     {
-        description: "Add multiple meshes at once. More efficient than calling add_mesh repeatedly.",
+        description:
+            "Add multiple meshes at once. More efficient than calling add_mesh repeatedly. " +
+            "Same rules as add_mesh apply: primitive options (size, diameter, segments) are immutable after creation. " +
+            "Each mesh entry supports the same parameters as add_mesh (name, type, options, transform, physics, materialId).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             meshes: z

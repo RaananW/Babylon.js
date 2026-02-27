@@ -424,7 +424,9 @@ server.registerTool(
             verticalAlignment,
         };
         for (const [k, v] of Object.entries(aliases)) {
-            if (v !== undefined && !(k in mergedProps)) mergedProps[k] = v;
+            if (v !== undefined && !(k in mergedProps)) {
+                mergedProps[k] = v;
+            }
         }
         // Gap 49 fix: auto-map text -> buttonText for Button controls
         if ((controlType === "Button" || controlType === "FocusableButton") && mergedProps.text !== undefined && mergedProps.buttonText === undefined) {
@@ -455,7 +457,7 @@ server.registerTool(
 server.registerTool(
     "remove_control",
     {
-        description: "Remove a control (and all its descendants) from the GUI.",
+        description: "Remove a control (and all its descendants) from the GUI. Use describe_gui to find valid control names.",
         inputSchema: {
             guiName: z.string().describe("Name of the GUI texture"),
             controlName: z.string().describe("Name of the control to remove"),
@@ -473,7 +475,10 @@ server.registerTool(
 server.registerTool(
     "set_control_properties",
     {
-        description: "Set or update properties on an existing control.",
+        description:
+            "Set or update properties on an existing control. Use get_control_type_info to discover available properties for the control's type. " +
+            "Common base properties: width, height, color, fontSize, text, background, isVisible, horizontalAlignment, verticalAlignment. " +
+            "For Buttons, use 'buttonText' to update the internal TextBlock's text.",
         inputSchema: {
             guiName: z.string().describe("Name of the GUI texture"),
             controlName: z.string().describe("Name of the control to modify"),
@@ -548,7 +553,7 @@ server.registerTool(
 server.registerTool(
     "add_grid_column",
     {
-        description: "Add a column definition to a Grid control.",
+        description: "Add a column definition to a Grid control. Call this before placing controls in that column.",
         inputSchema: {
             guiName: z.string().describe("Name of the GUI texture"),
             gridName: z.string().describe("Name of the Grid control"),
@@ -569,7 +574,7 @@ server.registerTool(
 server.registerTool(
     "set_grid_row",
     {
-        description: "Update an existing row definition on a Grid.",
+        description: "Update an existing row definition on a Grid (changes the size of the row at the given index). Use describe_gui to see current grid definitions.",
         inputSchema: {
             guiName: z.string().describe("Name of the GUI texture"),
             gridName: z.string().describe("Name of the Grid control"),
@@ -590,7 +595,7 @@ server.registerTool(
 server.registerTool(
     "set_grid_column",
     {
-        description: "Update an existing column definition on a Grid.",
+        description: "Update an existing column definition on a Grid (changes the size of the column at the given index). Use describe_gui to see current grid definitions.",
         inputSchema: {
             guiName: z.string().describe("Name of the GUI texture"),
             gridName: z.string().describe("Name of the Grid control"),
@@ -611,7 +616,7 @@ server.registerTool(
 server.registerTool(
     "remove_grid_row",
     {
-        description: "Remove a row definition from a Grid.",
+        description: "Remove a row definition from a Grid. WARNING: this shifts subsequent row indices downward and may orphan controls that were in the removed row.",
         inputSchema: {
             guiName: z.string().describe("Name of the GUI texture"),
             gridName: z.string().describe("Name of the Grid control"),
@@ -630,7 +635,7 @@ server.registerTool(
 server.registerTool(
     "remove_grid_column",
     {
-        description: "Remove a column definition from a Grid.",
+        description: "Remove a column definition from a Grid. WARNING: this shifts subsequent column indices and may orphan controls that were in the removed column.",
         inputSchema: {
             guiName: z.string().describe("Name of the GUI texture"),
             gridName: z.string().describe("Name of the Grid control"),
@@ -838,7 +843,9 @@ server.registerTool(
 server.registerTool(
     "add_controls_batch",
     {
-        description: "Add multiple controls at once. More efficient than calling add_control repeatedly.",
+        description:
+            "Add multiple controls at once (processed sequentially, so earlier controls can be parents for later ones). " +
+            "More efficient than calling add_control repeatedly. If one control fails, the rest still proceed.",
         inputSchema: {
             guiName: z.string().describe("Name of the GUI texture"),
             controls: z
@@ -895,7 +902,9 @@ server.registerTool(
                 verticalAlignment: def.verticalAlignment,
             };
             for (const [k, v] of Object.entries(aliases)) {
-                if (v !== undefined && !(k in mergedProps)) mergedProps[k] = v;
+                if (v !== undefined && !(k in mergedProps)) {
+                    mergedProps[k] = v;
+                }
             }
             // Gap 49 fix: auto-map text -> buttonText for Button controls
             if ((def.controlType === "Button" || def.controlType === "FocusableButton") && mergedProps.text !== undefined && mergedProps.buttonText === undefined) {

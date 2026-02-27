@@ -341,7 +341,7 @@ server.registerTool(
 server.registerTool(
     "remove_block",
     {
-        description: "Remove a block from a material graph. Also removes any connections to/from it.",
+        description: "Remove a block from a material graph by its numeric block id. Also removes any connections to/from it. Use describe_material to find valid block ids.",
         inputSchema: {
             materialName: z.string().describe("Name of the material"),
             blockId: z.number().describe("The block id to remove"),
@@ -359,11 +359,13 @@ server.registerTool(
 server.registerTool(
     "set_block_properties",
     {
-        description: "Set or update properties on an existing block (e.g. change an InputBlock value, set a TrigonometryBlock operation).",
+        description:
+            "Set or update properties on an existing block. Use get_block_type_info to see available properties for the block's type. " +
+            "Common: for InputBlock set 'value', 'type', 'systemValue'; for TrigonometryBlock set 'operation'; for ConditionalBlock set 'condition'.",
         inputSchema: {
             materialName: z.string().describe("Name of the material"),
             blockId: z.number().describe("The block id to modify"),
-            properties: z.record(z.string(), z.unknown()).describe("Key-value properties to set. Same keys as add_block's properties parameter."),
+            properties: z.record(z.string(), z.unknown()).describe("Key-value properties to set. Use get_block_type_info to discover valid keys for a given block type."),
         },
     },
     async ({ materialName, blockId, properties }) => {
@@ -409,7 +411,7 @@ server.registerTool(
 server.registerTool(
     "disconnect_input",
     {
-        description: "Disconnect an input on a block (remove an existing connection).",
+        description: "Disconnect an input on a block (remove the incoming connection). Use describe_block to find connected input names.",
         inputSchema: {
             materialName: z.string().describe("Name of the material"),
             blockId: z.number().describe("The block id whose input to disconnect"),
@@ -627,7 +629,10 @@ server.registerTool(
 server.registerTool(
     "get_snippet_url",
     {
-        description: "Generate a URL that opens the material in the online Babylon.js Node Material Editor. " + "The JSON is encoded in the URL fragment.",
+        description:
+            "Generate a URL that opens the material in the Babylon.js Node Material Editor (nme.babylonjs.com). " +
+            "The full JSON is Base64-encoded in the URL fragment, so this only works for small-to-medium materials. " +
+            "For large materials, use export_material_json and share the file instead.",
         inputSchema: {
             materialName: z.string().describe("Name of the material"),
         },
@@ -656,7 +661,10 @@ server.registerTool(
 server.registerTool(
     "add_blocks_batch",
     {
-        description: "Add multiple blocks at once. More efficient than calling add_block repeatedly. Returns all created block ids.",
+        description:
+            "Add multiple blocks at once (processed sequentially, so earlier blocks exist before later ones). " +
+            "More efficient than calling add_block repeatedly. Returns all created block ids. " +
+            "If one block fails, the rest still proceed.",
         inputSchema: {
             materialName: z.string().describe("Name of the material"),
             blocks: z
@@ -693,16 +701,18 @@ server.registerTool(
 server.registerTool(
     "connect_blocks_batch",
     {
-        description: "Connect multiple block pairs at once. More efficient than calling connect_blocks repeatedly.",
+        description:
+            "Connect multiple block pairs at once (processed sequentially). More efficient than calling connect_blocks repeatedly. " +
+            "If one connection fails, the rest still proceed.",
         inputSchema: {
             materialName: z.string().describe("Name of the material"),
             connections: z
                 .array(
                     z.object({
-                        sourceBlockId: z.number(),
-                        outputName: z.string(),
-                        targetBlockId: z.number(),
-                        inputName: z.string(),
+                        sourceBlockId: z.number().describe("Block id to connect FROM (the one with the output)"),
+                        outputName: z.string().describe("Name of the output on the source block (e.g. 'output', 'rgb', 'xyz')"),
+                        targetBlockId: z.number().describe("Block id to connect TO (the one with the input)"),
+                        inputName: z.string().describe("Name of the input on the target block (e.g. 'vector', 'left', 'color')"),
                     })
                 )
                 .describe("Array of connections to make"),

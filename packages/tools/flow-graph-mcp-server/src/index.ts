@@ -405,11 +405,26 @@ server.registerTool(
 server.registerTool(
     "set_block_config",
     {
-        description: "Set or update configuration on an existing block.",
+        description:
+            "Set or update configuration on an existing block. Config keys depend on the block type — " +
+            "use get_block_type_info to discover available config for a given block type.\n\n" +
+            "Common config patterns:\n" +
+            "- Constant: { value: <any> } — the constant value to output\n" +
+            "- GetVariable / SetVariable: { variable: 'varName' } — FlowGraph context variable name\n" +
+            "- MeshPickEvent: { targetMesh: { type: 'Mesh', name: 'meshName' } } — REQUIRED or clicks silently fail\n" +
+            "- GetProperty / SetProperty: { propertyName: 'propName' } — e.g. 'position', 'isVisible', 'rotation'\n" +
+            "- FunctionReference: { code: 'function(params) { ... }' } — inline JS function body. " +
+            "Connect inputs via CodeExecution block, read results via GetProperty on the outputs.\n" +
+            "- ConsoleLog: no config needed (message received via data input)\n" +
+            "- PlayAnimation: { loop: true/false } or receive animationGroup via data input\n\n" +
+            "TIP: Rich-type values like Mesh references use { type: 'Mesh', name: 'meshName' } format. " +
+            "Read the rich-types resource for the full list.",
         inputSchema: {
             graphName: z.string().describe("Name of the flow graph"),
             blockId: z.number().describe("The block id to modify"),
-            config: z.record(z.string(), z.unknown()).describe("Configuration key-value pairs to set or update."),
+            config: z
+                .record(z.string(), z.unknown())
+                .describe("Configuration key-value pairs to set or update. Keys are block-specific — use get_block_type_info to discover them."),
         },
     },
     async ({ graphName, blockId, config }) => {
