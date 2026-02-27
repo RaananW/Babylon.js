@@ -1241,16 +1241,20 @@ server.registerTool(
             name: z.string().optional().describe("Alias for nodeId — node name"),
             position: Vector3Schema.describe("New position as {x,y,z} or [x,y,z]"),
             rotation: Vector3Schema.describe("New rotation in radians as {x,y,z} or [x,y,z]"),
+            rotationQuaternion: z
+                .union([z.object({ x: z.number(), y: z.number(), z: z.number(), w: z.number() }), z.tuple([z.number(), z.number(), z.number(), z.number()])])
+                .optional()
+                .describe("Rotation quaternion as {x,y,z,w} or [x,y,z,w]. Takes priority over Euler rotation (required for physics bodies)."),
             scaling: Vector3Schema.describe("New scaling as {x,y,z} or [x,y,z]"),
         },
     },
-    async ({ sceneName, nodeId, meshId, meshName, name: nameAlias, position, rotation, scaling }) => {
+    async ({ sceneName, nodeId, meshId, meshName, name: nameAlias, position, rotation, rotationQuaternion, scaling }) => {
         // Gap 47 fix: also accept meshName
         const resolvedNodeId = nodeId ?? meshId ?? meshName ?? nameAlias;
         if (!resolvedNodeId) {
             return { content: [{ type: "text", text: "Error: Either nodeId, meshId, or name must be provided." }], isError: true };
         }
-        const result = manager.setTransform(sceneName, resolvedNodeId, { position, rotation, scaling } as Record<string, unknown>);
+        const result = manager.setTransform(sceneName, resolvedNodeId, { position, rotation, rotationQuaternion, scaling } as Record<string, unknown>);
         return {
             content: [{ type: "text", text: result === "OK" ? `Transform of "${resolvedNodeId}" updated.` : `Error: ${result}` }],
             isError: result !== "OK",
@@ -2584,6 +2588,13 @@ const ScoreDisplaySchema = z.object({
     prefix: z.string().describe('Text prefix, e.g. "Score: "'),
 });
 
+const PhysicsImpulseSchema = z.object({
+    type: z.literal("physicsImpulse"),
+    triggerButtonName: z.string().describe("GUI button control name that triggers the throw"),
+    meshName: z.string().describe("Mesh name to throw (must have a dynamic physics body)"),
+    strength: z.number().describe("Impulse strength (force magnitude)"),
+});
+
 const IntegrationSchema = z.discriminatedUnion("type", [
     PhysicsCollisionSchema,
     VariableToPropertySchema,
@@ -2591,6 +2602,7 @@ const IntegrationSchema = z.discriminatedUnion("type", [
     CollisionCounterSchema,
     EventCounterSchema,
     ScoreDisplaySchema,
+    PhysicsImpulseSchema,
 ]);
 
 server.registerTool(

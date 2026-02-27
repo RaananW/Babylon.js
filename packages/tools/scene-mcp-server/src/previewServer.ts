@@ -60,6 +60,10 @@ export function getPreviewSceneName(): string | null {
 // ═══════════════════════════════════════════════════════════════════════════
 
 function generatePreviewHtml(manager: SceneManager, sceneName: string): string {
+    // Auto-detect whether collision callbacks are needed (physicsCollision integrations)
+    const scene = manager.getScene(sceneName);
+    const needsCollisionCallbacks = !!scene?.integrations?.some((i) => i.type === "physicsCollision");
+
     // Use export_scene_code with HTML boilerplate to get a complete standalone page
     const code = manager.exportCode(sceneName, {
         wrapInFunction: true,
@@ -68,7 +72,7 @@ function generatePreviewHtml(manager: SceneManager, sceneName: string): string {
         includeEngineSetup: true,
         includeRenderLoop: true,
         format: "umd",
-        enableCollisionCallbacks: false,
+        enableCollisionCallbacks: needsCollisionCallbacks,
     });
 
     if (!code) {
@@ -195,6 +199,10 @@ export async function startPreview(manager: SceneManager, sceneName: string, por
 
             // ── Route: /api/code — raw generated code ──────────────────────
             if (pathname === "/api/code") {
+                // Auto-detect whether collision callbacks are needed (physicsCollision integrations)
+                const sceneData = _manager!.getScene(_sceneName);
+                const needsCollision = !!sceneData?.integrations?.some((i) => i.type === "physicsCollision");
+
                 const code = _manager!.exportCode(_sceneName, {
                     wrapInFunction: true,
                     functionName: "createScene",
@@ -202,7 +210,7 @@ export async function startPreview(manager: SceneManager, sceneName: string, por
                     includeEngineSetup: true,
                     includeRenderLoop: true,
                     format: "umd",
-                    enableCollisionCallbacks: false,
+                    enableCollisionCallbacks: needsCollision,
                 });
                 if (!code) {
                     res.writeHead(404, { "Content-Type": "application/json" });

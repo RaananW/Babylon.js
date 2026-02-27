@@ -76,11 +76,23 @@ export interface IColor4 {
 /**
  *
  */
+/**
+ * A four-component quaternion {x, y, z, w}.
+ */
+export interface IQuaternion {
+    x: number;
+    y: number;
+    z: number;
+    w: number;
+}
+
 export interface ITransform {
     /** Position in 3D space */
     position?: IVector3;
     /** Rotation in Euler angles (radians) */
     rotation?: IVector3;
+    /** Rotation quaternion — when set, takes priority over Euler `rotation` (important for physics bodies) */
+    rotationQuaternion?: IQuaternion;
     /** Scale factors along each axis */
     scaling?: IVector3;
 }
@@ -780,12 +792,24 @@ export interface IPhysicsPositionResetIntegration {
     resetCollisionCounter?: boolean;
 }
 
+/** On button click, teleport a mesh to the camera and apply a physics impulse in the camera's forward direction */
+export interface IPhysicsImpulseIntegration {
+    type: "physicsImpulse";
+    /** GUI button control name that triggers the throw */
+    triggerButtonName: string;
+    /** Mesh name to throw (must have a dynamic physics body) */
+    meshName: string;
+    /** Impulse strength (force magnitude) */
+    strength: number;
+}
+
 export type ISerializedIntegration =
     | IPhysicsCollisionEventIntegration
     | IVariableToPropertyIntegration
     | IGuiButtonEventIntegration
     | ICollisionCounterIntegration
-    | IPhysicsPositionResetIntegration;
+    | IPhysicsPositionResetIntegration
+    | IPhysicsImpulseIntegration;
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Scene Manager
@@ -842,11 +866,25 @@ export class SceneManager {
     private normalizeTransform(t?: Partial<ITransform>): ITransform {
         const def: ITransform = { position: { x: 0, y: 0, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scaling: { x: 1, y: 1, z: 1 } };
         if (!t) return def;
-        return {
+        const result: ITransform = {
             position: t.position ? this.parseVector3(t.position) : def.position,
             rotation: t.rotation ? this.parseVector3(t.rotation) : def.rotation,
             scaling: t.scaling ? this.parseVector3(t.scaling) : def.scaling,
         };
+        if (t.rotationQuaternion) {
+            result.rotationQuaternion = this.parseQuaternion(t.rotationQuaternion);
+        }
+        return result;
+    }
+
+    private parseQuaternion(v: unknown): IQuaternion {
+        if (Array.isArray(v) && v.length >= 4) {
+            return { x: v[0], y: v[1], z: v[2], w: v[3] };
+        }
+        if (typeof v === "object" && v !== null && "x" in v && "w" in v) {
+            return v as IQuaternion;
+        }
+        return { x: 0, y: 0, z: 0, w: 1 };
     }
 
     private parseColor3(v: unknown): IColor3 {
@@ -1144,6 +1182,9 @@ export class SceneManager {
         }
         if (transform.rotation) {
             node.transform.rotation = this.parseVector3(transform.rotation);
+        }
+        if (transform.rotationQuaternion) {
+            node.transform.rotationQuaternion = this.parseQuaternion(transform.rotationQuaternion);
         }
         if (transform.scaling) {
             node.transform.scaling = this.parseVector3(transform.scaling);
@@ -2624,6 +2665,9 @@ export class SceneManager {
                     lines.push(
                         `  [${i}] physicsPositionReset: button "${integ.triggerButtonName}" → reset ${integ.resets.map((r) => `"${r.meshName}" to (${r.position.x},${r.position.y},${r.position.z})`).join(", ")}${integ.resetCollisionCounter ? " + reset counter" : ""}`
                     );
+                    break;
+                case "physicsImpulse":
+                    lines.push(`  [${i}] physicsImpulse: button "${integ.triggerButtonName}" → throw "${integ.meshName}" (strength=${integ.strength})`);
                     break;
                 default:
                     lines.push(`  [${i}] ${JSON.stringify(integ)}`);

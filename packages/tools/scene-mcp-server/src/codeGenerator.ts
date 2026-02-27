@@ -35,11 +35,13 @@ import {
     type IGuiButtonEventIntegration,
     type ICollisionCounterIntegration,
     type IPhysicsPositionResetIntegration,
+    type IPhysicsImpulseIntegration,
     type ISerializedInspector,
     type IVector3,
     type IColor3,
     type IColor4,
     type ITransform,
+    type IQuaternion,
 } from "./sceneManager.js";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -522,12 +524,19 @@ function generateMaterial(mat: ISerializedMaterial, sceneVar: string): string {
     return lines.join("\n");
 }
 
+function quat(q: IQuaternion): string {
+    return `new BABYLON.Quaternion(${q.x}, ${q.y}, ${q.z}, ${q.w})`;
+}
+
 function generateTransformCode(v: string, transform: ITransform): string {
     const lines: string[] = [];
     if (transform.position && (transform.position.x !== 0 || transform.position.y !== 0 || transform.position.z !== 0)) {
         lines.push(`${v}.position = ${vec3(transform.position)};`);
     }
-    if (transform.rotation && (transform.rotation.x !== 0 || transform.rotation.y !== 0 || transform.rotation.z !== 0)) {
+    if (transform.rotationQuaternion) {
+        // Quaternion takes priority over Euler rotation (required for physics bodies)
+        lines.push(`${v}.rotationQuaternion = ${quat(transform.rotationQuaternion)};`);
+    } else if (transform.rotation && (transform.rotation.x !== 0 || transform.rotation.y !== 0 || transform.rotation.z !== 0)) {
         lines.push(`${v}.rotation = ${vec3(transform.rotation)};`);
     }
     if (transform.scaling && (transform.scaling.x !== 1 || transform.scaling.y !== 1 || transform.scaling.z !== 1)) {
@@ -2015,6 +2024,33 @@ function generateIntegrations(integrations: ISerializedIntegration[], scene: ISe
             lines.push(`    _collisionCount = 0;`);
             lines.push(`    ${counterVar}.text = "${sanitizeStringLiteral(counterInt.prefix)}0";`);
         }
+        lines.push(`});`);
+    }
+
+    // ── Physics impulse (throw from camera) on button click ───────────────
+    const impulses = integrations.filter((i): i is IPhysicsImpulseIntegration => i.type === "physicsImpulse");
+    for (const imp of impulses) {
+        const btnVar = resolveGuiVar(imp.triggerButtonName);
+        const meshVar = varName(imp.meshName);
+        lines.push(``);
+        lines.push(`// Physics impulse: "${imp.triggerButtonName}" → throw "${imp.meshName}" from camera`);
+        lines.push(`${btnVar}.onPointerUpObservable.add(() => {`);
+        lines.push(`    const _cam = ${sceneVar}.activeCamera;`);
+        lines.push(`    if (!_cam) return;`);
+        lines.push(`    // Teleport mesh to camera position`);
+        lines.push(`    ${meshVar}PhysicsBody.disablePreStep = false;`);
+        lines.push(`    ${meshVar}.position.copyFrom(_cam.position);`);
+        lines.push(`    // Reset velocities`);
+        lines.push(`    ${meshVar}PhysicsBody.setLinearVelocity(BABYLON.Vector3.Zero());`);
+        lines.push(`    ${meshVar}PhysicsBody.setAngularVelocity(BABYLON.Vector3.Zero());`);
+        lines.push(`    // Compute forward direction from camera`);
+        lines.push(`    const _forward = _cam.getForwardRay(1).direction.normalize();`);
+        lines.push(`    const _impulse = _forward.scale(${imp.strength});`);
+        lines.push(`    ${meshVar}PhysicsBody.applyImpulse(_impulse, ${meshVar}.getAbsolutePosition());`);
+        lines.push(`    // Re-enable preStep after one frame so physics takes over`);
+        lines.push(`    ${sceneVar}.onAfterRenderObservable.addOnce(() => {`);
+        lines.push(`        ${meshVar}PhysicsBody.disablePreStep = true;`);
+        lines.push(`    });`);
         lines.push(`});`);
     }
 

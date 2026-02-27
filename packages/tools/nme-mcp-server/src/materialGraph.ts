@@ -139,6 +139,82 @@ export const AnimationTypes: Record<string, number> = {
     Time: 1,
 };
 
+/**
+ * Valid vertex buffer attribute names in Babylon.js.
+ * Used to validate and normalise InputBlock attributeName values.
+ */
+const ValidAttributeNames = new Set([
+    "position",
+    "normal",
+    "tangent",
+    "uv",
+    "uv2",
+    "uv3",
+    "uv4",
+    "uv5",
+    "uv6",
+    "color",
+    "matricesIndices",
+    "matricesWeights",
+    "matricesIndicesExtra",
+    "matricesWeightsExtra",
+]);
+
+/**
+ * Common LLM mistakes for attribute names → correct Babylon.js attribute name.
+ * The PBR and Light blocks declare a local `vec4 worldPos` in the vertex shader,
+ * so using "worldPos" as an attribute name causes a fatal GLSL name collision.
+ */
+const AttributeNameAliases: Record<string, string> = {
+    pos: "position",
+    worldpos: "position",
+    worldposition: "position",
+    world_position: "position",
+    vertexposition: "position",
+    vertex_position: "position",
+    norm: "position", // "norm" is ambiguous but "normal" is more likely
+    worldnormal: "normal",
+    worldnorm: "normal",
+    world_normal: "normal",
+    vertexnormal: "normal",
+    vertex_normal: "normal",
+};
+// Fix "norm" — it almost certainly means "normal", not "position"
+AttributeNameAliases["norm"] = "normal";
+
+/**
+ * Normalise an InputBlock attribute name to a valid Babylon.js vertex attribute.
+ * Returns the corrected name and an optional warning if it was remapped.
+ * @param raw - The raw attribute name to normalise.
+ * @returns An object containing the normalised name and an optional warning message.
+ */
+function normaliseAttributeName(raw: unknown): { name: string; warning?: string } {
+    if (typeof raw !== "string") {
+        return { name: String(raw) };
+    }
+    // Already valid
+    if (ValidAttributeNames.has(raw)) {
+        return { name: raw };
+    }
+    // Check aliases (case-insensitive)
+    const lower = raw.toLowerCase().replace(/[\s_-]/g, "");
+    const mapped = AttributeNameAliases[lower];
+    if (mapped) {
+        return {
+            name: mapped,
+            warning: `⚠ attributeName "${raw}" is not a valid vertex attribute. ` + `Auto-corrected to "${mapped}". ` + `Valid names: ${[...ValidAttributeNames].join(", ")}.`,
+        };
+    }
+    // Unknown — return as-is but warn
+    return {
+        name: raw,
+        warning:
+            `⚠ attributeName "${raw}" is not a recognised vertex attribute. ` +
+            `Valid names: ${[...ValidAttributeNames].join(", ")}. ` +
+            `Using it anyway — this may cause shader errors.`,
+    };
+}
+
 // ─── Type Compatibility ───────────────────────────────────────────────────
 
 /**
@@ -428,6 +504,14 @@ export class MaterialGraphManager {
 
         // For InputBlock: auto-derive mode and normalise the value
         if (blockType === "InputBlock") {
+            // Normalise attributeName to a valid Babylon.js vertex attribute
+            if (block["attributeName"] !== undefined) {
+                const attrResult = normaliseAttributeName(block["attributeName"]);
+                block["attributeName"] = attrResult.name;
+                if (attrResult.warning) {
+                    warnings.push(attrResult.warning);
+                }
+            }
             // Auto-derive mode from context when not explicitly set (still Undefined=3)
             if (block["mode"] === 3) {
                 if (block["attributeName"] !== undefined) {
@@ -1173,6 +1257,14 @@ export class MaterialGraphManager {
 
         // Re-normalise InputBlock value after property changes
         if (typeName === "InputBlock") {
+            // Normalise attributeName to a valid Babylon.js vertex attribute
+            if (block["attributeName"] !== undefined) {
+                const attrResult = normaliseAttributeName(block["attributeName"]);
+                block["attributeName"] = attrResult.name;
+                if (attrResult.warning) {
+                    return attrResult.warning;
+                }
+            }
             // Auto-set Attribute mode when attributeName is provided
             if (block["attributeName"] !== undefined && (block["mode"] === 3 || block["mode"] === 0)) {
                 block["mode"] = 1; // Attribute — reads from vertex buffer
