@@ -1113,7 +1113,16 @@ server.registerTool(
         // Inline physics body
         let physicsMsg = "";
         if (physics) {
-            const pResult = manager.addPhysicsBody(sceneName, result.id, physics.bodyType, physics.shapeType, {
+            // Normalize bodyType (case-insensitive string → number, same as add_physics_body standalone)
+            let resolvedInlineBodyType: string | number = physics.bodyType;
+            if (typeof resolvedInlineBodyType === "string") {
+                const btMap: Record<string, number> = { static: 0, animated: 1, dynamic: 2 };
+                const mapped = btMap[resolvedInlineBodyType.toLowerCase()];
+                if (mapped !== undefined) {
+                    resolvedInlineBodyType = mapped;
+                }
+            }
+            const pResult = manager.addPhysicsBody(sceneName, result.id, resolvedInlineBodyType, physics.shapeType, {
                 mass: physics.mass,
                 friction: physics.friction,
                 restitution: physics.restitution,

@@ -405,8 +405,8 @@ export const AnimationDataTypes: Record<string, number> = {
 
 export const PhysicsBodyTypes: Record<string, number> = {
     Static: 0,
-    Dynamic: 1,
-    Animated: 2,
+    Animated: 1,
+    Dynamic: 2,
 };
 
 export const PhysicsShapeTypes: Record<string, string> = {
