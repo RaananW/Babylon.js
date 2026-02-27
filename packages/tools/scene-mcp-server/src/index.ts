@@ -83,6 +83,7 @@ const PhysicsSchema = z
         restitution: z.number().optional().describe("Bounciness (0-1)"),
         linearDamping: z.number().optional().describe("Linear damping (0-1)"),
         angularDamping: z.number().optional().describe("Angular damping (0-1)"),
+        isTrigger: z.boolean().optional().describe("Whether this shape is a trigger/sensor (detects overlap but no physical response)"),
     })
     .optional()
     .describe("Inline physics body. If provided, a physics body is automatically added to this mesh after creation.");
@@ -1128,6 +1129,7 @@ server.registerTool(
                 restitution: physics.restitution,
                 linearDamping: physics.linearDamping,
                 angularDamping: physics.angularDamping,
+                isTrigger: physics.isTrigger,
             });
             if (pResult === "OK") {
                 physicsMsg = ` Physics: ${physics.shapeType} (${physics.bodyType}).`;
@@ -1173,6 +1175,7 @@ server.registerTool(
             sceneName: z.string().describe("Name of the scene"),
             meshId: z.string().describe("Mesh ID or name"),
             isVisible: z.boolean().optional().describe("Whether the mesh is visible"),
+            visible: z.boolean().optional().describe("Alias for isVisible"),
             isPickable: z.boolean().optional().describe("Whether the mesh is pickable by ray-casting"),
             receiveShadows: z.boolean().optional().describe("Whether the mesh receives shadows"),
             castsShadows: z.boolean().optional().describe("Whether the mesh is included in shadow generators"),
@@ -1180,7 +1183,11 @@ server.registerTool(
             metadata: z.record(z.string(), z.unknown()).optional().describe("Custom metadata"),
         },
     },
-    async ({ sceneName, meshId, ...props }) => {
+    async ({ sceneName, meshId, visible, ...props }) => {
+        // Gap 54: accept `visible` as alias for `isVisible`
+        if (visible !== undefined && props.isVisible === undefined) {
+            props.isVisible = visible;
+        }
         const result = manager.setMeshProperties(sceneName, meshId, props as Record<string, unknown>);
         return {
             content: [{ type: "text", text: result === "OK" ? `Mesh "${meshId}" updated.` : `Error: ${result}` }],
@@ -1486,9 +1493,25 @@ server.registerTool(
             restitution: z.number().optional().describe("Bounciness (0-1)"),
             linearDamping: z.number().optional().describe("Linear damping (0-1)"),
             angularDamping: z.number().optional().describe("Angular damping (0-1)"),
+            isTrigger: z.boolean().optional().describe("Whether this shape is a trigger/sensor (detects overlap but no physical response)"),
         },
     },
-    async ({ sceneName, meshId, meshName, name: nameAlias, bodyType, type: typeAlias, shapeType, shape, mass, friction, restitution, linearDamping, angularDamping }) => {
+    async ({
+        sceneName,
+        meshId,
+        meshName,
+        name: nameAlias,
+        bodyType,
+        type: typeAlias,
+        shapeType,
+        shape,
+        mass,
+        friction,
+        restitution,
+        linearDamping,
+        angularDamping,
+        isTrigger,
+    }) => {
         // Gap 48 fix: resolve aliases
         const resolvedMeshId = meshId ?? meshName ?? nameAlias;
         if (!resolvedMeshId) {
@@ -1529,6 +1552,7 @@ server.registerTool(
             restitution,
             linearDamping,
             angularDamping,
+            isTrigger,
         });
         return {
             content: [
@@ -1918,6 +1942,26 @@ server.registerTool(
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
         return { content: [{ type: "text", text: `Added ${constraintType} constraint [${result.id}] "${name}" between "${parentMeshId}" and "${childMeshId}".` }] };
+    }
+);
+
+server.registerTool(
+    "remove_physics_body",
+    {
+        description:
+            "Remove the physics body from a mesh, leaving the mesh intact. " +
+            "Use this when you want to make a mesh non-physical (e.g., a trigger zone that shouldn't block other objects).",
+        inputSchema: {
+            sceneName: z.string().describe("Name of the scene"),
+            meshId: z.string().describe("Mesh ID or name"),
+        },
+    },
+    async ({ sceneName, meshId }) => {
+        const result = manager.removePhysicsBody(sceneName, meshId);
+        return {
+            content: [{ type: "text", text: result === "OK" ? `Removed physics body from "${meshId}".` : `Error: ${result}` }],
+            isError: result !== "OK",
+        };
     }
 );
 
@@ -2961,6 +3005,7 @@ server.registerTool(
                         restitution: m.physics.restitution,
                         linearDamping: m.physics.linearDamping,
                         angularDamping: m.physics.angularDamping,
+                        isTrigger: m.physics.isTrigger,
                     });
                     line += pResult === "OK" ? ` + physics (${m.physics.shapeType})` : ` [physics error: ${pResult}]`;
                 }

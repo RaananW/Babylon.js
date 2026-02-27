@@ -741,6 +741,9 @@ function generatePhysicsBody(meshName: string, mesh: ISerializedMesh, enableColl
         lines.push(`${v}PhysicsBody.setAngularDamping(${p.angularDamping});`);
     }
 
+    if (p.isTrigger) {
+        lines.push(`${v}PhysicsShape.isTrigger = true;`);
+    }
     lines.push(`${v}PhysicsBody.shape = ${v}PhysicsShape;`);
 
     if (enableCollisionCallbacks) {

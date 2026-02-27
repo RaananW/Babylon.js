@@ -329,6 +329,8 @@ export interface ISerializedPhysicsBody {
     linearDamping?: number;
     /** Angular damping */
     angularDamping?: number;
+    /** Whether this shape is a trigger/sensor (detects overlap but no physical response) */
+    isTrigger?: boolean;
 }
 
 /**
@@ -862,10 +864,14 @@ export class SceneManager {
      * Normalize a transform so position/rotation/scaling are always {x,y,z} objects,
      * not raw arrays.  This prevents `vec3()` in the code generator from producing
      * `undefined` when the LLM passes array notation like `[0, -10, 0]`.
+     * @param t Partial transform with optional position/rotation/scaling as arrays or objects
+     * @returns Normalized transform with position/rotation/scaling as objects
      */
     private normalizeTransform(t?: Partial<ITransform>): ITransform {
         const def: ITransform = { position: { x: 0, y: 0, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scaling: { x: 1, y: 1, z: 1 } };
-        if (!t) return def;
+        if (!t) {
+            return def;
+        }
         const result: ITransform = {
             position: t.position ? this.parseVector3(t.position) : def.position,
             rotation: t.rotation ? this.parseVector3(t.rotation) : def.rotation,
@@ -1511,6 +1517,7 @@ export class SceneManager {
             restitution?: number;
             linearDamping?: number;
             angularDamping?: number;
+            isTrigger?: boolean;
         }
     ): string {
         const scene = this.getScene(sceneName);
@@ -1535,7 +1542,24 @@ export class SceneManager {
             restitution: options?.restitution,
             linearDamping: options?.linearDamping,
             angularDamping: options?.angularDamping,
+            isTrigger: options?.isTrigger,
         };
+        return "OK";
+    }
+
+    removePhysicsBody(sceneName: string, meshId: string): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        const mesh = this.findMesh(scene, meshId);
+        if (!mesh) {
+            return `Mesh "${meshId}" not found.`;
+        }
+        if (!mesh.physics) {
+            return `Mesh "${meshId}" has no physics body.`;
+        }
+        delete mesh.physics;
         return "OK";
     }
 
