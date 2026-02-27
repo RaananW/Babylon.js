@@ -1895,7 +1895,9 @@ function generateIntegrations(integrations: ISerializedIntegration[], scene: ISe
             const tgtBody = `${varName(c.targetBody)}PhysicsBody`;
             lines.push(`    if ((bodyA === ${srcBody} && bodyB === ${tgtBody}) || (bodyB === ${srcBody} && bodyA === ${tgtBody})) {`);
             if (fgCoordVar) {
-                lines.push(`        ${fgCoordVar}.notifyCustomEvent("${sanitizeStringLiteral(c.eventId)}", {});`);
+                lines.push(
+                    `        try { ${fgCoordVar}.notifyCustomEvent("${sanitizeStringLiteral(c.eventId)}", {}); } catch(e) { console.error("Collision FlowGraph event error:", e); }`
+                );
             }
             if (counterInt) {
                 const counterVar = resolveGuiVar(counterInt.textBlockName);
@@ -2349,12 +2351,6 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         bodyParts.push(``);
     }
 
-    // ── Integrations (runtime bridges) ────────────────────────────────────
-    if (scene.integrations && scene.integrations.length > 0) {
-        bodyParts.push(generateIntegrations(scene.integrations, scene, S, guiControlVarMap));
-        bodyParts.push(``);
-    }
-
     // ── Inspector v2 ──────────────────────────────────────────────────────
     const hasInspector = !!scene.inspector?.enabled;
     if (hasInspector) {
@@ -2390,6 +2386,15 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
             bodyParts.push(generateFlowGraph(fg, S));
             bodyParts.push(``);
         }
+    }
+
+    // ── Integrations (runtime bridges) ────────────────────────────────────
+    // IMPORTANT: Must come AFTER flow graphs so that the coordinator variable
+    // (e.g. gameLogicCoordinator) is already declared and initialized before
+    // button/collision handlers that reference it are registered.
+    if (scene.integrations && scene.integrations.length > 0) {
+        bodyParts.push(generateIntegrations(scene.integrations, scene, S, guiControlVarMap));
+        bodyParts.push(``);
     }
 
     // ── Assemble ──────────────────────────────────────────────────────────

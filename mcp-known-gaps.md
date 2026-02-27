@@ -156,6 +156,13 @@ These are UX friction points where the LLM (or a human) naturally guesses a para
 - **Fix**: Corrected `catalog.ts` mappings (`Animated: 1, Dynamic: 2`) and added Gap21-style normalization to the inline physics path in `add_mesh`.
 - **Workaround** (before fix): Re-add the physics body using the standalone `add_physics_body` tool, which has the correct normalization and will overwrite the stored bodyType to 2.
 
+### Gap 52 (FIXED): Integrations generated before FlowGraph coordinator — buttons silently do nothing
+
+- **Symptom**: GUI buttons wired via `guiButton` integrations to a FlowGraph coordinator would silently fail. Clicking Throw/Reset produced no visible result even though `notifyCustomEvent` was wrapped in `try/catch`.
+- **Root cause**: `codeGenerator.ts` emitted the `// ─── Integrations` section **before** `// ─── Flow Graphs`. The FlowGraph section contains `const gameLogicCoordinator = await ParseCoordinatorAsync(...)`. Because it's a `const`, it's in the Temporal Dead Zone (TDZ) until that `await` resolves. The button closure captured the name `gameLogicCoordinator` — calling it before the `await` completed threw a `ReferenceError`, which was swallowed by the surrounding `try/catch`, making buttons appear dead. Additionally, the collision handler had **no** `try/catch`, so if a collision arrived before the coordinator was ready it would crash uncaught.
+- **Fix**: Moved the `integrations` bodyPart to after the flow graph section so the coordinator is fully initialized before any handler is registered. Also added `try/catch` to the collision `notifyCustomEvent` call.
+- **File**: `packages/tools/scene-mcp-server/src/codeGenerator.ts`
+
 ### Summary of naming friction
 
 | Tool                    | LLM guessed          | Correct param         | Gap |
