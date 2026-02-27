@@ -615,7 +615,8 @@ server.registerTool(
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().describe("Name for the light"),
-            type: z.enum(["HemisphericLight", "PointLight", "DirectionalLight", "SpotLight"]).describe("Light type"),
+            type: z.enum(["HemisphericLight", "PointLight", "DirectionalLight", "SpotLight"]).optional().describe("Light type"),
+            lightType: z.enum(["HemisphericLight", "PointLight", "DirectionalLight", "SpotLight"]).optional().describe("Alias for type — Light type"),
             properties: z.record(z.string(), z.unknown()).optional().describe("Light properties object. You can also use the top-level convenience aliases below instead."),
             options: z.record(z.string(), z.unknown()).optional().describe("Alias for properties — light properties object"),
             // Convenience aliases — merged into properties (top-level wins)
@@ -631,7 +632,29 @@ server.registerTool(
             shadowEnabled: z.boolean().optional().describe("Enable shadow generation for this light"),
         },
     },
-    async ({ sceneName, name, type, properties, options: optionsAlias, direction, position, intensity, diffuse, specular, groundColor, range, angle, exponent, shadowEnabled }) => {
+    async ({
+        sceneName,
+        name,
+        type,
+        lightType,
+        properties,
+        options: optionsAlias,
+        direction,
+        position,
+        intensity,
+        diffuse,
+        specular,
+        groundColor,
+        range,
+        angle,
+        exponent,
+        shadowEnabled,
+    }) => {
+        // Gap 45 fix: resolve lightType alias
+        const resolvedType = type ?? lightType;
+        if (!resolvedType) {
+            return { content: [{ type: "text", text: "Error: Either 'type' or 'lightType' must be provided." }], isError: true };
+        }
         // Merge convenience aliases into properties (top-level wins)
         const mergedProps: Record<string, unknown> = { ...((optionsAlias as Record<string, unknown>) || {}), ...((properties as Record<string, unknown>) || {}) };
         if (direction !== undefined) {
@@ -665,12 +688,12 @@ server.registerTool(
             mergedProps.shadowEnabled = shadowEnabled;
         }
 
-        const result = manager.addLight(sceneName, name, type, Object.keys(mergedProps).length > 0 ? mergedProps : undefined);
+        const result = manager.addLight(sceneName, name, resolvedType, Object.keys(mergedProps).length > 0 ? mergedProps : undefined);
         if (typeof result === "string") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
         return {
-            content: [{ type: "text", text: `Added light [${result.id}] "${name}" (${type}).` }],
+            content: [{ type: "text", text: `Added light [${result.id}] "${name}" (${resolvedType}).` }],
         };
     }
 );
@@ -939,7 +962,8 @@ server.registerTool(
             "Common properties can be passed at top level as convenience or inside properties object.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
-            materialId: z.string().describe("Material ID or name"),
+            materialId: z.string().optional().describe("Material ID or name"),
+            materialName: z.string().optional().describe("Alias for materialId — material name"),
             properties: z.record(z.string(), z.unknown()).optional().describe("Material properties to update: albedoColor, metallic, roughness, diffuseColor, etc."),
             // Convenience aliases — same as add_material
             albedoColor: z
@@ -963,7 +987,12 @@ server.registerTool(
             alpha: z.number().optional().describe("Shorthand for properties.alpha — 0 to 1"),
         },
     },
-    async ({ sceneName, materialId, properties, albedoColor, diffuseColor, specularColor, emissiveColor, metallic, roughness, alpha }) => {
+    async ({ sceneName, materialId, materialName, properties, albedoColor, diffuseColor, specularColor, emissiveColor, metallic, roughness, alpha }) => {
+        // Gap 46 fix: resolve materialName alias
+        const resolvedMaterialId = materialId ?? materialName;
+        if (!resolvedMaterialId) {
+            return { content: [{ type: "text", text: "Error: Either 'materialId' or 'materialName' must be provided." }], isError: true };
+        }
         const mergedProperties: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
         if (albedoColor !== undefined && !("albedoColor" in mergedProperties)) {
             mergedProperties.albedoColor = albedoColor;
@@ -990,14 +1019,14 @@ server.registerTool(
         if (Object.keys(mergedProperties).length === 0) {
             return { content: [{ type: "text", text: "Error: No properties provided to update." }], isError: true };
         }
-        const result = manager.configureMaterialProperties(sceneName, materialId, mergedProperties);
+        const result = manager.configureMaterialProperties(sceneName, resolvedMaterialId, mergedProperties);
         if (result !== "OK") {
             return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
         }
         const summary = Object.entries(mergedProperties)
             .map(([k, v]) => `${k}: ${JSON.stringify(v)}`)
             .join(", ");
-        return { content: [{ type: "text", text: `Material "${materialId}" updated: { ${summary} }` }] };
+        return { content: [{ type: "text", text: `Material "${resolvedMaterialId}" updated: { ${summary} }` }] };
     }
 );
 
@@ -1199,14 +1228,16 @@ server.registerTool(
             sceneName: z.string().describe("Name of the scene"),
             nodeId: z.string().optional().describe("Node ID or name"),
             meshId: z.string().optional().describe("Alias for nodeId — mesh name or ID"),
+            meshName: z.string().optional().describe("Alias for nodeId — mesh name"),
             name: z.string().optional().describe("Alias for nodeId — node name"),
             position: Vector3Schema.describe("New position as {x,y,z} or [x,y,z]"),
             rotation: Vector3Schema.describe("New rotation in radians as {x,y,z} or [x,y,z]"),
             scaling: Vector3Schema.describe("New scaling as {x,y,z} or [x,y,z]"),
         },
     },
-    async ({ sceneName, nodeId, meshId, name: nameAlias, position, rotation, scaling }) => {
-        const resolvedNodeId = nodeId ?? meshId ?? nameAlias;
+    async ({ sceneName, nodeId, meshId, meshName, name: nameAlias, position, rotation, scaling }) => {
+        // Gap 47 fix: also accept meshName
+        const resolvedNodeId = nodeId ?? meshId ?? meshName ?? nameAlias;
         if (!resolvedNodeId) {
             return { content: [{ type: "text", text: "Error: Either nodeId, meshId, or name must be provided." }], isError: true };
         }
@@ -1427,9 +1458,16 @@ server.registerTool(
         description: "Add a physics body to a mesh. Requires physics to be enabled in environment settings.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
-            meshId: z.string().describe("Mesh ID or name"),
-            bodyType: z.union([z.string(), z.number()]).describe("Body type: Static (immovable), Dynamic (fully simulated), Animated (driven by animation). Case-insensitive."),
-            shapeType: z.string().describe("Collision shape type: Box, Sphere, Capsule, Cylinder, ConvexHull, Mesh, Container (case-insensitive)"),
+            meshId: z.string().optional().describe("Mesh ID or name"),
+            meshName: z.string().optional().describe("Alias for meshId — mesh name"),
+            name: z.string().optional().describe("Alias for meshId — mesh name"),
+            bodyType: z
+                .union([z.string(), z.number()])
+                .optional()
+                .describe("Body type: Static (immovable), Dynamic (fully simulated), Animated (driven by animation). Case-insensitive."),
+            type: z.union([z.string(), z.number()]).optional().describe("Alias for bodyType"),
+            shapeType: z.string().optional().describe("Collision shape type: Box, Sphere, Capsule, Cylinder, ConvexHull, Mesh, Container (case-insensitive)"),
+            shape: z.string().optional().describe("Alias for shapeType"),
             mass: z.number().optional().describe("Mass (kg). Use 0 for static bodies."),
             friction: z.number().optional().describe("Friction coefficient (0-1)"),
             restitution: z.number().optional().describe("Bounciness (0-1)"),
@@ -1437,9 +1475,22 @@ server.registerTool(
             angularDamping: z.number().optional().describe("Angular damping (0-1)"),
         },
     },
-    async ({ sceneName, meshId, bodyType, shapeType, mass, friction, restitution, linearDamping, angularDamping }) => {
+    async ({ sceneName, meshId, meshName, name: nameAlias, bodyType, type: typeAlias, shapeType, shape, mass, friction, restitution, linearDamping, angularDamping }) => {
+        // Gap 48 fix: resolve aliases
+        const resolvedMeshId = meshId ?? meshName ?? nameAlias;
+        if (!resolvedMeshId) {
+            return { content: [{ type: "text", text: "Error: Either 'meshId', 'meshName', or 'name' must be provided." }], isError: true };
+        }
+        const resolvedBodyTypeRaw = bodyType ?? typeAlias;
+        if (resolvedBodyTypeRaw === undefined) {
+            return { content: [{ type: "text", text: "Error: Either 'bodyType' or 'type' must be provided." }], isError: true };
+        }
+        const resolvedShapeTypeRaw = shapeType ?? shape;
+        if (!resolvedShapeTypeRaw) {
+            return { content: [{ type: "text", text: "Error: Either 'shapeType' or 'shape' must be provided." }], isError: true };
+        }
         // Gap 21 fix: Normalize bodyType — accept case-insensitive strings and map to numbers
-        let resolvedBodyType = bodyType;
+        let resolvedBodyType: string | number = resolvedBodyTypeRaw;
         if (typeof resolvedBodyType === "string") {
             const bodyTypeMap: Record<string, number> = { static: 0, animated: 1, dynamic: 2 };
             const mapped = bodyTypeMap[resolvedBodyType.toLowerCase()];
@@ -1457,9 +1508,9 @@ server.registerTool(
             mesh: "Mesh",
             container: "Container",
         };
-        const resolvedShapeType = shapeTypeMap[shapeType.toLowerCase()] ?? shapeType;
+        const resolvedShapeType = shapeTypeMap[resolvedShapeTypeRaw.toLowerCase()] ?? resolvedShapeTypeRaw;
 
-        const result = manager.addPhysicsBody(sceneName, meshId, resolvedBodyType, resolvedShapeType, {
+        const result = manager.addPhysicsBody(sceneName, resolvedMeshId, resolvedBodyType, resolvedShapeType, {
             mass,
             friction,
             restitution,
@@ -1470,7 +1521,7 @@ server.registerTool(
             content: [
                 {
                     type: "text",
-                    text: result === "OK" ? `Added physics body to "${meshId}" (${shapeType}, ${bodyType}).` : `Error: ${result}`,
+                    text: result === "OK" ? `Added physics body to "${resolvedMeshId}" (${resolvedShapeType}, ${resolvedBodyType}).` : `Error: ${result}`,
                 },
             ],
             isError: result !== "OK",

@@ -840,27 +840,39 @@ server.registerTool(
     {
         description: "Connect multiple signal pairs at once.",
         inputSchema: {
-            graphName: z.string().describe("Name of the flow graph"),
+            graphName: z.string().optional().describe("Name of the flow graph"),
+            name: z.string().optional().describe("Alias for graphName"),
             connections: z
                 .array(
                     z.object({
                         sourceBlockId: z.number(),
                         signalOutputName: z.string().optional().describe("Signal output name on source block"),
+                        signalOut: z.string().optional().describe("Alias for signalOutputName"),
                         outputName: z.string().optional().describe("Alias for signalOutputName"),
                         targetBlockId: z.number(),
-                        signalInputName: z.string().default("in"),
+                        signalInputName: z.string().optional().describe("Signal input name on target block (default: 'in')"),
+                        signalIn: z.string().optional().describe("Alias for signalInputName"),
+                        inName: z.string().optional().describe("Alias for signalInputName"),
+                        inputName: z.string().optional().describe("Alias for signalInputName"),
+                        graphName: z.string().optional().describe("Ignored here — use top-level graphName"),
                     })
                 )
                 .describe("Array of signal connections to make"),
         },
     },
-    async ({ graphName, connections }) => {
+    async ({ graphName, name: nameAlias, connections }) => {
+        // Gap 50 fix: resolve graphName alias
+        const resolvedGraphName = graphName ?? nameAlias;
+        if (!resolvedGraphName) {
+            return { content: [{ type: "text", text: "Error: Either 'graphName' or 'name' must be provided." }], isError: true };
+        }
         const results: string[] = [];
         for (const conn of connections) {
-            // Gap 18 — resolve outputName alias for signalOutputName
-            const resolvedOutputName = conn.signalOutputName ?? conn.outputName ?? "out";
-            const result = manager.connectSignal(graphName, conn.sourceBlockId, resolvedOutputName, conn.targetBlockId, conn.signalInputName);
-            results.push(result === "OK" ? `[${conn.sourceBlockId}].${resolvedOutputName} → [${conn.targetBlockId}].${conn.signalInputName}` : `Error: ${result}`);
+            // Gap 18 / Gap 50 — resolve output and input name aliases
+            const resolvedOutputName = conn.signalOutputName ?? conn.signalOut ?? conn.outputName ?? "out";
+            const resolvedInputName = conn.signalInputName ?? conn.signalIn ?? conn.inName ?? conn.inputName ?? "in";
+            const result = manager.connectSignal(resolvedGraphName, conn.sourceBlockId, resolvedOutputName, conn.targetBlockId, resolvedInputName);
+            results.push(result === "OK" ? `[${conn.sourceBlockId}].${resolvedOutputName} → [${conn.targetBlockId}].${resolvedInputName}` : `Error: ${result}`);
         }
         return { content: [{ type: "text", text: `Signal connections:\n${results.join("\n")}` }] };
     }

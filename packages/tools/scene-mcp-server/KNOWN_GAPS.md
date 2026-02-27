@@ -368,48 +368,55 @@ Discovered during basketball-game scene-building test using only MCP servers (sc
 
 ## Summary Table
 
-| #      | Gap                                                     | Status             | Category                | Server                 |
-| ------ | ------------------------------------------------------- | ------------------ | ----------------------- | ---------------------- |
-| 1      | Silent param stripping (Zod)                            | ✅ Partially fixed | Tool schema             | scene                  |
-| 2      | No configure_material                                   | ✅ Fixed           | Missing tool            | scene                  |
-| 3      | NME JSON file support                                   | ✅ Already impl.   | N/A                     | scene                  |
-| 4      | No physics FG blocks                                    | ⚠️ Workaround      | Core engine             | flow-graph             |
-| 5      | Phantom FG blocks                                       | ✅ Fixed           | Registry                | flow-graph             |
-| 6      | No clone FG block                                       | ⚠️ Workaround      | Core engine             | flow-graph             |
-| 7      | Cross-server NME ref                                    | ✅ Already impl.   | N/A                     | scene                  |
-| 8      | Missing uniqueId                                        | ✅ Fixed           | Code generator          | scene                  |
-| 9      | FG JSON as string                                       | ✅ Fixed           | Code generator          | scene                  |
-| 10     | coordinatorJsonFile                                     | ✅ Already impl.   | N/A                     | scene                  |
-| 11     | Camera/Light aliases                                    | ✅ Fixed           | Tool schema             | scene                  |
-| 12     | Batch mesh physics                                      | ✅ Fixed           | Tool schema             | scene                  |
-| 13     | Physics param name                                      | ✅ Fixed           | Tool schema             | scene                  |
-| 14     | Button text in codegen                                  | ✅ Fixed           | Code generator          | scene                  |
-| **15** | **Material type alias**                                 | **✅ Fixed**       | **Tool schema**         | **scene**              |
-| **16** | **GUI prop stripping**                                  | **✅ Fixed**       | **Tool schema**         | **gui**                |
-| **17** | **GUI name vs controlName**                             | **✅ Fixed**       | **Tool schema**         | **gui**                |
-| **18** | **FG param naming**                                     | **✅ Fixed**       | **Tool schema**         | **flow-graph**         |
-| 19     | FG variableName alias                                   | ✅ Fixed           | Config alias            | flow-graph             |
-| 20     | FunctionRef config.code                                 | ✅ Fixed           | Code generator          | scene + FG             |
-| **21** | **Physics bodyType/shapeType naming**                   | **✅ Fixed**       | **Tool schema**         | **scene**              |
-| **22** | **Physics motion type mapping swapped**                 | **✅ Fixed**       | **Code generator**      | **scene**              |
-| **23** | **configure_light param wrapping**                      | **✅ Fixed**       | **Tool schema**         | **scene**              |
-| **24** | **set_transform nodeId vs meshId**                      | **✅ Fixed**       | **Tool schema**         | **scene**              |
-| **25** | **attach_flow_graph param naming**                      | **✅ Fixed**       | **Tool schema**         | **scene**              |
-| **26** | **add_camera type vs cameraType**                       | **✅ Fixed**       | **Tool schema**         | **scene**              |
-| **27** | **GUI create_gui name vs guiName inconsistency**        | **✅ Fixed**       | **Tool schema**         | **gui**                |
-| **28** | **Constant block output named "output" not "value"**    | **✅ Fixed**       | **Block registry**      | **flow-graph**         |
-| **29** | **CodeExecution is data block, not execution**          | **🟡 Info**        | **Engine design**       | **flow-graph**         |
-| **30** | **collisionCounter integration misleadingly named**     | **✅ Fixed**       | **Tool schema**         | **scene**              |
-| **31** | **CodeExecution config.code not injected**              | **✅ Fixed**       | **Code generator**      | **scene**              |
-| **32** | **Event block `out` vs `done` signal wiring**           | **✅ Fixed**       | **Signal semantics**    | **flow-graph**         |
-| **33** | **`attach_flow_graph` duplicates instead of replacing** | **✅ Fixed**       | **Tool behavior**       | **scene**              |
-| **34** | **Config values not propagated to data input defaults** | **✅ Fixed**       | **Block serialization** | **flow-graph + scene** |
-| **35** | **`add_material` options don't set properties**         | **🟡 Unfixed**     | **Tool schema**         | **scene**              |
-| **36** | **`add_physics_body` params inside options**            | **🟡 Info**        | **Tool schema**         | **scene**              |
-| **37** | **Gap 21 case normalization blocked by JSON Schema**    | **✅ Fixed**       | **Tool schema**         | **scene**              |
-| **38** | **`connect_signal` param name mismatch → wrong port**   | **✅ Fixed**       | **Tool schema**         | **flow-graph**         |
-| **39** | **`connect_signal` parameter naming friction**          | **✅ Fixed**       | **Tool schema**         | **flow-graph**         |
-| **40** | **`add_camera` ignores construction options**           | **✅ Fixed**       | **Tool schema**         | **scene**              |
-| **41** | **`add_light` ignores construction options**            | **✅ Fixed**       | **Tool schema**         | **scene**              |
-| **42** | **`connect_signal` success message shows raw param**    | **✅ Fixed**       | **Tool display**        | **flow-graph**         |
-| **43** | **Physics code generates Cannon.js instead of Havok**   | **✅ Fixed**       | **Code generator**      | **scene**              |
+| #      | Gap                                                           | Status             | Category                | Server                 |
+| ------ | ------------------------------------------------------------- | ------------------ | ----------------------- | ---------------------- |
+| 1      | Silent param stripping (Zod)                                  | ✅ Partially fixed | Tool schema             | scene                  |
+| 2      | No configure_material                                         | ✅ Fixed           | Missing tool            | scene                  |
+| 3      | NME JSON file support                                         | ✅ Already impl.   | N/A                     | scene                  |
+| 4      | No physics FG blocks                                          | ⚠️ Workaround      | Core engine             | flow-graph             |
+| 5      | Phantom FG blocks                                             | ✅ Fixed           | Registry                | flow-graph             |
+| 6      | No clone FG block                                             | ⚠️ Workaround      | Core engine             | flow-graph             |
+| 7      | Cross-server NME ref                                          | ✅ Already impl.   | N/A                     | scene                  |
+| 8      | Missing uniqueId                                              | ✅ Fixed           | Code generator          | scene                  |
+| 9      | FG JSON as string                                             | ✅ Fixed           | Code generator          | scene                  |
+| 10     | coordinatorJsonFile                                           | ✅ Already impl.   | N/A                     | scene                  |
+| 11     | Camera/Light aliases                                          | ✅ Fixed           | Tool schema             | scene                  |
+| 12     | Batch mesh physics                                            | ✅ Fixed           | Tool schema             | scene                  |
+| 13     | Physics param name                                            | ✅ Fixed           | Tool schema             | scene                  |
+| 14     | Button text in codegen                                        | ✅ Fixed           | Code generator          | scene                  |
+| **15** | **Material type alias**                                       | **✅ Fixed**       | **Tool schema**         | **scene**              |
+| **16** | **GUI prop stripping**                                        | **✅ Fixed**       | **Tool schema**         | **gui**                |
+| **17** | **GUI name vs controlName**                                   | **✅ Fixed**       | **Tool schema**         | **gui**                |
+| **18** | **FG param naming**                                           | **✅ Fixed**       | **Tool schema**         | **flow-graph**         |
+| 19     | FG variableName alias                                         | ✅ Fixed           | Config alias            | flow-graph             |
+| 20     | FunctionRef config.code                                       | ✅ Fixed           | Code generator          | scene + FG             |
+| **21** | **Physics bodyType/shapeType naming**                         | **✅ Fixed**       | **Tool schema**         | **scene**              |
+| **22** | **Physics motion type mapping swapped**                       | **✅ Fixed**       | **Code generator**      | **scene**              |
+| **23** | **configure_light param wrapping**                            | **✅ Fixed**       | **Tool schema**         | **scene**              |
+| **24** | **set_transform nodeId vs meshId**                            | **✅ Fixed**       | **Tool schema**         | **scene**              |
+| **25** | **attach_flow_graph param naming**                            | **✅ Fixed**       | **Tool schema**         | **scene**              |
+| **26** | **add_camera type vs cameraType**                             | **✅ Fixed**       | **Tool schema**         | **scene**              |
+| **27** | **GUI create_gui name vs guiName inconsistency**              | **✅ Fixed**       | **Tool schema**         | **gui**                |
+| **28** | **Constant block output named "output" not "value"**          | **✅ Fixed**       | **Block registry**      | **flow-graph**         |
+| **29** | **CodeExecution is data block, not execution**                | **🟡 Info**        | **Engine design**       | **flow-graph**         |
+| **30** | **collisionCounter integration misleadingly named**           | **✅ Fixed**       | **Tool schema**         | **scene**              |
+| **31** | **CodeExecution config.code not injected**                    | **✅ Fixed**       | **Code generator**      | **scene**              |
+| **32** | **Event block `out` vs `done` signal wiring**                 | **✅ Fixed**       | **Signal semantics**    | **flow-graph**         |
+| **33** | **`attach_flow_graph` duplicates instead of replacing**       | **✅ Fixed**       | **Tool behavior**       | **scene**              |
+| **34** | **Config values not propagated to data input defaults**       | **✅ Fixed**       | **Block serialization** | **flow-graph + scene** |
+| **35** | **`add_material` options don't set properties**               | **🟡 Unfixed**     | **Tool schema**         | **scene**              |
+| **36** | **`add_physics_body` params inside options**                  | **🟡 Info**        | **Tool schema**         | **scene**              |
+| **37** | **Gap 21 case normalization blocked by JSON Schema**          | **✅ Fixed**       | **Tool schema**         | **scene**              |
+| **38** | **`connect_signal` param name mismatch → wrong port**         | **✅ Fixed**       | **Tool schema**         | **flow-graph**         |
+| **39** | **`connect_signal` parameter naming friction**                | **✅ Fixed**       | **Tool schema**         | **flow-graph**         |
+| **40** | **`add_camera` ignores construction options**                 | **✅ Fixed**       | **Tool schema**         | **scene**              |
+| **41** | **`add_light` ignores construction options**                  | **✅ Fixed**       | **Tool schema**         | **scene**              |
+| **42** | **`connect_signal` success message shows raw param**          | **✅ Fixed**       | **Tool display**        | **flow-graph**         |
+| **43** | **Physics code generates Cannon.js instead of Havok**         | **✅ Fixed**       | **Code generator**      | **scene**              |
+| **44** | **`setBlockConfig` missing config alias normalization**       | **✅ Fixed**       | **Config alias**        | **flow-graph + scene** |
+| **45** | **`add_light` param `type` not `lightType`**                  | **✅ Fixed**       | **Param naming**        | **scene**              |
+| **46** | **`configure_material` uses `materialId` not `materialName`** | **✅ Fixed**       | **Param naming**        | **scene**              |
+| **47** | **`set_transform` param `name` not `meshName`**               | **✅ Fixed**       | **Param naming**        | **scene**              |
+| **48** | **`add_physics_body` `meshId`/`bodyType` naming**             | **✅ Fixed**       | **Param naming**        | **scene**              |
+| **49** | **GUI Button `buttonText` not `text`**                        | **✅ Fixed**       | **Param naming**        | **gui**                |
+| **50** | **`connect_signals_batch` `graphName` position**              | **✅ Fixed**       | **Param structure**     | **flow-graph**         |

@@ -139,6 +139,141 @@ export const AnimationTypes: Record<string, number> = {
     Time: 1,
 };
 
+// ─── Type Compatibility ───────────────────────────────────────────────────
+
+/**
+ * GLSL vec-size group for each NME connection point type.
+ * Types in the same group are compatible (e.g. Color3 ↔ Vector3 are both vec3).
+ * "any" means the type adapts to whatever it's connected to (AutoDetect, BasedOnInput).
+ */
+const _typeGroup: Record<string, string> = {
+    Float: "scalar",
+    Int: "scalar",
+    Vector2: "vec2",
+    Vector3: "vec3",
+    Color3: "vec3",
+    Vector4: "vec4",
+    Color4: "vec4",
+    Matrix: "matrix",
+    Object: "any",
+    AutoDetect: "any",
+    BasedOnInput: "any",
+};
+
+/**
+ * Reverse lookup: Numeric ConnectionPointTypes value → type name string.
+ */
+const _numericTypeToName: Record<number, string> = {};
+for (const [name, num] of Object.entries(ConnectionPointTypes)) {
+    _numericTypeToName[num] = name;
+}
+
+/**
+ * Resolve the effective type name of an output connection on a block.
+ * For InputBlocks, the type is stored as a numeric property on the block itself.
+ * For all other blocks, the type comes from the registry.
+ * @param block - The block containing the output connection.
+ * @param outputName - The name of the output connection to resolve the type for.
+ * @returns The resolved type name (e.g. "Float", "Vector3", "AutoDetect").
+ */
+function _resolveOutputType(block: ISerializedBlock, outputName: string): string {
+    // InputBlock: actual type is in block["type"] (numeric)
+    const blockClass = block.customType?.replace("BABYLON.", "");
+    if (blockClass === "InputBlock") {
+        const numType = block["type"] as number | undefined;
+        if (numType !== undefined && _numericTypeToName[numType]) {
+            return _numericTypeToName[numType];
+        }
+        return "AutoDetect";
+    }
+
+    // For other blocks, look up registry
+    const info = BlockRegistry[blockClass];
+    if (!info) {
+        return "AutoDetect";
+    }
+    const outDef = info.outputs.find((o) => o.name === outputName);
+    return outDef?.type ?? "AutoDetect";
+}
+
+/**
+ * Resolve the expected type of an input connection on a block from the registry.
+ * @param block - The block containing the input connection.
+ * @param inputName - The name of the input connection to resolve the type for.
+ * @returns The resolved type name (e.g. "Float", "Vector3", "AutoDetect").
+ */
+function _resolveInputType(block: ISerializedBlock, inputName: string): string {
+    const blockClass = block.customType?.replace("BABYLON.", "");
+    if (!blockClass) {
+        return "AutoDetect";
+    }
+    const info = BlockRegistry[blockClass];
+    if (!info) {
+        return "AutoDetect";
+    }
+    const inDef = info.inputs.find((i) => i.name === inputName);
+    return inDef?.type ?? "AutoDetect";
+}
+
+/**
+ * Check if two NME types are compatible for connection.
+ * Returns { compatible, warning?, suggestion? }
+ * @param outputType - The type of the output connection (e.g. "Float", "Vector3").
+ * @param inputType - The type of the input connection (e.g. "Float", "Vector3").
+ * @param targetBlock - The block the input connection belongs to (used for suggestions).
+ * @param targetInputName - The name of the input connection (used for suggestions).
+ * @returns An object indicating compatibility, with optional warning and suggestion messages.
+ */
+function _checkTypeCompatibility(
+    outputType: string,
+    inputType: string,
+    targetBlock: ISerializedBlock,
+    targetInputName: string
+): { compatible: boolean; warning?: string; suggestion?: string } {
+    const outGroup = _typeGroup[outputType] ?? "any";
+    const inGroup = _typeGroup[inputType] ?? "any";
+
+    // "any" group is always compatible (AutoDetect, BasedOnInput, Object)
+    if (outGroup === "any" || inGroup === "any") {
+        return { compatible: true };
+    }
+
+    // Same group is always compatible (e.g. Color3 ↔ Vector3, Float ↔ Int)
+    if (outGroup === inGroup) {
+        return { compatible: true };
+    }
+
+    // Scalar → vector promotion (Float → vec2/3/4): Babylon supports this
+    if (outGroup === "scalar") {
+        return { compatible: true, warning: `Type promotion: ${outputType} → ${inputType} (scalar will be broadcast to fill the vector).` };
+    }
+
+    // Different vec sizes: incompatible (e.g. Color3→Color4, vec3→vec4)
+    // Find a better input on the target block that matches the output group
+    const blockClass = targetBlock.customType?.replace("BABYLON.", "");
+    const info = blockClass ? BlockRegistry[blockClass] : undefined;
+    let suggestion: string | undefined;
+
+    if (info) {
+        const betterInputs = info.inputs.filter((inp) => {
+            const g = _typeGroup[inp.type] ?? "any";
+            return g === outGroup || g === "any";
+        });
+        if (betterInputs.length > 0) {
+            const names = betterInputs.map((i) => `"${i.name}" (${i.type})`).join(", ");
+            suggestion = `Consider connecting to ${names} instead of "${targetInputName}" (${inputType}).`;
+        }
+    }
+
+    return {
+        compatible: false,
+        warning:
+            `Type mismatch: output type ${outputType} (${outGroup}) is not compatible with input type ${inputType} (${inGroup}). ` +
+            `This will likely cause a shader compilation error.`,
+        suggestion,
+    };
+}
+
 // ─── Manager ──────────────────────────────────────────────────────────────
 
 /**
@@ -574,10 +709,29 @@ export class MaterialGraphManager {
             return `Input "${inputName}" not found on block ${targetBlockId} ("${targetBlock.name}"). Available: ${available}`;
         }
 
+        // ── Type-compatibility check ──────────────────────────────────
+        const outputType = _resolveOutputType(sourceBlock, outputName);
+        const inputType = _resolveInputType(targetBlock, inputName);
+        const compat = _checkTypeCompatibility(outputType, inputType, targetBlock, inputName);
+
+        if (!compat.compatible) {
+            const parts = [`TYPE MISMATCH WARNING: ${compat.warning}`];
+            if (compat.suggestion) {
+                parts.push(compat.suggestion);
+            }
+            parts.push("The connection was NOT made. Fix the types or choose a compatible input.");
+            return parts.join(" ");
+        }
+
         // An input can only have one connection — overwrite any existing one
         input.inputName = input.name; // Required by _restoreConnections()
         input.targetBlockId = sourceBlockId;
         input.targetConnectionName = outputName;
+
+        // Return OK, but include any promotion warnings
+        if (compat.warning) {
+            return `OK (note: ${compat.warning})`;
+        }
 
         return "OK";
     }
@@ -733,6 +887,29 @@ export class MaterialGraphManager {
                         block[key] = value;
                     }
                 }
+            }
+        }
+
+        // Normalise RemapBlock: ensure sourceRange / targetRange are Vector2 arrays.
+        // The AI may have set sourceMin / sourceMax / targetMin / targetMax as scalars;
+        // Babylon's RemapBlock._deserialize expects sourceRange and targetRange as [min, max].
+        for (const block of mat.blocks) {
+            if (block.customType === "BABYLON.RemapBlock") {
+                if (!Array.isArray(block["sourceRange"])) {
+                    const sMin = block["sourceMin"] ?? -1;
+                    const sMax = block["sourceMax"] ?? 1;
+                    block["sourceRange"] = [sMin, sMax];
+                }
+                if (!Array.isArray(block["targetRange"])) {
+                    const tMin = block["targetMin"] ?? 0;
+                    const tMax = block["targetMax"] ?? 1;
+                    block["targetRange"] = [tMin, tMax];
+                }
+                // Clean up scalar keys that are not part of the serialization format
+                delete block["sourceMin"];
+                delete block["sourceMax"];
+                delete block["targetMin"];
+                delete block["targetMax"];
             }
         }
 
@@ -1046,6 +1223,11 @@ export class MaterialGraphManager {
             for (const inp of block.inputs) {
                 const inputInfo = info.inputs.find((i) => i.name === inp.name);
                 if (inp.targetBlockId === undefined && inputInfo && !inputInfo.isOptional) {
+                    // Skip warning if the block has defaultSerializedProperties that provide
+                    // a fallback for this input (e.g. RemapBlock sourceRange covers sourceMin/sourceMax)
+                    if (info.defaultSerializedProperties && Object.keys(info.defaultSerializedProperties).length > 0) {
+                        continue;
+                    }
                     issues.push(`WARNING: Block [${block.id}] "${block.name}" has required input "${inp.name}" that is not connected.`);
                 }
             }

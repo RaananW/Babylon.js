@@ -518,13 +518,16 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         target: "Neutral",
         inputs: [
             { name: "input", type: "AutoDetect" },
-            { name: "sourceRange", type: "Vector2" },
-            { name: "targetRange", type: "Vector2" },
+            { name: "sourceMin", type: "Float", isOptional: true },
+            { name: "sourceMax", type: "Float", isOptional: true },
+            { name: "targetMin", type: "Float", isOptional: true },
+            { name: "targetMax", type: "Float", isOptional: true },
         ],
         outputs: [{ name: "output", type: "BasedOnInput" }],
+        defaultSerializedProperties: { sourceRange: [-1, 1], targetRange: [0, 1] },
         properties: {
-            sourceRange: "Vector2 — (min, max) of source range",
-            targetRange: "Vector2 — (min, max) of target range",
+            sourceRange: "number[] — [min, max] of source range (default [-1,1])",
+            targetRange: "number[] — [min, max] of target range (default [0,1])",
         },
     },
     FresnelBlock: {

@@ -330,36 +330,7 @@ export class FlowGraphManager {
         }
 
         // Normalize common config key aliases to canonical names
-        // Explicit alias map: maps common LLM-generated config key names to their canonical engine names
-        const CONFIG_ALIASES: Record<string, string> = {
-            variableName: "variable",
-            variableNames: "variables",
-            varName: "variable",
-            eventName: "eventId",
-        };
-        if (config && typeInfo.config) {
-            const knownKeys = new Set(Object.keys(typeInfo.config));
-            const keysToRename: Array<[string, string]> = [];
-            for (const key of Object.keys(config)) {
-                if (!knownKeys.has(key)) {
-                    // 1. Check explicit alias map
-                    const aliased = CONFIG_ALIASES[key];
-                    if (aliased && knownKeys.has(aliased)) {
-                        keysToRename.push([key, aliased]);
-                    } else {
-                        // 2. Try case-insensitive match
-                        const canonical = [...knownKeys].find((k) => k.toLowerCase() === key.toLowerCase());
-                        if (canonical) {
-                            keysToRename.push([key, canonical]);
-                        }
-                    }
-                }
-            }
-            for (const [oldKey, newKey] of keysToRename) {
-                config[newKey] = config[oldKey];
-                delete config[oldKey];
-            }
-        }
+        this._normalizeConfigAliases(config, typeInfo);
 
         // Validate config keys against the block type's known config schema
         const configWarnings: string[] = [];
@@ -461,6 +432,8 @@ export class FlowGraphManager {
             return `Block ${blockId} not found.`;
         }
 
+        // Normalize aliases before merging (Gap 35 fix)
+        this._normalizeConfigAliases(config, block.typeInfo);
         Object.assign(block.serialized.config, config);
         return "OK";
     }
@@ -1017,10 +990,16 @@ export class FlowGraphManager {
                 const typeInfo = this._resolveBlockType(serializedBlock.className);
                 const id = graph.nextBlockId++;
 
+                // Normalize config key aliases on import (Gap 35 fix)
+                const resolvedTypeInfo = typeInfo ?? this._makeUnknownTypeInfo(serializedBlock);
+                if (serializedBlock.config) {
+                    this._normalizeConfigAliases(serializedBlock.config as Record<string, unknown>, resolvedTypeInfo);
+                }
+
                 const memBlock: InMemoryBlock = {
                     id,
                     serialized: serializedBlock,
-                    typeInfo: typeInfo ?? this._makeUnknownTypeInfo(serializedBlock),
+                    typeInfo: resolvedTypeInfo,
                     displayName: (serializedBlock.metadata?.displayName as string) ?? serializedBlock.className,
                 };
 
@@ -1035,6 +1014,45 @@ export class FlowGraphManager {
     }
 
     // ── Private helpers ────────────────────────────────────────────────
+
+    /**
+     * Normalize common config key aliases to their canonical engine names.
+     * This handles LLM-generated config keys that don't match the engine's expected names
+     * (e.g. "variableName" → "variable", "eventName" → "eventId").
+     * Mutates the config object in place.
+     */
+    private _normalizeConfigAliases(config: Record<string, unknown> | undefined, typeInfo: IFlowGraphBlockTypeInfo): void {
+        // Explicit alias map: maps common LLM-generated config key names to their canonical engine names
+        const CONFIG_ALIASES: Record<string, string> = {
+            variableName: "variable",
+            variableNames: "variables",
+            varName: "variable",
+            eventName: "eventId",
+        };
+        if (config && typeInfo.config) {
+            const knownKeys = new Set(Object.keys(typeInfo.config));
+            const keysToRename: Array<[string, string]> = [];
+            for (const key of Object.keys(config)) {
+                if (!knownKeys.has(key)) {
+                    // 1. Check explicit alias map
+                    const aliased = CONFIG_ALIASES[key];
+                    if (aliased && knownKeys.has(aliased)) {
+                        keysToRename.push([key, aliased]);
+                    } else {
+                        // 2. Try case-insensitive match
+                        const canonical = [...knownKeys].find((k) => k.toLowerCase() === key.toLowerCase());
+                        if (canonical) {
+                            keysToRename.push([key, canonical]);
+                        }
+                    }
+                }
+            }
+            for (const [oldKey, newKey] of keysToRename) {
+                config[newKey] = config[oldKey];
+                delete config[oldKey];
+            }
+        }
+    }
 
     private _resolveBlockType(blockType: string): IFlowGraphBlockTypeInfo | undefined {
         // Try exact key match

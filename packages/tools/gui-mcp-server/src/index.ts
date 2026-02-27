@@ -379,15 +379,57 @@ server.registerTool(
             gridColumn: z.number().optional().describe("Column index when adding to a Grid parent (0-based)"),
         },
     },
-    async ({ guiName, controlType, controlName, name: nameAlias, parentName, properties, gridRow, gridColumn,
-             text, fontSize, color, background, width, height, top, left, buttonText, isVertical, thickness, cornerRadius, horizontalAlignment, verticalAlignment }) => {
+    async ({
+        guiName,
+        controlType,
+        controlName,
+        name: nameAlias,
+        parentName,
+        properties,
+        gridRow,
+        gridColumn,
+        text,
+        fontSize,
+        color,
+        background,
+        width,
+        height,
+        top,
+        left,
+        buttonText,
+        isVertical,
+        thickness,
+        cornerRadius,
+        horizontalAlignment,
+        verticalAlignment,
+    }) => {
         // Gap 17 — resolve name alias for controlName
         const resolvedControlName = controlName ?? nameAlias;
         // Gap 16 — merge top-level convenience properties into properties object
         const mergedProps: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
-        const aliases: Record<string, unknown> = { text, fontSize, color, background, width, height, top, left, buttonText, isVertical, thickness, cornerRadius, horizontalAlignment, verticalAlignment };
+        const aliases: Record<string, unknown> = {
+            text,
+            fontSize,
+            color,
+            background,
+            width,
+            height,
+            top,
+            left,
+            buttonText,
+            isVertical,
+            thickness,
+            cornerRadius,
+            horizontalAlignment,
+            verticalAlignment,
+        };
         for (const [k, v] of Object.entries(aliases)) {
             if (v !== undefined && !(k in mergedProps)) mergedProps[k] = v;
+        }
+        // Gap 49 fix: auto-map text -> buttonText for Button controls
+        if ((controlType === "Button" || controlType === "FocusableButton") && mergedProps.text !== undefined && mergedProps.buttonText === undefined) {
+            mergedProps.buttonText = mergedProps.text;
+            delete mergedProps.text;
         }
         const resolvedProps = Object.keys(mergedProps).length > 0 ? mergedProps : (properties as Record<string, unknown>);
         const result = manager.addControl(guiName, controlType, resolvedControlName, parentName, resolvedProps, gridRow, gridColumn);
@@ -837,13 +879,28 @@ server.registerTool(
             // Gap 16 — merge top-level convenience properties into properties
             const mergedProps: Record<string, unknown> = { ...((def.properties as Record<string, unknown>) || {}) };
             const aliases: Record<string, unknown> = {
-                text: def.text, fontSize: def.fontSize, color: def.color, background: def.background,
-                width: def.width, height: def.height, top: def.top, left: def.left,
-                buttonText: def.buttonText, isVertical: def.isVertical, thickness: def.thickness,
-                cornerRadius: def.cornerRadius, horizontalAlignment: def.horizontalAlignment, verticalAlignment: def.verticalAlignment,
+                text: def.text,
+                fontSize: def.fontSize,
+                color: def.color,
+                background: def.background,
+                width: def.width,
+                height: def.height,
+                top: def.top,
+                left: def.left,
+                buttonText: def.buttonText,
+                isVertical: def.isVertical,
+                thickness: def.thickness,
+                cornerRadius: def.cornerRadius,
+                horizontalAlignment: def.horizontalAlignment,
+                verticalAlignment: def.verticalAlignment,
             };
             for (const [k, v] of Object.entries(aliases)) {
                 if (v !== undefined && !(k in mergedProps)) mergedProps[k] = v;
+            }
+            // Gap 49 fix: auto-map text -> buttonText for Button controls
+            if ((def.controlType === "Button" || def.controlType === "FocusableButton") && mergedProps.text !== undefined && mergedProps.buttonText === undefined) {
+                mergedProps.buttonText = mergedProps.text;
+                delete mergedProps.text;
             }
             const resolvedProps = Object.keys(mergedProps).length > 0 ? mergedProps : (def.properties as Record<string, unknown>);
             const result = manager.addControl(guiName, def.controlType, resolvedName, def.parentName, resolvedProps, def.gridRow, def.gridColumn);

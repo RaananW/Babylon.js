@@ -771,11 +771,17 @@ interface _CodeInjection {
 
 function _extractCodeInjections(coordinatorJson: any): _CodeInjection[] {
     const injections: _CodeInjection[] = [];
-    if (!coordinatorJson?._flowGraphs) return injections;
+    if (!coordinatorJson?._flowGraphs) {
+        return injections;
+    }
     for (const graph of coordinatorJson._flowGraphs) {
-        if (!graph?.allBlocks) continue;
+        if (!graph?.allBlocks) {
+            continue;
+        }
         for (const block of graph.allBlocks) {
-            if (!block.config?.code) continue;
+            if (!block.config?.code) {
+                continue;
+            }
 
             // Pattern 1: FunctionReference with config.code → inject on OUTPUT
             if (block.className === "FlowGraphFunctionReference") {
@@ -812,11 +818,28 @@ function _extractCodeInjections(coordinatorJson: any): _CodeInjection[] {
  * When a block has e.g. config.duration = 4 and a data input named "duration" that is
  * unconnected and has no explicit defaultValue, set defaultValue so the engine uses the
  * intended value instead of the type-level default (e.g. 0 for numbers).
+ * @param coordinatorJson The parsed coordinator JSON to fix up in-place
  */
 function _fixupConfigDefaults(coordinatorJson: any): void {
     if (!coordinatorJson?._flowGraphs) {
         return;
     }
+
+    // Gap 35 fix: common config key alias map for LLM-generated names → canonical engine names
+    const CONFIG_ALIASES: Record<string, string> = {
+        variableName: "variable",
+        variableNames: "variables",
+        varName: "variable",
+        eventName: "eventId",
+    };
+    // Canonical config keys per block class (only blocks known to have config mismatches)
+    const BLOCK_CONFIG_KEYS: Record<string, Set<string>> = {
+        FlowGraphSetVariableBlock: new Set(["variable", "variables"]),
+        FlowGraphGetVariableBlock: new Set(["variable", "variables"]),
+        FlowGraphSendCustomEventBlock: new Set(["eventId"]),
+        FlowGraphReceiveCustomEventBlock: new Set(["eventId"]),
+    };
+
     for (const fg of coordinatorJson._flowGraphs) {
         if (!fg.allBlocks) {
             continue;
@@ -825,6 +848,21 @@ function _fixupConfigDefaults(coordinatorJson: any): void {
             if (!block.config || !block.dataInputs) {
                 continue;
             }
+
+            // Normalize config key aliases (Gap 35)
+            const knownKeys = BLOCK_CONFIG_KEYS[block.className];
+            if (knownKeys) {
+                for (const key of Object.keys(block.config)) {
+                    if (!knownKeys.has(key)) {
+                        const aliased = CONFIG_ALIASES[key];
+                        if (aliased && knownKeys.has(aliased)) {
+                            block.config[aliased] = block.config[key];
+                            delete block.config[key];
+                        }
+                    }
+                }
+            }
+
             for (const di of block.dataInputs) {
                 // Only fix unconnected inputs that don't already have an explicit defaultValue
                 if (

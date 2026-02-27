@@ -391,14 +391,17 @@ server.registerTool(
     },
     async ({ materialName, sourceBlockId, outputName, targetBlockId, inputName }) => {
         const result = manager.connectBlocks(materialName, sourceBlockId, outputName, targetBlockId, inputName);
+        const isOk = result.startsWith("OK");
         return {
             content: [
                 {
                     type: "text",
-                    text: result === "OK" ? `Connected [${sourceBlockId}].${outputName} → [${targetBlockId}].${inputName}` : `Error: ${result}`,
+                    text: isOk
+                        ? `Connected [${sourceBlockId}].${outputName} → [${targetBlockId}].${inputName}${result === "OK" ? "" : `. ${result.slice(3)}`}`
+                        : `Error: ${result}`,
                 },
             ],
-            isError: result !== "OK",
+            isError: !isOk,
         };
     }
 );
@@ -707,15 +710,18 @@ server.registerTool(
     },
     async ({ materialName, connections }) => {
         const results: string[] = [];
+        let hasError = false;
         for (const conn of connections) {
             const result = manager.connectBlocks(materialName, conn.sourceBlockId, conn.outputName, conn.targetBlockId, conn.inputName);
-            if (result === "OK") {
-                results.push(`[${conn.sourceBlockId}].${conn.outputName} → [${conn.targetBlockId}].${conn.inputName}`);
+            if (result.startsWith("OK")) {
+                const suffix = result === "OK" ? "" : ` ${result.slice(3)}`;
+                results.push(`[${conn.sourceBlockId}].${conn.outputName} → [${conn.targetBlockId}].${conn.inputName}${suffix}`);
             } else {
-                results.push(`Error: ${result}`);
+                hasError = true;
+                results.push(`Error ([${conn.sourceBlockId}].${conn.outputName} → [${conn.targetBlockId}].${conn.inputName}): ${result}`);
             }
         }
-        return { content: [{ type: "text", text: `Connections:\n${results.join("\n")}` }] };
+        return { content: [{ type: "text", text: `Connections:\n${results.join("\n")}` }], isError: hasError };
     }
 );
 
