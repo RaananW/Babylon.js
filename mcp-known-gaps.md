@@ -16,15 +16,18 @@ Discovered during basketball game scene testing (Feb 2026).
 - **Symptom**: Passing `position: [0, -10, 0]` to `add_mesh` results in exported code: `new BABYLON.Vector3(undefined, undefined, undefined)`.
 - **Workaround**: Call `set_transform` separately after `add_mesh` to set position.ƒ
 
-### `set_mesh_properties` — `isVisible: false` not reflected in export
+### Gap 54 (FIXED): `set_mesh_properties` — `visible` silently stripped by Zod, must use `isVisible`
 
-- **Symptom**: Setting `isVisible: false` via `set_mesh_properties` reports success, but the exported code does not include `mesh.isVisible = false` or `mesh.setEnabled(false)`.
-- **Workaround**: Position the mesh out of view (e.g., y=-10) or handle visibility in runtime code.
+- **Symptom**: Calling `set_mesh_properties` with `visible: false` reports success but the mesh remains visible. The exported code does not include `mesh.isVisible = false`.
+- **Root cause**: The Zod schema defines the parameter as `isVisible`, not `visible`. Since Zod doesn't use strict mode, the unknown `visible` key is silently stripped — same class of bug as Gap 53.
+- **Fix**: Added `visible` as an explicit alias in the Zod schema. The handler normalizes `visible` → `isVisible` before passing to `setMeshProperties()`.
+- **File**: `packages/tools/scene-mcp-server/src/index.ts`
 
-### No `remove_physics_body` tool
+### Gap 55 (FIXED): No `remove_physics_body` tool
 
-- **Symptom**: There is no tool to remove a physics body from a mesh. `remove_physics_constraint` exists but requires a `constraintId` and is unrelated.
-- **Workaround**: Remove the mesh entirely and re-add it without physics.
+- **Symptom**: There was no tool to remove a physics body from a mesh. `remove_physics_constraint` exists but requires a `constraintId` and is unrelated. To make a mesh non-physical (e.g., converting a collision trigger to a passthrough zone), the workaround was to remove the entire mesh and re-add it without physics.
+- **Fix**: Added `remove_physics_body` tool that takes `sceneName` and `meshId`, deletes `mesh.physics` from the scene state.
+- **Files**: `packages/tools/scene-mcp-server/src/index.ts`, `packages/tools/scene-mcp-server/src/sceneManager.ts`
 
 ### `GetAssetBlock` — index-based mesh lookup is fragile
 
@@ -55,6 +58,13 @@ Discovered during basketball game scene testing (Feb 2026).
 ---
 
 ## NME MCP Server
+
+### InputBlock `attributeName` not validated — GLSL name collision with PBR/Light blocks (FIXED)
+
+- **Symptom**: Creating an InputBlock with `attributeName: "worldPos"` (or similar invalid names) causes a fatal GLSL shader error: `v_worldPos = worldPos;` type mismatch. The PBR block's vertex shader hardcodes a local `vec4 worldPos`, which collides with the `in vec3 worldPos` attribute.
+- **Root cause**: The NME MCP server accepted arbitrary `attributeName` values without validation. LLMs often guess names like `worldPos`, `worldNormal`, `pos`, etc. which are not valid Babylon.js vertex buffer attributes.
+- **Fix**: Added `normaliseAttributeName()` in `materialGraph.ts` that maps common LLM mistakes to valid names (e.g., `worldPos` → `position`, `worldNormal` → `normal`) and warns on unrecognised names. Applied in both `addBlock()` and `setBlockProperties()`.
+- **Valid attribute names**: `position, normal, tangent, uv, uv2, uv3, uv4, uv5, uv6, color, matricesIndices, matricesWeights, matricesIndicesExtra, matricesWeightsExtra`.
 
 ### Node Materials not rendering correctly in scene preview
 
@@ -163,6 +173,46 @@ These are UX friction points where the LLM (or a human) naturally guesses a para
 - **Fix**: Moved the `integrations` bodyPart to after the flow graph section so the coordinator is fully initialized before any handler is registered. Also added `try/catch` to the collision `notifyCustomEvent` call.
 - **File**: `packages/tools/scene-mcp-server/src/codeGenerator.ts`
 
+### `previewServer` — `enableCollisionCallbacks` hardcoded to `false`
+
+- **Symptom**: `physicsCollision` integration generates `havokPlugin.onCollisionObservable.add(...)` code but collision events never fire because `setCollisionCallbackEnabled(true)` is not called on any physics bodies.
+- **Root cause**: `previewServer.ts` hardcodes `enableCollisionCallbacks: false` in both `generatePreviewHtml()` and the `/api/code` route, regardless of whether the scene has `physicsCollision` integrations.
+- **Fix**: Updated both locations to auto-detect `physicsCollision` integrations via `scene.integrations?.some(i => i.type === "physicsCollision")` and set `enableCollisionCallbacks` accordingly.
+- **File**: `packages/tools/scene-mcp-server/src/previewServer.ts`
+- **Note**: The `export_scene_code` and `export_scene_project` tools accept `enableCollisionCallbacks` as a parameter, so projects exported with `true` work correctly even before the preview server fix is loaded.
+
+### `collisionCounter` integration — requires companion `physicsCollision` integration
+
+- **Symptom**: Adding only a `collisionCounter` integration generates `let _collisionCount = 0;` but no collision detection callback. The counter variable is never incremented.
+- **Root cause**: The `collisionCounter` integration only generates the counter display logic (increment + GUI text update). The actual collision detection callback (`havokPlugin.onCollisionObservable.add(...)`) is generated by the `physicsCollision` integration. Both must be present for scoring to work.
+- **Workaround**: Always add a `physicsCollision` integration (with `sourceBody`, `targetBody`, `eventId`) alongside the `collisionCounter` integration.
+
+### `assign_material` — not automatically called when materials and meshes are added separately
+
+- **Symptom**: Adding NME materials to a scene and creating meshes separately results in materials being parsed but never assigned to meshes. All meshes render with default grey material.
+- **Root cause**: The `add_material` and `add_mesh` tools operate independently. There is no implicit linking between materials and meshes based on naming or order.
+- **Workaround**: Always explicitly call `assign_material` for each mesh after both the material and mesh have been added to the scene.
+
+### Gap 53: `export_graph_json` — `outputFile` not `outputPath`
+
+- **Symptom**: Calling `export_graph_json` with `outputPath: "/tmp/graph.json"` succeeds silently but does **not** write the file. The full JSON is returned inline instead, but when using a large graph this is truncated by the MCP transport. The file on disk is never updated.
+- **Root cause**: Zod's `.strict()` is not used, so unknown parameters like `outputPath` are silently stripped. The correct parameter name is `outputFile`.
+- **Impact**: High — the agent believes the file was updated, but re-attaching the flow graph to the scene loads stale data. Changes made via `set_block_config` appear to be lost. This caused multiple rounds of debugging during the basketball game session.
+- **Suggestion**: Accept `outputPath` as an alias for `outputFile`, or use Zod strict mode to reject unknown parameters with a clear error.
+
+### Gap 56: `set_mesh_properties` cannot change mesh primitive options after creation
+
+- **Symptom**: After creating a mesh with `add_mesh` (e.g., a Box with `width: 10, height: 0.2, depth: 10`), calling `set_mesh_properties` cannot change those primitive-specific options (width, height, depth, diameter, etc.). The MeshBuilder options are only set at creation time.
+- **Workaround**: Remove the mesh and re-add it with the desired dimensions.
+- **Suggestion**: Either support re-creation in `set_mesh_properties` when primitive options change, or document this limitation clearly in the tool description.
+
+### Gap 57: `PhysicsShapeMesh` for torus creates convex hull — ball can't pass through rim
+
+- **Symptom**: The basketball rim (a torus) uses `PhysicsShapeMesh` which creates a convex hull approximation. This seals the hole in the torus, making it impossible for the ball to pass through.
+- **Impact**: For donut/ring-shaped meshes, physics collision blocks objects that should pass through the center.
+- **Workaround**: Use a non-physics approach (e.g., `intersectsMesh` for scoring) and either skip physics on the rim or use compound shapes.
+- **Suggestion**: Add a `compoundShape` option or document that torus physics requires manual decomposition.
+
 ### Summary of naming friction
 
 | Tool                    | LLM guessed          | Correct param         | Gap |
@@ -174,3 +224,5 @@ These are UX friction points where the LLM (or a human) naturally guesses a para
 | `add_physics_body`      | `motionType`         | `bodyType`            | 48b |
 | GUI Button property     | `text`               | `buttonText`          | 49  |
 | `connect_signals_batch` | per-item `graphName` | top-level `graphName` | 50  |
+| `export_graph_json`     | `outputPath`         | `outputFile`          | 53  |
+| `set_mesh_properties`   | `visible`            | `isVisible`           | 54  |
