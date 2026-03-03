@@ -1,4 +1,4 @@
-/** Pure barrel for the entire Maths module — no RegisterClass side effects */
+/** Pure barrel — re-exports only side-effect-free modules */
 /* eslint-disable @typescript-eslint/no-restricted-imports */
 export * from "./math.scalar";
 export * from "./math.functions";
@@ -8,5 +8,5 @@ export * from "./math.pure";
 export * from "./sphericalPolynomial";
 export * from "./halton2DSequence";
 export * from "./math.vector.functions";
-export * from "./ThinMaths/index";
+export * from "./ThinMaths/pure";
 export * from "./math.scalar.functions";

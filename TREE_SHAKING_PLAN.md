@@ -117,9 +117,49 @@
 
 ## Phase 3 — Introduce `pure.ts` Barrel Files
 
-- [ ] **3.1** — Add `pure.ts` sibling to every subdirectory `index.ts`
-- [ ] **3.2** — Root-level `packages/dev/core/src/pure.ts`
-- [ ] **3.3** — Update public package exports: `@babylonjs/core/pure`
+- [x] **3.1** — Add `pure.ts` sibling to every subdirectory `index.ts`
+    - Automation script: `scripts/treeshaking/generatePureBarrels.mjs`
+    - Reads side-effects manifest + scans for `.pure.ts` files
+    - For each `export * from "./file"` in `index.ts`:
+        - If `file.pure.ts` exists → rewrite to `export * from "./file.pure"`
+        - If file is already pure (not in manifest) → keep as-is
+        - If file has side effects and no `.pure.ts` → skip
+    - For `import "./file"` (bare side-effect imports) → skip
+    - For subdirectory references → recursively generate `pure.ts` there
+    - Handles macOS case-insensitive FS (file-first disambiguation for `./abstractEngine` vs `./AbstractEngine/`)
+    - Run: `npm run generate:pure-barrels`
+    - **Results**:
+        - **112 `pure.ts` barrel files** generated (+ 1 root = 113 total)
+        - 399 exports rewritten to `.pure` specifiers
+        - 841 exports kept as-is (already pure files)
+        - 26 bare side-effect imports skipped
+        - 319 exports skipped (remaining impure files: shader writes, `AddNodeConstructor`, prototype augmentations, etc.)
+        - 6 directories entirely side-effectful (empty barrel — not written): `Engines/AbstractEngine`, `Engines/Extensions`, `Engines/WebGPU/Extensions`, `Engines/Native/Extensions`, `Lights/Clustered`, `Probes`
+- [x] **3.2** — Root-level `packages/dev/core/src/pure.ts`
+    - 47 exports (all top-level directories + pure top-level files like `scene.pure`, `sceneComponent`, `types`)
+    - Compiles to `dist/pure.js` and public `@babylonjs/core/pure.js` + `pure.d.ts`
+- [x] **3.3** — Public package access: `@babylonjs/core/pure`
+    - No `exports` field change needed — the public package has no `exports` field (uses direct file access)
+    - The compiled `pure.js` + `pure.d.ts` files are auto-generated in the public package output
+    - Consumers can import: `import { Vector3 } from "@babylonjs/core/Maths/pure"` or `import { ... } from "@babylonjs/core/pure"`
+    - TypeScript compilation: ✅ zero errors
+    - Bundle smoke tests: ✅ all 20 pass (10 test cases × 2 bundlers)
+    - Key result: `import "@babylonjs/core/pure"` → **0–1 bytes** (Rollup/Webpack)
+
+### Smoke Test Results (Phase 3)
+
+| Test                                | Rollup   | Webpack   |
+| ----------------------------------- | -------- | --------- |
+| ThinMaths bare import               | 1 byte ✓ | 0 bytes ✓ |
+| ThinMaths named import              | 120 B ✓  | 143 B ✓   |
+| math.color.pure bare                | 1 byte ✓ | 0 bytes ✓ |
+| math.color.pure named (Color3)      | 62 KB ✓  | 12 KB ✓   |
+| math.vector.pure bare               | 1 byte ✓ | 0 bytes ✓ |
+| math.pure barrel bare               | 1 byte ✓ | 0 bytes ✓ |
+| **Maths/pure barrel bare**          | 1 byte ✓ | 0 bytes ✓ |
+| **Cameras/pure barrel bare**        | 1 byte ✓ | 0 bytes ✓ |
+| **Root pure barrel bare**           | 1 byte ✓ | 0 bytes ✓ |
+| **Root pure barrel named (Color3)** | 93 B ✓   | 12 KB ✓   |
 
 ## Phase 4 — Factor Out Static Helpers
 
@@ -145,7 +185,7 @@
 Phase 0 (Audit tooling)  ← DONE
   ├─> Phase 1 (#__PURE__ annotations)        ← DONE
   └─> Phase 2 (FILE.pure.ts splits)          ← DONE (7 edge cases remain)
-        └─> Phase 3 (pure.ts barrels)        — depends on splits
+        └─> Phase 3 (pure.ts barrels)        ← DONE
               └─> Phase 4 (static helpers)   — can overlap with Phase 3
                     └─> Phase 5 (sideEffects in package.json)
                           └─> Phase 6 (CI guardrails)

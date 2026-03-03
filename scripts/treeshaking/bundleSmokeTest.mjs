@@ -101,6 +101,30 @@ const TEST_CASES = [
         maxBundleSizeBytes: 500,
         description: "Bare import of math.pure barrel (side-effect-free) should produce near-empty bundle",
     },
+    {
+        name: "maths-pure-barrel-bare",
+        entryCode: `import "${CORE_DIST}/Maths/pure.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of Maths/pure barrel should produce near-empty bundle",
+    },
+    {
+        name: "cameras-pure-barrel-bare",
+        entryCode: `import "${CORE_DIST}/Cameras/pure.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of Cameras/pure barrel should produce near-empty bundle",
+    },
+    {
+        name: "root-pure-barrel-bare",
+        entryCode: `import "${CORE_DIST}/pure.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of root pure barrel should produce near-empty bundle",
+    },
+    {
+        name: "root-pure-barrel-named",
+        entryCode: `import { Color3 } from "${CORE_DIST}/pure.js";\nconsole.log(Color3);\n`,
+        maxBundleSizeBytes: Infinity,
+        description: "Named import of Color3 from root pure barrel should bundle (sanity check)",
+    },
 ];
 
 // ---------------------------------------------------------------------------
@@ -130,11 +154,14 @@ async function testWithRollup(testCase) {
             treeshake: {
                 moduleSideEffects: (id) => {
                     // Mirror what package.json sideEffects says:
-                    // Everything in core has side effects EXCEPT ThinMaths and .pure files
+                    // Everything in core has side effects EXCEPT ThinMaths, .pure files, and pure barrels
                     if (id.includes("/Maths/ThinMaths/")) {
                         return false;
                     }
                     if (id.endsWith(".pure.js")) {
+                        return false;
+                    }
+                    if (id.endsWith("/pure.js")) {
                         return false;
                     }
                     return true;
@@ -198,8 +225,12 @@ async function testWithWebpack(testCase) {
             },
             resolve: {
                 extensions: [".js", ".mjs"],
+                alias: {
+                    // The compiled output uses "core/..." path-mapped imports
+                    core: CORE_DIST,
+                },
             },
-            // Tell webpack that ThinMaths files and .pure files have no side effects
+            // Tell webpack that ThinMaths files, .pure files, and pure barrels have no side effects
             module: {
                 rules: [
                     {
@@ -208,6 +239,10 @@ async function testWithWebpack(testCase) {
                     },
                     {
                         test: /\.pure\.js$/,
+                        sideEffects: false,
+                    },
+                    {
+                        test: /[\\/]pure\.js$/,
                         sideEffects: false,
                     },
                 ],

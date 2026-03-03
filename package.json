@@ -102,6 +102,7 @@
         "audit:side-effects": "node ./scripts/treeshaking/auditSideEffects.mjs",
         "split:register-class": "node ./scripts/treeshaking/splitRegisterClass.mjs",
         "inject:pure-annotations": "node ./scripts/treeshaking/injectPureAnnotations.mjs",
+        "generate:pure-barrels": "node ./scripts/treeshaking/generatePureBarrels.mjs",
         "test:treeshaking": "node ./scripts/treeshaking/bundleSmokeTest.mjs",
         "prepare": "ts-patch install -s && npm run build:tools && npm i @dev/build-tools -D && npm run build:assets && npm run build:test-tools",
         "clean": "npx nx run-many --outputStyle=static --target=clean --all && npm run build:tools --exclude=@babylonjs/root",
