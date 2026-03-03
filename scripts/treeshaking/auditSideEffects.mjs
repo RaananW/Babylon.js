@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 /**
  * Side-Effect Audit Script for @babylonjs/core
  *
@@ -38,6 +39,8 @@ const CORE_SRC = join(REPO_ROOT, "packages/dev/core/src");
 /**
  * Recursively collect all .ts files in a directory, excluding test files and
  * declaration files.
+ * @param {string} dir
+ * @returns {string[]} Array of file paths
  */
 function collectTsFiles(dir) {
     const results = [];
@@ -101,7 +104,9 @@ function analyzeFile(filePath) {
         // Handle block comments
         if (inBlockComment) {
             const endIdx = line.indexOf("*/");
-            if (endIdx === -1) continue;
+            if (endIdx === -1) {
+                continue;
+            }
             line = line.substring(endIdx + 2);
             inBlockComment = false;
         }
@@ -118,13 +123,19 @@ function analyzeFile(filePath) {
         line = line.replace(/\/\/.*$/, "");
 
         const trimmed = line.trim();
-        if (!trimmed) continue;
+        if (!trimmed) {
+            continue;
+        }
 
         // Count braces for depth tracking (simplified — ignores strings)
         const prevDepth = braceDepth;
         for (const ch of line) {
-            if (ch === "{") braceDepth++;
-            if (ch === "}") braceDepth = Math.max(0, braceDepth - 1);
+            if (ch === "{") {
+                braceDepth++;
+            }
+            if (ch === "}") {
+                braceDepth = Math.max(0, braceDepth - 1);
+            }
         }
 
         // Track declare module blocks
@@ -141,10 +152,14 @@ function analyzeFile(filePath) {
             inDeclareModule = false;
             continue;
         }
-        if (inDeclareModule) continue;
+        if (inDeclareModule) {
+            continue;
+        }
 
         // Only detect side effects at top-level (braceDepth was 0 before this line opened a brace)
-        if (prevDepth !== 0) continue;
+        if (prevDepth !== 0) {
+            continue;
+        }
 
         // --- Detection rules ---
 
@@ -261,7 +276,9 @@ function analyzeFile(filePath) {
         }
     }
 
-    if (sideEffects.length === 0) return null;
+    if (sideEffects.length === 0) {
+        return null;
+    }
     return { file: relPath, sideEffects };
 }
 
@@ -281,7 +298,9 @@ function main() {
 
     for (const f of files) {
         const report = analyzeFile(f);
-        if (report) manifest.push(report);
+        if (report) {
+            manifest.push(report);
+        }
     }
 
     // Sort by file path

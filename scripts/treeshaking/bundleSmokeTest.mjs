@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 /**
  * Tree-Shaking Bundle Smoke Test
  *
@@ -93,15 +94,21 @@ async function testWithRollup(testCase) {
             input: entryPath,
             // Treat everything outside the entry and core dist as external
             external: (id) => {
-                if (id === entryPath) return false;
-                if (id.startsWith(CORE_DIST)) return false;
+                if (id === entryPath) {
+                    return false;
+                }
+                if (id.startsWith(CORE_DIST)) {
+                    return false;
+                }
                 return true;
             },
             treeshake: {
                 moduleSideEffects: (id) => {
                     // Mirror what package.json sideEffects says:
                     // Everything in core has side effects EXCEPT ThinMaths
-                    if (id.includes("/Maths/ThinMaths/")) return false;
+                    if (id.includes("/Maths/ThinMaths/")) {
+                        return false;
+                    }
                     return true;
                 },
             },
@@ -246,7 +253,9 @@ async function main() {
         results.push(rollupResult);
         const rollupIcon = rollupResult.passed ? "PASS" : "FAIL";
         console.log(`  Rollup:  ${rollupIcon}  (${rollupResult.size ?? "N/A"} bytes${rollupResult.maxSize !== Infinity ? `, max ${rollupResult.maxSize}` : ""})`);
-        if (rollupResult.error) console.log(`    Error: ${rollupResult.error}`);
+        if (rollupResult.error) {
+            console.log(`    Error: ${rollupResult.error}`);
+        }
         if (rollupResult.contentPreview && !rollupResult.passed) {
             console.log(`    Content: ${rollupResult.contentPreview}`);
         }
@@ -255,14 +264,18 @@ async function main() {
         results.push(webpackResult);
         const webpackIcon = webpackResult.passed ? "PASS" : "FAIL";
         console.log(`  Webpack: ${webpackIcon}  (${webpackResult.size ?? "N/A"} bytes${webpackResult.maxSize !== Infinity ? `, max ${webpackResult.maxSize}` : ""})`);
-        if (webpackResult.error) console.log(`    Error: ${webpackResult.error}`);
+        if (webpackResult.error) {
+            console.log(`    Error: ${webpackResult.error}`);
+        }
         if (webpackResult.contentPreview && !webpackResult.passed) {
             console.log(`    Content: ${webpackResult.contentPreview}`);
         }
 
         console.log();
 
-        if (!rollupResult.passed || !webpackResult.passed) allPassed = false;
+        if (!rollupResult.passed || !webpackResult.passed) {
+            allPassed = false;
+        }
     }
 
     cleanup();
