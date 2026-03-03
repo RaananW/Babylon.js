@@ -125,6 +125,43 @@ const TEST_CASES = [
         maxBundleSizeBytes: Infinity,
         description: "Named import of Color3 from root pure barrel should bundle (sanity check)",
     },
+    // ── Phase 4: free-function granularity tests ────────────────────────────
+    {
+        name: "vector-functions-bare",
+        entryCode: `import "${CORE_DIST}/Maths/math.vector.functions.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of math.vector.functions (side-effect-free) should produce near-empty bundle",
+    },
+    {
+        name: "vector-functions-named",
+        entryCode: `import { Vector3CrossToRef } from "${CORE_DIST}/Maths/math.vector.functions.js";\nconsole.log(Vector3CrossToRef);\n`,
+        maxBundleSizeBytes: Infinity,
+        description: "Named import of single free function should bundle only that function",
+    },
+    {
+        name: "color-functions-bare",
+        entryCode: `import "${CORE_DIST}/Maths/math.color.functions.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of math.color.functions (side-effect-free) should produce near-empty bundle",
+    },
+    {
+        name: "quaternion-functions-bare",
+        entryCode: `import "${CORE_DIST}/Maths/math.quaternion.functions.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of math.quaternion.functions (side-effect-free) should produce near-empty bundle",
+    },
+    {
+        name: "quaternion-functions-named",
+        entryCode: `import { QuaternionSlerpToRef } from "${CORE_DIST}/Maths/math.quaternion.functions.js";\nconsole.log(QuaternionSlerpToRef);\n`,
+        maxBundleSizeBytes: Infinity,
+        description: "Named import of QuaternionSlerpToRef should bundle only that function",
+    },
+    {
+        name: "pure-barrel-named-function",
+        entryCode: `import { Vector3CrossToRef } from "${CORE_DIST}/Maths/pure.js";\nconsole.log(Vector3CrossToRef);\n`,
+        maxBundleSizeBytes: Infinity,
+        description: "Named import of free function through pure barrel should bundle only that function",
+    },
 ];
 
 // ---------------------------------------------------------------------------
@@ -162,6 +199,9 @@ async function testWithRollup(testCase) {
                         return false;
                     }
                     if (id.endsWith("/pure.js")) {
+                        return false;
+                    }
+                    if (id.endsWith(".functions.js")) {
                         return false;
                     }
                     return true;
@@ -243,6 +283,10 @@ async function testWithWebpack(testCase) {
                     },
                     {
                         test: /[\\/]pure\.js$/,
+                        sideEffects: false,
+                    },
+                    {
+                        test: /\.functions\.js$/,
                         sideEffects: false,
                     },
                 ],

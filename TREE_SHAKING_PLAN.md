@@ -163,8 +163,63 @@
 
 ## Phase 4 — Factor Out Static Helpers
 
-- [ ] **4.1** — Identify static methods that can become module-level functions
-- [ ] **4.2** — Prioritize: `Vector3`, `Matrix`, `Quaternion`, `Color3/4`, `Animation`, `Mesh`
+- [x] **4.1** — Identify static methods that can become module-level functions
+    - Cataloged **292 public static methods** and **38 static properties** across 9 priority classes
+    - Automation script: `scripts/treeshaking/catalogStaticHelpers.mjs`
+    - Run: `npm run catalog:static-helpers` (add `--verbose` for per-function lists)
+    - **Strategy**: Create parallel free functions using `I*Like` interfaces (not replace class statics)
+        - Free functions use public `.x`/`.y`/`.z` (structural types) — no class dependency
+        - Class statics remain unchanged (backward compatible, no performance regression)
+        - One-way dependency: class file → functions file (no circular imports)
+        - Tree-shaking benefit: users can import individual functions without pulling entire class
+    - **Key finding**: The codebase already had `math.vector.functions.ts` with 17 functions + `math.scalar.functions.ts` + `ThinMaths/thinMath.matrix.functions.ts` (10 functions) — an established pattern
+- [x] **4.2** — Expand free functions for priority classes
+    - **`Maths/math.vector.functions.ts`** — expanded from 17 → **38 functions**
+        - New Vector2: `AddToRef`, `SubtractToRef`, `LengthSquared`, `Length`, `Dot`
+        - New Vector3: `AddToRef`, `MultiplyToRef`, `NegateToRef`, `CrossToRef`, `MinimizeToRef`, `MaximizeToRef`, `ClampToRef`, `CheckExtends`, `Hermite1stDerivativeToRef`, `HermiteToRef`, `EqualsWithEpsilon`
+        - New Vector4: `AddToRef`, `SubtractToRef`, `ScaleToRef`, `NormalizeToRef`, `LerpToRef`
+    - **`Maths/math.color.functions.ts`** — **NEW**, 9 functions
+        - Color3: `LerpToRef`, `HSVtoRGBToRef`, `ToLinearSpaceToRef`, `ToGammaSpaceToRef`, `EqualsWithEpsilon`
+        - Color4: `LerpToRef`, `ToLinearSpaceToRef`, `ToGammaSpaceToRef`, `EqualsWithEpsilon`
+    - **`Maths/math.quaternion.functions.ts`** — **NEW**, 11 functions
+        - `Dot`, `LengthSquared`, `Length`, `NormalizeToRef`, `InverseToRef`, `AreClose`, `SlerpToRef`, `RotationAxisToRef`, `FromEulerAnglesToRef`, `RotationYawPitchRollToRef`, `MultiplyToRef`
+    - All new files re-exported from `Maths/index.ts` and `Maths/pure.ts` barrels
+    - Coverage: **85 / 292** static methods have free-function equivalents (**29.1%**)
+    - Bundler configs updated: `.functions.js` pattern added to side-effect-free rules
+    - TypeScript compilation: ✅ zero errors
+    - Bundle smoke tests: ✅ all 32 pass (16 test cases × 2 bundlers)
+
+### Phase 4 Smoke Test Results
+
+| Test                                                | Rollup    | Webpack   |
+| --------------------------------------------------- | --------- | --------- |
+| vector-functions bare                               | 1 byte ✓  | 0 bytes ✓ |
+| vector-functions named (`Vector3CrossToRef`)        | 826 B ✓   | 142 B ✓   |
+| color-functions bare                                | 1 byte ✓  | 0 bytes ✓ |
+| quaternion-functions bare                           | 1 byte ✓  | 0 bytes ✓ |
+| quaternion-functions named (`QuaternionSlerpToRef`) | 1,460 B ✓ | 323 B ✓   |
+| pure-barrel named function (`Vector3CrossToRef`)    | 120 B ✓   | 142 B ✓   |
+
+### Static Helper Coverage
+
+| Class      | Static Methods | Free Functions | Coverage  |
+| ---------- | -------------- | -------------- | --------- |
+| Vector2    | 28             | 7              | 25%       |
+| Vector3    | 59             | 25             | 42%       |
+| Vector4    | 27             | 8              | 30%       |
+| Quaternion | 47             | 11             | 23%       |
+| Matrix     | 62             | 10 (ThinMaths) | 16%       |
+| Color3     | 22             | 5              | 23%       |
+| Color4     | 11             | 4              | 36%       |
+| Animation  | 8              | 0              | 0%        |
+| Mesh       | 28             | 0              | 0%        |
+| **Total**  | **292**        | **85**         | **29.1%** |
+
+> **Note**: Not all static methods benefit from extraction. Factory methods (e.g., `Vector3.Zero()`,
+> `Matrix.Identity()`) construct class instances and thus inherently depend on the class.
+> The `*ToRef` pattern and scalar-returning functions are the best extraction candidates.
+> Animation/Mesh statics are lower priority — Animation mostly has constants (enum-like),
+> and Mesh has deprecated `Create*` stubs.
 
 ## Phase 5 — Update `sideEffects` in `package.json`
 
@@ -186,7 +241,7 @@ Phase 0 (Audit tooling)  ← DONE
   ├─> Phase 1 (#__PURE__ annotations)        ← DONE
   └─> Phase 2 (FILE.pure.ts splits)          ← DONE (7 edge cases remain)
         └─> Phase 3 (pure.ts barrels)        ← DONE
-              └─> Phase 4 (static helpers)   — can overlap with Phase 3
+              └─> Phase 4 (static helpers)   ← DONE (29% coverage, expandable)
                     └─> Phase 5 (sideEffects in package.json)
                           └─> Phase 6 (CI guardrails)
 ```

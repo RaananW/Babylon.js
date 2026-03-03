@@ -8,5 +8,7 @@ export * from "./math.pure";
 export * from "./sphericalPolynomial";
 export * from "./halton2DSequence";
 export * from "./math.vector.functions";
+export * from "./math.color.functions";
+export * from "./math.quaternion.functions";
 export * from "./ThinMaths/pure";
 export * from "./math.scalar.functions";
