@@ -59,16 +59,33 @@
 
 ## Phase 2 — Split Files into `FILE.pure.ts` + `FILE.ts`
 
-- [ ] **2.1** — Define `.pure.ts` convention and document it
-- [ ] **2.2** — Prioritized rollout:
-    1. `Maths/` (non-ThinMaths) — high fan-in, simple `RegisterClass` side effects
-    2. `Misc/` utilities — many transitive imports
-    3. `Materials/` — large subtree, existing `.pure.ts` precedent
-    4. `Meshes/` — core geometry types
-    5. `Cameras/`, `Lights/`, `Animations/` — common scene-graph types
-    6. `Engines/Extensions/` — prototype augmentations (already separate files)
-    7. Everything else
-- [ ] **2.3** — Shaders remain as-is (inherently side-effectful), explicitly listed in `sideEffects`
+- [x] **2.1** — Define `.pure.ts` convention and document it
+    - Convention: `FILE.pure.ts` contains all code except `RegisterClass` calls and their import
+    - `FILE.ts` becomes thin wrapper: `export * from "./FILE.pure"` + RegisterClass calls
+    - Pure files have header: `/** This file must only contain pure code and pure imports */`
+    - `Object.defineProperties` stays in pure file (semantically tied to class definitions)
+- [x] **2.2** — Pilot: Maths/ directory (manual split of `math.color.ts` and `math.vector.ts`)
+    - Created `math.color.pure.ts` (1,913 lines) + `math.color.ts` wrapper (12 lines)
+    - Created `math.vector.pure.ts` (8,877 lines) + `math.vector.ts` wrapper (14 lines)
+    - Created `math.pure.ts` and `pure.ts` barrel files for side-effect-free imports
+    - All smoke tests pass (bare import → 0-1 bytes, named import → bundles correctly)
+- [x] **2.3** — Automation script: `scripts/treeshaking/splitRegisterClass.mjs`
+    - Handles string literals (`"BABYLON.Xxx"`) and variable refs (`FlowGraphBlockNames.Xxx`)
+    - Handles `GetClass` + `RegisterClass` co-imports (preserves GetClass in pure file)
+    - Result: **397 files split automatically** + 2 manual = **399 total**
+    - **7 edge cases deferred** (5 FlowGraph interleaved, 2 code-after-RegisterClass)
+    - TypeScript compilation: ✅ zero errors
+    - Bundle smoke tests: ✅ all pass
+- [ ] **2.4** — Handle 7 deferred edge cases manually
+- [ ] **2.5** — Shaders remain as-is (inherently side-effectful), explicitly listed in `sideEffects`
+
+### Post-Phase-2 Audit Stats
+
+| Metric                     | Before | After |
+| -------------------------- | ------ | ----- |
+| Total `.ts` files          | 2,209  | 2,610 |
+| Files WITHOUT side effects | 1,296  | 1,697 |
+| New `.pure.ts` files       | 1      | 401   |
 
 ## Phase 3 — Introduce `pure.ts` Barrel Files
 

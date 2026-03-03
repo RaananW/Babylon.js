@@ -1,8 +1,8 @@
 {
   "stats": {
-    "totalFiles": 2209,
+    "totalFiles": 2610,
     "filesWithSideEffects": 913,
-    "filesWithoutSideEffects": 1296,
+    "filesWithoutSideEffects": 1697,
     "byType": {
       "RegisterClass": 535,
       "declare-module": 108,
@@ -28,7 +28,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 331,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.Action\", Action);"
         }
       ]
@@ -38,17 +38,17 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 291,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ValueCondition\", ValueCondition);"
         },
         {
           "type": "RegisterClass",
-          "line": 292,
+          "line": 12,
           "text": "RegisterClass(\"BABYLON.PredicateCondition\", PredicateCondition);"
         },
         {
           "type": "RegisterClass",
-          "line": 293,
+          "line": 13,
           "text": "RegisterClass(\"BABYLON.StateCondition\", StateCondition);"
         }
       ]
@@ -58,57 +58,57 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 571,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SetParentAction\", SetParentAction);"
         },
         {
           "type": "RegisterClass",
-          "line": 572,
+          "line": 12,
           "text": "RegisterClass(\"BABYLON.ExecuteCodeAction\", ExecuteCodeAction);"
         },
         {
           "type": "RegisterClass",
-          "line": 573,
+          "line": 13,
           "text": "RegisterClass(\"BABYLON.DoNothingAction\", DoNothingAction);"
         },
         {
           "type": "RegisterClass",
-          "line": 574,
+          "line": 14,
           "text": "RegisterClass(\"BABYLON.StopAnimationAction\", StopAnimationAction);"
         },
         {
           "type": "RegisterClass",
-          "line": 575,
+          "line": 15,
           "text": "RegisterClass(\"BABYLON.PlayAnimationAction\", PlayAnimationAction);"
         },
         {
           "type": "RegisterClass",
-          "line": 576,
+          "line": 16,
           "text": "RegisterClass(\"BABYLON.IncrementValueAction\", IncrementValueAction);"
         },
         {
           "type": "RegisterClass",
-          "line": 577,
+          "line": 17,
           "text": "RegisterClass(\"BABYLON.SetValueAction\", SetValueAction);"
         },
         {
           "type": "RegisterClass",
-          "line": 578,
+          "line": 18,
           "text": "RegisterClass(\"BABYLON.SetStateAction\", SetStateAction);"
         },
         {
           "type": "RegisterClass",
-          "line": 579,
+          "line": 19,
           "text": "RegisterClass(\"BABYLON.SetParentAction\", SetParentAction);"
         },
         {
           "type": "RegisterClass",
-          "line": 580,
+          "line": 20,
           "text": "RegisterClass(\"BABYLON.SwitchBooleanAction\", SwitchBooleanAction);"
         },
         {
           "type": "RegisterClass",
-          "line": 581,
+          "line": 21,
           "text": "RegisterClass(\"BABYLON.CombineAction\", CombineAction);"
         }
       ]
@@ -118,12 +118,12 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 96,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PlaySoundAction\", PlaySoundAction);"
         },
         {
           "type": "RegisterClass",
-          "line": 97,
+          "line": 12,
           "text": "RegisterClass(\"BABYLON.StopSoundAction\", StopSoundAction);"
         }
       ]
@@ -133,7 +133,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 161,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.InterpolateValueAction\", InterpolateValueAction);"
         }
       ]
@@ -208,7 +208,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 1072,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.Sound\", Sound);"
         }
       ]
@@ -273,7 +273,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 456,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.FlyCamera\", FlyCamera);"
         }
       ]
@@ -308,7 +308,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 459,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.FreeCamera\", FreeCamera);"
         }
       ]
@@ -328,7 +328,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 606,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeospatialCamera\", GeospatialCamera);"
         }
       ]
@@ -548,7 +548,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 546,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ComputeShader\", ComputeShader);"
         }
       ]
@@ -2298,7 +2298,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 63,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Conditional, FlowGraphConditionalDataBlock);"
         }
       ]
@@ -2308,7 +2308,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 63,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Constant, FlowGraphConstantBlock);"
         }
       ]
@@ -2318,7 +2318,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 94,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.DataSwitch, FlowGraphDataSwitchBlock);"
         }
       ]
@@ -2328,7 +2328,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 87,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.GetAsset, FlowGraphGetAssetBlock);"
         }
       ]
@@ -2338,7 +2338,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 94,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.GetProperty, FlowGraphGetPropertyBlock);"
         }
       ]
@@ -2348,7 +2348,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 69,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.GetVariable, FlowGraphGetVariableBlock);"
         }
       ]
@@ -2358,7 +2358,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 74,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.TransformCoordinatesSystem, FlowGraphTransformCoordinatesSystemBlock);"
         }
       ]
@@ -2368,292 +2368,292 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 77,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Add, FlowGraphAddBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 117,
+          "line": 13,
           "text": "RegisterClass(FlowGraphBlockNames.Subtract, FlowGraphSubtractBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 174,
+          "line": 14,
           "text": "RegisterClass(FlowGraphBlockNames.Multiply, FlowGraphMultiplyBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 241,
+          "line": 15,
           "text": "RegisterClass(FlowGraphBlockNames.Divide, FlowGraphDivideBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 312,
+          "line": 16,
           "text": "RegisterClass(FlowGraphBlockNames.Random, FlowGraphRandomBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 323,
+          "line": 17,
           "text": "RegisterClass(FlowGraphBlockNames.E, FlowGraphEBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 333,
+          "line": 18,
           "text": "RegisterClass(FlowGraphBlockNames.PI, FlowGraphPiBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 343,
+          "line": 19,
           "text": "RegisterClass(FlowGraphBlockNames.Inf, FlowGraphInfBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 353,
+          "line": 20,
           "text": "RegisterClass(FlowGraphBlockNames.NaN, FlowGraphNaNBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 401,
+          "line": 21,
           "text": "RegisterClass(FlowGraphBlockNames.Abs, FlowGraphAbsBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 415,
+          "line": 22,
           "text": "RegisterClass(FlowGraphBlockNames.Sign, FlowGraphSignBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 429,
+          "line": 23,
           "text": "RegisterClass(FlowGraphBlockNames.Trunc, FlowGraphTruncBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 443,
+          "line": 24,
           "text": "RegisterClass(FlowGraphBlockNames.Floor, FlowGraphFloorBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 457,
+          "line": 25,
           "text": "RegisterClass(FlowGraphBlockNames.Ceil, FlowGraphCeilBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 482,
+          "line": 26,
           "text": "RegisterClass(FlowGraphBlockNames.Round, FlowGraphRoundBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 496,
+          "line": 27,
           "text": "RegisterClass(FlowGraphBlockNames.Fraction, FlowGraphFractionBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 514,
+          "line": 28,
           "text": "RegisterClass(FlowGraphBlockNames.Negation, FlowGraphNegationBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 565,
+          "line": 29,
           "text": "RegisterClass(FlowGraphBlockNames.Modulo, FlowGraphModuloBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 579,
+          "line": 30,
           "text": "RegisterClass(FlowGraphBlockNames.Min, FlowGraphMinBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 593,
+          "line": 31,
           "text": "RegisterClass(FlowGraphBlockNames.Max, FlowGraphMaxBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 660,
+          "line": 32,
           "text": "RegisterClass(FlowGraphBlockNames.Clamp, FlowGraphClampBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 678,
+          "line": 33,
           "text": "RegisterClass(FlowGraphBlockNames.Saturate, FlowGraphSaturateBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 701,
+          "line": 34,
           "text": "RegisterClass(FlowGraphBlockNames.MathInterpolation, FlowGraphMathInterpolationBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 724,
+          "line": 35,
           "text": "RegisterClass(FlowGraphBlockNames.Equality, FlowGraphEqualityBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 746,
+          "line": 36,
           "text": "RegisterClass(FlowGraphBlockNames.LessThan, FlowGraphLessThanBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 761,
+          "line": 37,
           "text": "RegisterClass(FlowGraphBlockNames.LessThanOrEqual, FlowGraphLessThanOrEqualBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 776,
+          "line": 38,
           "text": "RegisterClass(FlowGraphBlockNames.GreaterThan, FlowGraphGreaterThanBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 790,
+          "line": 39,
           "text": "RegisterClass(FlowGraphBlockNames.GreaterThanOrEqual, FlowGraphGreaterThanOrEqualBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 808,
+          "line": 40,
           "text": "RegisterClass(FlowGraphBlockNames.IsNaN, FlowGraphIsNanBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 827,
+          "line": 41,
           "text": "RegisterClass(FlowGraphBlockNames.IsInfinity, FlowGraphIsInfinityBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 850,
+          "line": 42,
           "text": "RegisterClass(FlowGraphBlockNames.DegToRad, FlowGraphDegToRadBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 868,
+          "line": 43,
           "text": "RegisterClass(FlowGraphBlockNames.RadToDeg, FlowGraphRadToDegBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 921,
+          "line": 44,
           "text": "RegisterClass(FlowGraphBlockNames.Asin, FlowGraphAsinBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 935,
+          "line": 45,
           "text": "RegisterClass(FlowGraphBlockNames.Acos, FlowGraphAcosBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 949,
+          "line": 46,
           "text": "RegisterClass(FlowGraphBlockNames.Atan, FlowGraphAtanBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 963,
+          "line": 47,
           "text": "RegisterClass(FlowGraphBlockNames.Atan2, FlowGraphAtan2Block);"
         },
         {
           "type": "RegisterClass",
-          "line": 977,
+          "line": 48,
           "text": "RegisterClass(FlowGraphBlockNames.Sinh, FlowGraphSinhBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 991,
+          "line": 49,
           "text": "RegisterClass(FlowGraphBlockNames.Cosh, FlowGraphCoshBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1005,
+          "line": 50,
           "text": "RegisterClass(FlowGraphBlockNames.Tanh, FlowGraphTanhBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1019,
+          "line": 51,
           "text": "RegisterClass(FlowGraphBlockNames.Asinh, FlowGraphAsinhBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1033,
+          "line": 52,
           "text": "RegisterClass(FlowGraphBlockNames.Acosh, FlowGraphAcoshBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1047,
+          "line": 53,
           "text": "RegisterClass(FlowGraphBlockNames.Atanh, FlowGraphAtanhBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1061,
+          "line": 54,
           "text": "RegisterClass(FlowGraphBlockNames.Exponential, FlowGraphExpBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1075,
+          "line": 55,
           "text": "RegisterClass(FlowGraphBlockNames.Log, FlowGraphLogBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1089,
+          "line": 56,
           "text": "RegisterClass(FlowGraphBlockNames.Log2, FlowGraphLog2Block);"
         },
         {
           "type": "RegisterClass",
-          "line": 1103,
+          "line": 57,
           "text": "RegisterClass(FlowGraphBlockNames.Log10, FlowGraphLog10Block);"
         },
         {
           "type": "RegisterClass",
-          "line": 1117,
+          "line": 58,
           "text": "RegisterClass(FlowGraphBlockNames.SquareRoot, FlowGraphSquareRootBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1131,
+          "line": 59,
           "text": "RegisterClass(FlowGraphBlockNames.CubeRoot, FlowGraphCubeRootBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1146,
+          "line": 60,
           "text": "RegisterClass(FlowGraphBlockNames.Power, FlowGraphPowerBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1181,
+          "line": 61,
           "text": "RegisterClass(FlowGraphBlockNames.BitwiseNot, FlowGraphBitwiseNotBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1209,
+          "line": 62,
           "text": "RegisterClass(FlowGraphBlockNames.BitwiseAnd, FlowGraphBitwiseAndBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1236,
+          "line": 63,
           "text": "RegisterClass(FlowGraphBlockNames.BitwiseOr, FlowGraphBitwiseOrBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1263,
+          "line": 64,
           "text": "RegisterClass(FlowGraphBlockNames.BitwiseXor, FlowGraphBitwiseXorBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1280,
+          "line": 65,
           "text": "RegisterClass(FlowGraphBlockNames.BitwiseLeftShift, FlowGraphBitwiseLeftShiftBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1297,
+          "line": 66,
           "text": "RegisterClass(FlowGraphBlockNames.BitwiseRightShift, FlowGraphBitwiseRightShiftBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1307,
+          "line": 67,
           "text": "RegisterClass(FlowGraphBlockNames.LeadingZeros, FlowGraphLeadingZerosBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1323,
+          "line": 68,
           "text": "RegisterClass(FlowGraphBlockNames.TrailingZeros, FlowGraphTrailingZerosBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 1351,
+          "line": 69,
           "text": "RegisterClass(FlowGraphBlockNames.OneBitsCounter, FlowGraphOneBitsCounterBlock);"
         }
       ]
@@ -2663,62 +2663,62 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 81,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.CombineVector2, FlowGraphCombineVector2Block);"
         },
         {
           "type": "RegisterClass",
-          "line": 105,
+          "line": 13,
           "text": "RegisterClass(FlowGraphBlockNames.CombineVector3, FlowGraphCombineVector3Block);"
         },
         {
           "type": "RegisterClass",
-          "line": 134,
+          "line": 14,
           "text": "RegisterClass(FlowGraphBlockNames.CombineVector4, FlowGraphCombineVector4Block);"
         },
         {
           "type": "RegisterClass",
-          "line": 209,
+          "line": 15,
           "text": "RegisterClass(FlowGraphBlockNames.CombineMatrix, FlowGraphCombineMatrixBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 247,
+          "line": 16,
           "text": "RegisterClass(FlowGraphBlockNames.CombineMatrix2D, FlowGraphCombineMatrix2DBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 295,
+          "line": 17,
           "text": "RegisterClass(FlowGraphBlockNames.CombineMatrix3D, FlowGraphCombineMatrix3DBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 320,
+          "line": 18,
           "text": "RegisterClass(FlowGraphBlockNames.ExtractVector2, FlowGraphExtractVector2Block);"
         },
         {
           "type": "RegisterClass",
-          "line": 345,
+          "line": 19,
           "text": "RegisterClass(FlowGraphBlockNames.ExtractVector3, FlowGraphExtractVector3Block);"
         },
         {
           "type": "RegisterClass",
-          "line": 371,
+          "line": 20,
           "text": "RegisterClass(FlowGraphBlockNames.ExtractVector4, FlowGraphExtractVector4Block);"
         },
         {
           "type": "RegisterClass",
-          "line": 396,
+          "line": 21,
           "text": "RegisterClass(FlowGraphBlockNames.ExtractMatrix, FlowGraphExtractMatrixBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 421,
+          "line": 22,
           "text": "RegisterClass(FlowGraphBlockNames.ExtractMatrix2D, FlowGraphExtractMatrix2DBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 446,
+          "line": 23,
           "text": "RegisterClass(FlowGraphBlockNames.ExtractMatrix3D, FlowGraphExtractMatrix3DBlock);"
         }
       ]
@@ -2728,32 +2728,32 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 49,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Transpose, FlowGraphTransposeBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 63,
+          "line": 13,
           "text": "RegisterClass(FlowGraphBlockNames.Determinant, FlowGraphDeterminantBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 83,
+          "line": 14,
           "text": "RegisterClass(FlowGraphBlockNames.InvertMatrix, FlowGraphInvertMatrixBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 105,
+          "line": 15,
           "text": "RegisterClass(FlowGraphBlockNames.MatrixMultiplication, FlowGraphMatrixMultiplicationBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 188,
+          "line": 16,
           "text": "RegisterClass(FlowGraphBlockNames.MatrixDecompose, FlowGraphMatrixDecomposeBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 237,
+          "line": 17,
           "text": "RegisterClass(FlowGraphBlockNames.MatrixCompose, FlowGraphMatrixComposeBlock);"
         }
       ]
@@ -2763,62 +2763,62 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 52,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Length, FlowGraphLengthBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 94,
+          "line": 13,
           "text": "RegisterClass(FlowGraphBlockNames.Normalize, FlowGraphNormalizeBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 118,
+          "line": 14,
           "text": "RegisterClass(FlowGraphBlockNames.Dot, FlowGraphDotBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 128,
+          "line": 15,
           "text": "RegisterClass(FlowGraphBlockNames.Cross, FlowGraphCrossBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 138,
+          "line": 16,
           "text": "RegisterClass(FlowGraphBlockNames.Rotate2D, FlowGraphRotate2DBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 148,
+          "line": 17,
           "text": "RegisterClass(FlowGraphBlockNames.Rotate3D, FlowGraphRotate3DBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 200,
+          "line": 18,
           "text": "RegisterClass(FlowGraphBlockNames.TransformVector, FlowGraphTransformBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 211,
+          "line": 19,
           "text": "RegisterClass(FlowGraphBlockNames.TransformCoordinates, FlowGraphTransformCoordinatesBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 222,
+          "line": 20,
           "text": "RegisterClass(FlowGraphBlockNames.Conjugate, FlowGraphConjugateBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 233,
+          "line": 21,
           "text": "RegisterClass(FlowGraphBlockNames.AngleBetween, FlowGraphAngleBetweenBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 244,
+          "line": 22,
           "text": "RegisterClass(FlowGraphBlockNames.QuaternionFromAxisAngle, FlowGraphQuaternionFromAxisAngleBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 310,
+          "line": 23,
           "text": "RegisterClass(FlowGraphBlockNames.AxisAngleFromQuaternion, FlowGraphAxisAngleFromQuaternionBlock);"
         }
       ]
@@ -2828,7 +2828,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 196,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.JsonPointerParser, FlowGraphJsonPointerParserBlock);"
         }
       ]
@@ -2838,32 +2838,32 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 17,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.BooleanToFloat, FlowGraphBooleanToFloat);"
         },
         {
           "type": "RegisterClass",
-          "line": 28,
+          "line": 13,
           "text": "RegisterClass(FlowGraphBlockNames.BooleanToInt, FlowGraphBooleanToInt);"
         },
         {
           "type": "RegisterClass",
-          "line": 39,
+          "line": 14,
           "text": "RegisterClass(FlowGraphBlockNames.FloatToBoolean, FlowGraphFloatToBoolean);"
         },
         {
           "type": "RegisterClass",
-          "line": 50,
+          "line": 15,
           "text": "RegisterClass(FlowGraphBlockNames.IntToBoolean, FlowGraphIntToBoolean);"
         },
         {
           "type": "RegisterClass",
-          "line": 61,
+          "line": 16,
           "text": "RegisterClass(FlowGraphBlockNames.IntToFloat, FlowGraphIntToFloat);"
         },
         {
           "type": "RegisterClass",
-          "line": 100,
+          "line": 17,
           "text": "RegisterClass(FlowGraphBlockNames.FloatToInt, FlowGraphFloatToInt);"
         }
       ]
@@ -2873,7 +2873,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 70,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.ArrayIndex, FlowGraphArrayIndexBlock);"
         }
       ]
@@ -2883,7 +2883,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 43,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Context, FlowGraphContextBlock);"
         }
       ]
@@ -2893,7 +2893,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 62,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.FunctionReference, FlowGraphFunctionReferenceBlock);"
         }
       ]
@@ -2903,7 +2903,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 66,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.IndexOf, FlowGraphIndexOfBlock);"
         }
       ]
@@ -2913,7 +2913,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 134,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.MeshPickEvent, FlowGraphMeshPickEventBlock);"
         }
       ]
@@ -2923,7 +2923,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 97,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.PointerOutEvent, FlowGraphPointerOutEventBlock);"
         }
       ]
@@ -2933,7 +2933,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 98,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.PointerOverEvent, FlowGraphPointerOverEventBlock);"
         }
       ]
@@ -2943,7 +2943,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 86,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.ReceiveCustomEvent, FlowGraphReceiveCustomEventBlock);"
         }
       ]
@@ -2953,7 +2953,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 31,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.SceneReadyEvent, FlowGraphSceneReadyEventBlock);"
         }
       ]
@@ -2963,7 +2963,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 76,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.SceneTickEvent, FlowGraphSceneTickEventBlock);"
         }
       ]
@@ -2973,7 +2973,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 61,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.ReceiveCustomEvent, FlowGraphSendCustomEventBlock);"
         }
       ]
@@ -2983,7 +2983,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 80,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.BezierCurveEasing, FlowGraphBezierCurveEasingBlock);"
         }
       ]
@@ -2993,7 +2993,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 128,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Easing, FlowGraphEasingBlock);"
         }
       ]
@@ -3003,7 +3003,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 181,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.ValueInterpolation, FlowGraphInterpolationBlock);"
         }
       ]
@@ -3013,7 +3013,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 37,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.PauseAnimation, FlowGraphPauseAnimationBlock);"
         }
       ]
@@ -3023,7 +3023,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 235,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.PlayAnimation, FlowGraphPlayAnimationBlock);"
         }
       ]
@@ -3033,7 +3033,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 131,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.StopAnimation, FlowGraphStopAnimationBlock);"
         }
       ]
@@ -3043,7 +3043,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 51,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Branch, FlowGraphBranchBlock);"
         }
       ]
@@ -3053,7 +3053,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 47,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.CancelDelay, FlowGraphCancelDelayBlock);"
         }
       ]
@@ -3063,7 +3063,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 50,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.CallCounter, FlowGraphCallCounterBlock);"
         }
       ]
@@ -3073,7 +3073,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 58,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Debounce, FlowGraphDebounceBlock);"
         }
       ]
@@ -3083,7 +3083,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 69,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.DoN, FlowGraphDoNBlock);"
         }
       ]
@@ -3093,7 +3093,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 65,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.FlipFlop, FlowGraphFlipFlopBlock);"
         }
       ]
@@ -3103,7 +3103,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 110,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.ForLoop, FlowGraphForLoopBlock);"
         }
       ]
@@ -3113,7 +3113,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 137,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.MultiGate, FlowGraphMultiGateBlock);"
         }
       ]
@@ -3123,7 +3123,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 70,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Sequence, FlowGraphSequenceBlock);"
         }
       ]
@@ -3133,7 +3133,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 132,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.SetDelay, FlowGraphSetDelayBlock);"
         }
       ]
@@ -3143,7 +3143,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 118,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Switch, FlowGraphSwitchBlock);"
         }
       ]
@@ -3153,7 +3153,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 77,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.Throttle, FlowGraphThrottleBlock);"
         }
       ]
@@ -3163,7 +3163,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 122,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.WaitAll, FlowGraphWaitAllBlock);"
         }
       ]
@@ -3173,7 +3173,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 84,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.WhileLoop, FlowGraphWhileLoopBlock);"
         }
       ]
@@ -3183,7 +3183,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 102,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.ConsoleLog, FlowGraphConsoleLogBlock);"
         }
       ]
@@ -3193,7 +3193,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 125,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.SetProperty, FlowGraphSetPropertyBlock);"
         }
       ]
@@ -3203,7 +3203,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 99,
+          "line": 12,
           "text": "RegisterClass(FlowGraphBlockNames.SetVariable, FlowGraphSetVariableBlock);"
         }
       ]
@@ -3213,7 +3213,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 96,
+          "line": 11,
           "text": "RegisterClass(\"FlowGraphInteger\", FlowGraphInteger);"
         }
       ]
@@ -3223,7 +3223,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 180,
+          "line": 11,
           "text": "RegisterClass(\"FlowGraphDataConnection\", FlowGraphDataConnection);"
         }
       ]
@@ -3243,7 +3243,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 59,
+          "line": 11,
           "text": "RegisterClass(\"FlowGraphSignalConnection\", FlowGraphSignalConnection);"
         }
       ]
@@ -3253,7 +3253,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 101,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphComputeShaderBlock\", NodeRenderGraphComputeShaderBlock);"
         }
       ]
@@ -3263,7 +3263,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 93,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphCullObjectsBlock\", NodeRenderGraphCullObjectsBlock);"
         }
       ]
@@ -3273,7 +3273,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 57,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphElbowBlock\", NodeRenderGraphElbowBlock);"
         }
       ]
@@ -3283,7 +3283,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 76,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphExecuteBlock\", NodeRenderGraphExecuteBlock);"
         }
       ]
@@ -3293,7 +3293,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 318,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphInputBlock\", NodeRenderGraphInputBlock);"
         }
       ]
@@ -3303,7 +3303,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 234,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphGlowLayerBlock\", NodeRenderGraphGlowLayerBlock);"
         }
       ]
@@ -3313,7 +3313,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 250,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphHighlightLayerBlock\", NodeRenderGraphHighlightLayerBlock);"
         }
       ]
@@ -3323,7 +3323,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 263,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphSelectionOutlineLayerBlock\", NodeRenderGraphSelectionOutlineLayerBlock);"
         }
       ]
@@ -3333,7 +3333,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 110,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphLightingVolumeBlock\", NodeRenderGraphLightingVolumeBlock);"
         }
       ]
@@ -3343,7 +3343,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 65,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphOutputBlock\", NodeRenderGraphOutputBlock);"
         }
       ]
@@ -3353,7 +3353,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 61,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphAnaglyphPostProcessBlock\", NodeRenderGraphAnaglyphPostProcessBlock);"
         }
       ]
@@ -3363,7 +3363,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 71,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphBlackAndWhitePostProcessBlock\", NodeRenderGraphBlackAndWhitePostProcessBlock);"
         }
       ]
@@ -3373,7 +3373,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 136,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphBloomPostProcessBlock\", NodeRenderGraphBloomPostProcessBlock);"
         }
       ]
@@ -3383,7 +3383,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 85,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphBlurPostProcessBlock\", NodeRenderGraphBlurPostProcessBlock);"
         }
       ]
@@ -3393,7 +3393,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 98,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphChromaticAberrationPostProcessBlock\", NodeRenderGraphChromaticAberrationPostProces"
         }
       ]
@@ -3403,7 +3403,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 152,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphCircleOfConfusionPostProcessBlock\", NodeRenderGraphCircleOfConfusionPostProcessBlo"
         }
       ]
@@ -3413,7 +3413,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 73,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphColorCorrectionPostProcessBlock\", NodeRenderGraphColorCorrectionPostProcessBlock);"
         }
       ]
@@ -3423,7 +3423,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 122,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphConvolutionPostProcessBlock\", NodeRenderGraphConvolutionPostProcessBlock);"
         }
       ]
@@ -3433,7 +3433,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 201,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphDepthOfFieldPostProcessBlock\", NodeRenderGraphDepthOfFieldPostProcessBlock);"
         }
       ]
@@ -3443,7 +3443,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 71,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphExtractHighlightsPostProcessBlock\", NodeRenderGraphExtractHighlightsPostProcessBlo"
         }
       ]
@@ -3453,7 +3453,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 72,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphFilterPostProcessBlock\", NodeRenderGraphFilterPostProcessBlock);"
         }
       ]
@@ -3463,7 +3463,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 43,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphFXAAPostProcessBlock\", NodeRenderGraphFXAAPostProcessBlock);"
         }
       ]
@@ -3473,7 +3473,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 84,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphGrainPostProcessBlock\", NodeRenderGraphGrainPostProcessBlock);"
         }
       ]
@@ -3483,7 +3483,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 260,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphImageProcessingPostProcessBlock\", NodeRenderGraphImageProcessingPostProcessBlock);"
         }
       ]
@@ -3493,7 +3493,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 122,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphMotionBlurPostProcessBlock\", NodeRenderGraphMotionBlurPostProcessBlock);"
         }
       ]
@@ -3503,12 +3503,12 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 43,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphPassPostProcessBlock\", NodeRenderGraphPassPostProcessBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 81,
+          "line": 12,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphPassCubePostProcessBlock\", NodeRenderGraphPassCubePostProcessBlock);"
         }
       ]
@@ -3518,7 +3518,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 100,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphScreenSpaceCurvaturePostProcessBlock\", NodeRenderGraphScreenSpaceCurvaturePostProc"
         }
       ]
@@ -3528,7 +3528,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 84,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphSharpenPostProcessBlock\", NodeRenderGraphSharpenPostProcessBlock);"
         }
       ]
@@ -3538,7 +3538,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 335,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphSSAO2PostProcessBlock\", NodeRenderGraphSSAO2PostProcessBlock);"
         }
       ]
@@ -3548,7 +3548,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 556,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphSSRPostProcessBlock\", NodeRenderGraphSSRPostProcessBlock);"
         }
       ]
@@ -3558,7 +3558,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 173,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphTAAPostProcessBlock\", NodeRenderGraphTAAPostProcessBlock);"
         }
       ]
@@ -3568,7 +3568,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 105,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphTonemapPostProcessBlock\", NodeRenderGraphTonemapPostProcessBlock);"
         }
       ]
@@ -3578,7 +3578,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 222,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphVolumetricLightingBlock\", NodeRenderGraphVolumetricLightingBlock);"
         }
       ]
@@ -3588,7 +3588,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 217,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphCascadedShadowGeneratorBlock\", NodeRenderGraphCascadedShadowGeneratorBlock);"
         }
       ]
@@ -3598,7 +3598,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 519,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphGeometryRendererBlock\", NodeRenderGraphGeometryRendererBlock);"
         }
       ]
@@ -3608,7 +3608,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 17,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphObjectRendererBlock\", NodeRenderGraphObjectRendererBlock);"
         }
       ]
@@ -3618,7 +3618,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 33,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphShadowGeneratorBlock\", NodeRenderGraphShadowGeneratorBlock);"
         }
       ]
@@ -3628,7 +3628,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 103,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphUtilityLayerRendererBlock\", NodeRenderGraphUtilityLayerRendererBlock);"
         }
       ]
@@ -3638,7 +3638,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 128,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphResourceContainerBlock\", NodeRenderGraphResourceContainerBlock);"
         }
       ]
@@ -3648,7 +3648,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 159,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphTeleportInBlock\", NodeRenderGraphTeleportInBlock);"
         }
       ]
@@ -3658,7 +3658,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 132,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphTeleportOutBlock\", NodeRenderGraphTeleportOutBlock);"
         }
       ]
@@ -3668,7 +3668,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 175,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphClearBlock\", NodeRenderGraphClearBlock);"
         }
       ]
@@ -3678,7 +3678,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 164,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphCopyTextureBlock\", NodeRenderGraphCopyTextureBlock);"
         }
       ]
@@ -3688,7 +3688,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 69,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphGenerateMipmapsBlock\", NodeRenderGraphGenerateMipmapsBlock);"
         }
       ]
@@ -4013,7 +4013,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 1152,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BackgroundMaterial\", BackgroundMaterial);"
         }
       ]
@@ -4058,7 +4058,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 238,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GaussianSplattingGpuPickingMaterialPlugin\", GaussianSplattingGpuPickingMaterialPlugin);"
         }
       ]
@@ -4068,7 +4068,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 685,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GaussianSplattingMaterial\", GaussianSplattingMaterial);"
         }
       ]
@@ -4078,7 +4078,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 214,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GaussianSplattingSolidColorMaterialPlugin\", GaussianSplattingSolidColorMaterialPlugin);"
         }
       ]
@@ -4113,7 +4113,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 149,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DecalMapConfiguration\", DecalMapConfiguration);"
         }
       ]
@@ -4123,7 +4123,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 324,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MaterialPluginBase\", MaterialPluginBase);"
         }
       ]
@@ -4143,7 +4143,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 804,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MeshDebugPluginMaterial\", MeshDebugPluginMaterial);"
         }
       ]
@@ -4153,7 +4153,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 274,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MultiMaterial\", MultiMaterial);"
         }
       ]
@@ -4163,7 +4163,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 36,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.AddBlock\", AddBlock);"
         }
       ]
@@ -4173,7 +4173,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 65,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ArcTan2Block\", ArcTan2Block);"
         }
       ]
@@ -4183,7 +4183,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 114,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BiPlanarBlock\", BiPlanarBlock);"
         }
       ]
@@ -4193,7 +4193,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 106,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ClampBlock\", ClampBlock);"
         }
       ]
@@ -4203,7 +4203,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 241,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CloudBlock\", CloudBlock);"
         }
       ]
@@ -4213,7 +4213,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 225,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ColorConverterBlock\", ColorConverterBlock);"
         }
       ]
@@ -4223,7 +4223,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 218,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ColorMergerBlock\", ColorMergerBlock);"
         }
       ]
@@ -4233,7 +4233,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 135,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ColorSplitterBlock\", ColorSplitterBlock);"
         }
       ]
@@ -4243,7 +4243,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 239,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ConditionalBlock\", ConditionalBlock);"
         }
       ]
@@ -4253,7 +4253,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 72,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CrossBlock\", CrossBlock);"
         }
       ]
@@ -4263,7 +4263,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 390,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CurveBlock\", CurveBlock);"
         }
       ]
@@ -4273,7 +4273,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 214,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CustomBlock\", CustomBlock);"
         }
       ]
@@ -4283,7 +4283,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 137,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeMaterialDebugBlock\", NodeMaterialDebugBlock);"
         }
       ]
@@ -4293,7 +4293,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 73,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DesaturateBlock\", DesaturateBlock);"
         }
       ]
@@ -4303,7 +4303,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 70,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DistanceBlock\", DistanceBlock);"
         }
       ]
@@ -4313,7 +4313,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 36,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DivideBlock\", DivideBlock);"
         }
       ]
@@ -4323,7 +4323,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 69,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DotBlock\", DotBlock);"
         }
       ]
@@ -4333,7 +4333,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 175,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ClipPlanesBlock\", ClipPlanesBlock);"
         }
       ]
@@ -4343,7 +4343,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 352,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CurrentScreenBlock\", CurrentScreenBlock);"
         }
       ]
@@ -4353,7 +4353,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 76,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DepthSourceBlock\", DepthSourceBlock);"
         }
       ]
@@ -4363,7 +4363,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 229,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.FogBlock\", FogBlock);"
         }
       ]
@@ -4373,7 +4373,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 223,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ImageSourceBlock\", ImageSourceBlock);"
         }
       ]
@@ -4383,7 +4383,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 543,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.LightBlock\", LightBlock);"
         }
       ]
@@ -4393,7 +4393,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 641,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ReflectionTextureBaseBlock\", ReflectionTextureBaseBlock);"
         }
       ]
@@ -4403,7 +4403,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 212,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ReflectionTextureBlock\", ReflectionTextureBlock);"
         }
       ]
@@ -4413,7 +4413,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 311,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SceneDepthBlock\", SceneDepthBlock);"
         }
       ]
@@ -4423,7 +4423,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 172,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SmartFilterTextureBlock\", SmartFilterTextureBlock);"
         }
       ]
@@ -4433,7 +4433,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 773,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TextureBlock\", TextureBlock);"
         }
       ]
@@ -4443,7 +4443,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 84,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ElbowBlock\", ElbowBlock);"
         }
       ]
@@ -4453,7 +4453,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 308,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.AmbientOcclusionBlock\", AmbientOcclusionBlock);"
         }
       ]
@@ -4463,7 +4463,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 84,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DerivativeBlock\", DerivativeBlock);"
         }
       ]
@@ -4473,7 +4473,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 59,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DiscardBlock\", DiscardBlock);"
         }
       ]
@@ -4483,7 +4483,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 115,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.FragCoordBlock\", FragCoordBlock);"
         }
       ]
@@ -4493,7 +4493,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 79,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.FragDepthBlock\", FragDepthBlock);"
         }
       ]
@@ -4503,7 +4503,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 316,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.FragmentOutputBlock\", FragmentOutputBlock);"
         }
       ]
@@ -4513,7 +4513,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 55,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.FrontFacingBlock\", FrontFacingBlock);"
         }
       ]
@@ -4523,7 +4523,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 202,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.HeightToNormalBlock\", HeightToNormalBlock);"
         }
       ]
@@ -4533,7 +4533,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 260,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ImageProcessingBlock\", ImageProcessingBlock);"
         }
       ]
@@ -4543,7 +4543,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 503,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PerturbNormalBlock\", PerturbNormalBlock);"
         }
       ]
@@ -4553,7 +4553,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 258,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PrePassOutputBlock\", PrePassOutputBlock);"
         }
       ]
@@ -4563,7 +4563,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 111,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ScreenSizeBlock\", ScreenSizeBlock);"
         }
       ]
@@ -4573,7 +4573,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 133,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ScreenSpaceBlock\", ScreenSpaceBlock);"
         }
       ]
@@ -4583,7 +4583,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 173,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ShadowMapBlock\", ShadowMapBlock);"
         }
       ]
@@ -4593,7 +4593,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 240,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TBNBlock\", TBNBlock);"
         }
       ]
@@ -4603,7 +4603,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 146,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TwirlBlock\", TwirlBlock);"
         }
       ]
@@ -4613,7 +4613,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 114,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.FresnelBlock\", FresnelBlock);"
         }
       ]
@@ -4623,7 +4623,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 108,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GaussianBlock\", GaussianBlock);"
         }
       ]
@@ -4633,7 +4633,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 189,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GaussianSplattingBlock\", GaussianSplattingBlock);"
         }
       ]
@@ -4643,7 +4643,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 136,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SplatReaderBlock\", SplatReaderBlock);"
         }
       ]
@@ -4653,7 +4653,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 208,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GradientBlock\", GradientBlock);"
         }
       ]
@@ -4663,7 +4663,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 960,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.InputBlock\", InputBlock);"
         }
       ]
@@ -4673,7 +4673,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 293,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PrePassTextureBlock\", PrePassTextureBlock);"
         }
       ]
@@ -4683,7 +4683,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 58,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.LengthBlock\", LengthBlock);"
         }
       ]
@@ -4693,7 +4693,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 78,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.LerpBlock\", LerpBlock);"
         }
       ]
@@ -4703,7 +4703,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 156,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.LoopBlock\", LoopBlock);"
         }
       ]
@@ -4713,7 +4713,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 118,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MatrixBuilder\", MatrixBuilderBlock);"
         }
       ]
@@ -4723,7 +4723,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 57,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MatrixDeterminantBlock\", MatrixDeterminantBlock);"
         }
       ]
@@ -4733,7 +4733,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 152,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MatrixSplitterBlock\", MatrixSplitterBlock);"
         }
       ]
@@ -4743,7 +4743,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 57,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MatrixTransposeBlock\", MatrixTransposeBlock);"
         }
       ]
@@ -4753,7 +4753,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 66,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MaxBlock\", MaxBlock);"
         }
       ]
@@ -4763,7 +4763,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 232,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MeshAttributeExistsBlock\", MeshAttributeExistsBlock);"
         }
       ]
@@ -4773,7 +4773,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 66,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MinBlock\", MinBlock);"
         }
       ]
@@ -4783,7 +4783,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 73,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ModBlock\", ModBlock);"
         }
       ]
@@ -4793,7 +4793,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 36,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MultiplyBlock\", MultiplyBlock);"
         }
       ]
@@ -4803,7 +4803,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 57,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NegateBlock\", NegateBlock);"
         }
       ]
@@ -4813,7 +4813,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 80,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NLerpBlock\", NLerpBlock);"
         }
       ]
@@ -4823,7 +4823,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 86,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NormalBlendBlock\", NormalBlendBlock);"
         }
       ]
@@ -4833,7 +4833,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 61,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NormalizeBlock\", NormalizeBlock);"
         }
       ]
@@ -4843,13 +4843,13 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 58,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.OneMinusBlock\", OneMinusBlock);"
         },
         {
           "type": "RegisterClass",
-          "line": 59,
-          "text": "RegisterClass(\"BABYLON.OppositeBlock\", OneMinusBlock); // Backward compatibility"
+          "line": 12,
+          "text": "RegisterClass(\"BABYLON.OppositeBlock\", OneMinusBlock);"
         }
       ]
     },
@@ -4858,7 +4858,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 114,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PannerBlock\", PannerBlock);"
         }
       ]
@@ -4868,7 +4868,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 93,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleBlendMultiplyBlock\", ParticleBlendMultiplyBlock);"
         }
       ]
@@ -4878,7 +4878,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 94,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleRampGradientBlock\", ParticleRampGradientBlock);"
         }
       ]
@@ -4888,7 +4888,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 243,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleTextureBlock\", ParticleTextureBlock);"
         }
       ]
@@ -4898,7 +4898,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 249,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.AnisotropyBlock\", AnisotropyBlock);"
         }
       ]
@@ -4908,7 +4908,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 459,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ClearCoatBlock\", ClearCoatBlock);"
         }
       ]
@@ -4918,7 +4918,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 182,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.IridescenceBlock\", IridescenceBlock);"
         }
       ]
@@ -4928,7 +4928,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 1651,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PBRMetallicRoughnessBlock\", PBRMetallicRoughnessBlock);"
         }
       ]
@@ -4938,7 +4938,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 545,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ReflectionBlock\", ReflectionBlock);"
         }
       ]
@@ -4948,7 +4948,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 439,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.RefractionBlock\", RefractionBlock);"
         }
       ]
@@ -4958,7 +4958,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 243,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SheenBlock\", SheenBlock);"
         }
       ]
@@ -4968,7 +4968,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 313,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SubSurfaceBlock\", SubSurfaceBlock);"
         }
       ]
@@ -4978,7 +4978,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 73,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PosterizeBlock\", PosterizeBlock);"
         }
       ]
@@ -4988,7 +4988,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 66,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PowBlock\", PowBlock);"
         }
       ]
@@ -4998,7 +4998,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 69,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.RandomNumberBlock\", RandomNumberBlock);"
         }
       ]
@@ -5008,7 +5008,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 61,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ReciprocalBlock\", ReciprocalBlock);"
         }
       ]
@@ -5018,7 +5018,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 76,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ReflectBlock\", ReflectBlock);"
         }
       ]
@@ -5028,7 +5028,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 86,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.RefractBlock\", RefractBlock);"
         }
       ]
@@ -5038,7 +5038,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 147,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.RemapBlock\", RemapBlock);"
         }
       ]
@@ -5048,7 +5048,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 94,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ReplaceColorBlock\", ReplaceColorBlock);"
         }
       ]
@@ -5058,7 +5058,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 78,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.Rotate2dBlock\", Rotate2dBlock);"
         }
       ]
@@ -5068,7 +5068,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 65,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ScaleBlock\", ScaleBlock);"
         }
       ]
@@ -5078,7 +5078,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 140,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SimplexPerlin3DBlock\", SimplexPerlin3DBlock);"
         }
       ]
@@ -5088,7 +5088,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 76,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SmoothStepBlock\", SmoothStepBlock);"
         }
       ]
@@ -5098,7 +5098,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 63,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.StepBlock\", StepBlock);"
         }
       ]
@@ -5108,7 +5108,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 72,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.StorageReadBlock\", StorageReadBlock);"
         }
       ]
@@ -5118,7 +5118,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 84,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.StorageWriteBlock\", StorageWriteBlock);"
         }
       ]
@@ -5128,7 +5128,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 36,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SubtractBlock\", SubtractBlock);"
         }
       ]
@@ -5138,7 +5138,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 168,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeMaterialTeleportInBlock\", NodeMaterialTeleportInBlock);"
         }
       ]
@@ -5148,7 +5148,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 197,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeMaterialTeleportOutBlock\", NodeMaterialTeleportOutBlock);"
         }
       ]
@@ -5158,7 +5158,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 217,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TransformBlock\", TransformBlock);"
         }
       ]
@@ -5168,7 +5168,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 244,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TrigonometryBlock\", TrigonometryBlock);"
         }
       ]
@@ -5178,7 +5178,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 619,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TriPlanarBlock\", TriPlanarBlock);"
         }
       ]
@@ -5188,7 +5188,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 352,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.VectorMergerBlock\", VectorMergerBlock);"
         }
       ]
@@ -5198,7 +5198,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 178,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.VectorSplitterBlock\", VectorSplitterBlock);"
         }
       ]
@@ -5208,7 +5208,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 238,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BonesBlock\", BonesBlock);"
         }
       ]
@@ -5218,7 +5218,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 219,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.InstancesBlock\", InstancesBlock);"
         }
       ]
@@ -5228,7 +5228,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 271,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.LightInformationBlock\", LightInformationBlock);"
         }
       ]
@@ -5238,7 +5238,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 534,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MorphTargetsBlock\", MorphTargetsBlock);"
         }
       ]
@@ -5248,7 +5248,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 83,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.VertexOutputBlock\", VertexOutputBlock);"
         }
       ]
@@ -5258,7 +5258,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 85,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ViewDirectionBlock\", ViewDirectionBlock);"
         }
       ]
@@ -5268,7 +5268,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 137,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.VoronoiNoiseBlock\", VoronoiNoiseBlock);"
         }
       ]
@@ -5278,7 +5278,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 126,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.WaveBlock\", WaveBlock);"
         }
       ]
@@ -5288,7 +5288,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 307,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.WorleyNoise3DBlock\", WorleyNoise3DBlock);"
         }
       ]
@@ -5298,7 +5298,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 2678,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeMaterial\", NodeMaterial);"
         }
       ]
@@ -5308,7 +5308,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 3052,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.OpenPBRMaterial\", OpenPBRMaterial);"
         }
       ]
@@ -5328,7 +5328,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 750,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PBRMaterial\", PBRMaterial);"
         }
       ]
@@ -5338,7 +5338,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 162,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PBRMetallicRoughnessMaterial\", PBRMetallicRoughnessMaterial);"
         }
       ]
@@ -5348,7 +5348,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 159,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PBRSpecularGlossinessMaterial\", PBRSpecularGlossinessMaterial);"
         }
       ]
@@ -5358,7 +5358,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 1944,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ShaderMaterial\", ShaderMaterial);"
         }
       ]
@@ -5408,7 +5408,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 314,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ColorGradingTexture\", ColorGradingTexture);"
         }
       ]
@@ -5433,7 +5433,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 117,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.EXRCubeTexture\", EXRCubeTexture);"
         }
       ]
@@ -5443,7 +5443,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 113,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.HDRCubeTexture\", HDRCubeTexture);"
         }
       ]
@@ -5463,7 +5463,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 139,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NoiseProceduralTexture\", NoiseProceduralTexture);"
         }
       ]
@@ -5473,7 +5473,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 860,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ProceduralTexture\", ProceduralTexture);"
         }
       ]
@@ -5533,12 +5533,12 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 1913,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.Color3\", Color3);"
         },
         {
           "type": "RegisterClass",
-          "line": 1914,
+          "line": 12,
           "text": "RegisterClass(\"BABYLON.Color4\", Color4);"
         }
       ]
@@ -5548,22 +5548,22 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 8875,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.Vector2\", Vector2);"
         },
         {
           "type": "RegisterClass",
-          "line": 8876,
+          "line": 12,
           "text": "RegisterClass(\"BABYLON.Vector3\", Vector3);"
         },
         {
           "type": "RegisterClass",
-          "line": 8877,
+          "line": 13,
           "text": "RegisterClass(\"BABYLON.Vector4\", Vector4);"
         },
         {
           "type": "RegisterClass",
-          "line": 8878,
+          "line": 14,
           "text": "RegisterClass(\"BABYLON.Matrix\", Matrix);"
         }
       ]
@@ -5583,7 +5583,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 2833,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.AbstractMesh\", AbstractMesh);"
         }
       ]
@@ -5903,7 +5903,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 5895,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.Mesh\", Mesh);"
         }
       ]
@@ -5943,7 +5943,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 221,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BooleanGeometryBlock\", BooleanGeometryBlock);"
         }
       ]
@@ -5953,7 +5953,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 78,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BoundingBlock\", BoundingBlock);"
         }
       ]
@@ -5963,7 +5963,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 106,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CleanGeometryBlock\", CleanGeometryBlock);"
         }
       ]
@@ -5973,7 +5973,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 65,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ComputeNormalsBlock\", ComputeNormalsBlock);"
         }
       ]
@@ -5983,7 +5983,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 231,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ConditionBlock\", ConditionBlock);"
         }
       ]
@@ -5993,7 +5993,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 105,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DebugBlock\", DebugBlock);"
         }
       ]
@@ -6003,7 +6003,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 94,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryArcTan2Block\", GeometryArcTan2Block);"
         }
       ]
@@ -6013,7 +6013,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 130,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryClampBlock\", GeometryClampBlock);"
         }
       ]
@@ -6023,7 +6023,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 195,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryCollectionBlock\", GeometryCollectionBlock);"
         }
       ]
@@ -6033,7 +6033,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 89,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryCrossBlock\", GeometryCrossBlock);"
         }
       ]
@@ -6043,7 +6043,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 317,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryCurveBlock\", GeometryCurveBlock);"
         }
       ]
@@ -6053,7 +6053,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 73,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryDesaturateBlock\", GeometryDesaturateBlock);"
         }
       ]
@@ -6063,7 +6063,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 77,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryDistanceBlock\", GeometryDistanceBlock);"
         }
       ]
@@ -6073,7 +6073,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 76,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryDotBlock\", GeometryDotBlock);"
         }
       ]
@@ -6083,7 +6083,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 344,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryEaseBlock\", GeometryEaseBlock);"
         }
       ]
@@ -6093,7 +6093,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 64,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryElbowBlock\", GeometryElbowBlock);"
         }
       ]
@@ -6103,7 +6103,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 117,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryInfoBlock\", GeometryInfoBlock);"
         }
       ]
@@ -6113,7 +6113,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 323,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryInputBlock\", GeometryInputBlock);"
         }
       ]
@@ -6123,7 +6123,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 84,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryInterceptorBlock\", GeometryInterceptorBlock);"
         }
       ]
@@ -6133,7 +6133,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 62,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryLengthBlock\", GeometryLengthBlock);"
         }
       ]
@@ -6143,7 +6143,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 104,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryLerpBlock\", GeometryLerpBlock);"
         }
       ]
@@ -6153,7 +6153,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 95,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryModBlock\", GeometryModBlock);"
         }
       ]
@@ -6163,7 +6163,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 114,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryNLerpBlock\", GeometryNLerpBlock);"
         }
       ]
@@ -6173,7 +6173,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 245,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryOptimizeBlock\", GeometryOptimizeBlock);"
         }
       ]
@@ -6183,7 +6183,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 54,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryOutputBlock\", GeometryOutputBlock);"
         }
       ]
@@ -6193,7 +6193,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 111,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryPosterizeBlock\", GeometryPosterizeBlock);"
         }
       ]
@@ -6203,7 +6203,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 94,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryPowBlock\", GeometryPowBlock);"
         }
       ]
@@ -6213,7 +6213,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 101,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryReplaceColorBlock\", GeometryReplaceColorBlock);"
         }
       ]
@@ -6223,7 +6223,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 69,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryRotate2dBlock\", GeometryRotate2dBlock);"
         }
       ]
@@ -6233,7 +6233,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 105,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometrySmoothStepBlock\", GeometrySmoothStepBlock);"
         }
       ]
@@ -6243,7 +6243,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 97,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryStepBlock\", GeometryStepBlock);"
         }
       ]
@@ -6253,7 +6253,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 196,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryTransformBlock\", GeometryTransformBlock);"
         }
       ]
@@ -6263,7 +6263,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 293,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryTrigonometryBlock\", GeometryTrigonometryBlock);"
         }
       ]
@@ -6273,7 +6273,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 157,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.InstantiateBlock\", InstantiateBlock);"
         }
       ]
@@ -6283,7 +6283,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 122,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.InstantiateLinearBlock\", InstantiateLinearBlock);"
         }
       ]
@@ -6293,7 +6293,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 335,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.InstantiateOnFacesBlock\", InstantiateOnFacesBlock);"
         }
       ]
@@ -6303,7 +6303,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 298,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.InstantiateOnVerticesBlock\", InstantiateOnVerticesBlock);"
         }
       ]
@@ -6313,7 +6313,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 361,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.InstantiateOnVolumeBlock\", InstantiateOnVolumeBlock);"
         }
       ]
@@ -6323,7 +6323,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 171,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.InstantiateRadialBlock\", InstantiateRadialBlock);"
         }
       ]
@@ -6333,7 +6333,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 95,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.IntFloatConverterBlock\", IntFloatConverterBlock);"
         }
       ]
@@ -6343,7 +6343,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 181,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MappingBlock\", MappingBlock);"
         }
       ]
@@ -6353,7 +6353,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 109,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MapRangeBlock\", MapRangeBlock);"
         }
       ]
@@ -6363,7 +6363,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 346,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MathBlock\", MathBlock);"
         }
       ]
@@ -6373,7 +6373,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 71,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.AlignBlock\", AlignBlock);"
         }
       ]
@@ -6383,7 +6383,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 54,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.RotationXBlock\", RotationXBlock);"
         }
       ]
@@ -6393,7 +6393,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 54,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.RotationYBlock\", RotationYBlock);"
         }
       ]
@@ -6403,7 +6403,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 54,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.RotationZBlock\", RotationZBlock);"
         }
       ]
@@ -6413,7 +6413,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 65,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ScalingBlock\", ScalingBlock);"
         }
       ]
@@ -6423,7 +6423,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 65,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TranslationBlock\", TranslationBlock);"
         }
       ]
@@ -6433,7 +6433,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 71,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MatrixComposeBlock\", MatrixComposeBlock);"
         }
       ]
@@ -6443,7 +6443,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 167,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MergeGeometryBlock\", MergeGeometryBlock);"
         }
       ]
@@ -6453,7 +6453,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 215,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NoiseBlock\", NoiseBlock);"
         }
       ]
@@ -6463,7 +6463,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 62,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NormalizeVectorBlock\", NormalizeVectorBlock);"
         }
       ]
@@ -6473,7 +6473,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 212,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.RandomBlock\", RandomBlock);"
         }
       ]
@@ -6483,7 +6483,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 244,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.AggregatorBlock\", AggregatorBlock);"
         }
       ]
@@ -6493,7 +6493,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 230,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.LatticeBlock\", LatticeBlock);"
         }
       ]
@@ -6503,7 +6503,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 187,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SetColorsBlock\", SetColorsBlock);"
         }
       ]
@@ -6513,7 +6513,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 123,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SetMaterialIDBlock\", SetMaterialIDBlock);"
         }
       ]
@@ -6523,7 +6523,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 171,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SetNormalsBlock\", SetNormalsBlock);"
         }
       ]
@@ -6533,7 +6533,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 266,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SetPositionsBlock\", SetPositionsBlock);"
         }
       ]
@@ -6543,7 +6543,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 171,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SetTangentsBlock\", SetTangentsBlock);"
         }
       ]
@@ -6553,7 +6553,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 211,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SetUVsBlock\", SetUVsBlock);"
         }
       ]
@@ -6563,7 +6563,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 221,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BoxBlock\", BoxBlock);"
         }
       ]
@@ -6573,7 +6573,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 155,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CapsuleBlock\", CapsuleBlock);"
         }
       ]
@@ -6583,7 +6583,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 197,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CylinderBlock\", CylinderBlock);"
         }
       ]
@@ -6593,7 +6593,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 135,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DiscBlock\", DiscBlock);"
         }
       ]
@@ -6603,7 +6603,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 151,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GridBlock\", GridBlock);"
         }
       ]
@@ -6613,7 +6613,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 157,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.IcoSphereBlock\", IcoSphereBlock);"
         }
       ]
@@ -6623,7 +6623,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 139,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MeshBlock\", MeshBlock);"
         }
       ]
@@ -6633,7 +6633,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 48,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.NullBlock\", NullBlock);"
         }
       ]
@@ -6643,7 +6643,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 192,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PlaneBlock\", PlaneBlock);"
         }
       ]
@@ -6653,7 +6653,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 95,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PointListBlock\", PointListBlock);"
         }
       ]
@@ -6663,7 +6663,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 176,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SphereBlock\", SphereBlock);"
         }
       ]
@@ -6673,7 +6673,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 135,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TorusBlock\", TorusBlock);"
         }
       ]
@@ -6683,7 +6683,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 112,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SubdivideBlock\", SubdivideBlock);"
         }
       ]
@@ -6693,7 +6693,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 154,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TeleportInBlock\", TeleportInBlock);"
         }
       ]
@@ -6703,7 +6703,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 136,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TeleportOutBlock\", TeleportOutBlock);"
         }
       ]
@@ -6713,7 +6713,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 225,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryTextureBlock\", GeometryTextureBlock);"
         }
       ]
@@ -6723,7 +6723,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 231,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GeometryTextureFetchBlock\", GeometryTextureFetchBlock);"
         }
       ]
@@ -6733,7 +6733,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 299,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.VectorConverterBlock\", VectorConverterBlock);"
         }
       ]
@@ -6983,7 +6983,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 916,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BaseParticleSystem\", BaseParticleSystem);"
         }
       ]
@@ -6993,7 +6993,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 217,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ComputeShaderParticleSystem\", ComputeShaderParticleSystem);"
         }
       ]
@@ -7003,7 +7003,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 199,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleConditionBlock\", ParticleConditionBlock);"
         }
       ]
@@ -7013,7 +7013,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 133,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BoxShapeBlock\", BoxShapeBlock);"
         }
       ]
@@ -7023,7 +7023,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 224,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ConeShapeBlock\", ConeShapeBlock);"
         }
       ]
@@ -7033,7 +7033,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 168,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CreateParticleBlock\", CreateParticleBlock);"
         }
       ]
@@ -7043,7 +7043,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 122,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CustomShapeBlock\", CustomShapeBlock);"
         }
       ]
@@ -7053,7 +7053,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 185,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CylinderShapeBlock\", CylinderShapeBlock);"
         }
       ]
@@ -7063,7 +7063,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 292,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MeshShapeBlock\", MeshShapeBlock);"
         }
       ]
@@ -7073,7 +7073,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 108,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.PointShapeBlock\", PointShapeBlock);"
         }
       ]
@@ -7083,7 +7083,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 131,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SetupSpriteSheetBlock\", SetupSpriteSheetBlock);"
         }
       ]
@@ -7093,7 +7093,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 191,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SphereShapeBlock\", SphereShapeBlock);"
         }
       ]
@@ -7103,7 +7103,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 136,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleClampBlock\", ParticleClampBlock);"
         }
       ]
@@ -7113,7 +7113,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 300,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleConverterBlock\", ParticleConverterBlock);"
         }
       ]
@@ -7123,7 +7123,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 141,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleDebugBlock\", ParticleDebugBlock);"
         }
       ]
@@ -7133,7 +7133,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 57,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleElbowBlock\", ParticleElbowBlock);"
         }
       ]
@@ -7143,7 +7143,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 137,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleFloatToIntBlock\", ParticleFloatToIntBlock);"
         }
       ]
@@ -7153,7 +7153,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 187,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleGradientBlock\", ParticleGradientBlock);"
         }
       ]
@@ -7163,7 +7163,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 92,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleGradientValueBlock\", ParticleGradientValueBlock);"
         }
       ]
@@ -7173,7 +7173,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 340,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleInputBlock\", ParticleInputBlock);"
         }
       ]
@@ -7183,7 +7183,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 107,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleLerpBlock\", ParticleLerpBlock);"
         }
       ]
@@ -7193,7 +7193,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 140,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleLocalVariableBlock\", ParticleLocalVariableBlock);"
         }
       ]
@@ -7203,7 +7203,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 356,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleMathBlock\", ParticleMathBlock);"
         }
       ]
@@ -7213,7 +7213,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 116,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleNLerpBlock\", ParticleNLerpBlock);"
         }
       ]
@@ -7223,7 +7223,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 194,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleNumberMathBlock\", ParticleNumberMathBlock);"
         }
       ]
@@ -7233,7 +7233,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 213,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleRandomBlock\", ParticleRandomBlock);"
         }
       ]
@@ -7243,7 +7243,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 105,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleSmoothStepBlock\", ParticleSmoothStepBlock);"
         }
       ]
@@ -7253,7 +7253,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 332,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleTextureSourceBlock\", ParticleTextureSourceBlock);"
         }
       ]
@@ -7263,7 +7263,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 97,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleStepBlock\", ParticleStepBlock);"
         }
       ]
@@ -7273,7 +7273,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 290,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleTrigonometryBlock\", ParticleTrigonometryBlock);"
         }
       ]
@@ -7283,7 +7283,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 59,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleVectorLengthBlock\", ParticleVectorLengthBlock);"
         }
       ]
@@ -7293,7 +7293,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 132,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleVectorMathBlock\", ParticleVectorMathBlock);"
         }
       ]
@@ -7303,7 +7303,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 390,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SystemBlock\", SystemBlock);"
         }
       ]
@@ -7313,7 +7313,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 119,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleTeleportInBlock\", ParticleTeleportInBlock);"
         }
       ]
@@ -7323,7 +7323,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 104,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleTeleportOutBlock\", ParticleTeleportOutBlock);"
         }
       ]
@@ -7333,7 +7333,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 160,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ParticleTriggerBlock\", ParticleTriggerBlock);"
         }
       ]
@@ -7343,7 +7343,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 114,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.AlignAngleBlock\", AlignAngleBlock);"
         }
       ]
@@ -7353,7 +7353,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 82,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BasicColorUpdateBlock\", BasicColorUpdateBlock);"
         }
       ]
@@ -7363,7 +7363,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 77,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BasicPositionUpdateBlock\", BasicPositionUpdateBlock);"
         }
       ]
@@ -7373,7 +7373,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 76,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BasicSpriteUpdateBlock\", BasicSpriteUpdateBlock);"
         }
       ]
@@ -7383,7 +7383,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 88,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.UpdateAgeBlock\", UpdateAgeBlock);"
         }
       ]
@@ -7393,7 +7393,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 88,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.UpdateAngleBlock\", UpdateAngleBlock);"
         }
       ]
@@ -7403,7 +7403,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 103,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.UpdateAttractorBlock\", UpdateAttractorBlock);"
         }
       ]
@@ -7413,7 +7413,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 89,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.UpdateColorBlock\", UpdateColorBlock);"
         }
       ]
@@ -7423,7 +7423,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 89,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.UpdateDirectionBlock\", UpdateDirectionBlock);"
         }
       ]
@@ -7433,7 +7433,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 112,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.UpdateFlowMapBlock\", UpdateFlowMapBlock);"
         }
       ]
@@ -7443,7 +7443,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 175,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.UpdateNoiseBlock\", UpdateNoiseBlock);"
         }
       ]
@@ -7453,7 +7453,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 88,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.UpdatePositionBlock\", UpdatePositionBlock);"
         }
       ]
@@ -7463,7 +7463,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 89,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.UpdateScaleBlock\", UpdateScaleBlock);"
         }
       ]
@@ -7473,7 +7473,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 89,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.UpdateSizeBlock\", UpdateSizeBlock);"
         }
       ]
@@ -7483,7 +7483,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 90,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.UpdateSpriteCellIndexBlock\", UpdateSpriteCellIndexBlock);"
         }
       ]
@@ -7533,7 +7533,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 323,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.WebGL2ParticleSystem\", WebGL2ParticleSystem);"
         }
       ]
@@ -7658,7 +7658,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 57,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.AnaglyphPostProcess\", AnaglyphPostProcess);"
         }
       ]
@@ -7668,7 +7668,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 89,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BlackAndWhitePostProcess\", BlackAndWhitePostProcess);"
         }
       ]
@@ -7678,7 +7678,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 96,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BloomMergePostProcess\", BloomMergePostProcess);"
         }
       ]
@@ -7688,7 +7688,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 173,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.BlurPostProcess\", BlurPostProcess);"
         }
       ]
@@ -7698,7 +7698,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 170,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ChromaticAberrationPostProcess\", ChromaticAberrationPostProcess);"
         }
       ]
@@ -7708,7 +7708,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 144,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.CircleOfConfusionPostProcess\", CircleOfConfusionPostProcess);"
         }
       ]
@@ -7718,7 +7718,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 98,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ColorCorrectionPostProcess\", ColorCorrectionPostProcess);"
         }
       ]
@@ -7728,7 +7728,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 135,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ConvolutionPostProcess\", ConvolutionPostProcess);"
         }
       ]
@@ -7738,7 +7738,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 92,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DepthOfFieldBlurPostProcess\", DepthOfFieldBlurPostProcess);"
         }
       ]
@@ -7748,7 +7748,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 70,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DisplayPassPostProcess\", DisplayPassPostProcess);"
         }
       ]
@@ -7758,7 +7758,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 91,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ExtractHighlightsPostProcess\", ExtractHighlightsPostProcess);"
         }
       ]
@@ -7768,7 +7768,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 99,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.FilterPostProcess\", FilterPostProcess);"
         }
       ]
@@ -7778,7 +7778,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 82,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.FxaaPostProcess\", FxaaPostProcess);"
         }
       ]
@@ -7788,7 +7788,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 114,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.GrainPostProcess\", GrainPostProcess);"
         }
       ]
@@ -7798,7 +7798,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 327,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.MotionBlurPostProcess\", MotionBlurPostProcess);"
         }
       ]
@@ -7863,7 +7863,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 152,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.RefractionPostProcess\", RefractionPostProcess);"
         }
       ]
@@ -7873,7 +7873,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 873,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.DefaultRenderingPipeline\", DefaultRenderingPipeline);"
         }
       ]
@@ -7883,7 +7883,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 623,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SSAO2RenderingPipeline\", SSAO2RenderingPipeline);"
         }
       ]
@@ -7893,7 +7893,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 1041,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SSRRenderingPipeline\", SSRRenderingPipeline);"
         }
       ]
@@ -7903,7 +7903,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 1695,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.StandardRenderingPipeline\", StandardRenderingPipeline);"
         }
       ]
@@ -7923,7 +7923,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 438,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TAARenderingPipeline\", TAARenderingPipeline);"
         }
       ]
@@ -7943,7 +7943,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 156,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ScreenSpaceCurvaturePostProcess\", ScreenSpaceCurvaturePostProcess);"
         }
       ]
@@ -7953,7 +7953,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 310,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.ScreenSpaceReflectionPostProcess\", ScreenSpaceReflectionPostProcess);"
         }
       ]
@@ -7963,7 +7963,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 123,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.SharpenPostProcess\", SharpenPostProcess);"
         }
       ]
@@ -7973,7 +7973,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 120,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.TonemapPostProcess\", TonemapPostProcess);"
         }
       ]
@@ -7983,7 +7983,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 655,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.VolumetricLightScatteringPostProcess\", VolumetricLightScatteringPostProcess);"
         }
       ]
@@ -8298,7 +8298,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 6699,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.Scene\", Scene);"
         }
       ]

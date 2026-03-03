@@ -77,6 +77,30 @@ const TEST_CASES = [
         maxBundleSizeBytes: Infinity, // no size limit — just verify it bundles
         description: "Named import of ThinMatrix should bundle successfully (sanity check)",
     },
+    {
+        name: "math-color-pure-bare",
+        entryCode: `import "${CORE_DIST}/Maths/math.color.pure.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of math.color.pure (side-effect-free) should produce near-empty bundle",
+    },
+    {
+        name: "math-color-pure-named",
+        entryCode: `import { Color3 } from "${CORE_DIST}/Maths/math.color.pure.js";\nconsole.log(Color3);\n`,
+        maxBundleSizeBytes: Infinity,
+        description: "Named import of Color3 from math.color.pure should bundle (sanity check)",
+    },
+    {
+        name: "math-vector-pure-bare",
+        entryCode: `import "${CORE_DIST}/Maths/math.vector.pure.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of math.vector.pure (side-effect-free) should produce near-empty bundle",
+    },
+    {
+        name: "math-pure-barrel-bare",
+        entryCode: `import "${CORE_DIST}/Maths/math.pure.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of math.pure barrel (side-effect-free) should produce near-empty bundle",
+    },
 ];
 
 // ---------------------------------------------------------------------------
@@ -106,8 +130,11 @@ async function testWithRollup(testCase) {
             treeshake: {
                 moduleSideEffects: (id) => {
                     // Mirror what package.json sideEffects says:
-                    // Everything in core has side effects EXCEPT ThinMaths
+                    // Everything in core has side effects EXCEPT ThinMaths and .pure files
                     if (id.includes("/Maths/ThinMaths/")) {
+                        return false;
+                    }
+                    if (id.endsWith(".pure.js")) {
                         return false;
                     }
                     return true;
@@ -172,11 +199,15 @@ async function testWithWebpack(testCase) {
             resolve: {
                 extensions: [".js", ".mjs"],
             },
-            // Tell webpack that ThinMaths files have no side effects
+            // Tell webpack that ThinMaths files and .pure files have no side effects
             module: {
                 rules: [
                     {
                         test: /Maths[\\/]ThinMaths/,
+                        sideEffects: false,
+                    },
+                    {
+                        test: /\.pure\.js$/,
                         sideEffects: false,
                     },
                 ],
