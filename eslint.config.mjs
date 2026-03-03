@@ -704,5 +704,15 @@ export default tseslint.config(
         rules: {
             "babylonjs/no-directory-barrel-imports": "error",
         },
+    },
+
+    // ===========================================
+    // Pure files: require /*#__PURE__*/ on top-level calls
+    // ===========================================
+    {
+        files: ["packages/dev/core/src/**/*.pure.ts"],
+        rules: {
+            "babylonjs/require-pure-annotation": "error",
+        },
     }
 );

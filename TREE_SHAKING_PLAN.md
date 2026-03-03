@@ -54,8 +54,27 @@
 | Static property assignments    | 59    | Medium — need factory pattern           |
 | Multiple mixed side effects    | ~37   | Case-by-case                            |
 
-- [ ] **1.1** — Annotate module-scope `new`, factory calls, `Object.freeze()` etc. in pure-candidate files
-- [ ] **1.2** — Add lint/CI check for missing annotations in side-effect-free files
+- [x] **1.1** — Annotate module-scope `new`, factory calls, `Object.freeze()` etc. in pure-candidate files
+    - Added `/*#__PURE__*/` annotations to **5 `.pure.ts` source files** (44 sites total):
+        - `Maths/math.color.pure.ts` — 7 sites (2× `Object.defineProperties`, 2× `_V8PerformanceHack`, 1× `_BlackReadOnly`, 2× `BuildArray`)
+        - `Maths/math.vector.pure.ts` — 31 sites (5× `Object.defineProperties`, 4× `_V8PerformanceHack`, 13× `_ReadOnly`, 8× `BuildTuple`, 1× `Matrix.FromValues`)
+        - `scene.pure.ts` — 2 sites (2× top-level `new Vector4()`)
+        - `Particles/…/createParticleBlock.pure.ts` — 1 site (`new Color4()`)
+        - `Particles/…/updateAttractorBlock.pure.ts` — 3 sites (3× `Vector3.Zero()`)
+    - **Key finding**: TypeScript preserves `/*#__PURE__*/` for top-level `const`/`let` and `Object.defineProperties`, but **strips annotations from static class field initializers** (hoisted outside the class body)
+    - Solution: post-build injection script `scripts/treeshaking/injectPureAnnotations.mjs`
+        - Scans all `.pure.js` files in `dist/`, injects `/*#__PURE__*/` before call expressions in top-level `ClassName.field = ...` assignments
+        - Idempotent (safe to run multiple times), supports `--dry-run` and `--verbose`
+        - Run: `npm run inject:pure-annotations`
+    - **After tsc + injection**: all 44 annotations present in compiled `.js` output ✓
+    - Bundle smoke tests: all 12 pass ✓
+- [x] **1.2** — Add lint/CI check for missing annotations in side-effect-free files
+    - New ESLint rule: `babylonjs/require-pure-annotation` (in `eslintBabylonPlugin`)
+    - Fires for `.pure.ts` files only
+    - Checks: static field initializers, top-level variable initializers, top-level expression statements
+    - Auto-fixable (inserts `/*#__PURE__*/` before the call expression)
+    - Unwraps `TSAsExpression` / `TSTypeAssertion` wrappers
+    - Enabled as `"error"` in `eslint.config.mjs` for `packages/dev/core/src/**/*.pure.ts`
 
 ## Phase 2 — Split Files into `FILE.pure.ts` + `FILE.ts`
 
@@ -115,8 +134,8 @@
 
 ```
 Phase 0 (Audit tooling)  ← DONE
-  ├─> Phase 1 (#__PURE__ annotations)        — can overlap
-  └─> Phase 2 (FILE.pure.ts splits)          — depends on audit
+  ├─> Phase 1 (#__PURE__ annotations)        ← DONE
+  └─> Phase 2 (FILE.pure.ts splits)          ← DONE (7 edge cases remain)
         └─> Phase 3 (pure.ts barrels)        — depends on splits
               └─> Phase 4 (static helpers)   — can overlap with Phase 3
                     └─> Phase 5 (sideEffects in package.json)

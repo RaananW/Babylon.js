@@ -15,7 +15,7 @@ import { Color4 } from "core/Maths/math.color";
 import { Vector2 } from "core/Maths/math.vector";
 import { PointParticleEmitter } from "core/Particles/EmitterTypes/pointParticleEmitter";
 
-const ColorDiff = new Color4();
+const ColorDiff = /*#__PURE__*/ new Color4();
 
 /**
  * @internal

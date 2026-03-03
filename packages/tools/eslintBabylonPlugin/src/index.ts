@@ -749,6 +749,100 @@ const plugin: IPlugin = {
                 };
             },
         },
+
+        /**
+         * Require `/*#__PURE__*​/` annotations on top-level call / new expressions
+         * and static field initializers inside `.pure.ts` files.
+         *
+         * These annotations tell bundlers (Rollup, Webpack) that the call has no
+         * side effects and can be tree-shaken when the result is unused.
+         */
+        "require-pure-annotation": {
+            meta: {
+                type: "problem",
+                fixable: "code",
+                docs: {
+                    description: "Require /*#__PURE__*/ on call/new expressions at module scope in .pure.ts files",
+                },
+                messages: {
+                    "missing-pure-annotation":
+                        "Call/new expression in a .pure.ts file must be annotated with /*#__PURE__*/. " + "Without it, bundlers cannot tree-shake this code. Expression: {{expr}}",
+                },
+            },
+            create(context: { filename?: string; getFilename?: () => string; sourceCode?: any; getSourceCode?: () => any; report: (desc: any) => void }) {
+                const filename = context.filename ?? context.getFilename?.() ?? "";
+                if (!filename.endsWith(".pure.ts")) {
+                    return {};
+                }
+
+                const sourceCode = context.sourceCode ?? context.getSourceCode?.();
+
+                /**
+                 * Unwrap TS type assertions (e.g. `new Foo() as Bar`) to find the
+                 * underlying CallExpression or NewExpression.
+                 */
+                function findCallOrNew(node: any): any {
+                    if (!node) return null;
+                    if (node.type === "NewExpression" || node.type === "CallExpression") return node;
+                    if (node.type === "TSAsExpression" || node.type === "TSTypeAssertion" || node.type === "TSSatisfiesExpression") {
+                        return findCallOrNew(node.expression);
+                    }
+                    return null;
+                }
+
+                /** Check whether the node is preceded by a PURE block comment. */
+                function hasPureAnnotation(node: any): boolean {
+                    // getCommentsBefore returns leading comments attached to the node
+                    const comments = sourceCode.getCommentsBefore?.(node) ?? [];
+                    for (const c of comments) {
+                        if (c.type === "Block" && c.value.trim() === "#__PURE__") return true;
+                    }
+                    // Also check the immediately preceding token (comment) in case
+                    // ESLint attached it differently
+                    const prev = sourceCode.getTokenBefore?.(node, { includeComments: true });
+                    if (prev && prev.type === "Block" && prev.value?.trim() === "#__PURE__") return true;
+                    return false;
+                }
+
+                function reportMissing(callOrNew: any) {
+                    const text = sourceCode.getText(callOrNew);
+                    context.report({
+                        node: callOrNew,
+                        messageId: "missing-pure-annotation",
+                        data: { expr: text.length > 60 ? text.slice(0, 57) + "..." : text },
+                        fix(fixer: any) {
+                            return fixer.insertTextBefore(callOrNew, "/*#__PURE__*/ ");
+                        },
+                    });
+                }
+
+                return {
+                    // Static class field initializers:  static foo = new Bar() / Bar.Create()
+                    "PropertyDefinition[static=true]"(node: any) {
+                        const callOrNew = findCallOrNew(node.value);
+                        if (callOrNew && !hasPureAnnotation(callOrNew)) {
+                            reportMissing(callOrNew);
+                        }
+                    },
+
+                    // Top-level variable initializers:  const x = new Foo()
+                    "Program > VariableDeclaration > VariableDeclarator"(node: any) {
+                        const callOrNew = findCallOrNew(node.init);
+                        if (callOrNew && !hasPureAnnotation(callOrNew)) {
+                            reportMissing(callOrNew);
+                        }
+                    },
+
+                    // Top-level expression statements:  Object.defineProperties(...)
+                    "Program > ExpressionStatement"(node: any) {
+                        const callOrNew = findCallOrNew(node.expression);
+                        if (callOrNew && !hasPureAnnotation(callOrNew)) {
+                            reportMissing(callOrNew);
+                        }
+                    },
+                };
+            },
+        },
     },
 };
 

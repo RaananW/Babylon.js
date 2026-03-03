@@ -40,7 +40,7 @@ export class Color3 implements Tensor<Tuple<number, 3>, IColor3Like>, IColor3Lik
      * But the original color instances are unchanged and has a "deprecated map".
      * If we keep using the color instances from step 1, it will now be a poison pill which will mess up optimizations in any code it touches.
      */
-    static _V8PerformanceHack = new Color3(0.5, 0.5, 0.5) as DeepImmutable<Color3>;
+    static _V8PerformanceHack = /*#__PURE__*/ new Color3(0.5, 0.5, 0.5) as DeepImmutable<Color3>;
     /**
      * @see Tensor.dimension
      */
@@ -727,7 +727,7 @@ export class Color3 implements Tensor<Tuple<number, 3>, IColor3Like>, IColor3Lik
 
     // Statics
 
-    private static _BlackReadOnly = Color3.Black() as DeepImmutable<Color3>;
+    private static _BlackReadOnly = /*#__PURE__*/ Color3.Black() as DeepImmutable<Color3>;
 
     /**
      * Converts Hue, saturation and value to a Color3 (RGB)
@@ -1009,7 +1009,7 @@ export class Color3 implements Tensor<Tuple<number, 3>, IColor3Like>, IColor3Lik
         return new Color3(Math.random(), Math.random(), Math.random());
     }
 }
-Object.defineProperties(Color3.prototype, {
+/*#__PURE__*/ Object.defineProperties(Color3.prototype, {
     dimension: { value: [3] },
     rank: { value: 1 },
 });
@@ -1025,7 +1025,7 @@ export class Color4 implements Tensor<Tuple<number, 4>, IColor4Like>, IColor4Lik
      * But the original color instances are unchanged and has a "deprecated map".
      * If we keep using the color instances from step 1, it will now be a poison pill which will mess up optimizations in any code it touches.
      */
-    static _V8PerformanceHack = new Color4(0.5, 0.5, 0.5, 0.5) as DeepImmutable<Color4>;
+    static _V8PerformanceHack = /*#__PURE__*/ new Color4(0.5, 0.5, 0.5, 0.5) as DeepImmutable<Color4>;
     /**
      * @see Tensor.dimension
      */
@@ -1898,7 +1898,7 @@ export class Color4 implements Tensor<Tuple<number, 4>, IColor4Like>, IColor4Lik
         return colors;
     }
 }
-Object.defineProperties(Color4.prototype, {
+/*#__PURE__*/ Object.defineProperties(Color4.prototype, {
     dimension: { value: [4] },
     rank: { value: 1 },
 });
@@ -1907,6 +1907,6 @@ Object.defineProperties(Color4.prototype, {
  * @internal
  */
 export class TmpColors {
-    public static Color3: Color3[] = BuildArray(3, Color3.Black);
-    public static Color4: Color4[] = BuildArray(3, () => new Color4(0, 0, 0, 0));
+    public static Color3: Color3[] = /*#__PURE__*/ BuildArray(3, Color3.Black);
+    public static Color4: Color4[] = /*#__PURE__*/ BuildArray(3, () => new Color4(0, 0, 0, 0));
 }
