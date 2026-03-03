@@ -92,10 +92,20 @@
     - Handles string literals (`"BABYLON.Xxx"`) and variable refs (`FlowGraphBlockNames.Xxx`)
     - Handles `GetClass` + `RegisterClass` co-imports (preserves GetClass in pure file)
     - Result: **397 files split automatically** + 2 manual = **399 total**
-    - **7 edge cases deferred** (5 FlowGraph interleaved, 2 code-after-RegisterClass)
+    - **7 edge cases deferred** — script regex only matches `"…"` strings and bare identifiers; 6 files use backtick template literals, 1 file defines `RegisterClass` itself
     - TypeScript compilation: ✅ zero errors
     - Bundle smoke tests: ✅ all pass
 - [ ] **2.4** — Handle 7 deferred edge cases manually
+    - **Root cause A — Backtick template literal in `RegisterClass()` call** (6 files):
+        1. `Materials/GreasedLine/greasedLinePluginMaterial.ts` — uses interpolation: `` RegisterClass(`BABYLON.${GreasedLinePluginMaterial.GREASED_LINE_MATERIAL_NAME}`, …) ``
+        2. `PostProcesses/RenderPipeline/Pipelines/taaMaterialManager.ts` — also has a second class (`TAAMaterialManager`) defined *after* the call
+        3. `Rendering/GlobalIllumination/giRSMManager.ts`
+        4. `Rendering/IBLShadows/iblShadowsPluginMaterial.ts`
+        5. `Rendering/reflectiveShadowMap.ts`
+        6. `XR/features/WebXRDepthSensing.ts` — also has a second class (`WebXRDepthSensing`) defined *after* the call
+    - **Root cause B — File *defines* `RegisterClass`** (1 file):
+        7. `Misc/typeStore.ts` — exports the `RegisterClass` function itself; no import to detect
+    - **Fix options**: (a) extend regex on line 122 of `splitRegisterClass.mjs` to match backtick template literals, then re-run; (b) split these 7 files by hand
 - [ ] **2.5** — Shaders remain as-is (inherently side-effectful), explicitly listed in `sideEffects`
 
 ### Post-Phase-2 Audit Stats
