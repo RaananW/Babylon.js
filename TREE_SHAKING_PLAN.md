@@ -97,14 +97,13 @@
     - Bundle smoke tests: ✅ all pass
 - [ ] **2.4** — Handle 7 deferred edge cases manually
     - **Root cause A — Backtick template literal in `RegisterClass()` call** (6 files):
-        1. `Materials/GreasedLine/greasedLinePluginMaterial.ts` — uses interpolation: `` RegisterClass(`BABYLON.${GreasedLinePluginMaterial.GREASED_LINE_MATERIAL_NAME}`, …) ``
-        2. `PostProcesses/RenderPipeline/Pipelines/taaMaterialManager.ts` — also has a second class (`TAAMaterialManager`) defined *after* the call
+        1. `Materials/GreasedLine/greasedLinePluginMaterial.ts` — uses interpolation: ``RegisterClass(`BABYLON.${GreasedLinePluginMaterial.GREASED_LINE_MATERIAL_NAME}`, …)``
+        2. `PostProcesses/RenderPipeline/Pipelines/taaMaterialManager.ts` — also has a second class (`TAAMaterialManager`) defined _after_ the call
         3. `Rendering/GlobalIllumination/giRSMManager.ts`
         4. `Rendering/IBLShadows/iblShadowsPluginMaterial.ts`
         5. `Rendering/reflectiveShadowMap.ts`
-        6. `XR/features/WebXRDepthSensing.ts` — also has a second class (`WebXRDepthSensing`) defined *after* the call
-    - **Root cause B — File *defines* `RegisterClass`** (1 file):
-        7. `Misc/typeStore.ts` — exports the `RegisterClass` function itself; no import to detect
+        6. `XR/features/WebXRDepthSensing.ts` — also has a second class (`WebXRDepthSensing`) defined _after_ the call
+    - **Root cause B — File _defines_ `RegisterClass`** (1 file): 7. `Misc/typeStore.ts` — exports the `RegisterClass` function itself; no import to detect
     - **Fix options**: (a) extend regex on line 122 of `splitRegisterClass.mjs` to match backtick template literals, then re-run; (b) split these 7 files by hand
 - [ ] **2.5** — Shaders remain as-is (inherently side-effectful), explicitly listed in `sideEffects`
 
