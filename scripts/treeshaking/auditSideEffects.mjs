@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable babylonjs/syntax */
 /* eslint-disable no-console */
 /**
  * Side-Effect Audit Script for @babylonjs/core
