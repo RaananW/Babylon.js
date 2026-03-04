@@ -33,6 +33,12 @@
                             "@dev/smart-filters"
                         ],
                         "target": "build"
+                    },
+                    {
+                        "projects": [
+                            "@babylonjs/core"
+                        ],
+                        "target": "build"
                     }
                 ]
             }

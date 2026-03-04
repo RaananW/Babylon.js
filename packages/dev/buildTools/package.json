@@ -10,7 +10,8 @@
     ],
     "scripts": {
         "build": "npm run compile",
-        "compile": "tsc -b tsconfig.build.json"
+        "compile": "tsc -b tsconfig.build.json",
+        "postcompile": "chmod +x dist/index.js"
     },
     "sideEffects": true,
     "devDependencies": {

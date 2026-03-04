@@ -2,7 +2,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { globSync } from "glob";
-import { transformPackageLocation } from "./pathTransform.js";
+import { transformPackageLocation, storeTsLib } from "./pathTransform.js";
 import type { BuildType } from "./packageMapping.js";
 import { checkArgs } from "./utils.js";
 
@@ -204,4 +204,14 @@ export function postProcessPathsCommand(): void {
         },
         filePattern || undefined
     );
+
+    // When building @babylonjs/core, always ensure tslib.es6.js exists in the
+    // package directory. Previously the tsc + ts-patch compilation would emit
+    // `import "tslib"` statements (triggering storeTsLib during path transforms),
+    // but SWC inlines helpers instead of importing tslib. Other packages'
+    // postProcessPaths still rewrites tslib → @babylonjs/core/tslib.es6.js,
+    // so the file must exist even when core itself doesn't reference it.
+    if (basePackage === "@babylonjs/core" && buildType === "es6") {
+        storeTsLib();
+    }
 }

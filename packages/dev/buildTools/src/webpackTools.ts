@@ -25,7 +25,7 @@ export const externalsFunction = (excludePackages: string[] = [], type: BuildTyp
             return callback(null);
         }
         const importParts = request.split("/");
-        const devPackageName = importParts[0].replace(/^babylonjs/, "") || "core";
+        const devPackageName = importParts[0].replace(/^babylonjs-?/, "") || "core";
         // check if this request needs to be ignored or transformed
         if (excludePackages.indexOf(devPackageName) === -1 && isValidDevPackageName(devPackageName, true)) {
             const packages = getPackageMappingByDevName(devPackageName, true);

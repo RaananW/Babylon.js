@@ -31,6 +31,7 @@
     },
     "targetDefaults": {
         "build": {
+            "dependsOn": ["^build"],
             "outputs": ["{projectRoot}/**/*.js", "{projectRoot}/**/*.d.ts", "{projectRoot}/**/*.map"]
         }
     },

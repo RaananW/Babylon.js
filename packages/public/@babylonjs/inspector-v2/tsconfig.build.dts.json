@@ -1,0 +1,19 @@
+{
+    "extends": "./tsconfig.build.lib.json",
+
+    "compilerOptions": {
+        // Override paths to remove dev package mappings (core/*, gui/*, etc.).
+        // rollup-plugin-dts uses TypeScript internally to resolve the full type
+        // tree. With the dev paths from tsconfig.build.json, TypeScript resolves
+        // "core/*" to the actual dev/core/dist/* declaration files and tries to
+        // inline the entire type graph — causing OOM.
+        //
+        // By keeping only shared-ui-components (which IS bundled, not external),
+        // TypeScript can't resolve the dev package imports. rollup-plugin-dts
+        // then treats them as opaque external references, and the rollup output
+        // `paths` function rewrites them to @babylonjs/ public package names.
+        "paths": {
+            "shared-ui-components/*": ["dev/sharedUiComponents/dist/*"]
+        }
+    }
+}
