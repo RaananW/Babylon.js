@@ -329,8 +329,14 @@ Color3.FromArray = Color3FromArray;
 
 ## Phase 5 — Update `sideEffects` in `package.json`
 
-- [ ] **5.1** — Switch from `["**/*"]` to explicit list (auto-generated from manifest)
-- [ ] **5.2** — Script to sync manifest → package.json (`scripts/treeshaking/syncSideEffects.ts`)
+- [x] **5.1** — Switch from `["**/*"]` to explicit list (auto-generated from manifest)
+  - Fixed `auditSideEffects.mjs`: template literal brace tracking + WGSL regex (`\w*Store\w*`)
+  - Regenerated manifest: 1248 files with side effects, 1521 pure
+  - Updated both `@dev/core` and `@babylonjs/core` `package.json` files
+  - 627 entries: 2 glob patterns (`Shaders/**`, `ShadersWGSL/**`) + 625 individual files
+- [x] **5.2** — Script to sync manifest → package.json (`scripts/treeshaking/syncSideEffects.mjs`)
+  - Reads manifest, detects fully-SE directories for glob patterns, writes to both package.json files
+  - Usage: `node scripts/treeshaking/syncSideEffects.mjs [--dry-run] [--verbose]`
 
 ## Phase 6 — Guardrails & CI Enforcement
 
@@ -347,8 +353,8 @@ Phase 0 (Audit tooling)  ← DONE
   ├─> Phase 1 (#__PURE__ annotations)        ← DONE
   └─> Phase 2 (FILE.pure.ts splits)          ← DONE (7 edge cases remain)
         └─> Phase 3 (pure.ts barrels)        ← DONE
-              └─> Phase 4 (static helpers)   ← IN PROGRESS (69% coverage, expandable)
-                    └─> Phase 5 (sideEffects in package.json)
+              └─> Phase 4 (static helpers)   ← DONE (69% coverage, expandable)
+                    └─> Phase 5 (sideEffects in package.json)  ← DONE
                           └─> Phase 6 (CI guardrails)
 ```
 

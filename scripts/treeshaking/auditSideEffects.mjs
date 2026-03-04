@@ -93,10 +93,11 @@ function analyzeFile(filePath) {
 
     // Track brace depth to distinguish top-level from nested scope.
     // Depth 0 = top-level module scope.
-    // We do a simplified parse that ignores braces in strings/comments.
+    // We track template literals and strings to avoid counting braces inside them.
     let braceDepth = 0;
     let inBlockComment = false;
     let inDeclareModule = false;
+    let inTemplateLiteral = false;
 
     for (let i = 0; i < lines.length; i++) {
         let line = lines[i];
@@ -110,6 +111,18 @@ function analyzeFile(filePath) {
             }
             line = line.substring(endIdx + 2);
             inBlockComment = false;
+        }
+
+        // If inside a template literal, look for closing backtick
+        if (inTemplateLiteral) {
+            const btIdx = line.indexOf("`");
+            if (btIdx === -1) {
+                // Entire line is inside template literal — skip brace counting
+                continue;
+            }
+            // Template literal ends on this line; process remainder
+            line = line.substring(btIdx + 1);
+            inTemplateLiteral = false;
         }
 
         // Strip block comments that start and end on the same line
@@ -128,16 +141,49 @@ function analyzeFile(filePath) {
             continue;
         }
 
-        // Count braces for depth tracking (simplified — ignores strings)
+        // Count braces for depth tracking, skipping braces inside strings and template literals.
+        // This is a simplified scanner that handles the most common cases.
         const prevDepth = braceDepth;
-        for (const ch of line) {
-            if (ch === "{") {
-                braceDepth++;
+        let inSingleQuote = false;
+        let inDoubleQuote = false;
+        for (let c = 0; c < line.length; c++) {
+            const ch = line[c];
+            const prev = c > 0 ? line[c - 1] : "";
+
+            // Skip escaped characters
+            if (prev === "\\") {
+                continue;
             }
-            if (ch === "}") {
-                braceDepth = Math.max(0, braceDepth - 1);
+
+            // Track string literals (single/double quotes)
+            if (ch === "'" && !inDoubleQuote && !inTemplateLiteral) {
+                inSingleQuote = !inSingleQuote;
+                continue;
+            }
+            if (ch === '"' && !inSingleQuote && !inTemplateLiteral) {
+                inDoubleQuote = !inDoubleQuote;
+                continue;
+            }
+
+            // Track template literals
+            if (ch === "`" && !inSingleQuote && !inDoubleQuote) {
+                inTemplateLiteral = !inTemplateLiteral;
+                continue;
+            }
+
+            // Only count braces outside of strings and template literals
+            if (!inSingleQuote && !inDoubleQuote && !inTemplateLiteral) {
+                if (ch === "{") {
+                    braceDepth++;
+                }
+                if (ch === "}") {
+                    braceDepth = Math.max(0, braceDepth - 1);
+                }
             }
         }
+        // Reset string state at end of line (single/double quotes don't span lines)
+        inSingleQuote = false;
+        inDoubleQuote = false;
 
         // Track declare module blocks
         if (prevDepth === 0 && /^\s*declare\s+module\s+/.test(lines[i])) {
@@ -184,8 +230,9 @@ function analyzeFile(filePath) {
 
         // 3. ShaderStore writes: ShaderStore.ShadersStore[...] = ...
         //    or ShaderStore.IncludesShadersStore[...] = ...
+        //    or ShaderStore.ShadersStoreWGSL[...] = ...
         //    or direct assignment patterns in shader files
-        if (/ShaderStore\.\w*Store\s*\[/.test(trimmed)) {
+        if (/ShaderStore\.\w*Store\w*\s*\[/.test(trimmed)) {
             sideEffects.push({
                 type: "shader-store-write",
                 line: lineNum,

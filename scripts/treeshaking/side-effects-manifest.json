@@ -1,25 +1,25 @@
 {
   "stats": {
-    "totalFiles": 2610,
-    "filesWithSideEffects": 913,
-    "filesWithoutSideEffects": 1697,
+    "totalFiles": 2769,
+    "filesWithSideEffects": 1248,
+    "filesWithoutSideEffects": 1521,
     "byType": {
-      "RegisterClass": 535,
-      "declare-module": 108,
+      "RegisterClass": 537,
+      "declare-module": 155,
       "top-level-call": 9,
-      "static-property-assignment": 66,
+      "static-property-assignment": 126,
       "prototype-assignment": 344,
       "AddNodeConstructor": 26,
-      "shader-store-write": 331
+      "shader-store-write": 623
     },
     "filesByType": {
-      "RegisterClass": 426,
-      "declare-module": 91,
+      "RegisterClass": 428,
+      "declare-module": 138,
       "top-level-call": 8,
-      "static-property-assignment": 59,
+      "static-property-assignment": 63,
       "prototype-assignment": 84,
       "AddNodeConstructor": 25,
-      "shader-store-write": 331
+      "shader-store-write": 623
     }
   },
   "manifest": [
@@ -30,6 +30,16 @@
           "type": "RegisterClass",
           "line": 11,
           "text": "RegisterClass(\"BABYLON.Action\", Action);"
+        }
+      ]
+    },
+    {
+      "file": "Actions/actionEvent.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./actionEvent.pure\" {"
         }
       ]
     },
@@ -162,13 +172,63 @@
       "file": "Animations/animation.ts",
       "sideEffects": [
         {
+          "type": "declare-module",
+          "line": 24,
+          "text": "declare module \"./animation\" {"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 38,
+          "text": "Animation._PrepareAnimation = Animation_PrepareAnimation;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 39,
+          "text": "Animation.CreateAnimation = AnimationCreateAnimation;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 40,
+          "text": "Animation.CreateAndStartAnimation = AnimationCreateAndStartAnimation;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 41,
+          "text": "Animation.CreateAndStartHierarchyAnimation = AnimationCreateAndStartHierarchyAnimation;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 42,
+          "text": "Animation.CreateMergeAndStartAnimation = AnimationCreateMergeAndStartAnimation;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 43,
+          "text": "Animation.TransitionTo = AnimationTransitionTo;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 44,
+          "text": "Animation._UniversalLerp = Animation_UniversalLerp;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 45,
+          "text": "Animation.Parse = AnimationParse;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 46,
+          "text": "Animation.AppendSerializedAnimations = AnimationAppendSerializedAnimations;"
+        },
+        {
           "type": "RegisterClass",
-          "line": 1680,
+          "line": 48,
           "text": "RegisterClass(\"BABYLON.Animation\", Animation);"
         },
         {
           "type": "static-property-assignment",
-          "line": 1681,
+          "line": 49,
           "text": "Node._AnimationRangeFactory = (name: string, from: number, to: number) => new AnimationRange(name, from, to);"
         }
       ]
@@ -219,7 +279,7 @@
         {
           "type": "declare-module",
           "line": 13,
-          "text": "declare module \"./buffer\" {"
+          "text": "declare module \"./buffer.pure\" {"
         },
         {
           "type": "prototype-assignment",
@@ -240,6 +300,16 @@
           "type": "prototype-assignment",
           "line": 86,
           "text": "VertexBuffer.prototype._alignBuffer = function (): void {"
+        }
+      ]
+    },
+    {
+      "file": "Buffers/buffer.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 4,
+          "text": "declare module \"./buffer.pure\" {"
         }
       ]
     },
@@ -554,6 +624,26 @@
       ]
     },
     {
+      "file": "Culling/boundingBox.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./boundingBox.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Culling/boundingSphere.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./boundingSphere.pure\" {"
+        }
+      ]
+    },
+    {
       "file": "Culling/Octrees/octreeSceneComponent.ts",
       "sideEffects": [
         {
@@ -582,48 +672,53 @@
       "file": "Culling/ray.ts",
       "sideEffects": [
         {
+          "type": "declare-module",
+          "line": 29,
+          "text": "declare module \"./ray.core\" {"
+        },
+        {
           "type": "top-level-call",
-          "line": 24,
+          "line": 47,
           "text": "AddRayExtensions(Scene, Camera);"
         },
         {
           "type": "prototype-assignment",
-          "line": 26,
+          "line": 49,
           "text": "Scene.prototype.createPickingRayToRef = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 38,
+          "line": 61,
           "text": "Scene.prototype.createPickingRayInCameraSpace = function (x: number, y: number, camera?: Camera): Ray {"
         },
         {
           "type": "prototype-assignment",
-          "line": 42,
+          "line": 65,
           "text": "Scene.prototype.createPickingRayInCameraSpaceToRef = function (x: number, y: number, result: Ray, camera?: Camera): Scen"
         },
         {
           "type": "prototype-assignment",
-          "line": 46,
+          "line": 69,
           "text": "Scene.prototype.pickWithBoundingInfo = function (x: number, y: number, predicate?: MeshPredicate, fastCheck?: boolean, c"
         },
         {
           "type": "prototype-assignment",
-          "line": 50,
+          "line": 73,
           "text": "Scene.prototype.pick = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 62,
+          "line": 85,
           "text": "Scene.prototype.pickWithRay = function (ray: Ray, predicate?: MeshPredicate, fastCheck?: boolean, trianglePredicate?: Tr"
         },
         {
           "type": "prototype-assignment",
-          "line": 66,
+          "line": 89,
           "text": "Scene.prototype.multiPick = function (x: number, y: number, predicate?: MeshPredicate, camera?: Camera, trianglePredicat"
         },
         {
           "type": "prototype-assignment",
-          "line": 70,
+          "line": 93,
           "text": "Scene.prototype.multiPickWithRay = function (ray: Ray, predicate?: MeshPredicate, trianglePredicate?: TrianglePickingPre"
         }
       ]
@@ -1859,6 +1954,16 @@
       ]
     },
     {
+      "file": "Engines/shaderStore.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./shaderStore.pure\" {"
+        }
+      ]
+    },
+    {
       "file": "Engines/thinNativeEngine.ts",
       "sideEffects": [
         {
@@ -2290,6 +2395,16 @@
           "type": "prototype-assignment",
           "line": 24,
           "text": "WebGPUEngine.prototype.updateVideoTexture = function (texture: Nullable<InternalTexture>, video: HTMLVideoElement | Null"
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/webgpuTextureHelper.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 21,
+          "text": "declare module \"./webgpuTextureHelper.pure\" {"
         }
       ]
     },
@@ -3249,6 +3364,16 @@
       ]
     },
     {
+      "file": "FrameGraph/frameGraphTextureManager.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./frameGraphTextureManager.pure\" {"
+        }
+      ]
+    },
+    {
       "file": "FrameGraph/Node/Blocks/computeShaderBlock.ts",
       "sideEffects": [
         {
@@ -3690,6 +3815,56 @@
           "type": "RegisterClass",
           "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeRenderGraphGenerateMipmapsBlock\", NodeRenderGraphGenerateMipmapsBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FrameGraph/Node/nodeRenderGraph.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./nodeRenderGraph.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "FrameGraph/Node/nodeRenderGraphBlockConnectionPoint.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./nodeRenderGraphBlockConnectionPoint.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "FrameGraph/Passes/objectListPass.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./objectListPass.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "FrameGraph/Passes/renderPass.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./renderPass.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "FrameGraph/Tasks/Rendering/csmShadowGeneratorTask.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./csmShadowGeneratorTask.pure\" {"
         }
       ]
     },
@@ -4589,6 +4764,16 @@
       ]
     },
     {
+      "file": "Materials/Node/Blocks/Fragment/smartFilterFragmentOutputBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 120,
+          "text": "RegisterClass(\"BABYLON.SmartFilterFragmentOutputBlock\", SmartFilterFragmentOutputBlock);"
+        }
+      ]
+    },
+    {
       "file": "Materials/Node/Blocks/Fragment/TBNBlock.ts",
       "sideEffects": [
         {
@@ -5300,6 +5485,11 @@
           "type": "RegisterClass",
           "line": 11,
           "text": "RegisterClass(\"BABYLON.NodeMaterial\", NodeMaterial);"
+        },
+        {
+          "type": "declare-module",
+          "line": 13,
+          "text": "declare module \"./nodeMaterial.pure\" {"
         }
       ]
     },
@@ -5350,6 +5540,16 @@
           "type": "RegisterClass",
           "line": 11,
           "text": "RegisterClass(\"BABYLON.PBRSpecularGlossinessMaterial\", PBRSpecularGlossinessMaterial);"
+        }
+      ]
+    },
+    {
+      "file": "Materials/prePassConfiguration.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./prePassConfiguration.pure\" {"
         }
       ]
     },
@@ -5479,6 +5679,16 @@
       ]
     },
     {
+      "file": "Materials/Textures/rawTexture.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 14,
+          "text": "declare module \"./rawTexture.pure\" {"
+        }
+      ]
+    },
+    {
       "file": "Materials/Textures/renderTargetTexture.ts",
       "sideEffects": [
         {
@@ -5514,6 +5724,21 @@
       ]
     },
     {
+      "file": "Materials/Textures/videoTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "static-property-assignment",
+          "line": 470,
+          "text": "Texture._CreateVideoTexture = ("
+        },
+        {
+          "type": "RegisterClass",
+          "line": 484,
+          "text": "RegisterClass(\"BABYLON.VideoTexture\", VideoTexture);"
+        }
+      ]
+    },
+    {
       "file": "Materials/Textures/videoTexture.ts",
       "sideEffects": [
         {
@@ -5533,13 +5758,58 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 11,
+          "line": 45,
           "text": "RegisterClass(\"BABYLON.Color3\", Color3);"
         },
         {
           "type": "RegisterClass",
-          "line": 12,
+          "line": 46,
           "text": "RegisterClass(\"BABYLON.Color4\", Color4);"
+        },
+        {
+          "type": "declare-module",
+          "line": 48,
+          "text": "declare module \"./math.color.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Maths/math.frustum.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 20,
+          "text": "declare module \"./math.frustum.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Maths/math.path.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 25,
+          "text": "declare module \"./math.path.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Maths/math.polar.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 19,
+          "text": "declare module \"./math.polar.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Maths/math.size.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./math.size.pure\" {"
         }
       ]
     },
@@ -5565,6 +5835,16 @@
           "type": "RegisterClass",
           "line": 14,
           "text": "RegisterClass(\"BABYLON.Matrix\", Matrix);"
+        }
+      ]
+    },
+    {
+      "file": "Maths/sphericalPolynomial.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 10,
+          "text": "declare module \"./sphericalPolynomial.pure\" {"
         }
       ]
     },
@@ -5902,9 +6182,34 @@
       "file": "Meshes/mesh.ts",
       "sideEffects": [
         {
+          "type": "declare-module",
+          "line": 41,
+          "text": "declare module \"./mesh\" {"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 74,
+          "text": "Mesh._GetDefaultSideOrientation = Mesh_GetDefaultSideOrientation;"
+        },
+        {
           "type": "RegisterClass",
-          "line": 11,
+          "line": 103,
           "text": "RegisterClass(\"BABYLON.Mesh\", Mesh);"
+        }
+      ]
+    },
+    {
+      "file": "Meshes/mesh.vertexData.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 29,
+          "text": "declare module \"./mesh.vertexData.pure\" {"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 78,
+          "text": "VertexData._ComputeSides = VertexData_ComputeSides;"
         }
       ]
     },
@@ -6739,6 +7044,16 @@
       ]
     },
     {
+      "file": "Meshes/Node/nodeGeometry.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./nodeGeometry.pure\" {"
+        }
+      ]
+    },
+    {
       "file": "Meshes/subMesh.project.ts",
       "sideEffects": [
         {
@@ -6859,6 +7174,46 @@
       ]
     },
     {
+      "file": "Misc/asyncLock.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./asyncLock.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Misc/dds.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./dds.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Misc/decorators.serialization.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 12,
+          "text": "declare module \"./decorators.serialization.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Misc/deepCopier.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./deepCopier.pure\" {"
+        }
+      ]
+    },
+    {
       "file": "Misc/dumpTools.ts",
       "sideEffects": [
         {
@@ -6880,6 +7235,46 @@
           "type": "top-level-call",
           "line": 1036,
           "text": "_injectLTSFileTools(DecodeBase64UrlToBinary, DecodeBase64UrlToString, FileToolsOptions, IsBase64DataUrl, IsFileURL, Load"
+        }
+      ]
+    },
+    {
+      "file": "Misc/gradients.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./gradients.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Misc/greasedLineTools.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 29,
+          "text": "declare module \"./greasedLineTools.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Misc/khronosTextureContainer.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./khronosTextureContainer.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Misc/khronosTextureContainer2.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./khronosTextureContainer2.pure\" {"
         }
       ]
     },
@@ -6919,12 +7314,52 @@
       ]
     },
     {
+      "file": "Misc/PerformanceViewer/performanceViewerCollectionStrategies.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 32,
+          "text": "declare module \"./performanceViewerCollectionStrategies.pure\" {"
+        }
+      ]
+    },
+    {
       "file": "Misc/PerformanceViewer/performanceViewerSceneExtension.ts",
       "sideEffects": [
         {
           "type": "prototype-assignment",
           "line": 4,
           "text": "Scene.prototype.getPerfCollector = function (this: Scene): PerformanceViewerCollector {"
+        }
+      ]
+    },
+    {
+      "file": "Misc/retryStrategy.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./retryStrategy.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Misc/rgbdTextureTools.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./rgbdTextureTools.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Misc/sceneOptimizer.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 10,
+          "text": "declare module \"./sceneOptimizer.pure\" {"
         }
       ]
     },
@@ -6939,22 +7374,287 @@
       ]
     },
     {
+      "file": "Misc/tags.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 20,
+          "text": "declare module \"./tags.pure\" {"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 39,
+          "text": "Tags._AddTagTo = Tags_AddTagTo;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 41,
+          "text": "Tags._RemoveTagFrom = Tags_RemoveTagFrom;"
+        }
+      ]
+    },
+    {
+      "file": "Misc/timingTools.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./timingTools.pure\" {"
+        }
+      ]
+    },
+    {
       "file": "Misc/tools.ts",
       "sideEffects": [
         {
+          "type": "declare-module",
+          "line": 54,
+          "text": "declare module \"./tools.pure\" {"
+        },
+        {
           "type": "static-property-assignment",
-          "line": 1718,
+          "line": 106,
+          "text": "Tools.IsAbsoluteUrl = ToolsIsAbsoluteUrl;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 107,
+          "text": "Tools.FetchToRef = ToolsFetchToRef;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 108,
+          "text": "Tools.Instantiate = ToolsInstantiate;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 109,
+          "text": "Tools.SetImmediate = ToolsSetImmediate;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 110,
+          "text": "Tools.FloatRound = ToolsFloatRound;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 111,
+          "text": "Tools.GetFilename = ToolsGetFilename;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 112,
+          "text": "Tools.GetFolderPath = ToolsGetFolderPath;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 113,
+          "text": "Tools.ToDegrees = ToolsToDegrees;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 114,
+          "text": "Tools.ToRadians = ToolsToRadians;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 115,
+          "text": "Tools.SmoothAngleChange = ToolsSmoothAngleChange;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 116,
+          "text": "Tools.MakeArray = ToolsMakeArray;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 117,
+          "text": "Tools.GetPointerPrefix = ToolsGetPointerPrefix;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 118,
+          "text": "Tools.SetCorsBehavior = ToolsSetCorsBehavior;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 119,
+          "text": "Tools.SetReferrerPolicyBehavior = ToolsSetReferrerPolicyBehavior;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 120,
+          "text": "Tools.LoadImage = ToolsLoadImage;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 121,
+          "text": "Tools.LoadFile = ToolsLoadFile;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 122,
+          "text": "Tools.LoadFileAsync = ToolsLoadFileAsync;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 123,
+          "text": "Tools.ReadFileAsDataURL = ToolsReadFileAsDataURL;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 124,
+          "text": "Tools.ReadFile = ToolsReadFile;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 125,
+          "text": "Tools.FileAsURL = ToolsFileAsURL;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 126,
+          "text": "Tools.Format = ToolsFormat;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 127,
+          "text": "Tools.DeepCopy = ToolsDeepCopy;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 128,
+          "text": "Tools.IsEmpty = ToolsIsEmpty;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 129,
+          "text": "Tools.RegisterTopRootEvents = ToolsRegisterTopRootEvents;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 130,
+          "text": "Tools.UnregisterTopRootEvents = ToolsUnregisterTopRootEvents;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 131,
+          "text": "Tools.DumpData = ToolsDumpData;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 132,
+          "text": "Tools.DumpFramebuffer = ToolsDumpFramebuffer;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 133,
+          "text": "Tools.DumpDataAsync = ToolsDumpDataAsync;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 134,
+          "text": "Tools.Download = ToolsDownload;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 135,
+          "text": "Tools.BackCompatCameraNoPreventDefault = ToolsBackCompatCameraNoPreventDefault;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 136,
+          "text": "Tools.CreateScreenshot = ToolsCreateScreenshot;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 137,
+          "text": "Tools.CreateScreenshotAsync = ToolsCreateScreenshotAsync;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 138,
+          "text": "Tools.CreateScreenshotUsingRenderTarget = ToolsCreateScreenshotUsingRenderTarget;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 139,
+          "text": "Tools.CreateScreenshotUsingRenderTargetAsync = ToolsCreateScreenshotUsingRenderTargetAsync;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 140,
+          "text": "Tools.RandomId = ToolsRandomId;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 141,
+          "text": "Tools.IsBase64 = ToolsIsBase64;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 142,
+          "text": "Tools.DecodeBase64 = ToolsDecodeBase64;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 143,
+          "text": "Tools.Log = ToolsLog;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 144,
+          "text": "Tools.Warn = ToolsWarn;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 145,
+          "text": "Tools.Error = ToolsError;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 146,
+          "text": "Tools.ClearLogCache = ToolsClearLogCache;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 147,
+          "text": "Tools.GetClassName = ToolsGetClassName;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 148,
+          "text": "Tools.First = ToolsFirst;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 149,
+          "text": "Tools.getFullClassName = ToolsgetFullClassName;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 150,
+          "text": "Tools.DelayAsync = ToolsDelayAsync;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 151,
+          "text": "Tools.IsSafari = ToolsIsSafari;"
+        },
+        {
+          "type": "static-property-assignment",
+          "line": 153,
           "text": "Tools.Mix = Mix;"
         },
         {
           "type": "static-property-assignment",
-          "line": 1719,
+          "line": 154,
           "text": "Tools.IsExponentOfTwo = IsExponentOfTwo;"
         },
         {
           "type": "static-property-assignment",
-          "line": 1722,
-          "text": "EngineStore.FallbackTexture ="
+          "line": 157,
+          "text": "EngineStore.FallbackTexture =    \"data:image/jpg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QBmRXhpZgAATU0AKgAAAAgABAEaAAUAAAAB"
         }
       ]
     },
@@ -6965,6 +7665,26 @@
           "type": "RegisterClass",
           "line": 8,
           "text": "export function RegisterClass(className: string, type: object) {"
+        }
+      ]
+    },
+    {
+      "file": "Misc/videoRecorder.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./videoRecorder.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "node.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./node.pure\" {"
         }
       ]
     },
@@ -7489,6 +8209,26 @@
       ]
     },
     {
+      "file": "Particles/Node/nodeParticleSystemSet.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./nodeParticleSystemSet.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Particles/particleHelper.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 11,
+          "text": "declare module \"./particleHelper.pure\" {"
+        }
+      ]
+    },
+    {
       "file": "Particles/particleSystem.ts",
       "sideEffects": [
         {
@@ -7989,7 +8729,7 @@
       ]
     },
     {
-      "file": "Probes/reflectionProbe.ts",
+      "file": "Probes/reflectionProbe.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
@@ -8005,6 +8745,16 @@
           "type": "prototype-assignment",
           "line": 49,
           "text": "Scene.prototype.addReflectionProbe = function (newReflectionProbe: ReflectionProbe): void {"
+        }
+      ]
+    },
+    {
+      "file": "Probes/reflectionProbe.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./reflectionProbe.pure\" {"
         }
       ]
     },
@@ -8664,6 +9414,16 @@
       ]
     },
     {
+      "file": "Shaders/fluidRenderingRender.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 99,
+          "text": "if (!ShaderStore.ShadersStore[name]) {"
+        }
+      ]
+    },
+    {
       "file": "Shaders/fluidRenderingStandardBlur.fragment.ts",
       "sideEffects": [
         {
@@ -9069,6 +9829,16 @@
         {
           "type": "shader-store-write",
           "line": 19,
+          "text": "if (!ShaderStore.ShadersStore[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "Shaders/iblShadowVoxelTracing.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 185,
           "text": "if (!ShaderStore.ShadersStore[name]) {"
         }
       ]
@@ -10454,6 +11224,16 @@
       ]
     },
     {
+      "file": "Shaders/ShadersInclude/oitFragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 32,
+          "text": "if (!ShaderStore.IncludesShadersStore[name]) {"
+        }
+      ]
+    },
+    {
       "file": "Shaders/ShadersInclude/openpbrAmbientOcclusionData.ts",
       "sideEffects": [
         {
@@ -11610,6 +12390,2906 @@
           "type": "shader-store-write",
           "line": 10,
           "text": "if (!ShaderStore.ShadersStore[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/anaglyph.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/areaLightTextureProcessing.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 8,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/background.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 221,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/background.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 121,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/bilateralBlur.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 19,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/bilateralBlurQuality.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 19,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/blackAndWhite.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 11,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/bloomMerge.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 11,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/boundingBoxRenderer.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/boundingBoxRenderer.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 23,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/boundingInfo.compute.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 81,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/chromaticAberration.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/circleOfConfusion.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 23,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/clearQuad.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 9,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/clearQuad.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 20,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/color.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 31,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/color.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 49,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/colorCorrection.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/convolution.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 29,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/copyTexture3DLayerToTexture.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 8,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/copyTextureToTexture.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 28,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/default.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 399,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/default.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 191,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/depth.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 49,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/depth.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 75,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/depthBoxBlur.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 11,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/depthOfFieldMerge.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 27,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/displayPass.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/extractHighlights.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/filter.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/fluidRenderingBilateralBlur.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 11,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/fluidRenderingParticleDepth.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 27,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/fluidRenderingParticleDepth.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 20,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/fluidRenderingParticleDiffuse.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/fluidRenderingParticleDiffuse.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/fluidRenderingParticleThickness.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/fluidRenderingParticleThickness.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/fluidRenderingRender.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 99,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/fluidRenderingStandardBlur.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 11,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/fxaa.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 61,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/fxaa.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/gaussianSplatting.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 27,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/gaussianSplatting.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 69,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/gaussianSplattingDepth.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 38,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/gaussianSplattingDepth.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 40,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/geometry.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 183,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/geometry.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 189,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/glowBlurPostProcess.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 13,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/glowMapGeneration.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 72,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/glowMapGeneration.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 93,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/glowMapMerge.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 31,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/glowMapMerge.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/gpuUpdateParticles.compute.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 295,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/grain.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/greasedLine.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 29,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/greasedLine.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 56,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/hdrFiltering.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 16,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/hdrFiltering.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/hdrIrradianceFiltering.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 24,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/hdrIrradianceFiltering.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/highlights.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblCdfDebug.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 40,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblCdfx.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblCdfy.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 32,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblCombineVoxelGrids.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 8,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblDominantDirection.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 18,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblGenerateVoxelMip.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 24,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblIcdf.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 41,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblScaledLuminance.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 22,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblShadowAccumulation.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 19,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblShadowDebug.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblShadowGBufferDebug.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 15,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblShadowsCombine.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblShadowSpatialBlur.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 18,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblShadowVoxelTracing.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 191,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblVoxelGrid.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblVoxelGrid.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 125,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblVoxelGrid2dArrayDebug.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 8,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblVoxelGrid3dDebug.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 19,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblVoxelSlabDebug.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/iblVoxelSlabDebug.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 8,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/imageProcessing.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 27,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/kernelBlur.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 46,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/kernelBlur.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 19,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/layer.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 25,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/layer.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/lensFlare.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/lensFlare.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/lightingVolume.compute.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 29,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/lightProxy.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 9,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/lightProxy.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 21,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/line.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 22,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/line.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 34,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/lod.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 9,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/lodCube.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 28,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/meshUVSpaceRenderer.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/meshUVSpaceRenderer.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 39,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/meshUVSpaceRendererFinaliser.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/meshUVSpaceRendererFinaliser.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 9,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/meshUVSpaceRendererMasker.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 9,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/meshUVSpaceRendererMasker.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 8,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/minmaxRedux.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 36,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/motionBlur.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 33,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/oitBackBlend.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 9,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/oitFinal.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/oitFinalSimpleBlend.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 9,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/openpbr.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 220,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/openpbr.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 245,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/outline.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 28,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/outline.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 67,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/particles.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 49,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/particles.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 93,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/pass.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/passCube.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 29,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/pbr.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 627,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/pbr.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 265,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/picking.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 24,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/picking.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 42,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/postprocess.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 15,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/procedural.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/rgbdDecode.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/rgbdEncode.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/rsmFullGlobalIllumination.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 26,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/rsmGlobalIllumination.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 33,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/screenSpaceCurvature.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 21,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/screenSpaceReflection2.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 166,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/screenSpaceReflection2Blur.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 13,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/screenSpaceReflection2BlurCombiner.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 60,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/selection.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 43,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/selection.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 92,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/selectionOutline.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 54,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/backgroundUboDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/bakedVertexAnimation.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 38,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/bakedVertexAnimationDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 15,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/bayerDitherFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 15,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/bonesDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 28,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/bonesVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 60,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/bumpFragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 59,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/bumpFragmentFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 38,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/bumpFragmentMainFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 47,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/bumpVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/bumpVertexDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/clipPlaneFragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 34,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/clipPlaneFragmentDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 25,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/clipPlaneVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 25,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/clipPlaneVertexDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 25,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/clusteredLightingFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 20,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/decalFragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 17,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/decalFragmentDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/decalVertexDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/defaultUboDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 13,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/depthPrePass.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 13,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/diffusionProfile.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 8,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/fibonacci.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 13,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/fogFragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/fogFragmentDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 21,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/fogVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/fogVertexDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/fresnelFunction.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 11,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/gaussianSplatting.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 174,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/gaussianSplattingFragmentDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 18,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/gaussianSplattingUboDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/gaussianSplattingVertexDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 7,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/harmonicsFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 22,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/hdrFilteringFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 124,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/helperFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 86,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/imageProcessingCompatibility.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/imageProcessingDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 33,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/imageProcessingFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 69,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/importanceSampling.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/instancesDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 29,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/instancesVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 34,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/intersectionFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/kernelBlurFragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 18,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/kernelBlurFragment2.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 17,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/kernelBlurVaryingDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 7,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/kernelBlurVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 7,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/lightFragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 394,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/lightsFragmentFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 106,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/lightUboDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 84,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/lightVxFragmentDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 34,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/lightVxUboDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 38,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/logDepthDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/logDepthFragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/logDepthVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/ltcHelperFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 51,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/mainUVVaryingDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/meshUboDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/morphTargetsVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 65,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/morphTargetsVertexDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 31,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/morphTargetsVertexGlobal.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/morphTargetsVertexGlobalDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 19,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/oitDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 11,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/oitFragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 32,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrAmbientOcclusionData.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 11,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrAmbientOcclusionFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 9,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrBackgroundTransmission.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 21,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrBaseLayerData.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 133,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrBlockNormalFinal.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 21,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrCoatLayerData.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 59,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrConductorReflectance.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 15,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrDielectricReflectance.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 29,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrDirectLighting.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 129,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrDirectLightingInit.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 78,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrEnvironmentLighting.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 247,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrFragmentSamplersDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 81,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrFuzzLayerData.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 36,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrGeometryInfo.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 44,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrIblFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 221,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrNormalMapFragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 60,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrNormalMapFragmentFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 41,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrNormalMapFragmentMainFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 47,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrNormalMapVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrNormalMapVertexDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 12,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrThinFilmLayerData.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 24,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrTransmissionLayerData.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 43,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/openpbrUboDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 13,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/packingFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockAlbedoOpacity.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 87,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockAlphaFresnel.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 34,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockAmbientOcclusion.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 33,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockAnisotropic.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 44,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockClearcoat.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 260,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockDirectLighting.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 28,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockFinalColorComposition.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 49,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockFinalLitComponents.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 113,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockFinalUnlitComponents.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 31,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockGeometryInfo.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 31,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockImageProcessing.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 18,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockIridescence.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 48,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockLightmapInit.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 17,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockNormalFinal.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 21,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockNormalGeometric.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 17,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockPrePass.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 102,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockReflectance.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 33,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockReflectance0.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 11,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockReflection.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 317,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockReflectivity.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 167,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockSheen.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 193,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBlockSubSurface.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 429,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrBRDFFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 179,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrDebug.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 191,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrDirectLightingFalloffFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 43,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrDirectLightingFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 231,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrDirectLightingSetupFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 53,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrFragmentExtraDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 25,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrFragmentSamplersDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 99,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrHelperFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 41,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrIBLFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 21,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pbrUboDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 13,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pointCloudVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 7,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/pointCloudVertexDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/prePassDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 21,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/prePassVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 46,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/prePassVertexDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 21,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/reflectionFunction.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 71,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/samplerFragmentAlternateDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 24,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/samplerFragmentDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 25,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/samplerVertexDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/samplerVertexImplementation.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 31,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/sceneUboDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 16,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/screenSpaceRayTrace.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 155,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/shadowMapFragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 35,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/shadowMapFragmentExtraDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 24,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/shadowMapFragmentSoftTransparentShadow.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/shadowMapVertexExtraDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 17,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/shadowMapVertexMetric.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 31,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/shadowMapVertexNormalBias.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 15,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/shadowsFragmentFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 299,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/shadowsVertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 51,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/subSurfaceScatteringFunctions.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 8,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/uvAttributeDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 10,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/uvVariableDeclaration.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 15,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ShadersInclude/vertexColorMixing.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 20,
+          "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/shadowMap.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 37,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/shadowMap.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 90,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/sharpen.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 14,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/sprites.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 35,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/sprites.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 25,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ssao2.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 74,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/ssaoCombine.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 15,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/subSurfaceScattering.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 73,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/taa.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 23,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/textureMerger.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 82,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/tonemap.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 27,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/volumetricLightingBlendVolume.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 18,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/volumetricLightingRenderVolume.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 23,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/volumetricLightingRenderVolume.vertex.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 13,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "ShadersWGSL/vrDistortionCorrection.fragment.ts",
+      "sideEffects": [
+        {
+          "type": "shader-store-write",
+          "line": 13,
+          "text": "if (!ShaderStore.ShadersStoreWGSL[name]) {"
+        }
+      ]
+    },
+    {
+      "file": "Sprites/spriteManager.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./spriteManager.pure\" {"
         }
       ]
     },
