@@ -330,13 +330,13 @@ Color3.FromArray = Color3FromArray;
 ## Phase 5 — Update `sideEffects` in `package.json`
 
 - [x] **5.1** — Switch from `["**/*"]` to explicit list (auto-generated from manifest)
-  - Fixed `auditSideEffects.mjs`: template literal brace tracking + WGSL regex (`\w*Store\w*`)
-  - Regenerated manifest: 1248 files with side effects, 1521 pure
-  - Updated both `@dev/core` and `@babylonjs/core` `package.json` files
-  - 627 entries: 2 glob patterns (`Shaders/**`, `ShadersWGSL/**`) + 625 individual files
+    - Fixed `auditSideEffects.mjs`: template literal brace tracking + WGSL regex (`\w*Store\w*`)
+    - Regenerated manifest: 1248 files with side effects, 1521 pure
+    - Updated both `@dev/core` and `@babylonjs/core` `package.json` files
+    - 627 entries: 2 glob patterns (`Shaders/**`, `ShadersWGSL/**`) + 625 individual files
 - [x] **5.2** — Script to sync manifest → package.json (`scripts/treeshaking/syncSideEffects.mjs`)
-  - Reads manifest, detects fully-SE directories for glob patterns, writes to both package.json files
-  - Usage: `node scripts/treeshaking/syncSideEffects.mjs [--dry-run] [--verbose]`
+    - Reads manifest, detects fully-SE directories for glob patterns, writes to both package.json files
+    - Usage: `node scripts/treeshaking/syncSideEffects.mjs [--dry-run] [--verbose]`
 
 ## Phase 6 — Guardrails & CI Enforcement
 
