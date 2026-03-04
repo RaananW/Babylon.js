@@ -55,7 +55,7 @@ export const PickingCustomization: IPickingCustomization = {
  */
 export class Ray {
     private static readonly _TmpVector3 = BuildArray(6, Vector3.Zero);
-    private static _RayDistant = Ray.Zero();
+    private static _RayDistant = new Ray(Vector3.Zero(), Vector3.Zero());
     private _tmpRay: Ray;
 
     /**
@@ -356,9 +356,9 @@ export class Ray {
         mesh.getWorldMatrix().invertToRef(tm);
 
         if (this._tmpRay) {
-            Ray.TransformToRef(this, tm, this._tmpRay);
+            RayTransformToRef(this, tm, this._tmpRay);
         } else {
-            this._tmpRay = Ray.Transform(this, tm);
+            this._tmpRay = RayTransform(this, tm);
         }
 
         return mesh.intersects(this._tmpRay, fastCheck, trianglePredicate, onlyBoundingInfo, worldToUse, skipBoundingInfo);
@@ -535,125 +535,19 @@ export class Ray {
             // This is slower (2 matrix inverts instead of 1) but precision is preserved.
             // This is hidden behind `EnableDistantPicking` flag (default is false)
             if (!Ray._RayDistant) {
-                Ray._RayDistant = Ray.Zero();
+                Ray._RayDistant = RayZero();
             }
 
             Ray._RayDistant.unprojectRayToRef(x, y, viewportWidth, viewportHeight, Matrix.IdentityReadOnly, view, projection);
 
             const tm = TmpVectors.Matrix[0];
             world.invertToRef(tm);
-            Ray.TransformToRef(Ray._RayDistant, tm, this);
+            RayTransformToRef(Ray._RayDistant, tm, this);
         } else {
             this.unprojectRayToRef(x, y, viewportWidth, viewportHeight, world, view, projection);
         }
 
         return this;
-    }
-
-    // Statics
-    /**
-     * Creates a ray with origin and direction of 0,0,0
-     * @returns the new ray
-     */
-    public static Zero(): Ray {
-        return new Ray(Vector3.Zero(), Vector3.Zero());
-    }
-
-    /**
-     * Creates a new ray from screen space and viewport
-     * @param x position
-     * @param y y position
-     * @param viewportWidth viewport width
-     * @param viewportHeight viewport height
-     * @param world world matrix
-     * @param view view matrix
-     * @param projection projection matrix
-     * @returns new ray
-     */
-    public static CreateNew(
-        x: number,
-        y: number,
-        viewportWidth: number,
-        viewportHeight: number,
-        world: DeepImmutable<Matrix>,
-        view: DeepImmutable<Matrix>,
-        projection: DeepImmutable<Matrix>
-    ): Ray {
-        const result = Ray.Zero();
-
-        return result.update(x, y, viewportWidth, viewportHeight, world, view, projection);
-    }
-
-    /**
-     * Function will create a new transformed ray starting from origin and ending at the end point. Ray's length will be set, and ray will be
-     * transformed to the given world matrix.
-     * @param origin The origin point
-     * @param end The end point
-     * @param world a matrix to transform the ray to. Default is the identity matrix.
-     * @returns the new ray
-     */
-    public static CreateNewFromTo(origin: Vector3, end: Vector3, world: DeepImmutable<Matrix> = Matrix.IdentityReadOnly): Ray {
-        const result = new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
-        return Ray.CreateFromToToRef(origin, end, result, world);
-    }
-
-    /**
-     * Function will update a transformed ray starting from origin and ending at the end point. Ray's length will be set, and ray will be
-     * transformed to the given world matrix.
-     * @param origin The origin point
-     * @param end The end point
-     * @param result the object to store the result
-     * @param world a matrix to transform the ray to. Default is the identity matrix.
-     * @returns the ref ray
-     */
-    public static CreateFromToToRef(origin: Vector3, end: Vector3, result: Ray, world: DeepImmutable<Matrix> = Matrix.IdentityReadOnly): Ray {
-        result.origin.copyFrom(origin);
-        const direction = end.subtractToRef(origin, result.direction);
-        const length = Math.sqrt(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
-        result.length = length;
-        result.direction.normalize();
-
-        return Ray.TransformToRef(result, world, result);
-    }
-
-    /**
-     * Transforms a ray by a matrix
-     * @param ray ray to transform
-     * @param matrix matrix to apply
-     * @returns the resulting new ray
-     */
-    public static Transform(ray: DeepImmutable<Ray>, matrix: DeepImmutable<Matrix>): Ray {
-        const result = new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
-        Ray.TransformToRef(ray, matrix, result);
-
-        return result;
-    }
-
-    /**
-     * Transforms a ray by a matrix
-     * @param ray ray to transform
-     * @param matrix matrix to apply
-     * @param result ray to store result in
-     * @returns the updated result ray
-     */
-    public static TransformToRef(ray: DeepImmutable<Ray>, matrix: DeepImmutable<Matrix>, result: Ray): Ray {
-        Vector3.TransformCoordinatesToRef(ray.origin, matrix, result.origin);
-        Vector3.TransformNormalToRef(ray.direction, matrix, result.direction);
-        result.length = ray.length;
-        result.epsilon = ray.epsilon;
-
-        const dir = result.direction;
-        const len = dir.length();
-
-        if (!(len === 0 || len === 1)) {
-            const num = 1.0 / len;
-            dir.x *= num;
-            dir.y *= num;
-            dir.z *= num;
-            result.length *= len;
-        }
-
-        return result;
     }
 
     /**
@@ -700,6 +594,111 @@ export class Ray {
 }
 
 /**
+ * Creates a ray with origin and direction of 0,0,0
+ * @returns the new ray
+ */
+export function RayZero(): Ray {
+    return new Ray(Vector3.Zero(), Vector3.Zero());
+}
+
+/**
+ * Creates a new ray from screen space and viewport
+ * @param x position
+ * @param y y position
+ * @param viewportWidth viewport width
+ * @param viewportHeight viewport height
+ * @param world world matrix
+ * @param view view matrix
+ * @param projection projection matrix
+ * @returns new ray
+ */
+export function RayCreateNew(
+    x: number,
+    y: number,
+    viewportWidth: number,
+    viewportHeight: number,
+    world: DeepImmutable<Matrix>,
+    view: DeepImmutable<Matrix>,
+    projection: DeepImmutable<Matrix>
+): Ray {
+    const result = RayZero();
+
+    return result.update(x, y, viewportWidth, viewportHeight, world, view, projection);
+}
+
+/**
+ * Function will create a new transformed ray starting from origin and ending at the end point. Ray's length will be set, and ray will be
+ * transformed to the given world matrix.
+ * @param origin The origin point
+ * @param end The end point
+ * @param world a matrix to transform the ray to. Default is the identity matrix.
+ * @returns the new ray
+ */
+export function RayCreateNewFromTo(origin: Vector3, end: Vector3, world: DeepImmutable<Matrix> = Matrix.IdentityReadOnly): Ray {
+    const result = new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+    return RayCreateFromToToRef(origin, end, result, world);
+}
+
+/**
+ * Function will update a transformed ray starting from origin and ending at the end point. Ray's length will be set, and ray will be
+ * transformed to the given world matrix.
+ * @param origin The origin point
+ * @param end The end point
+ * @param result the object to store the result
+ * @param world a matrix to transform the ray to. Default is the identity matrix.
+ * @returns the ref ray
+ */
+export function RayCreateFromToToRef(origin: Vector3, end: Vector3, result: Ray, world: DeepImmutable<Matrix> = Matrix.IdentityReadOnly): Ray {
+    result.origin.copyFrom(origin);
+    const direction = end.subtractToRef(origin, result.direction);
+    const length = Math.sqrt(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
+    result.length = length;
+    result.direction.normalize();
+
+    return RayTransformToRef(result, world, result);
+}
+
+/**
+ * Transforms a ray by a matrix
+ * @param ray ray to transform
+ * @param matrix matrix to apply
+ * @returns the resulting new ray
+ */
+export function RayTransform(ray: DeepImmutable<Ray>, matrix: DeepImmutable<Matrix>): Ray {
+    const result = new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+    RayTransformToRef(ray, matrix, result);
+
+    return result;
+}
+
+/**
+ * Transforms a ray by a matrix
+ * @param ray ray to transform
+ * @param matrix matrix to apply
+ * @param result ray to store result in
+ * @returns the updated result ray
+ */
+export function RayTransformToRef(ray: DeepImmutable<Ray>, matrix: DeepImmutable<Matrix>, result: Ray): Ray {
+    Vector3.TransformCoordinatesToRef(ray.origin, matrix, result.origin);
+    Vector3.TransformNormalToRef(ray.direction, matrix, result.direction);
+    result.length = ray.length;
+    result.epsilon = ray.epsilon;
+
+    const dir = result.direction;
+    const len = dir.length();
+
+    if (!(len === 0 || len === 1)) {
+        const num = 1.0 / len;
+        dir.x *= num;
+        dir.y *= num;
+        dir.z *= num;
+        result.length *= len;
+    }
+
+    return result;
+}
+
+/**
  * Creates a ray that can be used to pick in the scene
  * @param scene defines the scene to use for the picking
  * @param x defines the x coordinate of the origin (on-screen)
@@ -710,7 +709,7 @@ export class Ray {
  * @returns a Ray
  */
 export function CreatePickingRay(scene: Scene, x: number, y: number, world: Nullable<Matrix>, camera: Nullable<Camera>, cameraViewSpace = false): Ray {
-    const result = Ray.Zero();
+    const result = RayZero();
 
     CreatePickingRayToRef(scene, x, y, world, result, camera, cameraViewSpace);
 
@@ -776,7 +775,7 @@ export function CreatePickingRayToRef(
  * @returns a Ray
  */
 export function CreatePickingRayInCameraSpace(scene: Scene, x: number, y: number, camera?: Camera): Ray {
-    const result = Ray.Zero();
+    const result = RayZero();
 
     CreatePickingRayInCameraSpaceToRef(scene, x, y, result, camera);
 
@@ -988,7 +987,7 @@ export function PickWithBoundingInfo(scene: Scene, x: number, y: number, predica
         scene,
         (world) => {
             if (!scene._tempPickingRay) {
-                scene._tempPickingRay = Ray.Zero();
+                scene._tempPickingRay = RayZero();
             }
 
             CreatePickingRayToRef(scene, x, y, world, scene._tempPickingRay, camera || null);
@@ -1029,7 +1028,7 @@ export function Pick(
         scene,
         (world, enableDistantPicking) => {
             if (!scene._tempPickingRay) {
-                scene._tempPickingRay = Ray.Zero();
+                scene._tempPickingRay = RayZero();
             }
 
             CreatePickingRayToRef(scene, x, y, world, scene._tempPickingRay, camera || null, false, enableDistantPicking);
@@ -1066,10 +1065,10 @@ export function PickWithRay(scene: Scene, ray: Ray, predicate?: MeshPredicate, f
             world.invertToRef(scene._pickWithRayInverseMatrix);
 
             if (!scene._cachedRayForTransform) {
-                scene._cachedRayForTransform = Ray.Zero();
+                scene._cachedRayForTransform = RayZero();
             }
 
-            Ray.TransformToRef(ray, scene._pickWithRayInverseMatrix, scene._cachedRayForTransform);
+            RayTransformToRef(ray, scene._pickWithRayInverseMatrix, scene._cachedRayForTransform);
             return scene._cachedRayForTransform;
         },
         predicate,
@@ -1116,10 +1115,10 @@ export function MultiPickWithRay(scene: Scene, ray: Ray, predicate?: MeshPredica
             world.invertToRef(scene._pickWithRayInverseMatrix);
 
             if (!scene._cachedRayForTransform) {
-                scene._cachedRayForTransform = Ray.Zero();
+                scene._cachedRayForTransform = RayZero();
             }
 
-            Ray.TransformToRef(ray, scene._pickWithRayInverseMatrix, scene._cachedRayForTransform);
+            RayTransformToRef(ray, scene._pickWithRayInverseMatrix, scene._cachedRayForTransform);
             return scene._cachedRayForTransform;
         },
         predicate,

@@ -358,16 +358,6 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
      */
     public static INSTANCEDMESH_SORT_TRANSPARENT = false;
 
-    /**
-     * Gets the default side orientation.
-     * @param orientation the orientation to value to attempt to get
-     * @returns the default orientation
-     * @internal
-     */
-    public static _GetDefaultSideOrientation(orientation?: number): number {
-        return orientation || Mesh.FRONTSIDE; // works as Mesh.FRONTSIDE is 0
-    }
-
     // Internal data
     private _internalMeshDataInfo = new _InternalMeshDataInfo();
 
@@ -4992,53 +4982,6 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
         return this;
     }
 
-    // Tools
-
-    /**
-     * Returns an object containing a min and max Vector3 which are the minimum and maximum vectors of each mesh bounding box from the passed array, in the world coordinates
-     * @param meshes defines the list of meshes to scan
-     * @returns an object `{min:` Vector3`, max:` Vector3`}`
-     */
-    public static MinMax(meshes: AbstractMesh[]): { min: Vector3; max: Vector3 } {
-        let minVector: Nullable<Vector3> = null;
-        let maxVector: Nullable<Vector3> = null;
-
-        for (const mesh of meshes) {
-            const boundingInfo = mesh.getBoundingInfo();
-
-            const boundingBox = boundingInfo.boundingBox;
-            if (!minVector || !maxVector) {
-                minVector = boundingBox.minimumWorld.clone();
-                maxVector = boundingBox.maximumWorld.clone();
-            } else {
-                minVector.minimizeInPlace(boundingBox.minimumWorld);
-                maxVector.maximizeInPlace(boundingBox.maximumWorld);
-            }
-        }
-
-        if (!minVector || !maxVector) {
-            return {
-                min: Vector3.Zero(),
-                max: Vector3.Zero(),
-            };
-        }
-
-        return {
-            min: minVector,
-            max: maxVector,
-        };
-    }
-
-    /**
-     * Returns the center of the `{min:` Vector3`, max:` Vector3`}` or the center of MinMax vector3 computed from a mesh array
-     * @param meshesOrMinMaxVector could be an array of meshes or a `{min:` Vector3`, max:` Vector3`}` object
-     * @returns a vector3
-     */
-    public static Center(meshesOrMinMaxVector: { min: Vector3; max: Vector3 } | AbstractMesh[]): Vector3 {
-        const minMaxVector = meshesOrMinMaxVector instanceof Array ? Mesh.MinMax(meshesOrMinMaxVector) : meshesOrMinMaxVector;
-        return Vector3.Center(minMaxVector.min, minMaxVector.max);
-    }
-
     /**
      * Merge the array of meshes into a single mesh for performance reasons.
      * @param meshes array of meshes with the vertices to merge. Entries cannot be empty meshes.
@@ -5319,577 +5262,663 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
     public setMaterialByID(id: string): Mesh {
         return this.setMaterialById(id);
     }
-
-    /**
-     * Creates a ribbon mesh.
-     * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param
-     * @param _name defines the name of the mesh to create
-     * @param _pathArray is a required array of paths, what are each an array of successive Vector3. The pathArray parameter depicts the ribbon geometry.
-     * @param _closeArray creates a seam between the first and the last paths of the path array (default is false)
-     * @param _closePath creates a seam between the first and the last points of each path of the path array
-     * @param _offset is taken in account only if the `pathArray` is containing a single path
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @param _instance defines an instance of an existing Ribbon object to be updated with the passed `pathArray` parameter (https://doc.babylonjs.com/how_to/How_to_dynamically_morph_a_mesh#ribbon)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateRibbon(
-        _name: string,
-        _pathArray: Vector3[][],
-        _closeArray: boolean,
-        _closePath: boolean,
-        _offset: number,
-        _scene?: Scene,
-        _updatable?: boolean,
-        _sideOrientation?: number,
-        _instance?: Mesh
-    ): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a plane polygonal mesh.  By default, this is a disc.
-     * @param _name defines the name of the mesh to create
-     * @param _radius sets the radius size (float) of the polygon (default 0.5)
-     * @param _tessellation sets the number of polygon sides (positive integer, default 64). So a tessellation valued to 3 will build a triangle, to 4 a square, etc
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateDisc(_name: string, _radius: number, _tessellation: number, _scene: Nullable<Scene>, _updatable?: boolean, _sideOrientation?: number): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a box mesh.
-     * @param _name defines the name of the mesh to create
-     * @param _size sets the size (float) of each box side (default 1)
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateBox(_name: string, _size: number, _scene: Nullable<Scene>, _updatable?: boolean, _sideOrientation?: number): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a sphere mesh.
-     * @param _name defines the name of the mesh to create
-     * @param _segments sets the sphere number of horizontal stripes (positive integer, default 32)
-     * @param _diameter sets the diameter size (float) of the sphere (default 1)
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateSphere(_name: string, _segments: number, _diameter: number, _scene?: Scene, _updatable?: boolean, _sideOrientation?: number): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a hemisphere mesh.
-     * @param _name defines the name of the mesh to create
-     * @param _segments sets the sphere number of horizontal stripes (positive integer, default 32)
-     * @param _diameter sets the diameter size (float) of the sphere (default 1)
-     * @param _scene defines the hosting scene
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateHemisphere(_name: string, _segments: number, _diameter: number, _scene?: Scene): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a cylinder or a cone mesh.
-     * @param _name defines the name of the mesh to create
-     * @param _height sets the height size (float) of the cylinder/cone (float, default 2)
-     * @param _diameterTop set the top cap diameter (floats, default 1)
-     * @param _diameterBottom set the bottom cap diameter (floats, default 1). This value can't be zero
-     * @param _tessellation sets the number of cylinder sides (positive integer, default 24). Set it to 3 to get a prism for instance
-     * @param _subdivisions sets the number of rings along the cylinder height (positive integer, default 1)
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateCylinder(
-        _name: string,
-        _height: number,
-        _diameterTop: number,
-        _diameterBottom: number,
-        _tessellation: number,
-        _subdivisions: any,
-        _scene?: Scene,
-        _updatable?: any,
-        _sideOrientation?: number
-    ): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    // Torus  (Code from SharpDX.org)
-    /**
-     * Creates a torus mesh.
-     * @param _name defines the name of the mesh to create
-     * @param _diameter sets the diameter size (float) of the torus (default 1)
-     * @param _thickness sets the diameter size of the tube of the torus (float, default 0.5)
-     * @param _tessellation sets the number of torus sides (positive integer, default 16)
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateTorus(_name: string, _diameter: number, _thickness: number, _tessellation: number, _scene?: Scene, _updatable?: boolean, _sideOrientation?: number): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a torus knot mesh.
-     * @param _name defines the name of the mesh to create
-     * @param _radius sets the global radius size (float) of the torus knot (default 2)
-     * @param _tube sets the diameter size of the tube of the torus (float, default 0.5)
-     * @param _radialSegments sets the number of sides on each tube segments (positive integer, default 32)
-     * @param _tubularSegments sets the number of tubes to decompose the knot into (positive integer, default 32)
-     * @param _p the number of windings on X axis (positive integers, default 2)
-     * @param _q the number of windings on Y axis (positive integers, default 3)
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateTorusKnot(
-        _name: string,
-        _radius: number,
-        _tube: number,
-        _radialSegments: number,
-        _tubularSegments: number,
-        _p: number,
-        _q: number,
-        _scene?: Scene,
-        _updatable?: boolean,
-        _sideOrientation?: number
-    ): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a line mesh..
-     * @param _name defines the name of the mesh to create
-     * @param _points is an array successive Vector3
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _instance is an instance of an existing LineMesh object to be updated with the passed `points` parameter (https://doc.babylonjs.com/how_to/How_to_dynamically_morph_a_mesh#lines-and-dashedlines).
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateLines(_name: string, _points: Vector3[], _scene: Nullable<Scene>, _updatable: boolean, _instance?: Nullable<LinesMesh>): LinesMesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a dashed line mesh.
-     * @param _name defines the name of the mesh to create
-     * @param _points is an array successive Vector3
-     * @param _dashSize is the size of the dashes relatively the dash number (positive float, default 3)
-     * @param _gapSize is the size of the gap between two successive dashes relatively the dash number (positive float, default 1)
-     * @param _dashNb is the intended total number of dashes (positive integer, default 200)
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _instance is an instance of an existing LineMesh object to be updated with the passed `points` parameter (https://doc.babylonjs.com/how_to/How_to_dynamically_morph_a_mesh#lines-and-dashedlines)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateDashedLines(
-        _name: string,
-        _points: Vector3[],
-        _dashSize: number,
-        _gapSize: number,
-        _dashNb: number,
-        _scene: Nullable<Scene>,
-        _updatable?: boolean,
-        _instance?: LinesMesh
-    ): LinesMesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a polygon mesh.Please consider using the same method from the MeshBuilder class instead
-     * The polygon's shape will depend on the input parameters and is constructed parallel to a ground mesh.
-     * The parameter `shape` is a required array of successive Vector3 representing the corners of the polygon in th XoZ plane, that is y = 0 for all vectors.
-     * You can set the mesh side orientation with the values : Mesh.FRONTSIDE (default), Mesh.BACKSIDE or Mesh.DOUBLESIDE
-     * The mesh can be set to updatable with the boolean parameter `updatable` (default false) if its internal geometry is supposed to change once created.
-     * Remember you can only change the shape positions, not their number when updating a polygon.
-     * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param#non-regular-polygon
-     * @param _name defines the name of the mesh to create
-     * @param _shape is a required array of successive Vector3 representing the corners of the polygon in th XoZ plane, that is y = 0 for all vectors
-     * @param _scene defines the hosting scene
-     * @param _holes is a required array of arrays of successive Vector3 used to defines holes in the polygon
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @param _earcutInjection can be used to inject your own earcut reference
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreatePolygon(
-        _name: string,
-        _shape: Vector3[],
-        _scene: Scene,
-        _holes?: Vector3[][],
-        _updatable?: boolean,
-        _sideOrientation?: number,
-        _earcutInjection?: any
-    ): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates an extruded polygon mesh, with depth in the Y direction..
-     * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param#extruded-non-regular-polygon
-     * @param _name defines the name of the mesh to create
-     * @param _shape is a required array of successive Vector3 representing the corners of the polygon in th XoZ plane, that is y = 0 for all vectors
-     * @param _depth defines the height of extrusion
-     * @param _scene defines the hosting scene
-     * @param _holes is a required array of arrays of successive Vector3 used to defines holes in the polygon
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @param _earcutInjection can be used to inject your own earcut reference
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static ExtrudePolygon(
-        _name: string,
-        _shape: Vector3[],
-        _depth: number,
-        _scene: Scene,
-        _holes?: Vector3[][],
-        _updatable?: boolean,
-        _sideOrientation?: number,
-        _earcutInjection?: any
-    ): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates an extruded shape mesh.
-     * The extrusion is a parametric shape. It has no predefined shape. Its final shape will depend on the input parameters.
-     * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param
-     * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param#extruded-shapes
-     * @param _name defines the name of the mesh to create
-     * @param _shape is a required array of successive Vector3. This array depicts the shape to be extruded in its local space : the shape must be designed in the xOy plane and will be extruded along the Z axis
-     * @param _path is a required array of successive Vector3. This is the axis curve the shape is extruded along
-     * @param _scale is the value to scale the shape
-     * @param _rotation is the angle value to rotate the shape each step (each path point), from the former step (so rotation added each step) along the curve
-     * @param _cap sets the way the extruded shape is capped. Possible values : Mesh.NO_CAP (default), Mesh.CAP_START, Mesh.CAP_END, Mesh.CAP_ALL
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @param _instance is an instance of an existing ExtrudedShape object to be updated with the passed `shape`, `path`, `scale` or `rotation` parameters (https://doc.babylonjs.com/how_to/How_to_dynamically_morph_a_mesh#extruded-shape)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static ExtrudeShape(
-        _name: string,
-        _shape: Vector3[],
-        _path: Vector3[],
-        _scale: number,
-        _rotation: number,
-        _cap: number,
-        _scene: Nullable<Scene>,
-        _updatable?: boolean,
-        _sideOrientation?: number,
-        _instance?: Mesh
-    ): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates an custom extruded shape mesh.
-     * The custom extrusion is a parametric shape.
-     * It has no predefined shape. Its final shape will depend on the input parameters.
-     *
-     * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param#extruded-shapes
-     * @param _name defines the name of the mesh to create
-     * @param _shape is a required array of successive Vector3. This array depicts the shape to be extruded in its local space : the shape must be designed in the xOy plane and will be extruded along the Z axis
-     * @param _path is a required array of successive Vector3. This is the axis curve the shape is extruded along
-     * @param _scaleFunction is a custom Javascript function called on each path point
-     * @param _rotationFunction is a custom Javascript function called on each path point
-     * @param _ribbonCloseArray forces the extrusion underlying ribbon to close all the paths in its `pathArray`
-     * @param _ribbonClosePath forces the extrusion underlying ribbon to close its `pathArray`
-     * @param _cap sets the way the extruded shape is capped. Possible values : Mesh.NO_CAP (default), Mesh.CAP_START, Mesh.CAP_END, Mesh.CAP_ALL
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @param _instance is an instance of an existing ExtrudedShape object to be updated with the passed `shape`, `path`, `scale` or `rotation` parameters (https://doc.babylonjs.com/features/featuresDeepDive/mesh/dynamicMeshMorph#extruded-shape)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static ExtrudeShapeCustom(
-        _name: string,
-        _shape: Vector3[],
-        _path: Vector3[],
-        _scaleFunction: Nullable<{ (i: number, distance: number): number }>,
-        _rotationFunction: Nullable<{ (i: number, distance: number): number }>,
-        _ribbonCloseArray: boolean,
-        _ribbonClosePath: boolean,
-        _cap: number,
-        _scene: Scene,
-        _updatable?: boolean,
-        _sideOrientation?: number,
-        _instance?: Mesh
-    ): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates lathe mesh.
-     * The lathe is a shape with a symmetry axis : a 2D model shape is rotated around this axis to design the lathe.
-     * @param _name defines the name of the mesh to create
-     * @param _shape is a required array of successive Vector3. This array depicts the shape to be rotated in its local space : the shape must be designed in the xOy plane and will be rotated around the Y axis. It's usually a 2D shape, so the Vector3 z coordinates are often set to zero
-     * @param _radius is the radius value of the lathe
-     * @param _tessellation is the side number of the lathe.
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateLathe(_name: string, _shape: Vector3[], _radius: number, _tessellation: number, _scene: Scene, _updatable?: boolean, _sideOrientation?: number): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a plane mesh.
-     * @param _name defines the name of the mesh to create
-     * @param _size sets the size (float) of both sides of the plane at once (default 1)
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreatePlane(_name: string, _size: number, _scene: Scene, _updatable?: boolean, _sideOrientation?: number): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a ground mesh.
-     * @param _name defines the name of the mesh to create
-     * @param _width set the width of the ground
-     * @param _height set the height of the ground
-     * @param _subdivisions sets the number of subdivisions per side
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateGround(_name: string, _width: number, _height: number, _subdivisions: number, _scene?: Scene, _updatable?: boolean): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a tiled ground mesh.
-     * @param _name defines the name of the mesh to create
-     * @param _xmin set the ground minimum X coordinate
-     * @param _zmin set the ground minimum Y coordinate
-     * @param _xmax set the ground maximum X coordinate
-     * @param _zmax set the ground maximum Z coordinate
-     * @param _subdivisions is an object `{w: positive integer, h: positive integer}` (default `{w: 6, h: 6}`). `w` and `h` are the numbers of subdivisions on the ground width and height. Each subdivision is called a tile
-     * @param _precision is an object `{w: positive integer, h: positive integer}` (default `{w: 2, h: 2}`). `w` and `h` are the numbers of subdivisions on the ground width and height of each tile
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateTiledGround(
-        _name: string,
-        _xmin: number,
-        _zmin: number,
-        _xmax: number,
-        _zmax: number,
-        _subdivisions: { w: number; h: number },
-        _precision: { w: number; h: number },
-        _scene: Scene,
-        _updatable?: boolean
-    ): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a ground mesh from a height map.
-     * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set/height_map
-     * @param _name defines the name of the mesh to create
-     * @param _url sets the URL of the height map image resource
-     * @param _width set the ground width size
-     * @param _height set the ground height size
-     * @param _subdivisions sets the number of subdivision per side
-     * @param _minHeight is the minimum altitude on the ground
-     * @param _maxHeight is the maximum altitude on the ground
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _onReady  is a callback function that will be called  once the mesh is built (the height map download can last some time)
-     * @param _alphaFilter will filter any data where the alpha channel is below this value, defaults 0 (all data visible)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateGroundFromHeightMap(
-        _name: string,
-        _url: string,
-        _width: number,
-        _height: number,
-        _subdivisions: number,
-        _minHeight: number,
-        _maxHeight: number,
-        _scene: Scene,
-        _updatable?: boolean,
-        _onReady?: (mesh: GroundMesh) => void,
-        _alphaFilter?: number
-    ): GroundMesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a tube mesh.
-     * The tube is a parametric shape.
-     * It has no predefined shape. Its final shape will depend on the input parameters.
-     *
-     * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param
-     * @param _name defines the name of the mesh to create
-     * @param _path is a required array of successive Vector3. It is the curve used as the axis of the tube
-     * @param _radius sets the tube radius size
-     * @param _tessellation is the number of sides on the tubular surface
-     * @param _radiusFunction is a custom function. If it is not null, it overrides the parameter `radius`. This function is called on each point of the tube path and is passed the index `i` of the i-th point and the distance of this point from the first point of the path
-     * @param _cap sets the way the extruded shape is capped. Possible values : Mesh.NO_CAP (default), Mesh.CAP_START, Mesh.CAP_END, Mesh.CAP_ALL
-     * @param _scene defines the hosting scene
-     * @param _updatable defines if the mesh must be flagged as updatable
-     * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
-     * @param _instance is an instance of an existing Tube object to be updated with the passed `pathArray` parameter (https://doc.babylonjs.com/how_to/How_to_dynamically_morph_a_mesh#tube)
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateTube(
-        _name: string,
-        _path: Vector3[],
-        _radius: number,
-        _tessellation: number,
-        _radiusFunction: { (i: number, distance: number): number },
-        _cap: number,
-        _scene: Scene,
-        _updatable?: boolean,
-        _sideOrientation?: number,
-        _instance?: Mesh
-    ): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a polyhedron mesh.
-     *.
-     * * The parameter `type` (positive integer, max 14, default 0) sets the polyhedron type to build among the 15 embedded types. Please refer to the type sheet in the tutorial to choose the wanted type
-     * * The parameter `size` (positive float, default 1) sets the polygon size
-     * * You can overwrite the `size` on each dimension bu using the parameters `sizeX`, `sizeY` or `sizeZ` (positive floats, default to `size` value)
-     * * You can build other polyhedron types than the 15 embbeded ones by setting the parameter `custom` (`polyhedronObject`, default null). If you set the parameter `custom`, this overwrittes the parameter `type`
-     * * A `polyhedronObject` is a formatted javascript object. You'll find a full file with pre-set polyhedra here : https://github.com/BabylonJS/Extensions/tree/master/Polyhedron
-     * * You can set the color and the UV of each side of the polyhedron with the parameters `faceColors` (Color4, default `(1, 1, 1, 1)`) and faceUV (Vector4, default `(0, 0, 1, 1)`)
-     * * To understand how to set `faceUV` or `faceColors`, please read this by considering the right number of faces of your polyhedron, instead of only 6 for the box : https://doc.babylonjs.com/features/featuresDeepDive/materials/using/texturePerBoxFace
-     * * The parameter `flat` (boolean, default true). If set to false, it gives the polyhedron a single global face, so less vertices and shared normals. In this case, `faceColors` and `faceUV` are ignored
-     * * You can also set the mesh side orientation with the values : Mesh.FRONTSIDE (default), Mesh.BACKSIDE or Mesh.DOUBLESIDE
-     * * If you create a double-sided mesh, you can choose what parts of the texture image to crop and stick respectively on the front and the back sides with the parameters `frontUVs` and `backUVs` (Vector4). Detail here : https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation
-     * * The mesh can be set to updatable with the boolean parameter `updatable` (default false) if its internal geometry is supposed to change once created
-     * @param _name defines the name of the mesh to create
-     * @param _options defines the options used to create the mesh
-     * @param _scene defines the hosting scene
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreatePolyhedron(
-        _name: string,
-        _options: {
-            type?: number;
-            size?: number;
-            sizeX?: number;
-            sizeY?: number;
-            sizeZ?: number;
-            custom?: any;
-            faceUV?: Vector4[];
-            faceColors?: Color4[];
-            updatable?: boolean;
-            sideOrientation?: number;
-        },
-        _scene: Scene
-    ): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a sphere based upon an icosahedron with 20 triangular faces which can be subdivided
-     * * The parameter `radius` sets the radius size (float) of the icosphere (default 1)
-     * * You can set some different icosphere dimensions, for instance to build an ellipsoid, by using the parameters `radiusX`, `radiusY` and `radiusZ` (all by default have the same value than `radius`)
-     * * The parameter `subdivisions` sets the number of subdivisions (positive integer, default 4). The more subdivisions, the more faces on the icosphere whatever its size
-     * * The parameter `flat` (boolean, default true) gives each side its own normals. Set it to false to get a smooth continuous light reflection on the surface
-     * * You can also set the mesh side orientation with the values : Mesh.FRONTSIDE (default), Mesh.BACKSIDE or Mesh.DOUBLESIDE
-     * * If you create a double-sided mesh, you can choose what parts of the texture image to crop and stick respectively on the front and the back sides with the parameters `frontUVs` and `backUVs` (Vector4). Detail here : https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation
-     * * The mesh can be set to updatable with the boolean parameter `updatable` (default false) if its internal geometry is supposed to change once created
-     * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/polyhedra#icosphere
-     * @param _name defines the name of the mesh
-     * @param _options defines the options used to create the mesh
-     * @param _scene defines the hosting scene
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateIcoSphere(
-        _name: string,
-        _options: { radius?: number; flat?: boolean; subdivisions?: number; sideOrientation?: number; updatable?: boolean },
-        _scene: Scene
-    ): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Creates a decal mesh.
-     *.
-     * A decal is a mesh usually applied as a model onto the surface of another mesh
-     * @param _name  defines the name of the mesh
-     * @param _sourceMesh defines the mesh receiving the decal
-     * @param _position sets the position of the decal in world coordinates
-     * @param _normal sets the normal of the mesh where the decal is applied onto in world coordinates
-     * @param _size sets the decal scaling
-     * @param _angle sets the angle to rotate the decal
-     * @returns a new Mesh
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateDecal(_name: string, _sourceMesh: AbstractMesh, _position: Vector3, _normal: Vector3, _size: Vector3, _angle: number): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /** Creates a Capsule Mesh
-     * @param _name defines the name of the mesh.
-     * @param _options the constructors options used to shape the mesh.
-     * @param _scene defines the scene the mesh is scoped to.
-     * @returns the capsule mesh
-     * @see https://doc.babylonjs.com/how_to/capsule_shape
-     * @deprecated Please use MeshBuilder instead
-     */
-    public static CreateCapsule(_name: string, _options: ICreateCapsuleOptions, _scene: Scene): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
-
-    /**
-     * Extends a mesh to a Goldberg mesh
-     * Warning  the mesh to convert MUST be an import of a perviously exported Goldberg mesh
-     * @param _mesh the mesh to convert
-     * @returns the extended mesh
-     * @deprecated Please use ExtendMeshToGoldberg instead
-     */
-    public static ExtendToGoldberg(_mesh: Mesh): Mesh {
-        throw new Error("Import MeshBuilder to populate this function");
-    }
 }
+
+
+/**
+ * Gets the default side orientation.
+ * @param orientation the orientation to value to attempt to get
+ * @returns the default orientation
+ * @internal
+ */
+export function Mesh_GetDefaultSideOrientation(orientation?: number): number {
+    return orientation || Mesh.FRONTSIDE; // works as Mesh.FRONTSIDE is 0
+}
+
+
+// Tools
+
+/**
+ * Returns an object containing a min and max Vector3 which are the minimum and maximum vectors of each mesh bounding box from the passed array, in the world coordinates
+ * @param meshes defines the list of meshes to scan
+ * @returns an object `{min:` Vector3`, max:` Vector3`}`
+ */
+export function MeshMinMax(meshes: AbstractMesh[]): { min: Vector3; max: Vector3 } {
+    let minVector: Nullable<Vector3> = null;
+    let maxVector: Nullable<Vector3> = null;
+
+    for (const mesh of meshes) {
+        const boundingInfo = mesh.getBoundingInfo();
+
+        const boundingBox = boundingInfo.boundingBox;
+        if (!minVector || !maxVector) {
+            minVector = boundingBox.minimumWorld.clone();
+            maxVector = boundingBox.maximumWorld.clone();
+        } else {
+            minVector.minimizeInPlace(boundingBox.minimumWorld);
+            maxVector.maximizeInPlace(boundingBox.maximumWorld);
+        }
+    }
+
+    if (!minVector || !maxVector) {
+        return {
+            min: Vector3.Zero(),
+            max: Vector3.Zero(),
+        };
+    }
+
+    return {
+        min: minVector,
+        max: maxVector,
+    };
+}
+
+
+/**
+ * Returns the center of the `{min:` Vector3`, max:` Vector3`}` or the center of MinMax vector3 computed from a mesh array
+ * @param meshesOrMinMaxVector could be an array of meshes or a `{min:` Vector3`, max:` Vector3`}` object
+ * @returns a vector3
+ */
+export function MeshCenter(meshesOrMinMaxVector: { min: Vector3; max: Vector3 } | AbstractMesh[]): Vector3 {
+    const minMaxVector = meshesOrMinMaxVector instanceof Array ? MeshMinMax(meshesOrMinMaxVector) : meshesOrMinMaxVector;
+    return Vector3.Center(minMaxVector.min, minMaxVector.max);
+}
+
+
+/**
+ * Creates a ribbon mesh.
+ * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param
+ * @param _name defines the name of the mesh to create
+ * @param _pathArray is a required array of paths, what are each an array of successive Vector3. The pathArray parameter depicts the ribbon geometry.
+ * @param _closeArray creates a seam between the first and the last paths of the path array (default is false)
+ * @param _closePath creates a seam between the first and the last points of each path of the path array
+ * @param _offset is taken in account only if the `pathArray` is containing a single path
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @param _instance defines an instance of an existing Ribbon object to be updated with the passed `pathArray` parameter (https://doc.babylonjs.com/how_to/How_to_dynamically_morph_a_mesh#ribbon)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateRibbon(
+    _name: string,
+    _pathArray: Vector3[][],
+    _closeArray: boolean,
+    _closePath: boolean,
+    _offset: number,
+    _scene?: Scene,
+    _updatable?: boolean,
+    _sideOrientation?: number,
+    _instance?: Mesh
+): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a plane polygonal mesh.  By default, this is a disc.
+ * @param _name defines the name of the mesh to create
+ * @param _radius sets the radius size (float) of the polygon (default 0.5)
+ * @param _tessellation sets the number of polygon sides (positive integer, default 64). So a tessellation valued to 3 will build a triangle, to 4 a square, etc
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateDisc(_name: string, _radius: number, _tessellation: number, _scene: Nullable<Scene>, _updatable?: boolean, _sideOrientation?: number): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a box mesh.
+ * @param _name defines the name of the mesh to create
+ * @param _size sets the size (float) of each box side (default 1)
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateBox(_name: string, _size: number, _scene: Nullable<Scene>, _updatable?: boolean, _sideOrientation?: number): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a sphere mesh.
+ * @param _name defines the name of the mesh to create
+ * @param _segments sets the sphere number of horizontal stripes (positive integer, default 32)
+ * @param _diameter sets the diameter size (float) of the sphere (default 1)
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateSphere(_name: string, _segments: number, _diameter: number, _scene?: Scene, _updatable?: boolean, _sideOrientation?: number): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a hemisphere mesh.
+ * @param _name defines the name of the mesh to create
+ * @param _segments sets the sphere number of horizontal stripes (positive integer, default 32)
+ * @param _diameter sets the diameter size (float) of the sphere (default 1)
+ * @param _scene defines the hosting scene
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateHemisphere(_name: string, _segments: number, _diameter: number, _scene?: Scene): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a cylinder or a cone mesh.
+ * @param _name defines the name of the mesh to create
+ * @param _height sets the height size (float) of the cylinder/cone (float, default 2)
+ * @param _diameterTop set the top cap diameter (floats, default 1)
+ * @param _diameterBottom set the bottom cap diameter (floats, default 1). This value can't be zero
+ * @param _tessellation sets the number of cylinder sides (positive integer, default 24). Set it to 3 to get a prism for instance
+ * @param _subdivisions sets the number of rings along the cylinder height (positive integer, default 1)
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateCylinder(
+    _name: string,
+    _height: number,
+    _diameterTop: number,
+    _diameterBottom: number,
+    _tessellation: number,
+    _subdivisions: any,
+    _scene?: Scene,
+    _updatable?: any,
+    _sideOrientation?: number
+): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+// Torus  (Code from SharpDX.org)
+/**
+ * Creates a torus mesh.
+ * @param _name defines the name of the mesh to create
+ * @param _diameter sets the diameter size (float) of the torus (default 1)
+ * @param _thickness sets the diameter size of the tube of the torus (float, default 0.5)
+ * @param _tessellation sets the number of torus sides (positive integer, default 16)
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateTorus(_name: string, _diameter: number, _thickness: number, _tessellation: number, _scene?: Scene, _updatable?: boolean, _sideOrientation?: number): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a torus knot mesh.
+ * @param _name defines the name of the mesh to create
+ * @param _radius sets the global radius size (float) of the torus knot (default 2)
+ * @param _tube sets the diameter size of the tube of the torus (float, default 0.5)
+ * @param _radialSegments sets the number of sides on each tube segments (positive integer, default 32)
+ * @param _tubularSegments sets the number of tubes to decompose the knot into (positive integer, default 32)
+ * @param _p the number of windings on X axis (positive integers, default 2)
+ * @param _q the number of windings on Y axis (positive integers, default 3)
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateTorusKnot(
+    _name: string,
+    _radius: number,
+    _tube: number,
+    _radialSegments: number,
+    _tubularSegments: number,
+    _p: number,
+    _q: number,
+    _scene?: Scene,
+    _updatable?: boolean,
+    _sideOrientation?: number
+): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a line mesh..
+ * @param _name defines the name of the mesh to create
+ * @param _points is an array successive Vector3
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _instance is an instance of an existing LineMesh object to be updated with the passed `points` parameter (https://doc.babylonjs.com/how_to/How_to_dynamically_morph_a_mesh#lines-and-dashedlines).
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateLines(_name: string, _points: Vector3[], _scene: Nullable<Scene>, _updatable: boolean, _instance?: Nullable<LinesMesh>): LinesMesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a dashed line mesh.
+ * @param _name defines the name of the mesh to create
+ * @param _points is an array successive Vector3
+ * @param _dashSize is the size of the dashes relatively the dash number (positive float, default 3)
+ * @param _gapSize is the size of the gap between two successive dashes relatively the dash number (positive float, default 1)
+ * @param _dashNb is the intended total number of dashes (positive integer, default 200)
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _instance is an instance of an existing LineMesh object to be updated with the passed `points` parameter (https://doc.babylonjs.com/how_to/How_to_dynamically_morph_a_mesh#lines-and-dashedlines)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateDashedLines(
+    _name: string,
+    _points: Vector3[],
+    _dashSize: number,
+    _gapSize: number,
+    _dashNb: number,
+    _scene: Nullable<Scene>,
+    _updatable?: boolean,
+    _instance?: LinesMesh
+): LinesMesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a polygon mesh.Please consider using the same method from the MeshBuilder class instead
+ * The polygon's shape will depend on the input parameters and is constructed parallel to a ground mesh.
+ * The parameter `shape` is a required array of successive Vector3 representing the corners of the polygon in th XoZ plane, that is y = 0 for all vectors.
+ * You can set the mesh side orientation with the values : Mesh.FRONTSIDE (default), Mesh.BACKSIDE or Mesh.DOUBLESIDE
+ * The mesh can be set to updatable with the boolean parameter `updatable` (default false) if its internal geometry is supposed to change once created.
+ * Remember you can only change the shape positions, not their number when updating a polygon.
+ * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param#non-regular-polygon
+ * @param _name defines the name of the mesh to create
+ * @param _shape is a required array of successive Vector3 representing the corners of the polygon in th XoZ plane, that is y = 0 for all vectors
+ * @param _scene defines the hosting scene
+ * @param _holes is a required array of arrays of successive Vector3 used to defines holes in the polygon
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @param _earcutInjection can be used to inject your own earcut reference
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreatePolygon(
+    _name: string,
+    _shape: Vector3[],
+    _scene: Scene,
+    _holes?: Vector3[][],
+    _updatable?: boolean,
+    _sideOrientation?: number,
+    _earcutInjection?: any
+): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates an extruded polygon mesh, with depth in the Y direction..
+ * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param#extruded-non-regular-polygon
+ * @param _name defines the name of the mesh to create
+ * @param _shape is a required array of successive Vector3 representing the corners of the polygon in th XoZ plane, that is y = 0 for all vectors
+ * @param _depth defines the height of extrusion
+ * @param _scene defines the hosting scene
+ * @param _holes is a required array of arrays of successive Vector3 used to defines holes in the polygon
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @param _earcutInjection can be used to inject your own earcut reference
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshExtrudePolygon(
+    _name: string,
+    _shape: Vector3[],
+    _depth: number,
+    _scene: Scene,
+    _holes?: Vector3[][],
+    _updatable?: boolean,
+    _sideOrientation?: number,
+    _earcutInjection?: any
+): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates an extruded shape mesh.
+ * The extrusion is a parametric shape. It has no predefined shape. Its final shape will depend on the input parameters.
+ * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param
+ * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param#extruded-shapes
+ * @param _name defines the name of the mesh to create
+ * @param _shape is a required array of successive Vector3. This array depicts the shape to be extruded in its local space : the shape must be designed in the xOy plane and will be extruded along the Z axis
+ * @param _path is a required array of successive Vector3. This is the axis curve the shape is extruded along
+ * @param _scale is the value to scale the shape
+ * @param _rotation is the angle value to rotate the shape each step (each path point), from the former step (so rotation added each step) along the curve
+ * @param _cap sets the way the extruded shape is capped. Possible values : Mesh.NO_CAP (default), Mesh.CAP_START, Mesh.CAP_END, Mesh.CAP_ALL
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @param _instance is an instance of an existing ExtrudedShape object to be updated with the passed `shape`, `path`, `scale` or `rotation` parameters (https://doc.babylonjs.com/how_to/How_to_dynamically_morph_a_mesh#extruded-shape)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshExtrudeShape(
+    _name: string,
+    _shape: Vector3[],
+    _path: Vector3[],
+    _scale: number,
+    _rotation: number,
+    _cap: number,
+    _scene: Nullable<Scene>,
+    _updatable?: boolean,
+    _sideOrientation?: number,
+    _instance?: Mesh
+): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates an custom extruded shape mesh.
+ * The custom extrusion is a parametric shape.
+ * It has no predefined shape. Its final shape will depend on the input parameters.
+ *
+ * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param#extruded-shapes
+ * @param _name defines the name of the mesh to create
+ * @param _shape is a required array of successive Vector3. This array depicts the shape to be extruded in its local space : the shape must be designed in the xOy plane and will be extruded along the Z axis
+ * @param _path is a required array of successive Vector3. This is the axis curve the shape is extruded along
+ * @param _scaleFunction is a custom Javascript function called on each path point
+ * @param _rotationFunction is a custom Javascript function called on each path point
+ * @param _ribbonCloseArray forces the extrusion underlying ribbon to close all the paths in its `pathArray`
+ * @param _ribbonClosePath forces the extrusion underlying ribbon to close its `pathArray`
+ * @param _cap sets the way the extruded shape is capped. Possible values : Mesh.NO_CAP (default), Mesh.CAP_START, Mesh.CAP_END, Mesh.CAP_ALL
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @param _instance is an instance of an existing ExtrudedShape object to be updated with the passed `shape`, `path`, `scale` or `rotation` parameters (https://doc.babylonjs.com/features/featuresDeepDive/mesh/dynamicMeshMorph#extruded-shape)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshExtrudeShapeCustom(
+    _name: string,
+    _shape: Vector3[],
+    _path: Vector3[],
+    _scaleFunction: Nullable<{ (i: number, distance: number): number }>,
+    _rotationFunction: Nullable<{ (i: number, distance: number): number }>,
+    _ribbonCloseArray: boolean,
+    _ribbonClosePath: boolean,
+    _cap: number,
+    _scene: Scene,
+    _updatable?: boolean,
+    _sideOrientation?: number,
+    _instance?: Mesh
+): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates lathe mesh.
+ * The lathe is a shape with a symmetry axis : a 2D model shape is rotated around this axis to design the lathe.
+ * @param _name defines the name of the mesh to create
+ * @param _shape is a required array of successive Vector3. This array depicts the shape to be rotated in its local space : the shape must be designed in the xOy plane and will be rotated around the Y axis. It's usually a 2D shape, so the Vector3 z coordinates are often set to zero
+ * @param _radius is the radius value of the lathe
+ * @param _tessellation is the side number of the lathe.
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateLathe(_name: string, _shape: Vector3[], _radius: number, _tessellation: number, _scene: Scene, _updatable?: boolean, _sideOrientation?: number): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a plane mesh.
+ * @param _name defines the name of the mesh to create
+ * @param _size sets the size (float) of both sides of the plane at once (default 1)
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreatePlane(_name: string, _size: number, _scene: Scene, _updatable?: boolean, _sideOrientation?: number): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a ground mesh.
+ * @param _name defines the name of the mesh to create
+ * @param _width set the width of the ground
+ * @param _height set the height of the ground
+ * @param _subdivisions sets the number of subdivisions per side
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateGround(_name: string, _width: number, _height: number, _subdivisions: number, _scene?: Scene, _updatable?: boolean): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a tiled ground mesh.
+ * @param _name defines the name of the mesh to create
+ * @param _xmin set the ground minimum X coordinate
+ * @param _zmin set the ground minimum Y coordinate
+ * @param _xmax set the ground maximum X coordinate
+ * @param _zmax set the ground maximum Z coordinate
+ * @param _subdivisions is an object `{w: positive integer, h: positive integer}` (default `{w: 6, h: 6}`). `w` and `h` are the numbers of subdivisions on the ground width and height. Each subdivision is called a tile
+ * @param _precision is an object `{w: positive integer, h: positive integer}` (default `{w: 2, h: 2}`). `w` and `h` are the numbers of subdivisions on the ground width and height of each tile
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateTiledGround(
+    _name: string,
+    _xmin: number,
+    _zmin: number,
+    _xmax: number,
+    _zmax: number,
+    _subdivisions: { w: number; h: number },
+    _precision: { w: number; h: number },
+    _scene: Scene,
+    _updatable?: boolean
+): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a ground mesh from a height map.
+ * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set/height_map
+ * @param _name defines the name of the mesh to create
+ * @param _url sets the URL of the height map image resource
+ * @param _width set the ground width size
+ * @param _height set the ground height size
+ * @param _subdivisions sets the number of subdivision per side
+ * @param _minHeight is the minimum altitude on the ground
+ * @param _maxHeight is the maximum altitude on the ground
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _onReady  is a callback function that will be called  once the mesh is built (the height map download can last some time)
+ * @param _alphaFilter will filter any data where the alpha channel is below this value, defaults 0 (all data visible)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateGroundFromHeightMap(
+    _name: string,
+    _url: string,
+    _width: number,
+    _height: number,
+    _subdivisions: number,
+    _minHeight: number,
+    _maxHeight: number,
+    _scene: Scene,
+    _updatable?: boolean,
+    _onReady?: (mesh: GroundMesh) => void,
+    _alphaFilter?: number
+): GroundMesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a tube mesh.
+ * The tube is a parametric shape.
+ * It has no predefined shape. Its final shape will depend on the input parameters.
+ *
+ * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param
+ * @param _name defines the name of the mesh to create
+ * @param _path is a required array of successive Vector3. It is the curve used as the axis of the tube
+ * @param _radius sets the tube radius size
+ * @param _tessellation is the number of sides on the tubular surface
+ * @param _radiusFunction is a custom function. If it is not null, it overrides the parameter `radius`. This function is called on each point of the tube path and is passed the index `i` of the i-th point and the distance of this point from the first point of the path
+ * @param _cap sets the way the extruded shape is capped. Possible values : Mesh.NO_CAP (default), Mesh.CAP_START, Mesh.CAP_END, Mesh.CAP_ALL
+ * @param _scene defines the hosting scene
+ * @param _updatable defines if the mesh must be flagged as updatable
+ * @param _sideOrientation defines the mesh side orientation (https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation)
+ * @param _instance is an instance of an existing Tube object to be updated with the passed `pathArray` parameter (https://doc.babylonjs.com/how_to/How_to_dynamically_morph_a_mesh#tube)
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateTube(
+    _name: string,
+    _path: Vector3[],
+    _radius: number,
+    _tessellation: number,
+    _radiusFunction: { (i: number, distance: number): number },
+    _cap: number,
+    _scene: Scene,
+    _updatable?: boolean,
+    _sideOrientation?: number,
+    _instance?: Mesh
+): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a polyhedron mesh.
+ *.
+ * * The parameter `type` (positive integer, max 14, default 0) sets the polyhedron type to build among the 15 embedded types. Please refer to the type sheet in the tutorial to choose the wanted type
+ * * The parameter `size` (positive float, default 1) sets the polygon size
+ * * You can overwrite the `size` on each dimension bu using the parameters `sizeX`, `sizeY` or `sizeZ` (positive floats, default to `size` value)
+ * * You can build other polyhedron types than the 15 embbeded ones by setting the parameter `custom` (`polyhedronObject`, default null). If you set the parameter `custom`, this overwrittes the parameter `type`
+ * * A `polyhedronObject` is a formatted javascript object. You'll find a full file with pre-set polyhedra here : https://github.com/BabylonJS/Extensions/tree/master/Polyhedron
+ * * You can set the color and the UV of each side of the polyhedron with the parameters `faceColors` (Color4, default `(1, 1, 1, 1)`) and faceUV (Vector4, default `(0, 0, 1, 1)`)
+ * * To understand how to set `faceUV` or `faceColors`, please read this by considering the right number of faces of your polyhedron, instead of only 6 for the box : https://doc.babylonjs.com/features/featuresDeepDive/materials/using/texturePerBoxFace
+ * * The parameter `flat` (boolean, default true). If set to false, it gives the polyhedron a single global face, so less vertices and shared normals. In this case, `faceColors` and `faceUV` are ignored
+ * * You can also set the mesh side orientation with the values : Mesh.FRONTSIDE (default), Mesh.BACKSIDE or Mesh.DOUBLESIDE
+ * * If you create a double-sided mesh, you can choose what parts of the texture image to crop and stick respectively on the front and the back sides with the parameters `frontUVs` and `backUVs` (Vector4). Detail here : https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation
+ * * The mesh can be set to updatable with the boolean parameter `updatable` (default false) if its internal geometry is supposed to change once created
+ * @param _name defines the name of the mesh to create
+ * @param _options defines the options used to create the mesh
+ * @param _scene defines the hosting scene
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreatePolyhedron(
+    _name: string,
+    _options: {
+        type?: number;
+        size?: number;
+        sizeX?: number;
+        sizeY?: number;
+        sizeZ?: number;
+        custom?: any;
+        faceUV?: Vector4[];
+        faceColors?: Color4[];
+        updatable?: boolean;
+        sideOrientation?: number;
+    },
+    _scene: Scene
+): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a sphere based upon an icosahedron with 20 triangular faces which can be subdivided
+ * * The parameter `radius` sets the radius size (float) of the icosphere (default 1)
+ * * You can set some different icosphere dimensions, for instance to build an ellipsoid, by using the parameters `radiusX`, `radiusY` and `radiusZ` (all by default have the same value than `radius`)
+ * * The parameter `subdivisions` sets the number of subdivisions (positive integer, default 4). The more subdivisions, the more faces on the icosphere whatever its size
+ * * The parameter `flat` (boolean, default true) gives each side its own normals. Set it to false to get a smooth continuous light reflection on the surface
+ * * You can also set the mesh side orientation with the values : Mesh.FRONTSIDE (default), Mesh.BACKSIDE or Mesh.DOUBLESIDE
+ * * If you create a double-sided mesh, you can choose what parts of the texture image to crop and stick respectively on the front and the back sides with the parameters `frontUVs` and `backUVs` (Vector4). Detail here : https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/set#side-orientation
+ * * The mesh can be set to updatable with the boolean parameter `updatable` (default false) if its internal geometry is supposed to change once created
+ * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/polyhedra#icosphere
+ * @param _name defines the name of the mesh
+ * @param _options defines the options used to create the mesh
+ * @param _scene defines the hosting scene
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateIcoSphere(
+    _name: string,
+    _options: { radius?: number; flat?: boolean; subdivisions?: number; sideOrientation?: number; updatable?: boolean },
+    _scene: Scene
+): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Creates a decal mesh.
+ *.
+ * A decal is a mesh usually applied as a model onto the surface of another mesh
+ * @param _name  defines the name of the mesh
+ * @param _sourceMesh defines the mesh receiving the decal
+ * @param _position sets the position of the decal in world coordinates
+ * @param _normal sets the normal of the mesh where the decal is applied onto in world coordinates
+ * @param _size sets the decal scaling
+ * @param _angle sets the angle to rotate the decal
+ * @returns a new Mesh
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateDecal(_name: string, _sourceMesh: AbstractMesh, _position: Vector3, _normal: Vector3, _size: Vector3, _angle: number): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/** Creates a Capsule Mesh
+ * @param _name defines the name of the mesh.
+ * @param _options the constructors options used to shape the mesh.
+ * @param _scene defines the scene the mesh is scoped to.
+ * @returns the capsule mesh
+ * @see https://doc.babylonjs.com/how_to/capsule_shape
+ * @deprecated Please use MeshBuilder instead
+ */
+export function MeshCreateCapsule(_name: string, _options: ICreateCapsuleOptions, _scene: Scene): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+
+
+/**
+ * Extends a mesh to a Goldberg mesh
+ * Warning  the mesh to convert MUST be an import of a perviously exported Goldberg mesh
+ * @param _mesh the mesh to convert
+ * @returns the extended mesh
+ * @deprecated Please use ExtendMeshToGoldberg instead
+ */
+export function MeshExtendToGoldberg(_mesh: Mesh): Mesh {
+    throw new Error("Import MeshBuilder to populate this function");
+}
+

@@ -6,7 +6,7 @@ export * from "./Compression/pure";
 export * from "./csg";
 export * from "./geometry";
 export * from "./mesh.pure";
-export * from "./mesh.vertexData";
+export * from "./mesh.vertexData.pure";
 export * from "./meshBuilder";
 export * from "./meshSimplification";
 export * from "./meshUtils";

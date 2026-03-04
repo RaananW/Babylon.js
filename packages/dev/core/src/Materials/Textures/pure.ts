@@ -16,7 +16,7 @@ export * from "./multiRenderTarget";
 export * from "./Packer/pure";
 export * from "./Procedurals/pure";
 export * from "./rawCubeTexture";
-export * from "./rawTexture";
+export * from "./rawTexture.pure";
 export * from "./rawTexture2DArray";
 export * from "./rawTexture3D";
 export * from "./refractionTexture";

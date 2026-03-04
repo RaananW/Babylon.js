@@ -38,6 +38,7 @@ export * from "./GaussianSplatting/gaussianSplattingGpuPickingMaterialPlugin.pur
 export * from "./materialHelper.functions.pure";
 export * from "./materialHelper.geometryrendering";
 export * from "./materialStencilState";
+export * from "./prePassConfiguration";
 export * from "./uv.defines";
 export * from "./floatingOriginMatrixOverrides";
 export * from "./vertexPullingHelper.functions";

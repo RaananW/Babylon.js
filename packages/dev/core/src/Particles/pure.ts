@@ -7,7 +7,7 @@ export * from "./computeShaderParticleSystem.pure";
 export * from "./gpuParticleSystem";
 export * from "./IParticleSystem";
 export * from "./particle";
-export * from "./particleHelper";
+export * from "./particleHelper.pure";
 export * from "./particleSystemSet";
 export * from "./solidParticle";
 export * from "./solidParticleSystem";

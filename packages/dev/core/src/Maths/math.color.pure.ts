@@ -122,7 +122,7 @@ export class Color3 implements Tensor<Tuple<number, 3>, IColor3Like>, IColor3Lik
      * @returns the current Color3 object
      */
     public fromArray(array: DeepImmutable<ArrayLike<number>>, offset: number = 0): this {
-        Color3.FromArrayToRef(array, offset, this);
+        Color3FromArrayToRef(array, offset, this);
         return this;
     }
 
@@ -727,230 +727,7 @@ export class Color3 implements Tensor<Tuple<number, 3>, IColor3Like>, IColor3Lik
 
     // Statics
 
-    private static _BlackReadOnly = /*#__PURE__*/ Color3.Black() as DeepImmutable<Color3>;
-
-    /**
-     * Converts Hue, saturation and value to a Color3 (RGB)
-     * @param hue defines the hue (value between 0 and 360)
-     * @param saturation defines the saturation (value between 0 and 1)
-     * @param value defines the value (value between 0 and 1)
-     * @param result defines the Color3 where to store the RGB values
-     * @returns the updated result
-     */
-    public static HSVtoRGBToRef<T extends IColor3Like>(hue: number, saturation: number, value: number, result: T): T {
-        const chroma = value * saturation;
-        const h = hue / 60;
-        const x = chroma * (1 - Math.abs((h % 2) - 1));
-        let r = 0;
-        let g = 0;
-        let b = 0;
-
-        if (h >= 0 && h <= 1) {
-            r = chroma;
-            g = x;
-        } else if (h >= 1 && h <= 2) {
-            r = x;
-            g = chroma;
-        } else if (h >= 2 && h <= 3) {
-            g = chroma;
-            b = x;
-        } else if (h >= 3 && h <= 4) {
-            g = x;
-            b = chroma;
-        } else if (h >= 4 && h <= 5) {
-            r = x;
-            b = chroma;
-        } else if (h >= 5 && h <= 6) {
-            r = chroma;
-            b = x;
-        }
-
-        const m = value - chroma;
-        result.r = r + m;
-        result.g = g + m;
-        result.b = b + m;
-        return result;
-    }
-
-    /**
-     * Converts Hue, saturation and value to a new Color3 (RGB)
-     * @param hue defines the hue (value between 0 and 360)
-     * @param saturation defines the saturation (value between 0 and 1)
-     * @param value defines the value (value between 0 and 1)
-     * @returns a new Color3 object
-     */
-    public static FromHSV(hue: number, saturation: number, value: number): Color3 {
-        const result = new Color3(0, 0, 0);
-        Color3.HSVtoRGBToRef(hue, saturation, value, result);
-        return result;
-    }
-
-    /**
-     * Creates a new Color3 from the string containing valid hexadecimal values
-     * @param hex defines a string containing valid hexadecimal values
-     * @returns a new Color3 object
-     */
-    public static FromHexString(hex: string): Color3 {
-        return new Color3(0, 0, 0).fromHexString(hex);
-    }
-
-    /**
-     * Creates a new Color3 from the starting index of the given array
-     * @param array defines the source array
-     * @param offset defines an offset in the source array
-     * @returns a new Color3 object
-     */
-    public static FromArray(array: DeepImmutable<ArrayLike<number>>, offset: number = 0): Color3 {
-        return new Color3(array[offset], array[offset + 1], array[offset + 2]);
-    }
-
-    /**
-     * Creates a new Color3 from the starting index element of the given array
-     * @param array defines the source array to read from
-     * @param offset defines the offset in the source array
-     * @param result defines the target Color3 object
-     */
-    public static FromArrayToRef(array: DeepImmutable<ArrayLike<number>>, offset: number = 0, result: Color3) {
-        result.r = array[offset];
-        result.g = array[offset + 1];
-        result.b = array[offset + 2];
-    }
-
-    /**
-     * Creates a new Color3 from integer values (\< 256)
-     * @param r defines the red component to read from (value between 0 and 255)
-     * @param g defines the green component to read from (value between 0 and 255)
-     * @param b defines the blue component to read from (value between 0 and 255)
-     * @returns a new Color3 object
-     */
-    public static FromInts(r: number, g: number, b: number): Color3 {
-        return new Color3(r / 255.0, g / 255.0, b / 255.0);
-    }
-
-    /**
-     * Creates a new Color3 with values linearly interpolated of "amount" between the start Color3 and the end Color3
-     * @param start defines the start Color3 value
-     * @param end defines the end Color3 value
-     * @param amount defines the gradient value between start and end
-     * @returns a new Color3 object
-     */
-    public static Lerp(start: DeepImmutable<Color3>, end: DeepImmutable<Color3>, amount: number): Color3 {
-        const result = new Color3(0.0, 0.0, 0.0);
-        Color3.LerpToRef(start, end, amount, result);
-        return result;
-    }
-
-    /**
-     * Creates a new Color3 with values linearly interpolated of "amount" between the start Color3 and the end Color3
-     * @param left defines the start value
-     * @param right defines the end value
-     * @param amount defines the gradient factor
-     * @param result defines the Color3 object where to store the result
-     */
-    public static LerpToRef(left: DeepImmutable<Color3>, right: DeepImmutable<Color3>, amount: number, result: Color3): void {
-        result.r = left.r + (right.r - left.r) * amount;
-        result.g = left.g + (right.g - left.g) * amount;
-        result.b = left.b + (right.b - left.b) * amount;
-    }
-
-    /**
-     * Returns a new Color3 located for "amount" (float) on the Hermite interpolation spline defined by the vectors "value1", "tangent1", "value2", "tangent2"
-     * @param value1 defines the first control point
-     * @param tangent1 defines the first tangent Color3
-     * @param value2 defines the second control point
-     * @param tangent2 defines the second tangent Color3
-     * @param amount defines the amount on the interpolation spline (between 0 and 1)
-     * @returns the new Color3
-     */
-    public static Hermite(value1: DeepImmutable<Color3>, tangent1: DeepImmutable<Color3>, value2: DeepImmutable<Color3>, tangent2: DeepImmutable<Color3>, amount: number): Color3 {
-        const squared = amount * amount;
-        const cubed = amount * squared;
-        const part1 = 2.0 * cubed - 3.0 * squared + 1.0;
-        const part2 = -2.0 * cubed + 3.0 * squared;
-        const part3 = cubed - 2.0 * squared + amount;
-        const part4 = cubed - squared;
-
-        const r = value1.r * part1 + value2.r * part2 + tangent1.r * part3 + tangent2.r * part4;
-        const g = value1.g * part1 + value2.g * part2 + tangent1.g * part3 + tangent2.g * part4;
-        const b = value1.b * part1 + value2.b * part2 + tangent1.b * part3 + tangent2.b * part4;
-        return new Color3(r, g, b);
-    }
-
-    /**
-     * Returns a new Color3 which is the 1st derivative of the Hermite spline defined by the colors "value1", "value2", "tangent1", "tangent2".
-     * @param value1 defines the first control point
-     * @param tangent1 defines the first tangent
-     * @param value2 defines the second control point
-     * @param tangent2 defines the second tangent
-     * @param time define where the derivative must be done
-     * @returns 1st derivative
-     */
-    public static Hermite1stDerivative(
-        value1: DeepImmutable<Color3>,
-        tangent1: DeepImmutable<Color3>,
-        value2: DeepImmutable<Color3>,
-        tangent2: DeepImmutable<Color3>,
-        time: number
-    ): Color3 {
-        const result = Color3.Black();
-
-        this.Hermite1stDerivativeToRef(value1, tangent1, value2, tangent2, time, result);
-
-        return result;
-    }
-
-    /**
-     * Returns a new Color3 which is the 1st derivative of the Hermite spline defined by the colors "value1", "value2", "tangent1", "tangent2".
-     * @param value1 defines the first control point
-     * @param tangent1 defines the first tangent
-     * @param value2 defines the second control point
-     * @param tangent2 defines the second tangent
-     * @param time define where the derivative must be done
-     * @param result define where to store the derivative
-     */
-    public static Hermite1stDerivativeToRef(
-        value1: DeepImmutable<Color3>,
-        tangent1: DeepImmutable<Color3>,
-        value2: DeepImmutable<Color3>,
-        tangent2: DeepImmutable<Color3>,
-        time: number,
-        result: Color3
-    ) {
-        const t2 = time * time;
-
-        result.r = (t2 - time) * 6 * value1.r + (3 * t2 - 4 * time + 1) * tangent1.r + (-t2 + time) * 6 * value2.r + (3 * t2 - 2 * time) * tangent2.r;
-        result.g = (t2 - time) * 6 * value1.g + (3 * t2 - 4 * time + 1) * tangent1.g + (-t2 + time) * 6 * value2.g + (3 * t2 - 2 * time) * tangent2.g;
-        result.b = (t2 - time) * 6 * value1.b + (3 * t2 - 4 * time + 1) * tangent1.b + (-t2 + time) * 6 * value2.b + (3 * t2 - 2 * time) * tangent2.b;
-    }
-
-    /**
-     * Returns a Color3 value containing a red color
-     * @returns a new Color3 object
-     */
-    public static Red(): Color3 {
-        return new Color3(1, 0, 0);
-    }
-    /**
-     * Returns a Color3 value containing a green color
-     * @returns a new Color3 object
-     */
-    public static Green(): Color3 {
-        return new Color3(0, 1, 0);
-    }
-    /**
-     * Returns a Color3 value containing a blue color
-     * @returns a new Color3 object
-     */
-    public static Blue(): Color3 {
-        return new Color3(0, 0, 1);
-    }
-    /**
-     * Returns a Color3 value containing a black color
-     * @returns a new Color3 object
-     */
-    public static Black(): Color3 {
-        return new Color3(0, 0, 0);
-    }
+    private static _BlackReadOnly = /*#__PURE__*/ Color3Black() as DeepImmutable<Color3>;
 
     /**
      * Gets a Color3 value containing a black color that must not be updated
@@ -958,61 +735,321 @@ export class Color3 implements Tensor<Tuple<number, 3>, IColor3Like>, IColor3Lik
     public static get BlackReadOnly(): DeepImmutable<Color3> {
         return Color3._BlackReadOnly;
     }
-
-    /**
-     * Returns a Color3 value containing a white color
-     * @returns a new Color3 object
-     */
-    public static White(): Color3 {
-        return new Color3(1, 1, 1);
-    }
-    /**
-     * Returns a Color3 value containing a purple color
-     * @returns a new Color3 object
-     */
-    public static Purple(): Color3 {
-        return new Color3(0.5, 0, 0.5);
-    }
-    /**
-     * Returns a Color3 value containing a magenta color
-     * @returns a new Color3 object
-     */
-    public static Magenta(): Color3 {
-        return new Color3(1, 0, 1);
-    }
-    /**
-     * Returns a Color3 value containing a yellow color
-     * @returns a new Color3 object
-     */
-    public static Yellow(): Color3 {
-        return new Color3(1, 1, 0);
-    }
-    /**
-     * Returns a Color3 value containing a gray color
-     * @returns a new Color3 object
-     */
-    public static Gray(): Color3 {
-        return new Color3(0.5, 0.5, 0.5);
-    }
-    /**
-     * Returns a Color3 value containing a teal color
-     * @returns a new Color3 object
-     */
-    public static Teal(): Color3 {
-        return new Color3(0, 1.0, 1.0);
-    }
-    /**
-     * Returns a Color3 value containing a random color
-     * @returns a new Color3 object
-     */
-    public static Random(): Color3 {
-        return new Color3(Math.random(), Math.random(), Math.random());
-    }
 }
 /*#__PURE__*/ Object.defineProperties(Color3.prototype, {
     dimension: { value: [3] },
     rank: { value: 1 },
 });
+
+// Color3.HSVtoRGBToRef → standalone (NOT exported (exists in .functions.ts))
+/**
+ * Converts Hue, saturation and value to a Color3 (RGB)
+ * @param hue defines the hue (value between 0 and 360)
+ * @param saturation defines the saturation (value between 0 and 1)
+ * @param value defines the value (value between 0 and 1)
+ * @param result defines the Color3 where to store the RGB values
+ * @returns the updated result
+ */
+function Color3HSVtoRGBToRef<T extends IColor3Like>(hue: number, saturation: number, value: number, result: T): T {
+    const chroma = value * saturation;
+    const h = hue / 60;
+    const x = chroma * (1 - Math.abs((h % 2) - 1));
+    let r = 0;
+    let g = 0;
+    let b = 0;
+
+    if (h >= 0 && h <= 1) {
+        r = chroma;
+        g = x;
+    } else if (h >= 1 && h <= 2) {
+        r = x;
+        g = chroma;
+    } else if (h >= 2 && h <= 3) {
+        g = chroma;
+        b = x;
+    } else if (h >= 3 && h <= 4) {
+        g = x;
+        b = chroma;
+    } else if (h >= 4 && h <= 5) {
+        r = x;
+        b = chroma;
+    } else if (h >= 5 && h <= 6) {
+        r = chroma;
+        b = x;
+    }
+
+    const m = value - chroma;
+    result.r = r + m;
+    result.g = g + m;
+    result.b = b + m;
+    return result;
+}
+
+// Color3.FromHSV → standalone (exported)
+/**
+ * Converts Hue, saturation and value to a new Color3 (RGB)
+ * @param hue defines the hue (value between 0 and 360)
+ * @param saturation defines the saturation (value between 0 and 1)
+ * @param value defines the value (value between 0 and 1)
+ * @returns a new Color3 object
+ */
+export function Color3FromHSV(hue: number, saturation: number, value: number): Color3 {
+    const result = new Color3(0, 0, 0);
+    Color3HSVtoRGBToRef(hue, saturation, value, result);
+    return result;
+}
+
+// Color3.FromHexString → standalone (exported)
+/**
+ * Creates a new Color3 from the string containing valid hexadecimal values
+ * @param hex defines a string containing valid hexadecimal values
+ * @returns a new Color3 object
+ */
+export function Color3FromHexString(hex: string): Color3 {
+    return new Color3(0, 0, 0).fromHexString(hex);
+}
+
+// Color3.FromArray → standalone (exported)
+/**
+ * Creates a new Color3 from the starting index of the given array
+ * @param array defines the source array
+ * @param offset defines an offset in the source array
+ * @returns a new Color3 object
+ */
+export function Color3FromArray(array: DeepImmutable<ArrayLike<number>>, offset: number = 0): Color3 {
+    return new Color3(array[offset], array[offset + 1], array[offset + 2]);
+}
+
+// Color3.FromArrayToRef → standalone (exported)
+/**
+ * Creates a new Color3 from the starting index element of the given array
+ * @param array defines the source array to read from
+ * @param offset defines the offset in the source array
+ * @param result defines the target Color3 object
+ */
+export function Color3FromArrayToRef(array: DeepImmutable<ArrayLike<number>>, offset: number = 0, result: Color3) {
+    result.r = array[offset];
+    result.g = array[offset + 1];
+    result.b = array[offset + 2];
+}
+
+// Color3.FromInts → standalone (exported)
+/**
+ * Creates a new Color3 from integer values (\< 256)
+ * @param r defines the red component to read from (value between 0 and 255)
+ * @param g defines the green component to read from (value between 0 and 255)
+ * @param b defines the blue component to read from (value between 0 and 255)
+ * @returns a new Color3 object
+ */
+export function Color3FromInts(r: number, g: number, b: number): Color3 {
+    return new Color3(r / 255.0, g / 255.0, b / 255.0);
+}
+
+// Color3.Lerp → standalone (exported)
+/**
+ * Creates a new Color3 with values linearly interpolated of "amount" between the start Color3 and the end Color3
+ * @param start defines the start Color3 value
+ * @param end defines the end Color3 value
+ * @param amount defines the gradient value between start and end
+ * @returns a new Color3 object
+ */
+export function Color3Lerp(start: DeepImmutable<Color3>, end: DeepImmutable<Color3>, amount: number): Color3 {
+    const result = new Color3(0.0, 0.0, 0.0);
+    Color3LerpToRef(start, end, amount, result);
+    return result;
+}
+
+// Color3.LerpToRef → standalone (NOT exported (exists in .functions.ts))
+/**
+ * Creates a new Color3 with values linearly interpolated of "amount" between the start Color3 and the end Color3
+ * @param left defines the start value
+ * @param right defines the end value
+ * @param amount defines the gradient factor
+ * @param result defines the Color3 object where to store the result
+ */
+function Color3LerpToRef(left: DeepImmutable<Color3>, right: DeepImmutable<Color3>, amount: number, result: Color3): void {
+    result.r = left.r + (right.r - left.r) * amount;
+    result.g = left.g + (right.g - left.g) * amount;
+    result.b = left.b + (right.b - left.b) * amount;
+}
+
+// Color3.Hermite → standalone (exported)
+/**
+ * Returns a new Color3 located for "amount" (float) on the Hermite interpolation spline defined by the vectors "value1", "tangent1", "value2", "tangent2"
+ * @param value1 defines the first control point
+ * @param tangent1 defines the first tangent Color3
+ * @param value2 defines the second control point
+ * @param tangent2 defines the second tangent Color3
+ * @param amount defines the amount on the interpolation spline (between 0 and 1)
+ * @returns the new Color3
+ */
+export function Color3Hermite(
+    value1: DeepImmutable<Color3>,
+    tangent1: DeepImmutable<Color3>,
+    value2: DeepImmutable<Color3>,
+    tangent2: DeepImmutable<Color3>,
+    amount: number
+): Color3 {
+    const squared = amount * amount;
+    const cubed = amount * squared;
+    const part1 = 2.0 * cubed - 3.0 * squared + 1.0;
+    const part2 = -2.0 * cubed + 3.0 * squared;
+    const part3 = cubed - 2.0 * squared + amount;
+    const part4 = cubed - squared;
+
+    const r = value1.r * part1 + value2.r * part2 + tangent1.r * part3 + tangent2.r * part4;
+    const g = value1.g * part1 + value2.g * part2 + tangent1.g * part3 + tangent2.g * part4;
+    const b = value1.b * part1 + value2.b * part2 + tangent1.b * part3 + tangent2.b * part4;
+    return new Color3(r, g, b);
+}
+
+// Color3.Hermite1stDerivative → standalone (exported)
+/**
+ * Returns a new Color3 which is the 1st derivative of the Hermite spline defined by the colors "value1", "value2", "tangent1", "tangent2".
+ * @param value1 defines the first control point
+ * @param tangent1 defines the first tangent
+ * @param value2 defines the second control point
+ * @param tangent2 defines the second tangent
+ * @param time define where the derivative must be done
+ * @returns 1st derivative
+ */
+export function Color3Hermite1stDerivative(
+    value1: DeepImmutable<Color3>,
+    tangent1: DeepImmutable<Color3>,
+    value2: DeepImmutable<Color3>,
+    tangent2: DeepImmutable<Color3>,
+    time: number
+): Color3 {
+    const result = Color3Black();
+
+    Color3Hermite1stDerivativeToRef(value1, tangent1, value2, tangent2, time, result);
+
+    return result;
+}
+
+// Color3.Hermite1stDerivativeToRef → standalone (exported)
+/**
+ * Returns a new Color3 which is the 1st derivative of the Hermite spline defined by the colors "value1", "value2", "tangent1", "tangent2".
+ * @param value1 defines the first control point
+ * @param tangent1 defines the first tangent
+ * @param value2 defines the second control point
+ * @param tangent2 defines the second tangent
+ * @param time define where the derivative must be done
+ * @param result define where to store the derivative
+ */
+export function Color3Hermite1stDerivativeToRef(
+    value1: DeepImmutable<Color3>,
+    tangent1: DeepImmutable<Color3>,
+    value2: DeepImmutable<Color3>,
+    tangent2: DeepImmutable<Color3>,
+    time: number,
+    result: Color3
+) {
+    const t2 = time * time;
+
+    result.r = (t2 - time) * 6 * value1.r + (3 * t2 - 4 * time + 1) * tangent1.r + (-t2 + time) * 6 * value2.r + (3 * t2 - 2 * time) * tangent2.r;
+    result.g = (t2 - time) * 6 * value1.g + (3 * t2 - 4 * time + 1) * tangent1.g + (-t2 + time) * 6 * value2.g + (3 * t2 - 2 * time) * tangent2.g;
+    result.b = (t2 - time) * 6 * value1.b + (3 * t2 - 4 * time + 1) * tangent1.b + (-t2 + time) * 6 * value2.b + (3 * t2 - 2 * time) * tangent2.b;
+}
+
+// Color3.Red → standalone (exported)
+/**
+ * Returns a Color3 value containing a red color
+ * @returns a new Color3 object
+ */
+export function Color3Red(): Color3 {
+    return new Color3(1, 0, 0);
+}
+
+// Color3.Green → standalone (exported)
+/**
+ * Returns a Color3 value containing a green color
+ * @returns a new Color3 object
+ */
+export function Color3Green(): Color3 {
+    return new Color3(0, 1, 0);
+}
+
+// Color3.Blue → standalone (exported)
+/**
+ * Returns a Color3 value containing a blue color
+ * @returns a new Color3 object
+ */
+export function Color3Blue(): Color3 {
+    return new Color3(0, 0, 1);
+}
+
+// Color3.Black → standalone (exported)
+/**
+ * Returns a Color3 value containing a black color
+ * @returns a new Color3 object
+ */
+export function Color3Black(): Color3 {
+    return new Color3(0, 0, 0);
+}
+
+// Color3.White → standalone (exported)
+/**
+ * Returns a Color3 value containing a white color
+ * @returns a new Color3 object
+ */
+export function Color3White(): Color3 {
+    return new Color3(1, 1, 1);
+}
+
+// Color3.Purple → standalone (exported)
+/**
+ * Returns a Color3 value containing a purple color
+ * @returns a new Color3 object
+ */
+export function Color3Purple(): Color3 {
+    return new Color3(0.5, 0, 0.5);
+}
+
+// Color3.Magenta → standalone (exported)
+/**
+ * Returns a Color3 value containing a magenta color
+ * @returns a new Color3 object
+ */
+export function Color3Magenta(): Color3 {
+    return new Color3(1, 0, 1);
+}
+
+// Color3.Yellow → standalone (exported)
+/**
+ * Returns a Color3 value containing a yellow color
+ * @returns a new Color3 object
+ */
+export function Color3Yellow(): Color3 {
+    return new Color3(1, 1, 0);
+}
+
+// Color3.Gray → standalone (exported)
+/**
+ * Returns a Color3 value containing a gray color
+ * @returns a new Color3 object
+ */
+export function Color3Gray(): Color3 {
+    return new Color3(0.5, 0.5, 0.5);
+}
+
+// Color3.Teal → standalone (exported)
+/**
+ * Returns a Color3 value containing a teal color
+ * @returns a new Color3 object
+ */
+export function Color3Teal(): Color3 {
+    return new Color3(0, 1.0, 1.0);
+}
+
+// Color3.Random → standalone (exported)
+/**
+ * Returns a Color3 value containing a random color
+ * @returns a new Color3 object
+ */
+export function Color3Random(): Color3 {
+    return new Color3(Math.random(), Math.random(), Math.random());
+}
 
 /**
  * Class used to hold a RBGA color
@@ -1700,213 +1737,224 @@ export class Color4 implements Tensor<Tuple<number, 4>, IColor4Like>, IColor4Lik
     }
 
     // Statics
-
-    /**
-     * Creates a new Color4 from the string containing valid hexadecimal values.
-     *
-     * A valid hex string is either in the format #RRGGBB or #RRGGBBAA.
-     *
-     * When a hex string without alpha is passed, the resulting Color4 has
-     * its alpha value set to 1.0.
-     *
-     * An invalid string results in a Color with all its channels set to 0.0,
-     * i.e. "transparent black".
-     *
-     * @param hex defines a string containing valid hexadecimal values
-     * @returns a new Color4 object
-     */
-    public static FromHexString(hex: string): Color4 {
-        if (hex.substring(0, 1) !== "#" || (hex.length !== 9 && hex.length !== 7)) {
-            return new Color4(0.0, 0.0, 0.0, 0.0);
-        }
-
-        return new Color4(0.0, 0.0, 0.0, 1.0).fromHexString(hex);
-    }
-
-    /**
-     * Creates a new Color4 object set with the linearly interpolated values of "amount" between the left Color4 object and the right Color4 object
-     * @param left defines the start value
-     * @param right defines the end value
-     * @param amount defines the gradient factor
-     * @returns a new Color4 object
-     */
-    public static Lerp(left: DeepImmutable<IColor4Like>, right: DeepImmutable<IColor4Like>, amount: number): Color4 {
-        return Color4.LerpToRef(left, right, amount, new Color4());
-    }
-
-    /**
-     * Set the given "result" with the linearly interpolated values of "amount" between the left Color4 object and the right Color4 object
-     * @param left defines the start value
-     * @param right defines the end value
-     * @param amount defines the gradient factor
-     * @param result defines the Color4 object where to store data
-     * @returns the updated result
-     */
-    public static LerpToRef<T extends IColor4Like>(left: DeepImmutable<IColor4Like>, right: DeepImmutable<IColor4Like>, amount: number, result: T): T {
-        result.r = left.r + (right.r - left.r) * amount;
-        result.g = left.g + (right.g - left.g) * amount;
-        result.b = left.b + (right.b - left.b) * amount;
-        result.a = left.a + (right.a - left.a) * amount;
-        return result;
-    }
-
-    /**
-     * Interpolate between two Color4 using Hermite interpolation
-     * @param value1 defines first Color4
-     * @param tangent1 defines the incoming tangent
-     * @param value2 defines second Color4
-     * @param tangent2 defines the outgoing tangent
-     * @param amount defines the target Color4
-     * @returns the new interpolated Color4
-     */
-    public static Hermite(
-        value1: DeepImmutable<IColor4Like>,
-        tangent1: DeepImmutable<IColor4Like>,
-        value2: DeepImmutable<IColor4Like>,
-        tangent2: DeepImmutable<IColor4Like>,
-        amount: number
-    ): Color4 {
-        const squared = amount * amount;
-        const cubed = amount * squared;
-        const part1 = 2.0 * cubed - 3.0 * squared + 1.0;
-        const part2 = -2.0 * cubed + 3.0 * squared;
-        const part3 = cubed - 2.0 * squared + amount;
-        const part4 = cubed - squared;
-
-        const r = value1.r * part1 + value2.r * part2 + tangent1.r * part3 + tangent2.r * part4;
-        const g = value1.g * part1 + value2.g * part2 + tangent1.g * part3 + tangent2.g * part4;
-        const b = value1.b * part1 + value2.b * part2 + tangent1.b * part3 + tangent2.b * part4;
-        const a = value1.a * part1 + value2.a * part2 + tangent1.a * part3 + tangent2.a * part4;
-        return new Color4(r, g, b, a);
-    }
-
-    /**
-     * Returns a new Color4 which is the 1st derivative of the Hermite spline defined by the colors "value1", "value2", "tangent1", "tangent2".
-     * @param value1 defines the first control point
-     * @param tangent1 defines the first tangent
-     * @param value2 defines the second control point
-     * @param tangent2 defines the second tangent
-     * @param time define where the derivative must be done
-     * @returns 1st derivative
-     */
-    public static Hermite1stDerivative(
-        value1: DeepImmutable<IColor4Like>,
-        tangent1: DeepImmutable<IColor4Like>,
-        value2: DeepImmutable<IColor4Like>,
-        tangent2: DeepImmutable<IColor4Like>,
-        time: number
-    ): Color4 {
-        const result = new Color4();
-
-        this.Hermite1stDerivativeToRef(value1, tangent1, value2, tangent2, time, result);
-
-        return result;
-    }
-
-    /**
-     * Update a Color4 with the 1st derivative of the Hermite spline defined by the colors "value1", "value2", "tangent1", "tangent2".
-     * @param value1 defines the first control point
-     * @param tangent1 defines the first tangent
-     * @param value2 defines the second control point
-     * @param tangent2 defines the second tangent
-     * @param time define where the derivative must be done
-     * @param result define where to store the derivative
-     */
-    public static Hermite1stDerivativeToRef(
-        value1: DeepImmutable<IColor4Like>,
-        tangent1: DeepImmutable<IColor4Like>,
-        value2: DeepImmutable<IColor4Like>,
-        tangent2: DeepImmutable<IColor4Like>,
-        time: number,
-        result: IColor4Like
-    ) {
-        const t2 = time * time;
-
-        result.r = (t2 - time) * 6 * value1.r + (3 * t2 - 4 * time + 1) * tangent1.r + (-t2 + time) * 6 * value2.r + (3 * t2 - 2 * time) * tangent2.r;
-        result.g = (t2 - time) * 6 * value1.g + (3 * t2 - 4 * time + 1) * tangent1.g + (-t2 + time) * 6 * value2.g + (3 * t2 - 2 * time) * tangent2.g;
-        result.b = (t2 - time) * 6 * value1.b + (3 * t2 - 4 * time + 1) * tangent1.b + (-t2 + time) * 6 * value2.b + (3 * t2 - 2 * time) * tangent2.b;
-        result.a = (t2 - time) * 6 * value1.a + (3 * t2 - 4 * time + 1) * tangent1.a + (-t2 + time) * 6 * value2.a + (3 * t2 - 2 * time) * tangent2.a;
-    }
-
-    /**
-     * Creates a new Color4 from a Color3 and an alpha value
-     * @param color3 defines the source Color3 to read from
-     * @param alpha defines the alpha component (1.0 by default)
-     * @returns a new Color4 object
-     */
-    public static FromColor3(color3: DeepImmutable<IColor3Like>, alpha: number = 1.0): Color4 {
-        return new Color4(color3.r, color3.g, color3.b, alpha);
-    }
-
-    /**
-     * Creates a new Color4 from the starting index element of the given array
-     * @param array defines the source array to read from
-     * @param offset defines the offset in the source array
-     * @returns a new Color4 object
-     */
-    public static FromArray(array: DeepImmutable<ArrayLike<number>>, offset: number = 0): Color4 {
-        return new Color4(array[offset], array[offset + 1], array[offset + 2], array[offset + 3]);
-    }
-
-    /**
-     * Creates a new Color4 from the starting index element of the given array
-     * @param array defines the source array to read from
-     * @param offset defines the offset in the source array
-     * @param result defines the target Color4 object
-     */
-    public static FromArrayToRef(array: DeepImmutable<ArrayLike<number>>, offset: number = 0, result: Color4) {
-        result.r = array[offset];
-        result.g = array[offset + 1];
-        result.b = array[offset + 2];
-        result.a = array[offset + 3];
-    }
-
-    /**
-     * Creates a new Color3 from integer values (less than 256)
-     * @param r defines the red component to read from (value between 0 and 255)
-     * @param g defines the green component to read from (value between 0 and 255)
-     * @param b defines the blue component to read from (value between 0 and 255)
-     * @param a defines the alpha component to read from (value between 0 and 255)
-     * @returns a new Color3 object
-     */
-    public static FromInts(r: number, g: number, b: number, a: number): Color4 {
-        return new Color4(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
-    }
-
-    /**
-     * Check the content of a given array and convert it to an array containing RGBA data
-     * If the original array was already containing count * 4 values then it is returned directly
-     * @param colors defines the array to check
-     * @param count defines the number of RGBA data to expect
-     * @returns an array containing count * 4 values (RGBA)
-     */
-    public static CheckColors4(colors: number[], count: number): number[] {
-        // Check if color3 was used
-        if (colors.length === count * 3) {
-            const colors4 = [];
-            for (let index = 0; index < colors.length; index += 3) {
-                const newIndex = (index / 3) * 4;
-                colors4[newIndex] = colors[index];
-                colors4[newIndex + 1] = colors[index + 1];
-                colors4[newIndex + 2] = colors[index + 2];
-                colors4[newIndex + 3] = 1.0;
-            }
-
-            return colors4;
-        }
-
-        return colors;
-    }
 }
 /*#__PURE__*/ Object.defineProperties(Color4.prototype, {
     dimension: { value: [4] },
     rank: { value: 1 },
 });
 
+// Color4.FromHexString → standalone (exported)
+/**
+ * Creates a new Color4 from the string containing valid hexadecimal values.
+ *
+ * A valid hex string is either in the format #RRGGBB or #RRGGBBAA.
+ *
+ * When a hex string without alpha is passed, the resulting Color4 has
+ * its alpha value set to 1.0.
+ *
+ * An invalid string results in a Color with all its channels set to 0.0,
+ * i.e. "transparent black".
+ *
+ * @param hex defines a string containing valid hexadecimal values
+ * @returns a new Color4 object
+ */
+export function Color4FromHexString(hex: string): Color4 {
+    if (hex.substring(0, 1) !== "#" || (hex.length !== 9 && hex.length !== 7)) {
+        return new Color4(0.0, 0.0, 0.0, 0.0);
+    }
+
+    return new Color4(0.0, 0.0, 0.0, 1.0).fromHexString(hex);
+}
+
+// Color4.Lerp → standalone (exported)
+/**
+ * Creates a new Color4 object set with the linearly interpolated values of "amount" between the left Color4 object and the right Color4 object
+ * @param left defines the start value
+ * @param right defines the end value
+ * @param amount defines the gradient factor
+ * @returns a new Color4 object
+ */
+export function Color4Lerp(left: DeepImmutable<IColor4Like>, right: DeepImmutable<IColor4Like>, amount: number): Color4 {
+    return Color4LerpToRef(left, right, amount, new Color4());
+}
+
+// Color4.LerpToRef → standalone (NOT exported (exists in .functions.ts))
+/**
+ * Set the given "result" with the linearly interpolated values of "amount" between the left Color4 object and the right Color4 object
+ * @param left defines the start value
+ * @param right defines the end value
+ * @param amount defines the gradient factor
+ * @param result defines the Color4 object where to store data
+ * @returns the updated result
+ */
+function Color4LerpToRef<T extends IColor4Like>(left: DeepImmutable<IColor4Like>, right: DeepImmutable<IColor4Like>, amount: number, result: T): T {
+    result.r = left.r + (right.r - left.r) * amount;
+    result.g = left.g + (right.g - left.g) * amount;
+    result.b = left.b + (right.b - left.b) * amount;
+    result.a = left.a + (right.a - left.a) * amount;
+    return result;
+}
+
+// Color4.Hermite → standalone (exported)
+/**
+ * Interpolate between two Color4 using Hermite interpolation
+ * @param value1 defines first Color4
+ * @param tangent1 defines the incoming tangent
+ * @param value2 defines second Color4
+ * @param tangent2 defines the outgoing tangent
+ * @param amount defines the target Color4
+ * @returns the new interpolated Color4
+ */
+export function Color4Hermite(
+    value1: DeepImmutable<IColor4Like>,
+    tangent1: DeepImmutable<IColor4Like>,
+    value2: DeepImmutable<IColor4Like>,
+    tangent2: DeepImmutable<IColor4Like>,
+    amount: number
+): Color4 {
+    const squared = amount * amount;
+    const cubed = amount * squared;
+    const part1 = 2.0 * cubed - 3.0 * squared + 1.0;
+    const part2 = -2.0 * cubed + 3.0 * squared;
+    const part3 = cubed - 2.0 * squared + amount;
+    const part4 = cubed - squared;
+
+    const r = value1.r * part1 + value2.r * part2 + tangent1.r * part3 + tangent2.r * part4;
+    const g = value1.g * part1 + value2.g * part2 + tangent1.g * part3 + tangent2.g * part4;
+    const b = value1.b * part1 + value2.b * part2 + tangent1.b * part3 + tangent2.b * part4;
+    const a = value1.a * part1 + value2.a * part2 + tangent1.a * part3 + tangent2.a * part4;
+    return new Color4(r, g, b, a);
+}
+
+// Color4.Hermite1stDerivative → standalone (exported)
+/**
+ * Returns a new Color4 which is the 1st derivative of the Hermite spline defined by the colors "value1", "value2", "tangent1", "tangent2".
+ * @param value1 defines the first control point
+ * @param tangent1 defines the first tangent
+ * @param value2 defines the second control point
+ * @param tangent2 defines the second tangent
+ * @param time define where the derivative must be done
+ * @returns 1st derivative
+ */
+export function Color4Hermite1stDerivative(
+    value1: DeepImmutable<IColor4Like>,
+    tangent1: DeepImmutable<IColor4Like>,
+    value2: DeepImmutable<IColor4Like>,
+    tangent2: DeepImmutable<IColor4Like>,
+    time: number
+): Color4 {
+    const result = new Color4();
+
+    Color4Hermite1stDerivativeToRef(value1, tangent1, value2, tangent2, time, result);
+
+    return result;
+}
+
+// Color4.Hermite1stDerivativeToRef → standalone (exported)
+/**
+ * Update a Color4 with the 1st derivative of the Hermite spline defined by the colors "value1", "value2", "tangent1", "tangent2".
+ * @param value1 defines the first control point
+ * @param tangent1 defines the first tangent
+ * @param value2 defines the second control point
+ * @param tangent2 defines the second tangent
+ * @param time define where the derivative must be done
+ * @param result define where to store the derivative
+ */
+export function Color4Hermite1stDerivativeToRef(
+    value1: DeepImmutable<IColor4Like>,
+    tangent1: DeepImmutable<IColor4Like>,
+    value2: DeepImmutable<IColor4Like>,
+    tangent2: DeepImmutable<IColor4Like>,
+    time: number,
+    result: IColor4Like
+) {
+    const t2 = time * time;
+
+    result.r = (t2 - time) * 6 * value1.r + (3 * t2 - 4 * time + 1) * tangent1.r + (-t2 + time) * 6 * value2.r + (3 * t2 - 2 * time) * tangent2.r;
+    result.g = (t2 - time) * 6 * value1.g + (3 * t2 - 4 * time + 1) * tangent1.g + (-t2 + time) * 6 * value2.g + (3 * t2 - 2 * time) * tangent2.g;
+    result.b = (t2 - time) * 6 * value1.b + (3 * t2 - 4 * time + 1) * tangent1.b + (-t2 + time) * 6 * value2.b + (3 * t2 - 2 * time) * tangent2.b;
+    result.a = (t2 - time) * 6 * value1.a + (3 * t2 - 4 * time + 1) * tangent1.a + (-t2 + time) * 6 * value2.a + (3 * t2 - 2 * time) * tangent2.a;
+}
+
+// Color4.FromColor3 → standalone (exported)
+/**
+ * Creates a new Color4 from a Color3 and an alpha value
+ * @param color3 defines the source Color3 to read from
+ * @param alpha defines the alpha component (1.0 by default)
+ * @returns a new Color4 object
+ */
+export function Color4FromColor3(color3: DeepImmutable<IColor3Like>, alpha: number = 1.0): Color4 {
+    return new Color4(color3.r, color3.g, color3.b, alpha);
+}
+
+// Color4.FromArray → standalone (exported)
+/**
+ * Creates a new Color4 from the starting index element of the given array
+ * @param array defines the source array to read from
+ * @param offset defines the offset in the source array
+ * @returns a new Color4 object
+ */
+export function Color4FromArray(array: DeepImmutable<ArrayLike<number>>, offset: number = 0): Color4 {
+    return new Color4(array[offset], array[offset + 1], array[offset + 2], array[offset + 3]);
+}
+
+// Color4.FromArrayToRef → standalone (exported)
+/**
+ * Creates a new Color4 from the starting index element of the given array
+ * @param array defines the source array to read from
+ * @param offset defines the offset in the source array
+ * @param result defines the target Color4 object
+ */
+export function Color4FromArrayToRef(array: DeepImmutable<ArrayLike<number>>, offset: number = 0, result: Color4) {
+    result.r = array[offset];
+    result.g = array[offset + 1];
+    result.b = array[offset + 2];
+    result.a = array[offset + 3];
+}
+
+// Color4.FromInts → standalone (exported)
+/**
+ * Creates a new Color3 from integer values (less than 256)
+ * @param r defines the red component to read from (value between 0 and 255)
+ * @param g defines the green component to read from (value between 0 and 255)
+ * @param b defines the blue component to read from (value between 0 and 255)
+ * @param a defines the alpha component to read from (value between 0 and 255)
+ * @returns a new Color3 object
+ */
+export function Color4FromInts(r: number, g: number, b: number, a: number): Color4 {
+    return new Color4(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
+}
+
+// Color4.CheckColors4 → standalone (exported)
+/**
+ * Check the content of a given array and convert it to an array containing RGBA data
+ * If the original array was already containing count * 4 values then it is returned directly
+ * @param colors defines the array to check
+ * @param count defines the number of RGBA data to expect
+ * @returns an array containing count * 4 values (RGBA)
+ */
+export function Color4CheckColors4(colors: number[], count: number): number[] {
+    // Check if color3 was used
+    if (colors.length === count * 3) {
+        const colors4 = [];
+        for (let index = 0; index < colors.length; index += 3) {
+            const newIndex = (index / 3) * 4;
+            colors4[newIndex] = colors[index];
+            colors4[newIndex + 1] = colors[index + 1];
+            colors4[newIndex + 2] = colors[index + 2];
+            colors4[newIndex + 3] = 1.0;
+        }
+
+        return colors4;
+    }
+
+    return colors;
+}
+
 /**
  * @internal
  */
 export class TmpColors {
-    public static Color3: Color3[] = /*#__PURE__*/ BuildArray(3, Color3.Black);
+    public static Color3: Color3[] = /*#__PURE__*/ BuildArray(3, Color3Black);
     public static Color4: Color4[] = /*#__PURE__*/ BuildArray(3, () => new Color4(0, 0, 0, 0));
 }

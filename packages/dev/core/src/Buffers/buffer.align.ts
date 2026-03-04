@@ -10,7 +10,7 @@ const IsLittleEndian = (() => {
     return !!((view[0] = 1) & array[0]);
 })();
 
-declare module "./buffer" {
+declare module "./buffer.pure" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface VertexBuffer {
         /**

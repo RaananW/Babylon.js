@@ -6,4 +6,5 @@ export * from "./Helper/boundingInfoHelper";
 export * from "./Helper/transformFeedbackBoundingHelper";
 export * from "./Helper/computeShaderBoundingHelper";
 export * from "./boundingSphere";
+export * from "./ray.core";
 export * from "./Octrees/pure";

@@ -5,7 +5,7 @@ import type { PickingInfo } from "../Collisions/pickingInfo";
 import { Scene } from "../scene";
 import { Camera } from "../Cameras/camera";
 
-import type { MeshPredicate, TrianglePickingPredicate, Ray } from "./ray.core";
+import { type MeshPredicate, type TrianglePickingPredicate, Ray } from "./ray.core";
 import {
     AddRayExtensions,
     CreatePickingRayInCameraSpace,
@@ -16,9 +16,32 @@ import {
     Pick,
     PickWithBoundingInfo,
     PickWithRay,
+    RayZero,
+    RayCreateNew,
+    RayCreateNewFromTo,
+    RayCreateFromToToRef,
+    RayTransform,
+    RayTransformToRef,
 } from "./ray.core";
 
 export * from "./ray.core";
+
+declare module "./ray.core" {
+    namespace Ray {
+        export let Zero: typeof RayZero;
+        export let CreateNew: typeof RayCreateNew;
+        export let CreateNewFromTo: typeof RayCreateNewFromTo;
+        export let CreateFromToToRef: typeof RayCreateFromToToRef;
+        export let Transform: typeof RayTransform;
+        export let TransformToRef: typeof RayTransformToRef;
+    }
+}
+Ray.Zero = RayZero;
+Ray.CreateNew = RayCreateNew;
+Ray.CreateNewFromTo = RayCreateNewFromTo;
+Ray.CreateFromToToRef = RayCreateFromToToRef;
+Ray.Transform = RayTransform;
+Ray.TransformToRef = RayTransformToRef;
 
 // Picking
 AddRayExtensions(Scene, Camera);
