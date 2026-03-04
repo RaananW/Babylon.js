@@ -8,10 +8,7 @@ import { Constants } from "../../Engines/constants";
 import type { ExternalTexture } from "./externalTexture";
 import type { WebGPUEngine } from "core/Engines";
 
-import "../../Engines/Extensions/engine.videoTexture";
-import "../../Engines/Extensions/engine.dynamicTexture";
 import { serialize } from "core/Misc/decorators";
-import { RegisterClass } from "core/Misc/typeStore";
 
 function RemoveSource(video: HTMLVideoElement): void {
     // Remove any <source> elements, etc.
@@ -463,25 +460,66 @@ export class VideoTexture extends Texture {
         this._externalTexture?.dispose();
     }
 
+    /**
+     * Creates a video texture straight from a stream.
+     * @param scene Define the scene the texture should be created in
+     * @param stream Define the stream the texture should be created from
+     * @param constraints video constraints
+     * @param invertY Defines if the video should be stored with invert Y set to true (true by default)
+     * @returns The created video texture as a promise
+     */
+    // eslint-disable-next-line @typescript-eslint/promise-function-async, no-restricted-syntax
+    public static CreateFromStreamAsync(scene: Scene, stream: MediaStream, constraints: any, invertY = true): Promise<VideoTexture> {
+        return VideoTextureCreateFromStreamAsync(scene, stream, constraints, invertY);
+    }
 
+    /**
+     * Creates a video texture straight from your WebCam video feed.
+     * @param scene Define the scene the texture should be created in
+     * @param constraints Define the constraints to use to create the web cam feed from WebRTC
+     * @param audioConstaints Define the audio constraints to use to create the web cam feed from WebRTC
+     * @param invertY Defines if the video should be stored with invert Y set to true (true by default)
+     * @returns The created video texture as a promise
+     */
+    public static CreateFromWebCamAsync(
+        scene: Scene,
+        constraints: {
+            minWidth: number;
+            maxWidth: number;
+            minHeight: number;
+            maxHeight: number;
+            deviceId: string;
+        } & MediaTrackConstraints,
+        audioConstaints: boolean | MediaTrackConstraints = false,
+        invertY = true
+    ): Promise<VideoTexture> {
+        return VideoTextureCreateFromWebCamAsync(scene, constraints, audioConstaints, invertY);
+    }
 
+    /**
+     * Creates a video texture straight from your WebCam video feed.
+     * @param scene Defines the scene the texture should be created in
+     * @param onReady Defines a callback to triggered once the texture will be ready
+     * @param constraints Defines the constraints to use to create the web cam feed from WebRTC
+     * @param audioConstaints Defines the audio constraints to use to create the web cam feed from WebRTC
+     * @param invertY Defines if the video should be stored with invert Y set to true (true by default)
+     */
+    public static CreateFromWebCam(
+        scene: Scene,
+        onReady: (videoTexture: VideoTexture) => void,
+        constraints: {
+            minWidth: number;
+            maxWidth: number;
+            minHeight: number;
+            maxHeight: number;
+            deviceId: string;
+        } & MediaTrackConstraints,
+        audioConstaints: boolean | MediaTrackConstraints = false,
+        invertY = true
+    ): void {
+        VideoTextureCreateFromWebCam(scene, onReady, constraints, audioConstaints, invertY);
+    }
 }
-
-Texture._CreateVideoTexture = (
-    name: Nullable<string>,
-    src: string | string[] | HTMLVideoElement,
-    scene: Nullable<Scene>,
-    generateMipMaps = false,
-    invertY = false,
-    samplingMode: number = Texture.TRILINEAR_SAMPLINGMODE,
-    settings: Partial<VideoTextureSettings> = {},
-    onError?: Nullable<(message?: string, exception?: any) => void>,
-    format: number = Constants.TEXTUREFORMAT_RGBA
-) => {
-    return new VideoTexture(name, src, scene, generateMipMaps, invertY, samplingMode, settings, onError, format);
-};
-// Some exporters relies on Tools.Instantiate
-RegisterClass("BABYLON.VideoTexture", VideoTexture);
 
 /**
  * Creates a video texture straight from a stream.
@@ -550,7 +588,9 @@ export function VideoTextureCreateFromStreamAsync(scene: Scene, stream: MediaStr
  * @param invertY Defines if the video should be stored with invert Y set to true (true by default)
  * @returns The created video texture as a promise
  */
-export async function VideoTextureCreateFromWebCamAsync() {
+export async function VideoTextureCreateFromWebCamAsync(
+    scene: Scene,
+    constraints: {
         minWidth: number;
         maxWidth: number;
         minHeight: number;
@@ -559,7 +599,7 @@ export async function VideoTextureCreateFromWebCamAsync() {
     } & MediaTrackConstraints,
     audioConstaints: boolean | MediaTrackConstraints = false,
     invertY = true
-    ): Promise<VideoTexture> {
+): Promise<VideoTexture> {
     if (navigator.mediaDevices) {
         const stream = await navigator.mediaDevices.getUserMedia({
             video: constraints,
@@ -589,7 +629,10 @@ export async function VideoTextureCreateFromWebCamAsync() {
  * @param audioConstaints Defines the audio constraints to use to create the web cam feed from WebRTC
  * @param invertY Defines if the video should be stored with invert Y set to true (true by default)
  */
-export function VideoTextureCreateFromWebCam() {
+export function VideoTextureCreateFromWebCam(
+    scene: Scene,
+    onReady: (videoTexture: VideoTexture) => void,
+    constraints: {
         minWidth: number;
         maxWidth: number;
         minHeight: number;
@@ -598,7 +641,7 @@ export function VideoTextureCreateFromWebCam() {
     } & MediaTrackConstraints,
     audioConstaints: boolean | MediaTrackConstraints = false,
     invertY = true
-    ): void {
+): void {
     VideoTextureCreateFromWebCamAsync(scene, constraints, audioConstaints, invertY)
         // eslint-disable-next-line github/no-then
         .then(function (videoTexture) {

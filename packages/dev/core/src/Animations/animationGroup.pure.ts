@@ -10,7 +10,6 @@ import { EngineStore } from "../Engines/engineStore";
 
 import { Tags } from "../Misc/tags";
 import type { AnimationGroupMask } from "./animationGroupMask";
-import "./animatable";
 import type { IAssetContainer } from "core/IAssetContainer";
 import { UniqueIdGenerator } from "core/Misc/uniqueIdGenerator";
 
@@ -986,6 +985,120 @@ export class AnimationGroup implements IDisposable {
         }
         return ret;
     }
+
+    /**
+     * Merge the array of animation groups into a new animation group
+     * @param animationGroups List of animation groups to merge
+     * @param disposeSource If true, animation groups will be disposed after being merged (default: true)
+     * @param normalize If true, animation groups will be normalized before being merged, so that all animations have the same "from" and "to" frame (default: false)
+     * @param weight Weight for the new animation group. If not provided, it will inherit the weight from the first animation group of the array
+     * @returns The new animation group or null if no animation groups were passed
+     */
+    public static MergeAnimationGroups(animationGroups: Array<AnimationGroup>, disposeSource = true, normalize = false, weight?: number): Nullable<AnimationGroup> {
+        return AnimationGroupMergeAnimationGroups(animationGroups, disposeSource, normalize, weight);
+    }
+
+    /**
+     * Returns a new AnimationGroup object parsed from the source provided.
+     * @param parsedAnimationGroup defines the source
+     * @param scene defines the scene that will receive the animationGroup
+     * @param targetLookup a callback that will be used instead of the default lookup
+     * @returns a new AnimationGroup
+     */
+    public static Parse(parsedAnimationGroup: any, scene: Scene, targetLookup?: (parsedTargetAnimation: any) => any): AnimationGroup {
+        return AnimationGroupParse(parsedAnimationGroup, scene, targetLookup);
+    }
+
+    /**
+     * Convert the keyframes for all animations belonging to the group to be relative to a given reference frame.
+     * @param sourceAnimationGroup defines the AnimationGroup containing animations to convert
+     * @param referenceFrame defines the frame that keyframes in the range will be relative to (default: 0)
+     * @param range defines the name of the AnimationRange belonging to the animations in the group to convert
+     * @param cloneOriginal defines whether or not to clone the group and convert the clone or convert the original group (default is false)
+     * @param clonedName defines the name of the resulting cloned AnimationGroup if cloneOriginal is true
+     * @returns a new AnimationGroup if cloneOriginal is true or the original AnimationGroup if cloneOriginal is false
+     */
+    public static MakeAnimationAdditive(sourceAnimationGroup: AnimationGroup, referenceFrame: number, range?: string, cloneOriginal?: boolean, clonedName?: string): AnimationGroup;
+    /**
+     * Convert the keyframes for all animations belonging to the group to be relative to a given reference frame.
+     * @param sourceAnimationGroup defines the AnimationGroup containing animations to convert
+     * @param options defines the options to use when converting keyframes
+     * @returns a new AnimationGroup if options.cloneOriginalAnimationGroup is true or the original AnimationGroup if options.cloneOriginalAnimationGroup is false
+     */
+    public static MakeAnimationAdditive(sourceAnimationGroup: AnimationGroup, options?: IMakeAnimationGroupAdditiveOptions): AnimationGroup;
+    /** @internal */
+    public static MakeAnimationAdditive(
+        sourceAnimationGroup: AnimationGroup,
+        referenceFrameOrOptions?: number | IMakeAnimationGroupAdditiveOptions,
+        range?: string,
+        cloneOriginal = false,
+        clonedName?: string
+    ): AnimationGroup {
+        return AnimationGroupMakeAnimationAdditive(sourceAnimationGroup, referenceFrameOrOptions as any, range, cloneOriginal, clonedName);
+    }
+
+    /**
+     * Creates a new animation, keeping only the keys that are inside a given key range
+     * @param sourceAnimationGroup defines the animation group on which to operate
+     * @param fromKey defines the lower bound of the range
+     * @param toKey defines the upper bound of the range
+     * @param name defines the name of the new animation group. If not provided, use the same name as animationGroup
+     * @param dontCloneAnimations defines whether or not the animations should be cloned before clipping the keys. Default is false, so animations will be cloned
+     * @returns a new animation group stripped from all the keys outside the given range
+     */
+    public static ClipKeys(sourceAnimationGroup: AnimationGroup, fromKey: number, toKey: number, name?: string, dontCloneAnimations?: boolean): AnimationGroup {
+        return AnimationGroupClipKeys(sourceAnimationGroup, fromKey, toKey, name, dontCloneAnimations);
+    }
+
+    /**
+     * Updates an existing animation, keeping only the keys that are inside a given key range
+     * @param animationGroup defines the animation group on which to operate
+     * @param fromKey defines the lower bound of the range
+     * @param toKey defines the upper bound of the range
+     * @param dontCloneAnimations defines whether or not the animations should be cloned before clipping the keys. Default is false, so animations will be cloned
+     * @returns the animationGroup stripped from all the keys outside the given range
+     */
+    public static ClipKeysInPlace(animationGroup: AnimationGroup, fromKey: number, toKey: number, dontCloneAnimations?: boolean): AnimationGroup {
+        return AnimationGroupClipKeysInPlace(animationGroup, fromKey, toKey, dontCloneAnimations);
+    }
+
+    /**
+     * Creates a new animation, keeping only the frames that are inside a given frame range
+     * @param sourceAnimationGroup defines the animation group on which to operate
+     * @param fromFrame defines the lower bound of the range
+     * @param toFrame defines the upper bound of the range
+     * @param name defines the name of the new animation group. If not provided, use the same name as animationGroup
+     * @param dontCloneAnimations defines whether or not the animations should be cloned before clipping the frames. Default is false, so animations will be cloned
+     * @returns a new animation group stripped from all the frames outside the given range
+     */
+    public static ClipFrames(sourceAnimationGroup: AnimationGroup, fromFrame: number, toFrame: number, name?: string, dontCloneAnimations?: boolean): AnimationGroup {
+        return AnimationGroupClipFrames(sourceAnimationGroup, fromFrame, toFrame, name, dontCloneAnimations);
+    }
+
+    /**
+     * Updates an existing animation, keeping only the frames that are inside a given frame range
+     * @param animationGroup defines the animation group on which to operate
+     * @param fromFrame defines the lower bound of the range
+     * @param toFrame defines the upper bound of the range
+     * @param dontCloneAnimations defines whether or not the animations should be cloned before clipping the frames. Default is false, so animations will be cloned
+     * @returns the animationGroup stripped from all the frames outside the given range
+     */
+    public static ClipFramesInPlace(animationGroup: AnimationGroup, fromFrame: number, toFrame: number, dontCloneAnimations?: boolean): AnimationGroup {
+        return AnimationGroupClipFramesInPlace(animationGroup, fromFrame, toFrame, dontCloneAnimations);
+    }
+
+    /**
+     * Updates an existing animation, keeping only the keys that are inside a given key or frame range
+     * @param animationGroup defines the animation group on which to operate
+     * @param start defines the lower bound of the range
+     * @param end defines the upper bound of the range
+     * @param dontCloneAnimations defines whether or not the animations should be cloned before clipping the keys. Default is false, so animations will be cloned
+     * @param useFrame defines if the range is defined by frame numbers or key indices (default is false which means use key indices)
+     * @returns the animationGroup stripped from all the keys outside the given range
+     */
+    public static ClipInPlace(animationGroup: AnimationGroup, start: number, end: number, dontCloneAnimations?: boolean, useFrame = false): AnimationGroup {
+        return AnimationGroupClipInPlace(animationGroup, start, end, dontCloneAnimations, useFrame);
+    }
 }
 
 /**
@@ -1018,7 +1131,7 @@ export function AnimationGroupMergeAnimationGroups(animationGroups: Array<Animat
         }
     }
 
-    const mergedAnimationGroup = new AnimationGroup(animationGroups[0].name + "_merged", animationGroups[0]._scene, weight);
+    const mergedAnimationGroup = new AnimationGroup(animationGroups[0].name + "_merged", animationGroups[0].getScene(), weight);
 
     for (const animationGroup of animationGroups) {
         if (normalize) {
@@ -1070,30 +1183,30 @@ export function AnimationGroupParse(parsedAnimationGroup: any, scene: Scene, tar
     }
 
     if (parsedAnimationGroup.speedRatio !== undefined) {
-        animationGroup._speedRatio = parsedAnimationGroup.speedRatio;
+        animationGroup.speedRatio = parsedAnimationGroup.speedRatio;
     }
     if (parsedAnimationGroup.loopAnimation !== undefined) {
-        animationGroup._loopAnimation = parsedAnimationGroup.loopAnimation;
+        animationGroup.loopAnimation = parsedAnimationGroup.loopAnimation;
     }
 
     if (parsedAnimationGroup.isAdditive !== undefined) {
-        animationGroup._isAdditive = parsedAnimationGroup.isAdditive;
+        animationGroup.isAdditive = parsedAnimationGroup.isAdditive;
     }
 
     if (parsedAnimationGroup.weight !== undefined) {
-        animationGroup._weight = parsedAnimationGroup.weight;
+        animationGroup.weight = parsedAnimationGroup.weight;
     }
 
     if (parsedAnimationGroup.playOrder !== undefined) {
-        animationGroup._playOrder = parsedAnimationGroup.playOrder;
+        animationGroup.playOrder = parsedAnimationGroup.playOrder;
     }
 
     if (parsedAnimationGroup.enableBlending !== undefined) {
-        animationGroup._enableBlending = parsedAnimationGroup.enableBlending;
+        animationGroup.enableBlending = parsedAnimationGroup.enableBlending;
     }
 
     if (parsedAnimationGroup.blendingSpeed !== undefined) {
-        animationGroup._blendingSpeed = parsedAnimationGroup.blendingSpeed;
+        animationGroup.blendingSpeed = parsedAnimationGroup.blendingSpeed;
     }
 
     if (parsedAnimationGroup.metadata !== undefined) {
@@ -1182,8 +1295,8 @@ export function AnimationGroupMakeAnimationAdditive(
             }
         }
 
-        animationGroup._from = from;
-        animationGroup._to = to;
+        animationGroup.from = from;
+        animationGroup.to = to;
     }
 
     return animationGroup;
@@ -1308,8 +1421,8 @@ export function AnimationGroupClipInPlace(animationGroup: AnimationGroup, start:
         targetedAnimation.animation = animation; // in case the animation has been cloned
     }
 
-    animationGroup._from = from;
-    animationGroup._to = to;
+    animationGroup.from = from;
+    animationGroup.to = to;
 
     return animationGroup;
 }
