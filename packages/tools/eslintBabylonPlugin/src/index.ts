@@ -843,7 +843,229 @@ const plugin: IPlugin = {
                 };
             },
         },
+
+        /**
+         * Disallow side-effect (bare) imports in `.pure.ts` files and ensure
+         * barrel `pure.ts` files only re-export from safe (pure) sources.
+         *
+         * `.pure.ts` files should be completely free of runtime side effects.
+         * Bare imports like `import "some/module"` exist solely for their side
+         * effects (prototype augmentation, shader registration, etc.) and defeat
+         * the purpose of the pure split.
+         *
+         * Barrel `pure.ts` files should only re-export from modules that are
+         * side-effect-free according to the manifest (or by naming convention).
+         */
+        "no-side-effect-imports-in-pure": {
+            meta: {
+                type: "problem",
+                docs: {
+                    description: "Disallow side-effect imports in .pure.ts files",
+                    recommended: false,
+                },
+                messages: {
+                    bareImport:
+                        'Bare import "{{source}}" introduces side effects in a .pure.ts file. ' + "Move it to the non-pure counterpart or guard with an eslint-disable comment.",
+                    unsafeBarrelReExport:
+                        'Re-export from "{{source}}" in a pure barrel file pulls in a module with side effects. ' + "Only re-export from side-effect-free modules.",
+                },
+                schema: [],
+            },
+            create(context: eslint.Rule.RuleContext) {
+                const filename = context.getFilename();
+
+                // Only applies to files ending in .pure.ts or named pure.ts
+                const isPureFile = /\.pure\.[tj]sx?$/.test(filename) || /[/\\]pure\.[tj]sx?$/.test(filename);
+                if (!isPureFile) {
+                    return {};
+                }
+
+                const isBarrelPure = /[/\\]pure\.[tj]sx?$/.test(filename);
+
+                // ── Manifest-based side-effect lookup (cached across files) ──
+                // The manifest lists files WITH side effects.  If a resolved
+                // import target is NOT in the set, it's safe.
+
+                // Static cache shared across all files in this ESLint run
+                const sideEffectFiles = loadSideEffectsSet();
+
+                /**
+                 * Resolve an import source relative to the current file and
+                 * return the manifest-style path (relative to packages/dev/core/src/).
+                 * Returns null if the file is outside core/src.
+                 */
+                function resolveToManifestPath(source: string): string | null {
+                    if (!source.startsWith(".")) {
+                        return null; // external / absolute — skip
+                    }
+                    const dir = path.dirname(filename);
+                    let resolved = path.resolve(dir, source);
+
+                    // Find core/src/ anchor
+                    const anchor = path.sep + path.join("packages", "dev", "core", "src") + path.sep;
+                    const idx = resolved.indexOf(anchor);
+                    if (idx === -1) {
+                        return null;
+                    }
+                    let rel = resolved.substring(idx + anchor.length);
+
+                    // Normalise to forward-slashes (Windows)
+                    rel = rel.replace(/\\/g, "/");
+
+                    // Try common extensions
+                    for (const ext of ["", ".ts", ".tsx"]) {
+                        const candidate = rel + ext;
+                        if (sideEffectFiles.has(candidate)) {
+                            return candidate; // it HAS side effects
+                        }
+                    }
+                    // Not in the side-effects set → pure (or unknown)
+                    return null;
+                }
+
+                /**
+                 * Check whether an import source is known to have side effects
+                 * according to the manifest.  Falls back to naming-convention
+                 * heuristics when the manifest is unavailable.
+                 */
+                function hasSideEffects(source: string): boolean {
+                    if (sideEffectFiles.size > 0) {
+                        return resolveToManifestPath(source) !== null;
+                    }
+                    // Fallback: naming-convention check (inverse — safe sources)
+                    return !isSafeSourceByName(source);
+                }
+
+                function isSafeSourceByName(source: string): boolean {
+                    return (
+                        /\.pure$/.test(source) ||
+                        /\.functions$/.test(source) ||
+                        /[/\\]pure$/.test(source) ||
+                        /ThinMaths[/\\]/.test(source) ||
+                        /math\.constants$/.test(source) ||
+                        /math\.like$/.test(source) ||
+                        /[/\\]types$/.test(source) ||
+                        /arrayTools$/.test(source) ||
+                        /[/\\]tensor$/.test(source)
+                    );
+                }
+
+                return {
+                    // Bare imports: import "foo"
+                    ImportDeclaration(node: any) {
+                        // import type { ... } from "..." — always safe
+                        if (node.importKind === "type") {
+                            return;
+                        }
+
+                        const source: string = node.source?.value ?? "";
+
+                        // Bare import (no specifiers) — always a side-effect import
+                        if (node.specifiers.length === 0) {
+                            context.report({
+                                node,
+                                messageId: "bareImport",
+                                data: { source },
+                            });
+                            return;
+                        }
+
+                        // In a barrel pure.ts file, check that value imports come
+                        // from side-effect-free sources
+                        if (isBarrelPure && hasSideEffects(source)) {
+                            // Check if ALL specifiers are type-only
+                            const allTypeOnly = node.specifiers.every((s: any) => s.importKind === "type");
+                            if (!allTypeOnly) {
+                                context.report({
+                                    node,
+                                    messageId: "unsafeBarrelReExport",
+                                    data: { source },
+                                });
+                            }
+                        }
+                    },
+
+                    // Re-exports: export * from "foo", export { x } from "foo"
+                    ExportNamedDeclaration(node: any) {
+                        if (!isBarrelPure || !node.source) {
+                            return;
+                        }
+                        // export type { ... } from "..." — always safe
+                        if (node.exportKind === "type") {
+                            return;
+                        }
+                        const source: string = node.source.value ?? "";
+                        if (hasSideEffects(source)) {
+                            const allTypeOnly = node.specifiers.length > 0 && node.specifiers.every((s: any) => s.exportKind === "type");
+                            if (!allTypeOnly) {
+                                context.report({
+                                    node,
+                                    messageId: "unsafeBarrelReExport",
+                                    data: { source },
+                                });
+                            }
+                        }
+                    },
+
+                    ExportAllDeclaration(node: any) {
+                        if (!isBarrelPure || !node.source) {
+                            return;
+                        }
+                        if (node.exportKind === "type") {
+                            return;
+                        }
+                        const source: string = node.source.value ?? "";
+                        if (hasSideEffects(source)) {
+                            context.report({
+                                node,
+                                messageId: "unsafeBarrelReExport",
+                                data: { source },
+                            });
+                        }
+                    },
+                };
+            },
+        },
     },
 };
+
+/**
+ * Load the side-effects manifest and return a Set of file paths that HAVE
+ * side effects.  Cached across the entire ESLint process.
+ */
+let _sideEffectFilesCache: Set<string> | undefined;
+function loadSideEffectsSet(): Set<string> {
+    if (_sideEffectFilesCache) {
+        return _sideEffectFilesCache;
+    }
+    _sideEffectFilesCache = new Set<string>();
+    try {
+        // Walk up from this compiled plugin file to the repo root
+        // Plugin is at packages/tools/eslintBabylonPlugin/dist/index.js
+        // Manifest is at scripts/treeshaking/side-effects-manifest.json
+        let dir = __dirname;
+        for (let i = 0; i < 10; i++) {
+            const candidate = path.join(dir, "scripts", "treeshaking", "side-effects-manifest.json");
+            if (fs.existsSync(candidate)) {
+                const raw = fs.readFileSync(candidate, "utf-8");
+                const manifest = JSON.parse(raw);
+                if (Array.isArray(manifest.manifest)) {
+                    for (const entry of manifest.manifest) {
+                        if (entry.file) {
+                            _sideEffectFilesCache.add(entry.file);
+                        }
+                    }
+                }
+                break;
+            }
+            const parent = path.dirname(dir);
+            if (parent === dir) break;
+            dir = parent;
+        }
+    } catch {
+        // Manifest not available — fall back to naming conventions
+    }
+    return _sideEffectFilesCache;
+}
 
 export = plugin;

@@ -714,5 +714,15 @@ export default tseslint.config(
         rules: {
             "babylonjs/require-pure-annotation": "error",
         },
+    },
+
+    // ===========================================
+    // Pure files: no side-effect (bare) imports
+    // ===========================================
+    {
+        files: ["packages/dev/core/src/**/*.pure.ts", "packages/dev/core/src/**/pure.ts"],
+        rules: {
+            "babylonjs/no-side-effect-imports-in-pure": "warn",
+        },
     }
 );

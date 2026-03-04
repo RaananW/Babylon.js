@@ -340,9 +340,15 @@ Color3.FromArray = Color3FromArray;
 
 ## Phase 6 — Guardrails & CI Enforcement
 
-- [ ] **6.1** — Custom ESLint rule: `no-side-effect-imports-in-pure` (in `eslintBabylonPlugin`)
-- [ ] **6.2** — Bundle-size smoke tests (Rollup + Webpack, `import "@babylonjs/core/pure"` → empty bundle)
-- [ ] **6.3** — CI step: audit script output must match committed manifest
+- [x] **6.1** — Custom ESLint rule: `no-side-effect-imports-in-pure` (in `eslintBabylonPlugin`)
+    - Flags bare (side-effect) imports in `.pure.ts` files (45 existing instances)
+    - Verifies barrel `pure.ts` files only re-export from side-effect-free modules (manifest-aware)
+    - Configured as `warn` in `eslint.config.mjs` for `**/*.pure.ts` and `**/pure.ts`
+- [x] **6.2** — Bundle-size smoke tests (Rollup + Webpack, 16 test cases — all passing)
+    - `npm run test:treeshaking` → `scripts/treeshaking/bundleSmokeTest.mjs`
+- [x] **6.3** — CI step: audit script output must match committed manifest
+    - `npm run check:manifest-drift` → `scripts/treeshaking/checkManifestDrift.mjs`
+    - Regenerates manifest from source, diffs against committed copy, reports added/removed files
 
 ---
 
@@ -355,7 +361,7 @@ Phase 0 (Audit tooling)  ← DONE
         └─> Phase 3 (pure.ts barrels)        ← DONE
               └─> Phase 4 (static helpers)   ← DONE (69% coverage, expandable)
                     └─> Phase 5 (sideEffects in package.json)  ← DONE
-                          └─> Phase 6 (CI guardrails)
+                          └─> Phase 6 (CI guardrails)  ← DONE
 ```
 
 ## Risk Mitigation
