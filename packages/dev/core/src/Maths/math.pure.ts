@@ -4,7 +4,7 @@ export * from "./math.color.pure";
 export * from "./math.constants";
 export * from "./math.frustum.pure";
 export * from "./math.path.pure";
-export * from "./math.plane";
+export * from "./math.plane.pure";
 export * from "./math.size";
 export * from "./math.vector.pure";
 export * from "./math.vertexFormat";

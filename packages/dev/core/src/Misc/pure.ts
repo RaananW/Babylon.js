@@ -14,7 +14,7 @@ export * from "./khronosTextureContainer";
 export * from "./observable";
 export * from "./performanceMonitor";
 export * from "./sceneOptimizer";
-export * from "./sceneSerializer";
+export * from "./sceneSerializer.pure";
 export * from "./smartArray";
 export * from "./stringDictionary";
 export * from "./tags.pure";

@@ -256,76 +256,119 @@ Color3.FromArray = Color3FromArray;
 
 #### Tracking Table
 
-| File                                                              |  Methods | .pure.ts | Status                                                     |
-| ----------------------------------------------------------------- | -------: | :------: | ---------------------------------------------------------- |
-| `Maths/math.vector.pure.ts`                                       |      177 |    ✓     | ✅ Done (Vector2/3/4, Quaternion, Matrix)                  |
-| `Maths/math.color.pure.ts`                                        |       33 |    ✓     | ✅ Done (Color3: 22, Color4: 11)                           |
-| `Misc/tools.ts`                                                   |       46 | ✓ (new)  | ✅ Done (46 extracted, 11 kept)                            |
-| `Meshes/mesh.pure.ts`                                             |       28 |    ✓     | ✅ Done (28 extracted, 2 kept internally)                  |
-| `Misc/PerformanceViewer/performanceViewerCollectionStrategies.ts` |       26 | ✓ (new)  | ✅ Done (26 extracted)                                     |
-| `Meshes/mesh.vertexData.ts`                                       |       23 | ✓ (new)  | ✅ Done                                                    |
-| `Misc/greasedLineTools.ts`                                        |       23 | ✓ (new)  | ✅ Done                                                    |
-| `Engines/WebGPU/webgpuTextureHelper.ts`                           |       15 | ✓ (new)  | ✅ Done (15 extracted)                                     |
-| `Loading/sceneLoader.ts`                                          |       14 |    ✗     | ⏭ Skip (private module functions)                         |
-| `Animations/animation.ts`                                         |        9 | ✓ (new)  | ✅ Done                                                    |
-| `Misc/trajectoryClassifier.ts`                                    |       11 |    ✗     | ⏭ Skip (only 2 of 11 clean)                               |
-| `Maths/math.path.ts`                                              |       11 | ✓ (new)  | ✅ Done                                                    |
-| `Animations/animationGroup.ts`                                    |       10 |    ✗     | ⏭ Skip (private instance fields)                          |
-| `Misc/tags.ts`                                                    |        9 | ✓ (new)  | ✅ Done                                                    |
-| `Maths/math.frustum.ts`                                           |        9 | ✓ (new)  | ✅ Done                                                    |
-| `Misc/dataStorage.ts`                                             |        8 |    ✗     | ⏭ Skip (private `_Storage`)                               |
-| `Materials/Textures/rawTexture.ts`                                |        8 |    ✗     | ✅ Done                                                    |
-| `XR/motionController/webXRMotionControllerManager.ts`             |        8 |    ✗     | ⏭ Skip (6 of 8 use private registries)                    |
-| `Materials/materialHelper.geometryrendering.ts`                   |        7 |    ✗     | ⏭ Skip (private `_Configurations`)                        |
-| `Misc/decorators.serialization.ts`                                |        6 |    ✗     | ✅ Done                                                    |
-| `Culling/ray.core.ts`                                             |        6 |    ✗     | ✅ Done                                                    |
-| `XR/webXRFeaturesManager.ts`                                      |        6 |    ✗     | ⏭ Skip (all readonly constants)                           |
-| `Meshes/abstractMesh.pure.ts`                                     |        6 |    ✓     | ⏭ Skip (all readonly constants)                           |
-| `Maths/math.polar.ts`                                             |        6 | ✓ (new)  | ✅ Done                                                    |
-| `Buffers/buffer.ts`                                               |        5 |    ✗     | ✅ Done                                                    |
-| `Materials/Node/nodeMaterial.pure.ts`                             |        4 |    ✓     | ✅ Done                                                    |
-| `Particles/particleHelper.ts`                                     |        5 |    ✗     | ✅ Done                                                    |
-| `Actions/actionEvent.ts`                                          |        4 | ✓ (new)  | ✅ Done                                                    |
-| `Maths/math.size.ts`                                              |        2 | ✓ (new)  | ✅ Done                                                    |
-| `Engines/shaderStore.ts`                                          |        3 | ✓ (new)  | ✅ Done                                                    |
-| `Maths/sphericalPolynomial.ts`                                    |        4 | ✓ (new)  | ✅ Done (SphericalHarmonics: 2, SphericalPolynomial: 2)    |
-| `Culling/boundingBox.ts`                                          |        3 | ✓ (new)  | ✅ Done (3 extracted, 1 kept: IntersectsSphere)            |
-| `Misc/sceneOptimizer.ts`                                          |        4 | ✓ (new)  | ✅ Done (SceneOptimizerOptions: 3, SceneOptimizer: 1)      |
-| `Materials/prePassConfiguration.ts`                               |        2 | ✓ (new)  | ✅ Done (AddUniforms, AddSamplers)                         |
-| `FrameGraph/Node/nodeRenderGraphBlockConnectionPoint.ts`          |        3 | ✓ (new)  | ✅ Done                                                    |
-| `Sprites/spriteManager.ts`                                        |        3 | ✓ (new)  | ✅ Done (Parse, ParseFromFileAsync, ParseFromSnippetAsync) |
-| `Meshes/Node/nodeGeometry.ts`                                     |        3 | ✓ (new)  | ✅ Done (CreateDefault, Parse, ParseFromSnippetAsync)      |
-| `Particles/Node/nodeParticleSystemSet.ts`                         |        4 | ✓ (new)  | ✅ Done (CreateDefault, Parse, ParseFromFile/SnippetAsync) |
-| `node.ts`                                                         |        1 | ✓ (new)  | ✅ Done (ParseAnimationRanges)                             |
-| `Misc/khronosTextureContainer2.ts`                                |        1 | ✓ (new)  | ✅ Done (IsValid)                                          |
-| `Culling/boundingSphere.ts`                                       |        1 | ✓ (new)  | ✅ Done (Intersects; CreateFromCenterAndRadius blocked)    |
-| `FrameGraph/Node/nodeRenderGraph.ts`                              |        3 | ✓ (new)  | ✅ Done (CreateDefaultAsync, Parse, ParseFromSnippetAsync) |
-| `Misc/rgbdTextureTools.ts`                                        |        2 | ✓ (new)  | ✅ Done (ExpandRGBDTexture, EncodeTextureToRGBD)           |
-| `Misc/dds.ts`                                                     |        1 | ✓ (new)  | ✅ Done (GetDDSInfo; UploadDDSLevels blocked)              |
-| `Misc/timingTools.ts`                                             |        1 | ✓ (new)  | ✅ Done (SetImmediate)                                     |
-| `Misc/retryStrategy.ts`                                           |        1 | ✓ (new)  | ✅ Done (ExponentialBackoff)                               |
-| `Misc/gradients.ts`                                               |        1 | ✓ (new)  | ✅ Done (GetCurrentGradient)                               |
-| `Misc/deepCopier.ts`                                              |        1 | ✓ (new)  | ✅ Done (DeepCopy)                                         |
-| `Misc/asyncLock.ts`                                               |        1 | ✓ (new)  | ✅ Done (LockAsync)                                        |
-| `Misc/videoRecorder.ts`                                           |        1 | ✓ (new)  | ✅ Done (IsSupported)                                      |
-| `Misc/khronosTextureContainer.ts`                                 |        1 | ✓ (new)  | ✅ Done (IsValid)                                          |
-| `Probes/reflectionProbe.ts`                                       |        1 | ✓ (new)  | ✅ Done (Parse)                                            |
-| `FrameGraph/Passes/renderPass.ts`                                 |        1 | ✓ (new)  | ✅ Done (IsRenderPass)                                     |
-| `FrameGraph/Passes/objectListPass.ts`                             |        1 | ✓ (new)  | ✅ Done (IsObjectListPass)                                 |
-| `FrameGraph/frameGraphTextureManager.ts`                          |        1 | ✓ (new)  | ✅ Done (CloneTextureOptions)                              |
-| `FrameGraph/Tasks/Rendering/csmShadowGeneratorTask.ts`            |        1 | ✓ (new)  | ✅ Done (IsCascadedShadowGenerator)                        |
-| `Materials/effect.ts`                                             |        1 |    ✗     | ⏭ Skip (Effect is heavily augmented — type divergence)    |
-| `Materials/materialHelper.ts`                                     |       25 |    ✗     | ⏭ Skip (already delegates to standalone functions)        |
-| `Meshes/meshSimplification.ts`                                    |        2 |    ✗     | ⏭ Skip (internal non-exported class)                      |
-| `Materials/Textures/videoTexture.ts`                              |        3 |    ✗     | ⏭ Skip (inline object types in params — manual later)     |
-| `Misc/andOrNotEvaluator.ts`                                       |        1 |    ✗     | ⏭ Skip (calls private `_HandleParenthesisContent`)        |
-| `Misc/sceneRecorder.ts`                                           |        1 |    ✗     | ⏭ Skip (ApplyDelta accesses private members)              |
-| `Misc/HighDynamicRange/panoramaToCubemap.ts`                      |        1 |    ✗     | ⏭ Skip (uses private static helpers)                      |
-| `Misc/dumpTools.ts`                                               |        1 |    ✗     | ⏭ Skip (internal class with @nativeOverride decorator)    |
-| `Meshes/geometry.ts`                                              |        2 |    ✗     | ⏭ Skip (2 clean, low ROI)                                 |
-| `Engines/abstractEngine.ts`                                       |        5 |    ✗     | ⏭ Skip (stubs, low ROI)                                   |
-| Files with ≤4 methods (77 files)                                  |     ~120 |  mixed   | ⬜ Not started                                             |
-| **Total**                                                         | **~736** |    —     | **505 done (69%)**                                         |
+| File                                                              |  Methods | .pure.ts | Status                                                               |
+| ----------------------------------------------------------------- | -------: | :------: | -------------------------------------------------------------------- |
+| `Maths/math.vector.pure.ts`                                       |      177 |    ✓     | ✅ Done (Vector2/3/4, Quaternion, Matrix)                            |
+| `Maths/math.color.pure.ts`                                        |       33 |    ✓     | ✅ Done (Color3: 22, Color4: 11)                                     |
+| `Misc/tools.ts`                                                   |       46 | ✓ (new)  | ✅ Done (46 extracted, 11 kept)                                      |
+| `Meshes/mesh.pure.ts`                                             |       28 |    ✓     | ✅ Done (28 extracted, 2 kept internally)                            |
+| `Misc/PerformanceViewer/performanceViewerCollectionStrategies.ts` |       26 | ✓ (new)  | ✅ Done (26 extracted)                                               |
+| `Meshes/mesh.vertexData.ts`                                       |       23 | ✓ (new)  | ✅ Done                                                              |
+| `Misc/greasedLineTools.ts`                                        |       23 | ✓ (new)  | ✅ Done                                                              |
+| `Engines/WebGPU/webgpuTextureHelper.ts`                           |       15 | ✓ (new)  | ✅ Done (15 extracted)                                               |
+| `Loading/sceneLoader.ts`                                          |       14 |    ✗     | ⏭ Skip (private module functions)                                   |
+| `Animations/animation.ts`                                         |        9 | ✓ (new)  | ✅ Done                                                              |
+| `Misc/trajectoryClassifier.ts`                                    |       11 |    ✗     | ⏭ Skip (only 2 of 11 clean)                                         |
+| `Maths/math.path.ts`                                              |       11 | ✓ (new)  | ✅ Done                                                              |
+| `Animations/animationGroup.ts`                                    |       10 |    ✗     | ⏭ Skip (private instance fields)                                    |
+| `Misc/tags.ts`                                                    |        9 | ✓ (new)  | ✅ Done                                                              |
+| `Maths/math.frustum.ts`                                           |        9 | ✓ (new)  | ✅ Done                                                              |
+| `Misc/dataStorage.ts`                                             |        8 |    ✗     | ⏭ Skip (private `_Storage`)                                         |
+| `Materials/Textures/rawTexture.ts`                                |        8 |    ✗     | ✅ Done                                                              |
+| `XR/motionController/webXRMotionControllerManager.ts`             |        8 |    ✗     | ⏭ Skip (6 of 8 use private registries)                              |
+| `Materials/materialHelper.geometryrendering.ts`                   |        7 |    ✗     | ⏭ Skip (private `_Configurations`)                                  |
+| `Misc/decorators.serialization.ts`                                |        6 |    ✗     | ✅ Done                                                              |
+| `Culling/ray.core.ts`                                             |        6 |    ✗     | ✅ Done                                                              |
+| `XR/webXRFeaturesManager.ts`                                      |        6 |    ✗     | ⏭ Skip (all readonly constants)                                     |
+| `Meshes/abstractMesh.pure.ts`                                     |        6 |    ✓     | ⏭ Skip (all readonly constants)                                     |
+| `Maths/math.polar.ts`                                             |        6 | ✓ (new)  | ✅ Done                                                              |
+| `Buffers/buffer.ts`                                               |        5 |    ✗     | ✅ Done                                                              |
+| `Materials/Node/nodeMaterial.pure.ts`                             |        4 |    ✓     | ✅ Done                                                              |
+| `Particles/particleHelper.ts`                                     |        5 |    ✗     | ✅ Done                                                              |
+| `Actions/actionEvent.ts`                                          |        4 | ✓ (new)  | ✅ Done                                                              |
+| `Maths/math.size.ts`                                              |        2 | ✓ (new)  | ✅ Done                                                              |
+| `Engines/shaderStore.ts`                                          |        3 | ✓ (new)  | ✅ Done                                                              |
+| `Maths/sphericalPolynomial.ts`                                    |        4 | ✓ (new)  | ✅ Done (SphericalHarmonics: 2, SphericalPolynomial: 2)              |
+| `Culling/boundingBox.ts`                                          |        3 | ✓ (new)  | ✅ Done (3 extracted, 1 kept: IntersectsSphere)                      |
+| `Misc/sceneOptimizer.ts`                                          |        4 | ✓ (new)  | ✅ Done (SceneOptimizerOptions: 3, SceneOptimizer: 1)                |
+| `Materials/prePassConfiguration.ts`                               |        2 | ✓ (new)  | ✅ Done (AddUniforms, AddSamplers)                                   |
+| `FrameGraph/Node/nodeRenderGraphBlockConnectionPoint.ts`          |        3 | ✓ (new)  | ✅ Done                                                              |
+| `Sprites/spriteManager.ts`                                        |        3 | ✓ (new)  | ✅ Done (Parse, ParseFromFileAsync, ParseFromSnippetAsync)           |
+| `Meshes/Node/nodeGeometry.ts`                                     |        3 | ✓ (new)  | ✅ Done (CreateDefault, Parse, ParseFromSnippetAsync)                |
+| `Particles/Node/nodeParticleSystemSet.ts`                         |        4 | ✓ (new)  | ✅ Done (CreateDefault, Parse, ParseFromFile/SnippetAsync)           |
+| `node.ts`                                                         |        1 | ✓ (new)  | ✅ Done (ParseAnimationRanges)                                       |
+| `Misc/khronosTextureContainer2.ts`                                |        1 | ✓ (new)  | ✅ Done (IsValid)                                                    |
+| `Culling/boundingSphere.ts`                                       |        1 | ✓ (new)  | ✅ Done (Intersects; CreateFromCenterAndRadius blocked)              |
+| `FrameGraph/Node/nodeRenderGraph.ts`                              |        3 | ✓ (new)  | ✅ Done (CreateDefaultAsync, Parse, ParseFromSnippetAsync)           |
+| `Misc/rgbdTextureTools.ts`                                        |        2 | ✓ (new)  | ✅ Done (ExpandRGBDTexture, EncodeTextureToRGBD)                     |
+| `Misc/dds.ts`                                                     |        1 | ✓ (new)  | ✅ Done (GetDDSInfo; UploadDDSLevels blocked)                        |
+| `Misc/timingTools.ts`                                             |        1 | ✓ (new)  | ✅ Done (SetImmediate)                                               |
+| `Misc/retryStrategy.ts`                                           |        1 | ✓ (new)  | ✅ Done (ExponentialBackoff)                                         |
+| `Misc/gradients.ts`                                               |        1 | ✓ (new)  | ✅ Done (GetCurrentGradient)                                         |
+| `Misc/deepCopier.ts`                                              |        1 | ✓ (new)  | ✅ Done (DeepCopy)                                                   |
+| `Misc/asyncLock.ts`                                               |        1 | ✓ (new)  | ✅ Done (LockAsync)                                                  |
+| `Misc/videoRecorder.ts`                                           |        1 | ✓ (new)  | ✅ Done (IsSupported)                                                |
+| `Misc/khronosTextureContainer.ts`                                 |        1 | ✓ (new)  | ✅ Done (IsValid)                                                    |
+| `Probes/reflectionProbe.ts`                                       |        1 | ✓ (new)  | ✅ Done (Parse)                                                      |
+| `FrameGraph/Passes/renderPass.ts`                                 |        1 | ✓ (new)  | ✅ Done (IsRenderPass)                                               |
+| `FrameGraph/Passes/objectListPass.ts`                             |        1 | ✓ (new)  | ✅ Done (IsObjectListPass)                                           |
+| `FrameGraph/frameGraphTextureManager.ts`                          |        1 | ✓ (new)  | ✅ Done (CloneTextureOptions)                                        |
+| `FrameGraph/Tasks/Rendering/csmShadowGeneratorTask.ts`            |        1 | ✓ (new)  | ✅ Done (IsCascadedShadowGenerator)                                  |
+| `Materials/effect.ts`                                             |        1 |    ✗     | ⏭ Skip (Effect is heavily augmented — type divergence)              |
+| `Materials/materialHelper.ts`                                     |       25 |    ✗     | ⏭ Skip (already delegates to standalone functions)                  |
+| `Meshes/meshSimplification.ts`                                    |        2 |    ✗     | ⏭ Skip (internal non-exported class)                                |
+| `Materials/Textures/videoTexture.ts`                              |        3 |    ✗     | ⏭ Skip (inline object types in params — manual later)               |
+| `Misc/andOrNotEvaluator.ts`                                       |        1 |    ✗     | ⏭ Skip (calls private `_HandleParenthesisContent`)                  |
+| `Misc/sceneRecorder.ts`                                           |        1 |    ✗     | ⏭ Skip (ApplyDelta accesses private members)                        |
+| `Misc/HighDynamicRange/panoramaToCubemap.ts`                      |        1 |    ✗     | ⏭ Skip (uses private static helpers)                                |
+| `Misc/dumpTools.ts`                                               |        1 |    ✗     | ⏭ Skip (internal class with @nativeOverride decorator)              |
+| `Meshes/geometry.ts`                                              |        2 |    ✗     | ⏭ Skip (2 clean, low ROI)                                           |
+| `Engines/abstractEngine.ts`                                       |        5 |    ✗     | ⏭ Skip (stubs, low ROI)                                             |
+| **── Newly triaged files (from verification audit) ──**           |          |          |                                                                      |
+| `Maths/math.plane.ts`                                             |        5 |    ✓     | ✅ Done (5 extracted: PlaneFromArray, etc.)                          |
+| `Misc/sceneSerializer.ts`                                         |        4 |    ✓     | ✅ Done (4 extracted: ClearCache, Serialize, SerializeAsync, etc.)   |
+| `Meshes/polygonMesh.ts`                                           |        4 |    ✓     | ✅ Done (4 extracted: Rectangle, Circle, Parse, StartingAt)          |
+| `Meshes/csg.ts`                                                   |        2 |    ✓     | ✅ Done (2 extracted: CSGFromVertexData, CSGFromMesh)                |
+| `Rendering/renderingGroup.ts`                                     |        4 |    ✗     | ⏭ Skip (@internal, sort callbacks read `_`-prefixed SubMesh fields) |
+| `Physics/v2/physicsShape.ts`                                      |        4 |    ✗     | ⏭ Skip (trivial factory stubs, 3-5 lines each)                      |
+| `Physics/physicsHelper.ts`                                        |        3 |    ✗     | ⏭ Skip (non-exported `HelperTools` class)                           |
+| `Meshes/GaussianSplatting/gaussianSplattingMesh.ts`               |        3 |    ✗     | ⏭ Skip (deep private static dep chain)                              |
+| `Materials/Textures/texture.ts`                                   |        3 |    ✗     | ⏭ Skip (constructor wrappers + private static hooks)                |
+| `Materials/Textures/cubeTexture.ts`                               |        3 |    ✗     | ⏭ Skip (trivial constructor wrappers)                               |
+| `Engines/WebGPU/webgpuCacheRenderPipelineTree.ts`                 |        3 |    ✗     | ⏭ Skip (@internal, private `_Cache` state)                          |
+| `Engines/Processors/Expressions/shaderDefineExpression.ts`        |        3 |    ✗     | ⏭ Skip (@internal, private static caching)                          |
+| `scene.pure.ts`                                                   |        2 |    ✓     | ⏭ Skip (factory property assignments, not methods)                  |
+| `XR/features/WebXRHitTestLegacy.ts`                               |        2 |    ✗     | ⏭ Skip (low ROI, XR-specific)                                       |
+| `PostProcesses/postProcess.ts`                                    |        2 |    ✗     | ⏭ Skip (RegisterShaderCodeProcessing + Parse, coupled)              |
+| `Physics/v2/Plugins/havokPlugin.ts`                               |        2 |    ✗     | ⏭ Skip (readToRef on internal event classes)                        |
+| `Particles/flowMap.ts`                                            |        2 |    ✗     | ⏭ Skip (factory async methods, low ROI)                             |
+| `Morph/morphTarget.ts`                                            |        2 |    ✗     | ⏭ Skip (Parse + FromMesh, low ROI)                                  |
+| `Misc/HighDynamicRange/cubemapToSphericalPolynomial.ts`           |        2 |    ✗     | ⏭ Skip (2 methods, low ROI)                                         |
+| `Meshes/subMesh.ts`                                               |        2 |    ✗     | ⏭ Skip (AddToMesh + CreateFromIndices, factory stubs)               |
+| `Meshes/csg2.ts`                                                  |        2 |    ✗     | ⏭ Skip (FromVertexData + FromMesh, factory stubs)                   |
+| `Maths/math.functions.ts`                                         |        2 |    ✗     | ⏭ Skip (already standalone functions, not class statics)            |
+| `Materials/shaderMaterial.pure.ts`                                |        2 |    ✗     | ⏭ Skip (ParseFromFileAsync + ParseFromSnippetAsync)                 |
+| `Materials/meshDebugPluginMaterial.pure.ts`                       |        2 |    ✗     | ⏭ Skip (Reset + PrepareMesh, low ROI)                               |
+| `Materials/material.ts`                                           |        2 |    ✗     | ⏭ Skip (ParseAlphaMode + Parse, deserialization stubs)              |
+| `Materials/colorCurves.ts`                                        |        2 |    ✗     | ⏭ Skip (Bind + Parse, low ROI)                                      |
+| `Lights/light.ts`                                                 |        2 |    ✗     | ⏭ Skip (GetConstructorFromName + Parse, deserialization)            |
+| `Engines/WebGPU/webgpuCacheSampler.ts`                            |        2 |    ✗     | ⏭ Skip (@internal, GPU caching internals)                           |
+| `Debug/skeletonViewer.ts`                                         |        2 |    ✗     | ⏭ Skip (shader factories, low ROI)                                  |
+| `Cameras/camera.ts`                                               |        2 |    ✗     | ⏭ Skip (GetConstructorFromName + Parse, deserialization)            |
+| `Bones/skeleton.ts`                                               |        2 |    ✗     | ⏭ Skip (MakeAnimationAdditive + Parse)                              |
+| `Actions/actionManager.ts`                                        |        2 |    ✗     | ⏭ Skip (Parse + GetTriggerName, deserialization)                    |
+| Files with 1 method each (71 files, mostly `Parse`/factories)     |       71 |  mixed   | ⏭ Skip (low ROI — 1 method per file, mostly deserialization)        |
+| **Total**                                                         | **~636** |    —     | **~505 done, ~16 extractable remaining, rest skipped**               |
+
+#### Verification Tooling
+
+- **`scripts/treeshaking/verifyPhase4.mjs`** — Comprehensive verification script
+    - Scans ALL `.ts` files in `packages/dev/core/src/` for classes with static methods
+    - Cross-references every file against the tracking table above
+    - Verifies "Done" files actually have standalone functions + augmentations
+    - Reports untracked files, count mismatches, and stale entries
+    - Usage: `node scripts/treeshaking/verifyPhase4.mjs [--verbose] [--verify-extractions]`
+    - **Latest run**: 130 files with 483 static methods; 48 Done (all verified ✅), 18+103 Skip; 4 files extractable remaining
 
 ## Phase 5 — Update `sideEffects` in `package.json`
 
