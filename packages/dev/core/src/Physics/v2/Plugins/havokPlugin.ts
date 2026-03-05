@@ -2425,7 +2425,11 @@ export class HavokPlugin implements IPhysicsEnginePluginV2 {
         for (const jointId of constraint._pluginData) {
             const nativeAxis = this._constraintAxisToNative(axis);
             const motorType = this._hknp.HP_Constraint_GetAxisMotorType(jointId, nativeAxis)[1];
-            if (motorType === this._hknp.ConstraintMotorType.POSITION) {
+            if (
+                motorType === this._hknp.ConstraintMotorType.POSITION ||
+                motorType === this._hknp.ConstraintMotorType.SPRING_FORCE ||
+                motorType === this._hknp.ConstraintMotorType.SPRING_ACCELERATION
+            ) {
                 this._hknp.HP_Constraint_SetAxisMotorPositionTarget(jointId, nativeAxis, target);
             } else if (motorType === this._hknp.ConstraintMotorType.VELOCITY) {
                 this._hknp.HP_Constraint_SetAxisMotorVelocityTarget(jointId, nativeAxis, target);
@@ -2449,7 +2453,11 @@ export class HavokPlugin implements IPhysicsEnginePluginV2 {
         if (firstId) {
             const nativeAxis = this._constraintAxisToNative(axis);
             const motorType = this._hknp.HP_Constraint_GetAxisMotorType(firstId, nativeAxis)[1];
-            if (motorType === this._hknp.ConstraintMotorType.POSITION) {
+            if (
+                motorType === this._hknp.ConstraintMotorType.POSITION ||
+                motorType === this._hknp.ConstraintMotorType.SPRING_FORCE ||
+                motorType === this._hknp.ConstraintMotorType.SPRING_ACCELERATION
+            ) {
                 return this._hknp.HP_Constraint_GetAxisMotorPositionTarget(firstId, nativeAxis)[1];
             } else if (motorType === this._hknp.ConstraintMotorType.VELOCITY) {
                 return this._hknp.HP_Constraint_GetAxisMotorVelocityTarget(firstId, nativeAxis)[1];
@@ -3003,6 +3011,10 @@ export class HavokPlugin implements IPhysicsEnginePluginV2 {
                 return this._hknp.ConstraintMotorType.POSITION;
             case PhysicsConstraintMotorType.VELOCITY:
                 return this._hknp.ConstraintMotorType.VELOCITY;
+            case PhysicsConstraintMotorType.SPRING_FORCE:
+                return this._hknp.ConstraintMotorType.SPRING_FORCE;
+            case PhysicsConstraintMotorType.SPRING_ACCELERATION:
+                return this._hknp.ConstraintMotorType.SPRING_ACCELERATION;
         }
         return this._hknp.ConstraintMotorType.NONE;
     }
@@ -3013,6 +3025,10 @@ export class HavokPlugin implements IPhysicsEnginePluginV2 {
                 return PhysicsConstraintMotorType.POSITION;
             case this._hknp.ConstraintMotorType.VELOCITY:
                 return PhysicsConstraintMotorType.VELOCITY;
+            case this._hknp.ConstraintMotorType.SPRING_FORCE:
+                return PhysicsConstraintMotorType.SPRING_FORCE;
+            case this._hknp.ConstraintMotorType.SPRING_ACCELERATION:
+                return PhysicsConstraintMotorType.SPRING_ACCELERATION;
         }
         return PhysicsConstraintMotorType.NONE;
     }

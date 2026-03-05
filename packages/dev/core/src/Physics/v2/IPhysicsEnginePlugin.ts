@@ -122,9 +122,21 @@ export const enum PhysicsShapeType {
 
 /** Optional motor which attempts to move a body at a specific velocity, or at a specific position */
 export const enum PhysicsConstraintMotorType {
+    /** No motor */
     NONE,
+    /** Motor drives toward a target velocity */
     VELOCITY,
+    /** Motor drives toward a target position/angle */
     POSITION,
+    /** Spring motor with configurable stiffness (position target) and damping (velocity target).
+     *  Force = stiffness * (positionTarget - current) + damping * (velocityTarget - currentVelocity).
+     *  Requires setting stiffness and damping via setAxisMotorStiffness/setAxisMotorDamping.
+     *  Unlike POSITION motor, this may work correctly with non-default constraint frames (custom axisA). */
+    SPRING_FORCE,
+    /** Same as SPRING_FORCE but the spring parameters are interpreted as accelerations instead of forces,
+     *  making the behavior mass-independent.
+     *  Requires setting stiffness and damping via setAxisMotorStiffness/setAxisMotorDamping. */
+    SPRING_ACCELERATION,
 }
 
 export const enum PhysicsEventType {
