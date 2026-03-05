@@ -25,6 +25,68 @@ import { join, resolve } from "path";
 const REPO_ROOT = resolve(__dirname, "../../../../..");
 const TMP_DIR = join(REPO_ROOT, "packages/tools/tests/test/unit/.tmp-treeshake");
 
+// ---------------------------------------------------------------------------
+// Bundle-size baseline tracking
+// ---------------------------------------------------------------------------
+
+/** Path to the committed baseline JSON (next to this test file). */
+const BASELINE_FILE = join(__dirname, "bundleSizeBaselines.json");
+
+/**
+ * Maximum allowed relative increase before a warning is emitted.
+ * Override with env var `BUNDLE_SIZE_THRESHOLD` (e.g. "0.15" for 15%).
+ */
+const BUNDLE_SIZE_THRESHOLD = parseFloat(process.env.BUNDLE_SIZE_THRESHOLD ?? "0.10");
+
+/**
+ * When set to "1" or "true", the test run will write current sizes into the
+ * baseline file (merged with any existing entries).  This is the *only* way
+ * the file gets modified — normal runs are read-only.
+ */
+const UPDATE_BASELINES = process.env.UPDATE_BUNDLE_BASELINES === "true" || process.env.UPDATE_BUNDLE_BASELINES === "1";
+
+/** Load existing baselines (gracefully returns {} if the file is missing). */
+function loadBaselines(): Record<string, number> {
+    try {
+        return JSON.parse(readFileSync(BASELINE_FILE, "utf-8"));
+    } catch {
+        return {};
+    }
+}
+
+const baselines = loadBaselines();
+
+/** Sizes recorded during *this* test run, keyed the same way as `baselines`. */
+const currentSizes: Record<string, number> = {};
+
+/** Build a deterministic key for the baseline map. */
+function baselineKey(pkgLabel: string, bundler: string, testName: string): string {
+    return `${pkgLabel} | ${bundler} | ${testName}`;
+}
+
+/**
+ * Record `currentSize` and warn if it regresses beyond the threshold.
+ * Never fails the test — only emits a console warning.
+ */
+function checkBundleSizeRegression(key: string, currentSize: number): void {
+    currentSizes[key] = currentSize;
+    const baseline = baselines[key];
+    if (baseline === undefined) {
+        // No baseline yet — nothing to compare against.
+        return;
+    }
+    const increase = (currentSize - baseline) / baseline;
+    if (increase > BUNDLE_SIZE_THRESHOLD) {
+        const pct = (increase * 100).toFixed(1);
+        console.warn(
+            `\u26A0\uFE0F  Bundle size regression: "${key}" is ${currentSize} bytes ` + `(baseline ${baseline}, +${pct}%). Threshold: ${(BUNDLE_SIZE_THRESHOLD * 100).toFixed(0)}%.`
+        );
+    } else if (increase < -BUNDLE_SIZE_THRESHOLD) {
+        const pct = (-increase * 100).toFixed(1);
+        console.log(`\u2705 Bundle size improvement: "${key}" is ${currentSize} bytes ` + `(baseline ${baseline}, -${pct}%). Consider updating baselines.`);
+    }
+}
+
 /** Packages under test — each gets its own describe() block. */
 const PACKAGES: { label: string; distDir: string; markerFile: string }[] = [
     {
@@ -167,6 +229,8 @@ interface SideEffectTestCase {
     entryCode: string;
     /** Strings that MUST NOT appear in the bundled output */
     forbiddenStrings: string[];
+    /** Strings that MUST appear in the bundled output (positive inclusion checks) */
+    requiredStrings?: string[];
     /** Optional max bundle size in bytes (for "bare import → near-empty" checks) */
     maxBundleSizeBytes?: number;
     /** Description shown in Jest output */
@@ -492,6 +556,52 @@ const TEST_CASE_TEMPLATES: SideEffectTestCase[] = [
         forbiddenStrings: forbidden("physics", "particles", "flowGraph", "nodeGeometry", "audio", "greasedLine"),
         description: "Textures + mixed materials scene should not include Physics, Particles, FlowGraph, NodeGeometry, Audio, or GreasedLine",
     },
+
+    // ── Positive inclusion tests ─────────────────────────────────────────────
+    // These verify that importing a subsystem DOES include its classes.
+
+    // ── Physics v2 scene ────────────────────────────────────────────────────
+    // Explicitly imports PhysicsEngine, PhysicsBody, PhysicsAggregate,
+    // PhysicsShape from Physics/v2.  Verifies these classes ARE bundled, while
+    // unrelated subsystems (Particles, FlowGraph, NodeGeometry, Audio,
+    // GreasedLine) are still excluded.
+    {
+        name: "physics-v2-scene",
+        entryCode: [
+            `import { Scene } from "%DIST%/scene.pure.js";`,
+            `import { FreeCamera } from "%DIST%/Cameras/freeCamera.pure.js";`,
+            `import { HemisphericLight } from "%DIST%/Lights/hemisphericLight.js";`,
+            `import { Mesh } from "%DIST%/Meshes/mesh.pure.js";`,
+            `import { CreateBox } from "%DIST%/Meshes/Builders/boxBuilder.js";`,
+            `import { CreateSphere } from "%DIST%/Meshes/Builders/sphereBuilder.js";`,
+            `import { CreateGround } from "%DIST%/Meshes/Builders/groundBuilder.js";`,
+            `import { PhysicsEngine } from "%DIST%/Physics/v2/physicsEngine.js";`,
+            `import { PhysicsBody } from "%DIST%/Physics/v2/physicsBody.js";`,
+            `import { PhysicsShape, PhysicsShapeBox, PhysicsShapeSphere } from "%DIST%/Physics/v2/physicsShape.js";`,
+            `import { PhysicsAggregate } from "%DIST%/Physics/v2/physicsAggregate.js";`,
+            `import { Vector3 } from "%DIST%/Maths/math.vector.js";`,
+            ``,
+            `const engine = { dummy: true };`,
+            `const scene = new Scene(engine);`,
+            `const camera = new FreeCamera("cam", new Vector3(0, 5, -10), scene);`,
+            `const light = new HemisphericLight("light", Vector3.Up(), scene);`,
+            `const ground = CreateGround("ground", { width: 20, height: 20 }, scene);`,
+            `const box = CreateBox("box", {}, scene);`,
+            `const sphere = CreateSphere("sphere", { diameter: 1 }, scene);`,
+            `console.log(PhysicsEngine, PhysicsBody, PhysicsShape, PhysicsShapeBox, PhysicsShapeSphere, PhysicsAggregate);`,
+            `console.log(scene, camera, light, ground, box, sphere, Mesh);`,
+            ``,
+        ].join("\n"),
+        requiredStrings: [
+            // These class definitions MUST be present — proves physics was bundled
+            "class PhysicsEngine {",
+            "class PhysicsBody {",
+            "class PhysicsShape {",
+            "class PhysicsAggregate ",
+        ],
+        forbiddenStrings: forbidden("particles", "flowGraph", "nodeGeometry", "audio", "greasedLine"),
+        description: "Physics v2 scene should include PhysicsEngine/Body/Shape/Aggregate and exclude Particles, FlowGraph, NodeGeometry, Audio, GreasedLine",
+    },
 ];
 
 /** Resolve %DIST% placeholders for a specific package. */
@@ -511,16 +621,20 @@ function resolveTestCases(distDir: string): SideEffectTestCase[] {
 // ---------------------------------------------------------------------------
 
 for (const pkg of PACKAGES) {
-    describe(`Tree-shaking side-effects isolation (${pkg.label})`, () => {
+    // Check up-front whether this package is built — if not, skip the whole
+    // suite so we don't fail when only @dev/core (or only @babylonjs/core) is
+    // compiled.
+    const pkgAvailable = existsSync(join(pkg.distDir, pkg.markerFile));
+
+    // Use describe.skip when the dist is missing so Jest reports skipped tests
+    // instead of hard failures.
+    const suiteFn = pkgAvailable ? describe : describe.skip;
+
+    suiteFn(`Tree-shaking side-effects isolation (${pkg.label})`, () => {
         const distDir = pkg.distDir;
         let testCases: SideEffectTestCase[];
 
         beforeAll(() => {
-            // Ensure the package is compiled
-            const marker = join(distDir, pkg.markerFile);
-            if (!existsSync(marker)) {
-                throw new Error(`${pkg.label} dist not found at ${distDir}. Run the appropriate build command first.`);
-            }
             ensureDir(TMP_DIR);
             testCases = resolveTestCases(distDir);
         });
@@ -544,12 +658,20 @@ for (const pkg of PACKAGES) {
                         expect(result.size, `Rollup bundle too large (${result.size} bytes, max ${tc.maxBundleSizeBytes})`).toBeLessThanOrEqual(tc.maxBundleSizeBytes);
                     }
 
+                    // Bundle-size regression check (warn-only)
+                    checkBundleSizeRegression(baselineKey(pkg.label, "rollup", tc.name), result.size);
+
                     // Forbidden string checks
                     for (const forbidden of tc.forbiddenStrings) {
                         expect(
                             result.content,
                             `Rollup bundle for "${tc.name}" should NOT contain "${forbidden}".\nBundle preview:\n${result.content.substring(0, 500)}`
                         ).not.toContain(forbidden);
+                    }
+
+                    // Required string checks (positive inclusion)
+                    for (const required of tc.requiredStrings ?? []) {
+                        expect(result.content, `Rollup bundle for "${tc.name}" SHOULD contain "${required}" but it was missing.`).toContain(required);
                     }
                 }, 30_000);
 
@@ -564,6 +686,9 @@ for (const pkg of PACKAGES) {
                         expect(result.size, `Webpack bundle too large (${result.size} bytes, max ${tc.maxBundleSizeBytes})`).toBeLessThanOrEqual(tc.maxBundleSizeBytes);
                     }
 
+                    // Bundle-size regression check (warn-only)
+                    checkBundleSizeRegression(baselineKey(pkg.label, "webpack", tc.name), result.size);
+
                     // Forbidden string checks
                     for (const forbidden of tc.forbiddenStrings) {
                         expect(
@@ -571,8 +696,35 @@ for (const pkg of PACKAGES) {
                             `Webpack bundle for "${tc.name}" should NOT contain "${forbidden}".\nBundle preview:\n${result.content.substring(0, 500)}`
                         ).not.toContain(forbidden);
                     }
+
+                    // Required string checks (positive inclusion)
+                    for (const required of tc.requiredStrings ?? []) {
+                        expect(result.content, `Webpack bundle for "${tc.name}" SHOULD contain "${required}" but it was missing.`).toContain(required);
+                    }
                 }, 30_000);
             });
         }
     });
 }
+
+// ---------------------------------------------------------------------------
+// Write baselines (only when UPDATE_BUNDLE_BASELINES=1)
+// ---------------------------------------------------------------------------
+
+afterAll(() => {
+    if (UPDATE_BASELINES) {
+        // Merge: current sizes overwrite matching keys; existing keys for
+        // tests that were not run (e.g. removed test cases) survive so that
+        // they can be cleaned up manually if desired.
+        const merged = { ...baselines, ...currentSizes };
+
+        // Sort keys for deterministic output (minimizes VCS diffs).
+        const sorted: Record<string, number> = {};
+        for (const key of Object.keys(merged).sort()) {
+            sorted[key] = merged[key];
+        }
+
+        writeFileSync(BASELINE_FILE, JSON.stringify(sorted, null, 2) + "\n");
+        console.log(`Bundle size baselines updated: ${BASELINE_FILE}`);
+    }
+});
