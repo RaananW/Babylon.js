@@ -1,5 +1,5 @@
 /** Pure barrel — re-exports only side-effect-free modules */
-export * from "./nodeGeometry";
+export * from "./nodeGeometry.pure";
 export * from "./nodeGeometryBlock";
 export * from "./nodeGeometryBlockConnectionPoint";
 export * from "./nodeGeometryBuildState";
@@ -86,3 +86,4 @@ export * from "./Blocks/geometryInterceptorBlock.pure";
 export * from "./Blocks/geometryEaseBlock.pure";
 export * from "./Blocks/Set/aggregatorBlock.pure";
 export * from "./Blocks/subdivideBlock.pure";
+export * from "./Blocks/pure";

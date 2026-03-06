@@ -1,61 +1,15 @@
-import type { Nullable, int } from "../../types";
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import engine.query.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./engine.query.pure";
+
 import { ThinEngine } from "../../Engines/thinEngine";
 import { AbstractMesh } from "../../Meshes/abstractMesh";
 import { _TimeToken } from "../../Instrumentation/timeToken";
-import type { Observer } from "../../Misc/observable";
-import type { AbstractEngine } from "../abstractEngine";
+import type { Nullable, int } from "../../types";
 import type { OcclusionQuery } from "../AbstractEngine/abstractEngine.query";
 
-import "../AbstractEngine/abstractEngine.timeQuery";
-import "../AbstractEngine/abstractEngine.query";
-
-declare module "../../Engines/thinEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface ThinEngine {
-        /**
-         * @internal
-         */
-        _captureGPUFrameTime: boolean;
-
-        /**
-         * Starts a time query (used to measure time spent by the GPU on a specific frame)
-         * Please note that only one query can be issued at a time
-         * @returns a time token used to track the time span
-         */
-        startTimeQuery(): Nullable<_TimeToken>;
-
-        /**
-         * Ends a time query
-         * @param token defines the token used to measure the time span
-         * @returns the time spent (in ns)
-         */
-        endTimeQuery(token: _TimeToken): int;
-
-        /** @internal */
-        _currentNonTimestampToken: Nullable<_TimeToken>;
-        /** @internal */
-        _gpuFrameTimeToken: Nullable<_TimeToken>;
-        /** @internal */
-        _onBeginFrameObserver: Nullable<Observer<AbstractEngine>>;
-        /** @internal */
-        _onEndFrameObserver: Nullable<Observer<AbstractEngine>>;
-
-        /** @internal */
-        _createTimeQuery(): Nullable<WebGLQuery>;
-
-        /** @internal */
-        _deleteTimeQuery(query: WebGLQuery): void;
-
-        /** @internal */
-        _getGlAlgorithmType(algorithmType: number): number;
-
-        /** @internal */
-        _getTimeQueryResult(query: WebGLQuery): any;
-
-        /** @internal */
-        _getTimeQueryAvailability(query: WebGLQuery): any;
-    }
-}
 
 ThinEngine.prototype.createQuery = function (): OcclusionQuery {
     const query = this._gl.createQuery();
@@ -65,19 +19,23 @@ ThinEngine.prototype.createQuery = function (): OcclusionQuery {
     return query;
 };
 
+
 ThinEngine.prototype.deleteQuery = function (query: OcclusionQuery): ThinEngine {
     this._gl.deleteQuery(query);
 
     return this;
 };
 
+
 ThinEngine.prototype.isQueryResultAvailable = function (query: OcclusionQuery): boolean {
     return this._gl.getQueryParameter(query, this._gl.QUERY_RESULT_AVAILABLE) as boolean;
 };
 
+
 ThinEngine.prototype.getQueryResult = function (query: OcclusionQuery): number {
     return this._gl.getQueryParameter(query, this._gl.QUERY_RESULT) as number;
 };
+
 
 ThinEngine.prototype.beginOcclusionQuery = function (algorithmType: number, query: OcclusionQuery): boolean {
     const glAlgorithm = this._getGlAlgorithmType(algorithmType);
@@ -86,12 +44,14 @@ ThinEngine.prototype.beginOcclusionQuery = function (algorithmType: number, quer
     return true;
 };
 
+
 ThinEngine.prototype.endOcclusionQuery = function (algorithmType: number): ThinEngine {
     const glAlgorithm = this._getGlAlgorithmType(algorithmType);
     this._gl.endQuery(glAlgorithm);
 
     return this;
 };
+
 
 ThinEngine.prototype._createTimeQuery = function (): Nullable<WebGLQuery> {
     const timerQuery = <EXT_disjoint_timer_query>this.getCaps().timerQuery;
@@ -102,6 +62,7 @@ ThinEngine.prototype._createTimeQuery = function (): Nullable<WebGLQuery> {
 
     return this.createQuery();
 };
+
 
 ThinEngine.prototype._deleteTimeQuery = function (query: WebGLQuery): void {
     const timerQuery = <EXT_disjoint_timer_query>this.getCaps().timerQuery;
@@ -114,6 +75,7 @@ ThinEngine.prototype._deleteTimeQuery = function (query: WebGLQuery): void {
     this.deleteQuery(query);
 };
 
+
 ThinEngine.prototype._getTimeQueryResult = function (query: WebGLQuery): any {
     const timerQuery = <EXT_disjoint_timer_query>this.getCaps().timerQuery;
 
@@ -123,6 +85,7 @@ ThinEngine.prototype._getTimeQueryResult = function (query: WebGLQuery): any {
     return this.getQueryResult(query);
 };
 
+
 ThinEngine.prototype._getTimeQueryAvailability = function (query: WebGLQuery): any {
     const timerQuery = <EXT_disjoint_timer_query>this.getCaps().timerQuery;
 
@@ -131,6 +94,7 @@ ThinEngine.prototype._getTimeQueryAvailability = function (query: WebGLQuery): a
     }
     return this.isQueryResultAvailable(query);
 };
+
 
 ThinEngine.prototype.startTimeQuery = function (): Nullable<_TimeToken> {
     const caps = this.getCaps();
@@ -165,6 +129,7 @@ ThinEngine.prototype.startTimeQuery = function (): Nullable<_TimeToken> {
     }
     return token;
 };
+
 
 ThinEngine.prototype.endTimeQuery = function (token: _TimeToken): int {
     const caps = this.getCaps();
@@ -234,6 +199,7 @@ ThinEngine.prototype.endTimeQuery = function (token: _TimeToken): int {
     return -1;
 };
 
+
 ThinEngine.prototype.captureGPUFrameTime = function (value: boolean) {
     if (value === this._captureGPUFrameTime) {
         return;
@@ -269,6 +235,7 @@ ThinEngine.prototype.captureGPUFrameTime = function (value: boolean) {
         this._onEndFrameObserver = null;
     }
 };
+
 
 ThinEngine.prototype._getGlAlgorithmType = function (algorithmType: number): number {
     return algorithmType === AbstractMesh.OCCLUSION_ALGORITHM_TYPE_CONSERVATIVE ? this._gl.ANY_SAMPLES_PASSED_CONSERVATIVE : this._gl.ANY_SAMPLES_PASSED;

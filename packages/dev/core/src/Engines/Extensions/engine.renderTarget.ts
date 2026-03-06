@@ -1,59 +1,27 @@
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import engine.renderTarget.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./engine.renderTarget.pure";
+
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
-import type { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../Materials/Textures/textureCreationOptions";
 import { ThinEngine } from "../thinEngine";
+import { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
+import { HasStencilAspect } from "core/Materials/Textures/textureHelper.functions";
+import { Constants } from "../constants";
+import type { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../Materials/Textures/textureCreationOptions";
 import type { Nullable } from "../../types";
 import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
 import type { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
-import { HasStencilAspect } from "core/Materials/Textures/textureHelper.functions";
 
-import { Constants } from "../constants";
-
-import "../AbstractEngine/abstractEngine.texture";
-
-/**
- * Type used to define a texture size (either with a number or with a rect width and height)
- * @deprecated please use TextureSize instead
- */
-export type RenderTargetTextureSize = TextureSize;
-
-declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface AbstractEngine {
-        /**
-         * Creates a new render target texture
-         * @param size defines the size of the texture
-         * @param options defines the options used to create the texture
-         * @returns a new render target wrapper ready to render texture
-         */
-        createRenderTargetTexture(size: TextureSize, options: boolean | RenderTargetCreationOptions): RenderTargetWrapper;
-
-        /**
-         * Updates the sample count of a render target texture
-         * @see https://doc.babylonjs.com/setup/support/webGL2#multisample-render-targets
-         * @param rtWrapper defines the render target wrapper to update
-         * @param samples defines the sample count to set
-         * @returns the effective sample count (could be 0 if multisample render targets are not supported)
-         */
-        updateRenderTargetTextureSampleCount(rtWrapper: Nullable<RenderTargetWrapper>, samples: number): number;
-
-        /** @internal */
-        _createDepthStencilTexture(size: TextureSize, options: DepthTextureCreationOptions, rtWrapper: RenderTargetWrapper): InternalTexture;
-
-        /** @internal */
-        _createHardwareRenderTargetWrapper(isMulti: boolean, isCube: boolean, size: TextureSize): RenderTargetWrapper;
-
-        /** @internal */
-        _setupDepthStencilTexture(internalTexture: InternalTexture, size: TextureSize, bilinearFiltering: boolean, comparisonFunction: number, samples?: number): void;
-    }
-}
 
 ThinEngine.prototype._createHardwareRenderTargetWrapper = function (isMulti: boolean, isCube: boolean, size: TextureSize): RenderTargetWrapper {
     const rtWrapper = new WebGLRenderTargetWrapper(isMulti, isCube, size, this, this._gl);
     this._renderTargetWrapperCache.push(rtWrapper);
     return rtWrapper;
 };
+
 
 ThinEngine.prototype.createRenderTargetTexture = function (this: ThinEngine, size: TextureSize, options: boolean | RenderTargetCreationOptions): RenderTargetWrapper {
     const rtWrapper = this._createHardwareRenderTargetWrapper(false, false, size) as WebGLRenderTargetWrapper;
@@ -116,6 +84,7 @@ ThinEngine.prototype.createRenderTargetTexture = function (this: ThinEngine, siz
 
     return rtWrapper;
 };
+
 
 ThinEngine.prototype._createDepthStencilTexture = function (size: TextureSize, options: DepthTextureCreationOptions, rtWrapper: WebGLRenderTargetWrapper): InternalTexture {
     const gl = this._gl;
@@ -209,6 +178,7 @@ ThinEngine.prototype._createDepthStencilTexture = function (size: TextureSize, o
     return internalTexture;
 };
 
+
 ThinEngine.prototype.updateRenderTargetTextureSampleCount = function (rtWrapper: Nullable<WebGLRenderTargetWrapper>, samples: number): number {
     if (this.webGLVersion < 2 || !rtWrapper) {
         return 1;
@@ -286,6 +256,7 @@ ThinEngine.prototype.updateRenderTargetTextureSampleCount = function (rtWrapper:
 
     return samples;
 };
+
 
 ThinEngine.prototype._setupDepthStencilTexture = function (
     internalTexture: InternalTexture,

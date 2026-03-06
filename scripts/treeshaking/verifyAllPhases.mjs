@@ -47,12 +47,17 @@ function collectFiles(dir, filter) {
 }
 
 function getBarrelExports(barrelPath) {
-    if (!existsSync(barrelPath)) return [];
+    if (!existsSync(barrelPath)) {
+        return [];
+    }
     const src = readFileSync(barrelPath, "utf8");
     const exports = [];
-    const re = /export\s+\*\s+from\s+["']([^"']+)["']/g;
+    // Match both `export * from "..."` and `export { ... } from "..."`
+    const re = /export\s+(?:\*|\{[^}]*\})\s+from\s+["']([^"']+)["']/g;
     let m;
-    while ((m = re.exec(src)) !== null) exports.push(m[1]);
+    while ((m = re.exec(src)) !== null) {
+        exports.push(m[1]);
+    }
     return exports;
 }
 
@@ -68,7 +73,10 @@ try {
 
 const sideEffectMap = new Map(); // relPath → sideEffect types
 for (const entry of manifest.manifest) {
-    sideEffectMap.set(entry.file, entry.sideEffects.map((s) => s.type));
+    sideEffectMap.set(
+        entry.file,
+        entry.sideEffects.map((s) => s.type)
+    );
 }
 
 // ── Collect all .pure.ts files ──────────────────────────────────────────────
@@ -131,8 +139,8 @@ console.log();
 console.log("── 2. Phase 3: Pure Barrel Reachability ──────────────────────");
 
 // Walk all barrel pure.ts files and collect everything they transitively export
-function collectBarrelReachable(dir) {
-    const barrelPath = join(dir, "pure.ts");
+function collectBarrelReachable(dir, overrideBarrelPath) {
+    const barrelPath = overrideBarrelPath || join(dir, "pure.ts");
     const exports = getBarrelExports(barrelPath);
     const reachable = new Set();
 
@@ -141,20 +149,46 @@ function collectBarrelReachable(dir) {
         const rel = relative(SRC_ROOT, fullResolved);
 
         if (spec.endsWith(".pure")) {
-            // Points to a .pure.ts file
+            // Points to a .pure.ts file (e.g. "./action.pure" → action.pure.ts)
             reachable.add(rel + ".ts");
+            // Check if this .pure.ts file is itself a barrel (re-exports from other .pure files)
+            const pureFile = fullResolved + ".ts";
+            if (existsSync(pureFile)) {
+                const pureExports = getBarrelExports(pureFile);
+                if (pureExports.length > 0) {
+                    const pureDir = dirname(pureFile);
+                    for (const sub of collectBarrelReachable(pureDir, pureFile)) {
+                        reachable.add(sub);
+                    }
+                }
+            }
         } else {
-            // Could be a plain .ts file (already pure) or a subdirectory
+            // Could be:
+            // (a) a subdirectory barrel (e.g. "./Actions/pure" → Actions/pure.ts which IS a barrel)
+            // (b) a plain .ts file already pure (e.g. "./actionManager" → actionManager.ts)
+            // (c) a subdirectory that has a pure.ts inside it
+
             const asFile = fullResolved + ".ts";
-            const asDir = join(fullResolved, "pure.ts");
 
             if (existsSync(asFile)) {
-                reachable.add(rel + ".ts");
-            }
-            if (existsSync(asDir)) {
-                // Subdirectory barrel — recurse
-                for (const sub of collectBarrelReachable(fullResolved)) {
-                    reachable.add(sub);
+                // Check if this file IS a barrel pure.ts (e.g. "Actions/pure.ts")
+                // by checking if the specifier ends with "/pure"
+                if (spec.endsWith("/pure")) {
+                    // This is a subdirectory barrel — recurse into the directory
+                    const subDir = dirname(asFile);
+                    for (const sub of collectBarrelReachable(subDir)) {
+                        reachable.add(sub);
+                    }
+                } else {
+                    reachable.add(rel + ".ts");
+                }
+            } else {
+                // Try as a directory that contains a pure.ts barrel
+                const asDir = join(fullResolved, "pure.ts");
+                if (existsSync(asDir)) {
+                    for (const sub of collectBarrelReachable(fullResolved)) {
+                        reachable.add(sub);
+                    }
                 }
             }
         }
@@ -299,9 +333,21 @@ console.log("── 6. Wrapper Re-export: .ts Should Re-export from .pure.ts ─
 let reexportIssues = 0;
 for (const pf of allPureFiles) {
     const wrapperPath = resolve(SRC_ROOT, pf.replace(".pure.ts", ".ts"));
-    if (!existsSync(wrapperPath)) continue;
+    if (!existsSync(wrapperPath)) {
+        continue;
+    }
 
     const wrapperSrc = readFileSync(wrapperPath, "utf8");
+
+    // Skip barrel-like files (only export * or export {} from lines) — not wrappers
+    const nonExportLines = wrapperSrc
+        .split("\n")
+        .filter((l) => l.trim() && !l.trim().startsWith("//") && !l.trim().startsWith("/*") && !l.trim().startsWith("*"))
+        .filter((l) => !/^export\s+(?:\*|\{[^}]*\})\s+from\s+/.test(l.trim()));
+    if (nonExportLines.length === 0) {
+        continue;
+    }
+
     const baseName = pf.replace(".pure.ts", "").split("/").pop();
     // Check for: export * from "./baseName.pure" or import ... from "./baseName.pure"
     const pureSpecifier = `./${baseName}.pure`;

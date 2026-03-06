@@ -1,51 +1,26 @@
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import engine.renderTarget.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./engine.renderTarget.pure";
+
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
-import type { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../../Materials/Textures/textureCreationOptions";
-import type { Nullable } from "../../../types";
 import { Constants } from "../../constants";
-import type { RenderTargetWrapper } from "../../renderTargetWrapper";
 import { WebGPURenderTargetWrapper } from "../webgpuRenderTargetWrapper";
 import { GetTypeForDepthTexture, HasStencilAspect } from "core/Materials/Textures/textureHelper.functions";
-
-import "../../AbstractEngine/abstractEngine.texture";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
+import type { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../../Materials/Textures/textureCreationOptions";
+import type { Nullable } from "../../../types";
+import type { RenderTargetWrapper } from "../../renderTargetWrapper";
 import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 
-declare module "../../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface AbstractEngine {
-        /**
-         * Creates a new render target texture
-         * @param size defines the size of the texture
-         * @param options defines the options used to create the texture
-         * @returns a new render target wrapper ready to render texture
-         */
-        createRenderTargetTexture(size: TextureSize, options: boolean | RenderTargetCreationOptions): RenderTargetWrapper;
-
-        /**
-         * Updates the sample count of a render target texture
-         * @see https://doc.babylonjs.com/setup/support/webGL2#multisample-render-targets
-         * @param rtWrapper defines the render target wrapper to update
-         * @param samples defines the sample count to set
-         * @returns the effective sample count (could be 0 if multisample render targets are not supported)
-         */
-        updateRenderTargetTextureSampleCount(rtWrapper: Nullable<RenderTargetWrapper>, samples: number): number;
-
-        /** @internal */
-        _createDepthStencilTexture(size: TextureSize, options: DepthTextureCreationOptions, rtWrapper: RenderTargetWrapper): InternalTexture;
-
-        /** @internal */
-        _createHardwareRenderTargetWrapper(isMulti: boolean, isCube: boolean, size: TextureSize): RenderTargetWrapper;
-
-        /** @internal */
-        _setupDepthStencilTexture(internalTexture: InternalTexture, size: TextureSize, bilinearFiltering: boolean, comparisonFunction: number, samples?: number): void;
-    }
-}
 
 ThinWebGPUEngine.prototype._createHardwareRenderTargetWrapper = function (isMulti: boolean, isCube: boolean, size: TextureSize): WebGPURenderTargetWrapper {
     const rtWrapper = new WebGPURenderTargetWrapper(isMulti, isCube, size, this);
     this._renderTargetWrapperCache.push(rtWrapper);
     return rtWrapper;
 };
+
 
 ThinWebGPUEngine.prototype.createRenderTargetTexture = function (size: TextureSize, options: boolean | RenderTargetCreationOptions): WebGPURenderTargetWrapper {
     const rtWrapper = this._createHardwareRenderTargetWrapper(false, false, size) as WebGPURenderTargetWrapper;
@@ -109,6 +84,7 @@ ThinWebGPUEngine.prototype.createRenderTargetTexture = function (size: TextureSi
     return rtWrapper;
 };
 
+
 ThinWebGPUEngine.prototype._createDepthStencilTexture = function (size: TextureSize, options: DepthTextureCreationOptions, wrapper: WebGPURenderTargetWrapper): InternalTexture {
     const internalOptions = {
         bilinearFiltering: false,
@@ -139,6 +115,7 @@ ThinWebGPUEngine.prototype._createDepthStencilTexture = function (size: TextureS
     return internalTexture;
 };
 
+
 ThinWebGPUEngine.prototype._setupDepthStencilTexture = function (
     internalTexture: InternalTexture,
     size: TextureSize,
@@ -167,6 +144,7 @@ ThinWebGPUEngine.prototype._setupDepthStencilTexture = function (
     internalTexture._cachedWrapU = Constants.TEXTURE_CLAMP_ADDRESSMODE;
     internalTexture._cachedWrapV = Constants.TEXTURE_CLAMP_ADDRESSMODE;
 };
+
 
 ThinWebGPUEngine.prototype.updateRenderTargetTextureSampleCount = function (rtWrapper: Nullable<RenderTargetWrapper>, samples: number): number {
     if (!rtWrapper || !rtWrapper.texture || rtWrapper.samples === samples) {

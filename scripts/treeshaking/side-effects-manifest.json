@@ -1,22 +1,22 @@
 {
   "stats": {
-    "totalFiles": 2769,
-    "filesWithSideEffects": 1248,
-    "filesWithoutSideEffects": 1521,
+    "totalFiles": 2970,
+    "filesWithSideEffects": 1368,
+    "filesWithoutSideEffects": 1602,
     "byType": {
-      "RegisterClass": 537,
-      "declare-module": 155,
-      "top-level-call": 9,
-      "static-property-assignment": 126,
+      "RegisterClass": 536,
+      "declare-module": 159,
+      "top-level-call": 110,
+      "static-property-assignment": 125,
       "prototype-assignment": 344,
       "AddNodeConstructor": 26,
       "shader-store-write": 623
     },
     "filesByType": {
-      "RegisterClass": 428,
-      "declare-module": 138,
-      "top-level-call": 8,
-      "static-property-assignment": 63,
+      "RegisterClass": 427,
+      "declare-module": 142,
+      "top-level-call": 72,
+      "static-property-assignment": 62,
       "prototype-assignment": 84,
       "AddNodeConstructor": 25,
       "shader-store-write": 623
@@ -149,7 +149,7 @@
       ]
     },
     {
-      "file": "Animations/animatable.ts",
+      "file": "Animations/animatable.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
@@ -160,10 +160,15 @@
           "type": "declare-module",
           "line": 186,
           "text": "declare module \"../Bones/bone\" {"
-        },
+        }
+      ]
+    },
+    {
+      "file": "Animations/animatable.ts",
+      "sideEffects": [
         {
           "type": "top-level-call",
-          "line": 203,
+          "line": 13,
           "text": "AddAnimationExtensions(Scene, Bone);"
         }
       ]
@@ -238,8 +243,18 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 10,
+          "line": 12,
           "text": "AbstractEngine.AudioEngineFactory = ("
+        }
+      ]
+    },
+    {
+      "file": "Audio/audioSceneComponent.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 18,
+          "text": "declare module \"../scene\" {"
         }
       ]
     },
@@ -247,18 +262,48 @@
       "file": "Audio/audioSceneComponent.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 46,
-          "text": "declare module \"../scene\" {"
+          "type": "top-level-call",
+          "line": 19,
+          "text": "AddParser(SceneComponentConstants.NAME_AUDIO, (parsedData: any, scene: Scene, container: AssetContainer, rootUrl: string"
+        },
+        {
+          "type": "top-level-call",
+          "line": 48,
+          "text": "Object.defineProperty(Scene.prototype, \"mainSoundTrack\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 124,
+          "line": 67,
           "text": "Scene.prototype.getSoundByName = function (name: string): Nullable<Sound> {"
         },
         {
+          "type": "top-level-call",
+          "line": 89,
+          "text": "Object.defineProperty(Scene.prototype, \"audioEnabled\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 117,
+          "text": "Object.defineProperty(Scene.prototype, \"headphone\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 145,
+          "text": "Object.defineProperty(Scene.prototype, \"audioListenerPositionProvider\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 173,
+          "text": "Object.defineProperty(Scene.prototype, \"audioListenerRotationProvider\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 201,
+          "text": "Object.defineProperty(Scene.prototype, \"audioPositioningRefreshRate\", {"
+        },
+        {
           "type": "static-property-assignment",
-          "line": 613,
+          "line": 225,
           "text": "Sound._SceneComponentInitialization = (scene: Scene) => {"
         }
       ]
@@ -274,31 +319,51 @@
       ]
     },
     {
-      "file": "Buffers/buffer.align.ts",
+      "file": "Buffers/buffer.align.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 13,
+          "line": 8,
           "text": "declare module \"./buffer.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Buffers/buffer.align.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 18,
+          "text": "Object.defineProperty(VertexBuffer.prototype, \"effectiveByteStride\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 27,
+          "text": "Object.defineProperty(VertexBuffer.prototype, \"effectiveByteOffset\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 36,
+          "text": "Object.defineProperty(VertexBuffer.prototype, \"effectiveBuffer\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 66,
+          "line": 45,
           "text": "VertexBuffer.prototype._rebuild = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 71,
+          "line": 51,
           "text": "VertexBuffer.prototype.dispose = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 82,
+          "line": 63,
           "text": "VertexBuffer.prototype.getWrapperBuffer = function (): Buffer {"
         },
         {
           "type": "prototype-assignment",
-          "line": 86,
+          "line": 68,
           "text": "VertexBuffer.prototype._alignBuffer = function (): void {"
         }
       ]
@@ -318,12 +383,12 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 26,
+          "line": 12,
           "text": "Node.AddNodeConstructor(\"ArcRotateCamera\", (name, scene) => {"
         },
         {
           "type": "RegisterClass",
-          "line": 1600,
+          "line": 18,
           "text": "RegisterClass(\"BABYLON.ArcRotateCamera\", ArcRotateCamera);"
         }
       ]
@@ -333,7 +398,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 10,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"DeviceOrientationCamera\", (name, scene) => {"
         }
       ]
@@ -358,17 +423,17 @@
         },
         {
           "type": "AddNodeConstructor",
-          "line": 16,
+          "line": 17,
           "text": "Node.AddNodeConstructor(\"ArcFollowCamera\", (name, scene) => {"
         },
         {
           "type": "RegisterClass",
-          "line": 313,
+          "line": 23,
           "text": "RegisterClass(\"BABYLON.FollowCamera\", FollowCamera);"
         },
         {
           "type": "RegisterClass",
-          "line": 314,
+          "line": 25,
           "text": "RegisterClass(\"BABYLON.ArcFollowCamera\", ArcFollowCamera);"
         }
       ]
@@ -388,7 +453,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 5,
+          "line": 10,
           "text": "Node.AddNodeConstructor(\"GamepadCamera\", (name, scene) => {"
         }
       ]
@@ -404,17 +469,32 @@
       ]
     },
     {
-      "file": "Cameras/Inputs/arcRotateCameraVRDeviceOrientationInput.ts",
+      "file": "Cameras/Inputs/arcRotateCameraVRDeviceOrientationInput.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 8,
+          "line": 10,
           "text": "declare module \"../../Cameras/arcRotateCameraInputsManager\" {"
-        },
+        }
+      ]
+    },
+    {
+      "file": "Cameras/Inputs/arcRotateCameraVRDeviceOrientationInput.ts",
+      "sideEffects": [
         {
           "type": "prototype-assignment",
-          "line": 23,
+          "line": 14,
           "text": "ArcRotateCameraInputsManager.prototype.addVRDeviceOrientation = function (): ArcRotateCameraInputsManager {"
+        }
+      ]
+    },
+    {
+      "file": "Cameras/Inputs/freeCameraDeviceOrientationInput.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 13,
+          "text": "declare module \"../../Cameras/freeCameraInputsManager\" {"
         }
       ]
     },
@@ -422,14 +502,19 @@
       "file": "Cameras/Inputs/freeCameraDeviceOrientationInput.ts",
       "sideEffects": [
         {
+          "type": "prototype-assignment",
+          "line": 15,
+          "text": "FreeCameraInputsManager.prototype.addDeviceOrientation = function (smoothFactor?: number): FreeCameraInputsManager {"
+        }
+      ]
+    },
+    {
+      "file": "Cameras/Inputs/freeCameraVirtualJoystickInput.pure.ts",
+      "sideEffects": [
+        {
           "type": "declare-module",
           "line": 11,
           "text": "declare module \"../../Cameras/freeCameraInputsManager\" {"
-        },
-        {
-          "type": "prototype-assignment",
-          "line": 32,
-          "text": "FreeCameraInputsManager.prototype.addDeviceOrientation = function (smoothFactor?: number): FreeCameraInputsManager {"
         }
       ]
     },
@@ -437,13 +522,8 @@
       "file": "Cameras/Inputs/freeCameraVirtualJoystickInput.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 9,
-          "text": "declare module \"../../Cameras/freeCameraInputsManager\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 24,
+          "line": 14,
           "text": "FreeCameraInputsManager.prototype.addVirtualJoystick = function (): FreeCameraInputsManager {"
         }
       ]
@@ -453,7 +533,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 8,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"AnaglyphArcRotateCamera\", (name, scene, options) => {"
         }
       ]
@@ -463,7 +543,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 8,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"AnaglyphFreeCamera\", (name, scene, options) => {"
         }
       ]
@@ -473,7 +553,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 8,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"AnaglyphGamepadCamera\", (name, scene, options) => {"
         }
       ]
@@ -483,7 +563,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 9,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"AnaglyphUniversalCamera\", (name, scene, options) => {"
         }
       ]
@@ -493,7 +573,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 8,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"StereoscopicArcRotateCamera\", (name, scene, options) => {"
         }
       ]
@@ -503,7 +583,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 8,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"StereoscopicFreeCamera\", (name, scene, options) => {"
         }
       ]
@@ -513,7 +593,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 8,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"StereoscopicGamepadCamera\", (name, scene, options) => {"
         }
       ]
@@ -523,7 +603,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 8,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"StereoscopicFreeCamera\", (name, scene, options) => {"
         }
       ]
@@ -543,7 +623,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 8,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"TouchCamera\", (name, scene) => {"
         }
       ]
@@ -553,12 +633,12 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 10,
+          "line": 13,
           "text": "Node.AddNodeConstructor(\"FreeCamera\", (name, scene) => {"
         },
         {
           "type": "static-property-assignment",
-          "line": 83,
+          "line": 19,
           "text": "Camera._CreateDefaultParsedCamera = (name: string, scene: Scene) => {"
         }
       ]
@@ -568,7 +648,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 8,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"VirtualJoysticksCamera\", (name, scene) => {"
         }
       ]
@@ -588,7 +668,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 9,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"VRDeviceOrientationFreeCamera\", (name, scene) => {"
         }
       ]
@@ -598,7 +678,7 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 10,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"VRDeviceOrientationGamepadCamera\", (name, scene) => {"
         }
       ]
@@ -608,7 +688,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 121,
+          "line": 10,
           "text": "Scene.CollisionCoordinatorFactory = () => {"
         }
       ]
@@ -644,27 +724,47 @@
       ]
     },
     {
-      "file": "Culling/Octrees/octreeSceneComponent.ts",
+      "file": "Culling/Octrees/octreeSceneComponent.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 14,
+          "line": 16,
           "text": "declare module \"../../scene\" {"
         },
         {
+          "type": "declare-module",
+          "line": 42,
+          "text": "declare module \"../../Meshes/abstractMesh\" {"
+        }
+      ]
+    },
+    {
+      "file": "Culling/Octrees/octreeSceneComponent.ts",
+      "sideEffects": [
+        {
           "type": "prototype-assignment",
-          "line": 40,
+          "line": 14,
           "text": "Scene.prototype.createOrUpdateSelectionOctree = function (maxCapacity = 64, maxDepth = 2): Octree<AbstractMesh> {"
         },
         {
-          "type": "declare-module",
-          "line": 67,
-          "text": "declare module \"../../Meshes/abstractMesh\" {"
+          "type": "top-level-call",
+          "line": 34,
+          "text": "Object.defineProperty(Scene.prototype, \"selectionOctree\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 98,
+          "line": 52,
           "text": "AbstractMesh.prototype.createOrUpdateSubmeshesOctree = function (maxCapacity = 64, maxDepth = 2): Octree<SubMesh> {"
+        }
+      ]
+    },
+    {
+      "file": "Culling/ray.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 12,
+          "text": "declare module \"./ray.core\" {"
         }
       ]
     },
@@ -672,54 +772,59 @@
       "file": "Culling/ray.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 29,
-          "text": "declare module \"./ray.core\" {"
-        },
-        {
           "type": "top-level-call",
-          "line": 47,
+          "line": 29,
           "text": "AddRayExtensions(Scene, Camera);"
         },
         {
           "type": "prototype-assignment",
-          "line": 49,
+          "line": 32,
           "text": "Scene.prototype.createPickingRayToRef = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 61,
+          "line": 45,
           "text": "Scene.prototype.createPickingRayInCameraSpace = function (x: number, y: number, camera?: Camera): Ray {"
         },
         {
           "type": "prototype-assignment",
-          "line": 65,
+          "line": 50,
           "text": "Scene.prototype.createPickingRayInCameraSpaceToRef = function (x: number, y: number, result: Ray, camera?: Camera): Scen"
         },
         {
           "type": "prototype-assignment",
-          "line": 69,
+          "line": 55,
           "text": "Scene.prototype.pickWithBoundingInfo = function (x: number, y: number, predicate?: MeshPredicate, fastCheck?: boolean, c"
         },
         {
           "type": "prototype-assignment",
-          "line": 73,
+          "line": 60,
           "text": "Scene.prototype.pick = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 85,
+          "line": 73,
           "text": "Scene.prototype.pickWithRay = function (ray: Ray, predicate?: MeshPredicate, fastCheck?: boolean, trianglePredicate?: Tr"
         },
         {
           "type": "prototype-assignment",
-          "line": 89,
+          "line": 78,
           "text": "Scene.prototype.multiPick = function (x: number, y: number, predicate?: MeshPredicate, camera?: Camera, trianglePredicat"
         },
         {
           "type": "prototype-assignment",
-          "line": 93,
+          "line": 83,
           "text": "Scene.prototype.multiPickWithRay = function (ray: Ray, predicate?: MeshPredicate, trianglePredicate?: TrianglePickingPre"
+        }
+      ]
+    },
+    {
+      "file": "Debug/debugLayer.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 173,
+          "text": "declare module \"../scene\" {"
         }
       ]
     },
@@ -727,9 +832,9 @@
       "file": "Debug/debugLayer.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 170,
-          "text": "declare module \"../scene\" {"
+          "type": "top-level-call",
+          "line": 9,
+          "text": "Object.defineProperty(Scene.prototype, \"debugLayer\", {"
         }
       ]
     },
@@ -744,17 +849,32 @@
       ]
     },
     {
-      "file": "Engines/AbstractEngine/abstractEngine.alpha.ts",
+      "file": "Engines/AbstractEngine/abstractEngine.alpha.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
           "line": 4,
           "text": "declare module \"../abstractEngine\" {"
-        },
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.alpha.ts",
+      "sideEffects": [
         {
           "type": "prototype-assignment",
-          "line": 16,
+          "line": 11,
           "text": "AbstractEngine.prototype.setAlphaEquation = function (equation: number, targetIndex: number = 0): void {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.cubeTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 8,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -762,34 +882,39 @@
       "file": "Engines/AbstractEngine/abstractEngine.cubeTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 12,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 71,
+          "line": 19,
           "text": "AbstractEngine.prototype._partialLoadFile = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 96,
+          "line": 45,
           "text": "AbstractEngine.prototype._cascadeLoadFiles = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 110,
+          "line": 60,
           "text": "AbstractEngine.prototype._cascadeLoadImgs = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 126,
+          "line": 77,
           "text": "AbstractEngine.prototype._partialLoadImg = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 167,
+          "line": 119,
           "text": "AbstractEngine.prototype.createCubeTextureBase = function ("
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.dom.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 17,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -797,39 +922,44 @@
       "file": "Engines/AbstractEngine/abstractEngine.dom.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 15,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 75,
+          "line": 11,
           "text": "AbstractEngine.prototype.getInputElement = function (): Nullable<HTMLElement> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 79,
+          "line": 16,
           "text": "AbstractEngine.prototype.getRenderingCanvasClientRect = function (): Nullable<ClientRect> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 86,
+          "line": 24,
           "text": "AbstractEngine.prototype.getInputElementClientRect = function (): Nullable<ClientRect> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 93,
+          "line": 32,
           "text": "AbstractEngine.prototype.getAspectRatio = function (viewportOwner: IViewportOwnerLike, useScreen = false): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 98,
+          "line": 38,
           "text": "AbstractEngine.prototype.getScreenAspectRatio = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 102,
+          "line": 43,
           "text": "AbstractEngine.prototype._verifyPointerLock = function (): void {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.loadFile.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 6,
+          "text": "declare module \"../abstractEngine\" {"
         }
       ]
     },
@@ -837,14 +967,19 @@
       "file": "Engines/AbstractEngine/abstractEngine.loadFile.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 4,
-          "text": "declare module \"../abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 16,
+          "line": 11,
           "text": "AbstractEngine.prototype._loadFileAsync = async function (url: string, offlineProvider?: IOfflineProvider, useArrayBuffe"
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.loadingScreen.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 6,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -852,19 +987,44 @@
       "file": "Engines/AbstractEngine/abstractEngine.loadingScreen.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 5,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 40,
+          "line": 12,
           "text": "AbstractEngine.prototype.displayLoadingUI = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 50,
+          "line": 23,
           "text": "AbstractEngine.prototype.hideLoadingUI = function (): void {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 34,
+          "text": "Object.defineProperty(AbstractEngine.prototype, \"loadingScreen\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 49,
+          "text": "Object.defineProperty(AbstractEngine.prototype, \"loadingUIText\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 58,
+          "text": "Object.defineProperty(AbstractEngine.prototype, \"loadingUIBackgroundColor\", {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.query.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 35,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 78,
+          "text": "declare module \"../../Meshes/abstractMesh\" {"
         }
       ]
     },
@@ -872,49 +1032,84 @@
       "file": "Engines/AbstractEngine/abstractEngine.query.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 33,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 76,
+          "line": 13,
           "text": "AbstractEngine.prototype.createQuery = function (): Nullable<OcclusionQuery> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 80,
+          "line": 18,
           "text": "AbstractEngine.prototype.deleteQuery = function (query: OcclusionQuery): AbstractEngine {"
         },
         {
           "type": "prototype-assignment",
-          "line": 85,
+          "line": 24,
           "text": "AbstractEngine.prototype.isQueryResultAvailable = function (query: OcclusionQuery): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 90,
+          "line": 30,
           "text": "AbstractEngine.prototype.getQueryResult = function (query: OcclusionQuery): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 95,
+          "line": 36,
           "text": "AbstractEngine.prototype.beginOcclusionQuery = function (algorithmType: number, query: OcclusionQuery): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 100,
+          "line": 42,
           "text": "AbstractEngine.prototype.endOcclusionQuery = function (algorithmType: number): AbstractEngine {"
         },
         {
-          "type": "declare-module",
-          "line": 105,
-          "text": "declare module \"../../Meshes/abstractMesh\" {"
+          "type": "top-level-call",
+          "line": 47,
+          "text": "Object.defineProperty(AbstractMesh.prototype, \"isOcclusionQueryInProgress\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 59,
+          "text": "Object.defineProperty(AbstractMesh.prototype, \"_occlusionDataStorage\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 71,
+          "text": "Object.defineProperty(AbstractMesh.prototype, \"isOccluded\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 83,
+          "text": "Object.defineProperty(AbstractMesh.prototype, \"occlusionQueryAlgorithmType\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 95,
+          "text": "Object.defineProperty(AbstractMesh.prototype, \"occlusionType\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 107,
+          "text": "Object.defineProperty(AbstractMesh.prototype, \"occlusionRetryCount\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 119,
+          "text": "Object.defineProperty(AbstractMesh.prototype, \"forceRenderingWhenOccluded\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 242,
+          "line": 132,
           "text": "AbstractMesh.prototype._checkOcclusionQuery = function () {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.renderPass.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 4,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -922,29 +1117,34 @@
       "file": "Engines/AbstractEngine/abstractEngine.renderPass.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 3,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 33,
+          "line": 10,
           "text": "AbstractEngine.prototype.getRenderPassNames = function (): string[] {"
         },
         {
           "type": "prototype-assignment",
-          "line": 37,
+          "line": 15,
           "text": "AbstractEngine.prototype.getCurrentRenderPassName = function (): string {"
         },
         {
           "type": "prototype-assignment",
-          "line": 41,
+          "line": 20,
           "text": "AbstractEngine.prototype.createRenderPassId = function (name?: string): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 48,
+          "line": 28,
           "text": "AbstractEngine.prototype.releaseRenderPassId = function (id: number): void {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.states.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 7,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -952,69 +1152,74 @@
       "file": "Engines/AbstractEngine/abstractEngine.states.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 7,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 80,
+          "line": 12,
           "text": "AbstractEngine.prototype.getInputElement = function (): Nullable<HTMLElement> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 84,
+          "line": 17,
           "text": "AbstractEngine.prototype.getDepthFunction = function (): Nullable<number> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 88,
+          "line": 22,
           "text": "AbstractEngine.prototype.setDepthFunction = function (depthFunc: number) {"
         },
         {
           "type": "prototype-assignment",
-          "line": 92,
+          "line": 27,
           "text": "AbstractEngine.prototype.setDepthFunctionToGreater = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 96,
+          "line": 32,
           "text": "AbstractEngine.prototype.setDepthFunctionToGreaterOrEqual = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 100,
+          "line": 37,
           "text": "AbstractEngine.prototype.setDepthFunctionToLess = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 103,
+          "line": 41,
           "text": "AbstractEngine.prototype.setDepthFunctionToLessOrEqual = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 107,
+          "line": 46,
           "text": "AbstractEngine.prototype.getDepthWrite = function (): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 111,
+          "line": 51,
           "text": "AbstractEngine.prototype.setDepthWrite = function (enable: boolean): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 115,
+          "line": 56,
           "text": "AbstractEngine.prototype.setAlphaConstants = function (r: number, g: number, b: number, a: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 119,
+          "line": 61,
           "text": "AbstractEngine.prototype.getAlphaMode = function (targetIndex = 0): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 123,
+          "line": 66,
           "text": "AbstractEngine.prototype.getAlphaEquation = function (targetIndex = 0): number {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.stencil.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 5,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1022,139 +1227,144 @@
       "file": "Engines/AbstractEngine/abstractEngine.stencil.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 5,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 178,
+          "line": 10,
           "text": "AbstractEngine.prototype.getStencilBuffer = function (): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 182,
+          "line": 15,
           "text": "AbstractEngine.prototype.setStencilBuffer = function (enable: boolean): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 186,
+          "line": 20,
           "text": "AbstractEngine.prototype.getStencilMask = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 190,
+          "line": 25,
           "text": "AbstractEngine.prototype.setStencilMask = function (mask: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 194,
+          "line": 30,
           "text": "AbstractEngine.prototype.getStencilFunction = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 198,
+          "line": 35,
           "text": "AbstractEngine.prototype.getStencilBackFunction = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 202,
+          "line": 40,
           "text": "AbstractEngine.prototype.getStencilFunctionReference = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 206,
+          "line": 45,
           "text": "AbstractEngine.prototype.getStencilFunctionMask = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 210,
+          "line": 50,
           "text": "AbstractEngine.prototype.setStencilFunction = function (stencilFunc: number) {"
         },
         {
           "type": "prototype-assignment",
-          "line": 214,
+          "line": 55,
           "text": "AbstractEngine.prototype.setStencilBackFunction = function (stencilFunc: number) {"
         },
         {
           "type": "prototype-assignment",
-          "line": 218,
+          "line": 60,
           "text": "AbstractEngine.prototype.setStencilFunctionReference = function (reference: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 222,
+          "line": 65,
           "text": "AbstractEngine.prototype.setStencilFunctionMask = function (mask: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 226,
+          "line": 70,
           "text": "AbstractEngine.prototype.getStencilOperationFail = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 230,
+          "line": 75,
           "text": "AbstractEngine.prototype.getStencilBackOperationFail = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 234,
+          "line": 80,
           "text": "AbstractEngine.prototype.getStencilOperationDepthFail = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 238,
+          "line": 85,
           "text": "AbstractEngine.prototype.getStencilBackOperationDepthFail = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 242,
+          "line": 90,
           "text": "AbstractEngine.prototype.getStencilOperationPass = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 246,
+          "line": 95,
           "text": "AbstractEngine.prototype.getStencilBackOperationPass = function (): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 250,
+          "line": 100,
           "text": "AbstractEngine.prototype.setStencilOperationFail = function (operation: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 254,
+          "line": 105,
           "text": "AbstractEngine.prototype.setStencilBackOperationFail = function (operation: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 258,
+          "line": 110,
           "text": "AbstractEngine.prototype.setStencilOperationDepthFail = function (operation: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 262,
+          "line": 115,
           "text": "AbstractEngine.prototype.setStencilBackOperationDepthFail = function (operation: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 266,
+          "line": 120,
           "text": "AbstractEngine.prototype.setStencilOperationPass = function (operation: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 270,
+          "line": 125,
           "text": "AbstractEngine.prototype.setStencilBackOperationPass = function (operation: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 274,
+          "line": 130,
           "text": "AbstractEngine.prototype.cacheStencilState = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 284,
+          "line": 141,
           "text": "AbstractEngine.prototype.restoreStencilState = function (): void {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.texture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 8,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1162,13 +1372,8 @@
       "file": "Engines/AbstractEngine/abstractEngine.texture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 6,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 21,
+          "line": 13,
           "text": "AbstractEngine.prototype.createDepthStencilTexture = function (size: TextureSize, options: DepthTextureCreationOptions, "
         }
       ]
@@ -1184,22 +1389,37 @@
       ]
     },
     {
-      "file": "Engines/AbstractEngine/abstractEngine.timeQuery.ts",
+      "file": "Engines/AbstractEngine/abstractEngine.timeQuery.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 6,
           "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.timeQuery.ts",
+      "sideEffects": [
         {
           "type": "prototype-assignment",
-          "line": 23,
+          "line": 11,
           "text": "AbstractEngine.prototype.getGPUFrameTimeCounter = function () {"
         },
         {
           "type": "prototype-assignment",
-          "line": 30,
+          "line": 19,
           "text": "AbstractEngine.prototype.captureGPUFrameTime = function (value: boolean): void {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.views.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 32,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1207,34 +1427,54 @@
       "file": "Engines/AbstractEngine/abstractEngine.views.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 31,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
+          "type": "top-level-call",
+          "line": 18,
+          "text": "Object.defineProperty(AbstractEngine.prototype, \"onBeforeViewRenderObservable\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 25,
+          "text": "Object.defineProperty(AbstractEngine.prototype, \"onAfterViewRenderObservable\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 32,
+          "text": "Object.defineProperty(AbstractEngine.prototype, \"inputElement\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 116,
+          "line": 45,
           "text": "AbstractEngine.prototype.getInputElement = function (): Nullable<HTMLElement> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 120,
+          "line": 50,
           "text": "AbstractEngine.prototype.registerView = function (canvas: HTMLCanvasElement, camera?: Camera | Camera[], clearBeforeCopy"
         },
         {
           "type": "prototype-assignment",
-          "line": 149,
+          "line": 80,
           "text": "AbstractEngine.prototype.unRegisterView = function (canvas: HTMLCanvasElement): AbstractEngine {"
         },
         {
           "type": "prototype-assignment",
-          "line": 168,
+          "line": 100,
           "text": "AbstractEngine.prototype._renderViewStep = function (view: EngineView): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 235,
+          "line": 168,
           "text": "AbstractEngine.prototype._renderViews = function () {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.alpha.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 4,
+          "text": "declare module \"../abstractEngine\" {"
         }
       ]
     },
@@ -1242,14 +1482,19 @@
       "file": "Engines/Extensions/engine.alpha.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 4,
-          "text": "declare module \"../abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 18,
+          "line": 11,
           "text": "ThinEngine.prototype.setAlphaMode = function (mode: number, noDepthWriteChange: boolean = false, targetIndex: number = 0"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.computeShader.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 67,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1257,69 +1502,74 @@
       "file": "Engines/Extensions/engine.computeShader.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 66,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 175,
+          "line": 17,
           "text": "ThinEngine.prototype.createComputeEffect = function (baseName: IComputeShaderPath & { computeToken?: string }, options: "
         },
         {
           "type": "prototype-assignment",
-          "line": 179,
+          "line": 22,
           "text": "ThinEngine.prototype.createComputePipelineContext = function (): IComputePipelineContext {"
         },
         {
           "type": "prototype-assignment",
-          "line": 183,
+          "line": 27,
           "text": "ThinEngine.prototype.createComputeContext = function (): IComputeContext | undefined {"
         },
         {
           "type": "prototype-assignment",
-          "line": 187,
+          "line": 32,
           "text": "ThinEngine.prototype.computeDispatch = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 198,
+          "line": 44,
           "text": "ThinEngine.prototype.computeDispatchIndirect = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 209,
+          "line": 56,
           "text": "ThinEngine.prototype.areAllComputeEffectsReady = function (): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 213,
+          "line": 61,
           "text": "ThinEngine.prototype.releaseComputeEffects = function (): void {};"
         },
         {
           "type": "prototype-assignment",
-          "line": 215,
+          "line": 64,
           "text": "ThinEngine.prototype._prepareComputePipelineContext = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 223,
+          "line": 73,
           "text": "ThinEngine.prototype._rebuildComputeEffects = function (): void {};"
         },
         {
           "type": "prototype-assignment",
-          "line": 225,
+          "line": 76,
           "text": "AbstractEngine.prototype._executeWhenComputeStateIsCompiled = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 232,
+          "line": 84,
           "text": "ThinEngine.prototype._releaseComputeEffect = function (effect: ComputeEffect): void {};"
         },
         {
           "type": "prototype-assignment",
-          "line": 234,
+          "line": 87,
           "text": "ThinEngine.prototype._deleteComputePipelineContext = function (pipelineContext: IComputePipelineContext): void {};"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.cubeTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 8,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1327,29 +1577,34 @@
       "file": "Engines/Extensions/engine.cubeTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 10,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 144,
+          "line": 17,
           "text": "ThinEngine.prototype._createDepthStencilCubeTexture = function (size: number, options: DepthTextureCreationOptions): Int"
         },
         {
           "type": "prototype-assignment",
-          "line": 181,
+          "line": 55,
           "text": "ThinEngine.prototype._setCubeMapTextureParams = function (texture: InternalTexture, loadMipmap: boolean, maxLevel?: numb"
         },
         {
           "type": "prototype-assignment",
-          "line": 197,
+          "line": 72,
           "text": "ThinEngine.prototype.createCubeTexture = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 296,
+          "line": 172,
           "text": "ThinEngine.prototype.generateMipMapsForCubemap = function (texture: InternalTexture, unbind = true) {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.debugging.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 10,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1357,24 +1612,29 @@
       "file": "Engines/Extensions/engine.debugging.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 9,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 23,
+          "line": 10,
           "text": "AbstractEngine.prototype._debugPushGroup = function (groupName: string): void {};"
         },
         {
           "type": "prototype-assignment",
-          "line": 25,
+          "line": 13,
           "text": "AbstractEngine.prototype._debugPopGroup = function (): void {};"
         },
         {
           "type": "prototype-assignment",
-          "line": 27,
+          "line": 16,
           "text": "AbstractEngine.prototype._debugInsertMarker = function (text: string): void {};"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.dynamicBuffer.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 7,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1382,19 +1642,24 @@
       "file": "Engines/Extensions/engine.dynamicBuffer.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 5,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 28,
+          "line": 13,
           "text": "ThinEngine.prototype.updateDynamicIndexBuffer = function (this: ThinEngine, indexBuffer: DataBuffer, indices: IndicesArr"
         },
         {
           "type": "prototype-assignment",
-          "line": 47,
+          "line": 33,
           "text": "ThinEngine.prototype.updateDynamicVertexBuffer = function (this: ThinEngine, vertexBuffer: DataBuffer, data: DataArray, "
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.dynamicTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 7,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1402,19 +1667,24 @@
       "file": "Engines/Extensions/engine.dynamicTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 7,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 42,
+          "line": 13,
           "text": "ThinEngine.prototype.createDynamicTexture = function (width: number, height: number, generateMipMaps: boolean, samplingM"
         },
         {
           "type": "prototype-assignment",
-          "line": 66,
+          "line": 38,
           "text": "ThinEngine.prototype.updateDynamicTexture = function ("
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.multiRender.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 11,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1422,54 +1692,69 @@
       "file": "Engines/Extensions/engine.multiRender.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 12,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 85,
+          "line": 19,
           "text": "ThinEngine.prototype.restoreSingleAttachment = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 91,
+          "line": 26,
           "text": "ThinEngine.prototype.restoreSingleAttachmentForRenderTarget = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 97,
+          "line": 33,
           "text": "ThinEngine.prototype.buildTextureLayout = function (textureStatus: boolean[], backBufferLayout = false): number[] {"
         },
         {
           "type": "prototype-assignment",
-          "line": 117,
+          "line": 54,
           "text": "ThinEngine.prototype.bindAttachments = function (attachments: number[]): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 123,
+          "line": 61,
           "text": "ThinEngine.prototype.unBindMultiColorAttachmentFramebuffer = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 149,
+          "line": 88,
           "text": "ThinEngine.prototype.createMultipleRenderTarget = function (size: TextureSize, options: IMultiRenderTargetOptions, initi"
         },
         {
           "type": "prototype-assignment",
-          "line": 427,
+          "line": 367,
           "text": "ThinEngine.prototype.updateMultipleRenderTargetTextureSampleCount = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 524,
+          "line": 465,
           "text": "ThinEngine.prototype.generateMipMapsMultiFramebuffer = function (texture: RenderTargetWrapper): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 542,
+          "line": 484,
           "text": "ThinEngine.prototype.resolveMultiFramebuffer = function (texture: RenderTargetWrapper): void {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.multiview.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 12,
+          "text": "declare module \"../../Engines/engine\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 37,
+          "text": "declare module \"../../Cameras/camera\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 67,
+          "text": "declare module \"../../scene\" {"
         }
       ]
     },
@@ -1477,84 +1762,79 @@
       "file": "Engines/Extensions/engine.multiview.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 16,
-          "text": "declare module \"../../Engines/engine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 41,
+          "line": 31,
           "text": "Engine.prototype.createMultiviewRenderTargetTexture = function (width: number, height: number, colorTexture?: WebGLTextu"
         },
         {
           "type": "prototype-assignment",
-          "line": 82,
+          "line": 73,
           "text": "Engine.prototype.bindMultiviewFramebuffer = function (_multiviewTexture: RenderTargetWrapper) {"
         },
         {
           "type": "prototype-assignment",
-          "line": 112,
+          "line": 104,
           "text": "Engine.prototype.bindSpaceWarpFramebuffer = function (_spaceWarpTexture: RenderTargetWrapper) {"
         },
         {
-          "type": "declare-module",
-          "line": 128,
-          "text": "declare module \"../../Cameras/camera\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 158,
+          "line": 121,
           "text": "Camera.prototype._useMultiviewToSingleView = false;"
         },
         {
           "type": "prototype-assignment",
-          "line": 160,
+          "line": 124,
           "text": "Camera.prototype._multiviewTexture = null;"
         },
         {
           "type": "prototype-assignment",
-          "line": 162,
+          "line": 127,
           "text": "Camera.prototype._resizeOrCreateMultiviewTexture = function (width: number, height: number) {"
         },
         {
-          "type": "declare-module",
-          "line": 171,
-          "text": "declare module \"../../scene\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 201,
+          "line": 137,
           "text": "Scene.prototype._transformMatrixR = Matrix.Zero();"
         },
         {
           "type": "prototype-assignment",
-          "line": 202,
+          "line": 139,
           "text": "Scene.prototype._multiviewSceneUbo = null;"
         },
         {
           "type": "prototype-assignment",
-          "line": 203,
+          "line": 141,
           "text": "Scene.prototype._multiviewSceneUboIsActive = false;"
         },
         {
           "type": "prototype-assignment",
-          "line": 204,
+          "line": 143,
           "text": "Scene.prototype._createMultiviewUbo = function () {"
         },
         {
           "type": "prototype-assignment",
-          "line": 208,
+          "line": 148,
           "text": "Scene.prototype.createSceneUniformBuffer = function (name?: string, trackUBOsInFrameOrOptions?: boolean | ICreateSceneUb"
         },
         {
           "type": "prototype-assignment",
-          "line": 216,
+          "line": 157,
           "text": "Scene.prototype._updateMultiviewUbo = function (viewR?: Matrix, projectionR?: Matrix) {"
         },
         {
           "type": "prototype-assignment",
-          "line": 233,
+          "line": 175,
           "text": "Scene.prototype._renderMultiviewToSingleView = function (camera: Camera) {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.prefilteredCubeTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 8,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1562,14 +1842,19 @@
       "file": "Engines/Extensions/engine.prefilteredCubeTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 11,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 41,
+          "line": 18,
           "text": "ThinEngine.prototype.createPrefilteredCubeTexture = function ("
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.query.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 10,
+          "text": "declare module \"../../Engines/thinEngine\" {"
         }
       ]
     },
@@ -1577,79 +1862,84 @@
       "file": "Engines/Extensions/engine.query.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 12,
-          "text": "declare module \"../../Engines/thinEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 60,
+          "line": 14,
           "text": "ThinEngine.prototype.createQuery = function (): OcclusionQuery {"
         },
         {
           "type": "prototype-assignment",
-          "line": 68,
+          "line": 23,
           "text": "ThinEngine.prototype.deleteQuery = function (query: OcclusionQuery): ThinEngine {"
         },
         {
           "type": "prototype-assignment",
-          "line": 74,
+          "line": 30,
           "text": "ThinEngine.prototype.isQueryResultAvailable = function (query: OcclusionQuery): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 78,
+          "line": 35,
           "text": "ThinEngine.prototype.getQueryResult = function (query: OcclusionQuery): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 82,
+          "line": 40,
           "text": "ThinEngine.prototype.beginOcclusionQuery = function (algorithmType: number, query: OcclusionQuery): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 89,
+          "line": 48,
           "text": "ThinEngine.prototype.endOcclusionQuery = function (algorithmType: number): ThinEngine {"
         },
         {
           "type": "prototype-assignment",
-          "line": 96,
+          "line": 56,
           "text": "ThinEngine.prototype._createTimeQuery = function (): Nullable<WebGLQuery> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 106,
+          "line": 67,
           "text": "ThinEngine.prototype._deleteTimeQuery = function (query: WebGLQuery): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 117,
+          "line": 79,
           "text": "ThinEngine.prototype._getTimeQueryResult = function (query: WebGLQuery): any {"
         },
         {
           "type": "prototype-assignment",
-          "line": 126,
+          "line": 89,
           "text": "ThinEngine.prototype._getTimeQueryAvailability = function (query: WebGLQuery): any {"
         },
         {
           "type": "prototype-assignment",
-          "line": 135,
+          "line": 99,
           "text": "ThinEngine.prototype.startTimeQuery = function (): Nullable<_TimeToken> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 169,
+          "line": 134,
           "text": "ThinEngine.prototype.endTimeQuery = function (token: _TimeToken): int {"
         },
         {
           "type": "prototype-assignment",
-          "line": 237,
+          "line": 203,
           "text": "ThinEngine.prototype.captureGPUFrameTime = function (value: boolean) {"
         },
         {
           "type": "prototype-assignment",
-          "line": 273,
+          "line": 240,
           "text": "ThinEngine.prototype._getGlAlgorithmType = function (algorithmType: number): number {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.rawTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 11,
+          "text": "declare module \"../abstractEngine\" {"
         }
       ]
     },
@@ -1657,54 +1947,59 @@
       "file": "Engines/Extensions/engine.rawTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 10,
-          "text": "declare module \"../abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 181,
+          "line": 51,
           "text": "ThinEngine.prototype.updateRawTexture = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 228,
+          "line": 99,
           "text": "ThinEngine.prototype.createRawTexture = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 279,
+          "line": 151,
           "text": "ThinEngine.prototype.createRawCubeTexture = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 386,
+          "line": 259,
           "text": "ThinEngine.prototype.updateRawCubeTexture = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 451,
+          "line": 325,
           "text": "ThinEngine.prototype.createRawCubeTextureFromUrl = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 659,
+          "line": 429,
           "text": "ThinEngine.prototype.createRawTexture2DArray = MakeCreateRawTextureFunction(false);"
         },
         {
           "type": "prototype-assignment",
-          "line": 660,
+          "line": 431,
           "text": "ThinEngine.prototype.createRawTexture3D = MakeCreateRawTextureFunction(true);"
         },
         {
           "type": "prototype-assignment",
-          "line": 711,
+          "line": 434,
           "text": "ThinEngine.prototype.updateRawTexture2DArray = MakeUpdateRawTextureFunction(false);"
         },
         {
           "type": "prototype-assignment",
-          "line": 712,
+          "line": 436,
           "text": "ThinEngine.prototype.updateRawTexture3D = MakeUpdateRawTextureFunction(true);"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.readTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 8,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1712,19 +2007,24 @@
       "file": "Engines/Extensions/engine.readTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 5,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 42,
+          "line": 13,
           "text": "ThinEngine.prototype._readTexturePixelsSync = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 107,
+          "line": 79,
           "text": "ThinEngine.prototype._readTexturePixels = function ("
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.renderTarget.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 17,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1732,34 +2032,39 @@
       "file": "Engines/Extensions/engine.renderTarget.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 21,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 52,
+          "line": 19,
           "text": "ThinEngine.prototype._createHardwareRenderTargetWrapper = function (isMulti: boolean, isCube: boolean, size: TextureSize"
         },
         {
           "type": "prototype-assignment",
-          "line": 58,
+          "line": 26,
           "text": "ThinEngine.prototype.createRenderTargetTexture = function (this: ThinEngine, size: TextureSize, options: boolean | Rende"
         },
         {
           "type": "prototype-assignment",
-          "line": 120,
+          "line": 89,
           "text": "ThinEngine.prototype._createDepthStencilTexture = function (size: TextureSize, options: DepthTextureCreationOptions, rtW"
         },
         {
           "type": "prototype-assignment",
-          "line": 212,
+          "line": 182,
           "text": "ThinEngine.prototype.updateRenderTargetTextureSampleCount = function (rtWrapper: Nullable<WebGLRenderTargetWrapper>, sam"
         },
         {
           "type": "prototype-assignment",
-          "line": 290,
+          "line": 261,
           "text": "ThinEngine.prototype._setupDepthStencilTexture = function ("
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.renderTargetCube.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 8,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1767,14 +2072,19 @@
       "file": "Engines/Extensions/engine.renderTargetCube.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 9,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 22,
+          "line": 16,
           "text": "ThinEngine.prototype.createRenderTargetCubeTexture = function (size: number, options?: RenderTargetCreationOptions): Ren"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.renderTargetTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 7,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1782,14 +2092,19 @@
       "file": "Engines/Extensions/engine.renderTargetTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 5,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 19,
+          "line": 12,
           "text": "ThinEngine.prototype.setDepthStencilTexture = function (channel: number, uniform: Nullable<WebGLUniformLocation>, textur"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.textureSelector.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 6,
+          "text": "declare module \"../../Engines/engine\" {"
         }
       ]
     },
@@ -1797,19 +2112,34 @@
       "file": "Engines/Extensions/engine.textureSelector.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 4,
-          "text": "declare module \"../../Engines/engine\" {"
+          "type": "top-level-call",
+          "line": 27,
+          "text": "Object.defineProperty(Engine.prototype, \"texturesSupported\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 57,
+          "text": "Object.defineProperty(Engine.prototype, \"textureFormatInUse\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 108,
+          "line": 66,
           "text": "Engine.prototype.setCompressedTextureExclusions = function (skippedFiles: Array<string>): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 112,
+          "line": 71,
           "text": "Engine.prototype.setTextureFormatToUse = function (formatsAvailable: Array<string>): Nullable<string> {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.transformFeedback.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 11,
+          "text": "declare module \"../../Engines/engine\" {"
         }
       ]
     },
@@ -1817,49 +2147,54 @@
       "file": "Engines/Extensions/engine.transformFeedback.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 9,
-          "text": "declare module \"../../Engines/engine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 63,
+          "line": 12,
           "text": "Engine.prototype.createTransformFeedback = function (): WebGLTransformFeedback {"
         },
         {
           "type": "prototype-assignment",
-          "line": 71,
+          "line": 21,
           "text": "Engine.prototype.deleteTransformFeedback = function (value: WebGLTransformFeedback): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 75,
+          "line": 26,
           "text": "Engine.prototype.bindTransformFeedback = function (value: Nullable<WebGLTransformFeedback>): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 79,
+          "line": 31,
           "text": "Engine.prototype.beginTransformFeedback = function (usePoints: boolean = true): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 83,
+          "line": 36,
           "text": "Engine.prototype.endTransformFeedback = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 87,
+          "line": 41,
           "text": "Engine.prototype.setTranformFeedbackVaryings = function (program: WebGLProgram, value: string[]): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 91,
+          "line": 46,
           "text": "Engine.prototype.bindTransformFeedbackBuffer = function (value: Nullable<DataBuffer>): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 95,
+          "line": 51,
           "text": "Engine.prototype.readTransformFeedbackBuffer = function (target: ArrayBufferView): void {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.uniformBuffer.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 9,
+          "text": "declare module \"../../Engines/thinEngine\" {"
         }
       ]
     },
@@ -1867,39 +2202,44 @@
       "file": "Engines/Extensions/engine.uniformBuffer.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 8,
-          "text": "declare module \"../../Engines/thinEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 63,
+          "line": 15,
           "text": "ThinEngine.prototype.createUniformBuffer = function (elements: FloatArray, _label?: string): DataBuffer {"
         },
         {
           "type": "prototype-assignment",
-          "line": 85,
+          "line": 38,
           "text": "ThinEngine.prototype.createDynamicUniformBuffer = function (elements: FloatArray, _label?: string): DataBuffer {"
         },
         {
           "type": "prototype-assignment",
-          "line": 107,
+          "line": 61,
           "text": "ThinEngine.prototype.updateUniformBuffer = function (uniformBuffer: DataBuffer, elements: FloatArray, offset?: number, c"
         },
         {
           "type": "prototype-assignment",
-          "line": 131,
+          "line": 86,
           "text": "ThinEngine.prototype.bindUniformBuffer = function (buffer: Nullable<DataBuffer>): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 136,
+          "line": 92,
           "text": "ThinEngine.prototype.bindUniformBufferBase = function (buffer: DataBuffer, location: number, name: string): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 140,
+          "line": 97,
           "text": "ThinEngine.prototype.bindUniformBlock = function (pipelineContext: IPipelineContext, blockName: string, index: number): "
+        }
+      ]
+    },
+    {
+      "file": "Engines/Extensions/engine.videoTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 8,
+          "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
     },
@@ -1907,14 +2247,19 @@
       "file": "Engines/Extensions/engine.videoTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 7,
-          "text": "declare module \"../../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 20,
+          "line": 13,
           "text": "ThinEngine.prototype.updateVideoTexture = function (texture: Nullable<InternalTexture>, video: HTMLVideoElement, invertY"
+        }
+      ]
+    },
+    {
+      "file": "Engines/Native/Extensions/nativeEngine.cubeTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 9,
+          "text": "declare module \"../../../Engines/thinNativeEngine\" {"
         }
       ]
     },
@@ -1922,13 +2267,8 @@
       "file": "Engines/Native/Extensions/nativeEngine.cubeTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 11,
-          "text": "declare module \"../../../Engines/thinNativeEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 53,
+          "line": 17,
           "text": "ThinNativeEngine.prototype.createCubeTexture = function ("
         }
       ]
@@ -1938,7 +2278,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 9,
+          "line": 11,
           "text": "ThinNativeEngine._createNativeDataStream = function () {"
         }
       ]
@@ -1948,7 +2288,7 @@
       "sideEffects": [
         {
           "type": "top-level-call",
-          "line": 71,
+          "line": 22,
           "text": "applyMixins(NativeEngine, [ThinNativeEngine]);"
         }
       ]
@@ -1974,22 +2314,37 @@
       ]
     },
     {
-      "file": "Engines/WebGPU/Extensions/engine.alpha.ts",
+      "file": "Engines/WebGPU/Extensions/engine.alpha.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 7,
+          "line": 5,
           "text": "declare module \"../../abstractEngine\" {"
-        },
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/Extensions/engine.alpha.ts",
+      "sideEffects": [
         {
           "type": "prototype-assignment",
-          "line": 21,
+          "line": 12,
           "text": "ThinWebGPUEngine.prototype.setAlphaMode = function (mode: number, noDepthWriteChange: boolean = false, targetIndex: numb"
         },
         {
           "type": "prototype-assignment",
-          "line": 50,
+          "line": 42,
           "text": "ThinWebGPUEngine.prototype.setAlphaEquation = function (equation: number, targetIndex: number = 0): void {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/Extensions/engine.computeShader.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 12,
+          "text": "declare module \"../../webgpuEngine\" {"
         }
       ]
     },
@@ -1997,79 +2352,84 @@
       "file": "Engines/WebGPU/Extensions/engine.computeShader.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 15,
-          "text": "declare module \"../../webgpuEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 40,
+          "line": 22,
           "text": "WebGPUEngine.prototype.createComputeContext = function (): IComputeContext | undefined {"
         },
         {
           "type": "prototype-assignment",
-          "line": 44,
+          "line": 27,
           "text": "WebGPUEngine.prototype.createComputeEffect = function (baseName: string | (IComputeShaderPath & { computeToken?: string "
         },
         {
           "type": "prototype-assignment",
-          "line": 62,
+          "line": 46,
           "text": "WebGPUEngine.prototype.createComputePipelineContext = function (): IComputePipelineContext {"
         },
         {
           "type": "prototype-assignment",
-          "line": 66,
+          "line": 51,
           "text": "WebGPUEngine.prototype.areAllComputeEffectsReady = function (): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 78,
+          "line": 64,
           "text": "WebGPUEngine.prototype.computeDispatch = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 91,
+          "line": 78,
           "text": "WebGPUEngine.prototype.computeDispatchIndirect = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 103,
+          "line": 91,
           "text": "WebGPUEngine.prototype._computeDispatch = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 159,
+          "line": 148,
           "text": "WebGPUEngine.prototype.releaseComputeEffects = function () {"
         },
         {
           "type": "prototype-assignment",
-          "line": 168,
+          "line": 158,
           "text": "WebGPUEngine.prototype._prepareComputePipelineContext = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 190,
+          "line": 181,
           "text": "WebGPUEngine.prototype._releaseComputeEffect = function (effect: ComputeEffect): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 198,
+          "line": 190,
           "text": "WebGPUEngine.prototype._rebuildComputeEffects = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 208,
+          "line": 201,
           "text": "WebGPUEngine.prototype._executeWhenComputeStateIsCompiled = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 235,
+          "line": 229,
           "text": "WebGPUEngine.prototype._deleteComputePipelineContext = function (pipelineContext: IComputePipelineContext): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 242,
+          "line": 237,
           "text": "WebGPUEngine.prototype._createComputePipelineStageDescriptor = function (computeShader: string, defines: Nullable<string"
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/Extensions/engine.cubeTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 10,
+          "text": "declare module \"../../abstractEngine\" {"
         }
       ]
     },
@@ -2077,28 +2437,23 @@
       "file": "Engines/WebGPU/Extensions/engine.cubeTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 11,
-          "text": "declare module \"../../abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 180,
+          "line": 17,
           "text": "ThinWebGPUEngine.prototype._createDepthStencilCubeTexture = function (size: number, options: DepthTextureCreationOptions"
         },
         {
           "type": "prototype-assignment",
-          "line": 211,
+          "line": 49,
           "text": "ThinWebGPUEngine.prototype.createCubeTexture = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 272,
+          "line": 111,
           "text": "ThinWebGPUEngine.prototype._setCubeMapTextureParams = function (texture: InternalTexture, loadMipmap: boolean, maxLevel?"
         },
         {
           "type": "prototype-assignment",
-          "line": 281,
+          "line": 121,
           "text": "ThinWebGPUEngine.prototype.generateMipMapsForCubemap = function (texture: InternalTexture) {"
         }
       ]
@@ -2124,22 +2479,37 @@
       ]
     },
     {
-      "file": "Engines/WebGPU/Extensions/engine.dynamicTexture.ts",
+      "file": "Engines/WebGPU/Extensions/engine.dynamicTexture.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
           "line": 8,
           "text": "declare module \"../../abstractEngine\" {"
-        },
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/Extensions/engine.dynamicTexture.ts",
+      "sideEffects": [
         {
           "type": "prototype-assignment",
-          "line": 43,
+          "line": 14,
           "text": "WebGPUEngine.prototype.createDynamicTexture = function (width: number, height: number, generateMipMaps: boolean, samplin"
         },
         {
           "type": "prototype-assignment",
-          "line": 70,
+          "line": 42,
           "text": "WebGPUEngine.prototype.updateDynamicTexture = function ("
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/Extensions/engine.multiRender.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 10,
+          "text": "declare module \"../../abstractEngine\" {"
         }
       ]
     },
@@ -2147,53 +2517,48 @@
       "file": "Engines/WebGPU/Extensions/engine.multiRender.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 11,
-          "text": "declare module \"../../abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 85,
+          "line": 19,
           "text": "WebGPUEngine.prototype.unBindMultiColorAttachmentFramebuffer = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 111,
+          "line": 46,
           "text": "WebGPUEngine.prototype.createMultipleRenderTarget = function (size: TextureSize, options: IMultiRenderTargetOptions, ini"
         },
         {
           "type": "prototype-assignment",
-          "line": 287,
+          "line": 223,
           "text": "WebGPUEngine.prototype.updateMultipleRenderTargetTextureSampleCount = function (rtWrapper: Nullable<RenderTargetWrapper>"
         },
         {
           "type": "prototype-assignment",
-          "line": 323,
+          "line": 260,
           "text": "WebGPUEngine.prototype.generateMipMapsMultiFramebuffer = function (texture: RenderTargetWrapper): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 341,
+          "line": 279,
           "text": "WebGPUEngine.prototype.resolveMultiFramebuffer = function (texture: RenderTargetWrapper, resolveColors: boolean = true):"
         },
         {
           "type": "prototype-assignment",
-          "line": 345,
+          "line": 284,
           "text": "WebGPUEngine.prototype.bindAttachments = function (attachments: number[]): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 359,
+          "line": 299,
           "text": "WebGPUEngine.prototype.buildTextureLayout = function (textureStatus: boolean[], backBufferLayout = false): number[] {"
         },
         {
           "type": "prototype-assignment",
-          "line": 377,
+          "line": 318,
           "text": "WebGPUEngine.prototype.restoreSingleAttachment = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 381,
+          "line": 323,
           "text": "WebGPUEngine.prototype.restoreSingleAttachmentForRenderTarget = function (): void {"
         }
       ]
@@ -2244,57 +2609,72 @@
       ]
     },
     {
-      "file": "Engines/WebGPU/Extensions/engine.rawTexture.ts",
+      "file": "Engines/WebGPU/Extensions/engine.rawTexture.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 11,
+          "line": 10,
           "text": "declare module \"../../abstractEngine\" {"
-        },
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/Extensions/engine.rawTexture.ts",
+      "sideEffects": [
         {
           "type": "prototype-assignment",
-          "line": 228,
+          "line": 51,
           "text": "ThinWebGPUEngine.prototype.createRawTexture = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 270,
+          "line": 94,
           "text": "ThinWebGPUEngine.prototype.updateRawTexture = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 318,
+          "line": 143,
           "text": "ThinWebGPUEngine.prototype.createRawCubeTexture = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 378,
+          "line": 204,
           "text": "ThinWebGPUEngine.prototype.updateRawCubeTexture = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 412,
+          "line": 239,
           "text": "ThinWebGPUEngine.prototype.createRawCubeTextureFromUrl = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 495,
+          "line": 323,
           "text": "ThinWebGPUEngine.prototype.createRawTexture3D = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 537,
+          "line": 366,
           "text": "ThinWebGPUEngine.prototype.updateRawTexture3D = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 571,
+          "line": 401,
           "text": "ThinWebGPUEngine.prototype.createRawTexture2DArray = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 615,
+          "line": 446,
           "text": "ThinWebGPUEngine.prototype.updateRawTexture2DArray = function ("
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/Extensions/engine.readTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 8,
+          "text": "declare module \"../../abstractEngine\" {"
         }
       ]
     },
@@ -2302,19 +2682,24 @@
       "file": "Engines/WebGPU/Extensions/engine.readTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 6,
-          "text": "declare module \"../../abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 40,
+          "line": 14,
           "text": "ThinWebGPUEngine.prototype._readTexturePixels = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 61,
+          "line": 36,
           "text": "ThinWebGPUEngine.prototype._readTexturePixelsSync = function (): ArrayBufferView {"
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/Extensions/engine.renderTarget.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 10,
+          "text": "declare module \"../../abstractEngine\" {"
         }
       ]
     },
@@ -2322,34 +2707,39 @@
       "file": "Engines/WebGPU/Extensions/engine.renderTarget.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 13,
-          "text": "declare module \"../../abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 44,
+          "line": 18,
           "text": "ThinWebGPUEngine.prototype._createHardwareRenderTargetWrapper = function (isMulti: boolean, isCube: boolean, size: Textu"
         },
         {
           "type": "prototype-assignment",
-          "line": 50,
+          "line": 25,
           "text": "ThinWebGPUEngine.prototype.createRenderTargetTexture = function (size: TextureSize, options: boolean | RenderTargetCreat"
         },
         {
           "type": "prototype-assignment",
-          "line": 112,
+          "line": 88,
           "text": "ThinWebGPUEngine.prototype._createDepthStencilTexture = function (size: TextureSize, options: DepthTextureCreationOption"
         },
         {
           "type": "prototype-assignment",
-          "line": 142,
+          "line": 119,
           "text": "ThinWebGPUEngine.prototype._setupDepthStencilTexture = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 171,
+          "line": 149,
           "text": "ThinWebGPUEngine.prototype.updateRenderTargetTextureSampleCount = function (rtWrapper: Nullable<RenderTargetWrapper>, sa"
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/Extensions/engine.renderTargetCube.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 7,
+          "text": "declare module \"../../abstractEngine\" {"
         }
       ]
     },
@@ -2357,14 +2747,19 @@
       "file": "Engines/WebGPU/Extensions/engine.renderTargetCube.ts",
       "sideEffects": [
         {
+          "type": "prototype-assignment",
+          "line": 14,
+          "text": "ThinWebGPUEngine.prototype.createRenderTargetCubeTexture = function (size: number, options?: RenderTargetCreationOptions"
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/Extensions/engine.renderTargetTexture.pure.ts",
+      "sideEffects": [
+        {
           "type": "declare-module",
           "line": 7,
           "text": "declare module \"../../abstractEngine\" {"
-        },
-        {
-          "type": "prototype-assignment",
-          "line": 20,
-          "text": "ThinWebGPUEngine.prototype.createRenderTargetCubeTexture = function (size: number, options?: RenderTargetCreationOptions"
         }
       ]
     },
@@ -2372,14 +2767,19 @@
       "file": "Engines/WebGPU/Extensions/engine.renderTargetTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 5,
-          "text": "declare module \"../../abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 19,
+          "line": 12,
           "text": "ThinWebGPUEngine.prototype.setDepthStencilTexture = function ("
+        }
+      ]
+    },
+    {
+      "file": "Engines/WebGPU/Extensions/engine.videoTexture.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 9,
+          "text": "declare module \"../../abstractEngine\" {"
         }
       ]
     },
@@ -2387,13 +2787,8 @@
       "file": "Engines/WebGPU/Extensions/engine.videoTexture.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 7,
-          "text": "declare module \"../../abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 24,
+          "line": 18,
           "text": "WebGPUEngine.prototype.updateVideoTexture = function (texture: Nullable<InternalTexture>, video: HTMLVideoElement | Null"
         }
       ]
@@ -3348,7 +3743,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 90,
+          "line": 10,
           "text": "RichTypeQuaternion.typeTransformer = (value: any) => {"
         }
       ]
@@ -3869,32 +4264,52 @@
       ]
     },
     {
-      "file": "Gamepads/gamepadSceneComponent.ts",
+      "file": "Gamepads/gamepadSceneComponent.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 12,
+          "line": 10,
           "text": "declare module \"../scene\" {"
         },
         {
           "type": "declare-module",
-          "line": 43,
+          "line": 24,
           "text": "declare module \"../Cameras/freeCameraInputsManager\" {"
         },
         {
+          "type": "declare-module",
+          "line": 38,
+          "text": "declare module \"../Cameras/arcRotateCameraInputsManager\" {"
+        }
+      ]
+    },
+    {
+      "file": "Gamepads/gamepadSceneComponent.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 16,
+          "text": "Object.defineProperty(Scene.prototype, \"gamepadManager\", {"
+        },
+        {
           "type": "prototype-assignment",
-          "line": 61,
+          "line": 38,
           "text": "FreeCameraInputsManager.prototype.addGamepad = function (): FreeCameraInputsManager {"
         },
         {
-          "type": "declare-module",
-          "line": 66,
-          "text": "declare module \"../Cameras/arcRotateCameraInputsManager\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 84,
+          "line": 48,
           "text": "ArcRotateCameraInputsManager.prototype.addGamepad = function (): ArcRotateCameraInputsManager {"
+        }
+      ]
+    },
+    {
+      "file": "Helpers/sceneHelpers.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 17,
+          "text": "declare module \"../scene\" {"
         }
       ]
     },
@@ -3902,43 +4317,38 @@
       "file": "Helpers/sceneHelpers.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 30,
-          "text": "declare module \"../scene\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 97,
+          "line": 29,
           "text": "Scene.prototype.createDefaultLight = function (replace = false): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 113,
+          "line": 46,
           "text": "Scene.prototype.createDefaultCamera = function (createArcRotateCamera = false, replace = false, attachCameraControls = f"
         },
         {
           "type": "prototype-assignment",
-          "line": 156,
+          "line": 90,
           "text": "Scene.prototype.createDefaultCameraOrLight = function (createArcRotateCamera = false, replace = false, attachCameraContr"
         },
         {
           "type": "prototype-assignment",
-          "line": 161,
+          "line": 96,
           "text": "Scene.prototype.createDefaultSkybox = function (environmentTexture?: BaseTexture, pbr = false, scale = 1000, blur = 0, s"
         },
         {
           "type": "prototype-assignment",
-          "line": 202,
+          "line": 138,
           "text": "Scene.prototype.createDefaultEnvironment = function (options: Partial<IEnvironmentHelperOptions>): Nullable<EnvironmentH"
         },
         {
           "type": "prototype-assignment",
-          "line": 209,
+          "line": 146,
           "text": "Scene.prototype.createDefaultVRExperience = function (webVROptions: VRExperienceHelperOptions = {}): VRExperienceHelper "
         },
         {
           "type": "prototype-assignment",
-          "line": 213,
+          "line": 151,
           "text": "Scene.prototype.createDefaultXRExperienceAsync = async function (options: WebXRDefaultExperienceOptions = {}): Promise<W"
         }
       ]
@@ -3947,9 +4357,24 @@
       "file": "Layers/effectLayerSceneComponent.ts",
       "sideEffects": [
         {
+          "type": "top-level-call",
+          "line": 15,
+          "text": "AddParser(SceneComponentConstants.NAME_EFFECTLAYER, (parsedData: any, scene: Scene, container: AssetContainer, rootUrl: "
+        },
+        {
           "type": "static-property-assignment",
-          "line": 242,
+          "line": 29,
           "text": "EffectLayer._SceneComponentInitialization = (scene: Scene) => {"
+        }
+      ]
+    },
+    {
+      "file": "Layers/glowLayer.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 27,
+          "text": "declare module \"../scene\" {"
         }
       ]
     },
@@ -3957,19 +4382,24 @@
       "file": "Layers/glowLayer.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 26,
-          "text": "declare module \"../scene\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 38,
+          "line": 12,
           "text": "Scene.prototype.getGlowLayerByName = function (name: string): Nullable<GlowLayer> {"
         },
         {
           "type": "RegisterClass",
-          "line": 570,
+          "line": 23,
           "text": "RegisterClass(\"BABYLON.GlowLayer\", GlowLayer);"
+        }
+      ]
+    },
+    {
+      "file": "Layers/highlightLayer.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 37,
+          "text": "declare module \"../scene\" {"
         }
       ]
     },
@@ -3977,19 +4407,24 @@
       "file": "Layers/highlightLayer.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 35,
-          "text": "declare module \"../scene\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 47,
+          "line": 12,
           "text": "Scene.prototype.getHighlightLayerByName = function (name: string): Nullable<HighlightLayer> {"
         },
         {
           "type": "RegisterClass",
-          "line": 640,
+          "line": 23,
           "text": "RegisterClass(\"BABYLON.HighlightLayer\", HighlightLayer);"
+        }
+      ]
+    },
+    {
+      "file": "Layers/selectionOutlineLayer.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 21,
+          "text": "declare module \"../scene\" {"
         }
       ]
     },
@@ -3997,19 +4432,24 @@
       "file": "Layers/selectionOutlineLayer.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 20,
-          "text": "declare module \"../scene\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 32,
+          "line": 12,
           "text": "Scene.prototype.getSelectionOutlineLayerByName = function (name: string): Nullable<SelectionOutlineLayer> {"
         },
         {
           "type": "RegisterClass",
-          "line": 407,
+          "line": 23,
           "text": "RegisterClass(\"BABYLON.SelectionOutlineLayer\", SelectionOutlineLayer);"
+        }
+      ]
+    },
+    {
+      "file": "LensFlares/lensFlareSystemSceneComponent.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 13,
+          "text": "declare module \"../scene\" {"
         }
       ]
     },
@@ -4017,38 +4457,38 @@
       "file": "LensFlares/lensFlareSystemSceneComponent.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 28,
-          "text": "declare module \"../scene\" {"
+          "type": "top-level-call",
+          "line": 16,
+          "text": "AddParser(SceneComponentConstants.NAME_LENSFLARESYSTEM, (parsedData: any, scene: Scene, container: AssetContainer, rootU"
         },
         {
           "type": "prototype-assignment",
-          "line": 69,
+          "line": 32,
           "text": "Scene.prototype.getLensFlareSystemByName = function (name: string): Nullable<LensFlareSystem> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 79,
+          "line": 43,
           "text": "Scene.prototype.getLensFlareSystemById = function (id: string): Nullable<LensFlareSystem> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 89,
+          "line": 54,
           "text": "Scene.prototype.getLensFlareSystemByID = function (id: string): Nullable<LensFlareSystem> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 93,
+          "line": 59,
           "text": "Scene.prototype.removeLensFlareSystem = function (toRemove: LensFlareSystem): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 101,
+          "line": 68,
           "text": "Scene.prototype.addLensFlareSystem = function (newLensFlareSystem: LensFlareSystem): void {"
         },
         {
           "type": "static-property-assignment",
-          "line": 213,
+          "line": 73,
           "text": "LensFlareSystem._SceneComponentInitialization = (scene: Scene) => {"
         }
       ]
@@ -4068,12 +4508,12 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 32,
+          "line": 11,
           "text": "Node.AddNodeConstructor(\"Light_Type_5\", (name, scene) => {"
         },
         {
           "type": "RegisterClass",
-          "line": 601,
+          "line": 17,
           "text": "RegisterClass(\"BABYLON.ClusteredLightContainer\", ClusteredLightContainer);"
         }
       ]
@@ -4083,7 +4523,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 61,
+          "line": 11,
           "text": "ClusteredLightContainer._SceneComponentInitialization = (scene) => {"
         }
       ]
@@ -4093,12 +4533,12 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 14,
+          "line": 12,
           "text": "Node.AddNodeConstructor(\"Light_Type_1\", (name, scene) => {"
         },
         {
           "type": "RegisterClass",
-          "line": 355,
+          "line": 18,
           "text": "RegisterClass(\"BABYLON.DirectionalLight\", DirectionalLight);"
         }
       ]
@@ -4113,7 +4553,7 @@
         },
         {
           "type": "RegisterClass",
-          "line": 136,
+          "line": 18,
           "text": "RegisterClass(\"BABYLON.HemisphericLight\", HemisphericLight);"
         }
       ]
@@ -4123,12 +4563,12 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 11,
+          "line": 12,
           "text": "Node.AddNodeConstructor(\"Light_Type_0\", (name, scene) => {"
         },
         {
           "type": "RegisterClass",
-          "line": 228,
+          "line": 18,
           "text": "RegisterClass(\"BABYLON.PointLight\", PointLight);"
         }
       ]
@@ -4138,12 +4578,12 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 14,
+          "line": 12,
           "text": "Node.AddNodeConstructor(\"Light_Type_4\", (name, scene) => {"
         },
         {
           "type": "RegisterClass",
-          "line": 222,
+          "line": 18,
           "text": "RegisterClass(\"BABYLON.RectAreaLight\", RectAreaLight);"
         }
       ]
@@ -4152,8 +4592,13 @@
       "file": "Lights/Shadows/shadowGeneratorSceneComponent.ts",
       "sideEffects": [
         {
+          "type": "top-level-call",
+          "line": 15,
+          "text": "AddParser(SceneComponentConstants.NAME_SHADOWGENERATOR, (parsedData: any, scene: Scene) => {"
+        },
+        {
           "type": "static-property-assignment",
-          "line": 141,
+          "line": 31,
           "text": "ShadowGenerator._SceneComponentInitialization = (scene: Scene) => {"
         }
       ]
@@ -4163,12 +4608,12 @@
       "sideEffects": [
         {
           "type": "AddNodeConstructor",
-          "line": 17,
+          "line": 12,
           "text": "Node.AddNodeConstructor(\"Light_Type_2\", (name, scene) => {"
         },
         {
           "type": "RegisterClass",
-          "line": 527,
+          "line": 18,
           "text": "RegisterClass(\"BABYLON.SpotLight\", SpotLight);"
         }
       ]
@@ -4178,8 +4623,18 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 345,
+          "line": 10,
           "text": "AbstractEngine.DefaultLoadingScreenFactory = (canvas: HTMLCanvasElement) => {"
+        }
+      ]
+    },
+    {
+      "file": "Loading/Plugins/babylonFileLoader.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 47,
+          "text": "RegisterSceneLoaderPlugin({"
         }
       ]
     },
@@ -4198,7 +4653,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 563,
+          "line": 11,
           "text": "SerializationHelper._ColorCurvesParser = ColorCurves.Parse;"
         }
       ]
@@ -4223,7 +4678,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 185,
+          "line": 11,
           "text": "SerializationHelper._FresnelParametersParser = FresnelParameters.Parse;"
         }
       ]
@@ -4263,7 +4718,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 654,
+          "line": 10,
           "text": "RegisterClass(`BABYLON.${GreasedLinePluginMaterial.GREASED_LINE_MATERIAL_NAME}`, GreasedLinePluginMaterial);"
         }
       ]
@@ -4273,12 +4728,12 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 658,
+          "line": 12,
           "text": "SerializationHelper._ImageProcessingConfigurationParser = ImageProcessingConfiguration.Parse;"
         },
         {
           "type": "RegisterClass",
-          "line": 661,
+          "line": 16,
           "text": "RegisterClass(\"BABYLON.ImageProcessingConfiguration\", ImageProcessingConfiguration);"
         }
       ]
@@ -4768,7 +5223,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 120,
+          "line": 10,
           "text": "RegisterClass(\"BABYLON.SmartFilterFragmentOutputBlock\", SmartFilterFragmentOutputBlock);"
         }
       ]
@@ -5504,12 +5959,22 @@
       ]
     },
     {
-      "file": "Materials/PBR/pbrMaterial.decalMap.ts",
+      "file": "Materials/PBR/pbrMaterial.decalMap.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 6,
           "text": "declare module \"./pbrBaseMaterial\" {"
+        }
+      ]
+    },
+    {
+      "file": "Materials/PBR/pbrMaterial.decalMap.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "Object.defineProperty(PBRBaseMaterial.prototype, \"decalMap\", {"
         }
       ]
     },
@@ -5564,12 +6029,22 @@
       ]
     },
     {
-      "file": "Materials/standardMaterial.decalMap.ts",
+      "file": "Materials/standardMaterial.decalMap.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 6,
           "text": "declare module \"./standardMaterial\" {"
+        }
+      ]
+    },
+    {
+      "file": "Materials/standardMaterial.decalMap.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "Object.defineProperty(StandardMaterial.prototype, \"decalMap\", {"
         }
       ]
     },
@@ -5578,13 +6053,23 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 1988,
+          "line": 11,
           "text": "RegisterClass(\"BABYLON.StandardMaterial\", StandardMaterial);"
         },
         {
           "type": "static-property-assignment",
-          "line": 1990,
+          "line": 14,
           "text": "Scene.DefaultMaterialFactory = (scene: Scene) => {"
+        }
+      ]
+    },
+    {
+      "file": "Materials/Textures/baseTexture.polynomial.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 7,
+          "text": "declare module \"./baseTexture\" {"
         }
       ]
     },
@@ -5592,14 +6077,14 @@
       "file": "Materials/Textures/baseTexture.polynomial.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 6,
-          "text": "declare module \"./baseTexture\" {"
+          "type": "prototype-assignment",
+          "line": 13,
+          "text": "BaseTexture.prototype.forceSphericalPolynomialsRecompute = function (): void {"
         },
         {
-          "type": "prototype-assignment",
-          "line": 24,
-          "text": "BaseTexture.prototype.forceSphericalPolynomialsRecompute = function (): void {"
+          "type": "top-level-call",
+          "line": 22,
+          "text": "Object.defineProperty(BaseTexture.prototype, \"sphericalPolynomial\", {"
         }
       ]
     },
@@ -5618,12 +6103,12 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 588,
+          "line": 11,
           "text": "Texture._CubeTextureParser = CubeTexture.Parse;"
         },
         {
           "type": "RegisterClass",
-          "line": 590,
+          "line": 14,
           "text": "RegisterClass(\"BABYLON.CubeTexture\", CubeTexture);"
         }
       ]
@@ -5653,7 +6138,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 354,
+          "line": 11,
           "text": "Texture._CreateMirror = (name: string, renderTargetSize: number, scene: Scene, generateMipMaps: boolean): MirrorTexture "
         }
       ]
@@ -5689,21 +6174,26 @@
       ]
     },
     {
-      "file": "Materials/Textures/renderTargetTexture.ts",
+      "file": "Materials/Textures/renderTargetTexture.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 27,
+          "line": 29,
           "text": "declare module \"../effect\" {"
-        },
+        }
+      ]
+    },
+    {
+      "file": "Materials/Textures/renderTargetTexture.ts",
+      "sideEffects": [
         {
           "type": "prototype-assignment",
-          "line": 44,
+          "line": 18,
           "text": "Effect.prototype.setDepthStencilTexture = function (channel: string, texture: Nullable<RenderTargetTexture>): void {"
         },
         {
           "type": "static-property-assignment",
-          "line": 1410,
+          "line": 24,
           "text": "Texture._CreateRenderTargetTexture = (name: string, renderTargetSize: number, scene: Scene, generateMipMaps: boolean, cr"
         }
       ]
@@ -5713,28 +6203,13 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 1247,
+          "line": 12,
           "text": "RegisterClass(\"BABYLON.Texture\", Texture);"
         },
         {
           "type": "static-property-assignment",
-          "line": 1248,
+          "line": 14,
           "text": "SerializationHelper._TextureParser = Texture.Parse;"
-        }
-      ]
-    },
-    {
-      "file": "Materials/Textures/videoTexture.pure.ts",
-      "sideEffects": [
-        {
-          "type": "static-property-assignment",
-          "line": 470,
-          "text": "Texture._CreateVideoTexture = ("
-        },
-        {
-          "type": "RegisterClass",
-          "line": 484,
-          "text": "RegisterClass(\"BABYLON.VideoTexture\", VideoTexture);"
         }
       ]
     },
@@ -5743,13 +6218,28 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 601,
+          "line": 14,
           "text": "Texture._CreateVideoTexture = ("
         },
         {
           "type": "RegisterClass",
-          "line": 615,
+          "line": 28,
           "text": "RegisterClass(\"BABYLON.VideoTexture\", VideoTexture);"
+        }
+      ]
+    },
+    {
+      "file": "Maths/math.color.pure.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 739,
+          "text": "Object.defineProperties(Color3.prototype, {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 1741,
+          "text": "Object.defineProperties(Color4.prototype, {"
         }
       ]
     },
@@ -5794,6 +6284,16 @@
       ]
     },
     {
+      "file": "Maths/math.plane.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 10,
+          "text": "declare module \"./math.plane.pure\" {"
+        }
+      ]
+    },
+    {
       "file": "Maths/math.polar.ts",
       "sideEffects": [
         {
@@ -5810,6 +6310,36 @@
           "type": "declare-module",
           "line": 3,
           "text": "declare module \"./math.size.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Maths/math.vector.pure.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 1176,
+          "text": "Object.defineProperties(Vector2.prototype, {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 3394,
+          "text": "Object.defineProperties(Vector3.prototype, {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 4482,
+          "text": "Object.defineProperties(Vector4.prototype, {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 6092,
+          "text": "Object.defineProperties(Quaternion.prototype, {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 8836,
+          "text": "Object.defineProperties(Matrix.prototype, {"
         }
       ]
     },
@@ -5839,6 +6369,36 @@
       ]
     },
     {
+      "file": "Maths/sphericalPolynomial.pure.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 44,
+          "text": "Math.sqrt(1 / (4 * Math.PI)),"
+        },
+        {
+          "type": "top-level-call",
+          "line": 47,
+          "text": "Math.sqrt(3 / (4 * Math.PI)),"
+        },
+        {
+          "type": "top-level-call",
+          "line": 50,
+          "text": "Math.sqrt(15 / (4 * Math.PI)),"
+        },
+        {
+          "type": "top-level-call",
+          "line": 52,
+          "text": "Math.sqrt(5 / (16 * Math.PI)),"
+        },
+        {
+          "type": "top-level-call",
+          "line": 54,
+          "text": "Math.sqrt(15 / (16 * Math.PI)),"
+        }
+      ]
+    },
+    {
       "file": "Maths/sphericalPolynomial.ts",
       "sideEffects": [
         {
@@ -5849,12 +6409,22 @@
       ]
     },
     {
-      "file": "Meshes/abstractMesh.decalMap.ts",
+      "file": "Meshes/abstractMesh.decalMap.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 7,
           "text": "declare module \"./abstractMesh\" {"
+        }
+      ]
+    },
+    {
+      "file": "Meshes/abstractMesh.decalMap.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 12,
+          "text": "Object.defineProperty(AbstractMesh.prototype, \"decalMap\", {"
         }
       ]
     },
@@ -5873,7 +6443,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 279,
+          "line": 18,
           "text": "Mesh.CreateBox = (name: string, size: number, scene: Nullable<Scene> = null, updatable?: boolean, sideOrientation?: numb"
         }
       ]
@@ -5883,7 +6453,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 298,
+          "line": 22,
           "text": "Mesh.CreateCapsule = (name: string, options: ICreateCapsuleOptions, scene?: Nullable<Scene>): Mesh => {"
         }
       ]
@@ -5893,7 +6463,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 374,
+          "line": 16,
           "text": "Mesh.CreateCylinder = ("
         }
       ]
@@ -5903,7 +6473,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 561,
+          "line": 13,
           "text": "Mesh.CreateDecal = (name: string, sourceMesh: AbstractMesh, position: Vector3, normal: Vector3, size: Vector3, angle: nu"
         }
       ]
@@ -5913,7 +6483,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 119,
+          "line": 17,
           "text": "Mesh.CreateDisc = (name: string, radius: number, tessellation: number, scene: Nullable<Scene> = null, updatable?: boolea"
         }
       ]
@@ -5923,17 +6493,17 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 507,
+          "line": 21,
           "text": "Mesh.CreateGround = (name: string, width: number, height: number, subdivisions: number, scene?: Scene, updatable?: boole"
         },
         {
           "type": "static-property-assignment",
-          "line": 518,
+          "line": 33,
           "text": "Mesh.CreateTiledGround = ("
         },
         {
           "type": "static-property-assignment",
-          "line": 542,
+          "line": 58,
           "text": "Mesh.CreateGroundFromHeightMap = ("
         }
       ]
@@ -5943,7 +6513,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 48,
+          "line": 19,
           "text": "Mesh.CreateHemisphere = (name: string, segments: number, diameter: number, scene?: Scene): Mesh => {"
         }
       ]
@@ -5953,7 +6523,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 432,
+          "line": 16,
           "text": "Mesh.CreateIcoSphere = (name: string, options: { radius?: number; flat?: boolean; subdivisions?: number; sideOrientation"
         }
       ]
@@ -5963,7 +6533,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 99,
+          "line": 13,
           "text": "Mesh.CreateLathe = (name: string, shape: Vector3[], radius: number, tessellation: number, scene: Scene, updatable?: bool"
         }
       ]
@@ -5973,12 +6543,12 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 312,
+          "line": 21,
           "text": "Mesh.CreateLines = (name: string, points: Vector3[], scene: Nullable<Scene> = null, updatable: boolean = false, instance"
         },
         {
           "type": "static-property-assignment",
-          "line": 321,
+          "line": 31,
           "text": "Mesh.CreateDashedLines = ("
         }
       ]
@@ -5988,7 +6558,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 119,
+          "line": 15,
           "text": "Mesh.CreatePlane = (name: string, size: number, scene: Scene, updatable?: boolean, sideOrientation?: number): Mesh => {"
         }
       ]
@@ -5998,12 +6568,12 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 236,
+          "line": 16,
           "text": "Mesh.CreatePolygon = (name: string, shape: Vector3[], scene: Scene, holes?: Vector3[][], updatable?: boolean, sideOrient"
         },
         {
           "type": "static-property-assignment",
-          "line": 246,
+          "line": 27,
           "text": "Mesh.ExtrudePolygon = ("
         }
       ]
@@ -6013,7 +6583,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 624,
+          "line": 18,
           "text": "Mesh.CreatePolyhedron = ("
         }
       ]
@@ -6023,7 +6593,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 445,
+          "line": 17,
           "text": "Mesh.CreateRibbon = ("
         }
       ]
@@ -6033,12 +6603,12 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 379,
+          "line": 14,
           "text": "Mesh.ExtrudeShape = ("
         },
         {
           "type": "static-property-assignment",
-          "line": 405,
+          "line": 41,
           "text": "Mesh.ExtrudeShapeCustom = ("
         }
       ]
@@ -6048,7 +6618,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 175,
+          "line": 16,
           "text": "Mesh.CreateSphere = (name: string, segments: number, diameter: number, scene?: Scene, updatable?: boolean, sideOrientati"
         }
       ]
@@ -6058,7 +6628,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 128,
+          "line": 16,
           "text": "Mesh.CreateTorus = (name: string, diameter: number, thickness: number, tessellation: number, scene?: Scene, updatable?: "
         }
       ]
@@ -6068,7 +6638,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 180,
+          "line": 16,
           "text": "Mesh.CreateTorusKnot = ("
         }
       ]
@@ -6078,8 +6648,18 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 193,
+          "line": 13,
           "text": "Mesh.CreateTube = ("
+        }
+      ]
+    },
+    {
+      "file": "Meshes/csg.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./csg.pure\" {"
         }
       ]
     },
@@ -6088,7 +6668,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 10,
+          "line": 11,
           "text": "Mesh._GoldbergMeshParser = (parsedMesh: any, scene: Scene): GoldbergMesh => {"
         }
       ]
@@ -6098,7 +6678,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 16,
+          "line": 11,
           "text": "Mesh._GreasedLineMeshParser = (parsedMesh: any, scene: Scene): Mesh => {"
         }
       ]
@@ -6108,7 +6688,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 13,
+          "line": 11,
           "text": "Mesh._GreasedLineRibbonMeshParser = (parsedMesh: any, scene: Scene): Mesh => {"
         }
       ]
@@ -6118,8 +6698,23 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 6,
+          "line": 11,
           "text": "Mesh._GroundMeshParser = (parsedMesh: any, scene: Scene): Mesh => {"
+        }
+      ]
+    },
+    {
+      "file": "Meshes/instancedMesh.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 655,
+          "text": "declare module \"./mesh\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 697,
+          "text": "declare module \"./abstractMesh\" {"
         }
       ]
     },
@@ -6128,42 +6723,32 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 21,
+          "line": 14,
           "text": "Mesh._instancedMeshFactory = (name: string, mesh: Mesh): InstancedMesh => {"
         },
         {
-          "type": "declare-module",
-          "line": 667,
-          "text": "declare module \"./mesh\" {"
-        },
-        {
-          "type": "declare-module",
-          "line": 709,
-          "text": "declare module \"./abstractMesh\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 721,
+          "line": 29,
           "text": "Mesh.prototype.registerInstancedBuffer = function (kind: string, stride: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 761,
+          "line": 70,
           "text": "Mesh.prototype._processInstancedBuffers = function (visibleInstances: Nullable<InstancedMesh[]>, renderSelf: boolean) {"
         },
         {
           "type": "prototype-assignment",
-          "line": 836,
+          "line": 146,
           "text": "Mesh.prototype._invalidateInstanceVertexArrayObject = function () {"
         },
         {
           "type": "prototype-assignment",
-          "line": 848,
+          "line": 159,
           "text": "Mesh.prototype._disposeInstanceSpecificData = function () {"
         },
         {
           "type": "RegisterClass",
-          "line": 871,
+          "line": 183,
           "text": "RegisterClass(\"BABYLON.InstancedMesh\", InstancedMesh);"
         }
       ]
@@ -6173,7 +6758,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 16,
+          "line": 11,
           "text": "Mesh._LinesMeshParser = (parsedMesh: any, scene: Scene): Mesh => {"
         }
       ]
@@ -6214,21 +6799,31 @@
       ]
     },
     {
-      "file": "Meshes/meshSimplificationSceneComponent.ts",
+      "file": "Meshes/meshSimplificationSceneComponent.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 8,
+          "line": 9,
           "text": "declare module \"../scene\" {"
         },
         {
           "type": "declare-module",
-          "line": 41,
+          "line": 24,
           "text": "declare module \"../Meshes/mesh\" {"
+        }
+      ]
+    },
+    {
+      "file": "Meshes/meshSimplificationSceneComponent.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 13,
+          "text": "Object.defineProperty(Scene.prototype, \"simplificationQueue\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 63,
+          "line": 33,
           "text": "Mesh.prototype.simplify = function ("
         }
       ]
@@ -7054,27 +7649,52 @@
       ]
     },
     {
-      "file": "Meshes/subMesh.project.ts",
+      "file": "Meshes/polygonMesh.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./polygonMesh.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Meshes/subMesh.project.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
           "line": 6,
           "text": "declare module \"./subMesh\" {"
-        },
+        }
+      ]
+    },
+    {
+      "file": "Meshes/subMesh.project.ts",
+      "sideEffects": [
         {
           "type": "prototype-assignment",
-          "line": 30,
+          "line": 16,
           "text": "SubMesh.prototype._projectOnTrianglesToRef = function (vector: Vector3, positions: Vector3[], indices: IndicesArray, ste"
         },
         {
           "type": "prototype-assignment",
-          "line": 70,
+          "line": 57,
           "text": "SubMesh.prototype._projectOnUnIndexedTrianglesToRef = function (vector: Vector3, positions: Vector3[], indices: IndicesA"
         },
         {
           "type": "prototype-assignment",
-          "line": 93,
+          "line": 81,
           "text": "SubMesh.prototype.projectToRef = function (vector: Vector3, positions: Vector3[], indices: IndicesArray, ref: Vector3): "
+        }
+      ]
+    },
+    {
+      "file": "Meshes/thinInstanceMesh.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 6,
+          "text": "declare module \"./mesh\" {"
         }
       ]
     },
@@ -7082,83 +7702,83 @@
       "file": "Meshes/thinInstanceMesh.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 8,
-          "text": "declare module \"./mesh\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 137,
+          "line": 15,
           "text": "Mesh.prototype.thinInstanceAdd = function (matrix: DeepImmutableObject<Matrix> | Array<DeepImmutableObject<Matrix>>, ref"
         },
         {
           "type": "prototype-assignment",
-          "line": 158,
+          "line": 37,
           "text": "Mesh.prototype.thinInstanceAddSelf = function (refresh: boolean = true): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 162,
+          "line": 42,
           "text": "Mesh.prototype.thinInstanceRegisterAttribute = function (kind: string, stride: number): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 180,
+          "line": 61,
           "text": "Mesh.prototype.thinInstanceSetMatrixAt = function (index: number, matrix: DeepImmutableObject<Matrix>, refresh: boolean "
         },
         {
           "type": "prototype-assignment",
-          "line": 204,
+          "line": 86,
           "text": "Mesh.prototype.thinInstanceSetAttributeAt = function (kind: string, index: number, value: Array<number>, refresh: boolea"
         },
         {
+          "type": "top-level-call",
+          "line": 108,
+          "text": "Object.defineProperty(Mesh.prototype, \"thinInstanceCount\", {"
+        },
+        {
           "type": "prototype-assignment",
-          "line": 241,
+          "line": 125,
           "text": "Mesh.prototype._thinInstanceCreateMatrixBuffer = function (kind: string, buffer: Float32Array, staticBuffer: boolean = t"
         },
         {
           "type": "prototype-assignment",
-          "line": 251,
+          "line": 136,
           "text": "Mesh.prototype.thinInstanceSetBuffer = function (kind: string, buffer: Nullable<Float32Array>, stride: number = 0, stati"
         },
         {
           "type": "prototype-assignment",
-          "line": 321,
+          "line": 207,
           "text": "Mesh.prototype.thinInstanceBufferUpdated = function (kind: string): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 353,
+          "line": 240,
           "text": "Mesh.prototype.thinInstancePartialBufferUpdate = function (kind: string, dataOrLength: Float32Array | number, offset: nu"
         },
         {
           "type": "prototype-assignment",
-          "line": 391,
+          "line": 279,
           "text": "Mesh.prototype.thinInstanceGetWorldMatrices = function (): Matrix[] {"
         },
         {
           "type": "prototype-assignment",
-          "line": 408,
+          "line": 297,
           "text": "Mesh.prototype.thinInstanceRefreshBoundingInfo = function (forceRefreshParentInfo: boolean = false, applySkeleton: boole"
         },
         {
           "type": "prototype-assignment",
-          "line": 449,
+          "line": 339,
           "text": "Mesh.prototype._thinInstanceRecreateBuffer = function (kind: string, staticBuffer: boolean = true) {"
         },
         {
           "type": "prototype-assignment",
-          "line": 481,
+          "line": 372,
           "text": "Mesh.prototype._thinInstanceUpdateBufferSize = function (kind: string, numInstances: number = 1) {"
         },
         {
           "type": "prototype-assignment",
-          "line": 535,
+          "line": 427,
           "text": "Mesh.prototype._thinInstanceInitializeUserStorage = function () {"
         },
         {
           "type": "prototype-assignment",
-          "line": 546,
+          "line": 439,
           "text": "Mesh.prototype._disposeThinInstanceSpecificData = function () {"
         }
       ]
@@ -7168,7 +7788,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 12,
+          "line": 11,
           "text": "Mesh._TrailMeshParser = (parsedMesh: any, scene: Scene) => {"
         }
       ]
@@ -7180,6 +7800,21 @@
           "type": "declare-module",
           "line": 3,
           "text": "declare module \"./asyncLock.pure\" {"
+        }
+      ]
+    },
+    {
+      "file": "Misc/basis.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 8,
+          "text": "Object.defineProperty(BasisTools, \"JSModuleURL\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 18,
+          "text": "Object.defineProperty(BasisTools, \"WasmModuleURL\", {"
         }
       ]
     },
@@ -7218,7 +7853,7 @@
       "sideEffects": [
         {
           "type": "top-level-call",
-          "line": 331,
+          "line": 18,
           "text": "InitSideEffects();"
         }
       ]
@@ -7228,12 +7863,12 @@
       "sideEffects": [
         {
           "type": "top-level-call",
-          "line": 880,
+          "line": 10,
           "text": "initSideEffects();"
         },
         {
           "type": "top-level-call",
-          "line": 1036,
+          "line": 13,
           "text": "_injectLTSFileTools(DecodeBase64UrlToBinary, DecodeBase64UrlToString, FileToolsOptions, IsBase64DataUrl, IsFileURL, Load"
         }
       ]
@@ -7279,17 +7914,32 @@
       ]
     },
     {
-      "file": "Misc/observable.extensions.ts",
+      "file": "Misc/observable.extensions.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 51,
+          "line": 54,
           "text": "declare module \"./observable\" {"
-        },
+        }
+      ]
+    },
+    {
+      "file": "Misc/observable.extensions.ts",
+      "sideEffects": [
         {
           "type": "prototype-assignment",
-          "line": 72,
+          "line": 10,
           "text": "Observable.prototype.notifyObserversWithPromise = async function <T>(eventData: T, mask: number = -1, target?: any, curr"
+        }
+      ]
+    },
+    {
+      "file": "Misc/observableCoroutine.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 34,
+          "text": "declare module \"./observable\" {"
         }
       ]
     },
@@ -7297,18 +7947,13 @@
       "file": "Misc/observableCoroutine.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 31,
-          "text": "declare module \"./observable\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 59,
+          "line": 13,
           "text": "Observable.prototype.runCoroutineAsync = function (coroutine: AsyncCoroutine<void>) {"
         },
         {
           "type": "prototype-assignment",
-          "line": 69,
+          "line": 24,
           "text": "Observable.prototype.cancelAllCoroutines = function () {"
         }
       ]
@@ -7364,11 +8009,21 @@
       ]
     },
     {
+      "file": "Misc/sceneSerializer.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 3,
+          "text": "declare module \"./sceneSerializer.pure\" {"
+        }
+      ]
+    },
+    {
       "file": "Misc/screenshotTools.ts",
       "sideEffects": [
         {
           "type": "top-level-call",
-          "line": 1023,
+          "line": 8,
           "text": "initSideEffects();"
         }
       ]
@@ -7693,7 +8348,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 10,
+          "line": 11,
           "text": "AbstractEngine.OfflineProviderFactory = (urlToScene: string, callbackManifestChecked: (checked: boolean) => any, disable"
         }
       ]
@@ -8233,8 +8888,23 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 1281,
+          "line": 10,
           "text": "SubEmitter._ParseParticleSystem = ParticleSystem.Parse;"
+        }
+      ]
+    },
+    {
+      "file": "Particles/particleSystemComponent.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 10,
+          "text": "declare module \"../Engines/abstractEngine\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 44,
+          "text": "declare module \"../Meshes/mesh\" {"
         }
       ]
     },
@@ -8242,28 +8912,28 @@
       "file": "Particles/particleSystemComponent.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 41,
-          "text": "declare module \"../Engines/abstractEngine\" {"
+          "type": "top-level-call",
+          "line": 22,
+          "text": "AddParser(SceneComponentConstants.NAME_PARTICLESYSTEM, (parsedData: any, scene: Scene, container: AssetContainer, rootUr"
+        },
+        {
+          "type": "top-level-call",
+          "line": 39,
+          "text": "AddIndividualParser(SceneComponentConstants.NAME_PARTICLESYSTEM, (parsedParticleSystem: any, scene: Scene, rootUrl: stri"
         },
         {
           "type": "prototype-assignment",
-          "line": 75,
+          "line": 50,
           "text": "AbstractEngine.prototype.createEffectForParticles = function ("
         },
         {
-          "type": "declare-module",
-          "line": 136,
-          "text": "declare module \"../Meshes/mesh\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 153,
+          "line": 112,
           "text": "Mesh.prototype.getEmittedParticleSystems = function (): IParticleSystem[] {"
         },
         {
           "type": "prototype-assignment",
-          "line": 164,
+          "line": 124,
           "text": "Mesh.prototype.getHierarchyEmittedParticleSystems = function (): IParticleSystem[] {"
         }
       ]
@@ -8279,42 +8949,57 @@
       ]
     },
     {
-      "file": "Physics/joinedPhysicsEngineComponent.ts",
+      "file": "Physics/joinedPhysicsEngineComponent.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
           "line": 15,
           "text": "declare module \"../scene\" {"
-        },
+        }
+      ]
+    },
+    {
+      "file": "Physics/joinedPhysicsEngineComponent.ts",
+      "sideEffects": [
         {
           "type": "prototype-assignment",
-          "line": 70,
+          "line": 24,
           "text": "Scene.prototype.getPhysicsEngine = function (): Nullable<IPhysicsEngine> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 80,
+          "line": 35,
           "text": "Scene.prototype.enablePhysics = function (gravity: Nullable<Vector3> = null, plugin?: IPhysicsEnginePluginV1 | IPhysicsE"
         },
         {
           "type": "prototype-assignment",
-          "line": 111,
+          "line": 67,
           "text": "Scene.prototype.disablePhysicsEngine = function (): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 124,
+          "line": 81,
           "text": "Scene.prototype.isPhysicsEnabled = function (): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 132,
+          "line": 90,
           "text": "Scene.prototype.deleteCompoundImpostor = function (compound: any): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 144,
+          "line": 103,
           "text": "Scene.prototype._advancePhysicsEngineStep = function (step: number) {"
+        }
+      ]
+    },
+    {
+      "file": "Physics/v1/physicsEngineComponent.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 11,
+          "text": "declare module \"../../Meshes/abstractMesh\" {"
         }
       ]
     },
@@ -8322,23 +9007,23 @@
       "file": "Physics/v1/physicsEngineComponent.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 10,
-          "text": "declare module \"../../Meshes/abstractMesh\" {"
+          "type": "top-level-call",
+          "line": 15,
+          "text": "Object.defineProperty(AbstractMesh.prototype, \"physicsImpostor\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 86,
+          "line": 49,
           "text": "AbstractMesh.prototype.getPhysicsImpostor = function (): Nullable<PhysicsImpostor> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 97,
+          "line": 61,
           "text": "AbstractMesh.prototype.applyImpulse = function (force: Vector3, contactPoint: Vector3): AbstractMesh {"
         },
         {
           "type": "prototype-assignment",
-          "line": 114,
+          "line": 79,
           "text": "AbstractMesh.prototype.setPhysicsLinkWith = function (otherMesh: Mesh, pivot1: Vector3, pivot2: Vector3, options?: any):"
         }
       ]
@@ -8348,7 +9033,7 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 191,
+          "line": 11,
           "text": "Mesh._PhysicsImpostorParser = function (scene: Scene, physicObject: IPhysicsEnabledObject, jsonObject: any): PhysicsImpo"
         }
       ]
@@ -8358,8 +9043,18 @@
       "sideEffects": [
         {
           "type": "static-property-assignment",
-          "line": 798,
+          "line": 10,
           "text": "PhysicsEngine.DefaultPluginFactory = () => {"
+        }
+      ]
+    },
+    {
+      "file": "Physics/v2/physicsEngineComponent.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 11,
+          "text": "declare module \"../../Meshes/transformNode\" {"
         }
       ]
     },
@@ -8367,28 +9062,28 @@
       "file": "Physics/v2/physicsEngineComponent.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 10,
-          "text": "declare module \"../../Meshes/transformNode\" {"
+          "type": "top-level-call",
+          "line": 13,
+          "text": "Object.defineProperty(TransformNode.prototype, \"physicsBody\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 82,
+          "line": 46,
           "text": "TransformNode.prototype.getPhysicsBody = function (): Nullable<PhysicsBody> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 93,
+          "line": 58,
           "text": "TransformNode.prototype.applyImpulse = function (force: Vector3, contactPoint: Vector3): TransformNode {"
         },
         {
           "type": "prototype-assignment",
-          "line": 107,
+          "line": 73,
           "text": "TransformNode.prototype.applyAngularImpulse = function (angularImpulse: Vector3): TransformNode {"
         },
         {
           "type": "prototype-assignment",
-          "line": 121,
+          "line": 88,
           "text": "TransformNode.prototype.applyTorque = function (torque: Vector3): TransformNode {"
         }
       ]
@@ -8548,13 +9243,28 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 87,
+          "line": 12,
           "text": "RegisterClass(\"BABYLON.PassPostProcess\", PassPostProcess);"
         },
         {
           "type": "static-property-assignment",
-          "line": 181,
+          "line": 15,
           "text": "AbstractEngine._RescalePostProcessFactory = (engine: AbstractEngine) => {"
+        }
+      ]
+    },
+    {
+      "file": "PostProcesses/postProcess.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 34,
+          "text": "declare module \"../Engines/abstractEngine\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 55,
+          "text": "declare module \"../Materials/effect\" {"
         }
       ]
     },
@@ -8562,38 +9272,28 @@
       "file": "PostProcesses/postProcess.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 31,
-          "text": "declare module \"../Engines/abstractEngine\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 52,
+          "line": 13,
           "text": "AbstractEngine.prototype.setTextureFromPostProcess = function (channel: number, postProcess: Nullable<PostProcess>, name"
         },
         {
           "type": "prototype-assignment",
-          "line": 65,
+          "line": 27,
           "text": "AbstractEngine.prototype.setTextureFromPostProcessOutput = function (channel: number, postProcess: Nullable<PostProcess>"
         },
         {
-          "type": "declare-module",
-          "line": 69,
-          "text": "declare module \"../Materials/effect\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 94,
+          "line": 37,
           "text": "Effect.prototype.setTextureFromPostProcess = function (channel: string, postProcess: Nullable<PostProcess>): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 104,
+          "line": 48,
           "text": "Effect.prototype.setTextureFromPostProcessOutput = function (channel: string, postProcess: Nullable<PostProcess>): void "
         },
         {
           "type": "RegisterClass",
-          "line": 1293,
+          "line": 53,
           "text": "RegisterClass(\"BABYLON.PostProcess\", PostProcess);"
         }
       ]
@@ -8653,7 +9353,7 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 119,
+          "line": 10,
           "text": "RegisterClass(`BABYLON.TAAJitterMaterialPlugin`, TAAJitterMaterialPlugin);"
         }
       ]
@@ -8669,12 +9369,22 @@
       ]
     },
     {
-      "file": "PostProcesses/RenderPipeline/postProcessRenderPipelineManagerSceneComponent.ts",
+      "file": "PostProcesses/RenderPipeline/postProcessRenderPipelineManagerSceneComponent.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 8,
           "text": "declare module \"../../scene\" {"
+        }
+      ]
+    },
+    {
+      "file": "PostProcesses/RenderPipeline/postProcessRenderPipelineManagerSceneComponent.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 12,
+          "text": "Object.defineProperty(Scene.prototype, \"postProcessRenderPipelineManager\", {"
         }
       ]
     },
@@ -8735,16 +9445,6 @@
           "type": "declare-module",
           "line": 12,
           "text": "declare module \"../scene\" {"
-        },
-        {
-          "type": "prototype-assignment",
-          "line": 36,
-          "text": "Scene.prototype.removeReflectionProbe = function (toRemove: ReflectionProbe): number {"
-        },
-        {
-          "type": "prototype-assignment",
-          "line": 49,
-          "text": "Scene.prototype.addReflectionProbe = function (newReflectionProbe: ReflectionProbe): void {"
         }
       ]
     },
@@ -8753,8 +9453,33 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 4,
           "text": "declare module \"./reflectionProbe.pure\" {"
+        },
+        {
+          "type": "prototype-assignment",
+          "line": 13,
+          "text": "Scene.prototype.removeReflectionProbe = function (toRemove: ReflectionProbe): number {"
+        },
+        {
+          "type": "prototype-assignment",
+          "line": 26,
+          "text": "Scene.prototype.addReflectionProbe = function (newReflectionProbe: ReflectionProbe): void {"
+        }
+      ]
+    },
+    {
+      "file": "Rendering/boundingBoxRenderer.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 28,
+          "text": "declare module \"../scene\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 50,
+          "text": "declare module \"../Meshes/abstractMesh\" {"
         }
       ]
     },
@@ -8762,19 +9487,29 @@
       "file": "Rendering/boundingBoxRenderer.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 25,
-          "text": "declare module \"../scene\" {"
+          "type": "top-level-call",
+          "line": 11,
+          "text": "Object.defineProperty(Scene.prototype, \"forceShowBoundingBoxes\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 62,
+          "line": 27,
           "text": "Scene.prototype.getBoundingBoxRenderer = function (): BoundingBoxRenderer {"
         },
         {
+          "type": "top-level-call",
+          "line": 36,
+          "text": "Object.defineProperty(AbstractMesh.prototype, \"showBoundingBox\", {"
+        }
+      ]
+    },
+    {
+      "file": "Rendering/depthPeelingSceneComponent.pure.ts",
+      "sideEffects": [
+        {
           "type": "declare-module",
-          "line": 70,
-          "text": "declare module \"../Meshes/abstractMesh\" {"
+          "line": 11,
+          "text": "declare module \"../scene\" {"
         }
       ]
     },
@@ -8782,8 +9517,23 @@
       "file": "Rendering/depthPeelingSceneComponent.ts",
       "sideEffects": [
         {
+          "type": "top-level-call",
+          "line": 13,
+          "text": "Object.defineProperty(Scene.prototype, \"depthPeelingRenderer\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 33,
+          "text": "Object.defineProperty(Scene.prototype, \"useOrderIndependentTransparency\", {"
+        }
+      ]
+    },
+    {
+      "file": "Rendering/depthRendererSceneComponent.pure.ts",
+      "sideEffects": [
+        {
           "type": "declare-module",
-          "line": 9,
+          "line": 12,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -8792,24 +9542,44 @@
       "file": "Rendering/depthRendererSceneComponent.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 11,
-          "text": "declare module \"../scene\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 44,
+          "line": 16,
           "text": "Scene.prototype.enableDepthRenderer = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 76,
+          "line": 49,
           "text": "Scene.prototype.disableDepthRenderer = function (camera?: Nullable<Camera>): void {"
         },
         {
           "type": "static-property-assignment",
-          "line": 160,
+          "line": 59,
           "text": "DepthRenderer._SceneComponentInitialization = (scene: Scene) => {"
+        }
+      ]
+    },
+    {
+      "file": "Rendering/edgesRenderer.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 23,
+          "text": "declare module \"../scene\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 31,
+          "text": "declare module \"../Meshes/abstractMesh\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 41,
+          "text": "declare module \"../Meshes/linesMesh\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 56,
+          "text": "declare module \"../Meshes/linesMesh\" {"
         }
       ]
     },
@@ -8817,44 +9587,39 @@
       "file": "Rendering/edgesRenderer.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 21,
-          "text": "declare module \"../scene\" {"
-        },
-        {
-          "type": "declare-module",
-          "line": 29,
-          "text": "declare module \"../Meshes/abstractMesh\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 38,
+          "line": 10,
           "text": "AbstractMesh.prototype.disableEdgesRendering = function (): AbstractMesh {"
         },
         {
           "type": "prototype-assignment",
-          "line": 46,
+          "line": 19,
           "text": "AbstractMesh.prototype.enableEdgesRendering = function (epsilon = 0.95, checkVerticesInsteadOfIndices = false, options?:"
         },
         {
-          "type": "declare-module",
-          "line": 60,
-          "text": "declare module \"../Meshes/linesMesh\" {"
+          "type": "top-level-call",
+          "line": 26,
+          "text": "Object.defineProperty(AbstractMesh.prototype, \"edgesRenderer\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 74,
+          "line": 34,
           "text": "LinesMesh.prototype.enableEdgesRendering = function (epsilon = 0.95, checkVerticesInsteadOfIndices = false): AbstractMes"
         },
         {
-          "type": "declare-module",
-          "line": 80,
-          "text": "declare module \"../Meshes/linesMesh\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 96,
+          "line": 42,
           "text": "InstancedLinesMesh.prototype.enableEdgesRendering = function (epsilon = 0.95, checkVerticesInsteadOfIndices = false): In"
+        }
+      ]
+    },
+    {
+      "file": "Rendering/fluidRenderer/fluidRenderer.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 24,
+          "text": "declare module \"../../scene\" {"
         }
       ]
     },
@@ -8862,18 +9627,18 @@
       "file": "Rendering/fluidRenderer/fluidRenderer.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 21,
-          "text": "declare module \"../../scene\" {"
+          "type": "top-level-call",
+          "line": 11,
+          "text": "Object.defineProperty(Scene.prototype, \"fluidRenderer\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 56,
+          "line": 23,
           "text": "Scene.prototype.enableFluidRenderer = function (): Nullable<FluidRenderer> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 66,
+          "line": 34,
           "text": "Scene.prototype.disableFluidRenderer = function (): void {"
         }
       ]
@@ -8883,8 +9648,18 @@
       "sideEffects": [
         {
           "type": "top-level-call",
-          "line": 60,
+          "line": 9,
           "text": "AddClipPlaneUniforms(Uniforms);"
+        }
+      ]
+    },
+    {
+      "file": "Rendering/geometryBufferRendererSceneComponent.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 11,
+          "text": "declare module \"../scene\" {"
         }
       ]
     },
@@ -8892,23 +9667,23 @@
       "file": "Rendering/geometryBufferRendererSceneComponent.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 10,
-          "text": "declare module \"../scene\" {"
+          "type": "top-level-call",
+          "line": 14,
+          "text": "Object.defineProperty(Scene.prototype, \"geometryBufferRenderer\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 54,
+          "line": 28,
           "text": "Scene.prototype.enableGeometryBufferRenderer = function ("
         },
         {
           "type": "prototype-assignment",
-          "line": 71,
+          "line": 46,
           "text": "Scene.prototype.disableGeometryBufferRenderer = function (): void {"
         },
         {
           "type": "static-property-assignment",
-          "line": 132,
+          "line": 56,
           "text": "GeometryBufferRenderer._SceneComponentInitialization = (scene: Scene) => {"
         }
       ]
@@ -8918,8 +9693,18 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 1056,
+          "line": 10,
           "text": "RegisterClass(`BABYLON.GIRSMRenderPluginMaterial`, GIRSMRenderPluginMaterial);"
+        }
+      ]
+    },
+    {
+      "file": "Rendering/iblCdfGeneratorSceneComponent.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 11,
+          "text": "declare module \"../scene\" {"
         }
       ]
     },
@@ -8927,23 +9712,23 @@
       "file": "Rendering/iblCdfGeneratorSceneComponent.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 9,
-          "text": "declare module \"../scene\" {"
+          "type": "top-level-call",
+          "line": 13,
+          "text": "Object.defineProperty(Scene.prototype, \"iblCdfGenerator\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 49,
+          "line": 27,
           "text": "Scene.prototype.enableIblCdfGenerator = function (): Nullable<IblCdfGenerator> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 65,
+          "line": 44,
           "text": "Scene.prototype.disableIblCdfGenerator = function (): void {"
         },
         {
           "type": "static-property-assignment",
-          "line": 128,
+          "line": 54,
           "text": "IblCdfGenerator._SceneComponentInitialization = (scene: Scene) => {"
         }
       ]
@@ -8953,8 +9738,23 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 280,
+          "line": 10,
           "text": "RegisterClass(`BABYLON.IBLShadowsPluginMaterial`, IBLShadowsPluginMaterial);"
+        }
+      ]
+    },
+    {
+      "file": "Rendering/outlineRenderer.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 21,
+          "text": "declare module \"../scene\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 35,
+          "text": "declare module \"../Meshes/abstractMesh\" {"
         }
       ]
     },
@@ -8962,19 +9762,34 @@
       "file": "Rendering/outlineRenderer.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 18,
-          "text": "declare module \"../scene\" {"
-        },
-        {
           "type": "prototype-assignment",
-          "line": 36,
+          "line": 15,
           "text": "Scene.prototype.getOutlineRenderer = function (): OutlineRenderer {"
         },
         {
+          "type": "top-level-call",
+          "line": 23,
+          "text": "Object.defineProperty(Mesh.prototype, \"renderOutline\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 39,
+          "text": "Object.defineProperty(Mesh.prototype, \"renderOverlay\", {"
+        }
+      ]
+    },
+    {
+      "file": "Rendering/prePassRendererSceneComponent.pure.ts",
+      "sideEffects": [
+        {
           "type": "declare-module",
-          "line": 43,
-          "text": "declare module \"../Meshes/abstractMesh\" {"
+          "line": 16,
+          "text": "declare module \"../scene\" {"
+        },
+        {
+          "type": "declare-module",
+          "line": 40,
+          "text": "declare module \"../Materials/Textures/renderTargetTexture\" {"
         }
       ]
     },
@@ -8982,28 +9797,23 @@
       "file": "Rendering/prePassRendererSceneComponent.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 15,
-          "text": "declare module \"../scene\" {"
-        },
-        {
-          "type": "declare-module",
-          "line": 39,
-          "text": "declare module \"../Materials/Textures/renderTargetTexture\" {"
+          "type": "top-level-call",
+          "line": 14,
+          "text": "Object.defineProperty(Scene.prototype, \"prePassRenderer\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 64,
+          "line": 28,
           "text": "Scene.prototype.enablePrePassRenderer = function (): Nullable<PrePassRenderer> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 79,
+          "line": 44,
           "text": "Scene.prototype.disablePrePassRenderer = function (): void {"
         },
         {
           "type": "static-property-assignment",
-          "line": 206,
+          "line": 54,
           "text": "PrePassRenderer._SceneComponentInitialization = (scene: Scene) => {"
         }
       ]
@@ -9013,8 +9823,18 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 537,
+          "line": 10,
           "text": "RegisterClass(`BABYLON.RSMCreatePluginMaterial`, RSMCreatePluginMaterial);"
+        }
+      ]
+    },
+    {
+      "file": "Rendering/subSurfaceSceneComponent.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 9,
+          "text": "declare module \"../scene\" {"
         }
       ]
     },
@@ -9022,23 +9842,28 @@
       "file": "Rendering/subSurfaceSceneComponent.ts",
       "sideEffects": [
         {
-          "type": "declare-module",
-          "line": 23,
-          "text": "declare module \"../scene\" {"
+          "type": "top-level-call",
+          "line": 16,
+          "text": "AddParser(SceneComponentConstants.NAME_SUBSURFACE, (parsedData: any, scene: Scene) => {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 30,
+          "text": "Object.defineProperty(Scene.prototype, \"subSurfaceConfiguration\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 62,
+          "line": 46,
           "text": "Scene.prototype.enableSubSurfaceForPrePass = function (): Nullable<SubSurfaceConfiguration> {"
         },
         {
           "type": "prototype-assignment",
-          "line": 77,
+          "line": 62,
           "text": "Scene.prototype.disableSubSurfaceForPrePass = function (): void {"
         },
         {
           "type": "static-property-assignment",
-          "line": 172,
+          "line": 72,
           "text": "SubSurfaceConfiguration._SceneComponentInitialization = (scene: Scene) => {"
         }
       ]
@@ -15294,52 +16119,127 @@
       ]
     },
     {
-      "file": "Sprites/spriteSceneComponent.ts",
+      "file": "Sprites/spriteSceneComponent.pure.ts",
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 16,
+          "line": 19,
           "text": "declare module \"../scene\" {"
+        }
+      ]
+    },
+    {
+      "file": "Sprites/spriteSceneComponent.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 19,
+          "text": "Object.defineProperty(Scene.prototype, \"onNewSpriteManagerAddedObservable\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 32,
+          "text": "Object.defineProperty(Scene.prototype, \"onSpriteManagerRemovedObservable\", {"
         },
         {
           "type": "prototype-assignment",
-          "line": 142,
+          "line": 45,
           "text": "Scene.prototype._internalPickSprites = function (ray: Ray, predicate?: (sprite: Sprite) => boolean, fastCheck?: boolean,"
         },
         {
           "type": "prototype-assignment",
-          "line": 184,
+          "line": 88,
           "text": "Scene.prototype._internalMultiPickSprites = function (ray: Ray, predicate?: (sprite: Sprite) => boolean, camera?: Camera"
         },
         {
           "type": "prototype-assignment",
-          "line": 217,
+          "line": 122,
           "text": "Scene.prototype.pickSprite = function (x: number, y: number, predicate?: (sprite: Sprite) => boolean, fastCheck?: boolea"
         },
         {
           "type": "prototype-assignment",
-          "line": 232,
+          "line": 138,
           "text": "Scene.prototype.pickSpriteWithRay = function (ray: Ray, predicate?: (sprite: Sprite) => boolean, fastCheck?: boolean, ca"
         },
         {
           "type": "prototype-assignment",
-          "line": 254,
+          "line": 161,
           "text": "Scene.prototype.multiPickSprite = function (x: number, y: number, predicate?: (sprite: Sprite) => boolean, camera?: Came"
         },
         {
           "type": "prototype-assignment",
-          "line": 260,
+          "line": 168,
           "text": "Scene.prototype.multiPickSpriteWithRay = function (ray: Ray, predicate?: (sprite: Sprite) => boolean, camera?: Camera): "
         },
         {
           "type": "prototype-assignment",
-          "line": 277,
+          "line": 186,
           "text": "Scene.prototype.setPointerOverSprite = function (sprite: Nullable<Sprite>): void {"
         },
         {
           "type": "prototype-assignment",
-          "line": 292,
+          "line": 202,
           "text": "Scene.prototype.getPointerOverSprite = function (): Nullable<Sprite> {"
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRAnchorSystem.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRBackgroundRemover.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRControllerMovement.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 10,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRControllerPhysics.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRControllerPointerSelection.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRControllerTeleportation.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 10,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
         }
       ]
     },
@@ -15348,8 +16248,223 @@
       "sideEffects": [
         {
           "type": "RegisterClass",
-          "line": 292,
+          "line": 11,
           "text": "RegisterClass(`BABYLON.DepthSensingMaterialPlugin`, WebXRDepthSensingMaterialPlugin);"
+        },
+        {
+          "type": "top-level-call",
+          "line": 14,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRDOMOverlay.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXREyeTracking.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 10,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRFeaturePointSystem.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRHandTracking.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRHitTest.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRImageTracking.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRLayers.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRLightEstimation.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRMeshDetector.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 10,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRNearInteraction.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRPlaneDetector.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRRawCameraAccess.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 10,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRSpaceWarp.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRWalkingLocomotion.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 11,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
+        }
+      ]
+    },
+    {
+      "file": "XR/motionController/webXRGenericHandController.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 12,
+          "text": "WebXRMotionControllerManager.RegisterController(\"generic-hand-select-grasp\", (xrInput: XRInputSource, scene: Scene) => {"
+        }
+      ]
+    },
+    {
+      "file": "XR/motionController/webXRHTCViveMotionController.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 12,
+          "text": "WebXRMotionControllerManager.RegisterController(\"htc-vive\", (xrInput: XRInputSource, scene: Scene) => {"
+        }
+      ]
+    },
+    {
+      "file": "XR/motionController/webXRMicrosoftMixedRealityController.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 12,
+          "text": "WebXRMotionControllerManager.RegisterController(\"windows-mixed-reality\", (xrInput: XRInputSource, scene: Scene) => {"
+        }
+      ]
+    },
+    {
+      "file": "XR/motionController/webXRMotionControllerManager.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 12,
+          "text": "WebXRMotionControllerManager.RegisterController(WebXRGenericTriggerMotionController.ProfileId, (xrInput: XRInputSource, "
+        },
+        {
+          "type": "top-level-call",
+          "line": 18,
+          "text": "WebXRMotionControllerManager.DefaultFallbacks();"
+        }
+      ]
+    },
+    {
+      "file": "XR/motionController/webXROculusHandController.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 12,
+          "text": "WebXRMotionControllerManager.RegisterController(\"oculus-hand\", (xrInput: XRInputSource, scene: Scene) => {"
+        }
+      ]
+    },
+    {
+      "file": "XR/motionController/webXROculusTouchMotionController.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 12,
+          "text": "WebXRMotionControllerManager.RegisterController(\"oculus-touch\", (xrInput: XRInputSource, scene: Scene) => {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 17,
+          "text": "WebXRMotionControllerManager.RegisterController(\"oculus-touch-legacy\", (xrInput: XRInputSource, scene: Scene) => {"
         }
       ]
     },
@@ -15358,7 +16473,7 @@
       "sideEffects": [
         {
           "type": "top-level-call",
-          "line": 91,
+          "line": 11,
           "text": "RegisterNativeTypeAsync(\"NativeXRFrame\", NativeXRFrame);"
         }
       ]

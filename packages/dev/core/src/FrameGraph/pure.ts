@@ -1,14 +1,14 @@
 /** Pure barrel — re-exports only side-effect-free modules */
 /* eslint-disable @typescript-eslint/no-restricted-imports */
-export * from "./Node/nodeRenderGraph";
+export * from "./Node/nodeRenderGraph.pure";
 export * from "./Node/nodeRenderGraphBlock";
-export * from "./Node/nodeRenderGraphBlockConnectionPoint";
+export * from "./Node/nodeRenderGraphBlockConnectionPoint.pure";
 export * from "./Node/nodeRenderGraphBuildState";
 export * from "./Node/Types/nodeRenderGraphTypes";
 export * from "./Node/Blocks/pure";
-export * from "./Passes/objectListPass";
+export * from "./Passes/objectListPass.pure";
 export * from "./Passes/pass";
-export * from "./Passes/renderPass";
+export * from "./Passes/renderPass.pure";
 export * from "./Tasks/Layers/glowLayerTask";
 export * from "./Tasks/Layers/highlightLayerTask";
 export * from "./Tasks/Layers/selectionOutlineTask";
@@ -45,7 +45,7 @@ export * from "./Tasks/Texture/clearTextureTask";
 export * from "./Tasks/Texture/copyToBackbufferColorTask";
 export * from "./Tasks/Texture/copyToTextureTask";
 export * from "./Tasks/Texture/generateMipMapsTask";
-export * from "./Tasks/Rendering/csmShadowGeneratorTask";
+export * from "./Tasks/Rendering/csmShadowGeneratorTask.pure";
 export * from "./Tasks/Rendering/geometryRendererTask";
 export * from "./Tasks/Rendering/objectRendererTask";
 export * from "./Tasks/Rendering/shadowGeneratorTask";
@@ -56,6 +56,8 @@ export * from "./frameGraphObjectList";
 export * from "./frameGraphRenderContext";
 export * from "./frameGraphRenderTarget";
 export * from "./frameGraphTask";
-export * from "./frameGraphTextureManager";
+export * from "./frameGraphTextureManager.pure";
 export * from "./frameGraphTypes";
 export * from "./frameGraphUtils";
+export * from "./Node/pure";
+export * from "./Passes/pure";

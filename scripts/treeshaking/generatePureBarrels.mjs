@@ -68,6 +68,7 @@ let keptAsIs = 0;
 let skippedBareImports = 0;
 let emptyBarrels = 0;
 let subdirRewrites = 0;
+let orphanedAdded = 0;
 
 // ── Recursive barrel processor ──────────────────────────────────────────────
 const processedDirs = new Map(); // dir → boolean (hasPure)
@@ -107,12 +108,29 @@ function processDirectory(dir) {
             continue;
         }
 
-        // Skip bare side-effect imports: import "./file"
+        // Bare side-effect imports: import "./file"
+        // If a .pure.ts companion exists, emit an export for the pure types
         if (/^import\s+["']/.test(trimmed)) {
-            skippedBareImports++;
-            if (VERBOSE) {
-                const relDir = relative(SRC_ROOT, dir);
-                console.log(`  SKIP bare import in ${relDir}/index.ts: ${trimmed}`);
+            const bareMatch = trimmed.match(/^import\s+["'](.+?)["']\s*;?\s*$/);
+            if (bareMatch) {
+                const bareSpec = bareMatch[1];
+                const bareRelPath = relative(SRC_ROOT, resolve(dir, bareSpec));
+                const barePureRelPath = bareRelPath + ".pure";
+                if (pureFileSet.has(barePureRelPath)) {
+                    rewrittenToPure++;
+                    outputLines.push(`export * from "${bareSpec}.pure";`);
+                    hasExports = true;
+                    if (VERBOSE) {
+                        const relDir = relative(SRC_ROOT, dir);
+                        console.log(`  BARE→PURE in ${relDir}/index.ts: ${bareSpec} → ${bareSpec}.pure`);
+                    }
+                } else {
+                    skippedBareImports++;
+                    if (VERBOSE) {
+                        const relDir = relative(SRC_ROOT, dir);
+                        console.log(`  SKIP bare import in ${relDir}/index.ts: ${trimmed}`);
+                    }
+                }
             }
             continue;
         }
@@ -148,6 +166,33 @@ function processDirectory(dir) {
         // Anything else we don't understand — warn and skip
         if (VERBOSE) {
             console.log(`  SKIP unknown line in ${relative(SRC_ROOT, dir)}/index.ts: ${trimmed}`);
+        }
+    }
+
+    // Scan for orphaned .pure.ts files in this directory not yet covered
+    const coveredPure = new Set();
+    for (const ol of outputLines) {
+        const m = ol.match(/from\s+["']\.\/(.+?)["']/);
+        if (m) {
+            const spec = m[1];
+            if (spec.endsWith(".pure")) {
+                coveredPure.add(spec); // e.g. "math.color.pure"
+            }
+        }
+    }
+    const relDir = relative(SRC_ROOT, dir) || ".";
+    for (const pf of pureFileSet) {
+        // pf is e.g. "Maths/math.color.pure" (relative to SRC_ROOT, without .ts)
+        const pfDir = dirname(pf);
+        if (pfDir !== relDir) continue;
+        const localSpec = basename(pf);
+        if (!coveredPure.has(localSpec)) {
+            outputLines.push(`export * from "./${localSpec}";`);
+            hasExports = true;
+            orphanedAdded++;
+            if (VERBOSE) {
+                console.log(`  ORPHAN added in ${relDir}/pure.ts: ./${localSpec}`);
+            }
         }
     }
 
@@ -330,6 +375,101 @@ function findUnprocessed(dir) {
 }
 findUnprocessed(SRC_ROOT);
 
+// ── Post-pass: generate barrels for dirs without index.ts ───────────────────
+// Some directories have .pure.ts files but no index.ts (e.g. internal modules).
+// Generate pure.ts barrels for these and link them from parent barrels.
+let postPassBarrels = 0;
+let postPassLinks = 0;
+
+function postPassOrphans(dir) {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        if (!entry.isDirectory()) continue;
+        const subDir = join(dir, entry.name);
+        postPassOrphans(subDir);
+    }
+
+    // Skip if already processed (has index.ts) or is the SRC_ROOT itself
+    if (processedDirs.has(dir)) return;
+
+    const relDir = relative(SRC_ROOT, dir) || ".";
+
+    // Collect .pure.ts files in this directory
+    const localPureFiles = [];
+    for (const pf of pureFileSet) {
+        if (dirname(pf) === relDir) {
+            localPureFiles.push(basename(pf)); // e.g. "webgpuTextureHelper.pure"
+        }
+    }
+    if (localPureFiles.length === 0) return;
+
+    // Also check for subdirectories with pure.ts barrels
+    const subBarrels = [];
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        if (entry.isDirectory()) {
+            const subPure = join(dir, entry.name, "pure.ts");
+            if (existsSync(subPure)) {
+                subBarrels.push(entry.name);
+            }
+        }
+    }
+
+    // Generate pure.ts for this directory
+    const purePath = join(dir, "pure.ts");
+    let fileContent = HEADER;
+    for (const pf of localPureFiles.sort()) {
+        fileContent += `export * from "./${pf}";\n`;
+    }
+    for (const sb of subBarrels.sort()) {
+        fileContent += `export * from "./${sb}/pure";\n`;
+    }
+
+    if (DRY_RUN) {
+        console.log(`\n[DRY-RUN] Would write (post-pass) ${relDir}/pure.ts:`);
+        console.log(fileContent);
+    } else {
+        writeFileSync(purePath, fileContent, "utf-8");
+        if (VERBOSE) {
+            console.log(`  POST-PASS wrote ${relDir}/pure.ts (${localPureFiles.length} pure files, ${subBarrels.length} sub-barrels)`);
+        }
+    }
+    postPassBarrels++;
+    processedDirs.set(dir, true);
+}
+postPassOrphans(SRC_ROOT);
+
+// ── Post-pass: link orphaned subdirectory barrels to parent ─────────────────
+// For each pure.ts barrel, check if parent references it; if not, append.
+function linkSubdirBarrels(dir) {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        if (!entry.isDirectory()) continue;
+        const subDir = join(dir, entry.name);
+        linkSubdirBarrels(subDir);
+
+        const subPure = join(subDir, "pure.ts");
+        if (!existsSync(subPure)) continue;
+
+        const parentPure = join(dir, "pure.ts");
+        if (!existsSync(parentPure)) continue;
+
+        const parentContent = readFileSync(parentPure, "utf-8");
+        const subRef = `./${entry.name}/pure`;
+        if (parentContent.includes(subRef)) continue;
+
+        // Append reference to subdirectory barrel
+        const newLine = `export * from "${subRef}";\n`;
+        if (DRY_RUN) {
+            console.log(`[DRY-RUN] Would append to ${relative(SRC_ROOT, parentPure)}: ${newLine.trim()}`);
+        } else {
+            writeFileSync(parentPure, parentContent + newLine, "utf-8");
+            if (VERBOSE) {
+                console.log(`  LINK ${relative(SRC_ROOT, parentPure)} → ${subRef}`);
+            }
+        }
+        postPassLinks++;
+    }
+}
+linkSubdirBarrels(SRC_ROOT);
+
 // ── Summary ─────────────────────────────────────────────────────────────────
 console.log("\n═══ Summary ═══");
 console.log(`  Barrel files generated:      ${barrelCount}`);
@@ -338,4 +478,7 @@ console.log(`  Exports kept as-is (pure):   ${keptAsIs}`);
 console.log(`  Subdir rewrites to /pure:    ${subdirRewrites}`);
 console.log(`  Bare imports skipped:        ${skippedBareImports}`);
 console.log(`  Exports skipped (impure):    ${skippedExports}`);
+console.log(`  Orphaned .pure.ts added:     ${orphanedAdded}`);
+console.log(`  Post-pass barrels created:   ${postPassBarrels}`);
+console.log(`  Post-pass parent links:      ${postPassLinks}`);
 console.log(`  Empty barrels (not written): ${emptyBarrels}`);

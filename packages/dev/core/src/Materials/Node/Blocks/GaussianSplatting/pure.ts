@@ -2,4 +2,3 @@
 export * from "./gaussianSplattingBlock.pure";
 export * from "./splatReaderBlock.pure";
 export * from "./gaussianBlock.pure";
-export * from "../../../../ShadersWGSL/ShadersInclude/gaussianSplattingVertexDeclaration";

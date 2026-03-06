@@ -1,3 +1,9 @@
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import engine.renderTargetCube.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./engine.renderTargetCube.pure";
+
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { Constants } from "../constants";
@@ -6,18 +12,6 @@ import type { RenderTargetWrapper } from "../renderTargetWrapper";
 import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
 import type { RenderTargetCreationOptions } from "../../Materials/Textures/textureCreationOptions";
 
-declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface AbstractEngine {
-        /**
-         * Creates a new render target cube wrapper
-         * @param size defines the size of the texture
-         * @param options defines the options used to create the texture
-         * @returns a new render target cube wrapper
-         */
-        createRenderTargetCubeTexture(size: number, options?: RenderTargetCreationOptions): RenderTargetWrapper;
-    }
-}
 
 ThinEngine.prototype.createRenderTargetCubeTexture = function (size: number, options?: RenderTargetCreationOptions): RenderTargetWrapper {
     const rtWrapper = this._createHardwareRenderTargetWrapper(false, true, size) as WebGLRenderTargetWrapper;

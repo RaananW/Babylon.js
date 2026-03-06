@@ -250,12 +250,13 @@ function analyzeFile(filePath) {
         }
 
         // 5. Top-level function calls that aren't imports/exports/declarations
-        //    e.g. initSideEffects();  InitSideEffects();
-        //    Heuristic: line is a call expression statement (identifier followed by (...);)
+        //    e.g. initSideEffects();  Object.method(...);  WebXRFeaturesManager.AddWebXRFeature(...)
+        //    Heuristic: line is a call expression statement (identifier or dotted access followed by ()
+        //    Supports multi-line calls (opening paren without closing on same line)
         //    Exclude: import, export, const, let, var, class, function, type, interface, enum, abstract, declare, if, for, while, switch, return
         //    Also exclude calls already caught by more specific patterns above.
-        if (/^[A-Za-z_$]\w*\s*\(/.test(trimmed) && /;\s*$/.test(trimmed)) {
-            const keyword = trimmed.split(/[\s(]/)[0];
+        if (/^[A-Za-z_$]\w*(?:\.\w+)*\s*\(/.test(trimmed)) {
+            const keyword = trimmed.split(/[\s(.]/)[0];
             const reserved = new Set([
                 "import",
                 "export",
@@ -286,7 +287,7 @@ function analyzeFile(filePath) {
                 "yield",
                 "await",
             ]);
-            // Skip calls already matched by specific patterns
+            // Skip calls already matched by more specific patterns
             const alreadyCaught = /\bRegisterClass\s*\(/.test(trimmed) || /\bNode\.AddNodeConstructor\s*\(/.test(trimmed) || /\bAddNodeConstructor\s*\(/.test(trimmed);
             // Skip false positives from GLSL/WGSL shader string content
             const isShaderContent = relPath.startsWith("Shaders/") || relPath.startsWith("ShadersWGSL/");

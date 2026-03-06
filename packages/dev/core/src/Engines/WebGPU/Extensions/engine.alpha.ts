@@ -1,22 +1,13 @@
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import engine.alpha.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./engine.alpha.pure";
+
 import { AbstractEngine } from "core/Engines/abstractEngine";
 import { Constants } from "../../constants";
-
-import "../../AbstractEngine/abstractEngine.alpha";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
 
-declare module "../../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface AbstractEngine {
-        /**
-         * Sets the current alpha mode
-         * @param mode defines the mode to use (one of the Engine.ALPHA_XXX)
-         * @param noDepthWriteChange defines if depth writing state should remains unchanged (false by default)
-         * @param targetIndex defines the index of the target to set the alpha mode for (default is 0)
-         * @see https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering
-         */
-        setAlphaMode(mode: number, noDepthWriteChange?: boolean, targetIndex?: number): void;
-    }
-}
 
 ThinWebGPUEngine.prototype.setAlphaMode = function (mode: number, noDepthWriteChange: boolean = false, targetIndex: number = 0): void {
     const alphaBlend = this._alphaState._alphaBlend[targetIndex];
@@ -46,6 +37,7 @@ ThinWebGPUEngine.prototype.setAlphaMode = function (mode: number, noDepthWriteCh
     this._cacheRenderPipeline.setAlphaBlendEnabled(this._alphaState._alphaBlend, this._alphaState._numTargetEnabled);
     this._cacheRenderPipeline.setAlphaBlendFactors(this._alphaState._blendFunctionParameters, this._alphaState._blendEquationParameters);
 };
+
 
 ThinWebGPUEngine.prototype.setAlphaEquation = function (equation: number, targetIndex: number = 0): void {
     AbstractEngine.prototype.setAlphaEquation.call(this, equation, targetIndex);

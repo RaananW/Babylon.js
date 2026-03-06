@@ -1,43 +1,14 @@
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import engine.readTexture.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./engine.readTexture.pure";
+
+import { allocateAndCopyTypedBuffer } from "./engine.readTexture.pure";
 import { ThinEngine } from "../../Engines/thinEngine";
 import type { InternalTexture } from "../../Materials/Textures/internalTexture";
 import type { Nullable } from "../../types";
 
-declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface AbstractEngine {
-        /** @internal */
-        _readTexturePixels(
-            texture: InternalTexture,
-            width: number,
-            height: number,
-            faceIndex?: number,
-            level?: number,
-            buffer?: Nullable<ArrayBufferView>,
-            flushRenderer?: boolean,
-            noDataConversion?: boolean,
-            x?: number,
-            y?: number
-        ): Promise<ArrayBufferView>;
-
-        /** @internal */
-        _readTexturePixelsSync(
-            texture: InternalTexture,
-            width: number,
-            height: number,
-            faceIndex?: number,
-            level?: number,
-            buffer?: Nullable<ArrayBufferView>,
-            flushRenderer?: boolean,
-            noDataConversion?: boolean,
-            x?: number,
-            y?: number
-        ): ArrayBufferView;
-    }
-}
-
-// back-compat
-import { allocateAndCopyTypedBuffer } from "../../Engines/abstractEngine.functions";
-export { allocateAndCopyTypedBuffer };
 
 ThinEngine.prototype._readTexturePixelsSync = function (
     texture: InternalTexture,
@@ -102,6 +73,7 @@ ThinEngine.prototype._readTexturePixelsSync = function (
 
     return buffer;
 };
+
 
 // eslint-disable-next-line @typescript-eslint/promise-function-async
 ThinEngine.prototype._readTexturePixels = function (

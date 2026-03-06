@@ -1,10 +1,10 @@
 /** Pure barrel — re-exports only side-effect-free modules */
 /* eslint-disable @typescript-eslint/no-restricted-imports */
-export * from "./boundingBox";
+export * from "./boundingBox.pure";
 export * from "./boundingInfo";
 export * from "./Helper/boundingInfoHelper";
 export * from "./Helper/transformFeedbackBoundingHelper";
 export * from "./Helper/computeShaderBoundingHelper";
-export * from "./boundingSphere";
-export * from "./ray.core";
+export * from "./boundingSphere.pure";
 export * from "./Octrees/pure";
+export * from "./ray.pure";

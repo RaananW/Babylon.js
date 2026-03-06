@@ -1,10 +1,13 @@
 /** Pure barrel — re-exports only side-effect-free modules */
 /* eslint-disable @typescript-eslint/no-restricted-imports */
 export * from "./Background/pure";
+export * from "./colorCurves.pure";
 export * from "./iEffectFallbacks";
 export * from "./effectFallbacks";
 export * from "./effect";
+export * from "./fresnelParameters.pure";
 export * from "./imageProcessing";
+export * from "./imageProcessingConfiguration.pure";
 export * from "./material";
 export * from "./materialDefines";
 export * from "./clipPlaneMaterialHelper";
@@ -15,6 +18,7 @@ export * from "./PBR/pure";
 export * from "./pushMaterial";
 export * from "./shaderLanguage";
 export * from "./shaderMaterial.pure";
+export * from "./standardMaterial.pure";
 export * from "./Textures/pure";
 export * from "./uniformBuffer";
 export * from "./materialFlags";
@@ -28,6 +32,7 @@ export * from "./materialPluginEvent";
 export * from "./material.detailMapConfiguration";
 export * from "./material.decalMapConfiguration.pure";
 export * from "./materialPluginFactoryExport";
+export * from "./GreasedLine/greasedLinePluginMaterial.pure";
 export * from "./GreasedLine/greasedLineSimpleMaterial";
 export * from "./GreasedLine/greasedLineMaterialInterfaces";
 export * from "./GreasedLine/greasedLineMaterialDefaults";
@@ -38,11 +43,10 @@ export * from "./GaussianSplatting/gaussianSplattingGpuPickingMaterialPlugin.pur
 export * from "./materialHelper.functions.pure";
 export * from "./materialHelper.geometryrendering";
 export * from "./materialStencilState";
-export * from "./prePassConfiguration";
 export * from "./uv.defines";
 export * from "./floatingOriginMatrixOverrides";
 export * from "./vertexPullingHelper.functions";
-export * from "../ShadersWGSL/default.fragment";
-export * from "../ShadersWGSL/default.vertex";
-export * from "../ShadersWGSL/greasedLine.fragment";
-export * from "../ShadersWGSL/greasedLine.vertex";
+export * from "./prePassConfiguration.pure";
+export * from "./standardMaterial.decalMap.pure";
+export * from "./GaussianSplatting/pure";
+export * from "./GreasedLine/pure";

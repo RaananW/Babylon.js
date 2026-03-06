@@ -11,7 +11,4 @@ export * from "./pbrMetallicRoughnessMaterial.pure";
 export * from "./pbrSpecularGlossinessMaterial.pure";
 export * from "./pbrSheenConfiguration";
 export * from "./pbrSubSurfaceConfiguration";
-export * from "../../ShadersWGSL/pbr.vertex";
-export * from "../../ShadersWGSL/pbr.fragment";
-export * from "../../ShadersWGSL/openpbr.vertex";
-export * from "../../ShadersWGSL/openpbr.fragment";
+export * from "./pbrMaterial.decalMap.pure";

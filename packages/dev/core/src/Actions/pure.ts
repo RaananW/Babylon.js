@@ -1,7 +1,7 @@
 /** Pure barrel — re-exports only side-effect-free modules */
 export * from "./abstractActionManager";
 export * from "./action.pure";
-export * from "./actionEvent";
+export * from "./actionEvent.pure";
 export * from "./actionManager";
 export * from "./condition.pure";
 export * from "./directActions.pure";

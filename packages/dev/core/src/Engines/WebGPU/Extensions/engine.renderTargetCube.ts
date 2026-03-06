@@ -1,21 +1,15 @@
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import engine.renderTargetCube.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./engine.renderTargetCube.pure";
+
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
-import type { RenderTargetCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
 import { Constants } from "../../constants";
+import type { RenderTargetCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
 import type { RenderTargetWrapper } from "../../renderTargetWrapper";
 
-declare module "../../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface AbstractEngine {
-        /**
-         * Creates a new render target cube wrapper
-         * @param size defines the size of the texture
-         * @param options defines the options used to create the texture
-         * @returns a new render target cube wrapper
-         */
-        createRenderTargetCubeTexture(size: number, options?: RenderTargetCreationOptions): RenderTargetWrapper;
-    }
-}
 
 ThinWebGPUEngine.prototype.createRenderTargetCubeTexture = function (size: number, options?: RenderTargetCreationOptions): RenderTargetWrapper {
     const rtWrapper = this._createHardwareRenderTargetWrapper(false, true, size);

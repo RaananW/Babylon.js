@@ -1,7 +1,7 @@
 /** Pure barrel — re-exports only side-effect-free modules */
 /* eslint-disable @typescript-eslint/no-restricted-imports */
 export * from "./nodeParticleBlock";
-export * from "./nodeParticleSystemSet";
+export * from "./nodeParticleSystemSet.pure";
 export * from "./nodeParticleSystemSet.helper";
 export * from "./nodeParticleBlockConnectionPoint";
 export * from "./nodeParticleBuildState";

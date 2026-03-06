@@ -1,42 +1,32 @@
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import engine.multiview.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./engine.multiview.pure";
+
 import { Camera } from "../../Cameras/camera";
 import { Engine } from "../../Engines/engine";
-import type { ICreateSceneUboOptions } from "../../scene";
 import { Scene } from "../../scene";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
-import type { Nullable } from "../../types";
-import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
 import { Matrix, TmpVectors } from "../../Maths/math.vector";
 import { UniformBuffer } from "../../Materials/uniformBuffer";
 import { MultiviewRenderTarget } from "../../Materials/Textures/MultiviewRenderTarget";
 import { Frustum } from "../../Maths/math.frustum";
+import type { ICreateSceneUboOptions } from "../../scene";
 import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
 import type { RenderTargetWrapper } from "../renderTargetWrapper";
 import type { AbstractEngine } from "../abstractEngine";
 
-declare module "../../Engines/engine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface Engine {
-        /**
-         * Creates a new multiview render target
-         * @param width defines the width of the texture
-         * @param height defines the height of the texture
-         * @returns the created multiview render target wrapper
-         */
-        createMultiviewRenderTargetTexture(width: number, height: number, colorTexture?: WebGLTexture, depthStencilTexture?: WebGLTexture): RenderTargetWrapper;
-
-        /**
-         * Binds a multiview render target wrapper to be drawn to
-         * @param multiviewTexture render target wrapper to bind
-         */
-        bindMultiviewFramebuffer(multiviewTexture: RenderTargetWrapper): void;
-
-        /**
-         * Binds a Space Warp render target wrapper to be drawn to
-         * @param spaceWarpTexture render target wrapper to bind
-         */
-        bindSpaceWarpFramebuffer(spaceWarpTexture: RenderTargetWrapper): void;
-    }
+function CreateMultiviewUbo(engine: AbstractEngine, name?: string, trackUBOsInFrame?: boolean) {
+    const ubo = new UniformBuffer(engine, undefined, true, name, undefined, trackUBOsInFrame);
+    ubo.addUniform("viewProjection", 16);
+    ubo.addUniform("viewProjectionR", 16);
+    ubo.addUniform("view", 16);
+    ubo.addUniform("projection", 16);
+    ubo.addUniform("vEyePosition", 4);
+    return ubo;
 }
+
 
 Engine.prototype.createMultiviewRenderTargetTexture = function (width: number, height: number, colorTexture?: WebGLTexture, depthStencilTexture?: WebGLTexture) {
     const gl = this._gl;
@@ -79,6 +69,7 @@ Engine.prototype.createMultiviewRenderTargetTexture = function (width: number, h
     return rtWrapper;
 };
 
+
 Engine.prototype.bindMultiviewFramebuffer = function (_multiviewTexture: RenderTargetWrapper) {
     const multiviewTexture = _multiviewTexture as WebGLRenderTargetWrapper;
 
@@ -109,6 +100,7 @@ Engine.prototype.bindMultiviewFramebuffer = function (_multiviewTexture: RenderT
     }
 };
 
+
 Engine.prototype.bindSpaceWarpFramebuffer = function (_spaceWarpTexture: RenderTargetWrapper) {
     const spaceWarpTexture = _spaceWarpTexture as WebGLRenderTargetWrapper;
 
@@ -125,39 +117,12 @@ Engine.prototype.bindSpaceWarpFramebuffer = function (_spaceWarpTexture: RenderT
     }
 };
 
-declare module "../../Cameras/camera" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface Camera {
-        /**
-         * @internal
-         * For cameras that cannot use multiview images to display directly. (e.g. webVR camera will render to multiview texture, then copy to each eye texture and go from there)
-         */
-        _useMultiviewToSingleView: boolean;
-        /**
-         * @internal
-         * For cameras that cannot use multiview images to display directly. (e.g. webVR camera will render to multiview texture, then copy to each eye texture and go from there)
-         */
-        _multiviewTexture: Nullable<RenderTargetTexture>;
-
-        /**
-         * @internal
-         * For WebXR cameras that are rendering to multiview texture arrays.
-         */
-        _renderingMultiview: boolean;
-
-        /**
-         * @internal
-         * ensures the multiview texture of the camera exists and has the specified width/height
-         * @param width height to set on the multiview texture
-         * @param height width to set on the multiview texture
-         */
-        _resizeOrCreateMultiviewTexture(width: number, height: number): void;
-    }
-}
 
 Camera.prototype._useMultiviewToSingleView = false;
 
+
 Camera.prototype._multiviewTexture = null;
+
 
 Camera.prototype._resizeOrCreateMultiviewTexture = function (width: number, height: number) {
     if (!this._multiviewTexture) {
@@ -168,43 +133,18 @@ Camera.prototype._resizeOrCreateMultiviewTexture = function (width: number, heig
     }
 };
 
-declare module "../../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface Scene {
-        /** @internal */
-        _transformMatrixR: Matrix;
-        /** @internal */
-        _multiviewSceneUbo: Nullable<UniformBuffer>;
-        /** @internal */
-        _multiviewSceneUboIsActive: boolean;
-        /** @internal */
-        _createMultiviewUbo(): void;
-        /** @internal */
-        _updateMultiviewUbo(viewR?: Matrix, projectionR?: Matrix): void;
-        /** @internal */
-        _renderMultiviewToSingleView(camera: Camera): void;
-    }
-}
-
-function CreateMultiviewUbo(engine: AbstractEngine, name?: string, trackUBOsInFrame?: boolean) {
-    const ubo = new UniformBuffer(engine, undefined, true, name, undefined, trackUBOsInFrame);
-    ubo.addUniform("viewProjection", 16);
-    ubo.addUniform("viewProjectionR", 16);
-    ubo.addUniform("view", 16);
-    ubo.addUniform("projection", 16);
-    ubo.addUniform("vEyePosition", 4);
-    return ubo;
-}
-
-const CurrentCreateSceneUniformBuffer = Scene.prototype.createSceneUniformBuffer;
 
 Scene.prototype._transformMatrixR = Matrix.Zero();
+
 Scene.prototype._multiviewSceneUbo = null;
+
 Scene.prototype._multiviewSceneUboIsActive = false;
+
 Scene.prototype._createMultiviewUbo = function () {
     this._multiviewSceneUbo = CreateMultiviewUbo(this.getEngine(), "scene_multiview");
     this._multiviewSceneUboIsActive = true;
 };
+
 Scene.prototype.createSceneUniformBuffer = function (name?: string, trackUBOsInFrameOrOptions?: boolean | ICreateSceneUboOptions): UniformBuffer {
     const forceMono = typeof trackUBOsInFrameOrOptions === "object" && !!trackUBOsInFrameOrOptions?.forceMono;
     if (!forceMono && this._multiviewSceneUboIsActive) {
@@ -213,6 +153,7 @@ Scene.prototype.createSceneUniformBuffer = function (name?: string, trackUBOsInF
     }
     return CurrentCreateSceneUniformBuffer.bind(this)(name, trackUBOsInFrameOrOptions);
 };
+
 Scene.prototype._updateMultiviewUbo = function (viewR?: Matrix, projectionR?: Matrix) {
     if (viewR && projectionR) {
         viewR.multiplyToRef(projectionR, this._transformMatrixR);
@@ -230,6 +171,7 @@ Scene.prototype._updateMultiviewUbo = function (viewR?: Matrix, projectionR?: Ma
         this._multiviewSceneUbo.updateMatrix("projection", this._projectionMatrix);
     }
 };
+
 Scene.prototype._renderMultiviewToSingleView = function (camera: Camera) {
     // Multiview is only able to be displayed directly for API's such as webXR
     // This displays a multiview image by rendering to the multiview image and then

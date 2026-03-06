@@ -1,6 +1,6 @@
 /** Pure barrel — re-exports only side-effect-free modules */
 export * from "./fragmentOutputBlock.pure";
-export * from "./smartFilterFragmentOutputBlock";
+export * from "./smartFilterFragmentOutputBlock.pure";
 export * from "./imageProcessingBlock.pure";
 export * from "./perturbNormalBlock.pure";
 export * from "./discardBlock.pure";
@@ -16,12 +16,3 @@ export * from "./fragDepthBlock.pure";
 export * from "./shadowMapBlock.pure";
 export * from "./prePassOutputBlock.pure";
 export * from "./ambientOcclusionBlock.pure";
-export * from "../../../../ShadersWGSL/ShadersInclude/helperFunctions";
-export * from "../../../../ShadersWGSL/ShadersInclude/imageProcessingDeclaration";
-export * from "../../../../ShadersWGSL/ShadersInclude/imageProcessingFunctions";
-export * from "../../../../ShadersWGSL/ShadersInclude/bumpFragment";
-export * from "../../../../ShadersWGSL/ShadersInclude/bumpFragmentMainFunctions";
-export * from "../../../../ShadersWGSL/ShadersInclude/bumpFragmentFunctions";
-export * from "../../../../ShadersWGSL/ShadersInclude/shadowMapVertexMetric";
-export * from "../../../../ShadersWGSL/ShadersInclude/packingFunctions";
-export * from "../../../../ShadersWGSL/ShadersInclude/shadowMapFragment";

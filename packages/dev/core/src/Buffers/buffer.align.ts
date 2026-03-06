@@ -1,5 +1,9 @@
-import type { Nullable } from "core/types";
-import type { DataBuffer } from "./dataBuffer";
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import buffer.align.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./buffer.align.pure";
+
 import { Buffer, VertexBuffer } from "./buffer";
 import { GetTypeByteLength } from "./bufferUtils";
 
@@ -10,34 +14,6 @@ const IsLittleEndian = (() => {
     return !!((view[0] = 1) & array[0]);
 })();
 
-declare module "./buffer.pure" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface VertexBuffer {
-        /**
-         * Gets the effective byte stride, that is the byte stride of the buffer that is actually sent to the GPU.
-         * It could be different from VertexBuffer.byteStride if a new buffer must be created under the hood because of the forceVertexBufferStrideAndOffsetMultiple4Bytes engine flag.
-         */
-        effectiveByteStride: number;
-
-        /**
-         * Gets the effective byte offset, that is the byte offset of the buffer that is actually sent to the GPU.
-         * It could be different from VertexBuffer.byteOffset if a new buffer must be created under the hood because of the forceVertexBufferStrideAndOffsetMultiple4Bytes engine flag.
-         */
-        effectiveByteOffset: number;
-
-        /**
-         * Gets the effective buffer, that is the buffer that is actually sent to the GPU.
-         * It could be different from VertexBuffer.getBuffer() if a new buffer must be created under the hood because of the forceVertexBufferStrideAndOffsetMultiple4Bytes engine flag.
-         */
-        effectiveBuffer: Nullable<DataBuffer>;
-
-        /** @internal */
-        _alignBuffer(): void;
-
-        /** @internal */
-        _alignedBuffer?: Buffer;
-    }
-}
 
 Object.defineProperty(VertexBuffer.prototype, "effectiveByteStride", {
     get: function (this: VertexBuffer) {
@@ -47,6 +23,7 @@ Object.defineProperty(VertexBuffer.prototype, "effectiveByteStride", {
     configurable: true,
 });
 
+
 Object.defineProperty(VertexBuffer.prototype, "effectiveByteOffset", {
     get: function (this: VertexBuffer) {
         return this._alignedBuffer ? 0 : this.byteOffset;
@@ -54,6 +31,7 @@ Object.defineProperty(VertexBuffer.prototype, "effectiveByteOffset", {
     enumerable: true,
     configurable: true,
 });
+
 
 Object.defineProperty(VertexBuffer.prototype, "effectiveBuffer", {
     get: function (this: VertexBuffer) {
@@ -63,10 +41,12 @@ Object.defineProperty(VertexBuffer.prototype, "effectiveBuffer", {
     configurable: true,
 });
 
+
 VertexBuffer.prototype._rebuild = function (): void {
     this._buffer?._rebuild();
     this._alignedBuffer?._rebuild();
 };
+
 
 VertexBuffer.prototype.dispose = function (): void {
     if (this._ownsBuffer) {
@@ -79,9 +59,11 @@ VertexBuffer.prototype.dispose = function (): void {
     this._isDisposed = true;
 };
 
+
 VertexBuffer.prototype.getWrapperBuffer = function (): Buffer {
     return this._alignedBuffer || this._buffer;
 };
+
 
 VertexBuffer.prototype._alignBuffer = function (): void {
     const data = this._buffer.getData();

@@ -3,3 +3,4 @@ export * from "./buffer.pure";
 export * from "./bufferUtils";
 export * from "./dataBuffer";
 export * from "./storageBuffer";
+export * from "./buffer.align.pure";

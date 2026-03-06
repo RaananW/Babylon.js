@@ -1,72 +1,20 @@
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import abstractEngine.cubeTexture.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./abstractEngine.cubeTexture.pure";
+
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
 import { LoadImage } from "../../Misc/fileTools";
 import { RandomGUID } from "../../Misc/guid";
-import type { IWebRequest } from "../../Misc/interfaces/iWebRequest";
 import { AbstractEngine } from "../abstractEngine";
 import { _GetCompatibleTextureLoader } from "core/Materials/Textures/Loaders/textureLoaderManager";
 import { GetExtensionFromUrl } from "core/Misc/urlTools";
+import type { Nullable } from "../../types";
+import type { Scene } from "../../scene";
+import type { IWebRequest } from "../../Misc/interfaces/iWebRequest";
 
-declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface AbstractEngine {
-        /** @internal */
-        createCubeTextureBase(
-            rootUrl: string,
-            scene: Nullable<Scene>,
-            files: Nullable<string[]>,
-            noMipmap: boolean,
-            onLoad: Nullable<(data?: any) => void>,
-            onError: Nullable<(message?: string, exception?: any) => void>,
-            format: number | undefined,
-            forcedExtension: any,
-            createPolynomials: boolean,
-            lodScale: number,
-            lodOffset: number,
-            fallback: Nullable<InternalTexture>,
-            beforeLoadCubeDataCallback: Nullable<(texture: InternalTexture, data: ArrayBufferView | ArrayBufferView[]) => void>,
-            imageHandler: Nullable<(texture: InternalTexture, imgs: HTMLImageElement[] | ImageBitmap[]) => void>,
-            useSRGBBuffer: boolean,
-            buffer: Nullable<ArrayBufferView>
-        ): InternalTexture;
-
-        /** @internal */
-        _partialLoadFile(
-            url: string,
-            index: number,
-            loadedFiles: ArrayBuffer[],
-            onfinish: (files: ArrayBuffer[]) => void,
-            onErrorCallBack: Nullable<(message?: string, exception?: any) => void>
-        ): void;
-
-        /** @internal */
-        _cascadeLoadFiles(scene: Nullable<Scene>, onfinish: (images: ArrayBuffer[]) => void, files: string[], onError: Nullable<(message?: string, exception?: any) => void>): void;
-
-        /** @internal */
-        _cascadeLoadImgs(
-            scene: Nullable<Scene>,
-            texture: InternalTexture,
-            onfinish: Nullable<(texture: InternalTexture, images: HTMLImageElement[] | ImageBitmap[]) => void>,
-            files: string[],
-            onError: Nullable<(message?: string, exception?: any) => void>,
-            mimeType?: string
-        ): void;
-
-        /** @internal */
-        _partialLoadImg(
-            url: string,
-            index: number,
-            loadedImages: HTMLImageElement[] | ImageBitmap[],
-            scene: Nullable<Scene>,
-            texture: InternalTexture,
-            onfinish: Nullable<(texture: InternalTexture, images: HTMLImageElement[] | ImageBitmap[]) => void>,
-            onErrorCallBack: Nullable<(message?: string, exception?: any) => void>,
-            mimeType?: string
-        ): void;
-    }
-}
 
 AbstractEngine.prototype._partialLoadFile = function (
     url: string,
@@ -93,6 +41,7 @@ AbstractEngine.prototype._partialLoadFile = function (
     this._loadFile(url, onload as (data: string | ArrayBuffer) => void, undefined, undefined, true, onerror);
 };
 
+
 AbstractEngine.prototype._cascadeLoadFiles = function (
     scene: Nullable<Scene>,
     onfinish: (images: ArrayBuffer[]) => void,
@@ -106,6 +55,7 @@ AbstractEngine.prototype._cascadeLoadFiles = function (
         this._partialLoadFile(files[index], index, loadedFiles, onfinish, onError);
     }
 };
+
 
 AbstractEngine.prototype._cascadeLoadImgs = function (
     scene: Nullable<Scene>,
@@ -122,6 +72,7 @@ AbstractEngine.prototype._cascadeLoadImgs = function (
         this._partialLoadImg(files[index], index, loadedImages, scene, texture, onfinish, onError, mimeType);
     }
 };
+
 
 AbstractEngine.prototype._partialLoadImg = function (
     url: string,
@@ -163,6 +114,7 @@ AbstractEngine.prototype._partialLoadImg = function (
         scene.addPendingData(tokenPendingData);
     }
 };
+
 
 AbstractEngine.prototype.createCubeTextureBase = function (
     rootUrl: string,

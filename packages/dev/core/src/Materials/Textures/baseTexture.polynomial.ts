@@ -1,25 +1,14 @@
-import type { Nullable } from "../../types";
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import baseTexture.polynomial.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./baseTexture.polynomial.pure";
+
 import { CubeMapToSphericalPolynomialTools } from "../../Misc/HighDynamicRange/cubemapToSphericalPolynomial";
-import type { SphericalPolynomial } from "../../Maths/sphericalPolynomial";
 import { BaseTexture } from "./baseTexture";
+import type { Nullable } from "../../types";
+import type { SphericalPolynomial } from "../../Maths/sphericalPolynomial";
 
-declare module "./baseTexture" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface BaseTexture {
-        /**
-         * Get the polynomial representation of the texture data.
-         * This is mainly use as a fast way to recover IBL Diffuse irradiance data.
-         * @see https://learnopengl.com/PBR/IBL/Diffuse-irradiance
-         */
-        sphericalPolynomial: Nullable<SphericalPolynomial>;
-
-        /**
-         * Force recomputation of spherical polynomials.
-         * Can be useful if you generate a cubemap multiple times (from a probe for eg) and you need the proper polynomials each time
-         */
-        forceSphericalPolynomialsRecompute(): void;
-    }
-}
 
 BaseTexture.prototype.forceSphericalPolynomialsRecompute = function (): void {
     if (this._texture) {
@@ -28,6 +17,7 @@ BaseTexture.prototype.forceSphericalPolynomialsRecompute = function (): void {
         this._texture._sphericalPolynomialComputed = false;
     }
 };
+
 
 Object.defineProperty(BaseTexture.prototype, "sphericalPolynomial", {
     get: function (this: BaseTexture) {

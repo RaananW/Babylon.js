@@ -1,29 +1,14 @@
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import depthPeelingSceneComponent.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./depthPeelingSceneComponent.pure";
+
 import { Constants } from "../Engines/constants";
 import { Scene } from "../scene";
-import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
-import type { Nullable } from "../types";
-import { DepthPeelingRenderer } from "./depthPeelingRenderer";
 import type { ThinDepthPeelingRenderer } from "./thinDepthPeelingRenderer";
 
-declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface Scene {
-        /**
-         * The depth peeling renderer
-         */
-        depthPeelingRenderer: Nullable<ThinDepthPeelingRenderer>;
-        /** @internal (Backing field) */
-        _depthPeelingRenderer: Nullable<ThinDepthPeelingRenderer>;
-
-        /**
-         * Flag to indicate if we want to use order independent transparency, despite the performance hit
-         */
-        useOrderIndependentTransparency: boolean;
-        /** @internal */
-        _useOrderIndependentTransparency: boolean;
-    }
-}
 
 Object.defineProperty(Scene.prototype, "depthPeelingRenderer", {
     get: function (this: Scene) {
@@ -44,6 +29,7 @@ Object.defineProperty(Scene.prototype, "depthPeelingRenderer", {
     configurable: true,
 });
 
+
 Object.defineProperty(Scene.prototype, "useOrderIndependentTransparency", {
     get: function (this: Scene) {
         return this._useOrderIndependentTransparency;
@@ -59,47 +45,3 @@ Object.defineProperty(Scene.prototype, "useOrderIndependentTransparency", {
     enumerable: true,
     configurable: true,
 });
-
-/**
- * Scene component to render order independent transparency with depth peeling
- */
-export class DepthPeelingSceneComponent implements ISceneComponent {
-    /**
-     * The component name helpful to identify the component in the list of scene components.
-     */
-    public readonly name = SceneComponentConstants.NAME_DEPTHPEELINGRENDERER;
-
-    /**
-     * The scene the component belongs to.
-     */
-    public scene: Scene;
-
-    /**
-     * Creates a new instance of the component for the given scene
-     * @param scene Defines the scene to register the component in
-     */
-    constructor(scene: Scene) {
-        this.scene = scene;
-
-        scene.depthPeelingRenderer = new DepthPeelingRenderer(scene);
-    }
-
-    /**
-     * Registers the component in a given scene
-     */
-    public register(): void {}
-
-    /**
-     * Rebuilds the elements related to this component in case of
-     * context lost for instance.
-     */
-    public rebuild(): void {}
-
-    /**
-     * Disposes the component and the associated resources.
-     */
-    public dispose(): void {
-        this.scene.depthPeelingRenderer?.dispose();
-        this.scene.depthPeelingRenderer = null;
-    }
-}
