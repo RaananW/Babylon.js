@@ -4,6 +4,7 @@ import { Vector2, Vector3, Vector4 } from "core/Maths/math.vector";
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+
 /**
  * Block used to normalize lerp between 2 values
  */

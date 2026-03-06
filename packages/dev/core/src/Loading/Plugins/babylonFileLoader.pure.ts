@@ -19,7 +19,6 @@ import { SceneLoaderFlags } from "../sceneLoaderFlags";
 import { Constants } from "../../Engines/constants";
 import { AssetContainer } from "../../assetContainer";
 import { ActionManager } from "../../Actions/actionManager";
-import type { IParticleSystem } from "../../Particles/IParticleSystem";
 import { Skeleton } from "../../Bones/skeleton";
 import { MorphTargetManager } from "../../Morph/morphTargetManager";
 import { ReflectionProbe } from "../../Probes/reflectionProbe";
@@ -30,8 +29,6 @@ import { SpriteManager } from "core/Sprites/spriteManager";
 import { Parse } from "./babylonFileParser.function";
 import { Observable } from "../../Misc/observable";
 import type { MorphTarget } from "../../Morph/morphTarget";
-
-
 
 /** @internal */
 // eslint-disable-next-line @typescript-eslint/naming-convention, no-var
@@ -50,28 +47,23 @@ export class BabylonFileLoaderConfiguration {
 }
 
 let TempIndexContainer: { [key: string]: Node } = {};
-let TempMaterialIndexContainer: { [key: string]: Material } = {};
+export let TempMaterialIndexContainer: { [key: string]: Material } = {};
 let TempMorphTargetIndexContainer: { [key: number]: MorphTarget } = {};
-let TempMorphTargetManagerIndexContainer: { [key: string]: MorphTargetManager } = {};
-let TempSkeletonIndexContainer: { [key: number]: Skeleton } = {};
+export let TempMorphTargetManagerIndexContainer: { [key: string]: MorphTargetManager } = {};
+export let TempSkeletonIndexContainer: { [key: number]: Skeleton } = {};
 
-
-const IsDescendantOf = (mesh: any, names: Array<any>, hierarchyIds: Array<number>) => {
-    for (const i in names) {
-        if (mesh.name === names[i]) {
-            hierarchyIds.push(mesh.id);
-            return true;
-        }
-    }
-    if (mesh.parentId !== undefined && hierarchyIds.indexOf(mesh.parentId) !== -1) {
-        hierarchyIds.push(mesh.id);
-        return true;
-    }
-    return false;
-};
+/**
+ * @internal
+ * Resets the temporary containers used during loading.
+ */
+export function _ResetTempContainers(): void {
+    TempMaterialIndexContainer = {};
+    TempMorphTargetManagerIndexContainer = {};
+    TempSkeletonIndexContainer = {};
+}
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const logOperation = (operation: string, producer: { file: string; name: string; version: string; exporter_version: string }) => {
+export const logOperation = (operation: string, producer: { file: string; name: string; version: string; exporter_version: string }) => {
     return (
         operation +
         " of " +
@@ -79,7 +71,7 @@ const logOperation = (operation: string, producer: { file: string; name: string;
     );
 };
 
-const LoadDetailLevels = (scene: Scene, mesh: AbstractMesh) => {
+export const LoadDetailLevels = (scene: Scene, mesh: AbstractMesh) => {
     const mastermesh: Mesh = mesh as Mesh;
 
     // Every value specified in the ids array of the lod data points to another mesh which should be used as the lower LOD level.
@@ -134,7 +126,7 @@ const FindParent = (parentId: any, parentInstanceIndex: any, scene: Scene) => {
     return parent;
 };
 
-const FindMaterial = (materialId: any, scene: Scene) => {
+export const FindMaterial = (materialId: any, scene: Scene) => {
     if (typeof materialId !== "number") {
         return scene.getLastMaterialById(materialId, true);
     }
@@ -154,7 +146,13 @@ export function LoadAssetContainerFromSerializedScene(scene: Scene, serializedSc
     return LoadAssetContainer(scene, serializedScene, rootUrl);
 }
 
-const LoadAssetContainer = (scene: Scene, data: string | object, rootUrl: string, onError?: (message: string, exception?: any) => void, addToScene = false): AssetContainer => {
+export const LoadAssetContainer = (
+    scene: Scene,
+    data: string | object,
+    rootUrl: string,
+    onError?: (message: string, exception?: any) => void,
+    addToScene = false
+): AssetContainer => {
     const container = new AssetContainer(scene);
 
     if (!addToScene) {

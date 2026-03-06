@@ -6,7 +6,6 @@ import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
 import type { Immutable } from "../../../../types";
-
 import type { FragmentOutputBlock } from "../Fragment/fragmentOutputBlock";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 

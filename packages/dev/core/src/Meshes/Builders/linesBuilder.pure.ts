@@ -13,7 +13,6 @@ import type { Material } from "../../Materials/material";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
-
 /**
  * Creates the VertexData of the LineSystem
  * @param options an object used to set the following optional parameters for the LineSystem, required but can be empty

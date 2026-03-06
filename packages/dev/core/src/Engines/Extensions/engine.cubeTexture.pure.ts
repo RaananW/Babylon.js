@@ -3,7 +3,7 @@
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
 import type { DepthTextureCreationOptions } from "../../Materials/Textures/textureCreationOptions";
-
+import type { InternalTexture } from "../../Materials/Textures/internalTexture";
 
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -138,3 +138,5 @@ declare module "../../Engines/abstractEngine" {
         generateMipMapsForCubemap(texture: InternalTexture, unbind?: boolean): void;
     }
 }
+
+export {};

@@ -9,7 +9,6 @@ import { Epsilon } from "../Maths/math.constants";
 import { Axis } from "../Maths/math.axis";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 
-
 // Temporary cache variables to avoid allocations.
 const TmpMatrix = Matrix.Zero();
 const TmpQuaternion = Quaternion.Identity();

@@ -1,9 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
 import type { ImageSource, Nullable } from "../../../types";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import type { ICanvas } from "../../../Engines/ICanvas";
-
+import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
 
 declare module "../../abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -39,3 +38,5 @@ declare module "../../abstractEngine" {
         ): void;
     }
 }
+
+export {};

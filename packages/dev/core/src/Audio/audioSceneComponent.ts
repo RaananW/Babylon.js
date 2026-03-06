@@ -4,16 +4,16 @@
  */
 export * from "./audioSceneComponent.pure";
 
+import { AudioSceneComponent } from "./audioSceneComponent.pure";
 import { Sound } from "./sound";
 import { SoundTrack } from "./soundTrack";
+import { Nullable } from "../types";
 import { Vector3 } from "../Maths/math.vector";
 import { SceneComponentConstants } from "../sceneComponent";
 import { Scene } from "../scene";
+import { AssetContainer } from "../assetContainer";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
-import type { Nullable } from "../types";
-import type { AssetContainer } from "../assetContainer";
-
 
 // Adds the parser to the scene parsers.
 AddParser(SceneComponentConstants.NAME_AUDIO, (parsedData: any, scene: Scene, container: AssetContainer, rootUrl: string) => {
@@ -44,7 +44,6 @@ AddParser(SceneComponentConstants.NAME_AUDIO, (parsedData: any, scene: Scene, co
     loadedSounds = [];
 });
 
-
 Object.defineProperty(Scene.prototype, "mainSoundTrack", {
     get: function (this: Scene) {
         let compo = this._getComponent(SceneComponentConstants.NAME_AUDIO) as AudioSceneComponent;
@@ -62,7 +61,6 @@ Object.defineProperty(Scene.prototype, "mainSoundTrack", {
     enumerable: true,
     configurable: true,
 });
-
 
 Scene.prototype.getSoundByName = function (name: string): Nullable<Sound> {
     let index: number;
@@ -84,7 +82,6 @@ Scene.prototype.getSoundByName = function (name: string): Nullable<Sound> {
 
     return null;
 };
-
 
 Object.defineProperty(Scene.prototype, "audioEnabled", {
     get: function (this: Scene) {
@@ -113,7 +110,6 @@ Object.defineProperty(Scene.prototype, "audioEnabled", {
     configurable: true,
 });
 
-
 Object.defineProperty(Scene.prototype, "headphone", {
     get: function (this: Scene) {
         let compo = this._getComponent(SceneComponentConstants.NAME_AUDIO) as AudioSceneComponent;
@@ -140,7 +136,6 @@ Object.defineProperty(Scene.prototype, "headphone", {
     enumerable: true,
     configurable: true,
 });
-
 
 Object.defineProperty(Scene.prototype, "audioListenerPositionProvider", {
     get: function (this: Scene) {
@@ -169,7 +164,6 @@ Object.defineProperty(Scene.prototype, "audioListenerPositionProvider", {
     configurable: true,
 });
 
-
 Object.defineProperty(Scene.prototype, "audioListenerRotationProvider", {
     get: function (this: Scene) {
         let compo = this._getComponent(SceneComponentConstants.NAME_AUDIO) as AudioSceneComponent;
@@ -197,7 +191,6 @@ Object.defineProperty(Scene.prototype, "audioListenerRotationProvider", {
     configurable: true,
 });
 
-
 Object.defineProperty(Scene.prototype, "audioPositioningRefreshRate", {
     get: function (this: Scene) {
         let compo = this._getComponent(SceneComponentConstants.NAME_AUDIO) as AudioSceneComponent;
@@ -220,7 +213,6 @@ Object.defineProperty(Scene.prototype, "audioPositioningRefreshRate", {
     enumerable: true,
     configurable: true,
 });
-
 
 Sound._SceneComponentInitialization = (scene: Scene) => {
     let compo = scene._getComponent(SceneComponentConstants.NAME_AUDIO);

@@ -7,7 +7,6 @@ import { InputBlock } from "../Input/inputBlock";
 import { ScreenSizeBlock } from "../Fragment/screenSizeBlock";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
-
 /** @internal */
 export const SfeModeDefine = "USE_SFE_FRAMEWORK";
 

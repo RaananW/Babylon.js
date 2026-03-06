@@ -4,8 +4,8 @@
  */
 export * from "./WebXRWalkingLocomotion.pure";
 
+import { WebXRWalkingLocomotion } from "./WebXRWalkingLocomotion.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 //register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

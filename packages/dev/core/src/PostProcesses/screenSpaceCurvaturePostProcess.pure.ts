@@ -8,13 +8,9 @@ import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess";
 import { Constants } from "../Engines/constants";
 import type { GeometryBufferRenderer } from "../Rendering/geometryBufferRenderer";
-
-import "../Rendering/geometryBufferRendererSceneComponent";
-import "../Shaders/screenSpaceCurvature.fragment";
 import { EngineStore } from "../Engines/engineStore";
 import { serialize } from "../Misc/decorators";
 import { SerializationHelper } from "../Misc/decorators.serialization";
-
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Scene } from "../scene";
 import { ThinScreenSpaceCurvaturePostProcess } from "./thinScreenSpaceCurvaturePostProcess";

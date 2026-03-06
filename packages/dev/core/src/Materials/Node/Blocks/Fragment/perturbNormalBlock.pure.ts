@@ -15,7 +15,6 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import type { TextureBlock } from "../Dual/textureBlock";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { TBNBlock } from "./TBNBlock";
-
 import { ShaderLanguage } from "../../../../Materials/shaderLanguage";
 import { Constants } from "../../../../Engines/constants";
 import type { Nullable } from "../../../../types";

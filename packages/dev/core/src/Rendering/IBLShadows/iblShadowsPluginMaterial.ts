@@ -4,7 +4,7 @@
  */
 export * from "./iblShadowsPluginMaterial.pure";
 
+import { IBLShadowsPluginMaterial } from "./iblShadowsPluginMaterial.pure";
 import { RegisterClass } from "core/Misc/typeStore";
-
 
 RegisterClass(`BABYLON.IBLShadowsPluginMaterial`, IBLShadowsPluginMaterial);

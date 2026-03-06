@@ -4,8 +4,8 @@
  */
 export * from "./WebXRAnchorSystem.pure";
 
+import { WebXRAnchorSystem } from "./WebXRAnchorSystem.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 // register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

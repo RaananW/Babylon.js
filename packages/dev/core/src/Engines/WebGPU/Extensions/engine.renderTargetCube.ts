@@ -4,12 +4,11 @@
  */
 export * from "./engine.renderTargetCube.pure";
 
+import { RenderTargetCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
+import { RenderTargetWrapper } from "../../renderTargetWrapper";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Constants } from "../../constants";
-import type { RenderTargetCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
-import type { RenderTargetWrapper } from "../../renderTargetWrapper";
-
 
 ThinWebGPUEngine.prototype.createRenderTargetCubeTexture = function (size: number, options?: RenderTargetCreationOptions): RenderTargetWrapper {
     const rtWrapper = this._createHardwareRenderTargetWrapper(false, true, size);

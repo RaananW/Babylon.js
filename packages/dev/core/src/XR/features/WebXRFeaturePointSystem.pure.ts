@@ -6,7 +6,6 @@ import { Observable } from "../../Misc/observable";
 import { Vector3 } from "../../Maths/math.vector";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 
-
 /**
  * A babylon interface for a "WebXR" feature point.
  * Represents the position and confidence value of a given feature point.

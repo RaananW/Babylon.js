@@ -15,7 +15,6 @@ import type { Effect } from "../Materials/effect";
 import type { MeshCreationOptions } from "./mesh";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
-
 /**
  * Line mesh
  * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param

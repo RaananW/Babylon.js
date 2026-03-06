@@ -11,7 +11,6 @@ import type { BaseTexture } from "core/Materials/Textures/baseTexture";
 import type { Texture } from "core/Materials/Textures/texture";
 import { Constants } from "core/Engines/constants";
 
-
 /**
  * A rectangular area light defined by an unique point in world space, a width and a height.
  * The light is emitted from the rectangular area in the -Z direction.

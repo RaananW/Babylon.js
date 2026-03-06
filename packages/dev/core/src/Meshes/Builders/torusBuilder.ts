@@ -4,14 +4,12 @@
  */
 export * from "./torusBuilder.pure";
 
-import { CreateTorus } from "./torusBuilder.pure";
+import { CreateTorus, CreateTorusVertexData } from "./torusBuilder.pure";
 import { Mesh } from "../mesh";
 import { VertexData } from "../mesh.vertexData";
-import type { Scene } from "../../scene";
-
+import { Scene } from "../../scene";
 
 VertexData.CreateTorus = CreateTorusVertexData;
-
 
 Mesh.CreateTorus = (name: string, diameter: number, thickness: number, tessellation: number, scene?: Scene, updatable?: boolean, sideOrientation?: number): Mesh => {
     const options = {

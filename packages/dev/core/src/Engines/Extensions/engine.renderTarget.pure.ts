@@ -3,10 +3,7 @@
 import type { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../Materials/Textures/textureCreationOptions";
 import type { Nullable } from "../../types";
 import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
-
-
-
+import type { InternalTexture } from "../../Materials/Textures/internalTexture";
 
 /**
  * Type used to define a texture size (either with a number or with a rect width and height)

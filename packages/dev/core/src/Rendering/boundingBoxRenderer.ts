@@ -4,9 +4,9 @@
  */
 export * from "./boundingBoxRenderer.pure";
 
+import { BoundingBoxRenderer } from "./boundingBoxRenderer.pure";
 import { Scene } from "../scene";
 import { AbstractMesh } from "../Meshes/abstractMesh";
-
 
 Object.defineProperty(Scene.prototype, "forceShowBoundingBoxes", {
     get: function (this: Scene) {
@@ -23,7 +23,6 @@ Object.defineProperty(Scene.prototype, "forceShowBoundingBoxes", {
     configurable: true,
 });
 
-
 Scene.prototype.getBoundingBoxRenderer = function (): BoundingBoxRenderer {
     if (!this._boundingBoxRenderer) {
         this._boundingBoxRenderer = new BoundingBoxRenderer(this);
@@ -31,7 +30,6 @@ Scene.prototype.getBoundingBoxRenderer = function (): BoundingBoxRenderer {
 
     return this._boundingBoxRenderer;
 };
-
 
 Object.defineProperty(AbstractMesh.prototype, "showBoundingBox", {
     get: function (this: AbstractMesh) {

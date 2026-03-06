@@ -1,14 +1,14 @@
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import videoTexture.pure for tree-shakeable, side-effect-free usage.
+ */
 export * from "./videoTexture.pure";
 
-import "../../Engines/Extensions/engine.videoTexture";
-import "../../Engines/Extensions/engine.dynamicTexture";
-
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
+import { VideoTexture, VideoTextureSettings } from "./videoTexture.pure";
+import { Nullable } from "../../types";
+import { Scene } from "../../scene";
 import { Texture } from "../../Materials/Textures/texture";
 import { Constants } from "../../Engines/constants";
-import { VideoTexture } from "./videoTexture.pure";
-import type { VideoTextureSettings } from "./videoTexture.pure";
 import { RegisterClass } from "core/Misc/typeStore";
 
 Texture._CreateVideoTexture = (
@@ -24,5 +24,6 @@ Texture._CreateVideoTexture = (
 ) => {
     return new VideoTexture(name, src, scene, generateMipMaps, invertY, samplingMode, settings, onError, format);
 };
+
 // Some exporters relies on Tools.Instantiate
 RegisterClass("BABYLON.VideoTexture", VideoTexture);

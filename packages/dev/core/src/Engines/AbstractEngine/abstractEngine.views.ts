@@ -4,16 +4,16 @@
  */
 export * from "./abstractEngine.views.pure";
 
+import { EngineView } from "./abstractEngine.views.pure";
+import { Camera } from "../../Cameras/camera";
+import { Nullable } from "../../types";
+import { Scene } from "../../scene";
 import { Observable } from "../../Misc/observable";
 import { AbstractEngine } from "../abstractEngine";
-import type { Camera } from "../../Cameras/camera";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
 
 const OnBeforeViewRenderObservable = new Observable<EngineView>();
 
 const OnAfterViewRenderObservable = new Observable<EngineView>();
-
 
 Object.defineProperty(AbstractEngine.prototype, "onBeforeViewRenderObservable", {
     get: function (this: AbstractEngine) {
@@ -21,13 +21,11 @@ Object.defineProperty(AbstractEngine.prototype, "onBeforeViewRenderObservable", 
     },
 });
 
-
 Object.defineProperty(AbstractEngine.prototype, "onAfterViewRenderObservable", {
     get: function (this: AbstractEngine) {
         return OnAfterViewRenderObservable;
     },
 });
-
 
 Object.defineProperty(AbstractEngine.prototype, "inputElement", {
     get: function (this: AbstractEngine) {
@@ -41,11 +39,9 @@ Object.defineProperty(AbstractEngine.prototype, "inputElement", {
     },
 });
 
-
 AbstractEngine.prototype.getInputElement = function (): Nullable<HTMLElement> {
     return this.inputElement || this.getRenderingCanvas();
 };
-
 
 AbstractEngine.prototype.registerView = function (canvas: HTMLCanvasElement, camera?: Camera | Camera[], clearBeforeCopy?: boolean): EngineView {
     if (!this.views) {
@@ -76,7 +72,6 @@ AbstractEngine.prototype.registerView = function (canvas: HTMLCanvasElement, cam
     return newView;
 };
 
-
 AbstractEngine.prototype.unRegisterView = function (canvas: HTMLCanvasElement): AbstractEngine {
     if (!this.views || this.views.length === 0) {
         return this;
@@ -95,7 +90,6 @@ AbstractEngine.prototype.unRegisterView = function (canvas: HTMLCanvasElement): 
 
     return this;
 };
-
 
 AbstractEngine.prototype._renderViewStep = function (view: EngineView): boolean {
     const canvas = view.target;
@@ -163,7 +157,6 @@ AbstractEngine.prototype._renderViewStep = function (view: EngineView): boolean 
     OnAfterViewRenderObservable.notifyObservers(view);
     return true;
 };
-
 
 AbstractEngine.prototype._renderViews = function () {
     if (!this.views || this.views.length === 0) {

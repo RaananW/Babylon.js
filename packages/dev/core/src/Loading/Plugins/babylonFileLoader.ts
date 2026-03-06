@@ -4,30 +4,55 @@
  */
 export * from "./babylonFileLoader.pure";
 
+import {
+    BabylonFileLoaderConfiguration,
+    FindMaterial,
+    LoadAssetContainer,
+    LoadDetailLevels,
+    TempMaterialIndexContainer,
+    TempMorphTargetManagerIndexContainer,
+    TempSkeletonIndexContainer,
+    _ResetTempContainers,
+    logOperation,
+} from "./babylonFileLoader.pure";
 import { Logger } from "../../Misc/logger";
-import { Vector3 } from "../../Maths/math.vector";
-import { Color3, Color4 } from "../../Maths/math.color";
+import { Nullable } from "../../types";
+import { Scene } from "../../scene";
 import { Mesh } from "../../Meshes/mesh";
+import { AbstractMesh } from "../../Meshes/abstractMesh";
 import { Geometry } from "../../Meshes/geometry";
+import { Node } from "../../node";
 import { TransformNode } from "../../Meshes/transformNode";
 import { Material } from "../../Materials/material";
 import { MultiMaterial } from "../../Materials/multiMaterial";
-import { SceneComponentConstants } from "../../sceneComponent";
-import { RegisterSceneLoaderPlugin } from "../../Loading/sceneLoader";
 import { SceneLoaderFlags } from "../sceneLoaderFlags";
 import { Constants } from "../../Engines/constants";
 import { AssetContainer } from "../../assetContainer";
+import { IParticleSystem } from "../../Particles/IParticleSystem";
 import { Skeleton } from "../../Bones/skeleton";
 import { MorphTargetManager } from "../../Morph/morphTargetManager";
+import { GetIndividualParser } from "./babylonFileParser.function";
+import { Vector3 } from "../../Maths/math.vector";
+import { Color3, Color4 } from "../../Maths/math.color";
+import { SceneComponentConstants } from "../../sceneComponent";
+import { RegisterSceneLoaderPlugin } from "../../Loading/sceneLoader";
 import { CannonJSPlugin } from "../../Physics/v1/Plugins/cannonJSPlugin";
 import { OimoJSPlugin } from "../../Physics/v1/Plugins/oimoJSPlugin";
 import { AmmoJSPlugin } from "../../Physics/v1/Plugins/ammoJSPlugin";
-import { GetIndividualParser, Parse } from "./babylonFileParser.function";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
-import type { Node } from "../../node";
-import type { IParticleSystem } from "../../Particles/IParticleSystem";
+
+const IsDescendantOf = (mesh: any, names: Array<any>, hierarchyIds: Array<number>) => {
+    for (const i in names) {
+        if (mesh.name === names[i]) {
+            hierarchyIds.push(mesh.id);
+            return true;
+        }
+    }
+    if (mesh.parentId !== undefined && hierarchyIds.indexOf(mesh.parentId) !== -1) {
+        hierarchyIds.push(mesh.id);
+        return true;
+    }
+    return false;
+};
 
 const ParseMaterialByPredicate = (predicate: (parsedMaterial: any) => boolean, parsedData: any, scene: Scene, rootUrl: string) => {
     if (!parsedData.materials) {
@@ -42,7 +67,6 @@ const ParseMaterialByPredicate = (predicate: (parsedMaterial: any) => boolean, p
     }
     return null;
 };
-
 
 RegisterSceneLoaderPlugin({
     name: "babylon.js",
@@ -414,9 +438,7 @@ RegisterSceneLoaderPlugin({
                     logOperation("importMesh", parsedData ? parsedData.producer : "Unknown") + (SceneLoaderFlags.loggingLevel !== Constants.SCENELOADER_MINIMAL_LOGGING ? log : "")
                 );
             }
-            TempMaterialIndexContainer = {};
-            TempMorphTargetManagerIndexContainer = {};
-            TempSkeletonIndexContainer = {};
+            _ResetTempContainers();
         }
 
         return false;

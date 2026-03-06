@@ -2,7 +2,6 @@
 
 import { Action } from "./action";
 import type { Condition } from "./condition";
-
 import { Logger } from "../Misc/logger";
 import { Observable } from "../Misc/observable";
 import { Color3 } from "../Maths/math.color";

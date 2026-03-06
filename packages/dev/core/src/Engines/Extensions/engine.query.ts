@@ -4,12 +4,11 @@
  */
 export * from "./engine.query.pure";
 
+import { Nullable, int } from "../../types";
+import { OcclusionQuery } from "../AbstractEngine/abstractEngine.query";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { AbstractMesh } from "../../Meshes/abstractMesh";
 import { _TimeToken } from "../../Instrumentation/timeToken";
-import type { Nullable, int } from "../../types";
-import type { OcclusionQuery } from "../AbstractEngine/abstractEngine.query";
-
 
 ThinEngine.prototype.createQuery = function (): OcclusionQuery {
     const query = this._gl.createQuery();
@@ -19,23 +18,19 @@ ThinEngine.prototype.createQuery = function (): OcclusionQuery {
     return query;
 };
 
-
 ThinEngine.prototype.deleteQuery = function (query: OcclusionQuery): ThinEngine {
     this._gl.deleteQuery(query);
 
     return this;
 };
 
-
 ThinEngine.prototype.isQueryResultAvailable = function (query: OcclusionQuery): boolean {
     return this._gl.getQueryParameter(query, this._gl.QUERY_RESULT_AVAILABLE) as boolean;
 };
 
-
 ThinEngine.prototype.getQueryResult = function (query: OcclusionQuery): number {
     return this._gl.getQueryParameter(query, this._gl.QUERY_RESULT) as number;
 };
-
 
 ThinEngine.prototype.beginOcclusionQuery = function (algorithmType: number, query: OcclusionQuery): boolean {
     const glAlgorithm = this._getGlAlgorithmType(algorithmType);
@@ -44,14 +39,12 @@ ThinEngine.prototype.beginOcclusionQuery = function (algorithmType: number, quer
     return true;
 };
 
-
 ThinEngine.prototype.endOcclusionQuery = function (algorithmType: number): ThinEngine {
     const glAlgorithm = this._getGlAlgorithmType(algorithmType);
     this._gl.endQuery(glAlgorithm);
 
     return this;
 };
-
 
 ThinEngine.prototype._createTimeQuery = function (): Nullable<WebGLQuery> {
     const timerQuery = <EXT_disjoint_timer_query>this.getCaps().timerQuery;
@@ -62,7 +55,6 @@ ThinEngine.prototype._createTimeQuery = function (): Nullable<WebGLQuery> {
 
     return this.createQuery();
 };
-
 
 ThinEngine.prototype._deleteTimeQuery = function (query: WebGLQuery): void {
     const timerQuery = <EXT_disjoint_timer_query>this.getCaps().timerQuery;
@@ -75,7 +67,6 @@ ThinEngine.prototype._deleteTimeQuery = function (query: WebGLQuery): void {
     this.deleteQuery(query);
 };
 
-
 ThinEngine.prototype._getTimeQueryResult = function (query: WebGLQuery): any {
     const timerQuery = <EXT_disjoint_timer_query>this.getCaps().timerQuery;
 
@@ -85,7 +76,6 @@ ThinEngine.prototype._getTimeQueryResult = function (query: WebGLQuery): any {
     return this.getQueryResult(query);
 };
 
-
 ThinEngine.prototype._getTimeQueryAvailability = function (query: WebGLQuery): any {
     const timerQuery = <EXT_disjoint_timer_query>this.getCaps().timerQuery;
 
@@ -94,7 +84,6 @@ ThinEngine.prototype._getTimeQueryAvailability = function (query: WebGLQuery): a
     }
     return this.isQueryResultAvailable(query);
 };
-
 
 ThinEngine.prototype.startTimeQuery = function (): Nullable<_TimeToken> {
     const caps = this.getCaps();
@@ -129,7 +118,6 @@ ThinEngine.prototype.startTimeQuery = function (): Nullable<_TimeToken> {
     }
     return token;
 };
-
 
 ThinEngine.prototype.endTimeQuery = function (token: _TimeToken): int {
     const caps = this.getCaps();
@@ -199,7 +187,6 @@ ThinEngine.prototype.endTimeQuery = function (token: _TimeToken): int {
     return -1;
 };
 
-
 ThinEngine.prototype.captureGPUFrameTime = function (value: boolean) {
     if (value === this._captureGPUFrameTime) {
         return;
@@ -235,7 +222,6 @@ ThinEngine.prototype.captureGPUFrameTime = function (value: boolean) {
         this._onEndFrameObserver = null;
     }
 };
-
 
 ThinEngine.prototype._getGlAlgorithmType = function (algorithmType: number): number {
     return algorithmType === AbstractMesh.OCCLUSION_ALGORITHM_TYPE_CONSERVATIVE ? this._gl.ANY_SAMPLES_PASSED_CONSERVATIVE : this._gl.ANY_SAMPLES_PASSED;

@@ -26,9 +26,6 @@ import type { PointLight } from "../pointLight";
 import type { SpotLight } from "../spotLight";
 import type { RenderTargetWrapper } from "../../Engines/renderTargetWrapper";
 
-
-
-
 const DefaultDepthSlices = 16;
 
 /**

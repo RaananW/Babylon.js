@@ -12,7 +12,6 @@ import { expandToProperty, serialize } from "core/Misc/decorators";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { OpenPBRMaterial } from "core/Materials/PBR/openpbrMaterial";
 
-
 /**
  * @internal
  */

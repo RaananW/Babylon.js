@@ -1,12 +1,11 @@
 /**
- * Re-exports all pure types and registers them with the serialization system.
- * Import this file (or the barrel) when you need serialization support (RegisterClass).
+ * Re-exports pure implementation and applies runtime side effects.
  * Import flowGraphDebounceBlock.pure for tree-shakeable, side-effect-free usage.
  */
 export * from "./flowGraphDebounceBlock.pure";
 
-import { RegisterClass } from "../../../../Misc/typeStore";
 import { FlowGraphDebounceBlock } from "./flowGraphDebounceBlock.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 RegisterClass(FlowGraphBlockNames.Debounce, FlowGraphDebounceBlock);

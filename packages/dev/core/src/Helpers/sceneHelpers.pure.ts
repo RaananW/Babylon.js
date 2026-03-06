@@ -3,12 +3,9 @@
 import type { Nullable } from "../types";
 import type { Mesh } from "../Meshes/mesh";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
-import type { IEnvironmentHelperOptions } from "./environmentHelper";
-import type { TargetCamera } from "../Cameras/targetCamera";
-import type { VRExperienceHelperOptions } from "../Cameras/VR/vrExperienceHelper";
-import type { WebXRDefaultExperienceOptions } from "../XR/webXRDefaultExperience";
-
-
+import type { IEnvironmentHelperOptions, EnvironmentHelper } from "./environmentHelper";
+import type { VRExperienceHelperOptions, VRExperienceHelper } from "../Cameras/VR/vrExperienceHelper";
+import type { WebXRDefaultExperienceOptions, WebXRDefaultExperience } from "../XR/webXRDefaultExperience";
 
 /** @internal */
 // eslint-disable-next-line no-var, @typescript-eslint/naming-convention

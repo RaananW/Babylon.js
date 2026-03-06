@@ -6,8 +6,6 @@ import { EngineStore } from "../../../Engines/engineStore";
 import type { Texture } from "../../../Materials/Textures/texture";
 import { ProceduralTexture } from "./proceduralTexture";
 
-import "../../../Shaders/noise.fragment";
-
 /**
  * Class used to generate noise procedural textures
  */

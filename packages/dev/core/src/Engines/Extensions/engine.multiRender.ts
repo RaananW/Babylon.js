@@ -4,17 +4,16 @@
  */
 export * from "./engine.multiRender.pure";
 
+import { IMultiRenderTargetOptions } from "../../Materials/Textures/multiRenderTarget";
+import { Nullable } from "../../types";
+import { RenderTargetWrapper } from "../renderTargetWrapper";
+import { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
+import { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
+import { TextureSize } from "../../Materials/Textures/textureCreationOptions";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { Constants } from "../constants";
 import { ThinEngine } from "../thinEngine";
-import type { IMultiRenderTargetOptions } from "../../Materials/Textures/multiRenderTarget";
-import type { Nullable } from "../../types";
-import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
-import type { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
-import type { TextureSize } from "../../Materials/Textures/textureCreationOptions";
-
 
 ThinEngine.prototype.restoreSingleAttachment = function (): void {
     const gl = this._gl;
@@ -22,13 +21,11 @@ ThinEngine.prototype.restoreSingleAttachment = function (): void {
     this.bindAttachments([gl.BACK]);
 };
 
-
 ThinEngine.prototype.restoreSingleAttachmentForRenderTarget = function (): void {
     const gl = this._gl;
 
     this.bindAttachments([gl.COLOR_ATTACHMENT0]);
 };
-
 
 ThinEngine.prototype.buildTextureLayout = function (textureStatus: boolean[], backBufferLayout = false): number[] {
     const gl = this._gl;
@@ -50,13 +47,11 @@ ThinEngine.prototype.buildTextureLayout = function (textureStatus: boolean[], ba
     return result;
 };
 
-
 ThinEngine.prototype.bindAttachments = function (attachments: number[]): void {
     const gl = this._gl;
 
     gl.drawBuffers(attachments);
 };
-
 
 ThinEngine.prototype.unBindMultiColorAttachmentFramebuffer = function (
     rtWrapper: WebGLRenderTargetWrapper,
@@ -83,7 +78,6 @@ ThinEngine.prototype.unBindMultiColorAttachmentFramebuffer = function (
 
     this._bindUnboundFramebuffer(null);
 };
-
 
 ThinEngine.prototype.createMultipleRenderTarget = function (size: TextureSize, options: IMultiRenderTargetOptions, initializeBuffers: boolean = true): RenderTargetWrapper {
     let generateMipMaps = false;
@@ -363,7 +357,6 @@ ThinEngine.prototype.createMultipleRenderTarget = function (size: TextureSize, o
     return rtWrapper;
 };
 
-
 ThinEngine.prototype.updateMultipleRenderTargetTextureSampleCount = function (
     rtWrapper: Nullable<WebGLRenderTargetWrapper>,
     samples: number,
@@ -461,7 +454,6 @@ ThinEngine.prototype.updateMultipleRenderTargetTextureSampleCount = function (
     return samples;
 };
 
-
 ThinEngine.prototype.generateMipMapsMultiFramebuffer = function (texture: RenderTargetWrapper): void {
     const rtWrapper = texture as WebGLRenderTargetWrapper;
     const gl = this._gl;
@@ -479,7 +471,6 @@ ThinEngine.prototype.generateMipMapsMultiFramebuffer = function (texture: Render
         }
     }
 };
-
 
 ThinEngine.prototype.resolveMultiFramebuffer = function (texture: RenderTargetWrapper): void {
     const rtWrapper = texture as WebGLRenderTargetWrapper;

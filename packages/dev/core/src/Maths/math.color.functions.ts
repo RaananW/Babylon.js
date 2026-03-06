@@ -2,6 +2,8 @@ import type { DeepImmutable } from "../types";
 import type { IColor3Like, IColor4Like } from "./math.like";
 import { ToGammaSpace, ToLinearSpace } from "./math.constants";
 
+export { Color3LerpToRef, Color3HSVtoRGBToRef, Color4LerpToRef } from "./math.color.pure";
+
 // ── sRGB ↔ linear helpers ───────────────────────────────────────────────────
 
 function channelToLinearApprox(c: number): number {
@@ -21,64 +23,6 @@ function channelToGammaExact(c: number): number {
 }
 
 // ── Color3 free functions ───────────────────────────────────────────────────
-
-/**
- * Linearly interpolates between two IColor3Like values and stores the result.
- * @param left - start color
- * @param right - end color
- * @param amount - interpolant (0..1)
- * @param result - color to store the result
- * @returns result
- */
-export function Color3LerpToRef<T extends IColor3Like>(left: DeepImmutable<IColor3Like>, right: DeepImmutable<IColor3Like>, amount: number, result: T): T {
-    result.r = left.r + (right.r - left.r) * amount;
-    result.g = left.g + (right.g - left.g) * amount;
-    result.b = left.b + (right.b - left.b) * amount;
-    return result;
-}
-
-/**
- * Converts Hue, Saturation, Value to an IColor3Like (RGB).
- * @param hue - the hue (0..360)
- * @param saturation - the saturation (0..1)
- * @param value - the value (0..1)
- * @param result - color to store the result
- * @returns result
- */
-export function Color3HSVtoRGBToRef<T extends IColor3Like>(hue: number, saturation: number, value: number, result: T): T {
-    const chroma = value * saturation;
-    const h = hue / 60;
-    const x = chroma * (1 - Math.abs((h % 2) - 1));
-    let r = 0;
-    let g = 0;
-    let b = 0;
-
-    if (h >= 0 && h <= 1) {
-        r = chroma;
-        g = x;
-    } else if (h >= 1 && h <= 2) {
-        r = x;
-        g = chroma;
-    } else if (h >= 2 && h <= 3) {
-        g = chroma;
-        b = x;
-    } else if (h >= 3 && h <= 4) {
-        g = x;
-        b = chroma;
-    } else if (h >= 4 && h <= 5) {
-        r = x;
-        b = chroma;
-    } else if (h >= 5 && h <= 6) {
-        r = chroma;
-        b = x;
-    }
-
-    const m = value - chroma;
-    result.r = r + m;
-    result.g = g + m;
-    result.b = b + m;
-    return result;
-}
 
 /**
  * Converts an IColor3Like from sRGB to linear space and stores the result.
@@ -122,22 +66,6 @@ export function Color3EqualsWithEpsilon(left: DeepImmutable<IColor3Like>, right:
 }
 
 // ── Color4 free functions ───────────────────────────────────────────────────
-
-/**
- * Linearly interpolates between two IColor4Like values and stores the result.
- * @param left - start color
- * @param right - end color
- * @param amount - interpolant (0..1)
- * @param result - color to store the result
- * @returns result
- */
-export function Color4LerpToRef<T extends IColor4Like>(left: DeepImmutable<IColor4Like>, right: DeepImmutable<IColor4Like>, amount: number, result: T): T {
-    result.r = left.r + (right.r - left.r) * amount;
-    result.g = left.g + (right.g - left.g) * amount;
-    result.b = left.b + (right.b - left.b) * amount;
-    result.a = left.a + (right.a - left.a) * amount;
-    return result;
-}
 
 /**
  * Converts an IColor4Like from sRGB to linear space and stores the result.

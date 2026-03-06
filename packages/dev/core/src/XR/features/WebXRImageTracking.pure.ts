@@ -9,7 +9,6 @@ import type { Nullable } from "../../types";
 import { Tools } from "../../Misc/tools";
 import type { Engine } from "../../Engines/engine";
 
-
 /**
  * Options interface for the background remover plugin
  */

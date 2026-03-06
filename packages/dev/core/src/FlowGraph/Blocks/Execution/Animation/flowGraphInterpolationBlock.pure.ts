@@ -2,7 +2,8 @@
 
 import type { EasingFunction } from "core/Animations/easing";
 import { Constants } from "core/Engines/constants";
-import { FlowGraphBlock, type IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
+import { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
+import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
 import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
 import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
 import type { FlowGraphTypes } from "core/FlowGraph/flowGraphRichTypes";
@@ -178,6 +179,5 @@ export class FlowGraphInterpolationBlock<T> extends FlowGraphBlock {
         return FlowGraphBlockNames.ValueInterpolation;
     }
 }
-
 
 // #L54P2C

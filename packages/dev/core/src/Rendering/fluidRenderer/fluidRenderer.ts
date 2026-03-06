@@ -4,9 +4,9 @@
  */
 export * from "./fluidRenderer.pure";
 
+import { FluidRenderer } from "./fluidRenderer.pure";
 import { Scene } from "core/scene";
-import type { Nullable } from "core/types";
-
+import { Nullable } from "core/types";
 
 Object.defineProperty(Scene.prototype, "fluidRenderer", {
     get: function (this: Scene) {
@@ -19,7 +19,6 @@ Object.defineProperty(Scene.prototype, "fluidRenderer", {
     configurable: true,
 });
 
-
 Scene.prototype.enableFluidRenderer = function (): Nullable<FluidRenderer> {
     if (this._fluidRenderer) {
         return this._fluidRenderer;
@@ -29,7 +28,6 @@ Scene.prototype.enableFluidRenderer = function (): Nullable<FluidRenderer> {
 
     return this._fluidRenderer;
 };
-
 
 Scene.prototype.disableFluidRenderer = function (): void {
     this._fluidRenderer?.dispose();

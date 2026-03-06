@@ -4,8 +4,8 @@
  */
 export * from "./WebXRMeshDetector.pure";
 
+import { WebXRMeshDetector } from "./WebXRMeshDetector.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 WebXRFeaturesManager.AddWebXRFeature(
     WebXRMeshDetector.Name,

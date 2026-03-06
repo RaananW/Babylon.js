@@ -5,6 +5,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConn
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
 import type { NodeGeometryBuildState } from "../nodeGeometryBuildState";
+
 /**
  * Block used to trigger an observable when traversed
  * It can also be used to execute a function when traversed

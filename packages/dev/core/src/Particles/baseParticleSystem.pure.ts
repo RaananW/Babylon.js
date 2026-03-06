@@ -11,8 +11,6 @@ import { Constants } from "../Engines/constants";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import { Color4 } from "../Maths/math.color";
 import type { AbstractEngine } from "../Engines/abstractEngine";
-
-import "../Engines/Extensions/engine.dynamicBuffer";
 import type { IClipPlanesHolder } from "../Misc/interfaces/iClipPlanesHolder";
 import type { Plane } from "../Maths/math.plane";
 import type { Animation } from "../Animations/animation";

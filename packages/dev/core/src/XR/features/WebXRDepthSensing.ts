@@ -4,12 +4,12 @@
  */
 export * from "./WebXRDepthSensing.pure";
 
+import { WebXRDepthSensing } from "./WebXRDepthSensing.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 import { RegisterClass } from "../../Misc/typeStore";
-
+import { WebXRDepthSensingMaterialPlugin } from "./WebXRDepthSensing.pure";
 
 RegisterClass(`BABYLON.DepthSensingMaterialPlugin`, WebXRDepthSensingMaterialPlugin);
-
 
 WebXRFeaturesManager.AddWebXRFeature(
     WebXRDepthSensing.Name,

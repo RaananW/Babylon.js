@@ -2,17 +2,10 @@
 
 import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
 import { FlowGraphCachedOperationBlock } from "../flowGraphCachedOperationBlock";
-import {
-    RichTypeMatrix,
-    RichTypeMatrix2D,
-    RichTypeMatrix3D,
-    RichTypeNumber,
-    RichTypeVector2,
-    RichTypeVector3,
-    RichTypeVector4,
-    type RichType,
-} from "core/FlowGraph/flowGraphRichTypes";
-import { FlowGraphBlock, type IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
+import { RichTypeMatrix, RichTypeMatrix2D, RichTypeMatrix3D, RichTypeNumber, RichTypeVector2, RichTypeVector3, RichTypeVector4 } from "core/FlowGraph/flowGraphRichTypes";
+import type { RichType } from "core/FlowGraph/flowGraphRichTypes";
+import { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
+import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
 import { Matrix, Vector2, Vector3, Vector4 } from "core/Maths/math.vector";
 import type { Nullable } from "core/types";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
@@ -79,7 +72,6 @@ export class FlowGraphCombineVector2Block extends FlowGraphMathCombineBlock<Vect
     }
 }
 
-
 /**
  * Combines three floats into a new Vector3
  */
@@ -101,7 +93,6 @@ export class FlowGraphCombineVector3Block extends FlowGraphMathCombineBlock<Vect
         return FlowGraphBlockNames.CombineVector3;
     }
 }
-
 
 /**
  * Combines four floats into a new Vector4
@@ -129,7 +120,6 @@ export class FlowGraphCombineVector4Block extends FlowGraphMathCombineBlock<Vect
         return FlowGraphBlockNames.CombineVector4;
     }
 }
-
 
 /**
  * Configuration for the matrix combine blocks.
@@ -204,7 +194,6 @@ export class FlowGraphCombineMatrixBlock extends FlowGraphMathCombineBlock<Matri
     }
 }
 
-
 /**
  * Combines 4 floats into a new Matrix
  */
@@ -240,7 +229,6 @@ export class FlowGraphCombineMatrix2DBlock extends FlowGraphMathCombineBlock<Flo
         return FlowGraphBlockNames.CombineMatrix2D;
     }
 }
-
 
 /**
  * Combines 9 floats into a new Matrix3D
@@ -288,7 +276,6 @@ export class FlowGraphCombineMatrix3DBlock extends FlowGraphMathCombineBlock<Flo
     }
 }
 
-
 /**
  * Extracts two floats from a Vector2
  */
@@ -312,7 +299,6 @@ export class FlowGraphExtractVector2Block extends FlowGraphMathExtractBlock<Vect
     }
 }
 
-
 /**
  * Extracts three floats from a Vector3
  */
@@ -335,7 +321,6 @@ export class FlowGraphExtractVector3Block extends FlowGraphMathExtractBlock<Vect
         return FlowGraphBlockNames.ExtractVector3;
     }
 }
-
 
 /**
  * Extracts four floats from a Vector4
@@ -361,7 +346,6 @@ export class FlowGraphExtractVector4Block extends FlowGraphMathExtractBlock<Vect
     }
 }
 
-
 /**
  * Extracts 16 floats from a Matrix
  */
@@ -385,7 +369,6 @@ export class FlowGraphExtractMatrixBlock extends FlowGraphMathExtractBlock<Matri
     }
 }
 
-
 /**
  * Extracts 4 floats from a Matrix2D
  */
@@ -408,7 +391,6 @@ export class FlowGraphExtractMatrix2DBlock extends FlowGraphMathExtractBlock<Flo
         return FlowGraphBlockNames.ExtractMatrix2D;
     }
 }
-
 
 /**
  * Extracts 4 floats from a Matrix2D

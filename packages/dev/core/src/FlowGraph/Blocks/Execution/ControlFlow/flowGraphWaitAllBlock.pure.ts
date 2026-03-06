@@ -8,6 +8,7 @@ import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnec
 import { RichTypeFlowGraphInteger } from "core/FlowGraph/flowGraphRichTypes";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger";
+
 /**
  * Configuration for the wait all block.
  */

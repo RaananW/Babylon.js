@@ -6,8 +6,6 @@ import { Quaternion, Vector3 } from "../Maths/math.vector";
 import { Axis } from "../Maths/math.axis";
 import type { Nullable } from "../types";
 
-
-
 // We're mainly based on the logic defined into the FreeCamera code
 /**
  * This is a camera specifically designed to react to device orientation events such as a modern mobile device

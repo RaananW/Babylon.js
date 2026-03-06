@@ -182,7 +182,6 @@ export class FlowGraphMatrixDecomposeBlock extends FlowGraphBlock {
     }
 }
 
-
 /**
  * Matrix compose block
  */

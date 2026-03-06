@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import { NodeMaterialBlock } from "../../nodeMaterialBlock";
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
 import { NodeMaterialBlockConnectionPointMode } from "../../Enums/nodeMaterialBlockConnectionPointMode";
@@ -19,6 +18,8 @@ import { Observable } from "../../../../Misc/observable";
 import type { NodeMaterial } from "../../nodeMaterial";
 import { PrecisionDate } from "../../../../Misc/precisionDate";
 import { ShaderLanguage } from "../../../../Materials/shaderLanguage";
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 const remapAttributeName: { [name: string]: string } = {
     position2d: "position",

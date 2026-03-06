@@ -8,6 +8,7 @@ import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterial } from "../nodeMaterial";
 import { NodeMaterialSystemValues } from "../Enums/nodeMaterialSystemValues";
 import { InputBlock } from "./Input/inputBlock";
+
 /**
  * Block used to get the view direction
  */

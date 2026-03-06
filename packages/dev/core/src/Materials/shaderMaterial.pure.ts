@@ -22,7 +22,6 @@ import { EngineStore } from "../Engines/engineStore";
 import { Constants } from "../Engines/constants";
 import { AddClipPlaneUniforms, BindClipPlane, PrepareStringDefinesForClipPlanes } from "./clipPlaneMaterialHelper";
 import type { WebGPUEngine } from "core/Engines/webgpuEngine";
-
 import type { ExternalTexture } from "./Textures/externalTexture";
 import {
     BindBonesParameters,
@@ -35,7 +34,6 @@ import {
 } from "./materialHelper.functions";
 import type { IColor3Like, IColor4Like, IVector2Like, IVector3Like, IVector4Like } from "core/Maths/math.like";
 import type { InternalTexture } from "./Textures/internalTexture";
-
 import { PrepareVertexPullingUniforms, BindVertexPullingUniforms } from "./vertexPullingHelper.functions";
 import type { IVertexPullingMetadata } from "./vertexPullingHelper.functions";
 

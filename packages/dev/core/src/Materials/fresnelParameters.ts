@@ -4,8 +4,8 @@
  */
 export * from "./fresnelParameters.pure";
 
+import { FresnelParameters } from "./fresnelParameters.pure";
 import { SerializationHelper } from "../Misc/decorators.serialization";
-
 
 // References the dependencies.
 SerializationHelper._FresnelParametersParser = FresnelParameters.Parse;

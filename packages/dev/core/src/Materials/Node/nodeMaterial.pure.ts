@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { NodeMaterialBlock } from "./nodeMaterialBlock";
 import { PushMaterial } from "../pushMaterial";
 import type { Scene } from "../../scene";
@@ -74,6 +73,8 @@ import type { LoopBlock } from "./Blocks/loopBlock";
 import { MaterialHelperGeometryRendering } from "../materialHelper.geometryrendering";
 import { UVDefinesMixin } from "../uv.defines";
 import { ImageProcessingMixin } from "../imageProcessing";
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 const onCreatedEffectParameters = { effect: null as unknown as Effect, subMesh: null as unknown as Nullable<SubMesh> };
 
@@ -2526,7 +2527,6 @@ export class NodeMaterial extends NodeMaterialBase {
 
         return Promise.all(textureReadyPromises);
     }
-
 }
 
 /**
@@ -2676,4 +2676,13 @@ export function NodeMaterialCreateDefault(name: string, scene?: Scene) {
     newMaterial.build();
 
     return newMaterial;
+}
+
+declare module "./nodeMaterial.pure" {
+    namespace NodeMaterial {
+        export let Parse: typeof NodeMaterialParse;
+        export let ParseFromFileAsync: typeof NodeMaterialParseFromFileAsync;
+        export let ParseFromSnippetAsync: typeof NodeMaterialParseFromSnippetAsync;
+        export let CreateDefault: typeof NodeMaterialCreateDefault;
+    }
 }

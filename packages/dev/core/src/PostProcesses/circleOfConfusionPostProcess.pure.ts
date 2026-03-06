@@ -8,7 +8,6 @@ import type { RenderTargetTexture } from "../Materials/Textures/renderTargetText
 import type { Camera } from "../Cameras/camera";
 import { Logger } from "../Misc/logger";
 import { Constants } from "../Engines/constants";
-
 import { serialize } from "../Misc/decorators";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import type { ThinCircleOfConfusionPostProcessOptions } from "./thinCircleOfConfusionPostProcess";

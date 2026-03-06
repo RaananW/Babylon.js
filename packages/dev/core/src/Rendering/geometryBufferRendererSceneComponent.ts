@@ -4,12 +4,12 @@
  */
 export * from "./geometryBufferRendererSceneComponent.pure";
 
+import { GeometryBufferRendererSceneComponent } from "./geometryBufferRendererSceneComponent.pure";
+import { Nullable } from "../types";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
 import { GeometryBufferRenderer } from "./geometryBufferRenderer";
 import { Constants } from "../Engines/constants";
-import type { Nullable } from "../types";
-
 
 Object.defineProperty(Scene.prototype, "geometryBufferRenderer", {
     get: function (this: Scene) {
@@ -23,7 +23,6 @@ Object.defineProperty(Scene.prototype, "geometryBufferRenderer", {
     enumerable: true,
     configurable: true,
 });
-
 
 Scene.prototype.enableGeometryBufferRenderer = function (
     ratio: number | { width: number; height: number } = 1,
@@ -42,7 +41,6 @@ Scene.prototype.enableGeometryBufferRenderer = function (
     return this._geometryBufferRenderer;
 };
 
-
 Scene.prototype.disableGeometryBufferRenderer = function (): void {
     if (!this._geometryBufferRenderer) {
         return;
@@ -51,7 +49,6 @@ Scene.prototype.disableGeometryBufferRenderer = function (): void {
     this._geometryBufferRenderer.dispose();
     this._geometryBufferRenderer = null;
 };
-
 
 GeometryBufferRenderer._SceneComponentInitialization = (scene: Scene) => {
     // Register the G Buffer component to the scene.

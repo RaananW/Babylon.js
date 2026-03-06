@@ -1,11 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import type { IWebRequest } from "../../../Misc/interfaces/iWebRequest";
 import type { Nullable } from "../../../types";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import type { Scene } from "../../../scene";
-
-
+import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
 
 declare module "../../abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -227,3 +224,5 @@ declare module "../../abstractEngine" {
 /**
  * @internal
  */
+
+export {};

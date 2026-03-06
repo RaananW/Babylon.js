@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import { serialize, expandToProperty, addAccessorsForMaterialProperty } from "../../Misc/decorators";
 import { GetEnvironmentBRDFTexture, GetEnvironmentFuzzBRDFTexture } from "../../Misc/brdfTextureTools";
 import type { Nullable } from "../../types";
@@ -67,6 +66,8 @@ import type { RenderTargetTexture } from "../Textures/renderTargetTexture";
 import type { IAnimatable } from "../../Animations/animatable.interface";
 import { Tools } from "../../Misc/tools";
 import type { UniformBuffer } from "../../Materials/uniformBuffer";
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 const onCreatedEffectParameters = { effect: null as unknown as Effect, subMesh: null as unknown as Nullable<SubMesh> };
 

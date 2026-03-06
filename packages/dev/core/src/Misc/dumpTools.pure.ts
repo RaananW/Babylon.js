@@ -14,7 +14,6 @@ import { nativeOverride } from "./decorators";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-
 type DumpResources = {
     canvas: HTMLCanvasElement | OffscreenCanvas;
     dumpEngine: {

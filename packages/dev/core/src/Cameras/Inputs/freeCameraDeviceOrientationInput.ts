@@ -4,8 +4,8 @@
  */
 export * from "./freeCameraDeviceOrientationInput.pure";
 
+import { FreeCameraDeviceOrientationInput } from "./freeCameraDeviceOrientationInput.pure";
 import { FreeCameraInputsManager } from "../../Cameras/freeCameraInputsManager";
-
 
 /**
  * Add orientation input support to the input manager.

@@ -10,6 +10,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "core/Decorators/
 import type { Scene } from "core/scene";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { NodeMaterialConnectionPointCustomObject } from "../nodeMaterialConnectionPointCustomObject";
+
 /**
  * Block used to repeat code
  */

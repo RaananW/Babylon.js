@@ -8,7 +8,6 @@ import { Vector3, TmpVectors } from "../../Maths/math.vector";
 import { Ray } from "../../Culling/ray";
 import type { Nullable } from "../../types";
 
-
 /**
  * The WebXR Eye Tracking feature grabs eye data from the device and provides it in an easy-access format.
  * Currently only enabled for BabylonNative applications.

@@ -4,7 +4,6 @@ import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnect
 import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
 import type { Particle } from "core/Particles/particle";
 import type { IShapeBlock } from "./IShapeBlock";
-
 import { RandomRange } from "core/Maths/math.scalar.functions";
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "../../nodeParticleBlock";

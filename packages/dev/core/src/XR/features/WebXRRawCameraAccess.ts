@@ -4,8 +4,8 @@
  */
 export * from "./WebXRRawCameraAccess.pure";
 
+import { WebXRRawCameraAccess } from "./WebXRRawCameraAccess.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 WebXRFeaturesManager.AddWebXRFeature(
     WebXRRawCameraAccess.Name,

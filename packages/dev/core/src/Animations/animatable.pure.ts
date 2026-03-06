@@ -6,7 +6,6 @@ import type { Node } from "../node";
 import type { Animatable } from "./animatable.core";
 import type { Animation } from "./animation";
 
-
 export * from "./animatable.core";
 
 declare module "../scene" {
@@ -198,3 +197,5 @@ declare module "../Bones/bone" {
         copyAnimationRange(source: Bone, rangeName: string, frameOffset: number, rescaleAsRequired: boolean, skelDimensionsRatio: Nullable<Vector3>): boolean;
     }
 }
+
+export {};

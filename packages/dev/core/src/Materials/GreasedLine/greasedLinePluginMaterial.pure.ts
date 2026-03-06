@@ -21,8 +21,6 @@ import { GetCustomCode as getCustomCodeGLSL } from "./greasedLinePluginMaterialS
 import { GetCustomCode as getCustomCodeWGSL } from "./greasedLinePluginMaterialShadersWGSL";
 import type { GreasedLineBaseMesh } from "../../Meshes";
 
-
-
 /**
  * @internal
  */

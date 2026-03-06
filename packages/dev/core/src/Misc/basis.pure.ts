@@ -5,7 +5,7 @@ import { Tools } from "./tools";
 import { Texture } from "../Materials/Textures/texture";
 import { InternalTexture, InternalTextureSource } from "../Materials/Textures/internalTexture";
 import { Constants } from "../Engines/constants";
-import { initializeWebWorker } from "./basisWorker";
+import { initializeWebWorker, workerFunction } from "./basisWorker";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import type { Engine } from "core/Engines/engine";
 

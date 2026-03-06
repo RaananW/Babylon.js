@@ -7,15 +7,12 @@ import { UniformBuffer } from "../Materials/uniformBuffer";
 import type { IGPUParticleSystemPlatform } from "./IGPUParticleSystemPlatform";
 import type { Buffer, VertexBuffer } from "../Buffers/buffer";
 import type { GPUParticleSystem } from "./gpuParticleSystem";
-
 import type { DataArray, Nullable } from "../types";
 import type { DataBuffer } from "../Buffers/dataBuffer";
 import { Constants } from "../Engines/constants";
 import { UniformBufferEffectCommonAccessor } from "../Materials/uniformBufferEffectCommonAccessor";
 import type { ComputeBindingMapping } from "../Engines/Extensions/engine.computeShader";
 import type { Effect } from "../Materials/effect";
-
-import "../ShadersWGSL/gpuUpdateParticles.compute";
 
 /** @internal */
 export class ComputeShaderParticleSystem implements IGPUParticleSystemPlatform {

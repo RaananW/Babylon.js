@@ -4,13 +4,13 @@
  */
 export * from "./lensFlareSystemSceneComponent.pure";
 
+import { LensFlareSystemSceneComponent } from "./lensFlareSystemSceneComponent.pure";
+import { Nullable } from "../types";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
+import { AssetContainer } from "../assetContainer";
 import { LensFlareSystem } from "./lensFlareSystem";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
-import type { Nullable } from "../types";
-import type { AssetContainer } from "../assetContainer";
-
 
 // Adds the parser to the scene parsers.
 AddParser(SceneComponentConstants.NAME_LENSFLARESYSTEM, (parsedData: any, scene: Scene, container: AssetContainer, rootUrl: string) => {
@@ -28,7 +28,6 @@ AddParser(SceneComponentConstants.NAME_LENSFLARESYSTEM, (parsedData: any, scene:
     }
 });
 
-
 Scene.prototype.getLensFlareSystemByName = function (name: string): Nullable<LensFlareSystem> {
     for (let index = 0; index < this.lensFlareSystems.length; index++) {
         if (this.lensFlareSystems[index].name === name) {
@@ -38,7 +37,6 @@ Scene.prototype.getLensFlareSystemByName = function (name: string): Nullable<Len
 
     return null;
 };
-
 
 Scene.prototype.getLensFlareSystemById = function (id: string): Nullable<LensFlareSystem> {
     for (let index = 0; index < this.lensFlareSystems.length; index++) {
@@ -50,11 +48,9 @@ Scene.prototype.getLensFlareSystemById = function (id: string): Nullable<LensFla
     return null;
 };
 
-
 Scene.prototype.getLensFlareSystemByID = function (id: string): Nullable<LensFlareSystem> {
     return this.getLensFlareSystemById(id);
 };
-
 
 Scene.prototype.removeLensFlareSystem = function (toRemove: LensFlareSystem): number {
     const index = this.lensFlareSystems.indexOf(toRemove);
@@ -64,11 +60,9 @@ Scene.prototype.removeLensFlareSystem = function (toRemove: LensFlareSystem): nu
     return index;
 };
 
-
 Scene.prototype.addLensFlareSystem = function (newLensFlareSystem: LensFlareSystem): void {
     this.lensFlareSystems.push(newLensFlareSystem);
 };
-
 
 LensFlareSystem._SceneComponentInitialization = (scene: Scene) => {
     let component = scene._getComponent(SceneComponentConstants.NAME_LENSFLARESYSTEM) as LensFlareSystemSceneComponent;

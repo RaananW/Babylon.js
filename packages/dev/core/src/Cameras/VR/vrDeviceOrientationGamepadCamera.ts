@@ -4,9 +4,9 @@
  */
 export * from "./vrDeviceOrientationGamepadCamera.pure";
 
+import { VRDeviceOrientationGamepadCamera } from "./vrDeviceOrientationGamepadCamera.pure";
 import { Vector3 } from "../../Maths/math.vector";
 import { Node } from "../../node";
-
 
 Node.AddNodeConstructor("VRDeviceOrientationGamepadCamera", (name, scene) => {
     return () => new VRDeviceOrientationGamepadCamera(name, Vector3.Zero(), scene);

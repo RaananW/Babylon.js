@@ -78,7 +78,6 @@ export class VideoRecorder {
         recordChunckSize: 3000,
     };
 
-
     private readonly _options: VideoRecorderOptions;
     private _canvas: Nullable<HTMLCanvasElement>;
     private _mediaRecorder: Nullable<MediaRecorder>;

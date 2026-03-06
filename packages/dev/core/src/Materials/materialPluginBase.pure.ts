@@ -5,7 +5,6 @@ import type { Nullable } from "../types";
 import { MaterialPluginManager } from "./materialPluginManager";
 import type { SmartArray } from "../Misc/smartArray";
 import { Constants } from "../Engines/constants";
-
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Scene } from "../scene";
 import type { AbstractMesh } from "../Meshes/abstractMesh";

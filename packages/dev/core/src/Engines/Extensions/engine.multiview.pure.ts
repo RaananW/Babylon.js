@@ -1,13 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { ICreateSceneUboOptions } from "../../scene";
-import { Scene } from "../../scene";
 import type { Nullable } from "../../types";
 import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
-import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
 import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { AbstractEngine } from "../abstractEngine";
-
+import type { Camera } from "../../Cameras/camera";
+import type { Matrix } from "../../Maths/math.vector";
+import type { UniformBuffer } from "../../Materials/uniformBuffer";
 
 declare module "../../Engines/engine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -82,5 +80,4 @@ declare module "../../scene" {
     }
 }
 
-
-const CurrentCreateSceneUniformBuffer = Scene.prototype.createSceneUniformBuffer;
+export {};

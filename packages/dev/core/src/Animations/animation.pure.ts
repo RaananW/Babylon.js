@@ -1,3 +1,5 @@
+/** This file must only contain pure code and pure imports */
+
 import type { IEasingFunction, EasingFunction } from "./easing";
 import { Vector3, Quaternion, Vector2, Matrix, TmpVectors } from "../Maths/math.vector";
 import { Color3, Color4 } from "../Maths/math.color";
@@ -1674,4 +1676,18 @@ export function AnimationParse(parsedAnimation: any): Animation {
  */
 export function AnimationAppendSerializedAnimations(source: IAnimatable, destination: any): void {
     SerializationHelper.AppendSerializedAnimations(source, destination);
+}
+
+declare module "./animation" {
+    namespace Animation {
+        export let _PrepareAnimation: typeof Animation_PrepareAnimation;
+        export let CreateAnimation: typeof AnimationCreateAnimation;
+        export let CreateAndStartAnimation: typeof AnimationCreateAndStartAnimation;
+        export let CreateAndStartHierarchyAnimation: typeof AnimationCreateAndStartHierarchyAnimation;
+        export let CreateMergeAndStartAnimation: typeof AnimationCreateMergeAndStartAnimation;
+        export let TransitionTo: typeof AnimationTransitionTo;
+        export let _UniversalLerp: typeof Animation_UniversalLerp;
+        export let Parse: typeof AnimationParse;
+        export let AppendSerializedAnimations: typeof AnimationAppendSerializedAnimations;
+    }
 }

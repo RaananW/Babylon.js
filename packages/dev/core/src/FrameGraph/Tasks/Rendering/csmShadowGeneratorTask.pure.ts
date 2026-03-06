@@ -13,7 +13,6 @@ import { textureSizeIsObject } from "../../../Materials/Textures/textureCreation
 export class FrameGraphCascadedShadowGeneratorTask extends FrameGraphShadowGeneratorTask {
     protected override _shadowGenerator: CascadedShadowGenerator | undefined;
 
-
     /**
      * The depth texture used by the autoCalcDepthBounds feature (optional if autoCalcDepthBounds is set to false).
      * This texture is used to compute the min/max depth bounds of the scene to setup the cascaded shadow generator.

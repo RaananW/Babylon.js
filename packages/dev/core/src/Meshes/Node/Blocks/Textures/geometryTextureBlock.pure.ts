@@ -7,6 +7,7 @@ import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import type { Texture } from "core/Materials/Textures/texture";
 import { TextureTools } from "core/Misc/textureTools";
+
 /**
  * Block used to load texture data
  */

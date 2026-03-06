@@ -4,9 +4,9 @@
  */
 export * from "./stereoscopicFreeCamera.pure";
 
+import { StereoscopicFreeCamera } from "./stereoscopicFreeCamera.pure";
 import { Vector3 } from "../../Maths/math.vector";
 import { Node } from "../../node";
-
 
 Node.AddNodeConstructor("StereoscopicFreeCamera", (name, scene, options) => {
     return () => new StereoscopicFreeCamera(name, Vector3.Zero(), options.interaxial_distance, options.isStereoscopicSideBySide, scene);

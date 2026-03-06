@@ -14,7 +14,6 @@ import { PrepareSamplersForImageProcessing, PrepareUniformsForImageProcessing } 
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
-
 /**
  * This groups together the common properties used for image processing either in direct forward pass
  * or through post processing effect depending on the use of the image processing pipeline in your scene

@@ -5,7 +5,6 @@ import { Vector3, Vector2, TmpVectors, Vector4 } from "../Maths/math.vector";
 import { VertexBuffer } from "../Buffers/buffer";
 import { Mesh } from "../Meshes/mesh";
 
-
 /**
  * Mesh representing the ground
  */

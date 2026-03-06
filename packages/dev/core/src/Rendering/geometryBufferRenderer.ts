@@ -4,6 +4,7 @@
  */
 export * from "./geometryBufferRenderer.pure";
 
+import { Uniforms } from "./geometryBufferRenderer.pure";
 import { AddClipPlaneUniforms } from "../Materials/clipPlaneMaterialHelper";
 
 AddClipPlaneUniforms(Uniforms);

@@ -17,17 +17,10 @@ import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
 import { PostProcess } from "./postProcess";
 import { Constants } from "../Engines/constants";
 import type { Scene } from "../scene";
-
 import { CreatePlane } from "../Meshes/Builders/planeBuilder";
-
-import "../Shaders/depth.vertex";
-import "../Shaders/volumetricLightScattering.fragment";
-import "../Shaders/volumetricLightScatteringPass.vertex";
-import "../Shaders/volumetricLightScatteringPass.fragment";
 import { Color4, Color3 } from "../Maths/math.color";
 import { Viewport } from "../Maths/math.viewport";
 import type { Nullable } from "../types";
-
 import { BindBonesParameters, BindMorphTargetParameters, PrepareDefinesAndAttributesForMorphTargets, PushAttributesForInstances } from "../Materials/materialHelper.functions";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { EffectFallbacks } from "core/Materials/effectFallbacks";

@@ -4,7 +4,6 @@ import type { DepthTextureCreationOptions, TextureSize } from "../../Materials/T
 import type { RenderTargetWrapper } from "../renderTargetWrapper";
 import type { InternalTexture } from "../../Materials/Textures/internalTexture";
 
-
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface AbstractEngine {
@@ -19,3 +18,5 @@ declare module "../../Engines/abstractEngine" {
         createDepthStencilTexture(size: TextureSize, options: DepthTextureCreationOptions, rtWrapper: RenderTargetWrapper): InternalTexture;
     }
 }
+
+export {};

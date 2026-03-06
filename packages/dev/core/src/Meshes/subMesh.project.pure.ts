@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { IndicesArray } from "../types";
-
+import type { Vector3 } from "../Maths/math.vector";
 
 declare module "./subMesh" {
     /** @internal */
@@ -23,3 +23,5 @@ declare module "./subMesh" {
         projectToRef(vector: Vector3, positions: Vector3[], indices: IndicesArray, ref: Vector3): number;
     }
 }
+
+export {};

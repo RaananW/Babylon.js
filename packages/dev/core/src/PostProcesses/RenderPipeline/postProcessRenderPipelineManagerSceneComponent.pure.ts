@@ -3,7 +3,7 @@
 import type { ISceneComponent } from "../../sceneComponent";
 import { SceneComponentConstants } from "../../sceneComponent";
 import { Scene } from "../../scene";
-
+import type { PostProcessRenderPipelineManager } from "./postProcessRenderPipelineManager";
 
 declare module "../../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

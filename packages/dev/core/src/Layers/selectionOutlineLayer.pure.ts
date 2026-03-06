@@ -15,9 +15,6 @@ import type { IThinSelectionOutlineLayerOptions } from "./thinSelectionOutlineLa
 import { ThinSelectionOutlineLayer } from "./thinSelectionOutlineLayer";
 import type { Color3 } from "../Maths/math.color";
 
-
-
-
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface Scene {

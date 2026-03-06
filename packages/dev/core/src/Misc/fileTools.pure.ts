@@ -10,12 +10,9 @@ import { FilesInputStore } from "./filesInputStore";
 import { RetryStrategy } from "./retryStrategy";
 import { BaseError, ErrorCodes, RuntimeError } from "./error";
 import { DecodeBase64ToBinary, DecodeBase64ToString, EncodeArrayBufferToBase64 } from "./stringTools";
-import { _FunctionContainer } from "../Engines/Processors/shaderProcessor";
 import { EngineStore } from "../Engines/engineStore";
 import { Logger } from "./logger";
 import { TimingTools } from "./timingTools";
-import { EngineFunctionContext } from "core/Engines/abstractEngine.functions";
-import { AbstractEngine } from "../Engines/abstractEngine";
 import { GetBlobBufferSource } from "../Buffers/bufferUtils";
 
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -874,11 +871,6 @@ export const DecodeBase64UrlToString = (uri: string): string => {
  * Once we build native modules those need to be exported.
  * @internal
  */
-const initSideEffects = () => {
-    AbstractEngine._FileToolsLoadImage = LoadImage;
-    EngineFunctionContext.loadFile = LoadFile;
-    _FunctionContainer.loadFile = LoadFile;
-};
 
 // deprecated
 

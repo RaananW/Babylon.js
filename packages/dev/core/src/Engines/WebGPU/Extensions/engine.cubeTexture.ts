@@ -4,15 +4,14 @@
  */
 export * from "./engine.cubeTexture.pure";
 
+import { Nullable } from "../../../types";
+import { DepthTextureCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
+import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import { Scene } from "../../../scene";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Constants } from "../../constants";
 import { WebGPUTextureHelper } from "../webgpuTextureHelper";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
-import type { Nullable } from "../../../types";
-import type { DepthTextureCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-import type { Scene } from "../../../scene";
-
 
 ThinWebGPUEngine.prototype._createDepthStencilCubeTexture = function (size: number, options: DepthTextureCreationOptions): InternalTexture {
     const internalTexture = new InternalTexture(this, options.generateStencil ? InternalTextureSource.DepthStencil : InternalTextureSource.Depth);
@@ -44,7 +43,6 @@ ThinWebGPUEngine.prototype._createDepthStencilCubeTexture = function (size: numb
 
     return internalTexture;
 };
-
 
 ThinWebGPUEngine.prototype.createCubeTexture = function (
     rootUrl: string,
@@ -107,7 +105,6 @@ ThinWebGPUEngine.prototype.createCubeTexture = function (
     );
 };
 
-
 ThinWebGPUEngine.prototype._setCubeMapTextureParams = function (texture: InternalTexture, loadMipmap: boolean, maxLevel?: number) {
     texture.samplingMode = loadMipmap ? Constants.TEXTURE_TRILINEAR_SAMPLINGMODE : Constants.TEXTURE_BILINEAR_SAMPLINGMODE;
     texture._cachedWrapU = Constants.TEXTURE_CLAMP_ADDRESSMODE;
@@ -116,7 +113,6 @@ ThinWebGPUEngine.prototype._setCubeMapTextureParams = function (texture: Interna
         texture._maxLodLevel = maxLevel;
     }
 };
-
 
 ThinWebGPUEngine.prototype.generateMipMapsForCubemap = function (texture: InternalTexture) {
     if (texture.generateMipMaps) {

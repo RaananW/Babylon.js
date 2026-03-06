@@ -4,15 +4,14 @@
  */
 export * from "./engine.cubeTexture.pure";
 
+import { Nullable } from "../../types";
+import { Scene } from "../../scene";
+import { DepthTextureCreationOptions } from "../../Materials/Textures/textureCreationOptions";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { Constants } from "../constants";
 import { GetExponentOfTwo } from "../../Misc/tools.functions";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-import type { DepthTextureCreationOptions } from "../../Materials/Textures/textureCreationOptions";
-
 
 ThinEngine.prototype._createDepthStencilCubeTexture = function (size: number, options: DepthTextureCreationOptions): InternalTexture {
     const internalTexture = new InternalTexture(this, InternalTextureSource.DepthStencil);
@@ -51,7 +50,6 @@ ThinEngine.prototype._createDepthStencilCubeTexture = function (size: number, op
     return internalTexture;
 };
 
-
 ThinEngine.prototype._setCubeMapTextureParams = function (texture: InternalTexture, loadMipmap: boolean, maxLevel?: number): void {
     const gl = this._gl;
     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -67,7 +65,6 @@ ThinEngine.prototype._setCubeMapTextureParams = function (texture: InternalTextu
 
     this._bindTextureDirectly(gl.TEXTURE_CUBE_MAP, null);
 };
-
 
 ThinEngine.prototype.createCubeTexture = function (
     rootUrl: string,
@@ -167,7 +164,6 @@ ThinEngine.prototype.createCubeTexture = function (
         buffer
     );
 };
-
 
 ThinEngine.prototype.generateMipMapsForCubemap = function (texture: InternalTexture, unbind = true) {
     if (texture.generateMipMaps) {

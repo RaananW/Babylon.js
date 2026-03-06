@@ -4,17 +4,17 @@
  */
 export * from "./spriteSceneComponent.pure";
 
+import { InternalSpriteAugmentedScene } from "./spriteSceneComponent.pure";
+import { Nullable } from "../types";
 import { Observable } from "../Misc/observable";
 import { Scene } from "../scene";
-import { CreatePickingRayInCameraSpace, CreatePickingRayInCameraSpaceToRef, Ray } from "../Culling/ray.core";
+import { Sprite } from "./sprite";
+import { ISpriteManager } from "./spriteManager";
+import { Ray, CreatePickingRayInCameraSpace, CreatePickingRayInCameraSpaceToRef } from "../Culling/ray.core";
+import { Camera } from "../Cameras/camera";
 import { PickingInfo } from "../Collisions/pickingInfo";
 import { ActionEvent } from "../Actions/actionEvent";
 import { Constants } from "../Engines/constants";
-import type { Nullable } from "../types";
-import type { Sprite } from "./sprite";
-import type { ISpriteManager } from "./spriteManager";
-import type { Camera } from "../Cameras/camera";
-
 
 Object.defineProperty(Scene.prototype, "onNewSpriteManagerAddedObservable", {
     get: function (this: InternalSpriteAugmentedScene) {
@@ -28,7 +28,6 @@ Object.defineProperty(Scene.prototype, "onNewSpriteManagerAddedObservable", {
     configurable: true,
 });
 
-
 Object.defineProperty(Scene.prototype, "onSpriteManagerRemovedObservable", {
     get: function (this: InternalSpriteAugmentedScene) {
         if (!this.isDisposed && !this._onSpriteManagerRemovedObservable) {
@@ -40,7 +39,6 @@ Object.defineProperty(Scene.prototype, "onSpriteManagerRemovedObservable", {
     enumerable: true,
     configurable: true,
 });
-
 
 Scene.prototype._internalPickSprites = function (ray: Ray, predicate?: (sprite: Sprite) => boolean, fastCheck?: boolean, camera?: Camera): Nullable<PickingInfo> {
     if (!PickingInfo) {
@@ -84,7 +82,6 @@ Scene.prototype._internalPickSprites = function (ray: Ray, predicate?: (sprite: 
     return pickingInfo || new PickingInfo();
 };
 
-
 Scene.prototype._internalMultiPickSprites = function (ray: Ray, predicate?: (sprite: Sprite) => boolean, camera?: Camera): Nullable<PickingInfo[]> {
     if (!PickingInfo) {
         return null;
@@ -118,7 +115,6 @@ Scene.prototype._internalMultiPickSprites = function (ray: Ray, predicate?: (spr
     return pickingInfos;
 };
 
-
 Scene.prototype.pickSprite = function (x: number, y: number, predicate?: (sprite: Sprite) => boolean, fastCheck?: boolean, camera?: Camera): Nullable<PickingInfo> {
     if (!this._tempSpritePickingRay) {
         return null;
@@ -133,7 +129,6 @@ Scene.prototype.pickSprite = function (x: number, y: number, predicate?: (sprite
 
     return result;
 };
-
 
 Scene.prototype.pickSpriteWithRay = function (ray: Ray, predicate?: (sprite: Sprite) => boolean, fastCheck?: boolean, camera?: Camera): Nullable<PickingInfo> {
     if (!this._tempSpritePickingRay) {
@@ -157,13 +152,11 @@ Scene.prototype.pickSpriteWithRay = function (ray: Ray, predicate?: (sprite: Spr
     return result;
 };
 
-
 Scene.prototype.multiPickSprite = function (x: number, y: number, predicate?: (sprite: Sprite) => boolean, camera?: Camera): Nullable<PickingInfo[]> {
     CreatePickingRayInCameraSpaceToRef(this, x, y, this._tempSpritePickingRay!, camera);
 
     return this._internalMultiPickSprites(this._tempSpritePickingRay!, predicate, camera);
 };
-
 
 Scene.prototype.multiPickSpriteWithRay = function (ray: Ray, predicate?: (sprite: Sprite) => boolean, camera?: Camera): Nullable<PickingInfo[]> {
     if (!this._tempSpritePickingRay) {
@@ -182,7 +175,6 @@ Scene.prototype.multiPickSpriteWithRay = function (ray: Ray, predicate?: (sprite
     return this._internalMultiPickSprites(this._tempSpritePickingRay, predicate, camera);
 };
 
-
 Scene.prototype.setPointerOverSprite = function (sprite: Nullable<Sprite>): void {
     if (this._pointerOverSprite === sprite) {
         return;
@@ -197,7 +189,6 @@ Scene.prototype.setPointerOverSprite = function (sprite: Nullable<Sprite>): void
         this._pointerOverSprite.actionManager.processTrigger(Constants.ACTION_OnPointerOverTrigger, ActionEvent.CreateNewFromSprite(this._pointerOverSprite, this));
     }
 };
-
 
 Scene.prototype.getPointerOverSprite = function (): Nullable<Sprite> {
     return this._pointerOverSprite;

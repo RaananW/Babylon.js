@@ -7,7 +7,6 @@ import { Mesh } from "../mesh";
 import { CreateRibbon } from "./ribbonBuilder";
 import type { Nullable } from "../../types";
 
-
 /**
  * Creates lathe mesh.
  * The lathe is a shape with a symmetry axis : a 2D model shape is rotated around this axis to design the lathe

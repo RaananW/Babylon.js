@@ -14,7 +14,6 @@ import type { ProceduralTexture } from "../Materials/Textures/Procedurals/proced
 import type { Camera } from "../Cameras/camera";
 import { Constants } from "core/Engines/constants";
 
-
 /**
  * A spot light is defined by a position, a direction, an angle, and an exponent.
  * These values define a cone of light starting from the position, emitting toward the direction.

@@ -28,9 +28,6 @@ import type { IAssetContainer } from "core/IAssetContainer";
 import type { EffectWrapperCustomShaderCodeProcessing, EffectWrapperCreationOptions } from "../Materials/effectRenderer";
 import { EffectWrapper } from "../Materials/effectRenderer";
 
-
-
-
 declare module "../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface AbstractEngine {

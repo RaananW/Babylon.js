@@ -3,7 +3,6 @@
 import { AbstractMesh } from "core/Meshes/abstractMesh";
 import type { Nullable } from "../../types";
 
-
 /** @internal */
 export type OcclusionQuery = WebGLQuery | number;
 

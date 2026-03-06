@@ -24,7 +24,6 @@ import type { Camera } from "core/Cameras/camera";
 import { Matrix } from "core/Maths/math.vector";
 import type { Engine } from "core/Engines/engine";
 
-
 export type WebXRDepthUsage = "cpu" | "gpu";
 export type WebXRDepthDataFormat = "ushort" | "float" | "luminance-alpha";
 
@@ -101,7 +100,7 @@ const ManagedMaterialPlugins: WebXRDepthSensingMaterialPlugin[] = [];
 /**
  * @internal
  */
-class WebXRDepthSensingMaterialPlugin extends MaterialPluginBase {
+export class WebXRDepthSensingMaterialPlugin extends MaterialPluginBase {
     private _varColorName: string;
     private _isEnabled = false;
 

@@ -4,8 +4,8 @@
  */
 export * from "./engine.textureSelector.pure";
 
+import { Nullable } from "../../types";
 import { Engine } from "../engine";
-import type { Nullable } from "../../types";
 
 function TransformTextureUrl(this: Engine, url: string): string {
     const excludeFn = (entry: string) => {
@@ -22,7 +22,6 @@ function TransformTextureUrl(this: Engine, url: string): string {
     const querystring = lastQuestionMark > -1 ? url.substring(lastQuestionMark, url.length) : "";
     return (lastDot > -1 ? url.substring(0, lastDot) : url) + this._textureFormatInUse + querystring;
 }
-
 
 Object.defineProperty(Engine.prototype, "texturesSupported", {
     get: function (this: Engine) {
@@ -53,7 +52,6 @@ Object.defineProperty(Engine.prototype, "texturesSupported", {
     configurable: true,
 });
 
-
 Object.defineProperty(Engine.prototype, "textureFormatInUse", {
     get: function (this: Engine) {
         return this._textureFormatInUse || null;
@@ -62,11 +60,9 @@ Object.defineProperty(Engine.prototype, "textureFormatInUse", {
     configurable: true,
 });
 
-
 Engine.prototype.setCompressedTextureExclusions = function (skippedFiles: Array<string>): void {
     this._excludedCompressedTextures = skippedFiles;
 };
-
 
 Engine.prototype.setTextureFormatToUse = function (formatsAvailable: Array<string>): Nullable<string> {
     const texturesSupported = this.texturesSupported;

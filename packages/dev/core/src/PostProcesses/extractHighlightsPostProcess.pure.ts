@@ -7,7 +7,6 @@ import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { Constants } from "../Engines/constants";
-
 import { serialize } from "../Misc/decorators";
 import { ThinExtractHighlightsPostProcess } from "./thinExtractHighlightsPostProcess";
 

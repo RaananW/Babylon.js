@@ -3,7 +3,6 @@
 import type { RenderTargetCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
 import type { RenderTargetWrapper } from "../../renderTargetWrapper";
 
-
 declare module "../../abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface AbstractEngine {
@@ -16,3 +15,5 @@ declare module "../../abstractEngine" {
         createRenderTargetCubeTexture(size: number, options?: RenderTargetCreationOptions): RenderTargetWrapper;
     }
 }
+
+export {};

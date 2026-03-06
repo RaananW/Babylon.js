@@ -10,7 +10,6 @@ import type { AbstractMesh } from "../abstractMesh";
 import type { Camera } from "../../Cameras/camera";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-
 const XpAxis = new Vector3(1, 0, 0);
 const XnAxis = new Vector3(-1, 0, 0);
 const YpAxis = new Vector3(0, 1, 0);

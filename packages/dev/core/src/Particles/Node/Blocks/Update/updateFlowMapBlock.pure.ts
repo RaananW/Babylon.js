@@ -6,7 +6,6 @@ import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnect
 import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
 import type { Particle } from "core/Particles/particle";
 import type { INodeParticleTextureData, ParticleTextureSourceBlock } from "../particleSourceTextureBlock";
-
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "../../nodeParticleBlock";
 import { _ConnectAtTheEnd } from "core/Particles/Queue/executionQueue";

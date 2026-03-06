@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { Nullable } from "../../../types";
 import { serialize, serializeAsTexture } from "../../../Misc/decorators";
 import { SerializationHelper } from "../../../Misc/decorators.serialization";
@@ -20,19 +19,13 @@ import type { IDisposable, Scene } from "../../../scene";
 import type { SpotLight } from "../../../Lights/spotLight";
 import type { DirectionalLight } from "../../../Lights/directionalLight";
 import type { GeometryBufferRenderer } from "../../../Rendering/geometryBufferRenderer";
-
 import { Constants } from "../../../Engines/constants";
-
-import "../../../Rendering/depthRendererSceneComponent";
-
 import { MotionBlurPostProcess } from "../../motionBlurPostProcess";
 import { ScreenSpaceReflectionPostProcess } from "../../screenSpaceReflectionPostProcess";
-
 import type { Animation } from "../../../Animations/animation";
 
-import "../../../PostProcesses/RenderPipeline/postProcessRenderPipelineManagerSceneComponent";
+/* eslint-disable @typescript-eslint/naming-convention */
 
-import "../../../Shaders/standard.fragment";
 /**
  * Standard rendering pipeline
  * Default pipeline should be used going forward but the standard pipeline will be kept for backwards compatibility.

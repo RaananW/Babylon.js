@@ -3,7 +3,6 @@
 import type { Nullable } from "../../types";
 import type { SphericalPolynomial } from "../../Maths/sphericalPolynomial";
 
-
 declare module "./baseTexture" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface BaseTexture {
@@ -21,3 +20,5 @@ declare module "./baseTexture" {
         forceSphericalPolynomialsRecompute(): void;
     }
 }
+
+export {};

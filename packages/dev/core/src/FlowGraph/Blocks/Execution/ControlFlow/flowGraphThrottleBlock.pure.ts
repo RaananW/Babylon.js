@@ -7,6 +7,7 @@ import type { FlowGraphSignalConnection } from "../../../flowGraphSignalConnecti
 import { FlowGraphExecutionBlockWithOutSignal } from "../../../flowGraphExecutionBlockWithOutSignal";
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+
 /**
  * A block that throttles the execution of its output flow.
  */

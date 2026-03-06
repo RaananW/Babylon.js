@@ -4,7 +4,6 @@ import type { InternalTexture } from "../../Materials/Textures/internalTexture";
 import type { Nullable } from "../../types";
 import { allocateAndCopyTypedBuffer } from "../../Engines/abstractEngine.functions";
 
-
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface AbstractEngine {

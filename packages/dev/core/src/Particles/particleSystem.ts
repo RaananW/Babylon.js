@@ -4,7 +4,7 @@
  */
 export * from "./particleSystem.pure";
 
+import { ParticleSystem } from "./particleSystem.pure";
 import { SubEmitter } from "./subEmitter";
-
 
 SubEmitter._ParseParticleSystem = ParticleSystem.Parse;

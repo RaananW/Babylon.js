@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Logger } from "../../../Misc/logger";
 import { serialize } from "../../../Misc/decorators";
 import { SerializationHelper } from "../../../Misc/decorators.serialization";
@@ -18,14 +17,13 @@ import type { PrePassRenderer } from "../../../Rendering/prePassRenderer";
 import { GeometryBufferRenderer } from "../../../Rendering/geometryBufferRenderer";
 import { Constants } from "../../../Engines/constants";
 import type { Nullable } from "../../../types";
-
-import "../../../PostProcesses/RenderPipeline/postProcessRenderPipelineManagerSceneComponent";
-import "../../../Rendering/geometryBufferRendererSceneComponent";
 import { ThinSSAO2RenderingPipeline } from "./thinSSAO2RenderingPipeline";
 import { ThinSSAO2PostProcess } from "../../thinSSAO2PostProcess";
 import type { ISize } from "../../../Maths/math.size";
 import { ThinSSAO2BlurPostProcess } from "../../thinSSAO2BlurPostProcess";
 import { ThinSSAO2CombinePostProcess } from "../../thinSSAO2CombinePostProcess";
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 /**
  * Render pipeline to produce ssao effect

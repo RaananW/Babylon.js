@@ -4,12 +4,11 @@
  */
 export * from "./capsuleBuilder.pure";
 
-import { CreateCapsule, CreateCapsuleVertexData } from "./capsuleBuilder.pure";
+import { CreateCapsule, CreateCapsuleVertexData, ICreateCapsuleOptions } from "./capsuleBuilder.pure";
 import { VertexData } from "../mesh.vertexData";
 import { Mesh } from "../mesh";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-
+import { Nullable } from "../../types";
+import { Scene } from "../../scene";
 
 /**
  * Creates a capsule or a pill mesh
@@ -22,6 +21,5 @@ import type { Scene } from "../../scene";
 Mesh.CreateCapsule = (name: string, options: ICreateCapsuleOptions, scene?: Nullable<Scene>): Mesh => {
     return CreateCapsule(name, options, scene);
 };
-
 
 VertexData.CreateCapsule = CreateCapsuleVertexData;

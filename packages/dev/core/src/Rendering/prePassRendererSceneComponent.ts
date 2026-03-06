@@ -4,12 +4,12 @@
  */
 export * from "./prePassRendererSceneComponent.pure";
 
+import { PrePassRendererSceneComponent } from "./prePassRendererSceneComponent.pure";
+import { Nullable } from "../types";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
 import { PrePassRenderer } from "./prePassRenderer";
 import { Logger } from "../Misc/logger";
-import type { Nullable } from "../types";
-
 
 Object.defineProperty(Scene.prototype, "prePassRenderer", {
     get: function (this: Scene) {
@@ -23,7 +23,6 @@ Object.defineProperty(Scene.prototype, "prePassRenderer", {
     enumerable: true,
     configurable: true,
 });
-
 
 Scene.prototype.enablePrePassRenderer = function (): Nullable<PrePassRenderer> {
     if (this._prePassRenderer) {
@@ -40,7 +39,6 @@ Scene.prototype.enablePrePassRenderer = function (): Nullable<PrePassRenderer> {
     return this._prePassRenderer;
 };
 
-
 Scene.prototype.disablePrePassRenderer = function (): void {
     if (!this._prePassRenderer) {
         return;
@@ -49,7 +47,6 @@ Scene.prototype.disablePrePassRenderer = function (): void {
     this._prePassRenderer.dispose();
     this._prePassRenderer = null;
 };
-
 
 PrePassRenderer._SceneComponentInitialization = (scene: Scene) => {
     // Register the G Buffer component to the scene.

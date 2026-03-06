@@ -11,9 +11,7 @@ import { ShaderLanguage } from "core/Materials/shaderLanguage";
 /**
  * Class used to host RGBD texture specific utilities
  */
-export class RGBDTextureTools {
-
-}
+export class RGBDTextureTools {}
 
 /**
  * Expand the RGBD Texture from RGBD to Half Float if possible.
@@ -137,7 +135,11 @@ export function RGBDTextureToolsExpandRGBDTexture(texture: Texture) {
  */
 // Should have "Async" in the name but this is a breaking change.
 // eslint-disable-next-line no-restricted-syntax
-export async function RGBDTextureToolsEncodeTextureToRGBD(internalTexture: InternalTexture, scene: Scene, outputTextureType = Constants.TEXTURETYPE_UNSIGNED_BYTE): Promise<InternalTexture> {
+export async function RGBDTextureToolsEncodeTextureToRGBD(
+    internalTexture: InternalTexture,
+    scene: Scene,
+    outputTextureType = Constants.TEXTURETYPE_UNSIGNED_BYTE
+): Promise<InternalTexture> {
     if (!scene.getEngine().isWebGPU) {
         await import("../Shaders/rgbdEncode.fragment");
     } else {

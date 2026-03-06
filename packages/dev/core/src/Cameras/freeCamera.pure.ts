@@ -10,7 +10,6 @@ import { FreeCameraInputsManager } from "./freeCameraInputsManager";
 import type { FreeCameraMouseInput } from "../Cameras/Inputs/freeCameraMouseInput";
 import type { FreeCameraKeyboardMoveInput } from "../Cameras/Inputs/freeCameraKeyboardMoveInput";
 import { Tools } from "../Misc/tools";
-
 import type { Collider } from "../Collisions/collider";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 

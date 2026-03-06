@@ -4,10 +4,9 @@
  */
 export * from "./abstractEngine.loadingScreen.pure";
 
+import { ILoadingScreen } from "../../Loading/loadingScreen";
 import { IsWindowObjectExist } from "../../Misc/domManagement";
 import { AbstractEngine } from "../abstractEngine";
-import type { ILoadingScreen } from "../../Loading/loadingScreen";
-
 
 AbstractEngine.prototype.displayLoadingUI = function (): void {
     if (!IsWindowObjectExist()) {
@@ -19,7 +18,6 @@ AbstractEngine.prototype.displayLoadingUI = function (): void {
     }
 };
 
-
 AbstractEngine.prototype.hideLoadingUI = function (): void {
     if (!IsWindowObjectExist()) {
         return;
@@ -29,7 +27,6 @@ AbstractEngine.prototype.hideLoadingUI = function (): void {
         loadingScreen.hideLoadingUI();
     }
 };
-
 
 Object.defineProperty(AbstractEngine.prototype, "loadingScreen", {
     get: function (this: AbstractEngine) {
@@ -45,7 +42,6 @@ Object.defineProperty(AbstractEngine.prototype, "loadingScreen", {
     configurable: true,
 });
 
-
 Object.defineProperty(AbstractEngine.prototype, "loadingUIText", {
     set: function (this: AbstractEngine, value: string) {
         this.loadingScreen.loadingUIText = value;
@@ -53,7 +49,6 @@ Object.defineProperty(AbstractEngine.prototype, "loadingUIText", {
     enumerable: true,
     configurable: true,
 });
-
 
 Object.defineProperty(AbstractEngine.prototype, "loadingUIBackgroundColor", {
     set: function (this: AbstractEngine, value: string) {

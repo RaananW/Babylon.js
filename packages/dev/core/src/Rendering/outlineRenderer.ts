@@ -4,9 +4,9 @@
  */
 export * from "./outlineRenderer.pure";
 
+import { OutlineRenderer } from "./outlineRenderer.pure";
 import { Mesh } from "../Meshes/mesh";
 import { Scene } from "../scene";
-
 
 /**
  * Gets the outline renderer associated with the scene
@@ -18,7 +18,6 @@ Scene.prototype.getOutlineRenderer = function (): OutlineRenderer {
     }
     return this._outlineRenderer;
 };
-
 
 Object.defineProperty(Mesh.prototype, "renderOutline", {
     get: function (this: Mesh) {
@@ -34,7 +33,6 @@ Object.defineProperty(Mesh.prototype, "renderOutline", {
     enumerable: true,
     configurable: true,
 });
-
 
 Object.defineProperty(Mesh.prototype, "renderOverlay", {
     get: function (this: Mesh) {

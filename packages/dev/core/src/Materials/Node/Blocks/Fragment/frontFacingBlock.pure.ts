@@ -6,6 +6,7 @@ import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
 import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import { ShaderLanguage } from "../../../../Materials/shaderLanguage";
+
 /**
  * Block used to test if the fragment shader is front facing
  */

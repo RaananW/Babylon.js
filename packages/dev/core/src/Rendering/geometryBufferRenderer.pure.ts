@@ -23,9 +23,6 @@ import { BindMorphTargetParameters, BindSceneUniformBuffer, PrepareDefinesAndAtt
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import type { OpenPBRMaterial } from "../Materials/PBR/openpbrMaterial";
 
-
-
-
 /** @internal */
 interface ISavedTransformationMatrix {
     world: Matrix;
@@ -33,7 +30,7 @@ interface ISavedTransformationMatrix {
 }
 
 /** list the uniforms used by the geometry renderer */
-const Uniforms = [
+export const Uniforms = [
     "world",
     "mBones",
     "viewProjection",

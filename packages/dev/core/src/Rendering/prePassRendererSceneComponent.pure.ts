@@ -11,7 +11,7 @@ import type { Effect } from "../Materials/effect";
 import type { Camera } from "../Cameras/camera";
 import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
 import type { PrePassRenderTarget } from "../Materials/Textures/prePassRenderTarget";
-
+import type { PrePassRenderer } from "./prePassRenderer";
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

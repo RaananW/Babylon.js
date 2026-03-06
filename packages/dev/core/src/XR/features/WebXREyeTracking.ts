@@ -4,8 +4,8 @@
  */
 export * from "./WebXREyeTracking.pure";
 
+import { WebXREyeTracking } from "./WebXREyeTracking.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 WebXRFeaturesManager.AddWebXRFeature(
     WebXREyeTracking.Name,

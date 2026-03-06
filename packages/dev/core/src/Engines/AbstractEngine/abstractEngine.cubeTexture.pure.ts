@@ -2,8 +2,7 @@
 
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
-import type { IWebRequest } from "../../Misc/interfaces/iWebRequest";
-
+import type { InternalTexture } from "../../Materials/Textures/internalTexture";
 
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -63,3 +62,5 @@ declare module "../../Engines/abstractEngine" {
         ): void;
     }
 }
+
+export {};

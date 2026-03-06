@@ -7,6 +7,7 @@ import type { FlowGraphContext } from "./flowGraphContext";
 import type { RichType } from "./flowGraphRichTypes";
 import { Observable } from "core/Misc/observable";
 import { defaultValueSerializationFunction } from "./serialization";
+
 /**
  * Represents a connection point for data.
  * An unconnected input point can have a default value.

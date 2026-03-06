@@ -4,11 +4,10 @@
  */
 export * from "./physicsEngineComponent.pure";
 
+import { Nullable } from "../../types";
+import { Vector3 } from "../../Maths/math.vector";
+import { PhysicsBody } from "./physicsBody";
 import { TransformNode } from "../../Meshes/transformNode";
-import type { Nullable } from "../../types";
-import type { Vector3 } from "../../Maths/math.vector";
-import type { PhysicsBody } from "./physicsBody";
-
 
 Object.defineProperty(TransformNode.prototype, "physicsBody", {
     get: function (this: TransformNode) {
@@ -38,7 +37,6 @@ Object.defineProperty(TransformNode.prototype, "physicsBody", {
     configurable: true,
 });
 
-
 /**
  * Gets the current physics body
  * @returns a physics body or null
@@ -46,7 +44,6 @@ Object.defineProperty(TransformNode.prototype, "physicsBody", {
 TransformNode.prototype.getPhysicsBody = function (): Nullable<PhysicsBody> {
     return this.physicsBody;
 };
-
 
 /**
  * Apply a physic impulse to the mesh
@@ -63,7 +60,6 @@ TransformNode.prototype.applyImpulse = function (force: Vector3, contactPoint: V
     return this;
 };
 
-
 /**
  * Apply a physic angular impulse to the mesh
  * @param angularImpulse defines the torque to apply
@@ -77,7 +73,6 @@ TransformNode.prototype.applyAngularImpulse = function (angularImpulse: Vector3)
     this.physicsBody.applyAngularImpulse(angularImpulse);
     return this;
 };
-
 
 /**
  * Apply a physic torque to the mesh

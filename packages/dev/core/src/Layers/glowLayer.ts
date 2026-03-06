@@ -4,10 +4,10 @@
  */
 export * from "./glowLayer.pure";
 
+import { GlowLayer } from "./glowLayer.pure";
+import { Nullable } from "../types";
 import { Scene } from "../scene";
 import { RegisterClass } from "../Misc/typeStore";
-import type { Nullable } from "../types";
-
 
 Scene.prototype.getGlowLayerByName = function (name: string): Nullable<GlowLayer> {
     for (let index = 0; index < this.effectLayers?.length; index++) {
@@ -18,6 +18,5 @@ Scene.prototype.getGlowLayerByName = function (name: string): Nullable<GlowLayer
 
     return null;
 };
-
 
 RegisterClass("BABYLON.GlowLayer", GlowLayer);

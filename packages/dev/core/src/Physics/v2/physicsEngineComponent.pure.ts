@@ -6,8 +6,6 @@ import type { Vector3 } from "../../Maths/math.vector";
 import type { Node } from "../../node";
 import type { PhysicsBody } from "./physicsBody";
 
-
-
 declare module "../../Meshes/transformNode" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface TransformNode {
@@ -47,3 +45,5 @@ declare module "../../Meshes/transformNode" {
         _disposePhysicsObserver: Nullable<Observer<Node>>;
     }
 }
+
+export {};

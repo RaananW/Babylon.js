@@ -6,8 +6,6 @@ import { SceneComponentConstants } from "core/sceneComponent";
 import { ClusteredLightContainer } from "./clusteredLightContainer";
 import { LightConstants } from "../lightConstants";
 
-
-
 /**
  * A scene component required for running the clustering step in clustered lights
  */

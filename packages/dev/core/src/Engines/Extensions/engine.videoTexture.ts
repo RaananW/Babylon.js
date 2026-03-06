@@ -4,11 +4,10 @@
  */
 export * from "./engine.videoTexture.pure";
 
+import { InternalTexture } from "../../Materials/Textures/internalTexture";
+import { Nullable } from "../../types";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { Constants } from "../constants";
-import type { InternalTexture } from "../../Materials/Textures/internalTexture";
-import type { Nullable } from "../../types";
-
 
 ThinEngine.prototype.updateVideoTexture = function (texture: Nullable<InternalTexture>, video: HTMLVideoElement, invertY: boolean): void {
     if (!texture || texture._isDisabled) {

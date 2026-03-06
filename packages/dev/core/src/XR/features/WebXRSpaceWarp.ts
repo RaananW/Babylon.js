@@ -4,8 +4,8 @@
  */
 export * from "./WebXRSpaceWarp.pure";
 
+import { WebXRSpaceWarp } from "./WebXRSpaceWarp.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 //register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

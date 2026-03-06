@@ -4,10 +4,10 @@
  */
 export * from "./postProcessRenderPipelineManagerSceneComponent.pure";
 
+import { PostProcessRenderPipelineManagerSceneComponent } from "./postProcessRenderPipelineManagerSceneComponent.pure";
 import { SceneComponentConstants } from "../../sceneComponent";
-import { PostProcessRenderPipelineManager } from "./postProcessRenderPipelineManager";
 import { Scene } from "../../scene";
-
+import { PostProcessRenderPipelineManager } from "./postProcessRenderPipelineManager";
 
 Object.defineProperty(Scene.prototype, "postProcessRenderPipelineManager", {
     get: function (this: Scene) {

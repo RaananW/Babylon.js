@@ -11,7 +11,6 @@ import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 
-
 class CircleBuffer {
     private _samples: Array<Vector2> = [];
     private _idx: number = 0;

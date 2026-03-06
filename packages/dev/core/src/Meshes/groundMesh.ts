@@ -4,9 +4,9 @@
  */
 export * from "./groundMesh.pure";
 
+import { GroundMesh } from "./groundMesh.pure";
+import { Scene } from "../scene";
 import { Mesh } from "../Meshes/mesh";
-import type { Scene } from "../scene";
-
 
 Mesh._GroundMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
     return GroundMesh.Parse(parsedMesh, scene);

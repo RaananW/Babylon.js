@@ -4,8 +4,8 @@
  */
 export * from "./WebXRBackgroundRemover.pure";
 
+import { WebXRBackgroundRemover } from "./WebXRBackgroundRemover.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 //register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

@@ -5,6 +5,7 @@ import { NodeParticleBlock } from "../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
 import type { NodeParticleConnectionPoint } from "../nodeParticleBlockConnectionPoint";
 import { Color4 } from "core/Maths/math.color";
+
 /**
  * Block used to lerp between 2 values
  */

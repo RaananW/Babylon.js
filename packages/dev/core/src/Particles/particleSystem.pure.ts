@@ -24,13 +24,21 @@ import { HemisphericParticleEmitter } from "./EmitterTypes/hemisphericParticleEm
 import { SphereDirectedParticleEmitter, SphereParticleEmitter } from "./EmitterTypes/sphereParticleEmitter";
 import { CylinderDirectedParticleEmitter, CylinderParticleEmitter } from "./EmitterTypes/cylinderParticleEmitter";
 import { ConeDirectedParticleEmitter, ConeParticleEmitter } from "./EmitterTypes/coneParticleEmitter";
-import { CreateConeEmitter, CreateCylinderEmitter, CreateDirectedCylinderEmitter, CreateDirectedSphereEmitter, CreateDirectedConeEmitter, CreateHemisphericEmitter, CreatePointEmitter, CreateSphereEmitter } from "./particleSystem.functions";
+import {
+    CreateConeEmitter,
+    CreateCylinderEmitter,
+    CreateDirectedCylinderEmitter,
+    CreateDirectedSphereEmitter,
+    CreateDirectedConeEmitter,
+    CreateHemisphericEmitter,
+    CreatePointEmitter,
+    CreateSphereEmitter,
+} from "./particleSystem.functions";
 import { Attractor } from "./attractor";
 import type { _IExecutionQueueItem } from "./Queue/executionQueue";
 import { _ConnectAfter, _RemoveFromQueue } from "./Queue/executionQueue";
 import type { FlowMap } from "./flowMap";
 import type { NodeParticleSystemSet } from "./Node/nodeParticleSystemSet";
-
 
 /**
  * This represents a particle system in Babylon.

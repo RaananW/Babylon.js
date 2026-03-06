@@ -15,6 +15,7 @@ import type { Scene } from "../../../../scene";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { EngineStore } from "../../../../Engines/engineStore";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+
 /**
  * Block used to provide an image for a TextureBlock
  */

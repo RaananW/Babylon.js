@@ -4,9 +4,9 @@
  */
 export * from "./goldbergMesh.pure";
 
+import { GoldbergMesh } from "./goldbergMesh.pure";
+import { Scene } from "../scene";
 import { Mesh } from "../Meshes/mesh";
-import type { Scene } from "../scene";
-
 
 Mesh._GoldbergMeshParser = (parsedMesh: any, scene: Scene): GoldbergMesh => {
     return GoldbergMesh.Parse(parsedMesh, scene);

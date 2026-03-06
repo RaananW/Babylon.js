@@ -24,7 +24,6 @@ import { Constants } from "../Engines/constants";
 import { _RetryWithInterval } from "../Misc/timingTools";
 import { Logger } from "../Misc/logger";
 
-
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface Scene {

@@ -4,9 +4,9 @@
  */
 export * from "./clusteredLightingSceneComponent.pure";
 
+import { ClusteredLightingSceneComponent } from "./clusteredLightingSceneComponent.pure";
 import { SceneComponentConstants } from "core/sceneComponent";
 import { ClusteredLightContainer } from "./clusteredLightContainer";
-
 
 ClusteredLightContainer._SceneComponentInitialization = (scene) => {
     if (!scene._getComponent(SceneComponentConstants.NAME_CLUSTEREDLIGHTING)) {

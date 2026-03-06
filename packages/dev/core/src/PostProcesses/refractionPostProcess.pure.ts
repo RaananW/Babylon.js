@@ -7,12 +7,9 @@ import { Texture } from "../Materials/Textures/texture";
 import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess";
 import type { AbstractEngine } from "../Engines/abstractEngine";
-
-import "../Shaders/refraction.fragment";
 import { serialize } from "../Misc/decorators";
 import { SerializationHelper } from "../Misc/decorators.serialization";
 import type { Nullable } from "../types";
-
 import type { Scene } from "../scene";
 
 /**

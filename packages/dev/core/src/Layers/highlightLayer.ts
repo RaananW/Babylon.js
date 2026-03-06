@@ -4,10 +4,10 @@
  */
 export * from "./highlightLayer.pure";
 
+import { HighlightLayer } from "./highlightLayer.pure";
+import { Nullable } from "../types";
 import { Scene } from "../scene";
 import { RegisterClass } from "../Misc/typeStore";
-import type { Nullable } from "../types";
-
 
 Scene.prototype.getHighlightLayerByName = function (name: string): Nullable<HighlightLayer> {
     for (let index = 0; index < this.effectLayers?.length; index++) {
@@ -18,6 +18,5 @@ Scene.prototype.getHighlightLayerByName = function (name: string): Nullable<High
 
     return null;
 };
-
 
 RegisterClass("BABYLON.HighlightLayer", HighlightLayer);

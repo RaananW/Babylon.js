@@ -11,7 +11,6 @@ import type { Effect } from "../../../effect";
 import type { Mesh } from "../../../../Meshes/mesh";
 import type { Scene } from "../../../../scene";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
-
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
 /**

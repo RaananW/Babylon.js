@@ -466,7 +466,6 @@ export class FlowGraphRoundBlock extends FlowGraphUnaryOperationBlock<FlowGraphM
     }
 }
 
-
 /**
  * A block that returns the fractional part of a number.
  */
@@ -639,7 +638,7 @@ export class FlowGraphClampBlock extends FlowGraphTernaryOperationBlock<
     }
 }
 
-function Saturate(a: number): number {
+export function Saturate(a: number): number {
     return Math.min(Math.max(a, 0), 1);
 }
 
@@ -734,7 +733,6 @@ export class FlowGraphLessThanOrEqualBlock extends FlowGraphBinaryOperationBlock
     }
 }
 
-
 /**
  * Greater than block.
  */
@@ -747,7 +745,6 @@ export class FlowGraphGreaterThanBlock extends FlowGraphBinaryOperationBlock<Flo
         return ComparisonOperators(a, b, (a, b) => a > b);
     }
 }
-
 
 /**
  * Greater than or equal block.
@@ -796,7 +793,6 @@ export class FlowGraphIsInfinityBlock extends FlowGraphUnaryOperationBlock<FlowG
     }
 }
 
-
 /**
  * Convert degrees to radians block.
  */
@@ -817,7 +813,6 @@ export class FlowGraphDegToRadBlock extends FlowGraphUnaryOperationBlock<FlowGra
         return ComponentWiseUnaryOperation(a, this._degToRad);
     }
 }
-
 
 /**
  * Convert radians to degrees block.
@@ -1096,7 +1091,6 @@ export class FlowGraphPowerBlock extends FlowGraphBinaryOperationBlock<FlowGraph
     }
 }
 
-
 /**
  * Configuration for bitwise operators
  */
@@ -1156,7 +1150,6 @@ export class FlowGraphBitwiseAndBlock extends FlowGraphBinaryOperationBlock<Flow
         );
     }
 }
-
 
 /**
  * Bitwise OR operation

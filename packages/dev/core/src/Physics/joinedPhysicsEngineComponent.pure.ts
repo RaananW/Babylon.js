@@ -3,14 +3,12 @@
 import type { Nullable } from "../types";
 import { Observable } from "../Misc/observable";
 import type { Vector3 } from "../Maths/math.vector";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import { Scene } from "../scene";
 import type { IPhysicsEngine } from "./IPhysicsEngine";
 import type { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin";
 import type { IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin";
-
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

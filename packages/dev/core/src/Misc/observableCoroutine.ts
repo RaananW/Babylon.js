@@ -5,9 +5,33 @@
 export * from "./observableCoroutine.pure";
 
 import { Observable } from "./observable";
-import { runCoroutineAsync } from "./coroutine";
-import type { AsyncCoroutine } from "./coroutine";
+import { AsyncCoroutine, CoroutineStep, CoroutineScheduler, inlineScheduler, runCoroutineAsync } from "./coroutine";
 
+function CreateObservableScheduler<T>(observable: Observable<any>): { scheduler: CoroutineScheduler<T>; dispose: () => void } {
+    const coroutines = new Array<AsyncCoroutine<T>>();
+    const onSteps = new Array<(stepResult: CoroutineStep<T>) => void>();
+    const onErrors = new Array<(stepError: any) => void>();
+
+    const observer = observable.add(() => {
+        const count = coroutines.length;
+        for (let i = 0; i < count; i++) {
+            inlineScheduler(coroutines.shift()!, onSteps.shift()!, onErrors.shift()!);
+        }
+    });
+
+    const scheduler = (coroutine: AsyncCoroutine<T>, onStep: (stepResult: CoroutineStep<T>) => void, onError: (stepError: any) => void) => {
+        coroutines.push(coroutine);
+        onSteps.push(onStep);
+        onErrors.push(onError);
+    };
+
+    return {
+        scheduler: scheduler,
+        dispose: () => {
+            observable.remove(observer);
+        },
+    };
+}
 
 // eslint-disable-next-line @typescript-eslint/promise-function-async
 Observable.prototype.runCoroutineAsync = function (coroutine: AsyncCoroutine<void>) {
@@ -19,7 +43,6 @@ Observable.prototype.runCoroutineAsync = function (coroutine: AsyncCoroutine<voi
 
     return runCoroutineAsync(coroutine, this._coroutineScheduler);
 };
-
 
 Observable.prototype.cancelAllCoroutines = function () {
     if (this._coroutineSchedulerDispose) {

@@ -3,7 +3,6 @@
 import type { Nullable } from "../../types";
 import type { DataBuffer } from "../../Buffers/dataBuffer";
 
-
 /** @internal */
 // eslint-disable-next-line no-var, @typescript-eslint/naming-convention
 export var _forceTransformFeedbackToBundle = true;

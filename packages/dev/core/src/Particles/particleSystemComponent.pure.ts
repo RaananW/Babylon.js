@@ -2,10 +2,8 @@
 
 import type { IParticleSystem } from "./IParticleSystem";
 import type { Effect } from "../Materials/effect";
-import type { Scene } from "../scene";
-import type { AssetContainer } from "../assetContainer";
 import type { EffectFallbacks } from "../Materials/effectFallbacks";
-
+import type { ShaderLanguage } from "core/Materials/shaderLanguage";
 
 declare module "../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -57,3 +55,5 @@ declare module "../Meshes/mesh" {
         getHierarchyEmittedParticleSystems(): IParticleSystem[];
     }
 }
+
+export {};

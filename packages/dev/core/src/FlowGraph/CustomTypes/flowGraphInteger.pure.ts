@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-
 /**
  * Class that represents an integer value.
  */

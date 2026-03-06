@@ -4,12 +4,12 @@
  */
 export * from "./instancedMesh.pure";
 
+import { InstancedMesh } from "./instancedMesh.pure";
+import { Nullable } from "../types";
 import { Mesh } from "../Meshes/mesh";
 import { VertexBuffer } from "../Buffers/buffer";
+import { ThinEngine } from "../Engines/thinEngine";
 import { RegisterClass } from "../Misc/typeStore";
-import type { Nullable } from "../types";
-import type { ThinEngine } from "../Engines/thinEngine";
-
 
 Mesh._instancedMeshFactory = (name: string, mesh: Mesh): InstancedMesh => {
     const instance = new InstancedMesh(name, mesh);
@@ -24,7 +24,6 @@ Mesh._instancedMeshFactory = (name: string, mesh: Mesh): InstancedMesh => {
 
     return instance;
 };
-
 
 Mesh.prototype.registerInstancedBuffer = function (kind: string, stride: number): void {
     // Remove existing one
@@ -65,7 +64,6 @@ Mesh.prototype.registerInstancedBuffer = function (kind: string, stride: number)
 
     this._markSubMeshesAsAttributesDirty();
 };
-
 
 Mesh.prototype._processInstancedBuffers = function (visibleInstances: Nullable<InstancedMesh[]>, renderSelf: boolean) {
     const instanceCount = visibleInstances ? visibleInstances.length : 0;
@@ -142,7 +140,6 @@ Mesh.prototype._processInstancedBuffers = function (visibleInstances: Nullable<I
     }
 };
 
-
 Mesh.prototype._invalidateInstanceVertexArrayObject = function () {
     if (!this._userInstancedBuffersStorage || this._userInstancedBuffersStorage.vertexArrayObjects === undefined) {
         return;
@@ -154,7 +151,6 @@ Mesh.prototype._invalidateInstanceVertexArrayObject = function () {
 
     this._userInstancedBuffersStorage.vertexArrayObjects = {};
 };
-
 
 Mesh.prototype._disposeInstanceSpecificData = function () {
     for (const renderPassId in this._instanceDataStorage.renderPasses) {
@@ -177,7 +173,6 @@ Mesh.prototype._disposeInstanceSpecificData = function () {
 
     this.instancedBuffers = {};
 };
-
 
 // Register Class Name
 RegisterClass("BABYLON.InstancedMesh", InstancedMesh);

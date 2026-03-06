@@ -1,6 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
-import { FlowGraphBlock, type IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
+import { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
+import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
 import {
     RichTypeVector3,
     FlowGraphTypes,
@@ -142,7 +143,7 @@ export class FlowGraphRotate3DBlock extends FlowGraphBinaryOperationBlock<Vector
     }
 }
 
-function TransformVector(a: FlowGraphVector, b: FlowGraphMatrix): FlowGraphVector {
+export function TransformVector(a: FlowGraphVector, b: FlowGraphMatrix): FlowGraphVector {
     const className = _GetClassNameOf(a);
     switch (className) {
         case FlowGraphTypes.Vector2:
@@ -192,7 +193,6 @@ export class FlowGraphTransformBlock extends FlowGraphBinaryOperationBlock<FlowG
     }
 }
 
-
 /**
  * Transform a vector3 by a matrix.
  */
@@ -201,7 +201,6 @@ export class FlowGraphTransformCoordinatesBlock extends FlowGraphBinaryOperation
         super(RichTypeVector3, RichTypeMatrix, RichTypeVector3, (a, b) => Vector3.TransformCoordinates(a, b), FlowGraphBlockNames.TransformCoordinates, config);
     }
 }
-
 
 /**
  * Conjugate the quaternion.
@@ -212,7 +211,6 @@ export class FlowGraphConjugateBlock extends FlowGraphUnaryOperationBlock<Quater
     }
 }
 
-
 /**
  * Get the angle between two quaternions.
  */
@@ -222,7 +220,6 @@ export class FlowGraphAngleBetweenBlock extends FlowGraphBinaryOperationBlock<Qu
     }
 }
 
-
 /**
  * Get the quaternion from an axis and an angle.
  */
@@ -231,7 +228,6 @@ export class FlowGraphQuaternionFromAxisAngleBlock extends FlowGraphBinaryOperat
         super(RichTypeVector3, RichTypeNumber, RichTypeQuaternion, (a, b) => Quaternion.RotationAxis(a, b), FlowGraphBlockNames.QuaternionFromAxisAngle, config);
     }
 }
-
 
 /**
  * Get the axis and angle from a quaternion.
@@ -296,7 +292,6 @@ export class FlowGraphAxisAngleFromQuaternionBlock extends FlowGraphBlock {
         return FlowGraphBlockNames.AxisAngleFromQuaternion;
     }
 }
-
 
 /**
  * Get the quaternion from two direction vectors.

@@ -33,7 +33,6 @@ import { PointerEventTypes } from "../../Events/pointerEvents";
 import { setAndStartTimer } from "../../Misc/timer";
 import type { LinesMesh } from "../../Meshes/linesMesh";
 
-
 /**
  * The options container for the teleportation module
  */

@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable jsdoc/require-returns-check */
 import type { Observer } from "../Misc/observable";
 import { Observable } from "../Misc/observable";
 import { Tools, AsyncLoop } from "../Misc/tools";
@@ -21,7 +20,6 @@ import { Node } from "../node";
 import { VertexBuffer, Buffer } from "../Buffers/buffer";
 import type { IGetSetVerticesData } from "./mesh.vertexData";
 import { VertexData } from "./mesh.vertexData";
-
 import { Geometry } from "./geometry";
 import type { IMeshDataOptions } from "./abstractMesh";
 import { AbstractMesh } from "./abstractMesh";
@@ -44,7 +42,6 @@ import type { Plane } from "../Maths/math.plane";
 import type { TransformNode } from "./transformNode";
 import type { DrawWrapper } from "../Materials/drawWrapper";
 import type { PhysicsEngine as PhysicsEngineV1 } from "../Physics/v1/physicsEngine";
-
 import type { GoldbergMesh } from "./goldbergMesh";
 import type { InstancedMesh } from "./instancedMesh";
 import type { IPhysicsEnabledObject, PhysicsImpostor } from "../Physics/v1/physicsImpostor";
@@ -53,6 +50,8 @@ import type { LinesMesh } from "./linesMesh";
 import type { GroundMesh } from "./groundMesh";
 import type { DataBuffer } from "core/Buffers/dataBuffer";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
+
+/* eslint-disable jsdoc/require-returns-check */
 
 /**
  * @internal
@@ -5264,7 +5263,6 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
     }
 }
 
-
 /**
  * Gets the default side orientation.
  * @param orientation the orientation to value to attempt to get
@@ -5274,7 +5272,6 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
 export function Mesh_GetDefaultSideOrientation(orientation?: number): number {
     return orientation || Mesh.FRONTSIDE; // works as Mesh.FRONTSIDE is 0
 }
-
 
 // Tools
 
@@ -5313,7 +5310,6 @@ export function MeshMinMax(meshes: AbstractMesh[]): { min: Vector3; max: Vector3
     };
 }
 
-
 /**
  * Returns the center of the `{min:` Vector3`, max:` Vector3`}` or the center of MinMax vector3 computed from a mesh array
  * @param meshesOrMinMaxVector could be an array of meshes or a `{min:` Vector3`, max:` Vector3`}` object
@@ -5323,7 +5319,6 @@ export function MeshCenter(meshesOrMinMaxVector: { min: Vector3; max: Vector3 } 
     const minMaxVector = meshesOrMinMaxVector instanceof Array ? MeshMinMax(meshesOrMinMaxVector) : meshesOrMinMaxVector;
     return Vector3.Center(minMaxVector.min, minMaxVector.max);
 }
-
 
 /**
  * Creates a ribbon mesh.
@@ -5354,7 +5349,6 @@ export function MeshCreateRibbon(
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /**
  * Creates a plane polygonal mesh.  By default, this is a disc.
  * @param _name defines the name of the mesh to create
@@ -5370,7 +5364,6 @@ export function MeshCreateDisc(_name: string, _radius: number, _tessellation: nu
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /**
  * Creates a box mesh.
  * @param _name defines the name of the mesh to create
@@ -5384,7 +5377,6 @@ export function MeshCreateDisc(_name: string, _radius: number, _tessellation: nu
 export function MeshCreateBox(_name: string, _size: number, _scene: Nullable<Scene>, _updatable?: boolean, _sideOrientation?: number): Mesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
-
 
 /**
  * Creates a sphere mesh.
@@ -5401,7 +5393,6 @@ export function MeshCreateSphere(_name: string, _segments: number, _diameter: nu
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /**
  * Creates a hemisphere mesh.
  * @param _name defines the name of the mesh to create
@@ -5414,7 +5405,6 @@ export function MeshCreateSphere(_name: string, _segments: number, _diameter: nu
 export function MeshCreateHemisphere(_name: string, _segments: number, _diameter: number, _scene?: Scene): Mesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
-
 
 /**
  * Creates a cylinder or a cone mesh.
@@ -5444,7 +5434,6 @@ export function MeshCreateCylinder(
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 // Torus  (Code from SharpDX.org)
 /**
  * Creates a torus mesh.
@@ -5458,10 +5447,17 @@ export function MeshCreateCylinder(
  * @returns a new Mesh
  * @deprecated Please use MeshBuilder instead
  */
-export function MeshCreateTorus(_name: string, _diameter: number, _thickness: number, _tessellation: number, _scene?: Scene, _updatable?: boolean, _sideOrientation?: number): Mesh {
+export function MeshCreateTorus(
+    _name: string,
+    _diameter: number,
+    _thickness: number,
+    _tessellation: number,
+    _scene?: Scene,
+    _updatable?: boolean,
+    _sideOrientation?: number
+): Mesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
-
 
 /**
  * Creates a torus knot mesh.
@@ -5493,7 +5489,6 @@ export function MeshCreateTorusKnot(
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /**
  * Creates a line mesh..
  * @param _name defines the name of the mesh to create
@@ -5507,7 +5502,6 @@ export function MeshCreateTorusKnot(
 export function MeshCreateLines(_name: string, _points: Vector3[], _scene: Nullable<Scene>, _updatable: boolean, _instance?: Nullable<LinesMesh>): LinesMesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
-
 
 /**
  * Creates a dashed line mesh.
@@ -5534,7 +5528,6 @@ export function MeshCreateDashedLines(
 ): LinesMesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
-
 
 /**
  * Creates a polygon mesh.Please consider using the same method from the MeshBuilder class instead
@@ -5566,7 +5559,6 @@ export function MeshCreatePolygon(
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /**
  * Creates an extruded polygon mesh, with depth in the Y direction..
  * @see https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/param#extruded-non-regular-polygon
@@ -5593,7 +5585,6 @@ export function MeshExtrudePolygon(
 ): Mesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
-
 
 /**
  * Creates an extruded shape mesh.
@@ -5627,7 +5618,6 @@ export function MeshExtrudeShape(
 ): Mesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
-
 
 /**
  * Creates an custom extruded shape mesh.
@@ -5667,7 +5657,6 @@ export function MeshExtrudeShapeCustom(
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /**
  * Creates lathe mesh.
  * The lathe is a shape with a symmetry axis : a 2D model shape is rotated around this axis to design the lathe.
@@ -5685,7 +5674,6 @@ export function MeshCreateLathe(_name: string, _shape: Vector3[], _radius: numbe
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /**
  * Creates a plane mesh.
  * @param _name defines the name of the mesh to create
@@ -5699,7 +5687,6 @@ export function MeshCreateLathe(_name: string, _shape: Vector3[], _radius: numbe
 export function MeshCreatePlane(_name: string, _size: number, _scene: Scene, _updatable?: boolean, _sideOrientation?: number): Mesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
-
 
 /**
  * Creates a ground mesh.
@@ -5715,7 +5702,6 @@ export function MeshCreatePlane(_name: string, _size: number, _scene: Scene, _up
 export function MeshCreateGround(_name: string, _width: number, _height: number, _subdivisions: number, _scene?: Scene, _updatable?: boolean): Mesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
-
 
 /**
  * Creates a tiled ground mesh.
@@ -5744,7 +5730,6 @@ export function MeshCreateTiledGround(
 ): Mesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
-
 
 /**
  * Creates a ground mesh from a height map.
@@ -5779,7 +5764,6 @@ export function MeshCreateGroundFromHeightMap(
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /**
  * Creates a tube mesh.
  * The tube is a parametric shape.
@@ -5813,7 +5797,6 @@ export function MeshCreateTube(
 ): Mesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
-
 
 /**
  * Creates a polyhedron mesh.
@@ -5854,7 +5837,6 @@ export function MeshCreatePolyhedron(
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /**
  * Creates a sphere based upon an icosahedron with 20 triangular faces which can be subdivided
  * * The parameter `radius` sets the radius size (float) of the icosphere (default 1)
@@ -5879,7 +5861,6 @@ export function MeshCreateIcoSphere(
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /**
  * Creates a decal mesh.
  *.
@@ -5897,7 +5878,6 @@ export function MeshCreateDecal(_name: string, _sourceMesh: AbstractMesh, _posit
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /** Creates a Capsule Mesh
  * @param _name defines the name of the mesh.
  * @param _options the constructors options used to shape the mesh.
@@ -5910,7 +5890,6 @@ export function MeshCreateCapsule(_name: string, _options: ICreateCapsuleOptions
     throw new Error("Import MeshBuilder to populate this function");
 }
 
-
 /**
  * Extends a mesh to a Goldberg mesh
  * Warning  the mesh to convert MUST be an import of a perviously exported Goldberg mesh
@@ -5922,3 +5901,35 @@ export function MeshExtendToGoldberg(_mesh: Mesh): Mesh {
     throw new Error("Import MeshBuilder to populate this function");
 }
 
+declare module "./mesh" {
+    namespace Mesh {
+        export let _GetDefaultSideOrientation: typeof Mesh_GetDefaultSideOrientation;
+        export let MinMax: typeof MeshMinMax;
+        export let Center: typeof MeshCenter;
+        export let CreateRibbon: typeof MeshCreateRibbon;
+        export let CreateDisc: typeof MeshCreateDisc;
+        export let CreateBox: typeof MeshCreateBox;
+        export let CreateSphere: typeof MeshCreateSphere;
+        export let CreateHemisphere: typeof MeshCreateHemisphere;
+        export let CreateCylinder: typeof MeshCreateCylinder;
+        export let CreateTorus: typeof MeshCreateTorus;
+        export let CreateTorusKnot: typeof MeshCreateTorusKnot;
+        export let CreateLines: typeof MeshCreateLines;
+        export let CreateDashedLines: typeof MeshCreateDashedLines;
+        export let CreatePolygon: typeof MeshCreatePolygon;
+        export let ExtrudePolygon: typeof MeshExtrudePolygon;
+        export let ExtrudeShape: typeof MeshExtrudeShape;
+        export let ExtrudeShapeCustom: typeof MeshExtrudeShapeCustom;
+        export let CreateLathe: typeof MeshCreateLathe;
+        export let CreatePlane: typeof MeshCreatePlane;
+        export let CreateGround: typeof MeshCreateGround;
+        export let CreateTiledGround: typeof MeshCreateTiledGround;
+        export let CreateGroundFromHeightMap: typeof MeshCreateGroundFromHeightMap;
+        export let CreateTube: typeof MeshCreateTube;
+        export let CreatePolyhedron: typeof MeshCreatePolyhedron;
+        export let CreateIcoSphere: typeof MeshCreateIcoSphere;
+        export let CreateDecal: typeof MeshCreateDecal;
+        export let CreateCapsule: typeof MeshCreateCapsule;
+        export let ExtendToGoldberg: typeof MeshExtendToGoldberg;
+    }
+}

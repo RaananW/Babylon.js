@@ -11,7 +11,6 @@ import type { Effect } from "../Materials/effect";
 import type { Nullable } from "../types";
 import { Constants } from "core/Engines/constants";
 
-
 /**
  * A directional light is defined by a direction (what a surprise!).
  * The light is emitted from everywhere in the specified direction, and has an infinite range.

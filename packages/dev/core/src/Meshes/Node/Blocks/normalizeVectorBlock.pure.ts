@@ -4,6 +4,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConn
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
 import type { NodeGeometryBuildState } from "../nodeGeometryBuildState";
+
 /**
  * Block used to normalize vectors
  */

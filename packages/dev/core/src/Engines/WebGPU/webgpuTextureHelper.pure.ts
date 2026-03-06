@@ -772,4 +772,3 @@ export function WebGPUTextureHelperGetSample(sampleCount: number) {
     // WebGPU only supports 1 or 4
     return sampleCount > 1 ? 4 : 1;
 }
-

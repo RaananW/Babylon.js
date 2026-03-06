@@ -4,8 +4,8 @@
  */
 export * from "./WebXRLayers.pure";
 
+import { WebXRLayers } from "./WebXRLayers.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 //register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

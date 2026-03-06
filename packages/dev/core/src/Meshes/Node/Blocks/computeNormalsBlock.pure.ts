@@ -4,6 +4,7 @@ import { VertexData } from "core/Meshes/mesh.vertexData";
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+
 /**
  * Block used to recompute normals for a geometry
  */

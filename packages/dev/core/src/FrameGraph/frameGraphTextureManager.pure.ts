@@ -1089,7 +1089,6 @@ export class FrameGraphTextureManager {
         }
     }
 
-
     /**
      * Gets the texture block information.
      * @param type Type of the texture.

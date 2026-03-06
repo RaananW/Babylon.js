@@ -2,7 +2,6 @@
 
 import type { Nullable } from "../../types";
 
-
 declare module "../../Engines/engine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface Engine {
@@ -53,3 +52,5 @@ declare module "../../Engines/engine" {
         setTextureFormatToUse(formatsAvailable: Array<string>): Nullable<string>;
     }
 }
+
+export {};

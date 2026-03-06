@@ -106,8 +106,7 @@ export class FactorGradient implements IValueGradient {
 /**
  * Helper used to simplify some generic gradient tasks
  */
-export class GradientHelper {
-}
+export class GradientHelper {}
 
 /**
  * Gets the current gradient from an array of IValueGradient

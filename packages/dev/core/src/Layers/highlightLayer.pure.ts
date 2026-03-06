@@ -33,7 +33,6 @@ import { ThinGlowBlurPostProcess } from "./thinEffectLayer";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface Scene {

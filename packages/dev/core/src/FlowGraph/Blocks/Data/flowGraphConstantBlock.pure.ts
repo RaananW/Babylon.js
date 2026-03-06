@@ -7,6 +7,7 @@ import { getRichTypeFromValue } from "core/FlowGraph/flowGraphRichTypes";
 import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
 import { defaultValueSerializationFunction } from "core/FlowGraph/serialization";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
+
 /**
  * Configuration for a constant block.
  */

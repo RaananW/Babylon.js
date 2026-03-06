@@ -9,7 +9,6 @@ import { TmpVectors, Vector3 } from "../Maths/math.vector";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { FollowCameraInputsManager } from "./followCameraInputsManager";
 
-
 /**
  * A follow camera takes a mesh as a target and follows it as it moves. Both a free camera version followCamera and
  * an arc rotate version arcFollowCamera are available.

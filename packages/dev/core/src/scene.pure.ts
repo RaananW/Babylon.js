@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Nullable } from "./types";
 import { Tools } from "./Misc/tools";
 import type { IAnimatable } from "./Animations/animatable.interface";
@@ -94,7 +93,6 @@ import { Logger } from "./Misc/logger";
 import type { AbstractEngine } from "./Engines/abstractEngine";
 import type { FrameGraph } from "./FrameGraph/frameGraph";
 import type { IAssetContainer } from "./IAssetContainer";
-
 import type { EffectLayer } from "./Layers/effectLayer";
 import type { Sound } from "./Audio/sound";
 import type { Layer } from "./Layers/layer";
@@ -105,6 +103,8 @@ import { _RetryWithInterval } from "./Misc/timingTools";
 import type { ObjectRenderer } from "./Rendering/objectRenderer";
 import type { BoundingBoxRenderer } from "./Rendering/boundingBoxRenderer";
 import type { BoundingBox } from "./Culling/boundingBox";
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Options for creating a scene uniform buffer

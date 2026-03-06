@@ -4,12 +4,11 @@
  */
 export * from "./engine.dynamicTexture.pure";
 
+import { ImageSource, Nullable } from "../../../types";
+import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { WebGPUEngine } from "../../webgpuEngine";
 import { GetExponentOfTwo } from "../../../Misc/tools.functions";
-import type { ImageSource, Nullable } from "../../../types";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-
 
 WebGPUEngine.prototype.createDynamicTexture = function (width: number, height: number, generateMipMaps: boolean, samplingMode: number): InternalTexture {
     const texture = new InternalTexture(this, InternalTextureSource.Dynamic);
@@ -37,7 +36,6 @@ WebGPUEngine.prototype.createDynamicTexture = function (width: number, height: n
 
     return texture;
 };
-
 
 WebGPUEngine.prototype.updateDynamicTexture = function (
     texture: Nullable<InternalTexture>,

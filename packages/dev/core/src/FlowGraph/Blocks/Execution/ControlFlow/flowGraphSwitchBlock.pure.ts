@@ -9,6 +9,7 @@ import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import type { FlowGraphNumber } from "core/FlowGraph/utils";
 import { getNumericValue, isNumeric } from "core/FlowGraph/utils";
+
 /**
  * Configuration for a switch block.
  */

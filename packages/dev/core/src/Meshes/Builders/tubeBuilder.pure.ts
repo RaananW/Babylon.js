@@ -8,7 +8,6 @@ import { Mesh } from "../mesh";
 import { CreateRibbon } from "./ribbonBuilder";
 import { Path3D } from "../../Maths/math.path";
 
-
 /**
  * Creates a tube mesh.
  * The tube is a parametric shape. It has no predefined shape. Its final shape will depend on the input parameters

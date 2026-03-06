@@ -24,8 +24,6 @@ import type { IParticleSystem } from "core/Particles/IParticleSystem";
 import { Logger } from "../../Misc/logger";
 import { ObjectRenderer } from "core/Rendering/objectRenderer";
 
-
-
 declare module "../effect" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface Effect {

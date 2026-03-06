@@ -12,7 +12,6 @@ import { EngineStore } from "../../Engines/engineStore";
 import { Epsilon } from "../../Maths/math.constants";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-
 /**
  * Creates the VertexData for a Ground
  * @param options an object used to set the following optional parameters for the Ground, required but can be empty

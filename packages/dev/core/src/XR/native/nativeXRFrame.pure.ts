@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-
 /** @internal */
 interface INativeXRFrame extends XRFrame {
     // Native-only helper functions

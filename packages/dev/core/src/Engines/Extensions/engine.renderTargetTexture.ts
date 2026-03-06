@@ -4,10 +4,9 @@
  */
 export * from "./engine.renderTargetTexture.pure";
 
+import { Nullable } from "../../types";
+import { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
 import { ThinEngine } from "../../Engines/thinEngine";
-import type { Nullable } from "../../types";
-import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
-
 
 ThinEngine.prototype.setDepthStencilTexture = function (channel: number, uniform: Nullable<WebGLUniformLocation>, texture: Nullable<RenderTargetTexture>, name?: string): void {
     if (channel === undefined) {

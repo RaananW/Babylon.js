@@ -8,7 +8,6 @@ export class FrameGraphObjectListPass extends FrameGraphPass<FrameGraphContext> 
     protected readonly _engine: AbstractEngine;
     protected _objectList: FrameGraphObjectList;
 
-
     /**
      * Gets the object list used by the pass.
      */

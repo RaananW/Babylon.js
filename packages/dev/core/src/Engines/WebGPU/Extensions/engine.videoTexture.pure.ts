@@ -2,9 +2,7 @@
 
 import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
 import type { Nullable } from "../../../types";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import type { ExternalTexture } from "../../../Materials/Textures/externalTexture";
-
 
 declare module "../../abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -18,3 +16,5 @@ declare module "../../abstractEngine" {
         updateVideoTexture(texture: Nullable<InternalTexture>, video: HTMLVideoElement | Nullable<ExternalTexture>, invertY: boolean): void;
     }
 }
+
+export {};

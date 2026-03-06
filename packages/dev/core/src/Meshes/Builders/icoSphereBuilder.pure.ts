@@ -8,7 +8,6 @@ import { VertexData } from "../mesh.vertexData";
 import type { Nullable } from "../../types";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-
 /**
  * Creates the VertexData of the IcoSphere
  * @param options an object used to set the following optional parameters for the IcoSphere, required but can be empty

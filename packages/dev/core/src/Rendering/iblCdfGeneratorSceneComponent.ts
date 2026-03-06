@@ -4,11 +4,11 @@
  */
 export * from "./iblCdfGeneratorSceneComponent.pure";
 
+import { IblCdfGeneratorSceneComponent } from "./iblCdfGeneratorSceneComponent.pure";
+import { Nullable } from "../types";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
 import { IblCdfGenerator } from "./iblCdfGenerator";
-import type { Nullable } from "../types";
-
 
 Object.defineProperty(Scene.prototype, "iblCdfGenerator", {
     get: function (this: Scene) {
@@ -22,7 +22,6 @@ Object.defineProperty(Scene.prototype, "iblCdfGenerator", {
     enumerable: true,
     configurable: true,
 });
-
 
 Scene.prototype.enableIblCdfGenerator = function (): Nullable<IblCdfGenerator> {
     if (this._iblCdfGenerator) {
@@ -40,7 +39,6 @@ Scene.prototype.enableIblCdfGenerator = function (): Nullable<IblCdfGenerator> {
     return this._iblCdfGenerator;
 };
 
-
 Scene.prototype.disableIblCdfGenerator = function (): void {
     if (!this._iblCdfGenerator) {
         return;
@@ -49,7 +47,6 @@ Scene.prototype.disableIblCdfGenerator = function (): void {
     this._iblCdfGenerator.dispose();
     this._iblCdfGenerator = null;
 };
-
 
 IblCdfGenerator._SceneComponentInitialization = (scene: Scene) => {
     // Register the CDF generator component to the scene.

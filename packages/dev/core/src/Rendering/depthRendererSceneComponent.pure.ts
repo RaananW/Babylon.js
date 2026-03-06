@@ -7,7 +7,7 @@ import type { Camera } from "../Cameras/camera";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
-
+import type { DepthRenderer } from "./depthRenderer";
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

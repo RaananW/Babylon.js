@@ -13,7 +13,6 @@ import { Color4 } from "../../Maths/math.color";
 import type { LensFlareSystem } from "../../LensFlares/lensFlareSystem";
 import type { ThinEngine } from "../../Engines";
 
-
 const DefaultXRWebGLLayerInit: XRWebGLLayerInit = {};
 
 /**

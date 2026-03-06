@@ -4,8 +4,8 @@
  */
 export * from "./cannonJSPlugin.pure";
 
+import { CannonJSPlugin } from "./cannonJSPlugin.pure";
 import { PhysicsEngine } from "../physicsEngine";
-
 
 PhysicsEngine.DefaultPluginFactory = () => {
     return new CannonJSPlugin();

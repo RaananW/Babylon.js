@@ -4,6 +4,7 @@
  */
 export * from "./basis.pure";
 
+import { BasisTools, BasisToolsOptions } from "./basis.pure";
 
 Object.defineProperty(BasisTools, "JSModuleURL", {
     get: function (this: null) {
@@ -13,7 +14,6 @@ Object.defineProperty(BasisTools, "JSModuleURL", {
         BasisToolsOptions.JSModuleURL = value;
     },
 });
-
 
 Object.defineProperty(BasisTools, "WasmModuleURL", {
     get: function (this: null) {

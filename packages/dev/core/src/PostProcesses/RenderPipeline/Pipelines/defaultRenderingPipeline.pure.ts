@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { Nullable } from "../../../types";
 import { serialize } from "../../../Misc/decorators";
 import { SerializationHelper } from "../../../Misc/decorators.serialization";
@@ -15,7 +14,6 @@ import type { AbstractEngine } from "../../../Engines/abstractEngine";
 import { Constants } from "../../../Engines/constants";
 import type { IDisposable, Scene } from "../../../scene";
 import { GlowLayer } from "../../../Layers/glowLayer";
-
 import type { PostProcess } from "../../../PostProcesses/postProcess";
 import { SharpenPostProcess } from "../../../PostProcesses/sharpenPostProcess";
 import { ImageProcessingPostProcess } from "../../../PostProcesses/imageProcessingPostProcess";
@@ -28,11 +26,9 @@ import { DepthOfFieldEffect, DepthOfFieldEffectBlurLevel } from "../../../PostPr
 import { BloomEffect } from "../../../PostProcesses/bloomEffect";
 import { EngineStore } from "../../../Engines/engineStore";
 import { Tools } from "core/Misc/tools";
-
-import "../../../PostProcesses/RenderPipeline/postProcessRenderPipelineManagerSceneComponent";
-import "../../../Rendering/depthRendererSceneComponent";
-
 import type { Animation } from "../../../Animations/animation";
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 /**
  * The default rendering pipeline can be added to a scene to apply common post processing effects such as anti-aliasing or depth of field.

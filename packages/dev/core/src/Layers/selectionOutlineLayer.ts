@@ -4,10 +4,10 @@
  */
 export * from "./selectionOutlineLayer.pure";
 
+import { SelectionOutlineLayer } from "./selectionOutlineLayer.pure";
+import { Nullable } from "../types";
 import { Scene } from "../scene";
 import { RegisterClass } from "../Misc/typeStore";
-import type { Nullable } from "../types";
-
 
 Scene.prototype.getSelectionOutlineLayerByName = function (name: string): Nullable<SelectionOutlineLayer> {
     for (let index = 0; index < this.effectLayers?.length; index++) {
@@ -18,6 +18,5 @@ Scene.prototype.getSelectionOutlineLayerByName = function (name: string): Nullab
 
     return null;
 };
-
 
 RegisterClass("BABYLON.SelectionOutlineLayer", SelectionOutlineLayer);

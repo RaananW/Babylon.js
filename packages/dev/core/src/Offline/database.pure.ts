@@ -7,7 +7,6 @@ import { GetTGAHeader } from "../Misc/tga";
 import type { IOfflineProvider } from "./IOfflineProvider";
 import { WebRequest } from "../Misc/webRequest";
 
-
 /**
  * Class used to enable access to IndexedDB
  * @see https://doc.babylonjs.com/features/featuresDeepDive/scene/optimizeCached

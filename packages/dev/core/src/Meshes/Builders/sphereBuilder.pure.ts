@@ -8,7 +8,6 @@ import type { Scene } from "../../scene";
 import type { Nullable } from "../../types";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-
 /**
  * Creates the VertexData for an ellipsoid, defaults to a sphere
  * @param options an object used to set the following optional parameters for the box, required but can be empty

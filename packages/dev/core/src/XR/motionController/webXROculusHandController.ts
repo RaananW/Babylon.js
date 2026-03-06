@@ -4,9 +4,9 @@
  */
 export * from "./webXROculusHandController.pure";
 
+import { WebXROculusHandController } from "./webXROculusHandController.pure";
+import { Scene } from "../../scene";
 import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
-import type { Scene } from "../../scene";
-
 
 // register the profiles
 WebXRMotionControllerManager.RegisterController("oculus-hand", (xrInput: XRInputSource, scene: Scene) => {

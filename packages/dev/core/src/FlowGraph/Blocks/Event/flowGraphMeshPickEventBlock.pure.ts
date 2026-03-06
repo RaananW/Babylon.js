@@ -12,6 +12,7 @@ import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnec
 import { RichTypeAny, RichTypeNumber, RichTypeVector3 } from "core/FlowGraph/flowGraphRichTypes";
 import type { Vector3 } from "core/Maths/math.vector";
 import { FlowGraphEventType } from "core/FlowGraph/flowGraphEventType";
+
 /**
  * Configuration for the mesh pick event block.
  */

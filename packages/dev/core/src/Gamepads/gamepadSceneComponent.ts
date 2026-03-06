@@ -4,6 +4,7 @@
  */
 export * from "./gamepadSceneComponent.pure";
 
+import { GamepadSystemSceneComponent } from "./gamepadSceneComponent.pure";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
 import { GamepadManager } from "./gamepadManager";
@@ -11,7 +12,6 @@ import { FreeCameraInputsManager } from "../Cameras/freeCameraInputsManager";
 import { FreeCameraGamepadInput } from "../Cameras/Inputs/freeCameraGamepadInput";
 import { ArcRotateCameraInputsManager } from "../Cameras/arcRotateCameraInputsManager";
 import { ArcRotateCameraGamepadInput } from "../Cameras/Inputs/arcRotateCameraGamepadInput";
-
 
 Object.defineProperty(Scene.prototype, "gamepadManager", {
     get: function (this: Scene) {
@@ -30,7 +30,6 @@ Object.defineProperty(Scene.prototype, "gamepadManager", {
     configurable: true,
 });
 
-
 /**
  * Adds a gamepad to the free camera inputs manager
  * @returns the FreeCameraInputsManager
@@ -39,7 +38,6 @@ FreeCameraInputsManager.prototype.addGamepad = function (): FreeCameraInputsMana
     this.add(new FreeCameraGamepadInput());
     return this;
 };
-
 
 /**
  * Adds a gamepad to the arc rotate camera inputs manager

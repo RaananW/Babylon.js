@@ -9,7 +9,6 @@ import type { Effect } from "../Materials/effect";
 import { Light } from "./light";
 import type { IShadowGenerator } from "./Shadows/shadowGenerator";
 
-
 /**
  * The HemisphericLight simulates the ambient environment light,
  * so the passed direction is the light reflection direction, not the incoming direction.

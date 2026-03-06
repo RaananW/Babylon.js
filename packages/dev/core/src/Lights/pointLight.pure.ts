@@ -8,7 +8,6 @@ import { Light } from "./light";
 import { ShadowLight } from "./shadowLight";
 import type { Effect } from "../Materials/effect";
 
-
 /**
  * A point light is a light defined by an unique point in world space.
  * The light is emitted in every direction from this point.

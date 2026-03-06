@@ -6,7 +6,6 @@ import type { Scene } from "../../scene";
 import { Vector3 } from "../../Maths/math.vector";
 import { _SetStereoscopicRigMode } from "../RigModes/stereoscopicRigMode";
 
-
 /**
  * Camera used to simulate stereoscopic rendering (based on FreeCamera)
  * @see https://doc.babylonjs.com/features/featuresDeepDive/cameras

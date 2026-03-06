@@ -4,25 +4,24 @@
  */
 export * from "./engine.computeShader.pure";
 
+import * as WebGPUConstants from "../webgpuConstants";
+import { IComputeEffectCreationOptions, IComputeShaderPath, ComputeEffect } from "../../../Compute/computeEffect";
+import { IComputeContext } from "../../../Compute/IComputeContext";
+import { IComputePipelineContext } from "../../../Compute/IComputePipelineContext";
+import { Nullable } from "../../../types";
+import { ComputeBindingList, ComputeBindingMapping, ComputeCompilationMessages } from "../../Extensions/engine.computeShader";
+import { WebGPUPerfCounter } from "../webgpuPerfCounter";
+import { DataBuffer } from "../../../Buffers/dataBuffer";
 import { Logger } from "core/Misc/logger";
-import { ComputeEffect } from "../../../Compute/computeEffect";
 import { WebGPUEngine } from "../../webgpuEngine";
 import { WebGPUComputeContext } from "../webgpuComputeContext";
 import { WebGPUComputePipelineContext } from "../webgpuComputePipelineContext";
-import * as WebGPUConstants from "../webgpuConstants";
-import type { IComputeEffectCreationOptions, IComputeShaderPath } from "../../../Compute/computeEffect";
-import type { IComputeContext } from "../../../Compute/IComputeContext";
-import type { IComputePipelineContext } from "../../../Compute/IComputePipelineContext";
-import type { Nullable } from "../../../types";
-import type { ComputeBindingList, ComputeBindingMapping, ComputeCompilationMessages } from "../../Extensions/engine.computeShader";
-import type { WebGPUPerfCounter } from "../webgpuPerfCounter";
-import type { DataBuffer } from "../../../Buffers/dataBuffer";
 
+const ComputePassDescriptor: GPUComputePassDescriptor = {};
 
 WebGPUEngine.prototype.createComputeContext = function (): IComputeContext | undefined {
     return new WebGPUComputeContext(this._device, this._cacheSampler);
 };
-
 
 WebGPUEngine.prototype.createComputeEffect = function (baseName: string | (IComputeShaderPath & { computeToken?: string }), options: IComputeEffectCreationOptions): ComputeEffect {
     const compute = typeof baseName === "string" ? baseName : baseName.computeToken || baseName.computeSource || baseName.computeElement || baseName.compute;
@@ -42,11 +41,9 @@ WebGPUEngine.prototype.createComputeEffect = function (baseName: string | (IComp
     return effect;
 };
 
-
 WebGPUEngine.prototype.createComputePipelineContext = function (): IComputePipelineContext {
     return new WebGPUComputePipelineContext(this);
 };
-
 
 WebGPUEngine.prototype.areAllComputeEffectsReady = function (): boolean {
     for (const key in this._compiledComputeEffects) {
@@ -59,7 +56,6 @@ WebGPUEngine.prototype.areAllComputeEffectsReady = function (): boolean {
 
     return true;
 };
-
 
 WebGPUEngine.prototype.computeDispatch = function (
     effect: ComputeEffect,
@@ -74,7 +70,6 @@ WebGPUEngine.prototype.computeDispatch = function (
     this._computeDispatch(effect, context, bindings, x, y, z, undefined, undefined, bindingsMapping, gpuPerfCounter);
 };
 
-
 WebGPUEngine.prototype.computeDispatchIndirect = function (
     effect: ComputeEffect,
     context: IComputeContext,
@@ -86,7 +81,6 @@ WebGPUEngine.prototype.computeDispatchIndirect = function (
 ): void {
     this._computeDispatch(effect, context, bindings, undefined, undefined, undefined, buffer, offset, bindingsMapping, gpuPerfCounter);
 };
-
 
 WebGPUEngine.prototype._computeDispatch = function (
     effect: ComputeEffect,
@@ -144,7 +138,6 @@ WebGPUEngine.prototype._computeDispatch = function (
     }
 };
 
-
 WebGPUEngine.prototype.releaseComputeEffects = function () {
     for (const name in this._compiledComputeEffects) {
         const webGPUPipelineContextCompute = this._compiledComputeEffects[name].getPipelineContext() as WebGPUComputePipelineContext;
@@ -153,7 +146,6 @@ WebGPUEngine.prototype.releaseComputeEffects = function () {
 
     this._compiledComputeEffects = {};
 };
-
 
 WebGPUEngine.prototype._prepareComputePipelineContext = function (
     pipelineContext: IComputePipelineContext,
@@ -177,7 +169,6 @@ WebGPUEngine.prototype._prepareComputePipelineContext = function (
     webGpuContext.stage = this._createComputePipelineStageDescriptor(computeSourceCode, defines, entryPoint);
 };
 
-
 WebGPUEngine.prototype._releaseComputeEffect = function (effect: ComputeEffect): void {
     if (this._compiledComputeEffects[effect._key]) {
         delete this._compiledComputeEffects[effect._key];
@@ -185,7 +176,6 @@ WebGPUEngine.prototype._releaseComputeEffect = function (effect: ComputeEffect):
         this._deleteComputePipelineContext(effect.getPipelineContext() as WebGPUComputePipelineContext);
     }
 };
-
 
 WebGPUEngine.prototype._rebuildComputeEffects = function (): void {
     for (const key in this._compiledComputeEffects) {
@@ -196,7 +186,6 @@ WebGPUEngine.prototype._rebuildComputeEffects = function (): void {
         effect._prepareEffect();
     }
 };
-
 
 WebGPUEngine.prototype._executeWhenComputeStateIsCompiled = function (
     pipelineContext: WebGPUComputePipelineContext,
@@ -225,14 +214,12 @@ WebGPUEngine.prototype._executeWhenComputeStateIsCompiled = function (
     });
 };
 
-
 WebGPUEngine.prototype._deleteComputePipelineContext = function (pipelineContext: IComputePipelineContext): void {
     const webgpuPipelineContext = pipelineContext as WebGPUComputePipelineContext;
     if (webgpuPipelineContext) {
         pipelineContext.dispose();
     }
 };
-
 
 WebGPUEngine.prototype._createComputePipelineStageDescriptor = function (computeShader: string, defines: Nullable<string>, entryPoint: string): GPUProgrammableStage {
     if (defines) {

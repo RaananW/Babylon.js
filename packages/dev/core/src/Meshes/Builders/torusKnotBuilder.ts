@@ -4,14 +4,12 @@
  */
 export * from "./torusKnotBuilder.pure";
 
-import { CreateTorusKnot } from "./torusKnotBuilder.pure";
+import { CreateTorusKnot, CreateTorusKnotVertexData } from "./torusKnotBuilder.pure";
 import { Mesh } from "../mesh";
 import { VertexData } from "../mesh.vertexData";
-import type { Scene } from "../../scene";
-
+import { Scene } from "../../scene";
 
 VertexData.CreateTorusKnot = CreateTorusKnotVertexData;
-
 
 Mesh.CreateTorusKnot = (
     name: string,

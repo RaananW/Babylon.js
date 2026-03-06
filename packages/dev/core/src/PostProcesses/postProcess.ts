@@ -4,11 +4,11 @@
  */
 export * from "./postProcess.pure";
 
+import { PostProcess } from "./postProcess.pure";
+import { Nullable } from "../types";
 import { Effect } from "../Materials/effect";
-import { RegisterClass } from "../Misc/typeStore";
 import { AbstractEngine } from "../Engines/abstractEngine";
-import type { Nullable } from "../types";
-
+import { RegisterClass } from "../Misc/typeStore";
 
 AbstractEngine.prototype.setTextureFromPostProcess = function (channel: number, postProcess: Nullable<PostProcess>, name: string): void {
     let postProcessInput = null;
@@ -23,11 +23,9 @@ AbstractEngine.prototype.setTextureFromPostProcess = function (channel: number, 
     this._bindTexture(channel, postProcessInput?.texture ?? null, name);
 };
 
-
 AbstractEngine.prototype.setTextureFromPostProcessOutput = function (channel: number, postProcess: Nullable<PostProcess>, name: string): void {
     this._bindTexture(channel, postProcess?._outputTexture?.texture ?? null, name);
 };
-
 
 /**
  * Sets a texture to be the input of the specified post process. (To use the output, pass in the next post process in the pipeline)
@@ -38,7 +36,6 @@ Effect.prototype.setTextureFromPostProcess = function (channel: string, postProc
     this._engine.setTextureFromPostProcess(this._samplers[channel], postProcess, channel);
 };
 
-
 /**
  * (Warning! setTextureFromPostProcessOutput may be desired instead)
  * Sets the input texture of the passed in post process to be input of this effect. (To use the output of the passed in post process use setTextureFromPostProcessOutput)
@@ -48,6 +45,5 @@ Effect.prototype.setTextureFromPostProcess = function (channel: string, postProc
 Effect.prototype.setTextureFromPostProcessOutput = function (channel: string, postProcess: Nullable<PostProcess>): void {
     this._engine.setTextureFromPostProcessOutput(this._samplers[channel], postProcess, channel);
 };
-
 
 RegisterClass("BABYLON.PostProcess", PostProcess);

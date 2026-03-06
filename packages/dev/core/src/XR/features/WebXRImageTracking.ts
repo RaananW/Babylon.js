@@ -4,8 +4,8 @@
  */
 export * from "./WebXRImageTracking.pure";
 
+import { WebXRImageTracking } from "./WebXRImageTracking.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 //register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

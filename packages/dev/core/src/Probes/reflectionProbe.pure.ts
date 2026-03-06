@@ -1,3 +1,5 @@
+/** This file must only contain pure code and pure imports */
+
 import { serializeAsMeshReference, serializeAsVector3 } from "../Misc/decorators";
 import { SerializationHelper } from "../Misc/decorators.serialization";
 import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
@@ -361,4 +363,11 @@ export function ReflectionProbeParse(parsedReflectionProbe: any, scene: Scene, r
     }
 
     return reflectionProbe;
+}
+
+declare module "./reflectionProbe.pure" {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
+    namespace ReflectionProbe {
+        export { ReflectionProbeParse as Parse };
+    }
 }

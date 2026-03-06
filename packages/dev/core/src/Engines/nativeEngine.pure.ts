@@ -7,8 +7,6 @@ import { ThinNativeEngine } from "./thinNativeEngine";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
-
-
 /**
  * Options to create the Native engine
  */

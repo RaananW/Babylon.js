@@ -7,7 +7,6 @@ import { Collider } from "./collider";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 
-
 /** @internal */
 export interface ICollisionCoordinator {
     createCollider(): Collider;

@@ -9,7 +9,6 @@ import { Color4 } from "../Maths/math.color";
 import { Logger } from "../Misc/logger";
 import type { FloatArray } from "../types";
 
-
 /**
  * Defines the set of goldberg data used to create the polygon
  */

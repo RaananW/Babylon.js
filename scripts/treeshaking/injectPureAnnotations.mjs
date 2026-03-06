@@ -22,11 +22,13 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve, relative } from "node:path";
+import { execSync } from "node:child_process";
 import { globSync } from "glob";
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
 const verbose = args.includes("--verbose");
+const writtenFiles = [];
 
 const distDir = resolve("packages/dev/core/dist");
 
@@ -80,8 +82,26 @@ for (const filePath of pureFiles) {
 
         if (!dryRun) {
             writeFileSync(filePath, patched, "utf-8");
+            writtenFiles.push(filePath);
         }
     }
 }
 
 console.log(`\n${dryRun ? "[dry-run] " : ""}Injected ${totalAnnotations} /*#__PURE__*/ annotation(s) across ${totalFiles} file(s) (${pureFiles.length} .pure.js scanned).`);
+
+// Format all modified files with Prettier
+if (!dryRun && writtenFiles.length > 0) {
+    console.log(`\nFormatting ${writtenFiles.length} files with Prettier...`);
+    try {
+        const BATCH = 100;
+        for (let i = 0; i < writtenFiles.length; i += BATCH) {
+            const batch = writtenFiles.slice(i, i + BATCH);
+            execSync(`npx prettier --write ${batch.map((f) => `"${f}"`).join(" ")}`, {
+                stdio: "ignore",
+            });
+        }
+        console.log(`Formatted ${writtenFiles.length} files.`);
+    } catch (err) {
+        console.error(`Warning: Prettier formatting failed: ${err.message}`);
+    }
+}

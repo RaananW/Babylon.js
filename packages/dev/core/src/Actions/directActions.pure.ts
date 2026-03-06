@@ -5,7 +5,6 @@ import { Vector3 } from "../Maths/math.vector";
 import { Action } from "./action";
 import type { Condition } from "./condition";
 import { Constants } from "../Engines/constants";
-
 import type { ActionEvent } from "./actionEvent";
 
 /**

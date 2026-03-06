@@ -5,7 +5,6 @@ import type { ICameraInput } from "../../Cameras/cameraInputsManager";
 import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
 import { Tools } from "../../Misc/tools";
 
-
 // Module augmentation to abstract orientation inputs from camera.
 declare module "../../Cameras/arcRotateCameraInputsManager" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

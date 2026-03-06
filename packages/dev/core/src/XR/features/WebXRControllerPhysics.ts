@@ -4,8 +4,8 @@
  */
 export * from "./WebXRControllerPhysics.pure";
 
+import { WebXRControllerPhysics } from "./WebXRControllerPhysics.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 //register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

@@ -7,7 +7,6 @@ import { VertexData } from "../mesh.vertexData";
 import type { Scene } from "../../scene";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-
 /**
  * Creates the VertexData for a torus
  * @param options an object used to set the following optional parameters for the box, required but can be empty

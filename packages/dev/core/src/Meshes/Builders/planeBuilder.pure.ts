@@ -8,7 +8,6 @@ import type { Nullable } from "../../types";
 import type { Plane } from "../../Maths/math.plane";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-
 /**
  * Creates the VertexData for a Plane
  * @param options an object used to set the following optional parameters for the plane, required but can be empty

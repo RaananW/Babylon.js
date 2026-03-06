@@ -4,11 +4,11 @@
  */
 export * from "./depthPeelingSceneComponent.pure";
 
-import { Constants } from "../Engines/constants";
+import { DepthPeelingSceneComponent } from "./depthPeelingSceneComponent.pure";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
-import type { ThinDepthPeelingRenderer } from "./thinDepthPeelingRenderer";
-
+import { ThinDepthPeelingRenderer } from "./thinDepthPeelingRenderer";
+import { Constants } from "../Engines/constants";
 
 Object.defineProperty(Scene.prototype, "depthPeelingRenderer", {
     get: function (this: Scene) {
@@ -28,7 +28,6 @@ Object.defineProperty(Scene.prototype, "depthPeelingRenderer", {
     enumerable: true,
     configurable: true,
 });
-
 
 Object.defineProperty(Scene.prototype, "useOrderIndependentTransparency", {
     get: function (this: Scene) {

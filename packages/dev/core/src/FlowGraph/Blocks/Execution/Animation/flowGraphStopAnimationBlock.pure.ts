@@ -8,6 +8,7 @@ import type { AnimationGroup } from "core/Animations/animationGroup";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { Logger } from "core/Misc/logger";
 import { FlowGraphAsyncExecutionBlock } from "core/FlowGraph/flowGraphAsyncExecutionBlock";
+
 /**
  * @experimental
  * Block that stops a running animation

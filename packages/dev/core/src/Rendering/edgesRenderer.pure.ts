@@ -18,8 +18,6 @@ import { SmartArray } from "../Misc/smartArray";
 import { DrawWrapper } from "../Materials/drawWrapper";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
-
-
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface Scene {

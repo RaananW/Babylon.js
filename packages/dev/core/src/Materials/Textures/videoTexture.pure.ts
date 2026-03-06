@@ -1,3 +1,5 @@
+/** This file must only contain pure code and pure imports */
+
 import { Observable } from "../../Misc/observable";
 import { Tools } from "../../Misc/tools";
 import { Logger } from "../../Misc/logger";
@@ -7,7 +9,6 @@ import { Texture } from "../../Materials/Textures/texture";
 import { Constants } from "../../Engines/constants";
 import type { ExternalTexture } from "./externalTexture";
 import type { WebGPUEngine } from "core/Engines";
-
 import { serialize } from "core/Misc/decorators";
 
 function RemoveSource(video: HTMLVideoElement): void {

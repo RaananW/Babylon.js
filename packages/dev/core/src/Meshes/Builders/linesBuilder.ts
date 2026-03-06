@@ -4,19 +4,17 @@
  */
 export * from "./linesBuilder.pure";
 
-import { CreateDashedLines, CreateLineSystem, CreateLines } from "./linesBuilder.pure";
+import { CreateDashedLines, CreateDashedLinesVertexData, CreateLineSystemVertexData, CreateLines } from "./linesBuilder.pure";
 import { Vector3 } from "../../Maths/math.vector";
-import { Mesh } from "../mesh";
 import { VertexData } from "../mesh.vertexData";
+import { Nullable } from "../../types";
 import { LinesMesh } from "../../Meshes/linesMesh";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-
+import { Scene } from "../../scene";
+import { Mesh } from "../mesh";
 
 VertexData.CreateLineSystem = CreateLineSystemVertexData;
 
 VertexData.CreateDashedLines = CreateDashedLinesVertexData;
-
 
 Mesh.CreateLines = (name: string, points: Vector3[], scene: Nullable<Scene> = null, updatable: boolean = false, instance: Nullable<LinesMesh> = null): LinesMesh => {
     const options = {
@@ -26,7 +24,6 @@ Mesh.CreateLines = (name: string, points: Vector3[], scene: Nullable<Scene> = nu
     };
     return CreateLines(name, options, scene);
 };
-
 
 Mesh.CreateDashedLines = (
     name: string,

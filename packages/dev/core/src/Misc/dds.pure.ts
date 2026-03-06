@@ -153,7 +153,6 @@ export class DDSTools {
      */
     public static StoreLODInAlphaChannel = false;
 
-
     private static _GetHalfFloatAsFloatRGBAArrayBuffer(
         width: number,
         height: number,

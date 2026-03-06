@@ -7,6 +7,7 @@ import type { FlowGraphSignalConnection } from "../../../flowGraphSignalConnecti
 import { FlowGraphExecutionBlockWithOutSignal } from "../../../flowGraphExecutionBlockWithOutSignal";
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+
 /**
  * A block that counts the number of times it has been called.
  * Afterwards it activates its out signal.

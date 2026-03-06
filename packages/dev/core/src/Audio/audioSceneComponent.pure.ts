@@ -7,13 +7,10 @@ import { Matrix, Vector3 } from "../Maths/math.vector";
 import type { ISceneSerializableComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import { Scene } from "../scene";
-import type { AssetContainer } from "../assetContainer";
 import { PrecisionDate } from "../Misc/precisionDate";
 import { EngineStore } from "../Engines/engineStore";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 import type { IAssetContainer } from "core/IAssetContainer";
-
-
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

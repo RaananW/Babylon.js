@@ -40,9 +40,6 @@ export class NodeRenderGraphConnectionPoint {
         return this._direction;
     }
 
-
-
-
     /**
      * The value stored in this connection point
      */

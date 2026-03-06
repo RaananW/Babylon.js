@@ -4,18 +4,18 @@
  */
 export * from "./joinedPhysicsEngineComponent.pure";
 
-import { Logger } from "../Misc/logger";
+import { PhysicsEngineSceneComponent } from "./joinedPhysicsEngineComponent.pure";
+import { Nullable } from "../types";
+import { Vector3 } from "../Maths/math.vector";
+import { AbstractMesh } from "../Meshes/abstractMesh";
 import { SceneComponentConstants } from "../sceneComponent";
 import { Scene } from "../scene";
+import { IPhysicsEngine } from "./IPhysicsEngine";
+import { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin";
+import { IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin";
+import { Logger } from "../Misc/logger";
 import { PhysicsEngine as PhysicsEngineV1 } from "./v1/physicsEngine";
 import { PhysicsEngine as PhysicsEngineV2 } from "./v2/physicsEngine";
-import type { Nullable } from "../types";
-import type { Vector3 } from "../Maths/math.vector";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-import type { IPhysicsEngine } from "./IPhysicsEngine";
-import type { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin";
-import type { IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin";
-
 
 /**
  * Gets the current physics engine
@@ -24,7 +24,6 @@ import type { IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin";
 Scene.prototype.getPhysicsEngine = function (): Nullable<IPhysicsEngine> {
     return this._physicsEngine ?? null;
 };
-
 
 /**
  * Enables physics to the current scene
@@ -60,7 +59,6 @@ Scene.prototype.enablePhysics = function (gravity: Nullable<Vector3> = null, plu
     }
 };
 
-
 /**
  * Disables and disposes the physics engine associated with the scene
  */
@@ -73,7 +71,6 @@ Scene.prototype.disablePhysicsEngine = function (): void {
     this._physicsEngine = null;
 };
 
-
 /**
  * Gets a boolean indicating if there is an active physics engine
  * @returns a boolean indicating if there is an active physics engine
@@ -81,7 +78,6 @@ Scene.prototype.disablePhysicsEngine = function (): void {
 Scene.prototype.isPhysicsEnabled = function (): boolean {
     return !!this._physicsEngine;
 };
-
 
 /**
  * Deletes a physics compound impostor
@@ -95,7 +91,6 @@ Scene.prototype.deleteCompoundImpostor = function (compound: any): void {
         mesh.physicsImpostor = null;
     }
 };
-
 
 /**
  * @internal

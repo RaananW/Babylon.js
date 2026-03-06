@@ -11,6 +11,7 @@ import type { Mesh } from "../../../../Meshes/mesh";
 import type { AbstractMesh } from "../../../../Meshes/abstractMesh";
 import { BindClipPlane } from "../../../../Materials/clipPlaneMaterialHelper";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+
 /**
  * Block used to implement clip planes
  */

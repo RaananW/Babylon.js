@@ -8,7 +8,6 @@ import { Mesh } from "../mesh";
 import { CreateRibbon } from "./ribbonBuilder";
 import { Path3D } from "../../Maths/math.path";
 
-
 /**
  * Creates an extruded shape mesh. The extrusion is a parametric shape. It has no predefined shape. Its final shape will depend on the input parameters.
  * * The parameter `shape` is a required array of successive Vector3. This array depicts the shape to be extruded in its local space : the shape must be designed in the xOy plane and will be extruded along the Z axis.

@@ -8,7 +8,6 @@ import type { TransformNode } from "../../Meshes/transformNode";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import type { IWebXRHitResult } from "./WebXRHitTest";
 
-
 /**
  * Configuration options of the anchor system
  */

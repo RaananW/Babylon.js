@@ -15,7 +15,6 @@ import type { GreasedLineMeshOptions } from "./greasedLineBaseMesh";
 import { GreasedLineBaseMesh } from "./greasedLineBaseMesh";
 import type { VertexData } from "../mesh.vertexData";
 
-
 /**
  * GreasedLineMesh
  * Use the GreasedLineBuilder.CreateGreasedLine function to create an instance of this class.

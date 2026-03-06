@@ -4,9 +4,9 @@
  */
 export * from "./webXRMicrosoftMixedRealityController.pure";
 
+import { WebXRMicrosoftMixedRealityController } from "./webXRMicrosoftMixedRealityController.pure";
+import { Scene } from "../../scene";
 import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
-import type { Scene } from "../../scene";
-
 
 // register the profile
 WebXRMotionControllerManager.RegisterController("windows-mixed-reality", (xrInput: XRInputSource, scene: Scene) => {

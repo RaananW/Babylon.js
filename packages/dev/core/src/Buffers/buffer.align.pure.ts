@@ -3,8 +3,6 @@
 import type { Nullable } from "core/types";
 import type { DataBuffer } from "./dataBuffer";
 
-
-
 declare module "./buffer.pure" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface VertexBuffer {
@@ -33,3 +31,5 @@ declare module "./buffer.pure" {
         _alignedBuffer?: Buffer;
     }
 }
+
+export {};

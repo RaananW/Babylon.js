@@ -4,8 +4,8 @@
  */
 export * from "./WebXRFeaturePointSystem.pure";
 
+import { WebXRFeaturePointSystem } from "./WebXRFeaturePointSystem.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 // register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

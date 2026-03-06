@@ -4,16 +4,15 @@
  */
 export * from "./engine.prefilteredCubeTexture.pure";
 
+import { Nullable } from "../../types";
+import { Scene } from "../../scene";
+import { DDSInfo } from "core/Misc/dds";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { Constants } from "../constants";
 import { SphericalPolynomial } from "core/Maths/sphericalPolynomial";
 import { BaseTexture } from "core/Materials/Textures/baseTexture";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-import type { DDSInfo } from "core/Misc/dds";
-
 
 ThinEngine.prototype.createPrefilteredCubeTexture = function (
     rootUrl: string,

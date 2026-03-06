@@ -35,6 +35,7 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from "fs";
 import { join, resolve, dirname, basename, relative } from "path";
 import { fileURLToPath } from "url";
+import { execSync } from "child_process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -59,8 +60,206 @@ const SINGLE_FILE = fileIdx !== -1 ? args[fileIdx + 1] : null;
 
 const PURE_HEADER = "/** This file must only contain pure code and pure imports */\n\n";
 
+// ---------------------------------------------------------------------------
+// Import deduplication helper
+// ---------------------------------------------------------------------------
+
+/**
+ * Deduplicate an array of import line strings by merging imports from
+ * the same module path with the same import-type (value vs type).
+ * E.g., three `import type { Nullable } from "../types"` collapse to one.
+ * Namespace, default, and side-effect imports are kept as-is.
+ */
+function deduplicateImportLines(importLines) {
+    // Map: `${isType}|${modulePath}` → Set of name strings (with optional alias)
+    const groups = new Map();
+    const result = [];
+
+    for (const line of importLines) {
+        const trimmed = line.trim();
+
+        // Detect type imports
+        const isType = /^import\s+type\s/.test(trimmed);
+
+        // Try to parse as named import: import [type] { ... } from "...";
+        const namedMatch = trimmed.match(/^import\s+(?:type\s+)?\{([^}]+)\}\s+from\s+["'](.+?)["'];?$/);
+        if (namedMatch) {
+            const names = namedMatch[1]
+                .split(",")
+                .map((n) => n.trim())
+                .filter(Boolean);
+            const modulePath = namedMatch[2];
+            const key = `${isType ? "type" : "value"}|${modulePath}`;
+
+            if (!groups.has(key)) {
+                groups.set(key, { isType, modulePath, names: new Set() });
+            }
+            for (const n of names) {
+                groups.get(key).names.add(n);
+            }
+            continue;
+        }
+
+        // Non-named imports (namespace, default, side-effect) — keep as-is, but deduplicate by exact text
+        if (!result.includes(line)) {
+            result.push(line);
+        }
+    }
+
+    // Emit merged named imports
+    for (const [, group] of groups) {
+        const prefix = group.isType ? "import type" : "import";
+        const nameStr = [...group.names].join(", ");
+        result.push(`${prefix} { ${nameStr} } from "${group.modulePath}";`);
+    }
+
+    return result;
+}
+
 // Files that should never be split (defines RegisterClass itself, etc.)
 const SKIP_FILES = new Set(["Misc/typeStore.ts"]);
+
+// ---------------------------------------------------------------------------
+// Reconstruct original from .pure.ts + wrapper (for --resplit)
+// ---------------------------------------------------------------------------
+
+function reconstructOriginal(pureFilePath, wrapperFilePath) {
+    const pureRaw = readFileSync(pureFilePath, "utf-8");
+    const wrapperRaw = readFileSync(wrapperFilePath, "utf-8");
+
+    // Strip the PURE_HEADER from the pure file (may appear more than once from previous buggy runs)
+    const PURE_HEADER = "/** This file must only contain pure code and pure imports */";
+    let pureContent = pureRaw;
+    while (pureContent.startsWith(PURE_HEADER)) {
+        pureContent = pureContent.slice(PURE_HEADER.length).replace(/^[\r\n]+/, "");
+    }
+
+    // Remove `export {};` that was added for declare-module-only files (Bug 3 fix)
+    pureContent = pureContent.replace(/\nexport \{\};\n$/, "\n");
+
+    // Strip any self-imports from the pure file (artifacts from previous buggy runs)
+    // e.g., `import { Animation } from "./animation.pure"` in animation.pure.ts
+    const baseName = basename(pureFilePath, ".pure.ts");
+    pureContent = pureContent
+        .split("\n")
+        .filter((line) => {
+            const t = line.trim();
+            return !(/^import\s+/.test(t) && t.includes(`"./${baseName}.pure"`));
+        })
+        .join("\n");
+
+    // Build a set of all imported names from the pure content, keyed by module path
+    const pureImportedNames = new Map(); // modulePath → Set of local names
+    const pureLines = pureContent.split("\n");
+    const pureImports = parseImports(pureLines);
+    for (const imp of pureImports) {
+        const names = new Set();
+        if (imp.defaultName) names.add(imp.defaultName);
+        if (imp.isNamespace && imp.namespaceName) names.add(imp.namespaceName);
+        for (const n of imp.names) names.add(n.alias || n.name);
+        if (!pureImportedNames.has(imp.modulePath)) {
+            pureImportedNames.set(imp.modulePath, names);
+        } else {
+            for (const n of names) pureImportedNames.get(imp.modulePath).add(n);
+        }
+    }
+
+    // Also collect exported/declared names from the pure content to detect wrapper
+    // imports that duplicate locally-defined symbols (e.g. functions defined in both
+    // the pure file and a .functions helper — the wrapper may import from .functions
+    // but the pure file already defines them).
+    const pureDeclaredNames = new Set();
+    for (const line of pureLines) {
+        const m = line.match(/^(?:export\s+)?(?:function|class|const|let|var|enum|type|interface)\s+(\w+)/);
+        if (m) pureDeclaredNames.add(m[1]);
+    }
+
+    // Extract wrapper lines, deduplicating imports against pure content
+    const wrapperLines = wrapperRaw.split("\n");
+    const filteredWrapperLines = [];
+    let inHeaderComment = false;
+
+    for (let i = 0; i < wrapperLines.length; i++) {
+        const trimmed = wrapperLines[i].trim();
+
+        // Skip header comment block
+        if (i === 0 && trimmed.startsWith("/**")) {
+            inHeaderComment = true;
+        }
+        if (inHeaderComment) {
+            if (trimmed.includes("*/")) {
+                inHeaderComment = false;
+            }
+            continue;
+        }
+
+        // Skip the re-export line
+        if (/^export\s+\*\s+from\s+["']\.\/.*\.pure["'];?\s*$/.test(trimmed)) {
+            continue;
+        }
+
+        // Skip import from .pure (self-referencing import from the wrapper)
+        if (/^import\s+.*from\s+["']\.\/.*\.pure["'];?\s*$/.test(trimmed)) {
+            continue;
+        }
+
+        // Deduplicate import lines against pure content
+        if (trimmed.startsWith("import ")) {
+            // Collect full import statement (may span multiple lines)
+            let fullText = wrapperLines[i];
+            let endIdx = i;
+            while (!fullText.includes(" from ") || !fullText.trim().endsWith(";")) {
+                if (/^import\s+["']/.test(fullText.trim()) && fullText.trim().endsWith(";")) break;
+                endIdx++;
+                if (endIdx >= wrapperLines.length) break;
+                fullText += "\n" + wrapperLines[endIdx];
+            }
+
+            const modMatch = fullText.match(/from\s+["'](.+?)["']/);
+            const namesMatch = fullText.match(/import\s+\{([^}]+)\}/);
+
+            if (modMatch && namesMatch) {
+                const modulePath = modMatch[1];
+
+                // Skip multi-line imports from .pure (self-referencing from wrapper)
+                if (/\.\/.*\.pure$/.test(modulePath)) {
+                    i = endIdx;
+                    continue;
+                }
+                const pureNames = pureImportedNames.get(modulePath) || new Set();
+                const importedNames = namesMatch[1].split(",").map((n) => {
+                    const parts = n.trim().split(/\s+as\s+/);
+                    return { name: parts[0], alias: parts[1] || null, local: parts[1] || parts[0] };
+                });
+
+                // Keep only names not already in pure imports or declared in pure content
+                const newNames = importedNames.filter((n) => !pureNames.has(n.local) && !pureDeclaredNames.has(n.local));
+
+                if (newNames.length === 0) {
+                    i = endIdx;
+                    continue; // All names already in pure — skip entirely
+                }
+
+                // Rebuild import with only the unique names
+                const isTypeImport = /^import\s+type\s/.test(fullText.trim());
+                const prefix = isTypeImport ? "import type" : "import";
+                const nameStr = newNames.map((n) => (n.alias ? `${n.name} as ${n.alias}` : n.name)).join(", ");
+                filteredWrapperLines.push(`${prefix} { ${nameStr} } from "${modulePath}";`);
+                i = endIdx;
+                continue;
+            }
+
+            // Default/namespace/side-effect imports: keep as-is
+            for (let j = i; j <= endIdx; j++) filteredWrapperLines.push(wrapperLines[j]);
+            i = endIdx;
+            continue;
+        }
+
+        filteredWrapperLines.push(wrapperLines[i]);
+    }
+
+    return pureContent.trimEnd() + "\n" + filteredWrapperLines.join("\n");
+}
 
 // ---------------------------------------------------------------------------
 // File collection
@@ -165,10 +364,16 @@ function parseImportStatement(text, startLine, endLine) {
             .map((s) => s.trim())
             .filter(Boolean)
             .map((s) => {
-                const parts = s.split(/\s+as\s+/);
-                return { name: parts[0].trim(), alias: parts.length > 1 ? parts[1].trim() : null };
+                // Strip inline `type` qualifier: import { type Foo } from "..."
+                const isInlineType = /^type\s+/.test(s);
+                const cleanedS = isInlineType ? s.replace(/^type\s+/, "") : s;
+                const parts = cleanedS.split(/\s+as\s+/);
+                return { name: parts[0].trim(), alias: parts.length > 1 ? parts[1].trim() : null, isInlineType };
             });
-        return { startLine, endLine, text, names, modulePath: namedMatch[2], isType, isDefault: false, isNamespace: false, isSideEffectOnly: false };
+        // If ALL names have inline type, treat the whole import as type import
+        const allInlineType = names.every((n) => n.isInlineType);
+        const effectiveIsType = isType || allInlineType;
+        return { startLine, endLine, text, names, modulePath: namedMatch[2], isType: effectiveIsType, isDefault: false, isNamespace: false, isSideEffectOnly: false };
     }
 
     // Default import: import Foo from "...";
@@ -236,11 +441,10 @@ class BracketTracker {
     processLine(line) {
         for (let c = 0; c < line.length; c++) {
             const ch = line[c];
-            const prev = c > 0 ? line[c - 1] : "";
 
             // Block comment
             if (this.inBlockComment) {
-                if (ch === "/" && prev === "*") {
+                if (ch === "/" && c > 0 && line[c - 1] === "*") {
                     this.inBlockComment = false;
                 }
                 continue;
@@ -257,8 +461,11 @@ class BracketTracker {
                 break; // rest of line is comment
             }
 
-            // Skip escaped characters
-            if (prev === "\\") continue;
+            // Escape handling: skip the NEXT character entirely (only inside strings)
+            if ((this.inSingle || this.inDouble || this.inTemplate) && ch === "\\") {
+                c++; // skip next char
+                continue;
+            }
 
             // String tracking
             if (ch === "'" && !this.inDouble && !this.inTemplate) {
@@ -293,19 +500,75 @@ class BracketTracker {
  * Returns the line index where the block ends (inclusive).
  */
 function findBlockEnd(lines, startIdx) {
-    const tracker = new BracketTracker();
+    // Process the first line to decide the strategy.
+    // If the first line opens braces (function/class body), use brace-only
+    // counting to avoid paren drift from regex literals in long function bodies.
+    // Otherwise use full BracketTracker for short expression-like blocks.
+    const firstTracker = new BracketTracker();
+    firstTracker.processLine(lines[startIdx]);
+    const useBraceOnly = firstTracker.braceDepth > 0;
 
+    if (useBraceOnly) {
+        // Brace-only counting with robust string/comment handling
+        let braceDepth = 0;
+        let inSingle = false,
+            inDouble = false,
+            inTemplate = false,
+            inBlockComment = false;
+
+        for (let i = startIdx; i < lines.length; i++) {
+            const line = lines[i];
+            for (let c = 0; c < line.length; c++) {
+                const ch = line[c];
+                if (inBlockComment) {
+                    if (ch === "/" && c > 0 && line[c - 1] === "*") inBlockComment = false;
+                    continue;
+                }
+                if (ch === "/" && c + 1 < line.length && line[c + 1] === "*" && !inSingle && !inDouble && !inTemplate) {
+                    inBlockComment = true;
+                    c++;
+                    continue;
+                }
+                if (ch === "/" && c + 1 < line.length && line[c + 1] === "/" && !inSingle && !inDouble && !inTemplate) {
+                    break;
+                }
+                if ((inSingle || inDouble || inTemplate) && ch === "\\") {
+                    c++;
+                    continue;
+                }
+                if (ch === "'" && !inDouble && !inTemplate) {
+                    inSingle = !inSingle;
+                    continue;
+                }
+                if (ch === '"' && !inSingle && !inTemplate) {
+                    inDouble = !inDouble;
+                    continue;
+                }
+                if (ch === "`" && !inSingle && !inDouble) {
+                    inTemplate = !inTemplate;
+                    continue;
+                }
+                if (!inSingle && !inDouble && !inTemplate) {
+                    if (ch === "{") braceDepth++;
+                    if (ch === "}") braceDepth--;
+                }
+            }
+            if (braceDepth <= 0 && i > startIdx) {
+                return i;
+            }
+        }
+        return startIdx;
+    }
+
+    // Full bracket tracking for expression-like blocks
+    const tracker = new BracketTracker();
     for (let i = startIdx; i < lines.length; i++) {
         tracker.processLine(lines[i]);
-
-        // Block ends when all brackets are balanced
         if (tracker.isBalanced) {
             const trimmed = lines[i].trim();
-            // Check for statement completion
             if (trimmed.endsWith(";") || trimmed.endsWith("}") || trimmed.endsWith(",") || trimmed === "") {
                 return i;
             }
-            // If we opened a block (braces went up then back to 0), that's the end
             if (i > startIdx) {
                 return i;
             }
@@ -397,8 +660,11 @@ function findSideEffectBlocks(lines) {
         let inDoubleQuote = false;
         for (let c = 0; c < line.length; c++) {
             const ch = line[c];
-            const prev = c > 0 ? line[c - 1] : "";
-            if (prev === "\\") continue;
+            // Escape handling: skip next char entirely (only inside strings)
+            if ((inSingleQuote || inDoubleQuote || inTemplateLiteral) && ch === "\\") {
+                c++; // skip next char
+                continue;
+            }
             if (ch === "'" && !inDoubleQuote && !inTemplateLiteral) {
                 inSingleQuote = !inSingleQuote;
                 continue;
@@ -537,13 +803,15 @@ function findSideEffectBlocks(lines) {
  */
 function findIdentifiers(code) {
     const ids = new Set();
-    // Remove strings, template literals, and comments to avoid false matches
+    // Remove strings, template literals, and comments to avoid false matches.
+    // IMPORTANT: Character classes must exclude \r and \n to prevent runaway
+    // matches across CRLF line endings (the [^"\\] class was matching \r\n).
     const cleaned = code
         .replace(/\/\/.*$/gm, "") // line comments
         .replace(/\/\*[\s\S]*?\*\//g, "") // block comments
-        .replace(/"(?:[^"\\]|\\.)*"/g, '""') // double-quoted strings
-        .replace(/'(?:[^'\\]|\\.)*'/g, "''") // single-quoted strings
-        .replace(/`(?:[^`\\]|\\.)*`/g, "``"); // template literals (simplified — won't handle nested)
+        .replace(/"(?:[^"\\\r\n]|\\.)*"/g, '""') // double-quoted strings
+        .replace(/'(?:[^'\\\r\n]|\\.)*'/g, "''") // single-quoted strings
+        .replace(/`(?:[^`\\]|\\.)*`/g, "``"); // template literals (may span lines — keep as-is)
 
     for (const match of cleaned.matchAll(/\b([A-Za-z_$]\w*)\b/g)) {
         ids.add(match[1]);
@@ -643,13 +911,11 @@ function findExportedNames(pureLines) {
             inDeclareModule = true;
         }
 
-        // Count braces (simplified — good enough for export detection)
-        for (const ch of line) {
-            if (ch === "{") braceDepth++;
-            if (ch === "}") braceDepth--;
-        }
-
         if (inDeclareModule) {
+            for (const ch of line) {
+                if (ch === "{") braceDepth++;
+                if (ch === "}") braceDepth--;
+            }
             if (braceDepth <= 0) {
                 inDeclareModule = false;
                 braceDepth = 0;
@@ -657,25 +923,32 @@ function findExportedNames(pureLines) {
             continue; // Skip exports inside declare module blocks
         }
 
-        // Only top-level exports (braceDepth should be 0)
-        if (braceDepth > 0) continue;
+        // Check exports BEFORE counting braces for this line,
+        // because `export class Foo {` is top-level even though it opens a brace block
+        if (braceDepth === 0) {
+            // export class Foo / export abstract class Foo / export async function foo / export const enum Foo / etc.
+            const match = trimmed.match(/^export\s+(?:abstract\s+|async\s+|default\s+)*(?:class|function|const\s+enum|const|let|var|interface|type|enum)\s+([A-Za-z_$]\w*)/);
+            if (match) {
+                names.add(match[1]);
+            }
 
-        // export class Foo / export abstract class Foo / export async function foo / etc.
-        const match = trimmed.match(/^export\s+(?:abstract\s+|async\s+|default\s+)*(?:class|function|const|let|var|interface|type|enum)\s+([A-Za-z_$]\w*)/);
-        if (match) {
-            names.add(match[1]);
+            // export { Foo, Bar }
+            const bracketMatch = trimmed.match(/^export\s+\{([^}]+)\}/);
+            if (bracketMatch) {
+                for (const name of bracketMatch[1].split(",")) {
+                    const cleaned = name
+                        .trim()
+                        .split(/\s+as\s+/)[0]
+                        .trim();
+                    if (cleaned) names.add(cleaned);
+                }
+            }
         }
 
-        // export { Foo, Bar }
-        const bracketMatch = trimmed.match(/^export\s+\{([^}]+)\}/);
-        if (bracketMatch) {
-            for (const name of bracketMatch[1].split(",")) {
-                const cleaned = name
-                    .trim()
-                    .split(/\s+as\s+/)[0]
-                    .trim();
-                if (cleaned) names.add(cleaned);
-            }
+        // Count braces AFTER export check
+        for (const ch of line) {
+            if (ch === "{") braceDepth++;
+            if (ch === "}") braceDepth--;
         }
     }
 
@@ -688,12 +961,14 @@ function findExportedNames(pureLines) {
 
 /**
  * Find non-exported, non-imported top-level variable/function definitions
- * that are ONLY referenced by side-effect code.
- * These should be moved from pure to wrapper.
- * Returns array of { startLine, endLine, name }
+ * that are referenced by side-effect code.
+ * Returns:
+ *   - sideEffectOnly: array of { startLine, endLine, name } — move to wrapper
+ *   - sharedLocals: array of { startLine, endLine, name } — keep in pure but export for wrapper
  */
 function findSideEffectOnlyLocals(lines, importLineSet, sideEffectLineSet, pureContentLines, seContentStr) {
-    const result = [];
+    const sideEffectOnly = [];
+    const sharedLocals = [];
 
     // Find all top-level non-exported declarations in the pure portion
     const declarations = [];
@@ -730,22 +1005,28 @@ function findSideEffectOnlyLocals(lines, importLineSet, sideEffectLineSet, pureC
 
         if (prevDepth !== 0) continue;
 
-        // Match non-exported declarations: const/let/var/function
-        const declMatch = trimmed.match(/^(?:const|let|var)\s+([A-Za-z_$]\w*)\s*=/);
-        const funcMatch = !declMatch && trimmed.match(/^function\s+([A-Za-z_$]\w*)\s*\(/);
+        // Match non-exported declarations: const/let/var/function/interface/type
+        // The regex must handle optional TypeScript type annotations between
+        // the name and `=`, e.g.: let Foo: { [key: string]: Bar } = {};
+        const declMatch = trimmed.match(/^(?:const|let|var)\s+([A-Za-z_$]\w*)\s*(?:[:,=])/);
+        const funcMatch = !declMatch && trimmed.match(/^function\s+([A-Za-z_$]\w*)\s*[(<]/);
+        const ifaceMatch = !declMatch && !funcMatch && trimmed.match(/^(?:interface|type)\s+([A-Za-z_$]\w*)\s*[{<=(<]/);
+        const declareMatch = !declMatch && !funcMatch && !ifaceMatch && trimmed.match(/^declare\s+(?:const|let|var)\s+([A-Za-z_$]\w*)\s*(?:[:,=])/);
 
-        if (declMatch || funcMatch) {
-            const name = (declMatch || funcMatch)[1];
+        if (declMatch || funcMatch || ifaceMatch || declareMatch) {
+            const name = (declMatch || funcMatch || ifaceMatch || declareMatch)[1];
+            const isDeclareAmbient = !!declareMatch;
             // Find the extent of this declaration
             const blockEnd = findBlockEnd(lines, i);
-            declarations.push({ startLine: i, endLine: blockEnd, name });
+            declarations.push({ startLine: i, endLine: blockEnd, name, isDeclareAmbient });
             i = blockEnd; // skip past
+            // Re-sync brace depth — findBlockEnd returns when depth returns to 0
+            braceDepth = 0;
         }
     }
 
     // For each non-exported local, check if it's only used in side-effect code
     const seIds = findIdentifiers(seContentStr);
-    const pureStr = pureContentLines.join("\n");
 
     for (const decl of declarations) {
         if (!seIds.has(decl.name)) continue; // not used in side effects at all
@@ -762,11 +1043,14 @@ function findSideEffectOnlyLocals(lines, importLineSet, sideEffectLineSet, pureC
 
         if (!pureIds.has(decl.name)) {
             // Only used in side-effect code — move to wrapper
-            result.push(decl);
+            sideEffectOnly.push(decl);
+        } else {
+            // Used in both pure and side-effect code — keep in pure, export for wrapper
+            sharedLocals.push(decl);
         }
     }
 
-    return result;
+    return { sideEffectOnly, sharedLocals };
 }
 
 // ---------------------------------------------------------------------------
@@ -811,7 +1095,7 @@ function generateSplit(source, lines, imports, sideEffectBlocks, relPath) {
 
     // --- Detect local definitions only used by side-effect code ---
     // These need to move from pure to wrapper (e.g., `const InitSideEffects = () => { ... }`)
-    const sideEffectOnlyLocals = findSideEffectOnlyLocals(lines, importLineSet, sideEffectLineSet, pureContentLines, seContentStr);
+    const { sideEffectOnly: sideEffectOnlyLocals, sharedLocals } = findSideEffectOnlyLocals(lines, importLineSet, sideEffectLineSet, pureContentLines, seContentStr);
 
     // Add side-effect-only local blocks to the side-effect set
     for (const local of sideEffectOnlyLocals) {
@@ -847,9 +1131,12 @@ function generateSplit(source, lines, imports, sideEffectBlocks, relPath) {
     const seContentStr2 = seContentLines2.join("\n");
 
     // Analyze which imports are used in pure vs side-effect content
-    // For pure content, strip declare module blocks to avoid false positives
-    // (identifiers inside declare module augmentations aren't references to module-level imports)
-    const pureUsage = analyzeImportUsage(imports, stripDeclareModuleBlocks(pureContentStr2));
+    // Two analyses for pure content:
+    //   1. Full content (including declare module) — to find ALL needed imports
+    //   2. Stripped content (without declare module) — to find which are value imports
+    // Imports used only in declare module blocks become `import type`
+    const pureUsageFull = analyzeImportUsage(imports, pureContentStr2);
+    const pureUsageStripped = analyzeImportUsage(imports, stripDeclareModuleBlocks(pureContentStr2));
     const seUsage = analyzeImportUsage(imports, seContentStr2);
 
     // Build pure file imports
@@ -869,41 +1156,70 @@ function generateSplit(source, lines, imports, sideEffectBlocks, relPath) {
             continue;
         }
 
-        const pureNames = pureUsage.get(idx);
+        const pureNamesFull = pureUsageFull.get(idx);
+        const pureNamesStripped = pureUsageStripped.get(idx);
         const seNames = seUsage.get(idx);
 
-        if (!pureNames && !seNames) {
+        if (!pureNamesFull && !seNames) {
             // Unused import — keep in pure to avoid breaking anything
             // (might be used in type annotations we didn't detect)
             pureImportLines.push(imp.text);
             continue;
         }
 
-        if (pureNames) {
+        if (pureNamesFull) {
             if (imp.isNamespace || imp.isDefault) {
                 // Can't split namespace/default imports
-                pureImportLines.push(imp.text);
+                // If only used in declare module blocks, make it type-only
+                if (!pureNamesStripped) {
+                    const typeText = imp.text
+                        .replace(/^import /, "import type ")
+                        .replace(/\n/g, " ")
+                        .trim();
+                    pureImportLines.push(typeText);
+                } else {
+                    pureImportLines.push(imp.text);
+                }
             } else {
-                // Only keep names used in pure content
-                const pureNameList = imp.names.filter((n) => pureNames.has(n.name));
-                if (pureNameList.length > 0) {
-                    const nameStr = pureNameList.map((n) => (n.alias ? `${n.name} as ${n.alias}` : n.name)).join(", ");
+                // Split names into value imports (used in actual code) and type imports (only in declare module or inline-typed)
+                const valueNames = imp.names.filter((n) => pureNamesStripped && pureNamesStripped.has(n.name) && !n.isInlineType);
+                const typeOnlyNames = imp.names.filter((n) => pureNamesFull.has(n.name) && (n.isInlineType || !(pureNamesStripped && pureNamesStripped.has(n.name))));
+
+                if (valueNames.length > 0) {
+                    const nameStr = valueNames.map((n) => (n.alias ? `${n.name} as ${n.alias}` : n.name)).join(", ");
                     pureImportLines.push(`import { ${nameStr} } from "${imp.modulePath}";`);
+                }
+                if (typeOnlyNames.length > 0) {
+                    const nameStr = typeOnlyNames.map((n) => (n.alias ? `${n.name} as ${n.alias}` : n.name)).join(", ");
+                    pureImportLines.push(`import type { ${nameStr} } from "${imp.modulePath}";`);
                 }
             }
         }
     }
 
-    // Build pure file
-    const pureLines2 = [...pureImportLines];
+    // Build pure file (deduplicate imports from reconstruction artifacts)
+    const dedupedPureImports = deduplicateImportLines(pureImportLines);
+    const pureLines2 = [...dedupedPureImports];
     if (pureImportLines.length > 0) pureLines2.push(""); // blank line after imports
+
+    // Build set of shared local start lines for adding `export` keyword
+    // Ambient declarations (declare const/var/let) can't be exported — they need
+    // to be duplicated in the wrapper instead.
+    const ambientSharedLocals = sharedLocals.filter((l) => l.isDeclareAmbient);
+    const nonAmbientSharedLocals = sharedLocals.filter((l) => !l.isDeclareAmbient);
+    const sharedLocalStartLines = new Set(nonAmbientSharedLocals.map((l) => l.startLine));
 
     // Add non-import, non-side-effect content (using updated sideEffectLineSet)
     let startedContent = false;
     for (let i = 0; i < lines.length; i++) {
         if (importLineSet.has(i)) continue;
         if (sideEffectLineSet.has(i)) continue;
-        pureLines2.push(lines[i]);
+        let line = lines[i];
+        // Add `export` to shared locals so the wrapper can import them
+        if (sharedLocalStartLines.has(i)) {
+            line = "export " + line;
+        }
+        pureLines2.push(line);
         startedContent = true;
     }
 
@@ -916,6 +1232,11 @@ function generateSplit(source, lines, imports, sideEffectBlocks, relPath) {
 
     // Find exported names from pure content
     const exportedFromPure = findExportedNames(pureLines2);
+
+    // If the pure file has no exports (only declare module blocks), it needs `export {}`
+    // to be a valid TypeScript module that can be referenced by `export * from`
+    const hasDeclareModule = pureLines2.some((l) => /^\s*declare\s+module\s+/.test(l));
+    const needsEmptyExport = exportedFromPure.size === 0 && hasDeclareModule;
 
     // Build wrapper file
     const pureModulePath = "./" + basename(relPath).replace(/\.ts$/, ".pure");
@@ -948,10 +1269,16 @@ function generateSplit(source, lines, imports, sideEffectBlocks, relPath) {
         wrapperImports.push(`import { ${[...neededFromPure].sort().join(", ")} } from "${pureModulePath}";`);
     }
 
-    // Import external symbols needed by side effects that aren't available from pure
+    // Import external symbols needed by side effects that aren't available from pure.
+    // Handle both value and type imports — use value imports in wrappers since
+    // TypeScript auto-elides unused imports (no verbatimModuleSyntax in tsconfig).
+    // This avoids TS1361 errors when reconstructed sources have `import type`
+    // for names actually used as values in side-effect code.
+    const alreadyHandledNames = new Set(neededFromPure);
+
     for (let idx = 0; idx < imports.length; idx++) {
         const imp = imports[idx];
-        if (imp.isSideEffectOnly || imp.isType) continue;
+        if (imp.isSideEffectOnly) continue;
 
         const seNames = seUsage.get(idx);
         if (!seNames) continue;
@@ -960,11 +1287,10 @@ function generateSplit(source, lines, imports, sideEffectBlocks, relPath) {
         const externalNames = [];
         for (const nameObj of imp.names) {
             const localName = nameObj.alias || nameObj.name;
-            if (seNames.has(nameObj.name) && !exportedFromPure.has(localName) && !neededFromPure.has(localName)) {
-                // This name is needed by side effects and not available from pure
-                // Check if it's already being imported from pure under a different guise
-                if (!neededFromPure.has(nameObj.name)) {
+            if (seNames.has(nameObj.name) && !exportedFromPure.has(localName) && !alreadyHandledNames.has(localName)) {
+                if (!alreadyHandledNames.has(nameObj.name)) {
                     externalNames.push(nameObj);
+                    alreadyHandledNames.add(localName);
                 }
             }
         }
@@ -981,29 +1307,23 @@ function generateSplit(source, lines, imports, sideEffectBlocks, relPath) {
         }
     }
 
-    // Also add type imports needed by side-effect code
-    for (let idx = 0; idx < imports.length; idx++) {
-        const imp = imports[idx];
-        if (!imp.isType) continue;
-
-        const seNames = seUsage.get(idx);
-        if (!seNames) continue;
-
-        // Type imports needed by side-effect type annotations
-        const typeNames = imp.names.filter((n) => seNames.has(n.name));
-        if (typeNames.length > 0) {
-            const nameStr = typeNames.map((n) => (n.alias ? `${n.name} as ${n.alias}` : n.name)).join(", ");
-            wrapperImports.push(`import type { ${nameStr} } from "${imp.modulePath}";`);
-        }
-    }
-
-    for (const impLine of wrapperImports) {
+    const dedupedWrapperImports = deduplicateImportLines(wrapperImports);
+    for (const impLine of dedupedWrapperImports) {
         wrapperLines.push(impLine);
     }
-    if (wrapperImports.length > 0) wrapperLines.push(``);
+    if (dedupedWrapperImports.length > 0) wrapperLines.push(``);
 
     // Add side-effect-only locals first (they need to precede the side-effect code)
     for (const local of sideEffectOnlyLocals) {
+        for (let i = local.startLine; i <= local.endLine; i++) {
+            wrapperLines.push(lines[i]);
+        }
+        wrapperLines.push(``);
+    }
+
+    // Add ambient shared locals (declare const/var/let) — these can't be exported
+    // from the pure file, so duplicate them in the wrapper
+    for (const local of ambientSharedLocals) {
         for (let i = local.startLine; i <= local.endLine; i++) {
             wrapperLines.push(lines[i]);
         }
@@ -1027,7 +1347,12 @@ function generateSplit(source, lines, imports, sideEffectBlocks, relPath) {
 
     const wrapperContent = wrapperLines.join("\n");
 
-    return { pureContent, wrapperContent };
+    let finalPureContent = pureContent;
+    if (needsEmptyExport) {
+        finalPureContent = finalPureContent.trimEnd() + "\n\nexport {};\n";
+    }
+
+    return { pureContent: finalPureContent, wrapperContent };
 }
 
 // ---------------------------------------------------------------------------
@@ -1072,9 +1397,22 @@ function main() {
         const types = new Set(entry.sideEffects.map((s) => s.type));
         // Only filter prototype-assignment-only files (no other side effect types)
         if (types.size === 1 && types.has("prototype-assignment")) {
-            const content = readFileSync(join(CORE_SRC, entry.file), "utf-8");
+            const filePath = join(CORE_SRC, entry.file);
+            let content;
+            // When resplitting, check the reconstructed content, not the wrapper
+            if (RESPLIT) {
+                const purePath = filePath.replace(/\.ts$/, ".pure.ts");
+                if (existsSync(purePath)) {
+                    content = reconstructOriginal(purePath, filePath);
+                } else {
+                    content = readFileSync(filePath, "utf-8");
+                }
+            } else {
+                content = readFileSync(filePath, "utf-8");
+            }
             const hasExportedDecl = /^export\s+(class|interface|type|enum|function|const|let|var|abstract)\s/m.test(content);
-            if (!hasExportedDecl) {
+            const hasDeclareModule = /^\s*declare\s+module\s+/m.test(content);
+            if (!hasExportedDecl && !hasDeclareModule) {
                 if (VERBOSE) console.log(`  SKIP  ${entry.file} — prototype-only, no exports`);
                 return false;
             }
@@ -1097,10 +1435,21 @@ function main() {
     let processed = 0;
     let skipped = 0;
     const errors = [];
+    const writtenFiles = [];
 
     for (const entry of candidates) {
         const filePath = join(CORE_SRC, entry.file);
-        const source = readFileSync(filePath, "utf-8");
+        let source = readFileSync(filePath, "utf-8");
+
+        // When resplitting, reconstruct the original from .pure.ts + wrapper
+        if (RESPLIT) {
+            const pureFilePath = filePath.replace(/\.ts$/, ".pure.ts");
+            if (existsSync(pureFilePath)) {
+                source = reconstructOriginal(pureFilePath, filePath);
+                if (VERBOSE) console.log(`  RECONSTRUCT  ${entry.file} (merged .pure.ts + wrapper)`);
+            }
+        }
+
         const lines = source.split("\n");
 
         // Parse imports
@@ -1165,6 +1514,7 @@ function main() {
             } else {
                 writeFileSync(pureFilePath, pureContent);
                 writeFileSync(filePath, wrapperContent);
+                writtenFiles.push(pureFilePath, filePath);
                 if (VERBOSE) {
                     const typeStr = blocks.map((b) => b.type).join(", ");
                     console.log(`  SPLIT  ${entry.file} (${typeStr})`);
@@ -1186,6 +1536,72 @@ function main() {
     if (errors.length > 0) {
         console.log(`\nErrors:`);
         errors.forEach((e) => console.log(`  ${e.file}: ${e.error}`));
+    }
+
+    // Post-pass: ensure all .pure.ts files that are declare-module-only have `export {}`
+    // so they're valid TypeScript modules that can be referenced by `export * from`
+    let fixedExportEmpty = 0;
+    const allPureFiles = [];
+    function collectPure(dir) {
+        for (const ent of readdirSync(dir, { withFileTypes: true })) {
+            const p = join(dir, ent.name);
+            if (ent.isDirectory()) collectPure(p);
+            else if (ent.name.endsWith(".pure.ts")) allPureFiles.push(p);
+        }
+    }
+    collectPure(CORE_SRC);
+    for (const pf of allPureFiles) {
+        const content = readFileSync(pf, "utf-8");
+        if (content.includes("export {}")) continue;
+        // Check if file has any module-level exports
+        const lines = content.split("\n");
+        let braceDepth = 0;
+        let hasModuleLevelExport = false;
+        for (const line of lines) {
+            const trimmed = line.trim();
+            if (braceDepth === 0 && /^export\s+(class|interface|type|enum|function|const|let|var|abstract|default)\s/.test(trimmed)) {
+                hasModuleLevelExport = true;
+                break;
+            }
+            if (braceDepth === 0 && /^export\s+\{/.test(trimmed)) {
+                hasModuleLevelExport = true;
+                break;
+            }
+            for (const ch of trimmed) {
+                if (ch === "{") braceDepth++;
+                else if (ch === "}") braceDepth--;
+            }
+        }
+        if (!hasModuleLevelExport) {
+            if (!DRY_RUN) {
+                writeFileSync(pf, content.trimEnd() + "\n\nexport {};\n");
+                writtenFiles.push(pf);
+            }
+            fixedExportEmpty++;
+            if (VERBOSE) console.log(`  FIX    ${relative(CORE_SRC, pf)} — added export {}`);
+        }
+    }
+    if (fixedExportEmpty > 0) {
+        console.log(`Fixed:     ${fixedExportEmpty} .pure.ts files needed export {}`);
+    }
+
+    // Format all generated/modified files with Prettier
+    if (!DRY_RUN && writtenFiles.length > 0) {
+        console.log(`\nFormatting ${writtenFiles.length} files with Prettier...`);
+        try {
+            // Batch in groups to avoid command-line length limits
+            const BATCH = 100;
+            for (let i = 0; i < writtenFiles.length; i += BATCH) {
+                const batch = writtenFiles.slice(i, i + BATCH);
+                execSync(`npx prettier --write ${batch.map((f) => `"${f}"`).join(" ")}`, {
+                    cwd: REPO_ROOT,
+                    stdio: "ignore",
+                });
+            }
+            console.log(`Formatted ${writtenFiles.length} files.`);
+        } catch (err) {
+            console.error(`Warning: Prettier formatting failed: ${err.message}`);
+        }
     }
 }
 

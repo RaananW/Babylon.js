@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import { serialize, serializeAsColor3, expandToProperty, serializeAsTexture, serializeAsVector3 } from "../../Misc/decorators";
 import { SmartArray } from "../../Misc/smartArray";
 import { Logger } from "../../Misc/logger";
@@ -23,7 +22,6 @@ import type { IShadowLight } from "../../Lights/shadowLight";
 import { Constants } from "../../Engines/constants";
 import { MaterialFlags } from "../materialFlags";
 import { Color3 } from "../../Maths/math.color";
-
 import { EffectFallbacks } from "../effectFallbacks";
 import { AddClipPlaneUniforms, BindClipPlane } from "../clipPlaneMaterialHelper";
 import {
@@ -51,6 +49,8 @@ import {
 import { SerializationHelper } from "../../Misc/decorators.serialization";
 import { ShaderLanguage } from "../shaderLanguage";
 import { ImageProcessingMixin } from "../imageProcessing";
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 class BackgroundMaterialDefinesBase extends MaterialDefines {}
 

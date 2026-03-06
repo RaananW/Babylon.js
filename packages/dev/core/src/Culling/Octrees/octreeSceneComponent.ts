@@ -4,12 +4,12 @@
  */
 export * from "./octreeSceneComponent.pure";
 
+import { OctreeSceneComponent } from "./octreeSceneComponent.pure";
 import { Scene } from "../../scene";
+import { SubMesh } from "../../Meshes/subMesh";
 import { AbstractMesh } from "../../Meshes/abstractMesh";
 import { SceneComponentConstants } from "../../sceneComponent";
 import { Octree } from "./octree";
-import type { SubMesh } from "../../Meshes/subMesh";
-
 
 Scene.prototype.createOrUpdateSelectionOctree = function (maxCapacity = 64, maxDepth = 2): Octree<AbstractMesh> {
     let component = this._getComponent(SceneComponentConstants.NAME_OCTREE);
@@ -30,7 +30,6 @@ Scene.prototype.createOrUpdateSelectionOctree = function (maxCapacity = 64, maxD
     return this._selectionOctree;
 };
 
-
 Object.defineProperty(Scene.prototype, "selectionOctree", {
     get: function (this: Scene) {
         return this._selectionOctree;
@@ -38,7 +37,6 @@ Object.defineProperty(Scene.prototype, "selectionOctree", {
     enumerable: true,
     configurable: true,
 });
-
 
 /**
  * This function will create an octree to help to select the right submeshes for rendering, picking and collision computations.

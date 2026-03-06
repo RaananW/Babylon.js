@@ -10,7 +10,6 @@ import { Texture } from "../Materials/Textures/texture";
 import { Constants } from "../Engines/constants";
 import { serialize, serializeAsVector2 } from "../Misc/decorators";
 import { SerializationHelper } from "../Misc/decorators.serialization";
-
 import type { Scene } from "../scene";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import { ThinBlurPostProcess } from "./thinBlurPostProcess";

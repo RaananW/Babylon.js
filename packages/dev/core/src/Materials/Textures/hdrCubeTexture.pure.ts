@@ -5,7 +5,6 @@ import type { Scene } from "../../scene";
 import { EnvCubeTexture } from "./envCubeTexture";
 import { GetCubeMapTextureData } from "../../Misc/HighDynamicRange/hdr";
 import type { AbstractEngine } from "../../Engines/abstractEngine";
-import "../../Materials/Textures/baseTexture.polynomial";
 import type { CubeMapInfo } from "../../Misc/HighDynamicRange/panoramaToCubemap";
 
 /**

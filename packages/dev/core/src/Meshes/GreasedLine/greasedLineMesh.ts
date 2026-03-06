@@ -4,9 +4,9 @@
  */
 export * from "./greasedLineMesh.pure";
 
+import { GreasedLineMesh } from "./greasedLineMesh.pure";
+import { Scene } from "../../scene";
 import { Mesh } from "../mesh";
-import type { Scene } from "../../scene";
-
 
 Mesh._GreasedLineMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
     return GreasedLineMesh.Parse(parsedMesh, scene);

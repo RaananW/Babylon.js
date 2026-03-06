@@ -20,6 +20,7 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join, resolve, dirname, basename, relative } from "path";
 import { fileURLToPath } from "url";
+import { execSync } from "child_process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -272,6 +273,7 @@ function main() {
     let processed = 0;
     let skipped = 0;
     const errors = [];
+    const writtenFiles = [];
 
     for (const entry of candidates) {
         const filePath = join(CORE_SRC, entry.file);
@@ -311,6 +313,7 @@ function main() {
             try {
                 writeFileSync(pureFilePath, pureContent);
                 writeFileSync(filePath, wrapperContent);
+                writtenFiles.push(pureFilePath, filePath);
                 if (VERBOSE) console.log(`  SPLIT  ${entry.file} (${analysis.registerCalls.length} RegisterClass calls)`);
             } catch (err) {
                 errors.push({ file: entry.file, error: err.message });
@@ -329,6 +332,24 @@ function main() {
     if (errors.length > 0) {
         console.log(`\nErrors:`);
         errors.forEach((e) => console.log(`  ${e.file}: ${e.error}`));
+    }
+
+    // Format all generated/modified files with Prettier
+    if (!DRY_RUN && writtenFiles.length > 0) {
+        console.log(`\nFormatting ${writtenFiles.length} files with Prettier...`);
+        try {
+            const BATCH = 100;
+            for (let i = 0; i < writtenFiles.length; i += BATCH) {
+                const batch = writtenFiles.slice(i, i + BATCH);
+                execSync(`npx prettier --write ${batch.map((f) => `"${f}"`).join(" ")}`, {
+                    cwd: REPO_ROOT,
+                    stdio: "ignore",
+                });
+            }
+            console.log(`Formatted ${writtenFiles.length} files.`);
+        } catch (err) {
+            console.error(`Warning: Prettier formatting failed: ${err.message}`);
+        }
     }
 }
 

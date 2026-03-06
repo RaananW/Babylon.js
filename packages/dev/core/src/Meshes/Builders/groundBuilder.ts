@@ -4,19 +4,24 @@
  */
 export * from "./groundBuilder.pure";
 
-import { CreateGround, CreateGroundFromHeightMap, CreateTiledGround } from "./groundBuilder.pure";
+import {
+    CreateGround,
+    CreateGroundFromHeightMap,
+    CreateGroundFromHeightMapVertexData,
+    CreateGroundVertexData,
+    CreateTiledGround,
+    CreateTiledGroundVertexData,
+} from "./groundBuilder.pure";
+import { Scene } from "../../scene";
 import { Mesh } from "../mesh";
 import { VertexData } from "../mesh.vertexData";
 import { GroundMesh } from "../groundMesh";
-import type { Scene } from "../../scene";
-
 
 VertexData.CreateGround = CreateGroundVertexData;
 
 VertexData.CreateTiledGround = CreateTiledGroundVertexData;
 
 VertexData.CreateGroundFromHeightMap = CreateGroundFromHeightMapVertexData;
-
 
 Mesh.CreateGround = (name: string, width: number, height: number, subdivisions: number, scene?: Scene, updatable?: boolean): Mesh => {
     const options = {
@@ -28,7 +33,6 @@ Mesh.CreateGround = (name: string, width: number, height: number, subdivisions: 
 
     return CreateGround(name, options, scene);
 };
-
 
 Mesh.CreateTiledGround = (
     name: string,
@@ -53,7 +57,6 @@ Mesh.CreateTiledGround = (
 
     return CreateTiledGround(name, options, scene);
 };
-
 
 Mesh.CreateGroundFromHeightMap = (
     name: string,

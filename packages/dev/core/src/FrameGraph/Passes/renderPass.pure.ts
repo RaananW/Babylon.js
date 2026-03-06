@@ -25,7 +25,6 @@ export class FrameGraphRenderPass extends FrameGraphPass<FrameGraphRenderContext
     protected _frameGraphRenderTarget: FrameGraphRenderTarget;
     protected _dependencies: Set<FrameGraphTextureHandle> = new Set();
 
-
     /**
      * Gets the handle(s) of the render target(s) used by the render pass.
      */

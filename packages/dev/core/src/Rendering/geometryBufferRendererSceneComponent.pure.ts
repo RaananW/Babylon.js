@@ -6,7 +6,7 @@ import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import type { SmartArrayNoDuplicate } from "../Misc/smartArray";
 import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
-
+import type { GeometryBufferRenderer } from "./geometryBufferRenderer";
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -4,40 +4,34 @@
  */
 export * from "./abstractEngine.query.pure";
 
-import { OcclusionQuery } from "./abstractEngine.query.pure";
+import { OcclusionQuery, _OcclusionDataStorage } from "./abstractEngine.query.pure";
 import { AbstractMesh } from "core/Meshes/abstractMesh";
+import { Nullable } from "../../types";
 import { AbstractEngine } from "../abstractEngine";
-import type { Nullable } from "../../types";
-
 
 AbstractEngine.prototype.createQuery = function (): Nullable<OcclusionQuery> {
     return null;
 };
-
 
 AbstractEngine.prototype.deleteQuery = function (query: OcclusionQuery): AbstractEngine {
     // Do nothing. Must be implemented by child classes
     return this;
 };
 
-
 AbstractEngine.prototype.isQueryResultAvailable = function (query: OcclusionQuery): boolean {
     // Do nothing. Must be implemented by child classes
     return false;
 };
-
 
 AbstractEngine.prototype.getQueryResult = function (query: OcclusionQuery): number {
     // Do nothing. Must be implemented by child classes
     return 0;
 };
 
-
 AbstractEngine.prototype.beginOcclusionQuery = function (algorithmType: number, query: OcclusionQuery): boolean {
     // Do nothing. Must be implemented by child classes
     return false;
 };
-
 
 AbstractEngine.prototype.endOcclusionQuery = function (algorithmType: number): AbstractEngine {
     // Do nothing. Must be implemented by child classes
@@ -55,7 +49,6 @@ Object.defineProperty(AbstractMesh.prototype, "isOcclusionQueryInProgress", {
     configurable: true,
 });
 
-
 Object.defineProperty(AbstractMesh.prototype, "_occlusionDataStorage", {
     get: function (this: AbstractMesh) {
         if (!this.__occlusionDataStorage) {
@@ -66,7 +59,6 @@ Object.defineProperty(AbstractMesh.prototype, "_occlusionDataStorage", {
     enumerable: false,
     configurable: true,
 });
-
 
 Object.defineProperty(AbstractMesh.prototype, "isOccluded", {
     get: function (this: AbstractMesh) {
@@ -79,7 +71,6 @@ Object.defineProperty(AbstractMesh.prototype, "isOccluded", {
     configurable: true,
 });
 
-
 Object.defineProperty(AbstractMesh.prototype, "occlusionQueryAlgorithmType", {
     get: function (this: AbstractMesh) {
         return this._occlusionDataStorage.occlusionQueryAlgorithmType;
@@ -90,7 +81,6 @@ Object.defineProperty(AbstractMesh.prototype, "occlusionQueryAlgorithmType", {
     enumerable: true,
     configurable: true,
 });
-
 
 Object.defineProperty(AbstractMesh.prototype, "occlusionType", {
     get: function (this: AbstractMesh) {
@@ -103,7 +93,6 @@ Object.defineProperty(AbstractMesh.prototype, "occlusionType", {
     configurable: true,
 });
 
-
 Object.defineProperty(AbstractMesh.prototype, "occlusionRetryCount", {
     get: function (this: AbstractMesh) {
         return this._occlusionDataStorage.occlusionRetryCount;
@@ -115,7 +104,6 @@ Object.defineProperty(AbstractMesh.prototype, "occlusionRetryCount", {
     configurable: true,
 });
 
-
 Object.defineProperty(AbstractMesh.prototype, "forceRenderingWhenOccluded", {
     get: function (this: AbstractMesh) {
         return this._occlusionDataStorage.forceRenderingWhenOccluded;
@@ -126,7 +114,6 @@ Object.defineProperty(AbstractMesh.prototype, "forceRenderingWhenOccluded", {
     enumerable: true,
     configurable: true,
 });
-
 
 // We also need to update AbstractMesh as there is a portion of the code there
 AbstractMesh.prototype._checkOcclusionQuery = function () {

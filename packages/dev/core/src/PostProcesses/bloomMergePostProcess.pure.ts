@@ -7,7 +7,6 @@ import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Effect } from "../Materials/effect";
 import type { Camera } from "../Cameras/camera";
 import { Constants } from "../Engines/constants";
-
 import { serialize } from "../Misc/decorators";
 import { ThinBloomMergePostProcess } from "./thinBloomMergePostProcess";
 

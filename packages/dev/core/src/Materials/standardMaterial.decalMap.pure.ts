@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable } from "core/types";
-
+import type { DecalMapConfiguration } from "./material.decalMapConfiguration";
 
 declare module "./standardMaterial" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -15,3 +15,5 @@ declare module "./standardMaterial" {
         decalMap: Nullable<DecalMapConfiguration>;
     }
 }
+
+export {};

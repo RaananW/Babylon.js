@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import { MaterialPluginBase } from "./materialPluginBase";
 import type { Scene } from "../scene";
 import type { UniformBuffer } from "./uniformBuffer";
@@ -14,6 +13,8 @@ import { Logger } from "core/Misc/logger";
 import { expandToProperty, serialize, serializeAsColor3 } from "core/Misc/decorators";
 import type { AbstractMesh } from "core/Meshes/abstractMesh";
 import { ShaderLanguage } from "./shaderLanguage";
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 const vertexDefinitions = `#if defined(DBG_ENABLED)
 attribute float dbg_initialPass;

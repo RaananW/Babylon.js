@@ -5,11 +5,10 @@
 export * from "./shapeBuilder.pure";
 
 import { ExtrudeShape, ExtrudeShapeCustom } from "./shapeBuilder.pure";
+import { Nullable } from "../../types";
+import { Scene } from "../../scene";
 import { Vector3 } from "../../Maths/math.vector";
 import { Mesh } from "../mesh";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-
 
 Mesh.ExtrudeShape = (
     name: string,
@@ -36,7 +35,6 @@ Mesh.ExtrudeShape = (
 
     return ExtrudeShape(name, options, scene);
 };
-
 
 Mesh.ExtrudeShapeCustom = (
     name: string,

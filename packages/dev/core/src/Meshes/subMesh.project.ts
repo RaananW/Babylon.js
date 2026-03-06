@@ -4,11 +4,10 @@
  */
 export * from "./subMesh.project.pure";
 
+import { IndicesArray } from "../types";
 import { Constants } from "../Engines/constants";
 import { TmpVectors, Vector3 } from "../Maths/math.vector";
 import { SubMesh } from "./subMesh";
-import type { IndicesArray } from "../types";
-
 
 /**
  * @internal
@@ -50,7 +49,6 @@ SubMesh.prototype._projectOnTrianglesToRef = function (vector: Vector3, position
     return distance;
 };
 
-
 /**
  * @internal
  */
@@ -76,7 +74,6 @@ SubMesh.prototype._projectOnUnIndexedTrianglesToRef = function (vector: Vector3,
 
     return distance;
 };
-
 
 SubMesh.prototype.projectToRef = function (vector: Vector3, positions: Vector3[], indices: IndicesArray, ref: Vector3): number {
     const material = this.getMaterial();

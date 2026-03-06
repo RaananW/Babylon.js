@@ -21,7 +21,6 @@ import { FrameGraphUtils } from "../FrameGraph/frameGraphUtils";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
-
 let screenshotCanvas: Nullable<HTMLCanvasElement> = null;
 
 /**
@@ -1015,10 +1014,3 @@ export const ScreenshotTools = {
  * Once we build native modules those need to be exported.
  * @internal
  */
-const initSideEffects = () => {
-    // References the dependencies.
-    Tools.CreateScreenshot = CreateScreenshot;
-    Tools.CreateScreenshotAsync = CreateScreenshotAsync;
-    Tools.CreateScreenshotUsingRenderTarget = CreateScreenshotUsingRenderTarget;
-    Tools.CreateScreenshotUsingRenderTargetAsync = CreateScreenshotUsingRenderTargetAsync;
-};

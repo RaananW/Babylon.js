@@ -4,14 +4,14 @@
  */
 export * from "./depthRendererSceneComponent.pure";
 
+import { DepthRendererSceneComponent } from "./depthRendererSceneComponent.pure";
+import { Nullable } from "../types";
 import { Scene } from "../scene";
+import { Camera } from "../Cameras/camera";
+import { SceneComponentConstants } from "../sceneComponent";
+import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
 import { DepthRenderer } from "./depthRenderer";
 import { Constants } from "../Engines/constants";
-import { SceneComponentConstants } from "../sceneComponent";
-import type { Nullable } from "../types";
-import type { Camera } from "../Cameras/camera";
-import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
-
 
 Scene.prototype.enableDepthRenderer = function (
     camera?: Nullable<Camera>,
@@ -45,7 +45,6 @@ Scene.prototype.enableDepthRenderer = function (
     return this._depthRenderer[camera.id];
 };
 
-
 Scene.prototype.disableDepthRenderer = function (camera?: Nullable<Camera>): void {
     camera = camera || this.activeCamera;
     if (!camera || !this._depthRenderer || !this._depthRenderer[camera.id]) {
@@ -54,7 +53,6 @@ Scene.prototype.disableDepthRenderer = function (camera?: Nullable<Camera>): voi
 
     this._depthRenderer[camera.id].dispose();
 };
-
 
 DepthRenderer._SceneComponentInitialization = (scene: Scene) => {
     // Register the G Buffer component to the scene.

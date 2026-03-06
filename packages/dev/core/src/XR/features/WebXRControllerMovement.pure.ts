@@ -13,7 +13,6 @@ import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import type { MotionControllerComponentType } from "../motionController/webXRAbstractMotionController";
 import { Tools } from "../../Misc/tools";
 
-
 /**
  * The options container for the controller movement module
  */

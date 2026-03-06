@@ -4,8 +4,8 @@
  */
 export * from "./WebXRHandTracking.pure";
 
+import { WebXRHandTracking } from "./WebXRHandTracking.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 //register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

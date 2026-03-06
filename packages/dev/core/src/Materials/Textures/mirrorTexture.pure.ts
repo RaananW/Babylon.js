@@ -14,7 +14,6 @@ import { Plane } from "../../Maths/math.plane";
 import type { UniformBuffer } from "../uniformBuffer";
 import type { TextureSize } from "../../Materials/Textures/textureCreationOptions";
 
-
 /**
  * Mirror texture can be used to simulate the view from a mirror in a scene.
  * It will dynamically be rendered every frame to adapt to the camera point of view.

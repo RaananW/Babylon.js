@@ -9,9 +9,7 @@ import { Ray } from "../../Culling/ray";
 import { SceneComponentConstants } from "../../sceneComponent";
 import { EngineStore } from "../../Engines/engineStore";
 import type { Collider } from "../../Collisions/collider";
-
-
-
+import type { Octree } from "./octree";
 
 declare module "../../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -4,11 +4,11 @@
  */
 export * from "./renderTargetTexture.pure";
 
+import { RenderTargetTexture } from "./renderTargetTexture.pure";
+import { Nullable } from "../../types";
+import { Scene } from "../../scene";
 import { Texture } from "../../Materials/Textures/texture";
 import { Effect } from "../effect";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-
 
 /**
  * Sets a depth stencil texture from a render target on the engine to be used in the shader.
@@ -18,7 +18,6 @@ import type { Scene } from "../../scene";
 Effect.prototype.setDepthStencilTexture = function (channel: string, texture: Nullable<RenderTargetTexture>): void {
     this._engine.setDepthStencilTexture(this._samplers[channel], this._uniforms[channel], texture, channel);
 };
-
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 Texture._CreateRenderTargetTexture = (name: string, renderTargetSize: number, scene: Scene, generateMipMaps: boolean, creationFlags?: number) => {

@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable } from "../../types";
-
+import type { PerfCounter } from "../../Misc/perfCounter";
 
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -20,3 +20,5 @@ declare module "../../Engines/abstractEngine" {
         captureGPUFrameTime(value: boolean): void;
     }
 }
+
+export {};

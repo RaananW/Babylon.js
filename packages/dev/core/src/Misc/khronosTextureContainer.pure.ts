@@ -181,7 +181,6 @@ export class KhronosTextureContainer {
             height = Math.max(1.0, height * 0.5);
         }
     }
-
 }
 
 /**

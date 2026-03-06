@@ -12,7 +12,6 @@ import type { GreasedLineMeshOptions, GreasedLineRibbonOptions } from "./greased
 import { GreasedLineBaseMesh, GreasedLineRibbonAutoDirectionMode, GreasedLineRibbonFacesMode, GreasedLineRibbonPointsMode } from "./greasedLineBaseMesh";
 import type { VertexData } from "../mesh.vertexData";
 
-
 /**
  * GreasedLineRibbonMesh
  * Use the GreasedLineBuilder.CreateGreasedLine function to create an instance of this class.

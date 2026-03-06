@@ -6,8 +6,6 @@ import type { Scene } from "../../scene";
 import { Vector3 } from "../../Maths/math.vector";
 import { _SetVrRigMode } from "../RigModes/vrRigMode";
 
-
-
 /**
  * Camera used to simulate VR rendering (based on VRDeviceOrientationFreeCamera)
  * @see https://doc.babylonjs.com/features/featuresDeepDive/cameras/camera_introduction#vr-device-orientation-cameras

@@ -7,7 +7,7 @@ import { RawTexture } from "core/Materials/Textures/rawTexture";
 import type { Nullable } from "core/types";
 import { RenderTargetTexture } from "core/Materials/Textures/renderTargetTexture";
 import { PostProcess } from "core/PostProcesses/postProcess";
-import { Observable } from "core/Misc/observable";
+import { Observable, type Observer } from "core/Misc/observable";
 import { Layer } from "core/Layers/layer";
 import { Matrix } from "core/Maths/math.vector";
 import { Constants } from "core/Engines/constants";
@@ -32,8 +32,6 @@ import { ShaderLanguage } from "core/Materials/shaderLanguage";
  * - C++ implementation by Luis Angel: https://github.com/imyoungmin/RSM
  * - Javascript implementation by Erkaman: https://github.com/Erkaman/webgl-rsm
  */
-
-
 
 /**
  * Class used to manage the global illumination contribution calculated from reflective shadow maps (RSM).

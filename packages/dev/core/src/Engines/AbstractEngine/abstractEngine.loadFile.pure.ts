@@ -2,7 +2,6 @@
 
 import type { IOfflineProvider } from "../../Offline/IOfflineProvider";
 
-
 declare module "../abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface AbstractEngine {
@@ -14,3 +13,5 @@ declare module "../abstractEngine" {
         _loadFileAsync(url: string, offlineProvider?: IOfflineProvider, useArrayBuffer?: boolean): Promise<string | ArrayBuffer>;
     }
 }
+
+export {};

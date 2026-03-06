@@ -9,7 +9,6 @@ import type { Nullable } from "../../types";
 import { Axis } from "../../Maths/math.axis";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-
 /**
  * Creates the VertexData for a cylinder, cone or prism
  * @param options an object used to set the following optional parameters for the box, required but can be empty

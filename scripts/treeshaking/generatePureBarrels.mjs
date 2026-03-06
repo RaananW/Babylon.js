@@ -22,6 +22,7 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from "fs";
 import { resolve, dirname, relative, join, basename } from "path";
 import { fileURLToPath } from "url";
+import { execSync } from "child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, "../..");
@@ -32,6 +33,7 @@ const DRY_RUN = process.argv.includes("--dry-run");
 const VERBOSE = process.argv.includes("--verbose");
 
 const HEADER = `/** Pure barrel — re-exports only side-effect-free modules */\n`;
+const writtenFiles = [];
 
 // ── Load side-effects manifest ──────────────────────────────────────────────
 const manifestData = JSON.parse(readFileSync(MANIFEST_PATH, "utf-8"));
@@ -225,6 +227,7 @@ function processDirectory(dir) {
         console.log(fileContent);
     } else {
         writeFileSync(purePath, fileContent, "utf-8");
+        writtenFiles.push(purePath);
         if (VERBOSE) {
             console.log(`  WROTE ${relPure} (${exportLines.length} exports)`);
         }
@@ -428,6 +431,7 @@ function postPassOrphans(dir) {
         console.log(fileContent);
     } else {
         writeFileSync(purePath, fileContent, "utf-8");
+        writtenFiles.push(purePath);
         if (VERBOSE) {
             console.log(`  POST-PASS wrote ${relDir}/pure.ts (${localPureFiles.length} pure files, ${subBarrels.length} sub-barrels)`);
         }
@@ -461,6 +465,7 @@ function linkSubdirBarrels(dir) {
             console.log(`[DRY-RUN] Would append to ${relative(SRC_ROOT, parentPure)}: ${newLine.trim()}`);
         } else {
             writeFileSync(parentPure, parentContent + newLine, "utf-8");
+            writtenFiles.push(parentPure);
             if (VERBOSE) {
                 console.log(`  LINK ${relative(SRC_ROOT, parentPure)} → ${subRef}`);
             }
@@ -482,3 +487,23 @@ console.log(`  Orphaned .pure.ts added:     ${orphanedAdded}`);
 console.log(`  Post-pass barrels created:   ${postPassBarrels}`);
 console.log(`  Post-pass parent links:      ${postPassLinks}`);
 console.log(`  Empty barrels (not written): ${emptyBarrels}`);
+
+// ── Format generated files with Prettier ────────────────────────────────────
+if (!DRY_RUN && writtenFiles.length > 0) {
+    // Deduplicate (a file may be appended to multiple times)
+    const uniqueFiles = [...new Set(writtenFiles)];
+    console.log(`\nFormatting ${uniqueFiles.length} files with Prettier...`);
+    try {
+        const BATCH = 100;
+        for (let i = 0; i < uniqueFiles.length; i += BATCH) {
+            const batch = uniqueFiles.slice(i, i + BATCH);
+            execSync(`npx prettier --write ${batch.map((f) => `"${f}"`).join(" ")}`, {
+                cwd: REPO_ROOT,
+                stdio: "ignore",
+            });
+        }
+        console.log(`Formatted ${uniqueFiles.length} files.`);
+    } catch (err) {
+        console.error(`Warning: Prettier formatting failed: ${err.message}`);
+    }
+}

@@ -10,7 +10,6 @@ import { Mesh } from "../../Meshes/mesh";
 import { VertexBuffer } from "core/Buffers/buffer";
 import { Logger } from "core/Misc/logger";
 
-
 /**
  * Options used in the mesh detector module
  */

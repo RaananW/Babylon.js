@@ -7,7 +7,6 @@ import type { Condition } from "./condition";
 import type { AbstractActionManager } from "./abstractActionManager";
 import type { Nullable } from "../types";
 import type { Material } from "../Materials/material";
-
 import type { Scene } from "../scene";
 import type { ActionManager } from "./actionManager";
 import type { ActionEvent } from "./actionEvent";

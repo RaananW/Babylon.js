@@ -8,11 +8,10 @@ import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { Constants } from "../Engines/constants";
-
 import { SerializationHelper } from "../Misc/decorators.serialization";
 import { ThinFXAAPostProcess } from "./thinFXAAPostProcess";
-
 import type { Scene } from "../scene";
+
 /**
  * Fxaa post process
  * @see https://doc.babylonjs.com/features/featuresDeepDive/postProcesses/usePostProcesses#fxaa

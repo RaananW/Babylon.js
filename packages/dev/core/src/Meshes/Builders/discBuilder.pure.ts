@@ -7,7 +7,6 @@ import { Mesh } from "../mesh";
 import { VertexData } from "../mesh.vertexData";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-
 /**
  * Creates the VertexData of the Disc or regular Polygon
  * @param options an object used to set the following optional parameters for the disc, required but can be empty

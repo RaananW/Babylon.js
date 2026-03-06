@@ -3,7 +3,6 @@
 import type { DataBuffer } from "../../Buffers/dataBuffer";
 import type { IndicesArray, DataArray } from "../../types";
 
-
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface AbstractEngine {
@@ -25,3 +24,5 @@ declare module "../../Engines/abstractEngine" {
         updateDynamicVertexBuffer(vertexBuffer: DataBuffer, data: DataArray, byteOffset?: number, byteLength?: number): void;
     }
 }
+
+export {};

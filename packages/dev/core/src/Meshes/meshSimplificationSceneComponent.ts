@@ -4,11 +4,11 @@
  */
 export * from "./meshSimplificationSceneComponent.pure";
 
+import { SimplicationQueueSceneComponent } from "./meshSimplificationSceneComponent.pure";
 import { Scene } from "../scene";
-import { Mesh } from "./mesh";
-import { SimplificationQueue, SimplificationType } from "./meshSimplification";
+import { ISimplificationSettings, SimplificationQueue, SimplificationType } from "./meshSimplification";
 import { SceneComponentConstants } from "../sceneComponent";
-import type { ISimplificationSettings } from "./meshSimplification";
+import { Mesh } from "./mesh";
 
 Object.defineProperty(Scene.prototype, "simplificationQueue", {
     get: function (this: Scene) {
@@ -28,7 +28,6 @@ Object.defineProperty(Scene.prototype, "simplificationQueue", {
     enumerable: true,
     configurable: true,
 });
-
 
 Mesh.prototype.simplify = function (
     settings: Array<ISimplificationSettings>,

@@ -4,9 +4,8 @@
  */
 export * from "./abstractEngine.loadFile.pure";
 
+import { IOfflineProvider } from "../../Offline/IOfflineProvider";
 import { AbstractEngine } from "../../Engines/abstractEngine";
-import type { IOfflineProvider } from "../../Offline/IOfflineProvider";
-
 
 AbstractEngine.prototype._loadFileAsync = async function (url: string, offlineProvider?: IOfflineProvider, useArrayBuffer?: boolean): Promise<any> {
     return await new Promise<string | ArrayBuffer>((resolve, reject) => {

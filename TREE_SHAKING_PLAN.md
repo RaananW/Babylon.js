@@ -416,3 +416,70 @@ Phase 0 (Audit tooling)  ← DONE
 | Prototype augmentation in pure | ESLint rule (6.1) + bundle tests (6.2)                  |
 | Massive PRs                    | One PR per subdirectory (Phase 2.2 priority order)      |
 | Shader files in pure           | Blocked by glob pattern in ESLint rule                  |
+
+---
+
+## Future Consideration: Three-File Side-Effect Architecture
+
+> **Status**: Not yet implemented. Documented here for future reference.
+
+### The Problem
+
+The current two-file split (`foo.pure.ts` + `foo.ts` wrapper) creates an ergonomic gap for pure-barrel users who need to opt into specific side effects.
+
+Today, if a consumer imports from the pure barrel and later wants a specific side effect (e.g., `RegisterClass` for serialization, or `WebXRFeaturesManager.AddWebXRFeature` for auto-registration), their only option is:
+
+```ts
+// Pure import — no side effects
+import { WebXRAnchorSystem } from "@babylonjs/core/XR/features/pure";
+
+// To opt in to the AddWebXRFeature registration, must import the wrapper:
+import "@babylonjs/core/XR/features/WebXRAnchorSystem";
+// ↑ This re-exports everything from WebXRAnchorSystem.pure AND runs the side effects.
+//   The re-export is redundant — the pure class is already resolved from the first import.
+//   Bundlers deduplicate this, so it works, but it's architecturally awkward:
+//   the side-effect-only import is coupled to a module that also re-exports pure content.
+```
+
+This means there's no way to express "just the side effects, nothing else" — every side-effect opt-in also drags in a re-export barrel. It works in practice (ES module deduplication), but it goes against the clean separation that pure barrels were designed to provide.
+
+### Proposed Solution: `foo.effects.ts`
+
+Split each file into **three** instead of two:
+
+```
+foo.pure.ts      → Pure implementation (class, functions, types)
+foo.effects.ts   → ONLY the side effects (RegisterClass, prototype assignments, etc.)
+                    Imports what it needs from foo.pure.ts
+foo.ts           → Backward-compatible wrapper:
+                    export * from "./foo.pure";
+                    import "./foo.effects";
+```
+
+This gives consumers three distinct import paths:
+
+```ts
+// 1. Pure — no side effects, maximum tree-shaking
+import { Foo } from "@babylonjs/core/Something/foo.pure";
+
+// 2. Side effects only — opt-in without redundant re-exports
+import "@babylonjs/core/Something/foo.effects";
+
+// 3. Everything (backward compatible, same as today)
+import { Foo } from "@babylonjs/core/Something/foo";
+```
+
+### Why This Matters
+
+- **Clean separation of concerns**: Side effects become independently importable units, not piggy-backed on re-export modules
+- **Pure barrel + opt-in pattern**: A user working with `import ... from ".../pure"` can add individual side effects via `.effects` imports without pulling in redundant re-export glue
+- **Side-effect barrels**: Could generate `effects.ts` barrels alongside `pure.ts` barrels, giving users `import "@babylonjs/core/XR/features/effects"` to register all XR features
+- **No behavioral change**: The existing `foo.ts` wrapper still works identically — it just delegates to two files instead of inlining both
+
+### Implementation Notes
+
+- The generic splitter (`scripts/treeshaking/splitSideEffects.mjs`) already separates pure content from side-effect blocks in its AST analysis — extracting to a third file is a matter of writing the side-effect blocks to `foo.effects.ts` instead of inlining them in `foo.ts`
+- The `foo.effects.ts` file would need to import its dependencies from `foo.pure.ts` (for the class reference used in `RegisterClass(...)`, etc.) and from other modules (e.g., `WebXRFeaturesManager`)
+- The splitter already tracks which imports are used only by side-effect code vs. pure code — this is the exact information needed to generate correct imports for `foo.effects.ts`
+- File count increases by ~650 files (one `.effects.ts` per existing split), but each is tiny (typically 2-5 lines)
+- Barrel generation would need a parallel pass for `effects.ts` barrels

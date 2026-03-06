@@ -15,7 +15,6 @@ export class FlowGraphBooleanToFloat extends FlowGraphUnaryOperationBlock<boolea
     }
 }
 
-
 /**
  * A block that converts a boolean to an integer
  */
@@ -24,7 +23,6 @@ export class FlowGraphBooleanToInt extends FlowGraphUnaryOperationBlock<boolean,
         super(RichTypeBoolean, RichTypeFlowGraphInteger, (a) => FlowGraphInteger.FromValue(+a), FlowGraphBlockNames.BooleanToInt, config);
     }
 }
-
 
 /**
  * A block that converts a float to a boolean.
@@ -35,7 +33,6 @@ export class FlowGraphFloatToBoolean extends FlowGraphUnaryOperationBlock<number
     }
 }
 
-
 /**
  * A block that converts an integer to a boolean.
  */
@@ -45,7 +42,6 @@ export class FlowGraphIntToBoolean extends FlowGraphUnaryOperationBlock<FlowGrap
     }
 }
 
-
 /**
  * A block that converts an integer to a float.
  */
@@ -54,7 +50,6 @@ export class FlowGraphIntToFloat extends FlowGraphUnaryOperationBlock<FlowGraphI
         super(RichTypeFlowGraphInteger, RichTypeNumber, (a) => a.value, FlowGraphBlockNames.IntToFloat, config);
     }
 }
-
 
 /**
  * Configuration for the float to int block.

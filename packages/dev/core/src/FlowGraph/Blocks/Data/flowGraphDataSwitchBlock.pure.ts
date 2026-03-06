@@ -1,6 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
-import { FlowGraphBlock, type IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
+import { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
+import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
 import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
 import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
 import { RichTypeAny } from "core/FlowGraph/flowGraphRichTypes";

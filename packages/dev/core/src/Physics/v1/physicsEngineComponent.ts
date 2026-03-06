@@ -4,13 +4,12 @@
  */
 export * from "./physicsEngineComponent.pure";
 
+import { Nullable } from "../../types";
+import { Vector3 } from "../../Maths/math.vector";
+import { Mesh } from "../../Meshes/mesh";
+import { PhysicsImpostor } from "./physicsImpostor";
 import { AbstractMesh } from "../../Meshes/abstractMesh";
 import { PhysicsJoint } from "./physicsJoint";
-import type { Nullable } from "../../types";
-import type { Vector3 } from "../../Maths/math.vector";
-import type { Mesh } from "../../Meshes/mesh";
-import type { PhysicsImpostor } from "./physicsImpostor";
-
 
 Object.defineProperty(AbstractMesh.prototype, "physicsImpostor", {
     get: function (this: AbstractMesh) {
@@ -40,7 +39,6 @@ Object.defineProperty(AbstractMesh.prototype, "physicsImpostor", {
     configurable: true,
 });
 
-
 /**
  * Gets the current physics impostor
  * @see https://doc.babylonjs.com/features/featuresDeepDive/physics
@@ -49,7 +47,6 @@ Object.defineProperty(AbstractMesh.prototype, "physicsImpostor", {
 AbstractMesh.prototype.getPhysicsImpostor = function (): Nullable<PhysicsImpostor> {
     return this.physicsImpostor;
 };
-
 
 /**
  * Apply a physic impulse to the mesh
@@ -65,7 +62,6 @@ AbstractMesh.prototype.applyImpulse = function (force: Vector3, contactPoint: Ve
     this.physicsImpostor.applyImpulse(force, contactPoint);
     return this;
 };
-
 
 /**
  * Creates a physic joint between two meshes

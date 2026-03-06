@@ -3,9 +3,7 @@
 import type { Nullable, int } from "../../types";
 import type { Observer } from "../../Misc/observable";
 import type { AbstractEngine } from "../abstractEngine";
-import type { OcclusionQuery } from "../AbstractEngine/abstractEngine.query";
-
-
+import type { _TimeToken } from "../../Instrumentation/timeToken";
 
 declare module "../../Engines/thinEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -54,3 +52,5 @@ declare module "../../Engines/thinEngine" {
         _getTimeQueryAvailability(query: WebGLQuery): any;
     }
 }
+
+export {};

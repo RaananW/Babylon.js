@@ -4,6 +4,7 @@ import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBloc
 import { NodeParticleBlock } from "../nodeParticleBlock";
 import type { NodeParticleConnectionPoint } from "../nodeParticleBlockConnectionPoint";
 import type { NodeParticleBuildState } from "../nodeParticleBuildState";
+
 /**
  * Block used as a pass through
  */

@@ -4,16 +4,15 @@
  */
 export * from "./engine.videoTexture.pure";
 
+import { InternalTexture } from "../../../Materials/Textures/internalTexture";
+import { Nullable } from "../../../types";
+import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import { ExternalTexture } from "../../../Materials/Textures/externalTexture";
 import { WebGPUEngine } from "../../webgpuEngine";
-import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
-import type { Nullable } from "../../../types";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-import type { ExternalTexture } from "../../../Materials/Textures/externalTexture";
 
 function IsExternalTexture(texture: Nullable<ExternalTexture> | HTMLVideoElement): texture is ExternalTexture {
     return texture && (texture as ExternalTexture).underlyingResource !== undefined ? true : false;
 }
-
 
 WebGPUEngine.prototype.updateVideoTexture = function (texture: Nullable<InternalTexture>, video: HTMLVideoElement | Nullable<ExternalTexture>, invertY: boolean): void {
     if (!texture || texture._isDisabled) {

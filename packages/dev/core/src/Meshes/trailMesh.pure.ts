@@ -11,7 +11,6 @@ import { VertexData } from "../Meshes/mesh.vertexData";
 import { Lerp } from "../Maths/math.scalar.functions";
 import type { TransformNode } from "../Meshes/transformNode";
 
-
 /**
  * Options to be used when creating a trail mesh
  */

@@ -5,7 +5,6 @@ import type { Scene } from "../../scene";
 import { CreateSphere } from "../Builders/sphereBuilder";
 import { CreateDisc } from "./discBuilder";
 
-
 /**
  * Creates a hemisphere mesh
  * @param name defines the name of the mesh

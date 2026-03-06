@@ -4,11 +4,9 @@ import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess";
 import type { Camera } from "../Cameras/camera";
 import type { AbstractEngine } from "../Engines/abstractEngine";
-
 import { serialize } from "../Misc/decorators";
 import { SerializationHelper } from "../Misc/decorators.serialization";
 import type { Nullable } from "../types";
-
 import type { Scene } from "../scene";
 import { ThinBlackAndWhitePostProcess } from "./thinBlackAndWhitePostProcess";
 

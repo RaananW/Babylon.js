@@ -9,3 +9,5 @@ export * from "./math.size";
 export * from "./math.vector.pure";
 export * from "./math.vertexFormat";
 export * from "./math.viewport";
+
+export {};

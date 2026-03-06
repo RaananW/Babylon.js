@@ -4,13 +4,13 @@
  */
 export * from "./subSurfaceSceneComponent.pure";
 
+import { SubSurfaceSceneComponent } from "./subSurfaceSceneComponent.pure";
+import { Nullable } from "../types";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
 import { SubSurfaceConfiguration } from "./subSurfaceConfiguration";
 import { Color3 } from "../Maths/math.color";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
-import type { Nullable } from "../types";
-
 
 // Adds the parser to the scene parsers.
 AddParser(SceneComponentConstants.NAME_SUBSURFACE, (parsedData: any, scene: Scene) => {
@@ -25,7 +25,6 @@ AddParser(SceneComponentConstants.NAME_SUBSURFACE, (parsedData: any, scene: Scen
         }
     }
 });
-
 
 Object.defineProperty(Scene.prototype, "subSurfaceConfiguration", {
     get: function (this: Scene) {
@@ -42,7 +41,6 @@ Object.defineProperty(Scene.prototype, "subSurfaceConfiguration", {
     configurable: true,
 });
 
-
 Scene.prototype.enableSubSurfaceForPrePass = function (): Nullable<SubSurfaceConfiguration> {
     if (this._subSurfaceConfiguration) {
         return this._subSurfaceConfiguration;
@@ -58,7 +56,6 @@ Scene.prototype.enableSubSurfaceForPrePass = function (): Nullable<SubSurfaceCon
     return null;
 };
 
-
 Scene.prototype.disableSubSurfaceForPrePass = function (): void {
     if (!this._subSurfaceConfiguration) {
         return;
@@ -67,7 +64,6 @@ Scene.prototype.disableSubSurfaceForPrePass = function (): void {
     this._subSurfaceConfiguration.dispose();
     this._subSurfaceConfiguration = null;
 };
-
 
 SubSurfaceConfiguration._SceneComponentInitialization = (scene: Scene) => {
     // Register the G Buffer component to the scene.

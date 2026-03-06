@@ -4,11 +4,10 @@
  */
 export * from "./baseTexture.polynomial.pure";
 
+import { Nullable } from "../../types";
+import { SphericalPolynomial } from "../../Maths/sphericalPolynomial";
 import { CubeMapToSphericalPolynomialTools } from "../../Misc/HighDynamicRange/cubemapToSphericalPolynomial";
 import { BaseTexture } from "./baseTexture";
-import type { Nullable } from "../../types";
-import type { SphericalPolynomial } from "../../Maths/sphericalPolynomial";
-
 
 BaseTexture.prototype.forceSphericalPolynomialsRecompute = function (): void {
     if (this._texture) {
@@ -17,7 +16,6 @@ BaseTexture.prototype.forceSphericalPolynomialsRecompute = function (): void {
         this._texture._sphericalPolynomialComputed = false;
     }
 };
-
 
 Object.defineProperty(BaseTexture.prototype, "sphericalPolynomial", {
     get: function (this: BaseTexture) {

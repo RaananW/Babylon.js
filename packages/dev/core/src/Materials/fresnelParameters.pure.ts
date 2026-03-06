@@ -6,7 +6,6 @@ import { Color3 } from "../Maths/math.color";
 import { Constants } from "../Engines/constants";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 
-
 /**
  * Options to be used when creating a FresnelParameters.
  */

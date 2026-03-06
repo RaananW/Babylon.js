@@ -6,7 +6,7 @@ import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import type { Observer } from "../Misc/observable";
-
+import type { IblCdfGenerator } from "./iblCdfGenerator";
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

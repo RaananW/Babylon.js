@@ -17,15 +17,6 @@ import { ShadowDepthWrapper } from "../../Materials/shadowDepthWrapper";
 import { ShaderMaterial } from "../../Materials/shaderMaterial";
 import { MaterialPluginEvent } from "../materialPluginEvent";
 import { Material } from "../material";
-
-import "../../Shaders/gaussianSplatting.fragment";
-import "../../Shaders/gaussianSplatting.vertex";
-import "../../ShadersWGSL/gaussianSplatting.fragment";
-import "../../ShadersWGSL/gaussianSplatting.vertex";
-import "../../Shaders/gaussianSplattingDepth.fragment";
-import "../../Shaders/gaussianSplattingDepth.vertex";
-import "../../ShadersWGSL/gaussianSplattingDepth.fragment";
-import "../../ShadersWGSL/gaussianSplattingDepth.vertex";
 import {
     BindFogParameters,
     BindLogDepth,

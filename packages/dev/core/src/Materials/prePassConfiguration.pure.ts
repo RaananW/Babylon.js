@@ -31,8 +31,6 @@ export class PrePassConfiguration {
 
     private _lastUpdateFrameId: number;
 
-
-
     /**
      * Binds the material data.
      * @param effect defines the effect to update

@@ -1,9 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
 import type { RenderTargetCreationOptions } from "../../Materials/Textures/textureCreationOptions";
-
 
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -17,3 +15,5 @@ declare module "../../Engines/abstractEngine" {
         createRenderTargetCubeTexture(size: number, options?: RenderTargetCreationOptions): RenderTargetWrapper;
     }
 }
+
+export {};

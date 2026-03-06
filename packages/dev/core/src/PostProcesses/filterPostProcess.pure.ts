@@ -6,10 +6,8 @@ import type { Camera } from "../Cameras/camera";
 import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess";
 import type { AbstractEngine } from "../Engines/abstractEngine";
-
 import { serializeAsMatrix } from "../Misc/decorators";
 import { SerializationHelper } from "../Misc/decorators.serialization";
-
 import type { Scene } from "../scene";
 import { ThinFilterPostProcess } from "./thinFilterPostProcess";
 

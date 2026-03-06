@@ -3,8 +3,7 @@ let ImmediateQueue: Array<() => void> = [];
 /**
  * Class used to provide helper for timing
  */
-export class TimingTools {
-}
+export class TimingTools {}
 
 function RunWithCondition(condition: () => boolean, onSuccess: () => void, onError?: (e?: any, isTimeout?: boolean) => void) {
     try {

@@ -736,10 +736,6 @@ export class Color3 implements Tensor<Tuple<number, 3>, IColor3Like>, IColor3Lik
         return Color3._BlackReadOnly;
     }
 }
-/*#__PURE__*/ Object.defineProperties(Color3.prototype, {
-    dimension: { value: [3] },
-    rank: { value: 1 },
-});
 
 // Color3.HSVtoRGBToRef → standalone (NOT exported (exists in .functions.ts))
 /**
@@ -750,7 +746,7 @@ export class Color3 implements Tensor<Tuple<number, 3>, IColor3Like>, IColor3Lik
  * @param result defines the Color3 where to store the RGB values
  * @returns the updated result
  */
-function Color3HSVtoRGBToRef<T extends IColor3Like>(hue: number, saturation: number, value: number, result: T): T {
+export function Color3HSVtoRGBToRef<T extends IColor3Like>(hue: number, saturation: number, value: number, result: T): T {
     const chroma = value * saturation;
     const h = hue / 60;
     const x = chroma * (1 - Math.abs((h % 2) - 1));
@@ -867,7 +863,7 @@ export function Color3Lerp(start: DeepImmutable<Color3>, end: DeepImmutable<Colo
  * @param amount defines the gradient factor
  * @param result defines the Color3 object where to store the result
  */
-function Color3LerpToRef(left: DeepImmutable<Color3>, right: DeepImmutable<Color3>, amount: number, result: Color3): void {
+export function Color3LerpToRef(left: DeepImmutable<Color3>, right: DeepImmutable<Color3>, amount: number, result: Color3): void {
     result.r = left.r + (right.r - left.r) * amount;
     result.g = left.g + (right.g - left.g) * amount;
     result.b = left.b + (right.b - left.b) * amount;
@@ -1738,10 +1734,6 @@ export class Color4 implements Tensor<Tuple<number, 4>, IColor4Like>, IColor4Lik
 
     // Statics
 }
-/*#__PURE__*/ Object.defineProperties(Color4.prototype, {
-    dimension: { value: [4] },
-    rank: { value: 1 },
-});
 
 // Color4.FromHexString → standalone (exported)
 /**
@@ -1787,7 +1779,7 @@ export function Color4Lerp(left: DeepImmutable<IColor4Like>, right: DeepImmutabl
  * @param result defines the Color4 object where to store data
  * @returns the updated result
  */
-function Color4LerpToRef<T extends IColor4Like>(left: DeepImmutable<IColor4Like>, right: DeepImmutable<IColor4Like>, amount: number, result: T): T {
+export function Color4LerpToRef<T extends IColor4Like>(left: DeepImmutable<IColor4Like>, right: DeepImmutable<IColor4Like>, amount: number, result: T): T {
     result.r = left.r + (right.r - left.r) * amount;
     result.g = left.g + (right.g - left.g) * amount;
     result.b = left.b + (right.b - left.b) * amount;
@@ -1957,4 +1949,44 @@ export function Color4CheckColors4(colors: number[], count: number): number[] {
 export class TmpColors {
     public static Color3: Color3[] = /*#__PURE__*/ BuildArray(3, Color3Black);
     public static Color4: Color4[] = /*#__PURE__*/ BuildArray(3, () => new Color4(0, 0, 0, 0));
+}
+
+declare module "./math.color.pure" {
+    namespace Color3 {
+        export let HSVtoRGBToRef: typeof Color3HSVtoRGBToRef;
+        export let FromHSV: typeof Color3FromHSV;
+        export let FromHexString: typeof Color3FromHexString;
+        export let FromArray: typeof Color3FromArray;
+        export let FromArrayToRef: typeof Color3FromArrayToRef;
+        export let FromInts: typeof Color3FromInts;
+        export let Lerp: typeof Color3Lerp;
+        export let LerpToRef: typeof Color3LerpToRef;
+        export let Hermite: typeof Color3Hermite;
+        export let Hermite1stDerivative: typeof Color3Hermite1stDerivative;
+        export let Hermite1stDerivativeToRef: typeof Color3Hermite1stDerivativeToRef;
+        export let Red: typeof Color3Red;
+        export let Green: typeof Color3Green;
+        export let Blue: typeof Color3Blue;
+        export let Black: typeof Color3Black;
+        export let White: typeof Color3White;
+        export let Purple: typeof Color3Purple;
+        export let Magenta: typeof Color3Magenta;
+        export let Yellow: typeof Color3Yellow;
+        export let Gray: typeof Color3Gray;
+        export let Teal: typeof Color3Teal;
+        export let Random: typeof Color3Random;
+    }
+    namespace Color4 {
+        export let FromHexString: typeof Color4FromHexString;
+        export let Lerp: typeof Color4Lerp;
+        export let LerpToRef: typeof Color4LerpToRef;
+        export let Hermite: typeof Color4Hermite;
+        export let Hermite1stDerivative: typeof Color4Hermite1stDerivative;
+        export let Hermite1stDerivativeToRef: typeof Color4Hermite1stDerivativeToRef;
+        export let FromColor3: typeof Color4FromColor3;
+        export let FromArray: typeof Color4FromArray;
+        export let FromArrayToRef: typeof Color4FromArrayToRef;
+        export let FromInts: typeof Color4FromInts;
+        export let CheckColors4: typeof Color4CheckColors4;
+    }
 }

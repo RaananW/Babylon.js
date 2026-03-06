@@ -4,9 +4,9 @@
  */
 export * from "./webXRHTCViveMotionController.pure";
 
+import { WebXRHTCViveMotionController } from "./webXRHTCViveMotionController.pure";
+import { Scene } from "../../scene";
 import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
-import type { Scene } from "../../scene";
-
 
 // register the profile
 WebXRMotionControllerManager.RegisterController("htc-vive", (xrInput: XRInputSource, scene: Scene) => {

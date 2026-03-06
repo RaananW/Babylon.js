@@ -6,8 +6,6 @@ import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
 import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 
-import "../../../Shaders/ShadersInclude/helperFunctions";
-
 /**
  * Block used to get a random number
  */

@@ -4,8 +4,8 @@
  */
 export * from "./flowGraphRichTypes.pure";
 
-import { RichTypeQuaternion } from "./flowGraphRichTypes.pure";
-import { Vector3, Vector4, Matrix, Quaternion } from "../Maths/math.vector";
+import { FlowGraphTypes, RichTypeQuaternion } from "./flowGraphRichTypes.pure";
+import { Quaternion } from "../Maths/math.vector";
 
 RichTypeQuaternion.typeTransformer = (value: any) => {
     if (value.getClassName) {

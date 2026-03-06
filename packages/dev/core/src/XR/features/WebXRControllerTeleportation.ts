@@ -4,8 +4,8 @@
  */
 export * from "./WebXRControllerTeleportation.pure";
 
+import { WebXRMotionControllerTeleportation } from "./WebXRControllerTeleportation.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 WebXRFeaturesManager.AddWebXRFeature(
     WebXRMotionControllerTeleportation.Name,

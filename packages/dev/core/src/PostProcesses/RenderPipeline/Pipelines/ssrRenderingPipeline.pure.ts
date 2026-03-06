@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import { serialize } from "../../../Misc/decorators";
 import { SerializationHelper } from "../../../Misc/decorators.serialization";
 import type { Camera } from "../../../Cameras/camera";
@@ -22,8 +21,7 @@ import { ThinSSRPostProcess } from "core/PostProcesses/thinSSRPostProcess";
 import { ThinSSRBlurPostProcess } from "core/PostProcesses/thinSSRBlurPostProcess";
 import { ThinSSRBlurCombinerPostProcess } from "core/PostProcesses/thinSSRBlurCombinerPostProcess";
 
-import "../postProcessRenderPipelineManagerSceneComponent";
-import "../../../Rendering/geometryBufferRendererSceneComponent";
+/* eslint-disable @typescript-eslint/naming-convention */
 
 /**
  * Render pipeline to produce Screen Space Reflections (SSR) effect

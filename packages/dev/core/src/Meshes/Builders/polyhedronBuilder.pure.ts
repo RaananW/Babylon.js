@@ -8,7 +8,6 @@ import { VertexData } from "../mesh.vertexData";
 import type { Nullable } from "../../types";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-
 // inspired from // http://stemkoski.github.io/Three.js/Polyhedra.html
 /**
  * Creates the VertexData for a Polyhedron

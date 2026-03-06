@@ -3,7 +3,6 @@
 import type { Nullable } from "../../../types";
 import type { RenderTargetTexture } from "../../../Materials/Textures/renderTargetTexture";
 
-
 declare module "../../abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface AbstractEngine {
@@ -17,3 +16,5 @@ declare module "../../abstractEngine" {
         setDepthStencilTexture(channel: number, uniform: Nullable<WebGLUniformLocation>, texture: Nullable<RenderTargetTexture>, name?: string): void;
     }
 }
+
+export {};

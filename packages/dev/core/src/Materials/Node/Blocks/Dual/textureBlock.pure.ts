@@ -15,7 +15,6 @@ import { Texture } from "../../../Textures/texture";
 import type { Scene } from "../../../../scene";
 import { NodeMaterialModes } from "../../Enums/nodeMaterialModes";
 import { Constants } from "../../../../Engines/constants";
-import "../../../../Shaders/ShadersInclude/helperFunctions";
 import { ImageSourceBlock } from "./imageSourceBlock";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { EngineStore } from "../../../../Engines/engineStore";

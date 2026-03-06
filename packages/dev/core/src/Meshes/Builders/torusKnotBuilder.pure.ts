@@ -7,7 +7,6 @@ import { VertexData } from "../mesh.vertexData";
 import type { Scene } from "../../scene";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-
 // based on http://code.google.com/p/away3d/source/browse/trunk/fp10/Away3D/src/away3d/primitives/TorusKnot.as?spec=svn2473&r=2473
 /**
  * Creates the VertexData for a TorusKnot

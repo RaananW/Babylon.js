@@ -8,7 +8,6 @@ import type { IInspectable } from "../Misc/iInspectable";
 import type { Camera } from "../Cameras/camera";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 
-
 // declare INSPECTOR namespace for compilation issue
 // eslint-disable-next-line @typescript-eslint/naming-convention
 declare let INSPECTOR: any;

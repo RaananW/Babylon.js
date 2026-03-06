@@ -8,6 +8,7 @@ import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import { Vector2 } from "../../../Maths/math.vector";
 import type { Scene } from "../../../scene";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../Decorators/nodeDecorator";
+
 /**
  * Block used to remap a float from a range to a new one
  */

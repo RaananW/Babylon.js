@@ -4,11 +4,10 @@
  */
 export * from "./engine.dynamicTexture.pure";
 
+import { ImageSource, Nullable } from "../../types";
 import { GetExponentOfTwo } from "core/Misc/tools.functions";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
-import type { ImageSource, Nullable } from "../../types";
-
 
 ThinEngine.prototype.createDynamicTexture = function (width: number, height: number, generateMipMaps: boolean, samplingMode: number): InternalTexture {
     const texture = new InternalTexture(this, InternalTextureSource.Dynamic);
@@ -33,7 +32,6 @@ ThinEngine.prototype.createDynamicTexture = function (width: number, height: num
 
     return texture;
 };
-
 
 ThinEngine.prototype.updateDynamicTexture = function (
     texture: Nullable<InternalTexture>,

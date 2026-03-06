@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import { serialize } from "../../../Misc/decorators";
 import { SerializationHelper } from "../../../Misc/decorators.serialization";
 import type { Camera } from "../../../Cameras/camera";
@@ -17,7 +16,7 @@ import { ThinTAAPostProcess } from "core/PostProcesses/thinTAAPostProcess";
 import type { PrePassEffectConfiguration } from "core/Rendering/prePassEffectConfiguration";
 import { Logger } from "core/Misc/logger";
 
-import "../postProcessRenderPipelineManagerSceneComponent";
+/* eslint-disable @typescript-eslint/naming-convention */
 
 class TAAEffectConfiguration implements PrePassEffectConfiguration {
     public name = "taa";

@@ -4,10 +4,9 @@
  */
 export * from "./engine.dynamicBuffer.pure";
 
+import { DataBuffer } from "../../Buffers/dataBuffer";
+import { IndicesArray, DataArray } from "../../types";
 import { ThinEngine } from "../../Engines/thinEngine";
-import type { DataBuffer } from "../../Buffers/dataBuffer";
-import type { IndicesArray, DataArray } from "../../types";
-
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 ThinEngine.prototype.updateDynamicIndexBuffer = function (this: ThinEngine, indexBuffer: DataBuffer, indices: IndicesArray, offset: number = 0): void {
@@ -28,7 +27,6 @@ ThinEngine.prototype.updateDynamicIndexBuffer = function (this: ThinEngine, inde
 
     this._resetIndexBufferBinding();
 };
-
 
 ThinEngine.prototype.updateDynamicVertexBuffer = function (this: ThinEngine, vertexBuffer: DataBuffer, data: DataArray, byteOffset?: number, byteLength?: number): void {
     this.bindArrayBuffer(vertexBuffer);

@@ -4,7 +4,7 @@ import type { Nullable } from "../types";
 import { Scene } from "../scene";
 import type { ISceneSerializableComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
-
+import type { SubSurfaceConfiguration } from "./subSurfaceConfiguration";
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

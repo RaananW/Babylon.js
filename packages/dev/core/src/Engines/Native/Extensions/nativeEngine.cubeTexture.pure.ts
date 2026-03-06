@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import type { IWebRequest } from "../../../Misc/interfaces/iWebRequest";
 import type { Scene } from "../../../scene";
 import type { Nullable } from "../../../types";
+import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -47,3 +47,5 @@ declare module "../../../Engines/thinNativeEngine" {
         ): InternalTexture;
     }
 }
+
+export {};

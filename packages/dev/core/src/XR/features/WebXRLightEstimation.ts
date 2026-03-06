@@ -4,8 +4,8 @@
  */
 export * from "./WebXRLightEstimation.pure";
 
+import { WebXRLightEstimation } from "./WebXRLightEstimation.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 // register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

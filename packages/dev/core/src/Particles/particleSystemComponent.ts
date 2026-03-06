@@ -4,6 +4,11 @@
  */
 export * from "./particleSystemComponent.pure";
 
+import { IParticleSystem } from "./IParticleSystem";
+import { Effect } from "../Materials/effect";
+import { Scene } from "../scene";
+import { AssetContainer } from "../assetContainer";
+import { EffectFallbacks } from "../Materials/effectFallbacks";
 import { Mesh } from "../Meshes/mesh";
 import { GPUParticleSystem } from "./gpuParticleSystem";
 import { ParticleSystem } from "./particleSystem";
@@ -11,12 +16,6 @@ import { SceneComponentConstants } from "../sceneComponent";
 import { AbstractEngine } from "../Engines/abstractEngine";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { AddParser, AddIndividualParser, GetIndividualParser } from "core/Loading/Plugins/babylonFileParser.function";
-import type { IParticleSystem } from "./IParticleSystem";
-import type { Effect } from "../Materials/effect";
-import type { Scene } from "../scene";
-import type { AssetContainer } from "../assetContainer";
-import type { EffectFallbacks } from "../Materials/effectFallbacks";
-
 
 // Adds the parsers to the scene parsers.
 AddParser(SceneComponentConstants.NAME_PARTICLESYSTEM, (parsedData: any, scene: Scene, container: AssetContainer, rootUrl: string) => {
@@ -35,7 +34,6 @@ AddParser(SceneComponentConstants.NAME_PARTICLESYSTEM, (parsedData: any, scene: 
     }
 });
 
-
 AddIndividualParser(SceneComponentConstants.NAME_PARTICLESYSTEM, (parsedParticleSystem: any, scene: Scene, rootUrl: string) => {
     if (parsedParticleSystem.activeParticleCount) {
         const ps = GPUParticleSystem.Parse(parsedParticleSystem, scene, rootUrl);
@@ -45,7 +43,6 @@ AddIndividualParser(SceneComponentConstants.NAME_PARTICLESYSTEM, (parsedParticle
         return ps;
     }
 });
-
 
 AbstractEngine.prototype.createEffectForParticles = function (
     fragmentName: string,
@@ -108,7 +105,6 @@ AbstractEngine.prototype.createEffectForParticles = function (
     );
 };
 
-
 Mesh.prototype.getEmittedParticleSystems = function (): IParticleSystem[] {
     const results: IParticleSystem[] = [];
     for (let index = 0; index < this.getScene().particleSystems.length; index++) {
@@ -119,7 +115,6 @@ Mesh.prototype.getEmittedParticleSystems = function (): IParticleSystem[] {
     }
     return results;
 };
-
 
 Mesh.prototype.getHierarchyEmittedParticleSystems = function (): IParticleSystem[] {
     const results: IParticleSystem[] = [];

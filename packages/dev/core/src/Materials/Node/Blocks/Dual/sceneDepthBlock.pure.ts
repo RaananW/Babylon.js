@@ -10,12 +10,9 @@ import type { Scene } from "../../../../scene";
 import type { InputBlock } from "../Input/inputBlock";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import type { Effect } from "../../../effect";
-
 import type { NodeMaterial } from "../../nodeMaterial";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { Constants } from "core/Engines/constants";
-
-import "../../../../Rendering/depthRendererSceneComponent";
 
 /**
  * Block used to retrieve the depth (zbuffer) of the scene

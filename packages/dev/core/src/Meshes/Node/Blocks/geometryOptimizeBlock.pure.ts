@@ -10,6 +10,7 @@ import { VertexData } from "../../../Meshes/mesh.vertexData";
 import { WithinEpsilon } from "../../../Maths/math.scalar.functions";
 import { Epsilon } from "../../../Maths/math.constants";
 import type { INodeGeometryExecutionContext } from "../Interfaces/nodeGeometryExecutionContext";
+
 /**
  * Block used to extract unique positions from a geometry
  */

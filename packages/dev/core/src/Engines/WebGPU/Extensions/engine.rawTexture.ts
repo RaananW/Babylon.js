@@ -4,14 +4,14 @@
  */
 export * from "./engine.rawTexture.pure";
 
+import { IWebRequest } from "../../../Misc/interfaces/iWebRequest";
+import { Nullable } from "../../../types";
+import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import { Scene } from "../../../scene";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Constants } from "../../constants";
 import { Logger } from "../../../Misc/logger";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
-import type { IWebRequest } from "../../../Misc/interfaces/iWebRequest";
-import type { Nullable } from "../../../types";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-import type { Scene } from "../../../scene";
 
 function ConvertRGBtoRGBATextureData(rgbData: any, width: number, height: number, textureType: number): ArrayBufferView {
     // Create new RGBA data container.
@@ -46,7 +46,6 @@ function ConvertRGBtoRGBATextureData(rgbData: any, width: number, height: number
 
     return rgbaData;
 }
-
 
 ThinWebGPUEngine.prototype.createRawTexture = function (
     data: Nullable<ArrayBufferView>,
@@ -89,7 +88,6 @@ ThinWebGPUEngine.prototype.createRawTexture = function (
 
     return texture;
 };
-
 
 ThinWebGPUEngine.prototype.updateRawTexture = function (
     texture: Nullable<InternalTexture>,
@@ -138,7 +136,6 @@ ThinWebGPUEngine.prototype.updateRawTexture = function (
 
     texture.isReady = true;
 };
-
 
 ThinWebGPUEngine.prototype.createRawCubeTexture = function (
     data: Nullable<ArrayBufferView[]>,
@@ -200,7 +197,6 @@ ThinWebGPUEngine.prototype.createRawCubeTexture = function (
     return texture;
 };
 
-
 ThinWebGPUEngine.prototype.updateRawCubeTexture = function (
     texture: InternalTexture,
     bufferView: ArrayBufferView[],
@@ -234,7 +230,6 @@ ThinWebGPUEngine.prototype.updateRawCubeTexture = function (
 
     texture.isReady = true;
 };
-
 
 ThinWebGPUEngine.prototype.createRawCubeTextureFromUrl = function (
     url: string,
@@ -319,7 +314,6 @@ ThinWebGPUEngine.prototype.createRawCubeTextureFromUrl = function (
     return texture;
 };
 
-
 ThinWebGPUEngine.prototype.createRawTexture3D = function (
     data: Nullable<ArrayBufferView>,
     width: number,
@@ -362,7 +356,6 @@ ThinWebGPUEngine.prototype.createRawTexture3D = function (
     return texture;
 };
 
-
 ThinWebGPUEngine.prototype.updateRawTexture3D = function (
     texture: InternalTexture,
     bufferView: Nullable<ArrayBufferView>,
@@ -396,7 +389,6 @@ ThinWebGPUEngine.prototype.updateRawTexture3D = function (
 
     texture.isReady = true;
 };
-
 
 ThinWebGPUEngine.prototype.createRawTexture2DArray = function (
     data: Nullable<ArrayBufferView>,
@@ -441,7 +433,6 @@ ThinWebGPUEngine.prototype.createRawTexture2DArray = function (
 
     return texture;
 };
-
 
 ThinWebGPUEngine.prototype.updateRawTexture2DArray = function (
     texture: InternalTexture,

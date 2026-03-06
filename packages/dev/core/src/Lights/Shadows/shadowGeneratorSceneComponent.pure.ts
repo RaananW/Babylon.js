@@ -7,7 +7,6 @@ import type { ISceneSerializableComponent } from "../../sceneComponent";
 import { SceneComponentConstants } from "../../sceneComponent";
 import type { IAssetContainer } from "core/IAssetContainer";
 
-
 /**
  * Defines the shadow generator component responsible to manage any shadow generators
  * in a given scene.

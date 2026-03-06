@@ -6,9 +6,8 @@ import type { Camera } from "../Cameras/camera";
 import { Scene } from "../scene";
 import type { ISceneSerializableComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
-import type { AssetContainer } from "../assetContainer";
 import type { IAssetContainer } from "core/IAssetContainer";
-
+import type { LensFlareSystem } from "./lensFlareSystem";
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

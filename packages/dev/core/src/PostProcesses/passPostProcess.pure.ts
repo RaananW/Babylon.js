@@ -11,9 +11,6 @@ import type { Scene } from "../scene";
 import { ThinPassCubePostProcess, ThinPassPostProcess } from "./thinPassPostProcess";
 import { serialize } from "core/Misc/decorators";
 
-
-
-
 /**
  * PassPostProcess which produces an output the same as it's input
  */

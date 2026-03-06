@@ -7,10 +7,8 @@ import type { Camera } from "../Cameras/camera";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Effect } from "../Materials/effect";
 import { Constants } from "../Engines/constants";
-
 import { serialize } from "../Misc/decorators";
 import { SerializationHelper } from "../Misc/decorators.serialization";
-
 import type { Scene } from "../scene";
 import { ThinConvolutionPostProcess } from "./thinConvolutionPostProcess";
 

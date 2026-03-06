@@ -41,7 +41,6 @@ export class NodeRenderGraphPassPostProcessBlock extends NodeRenderGraphBaseWith
     }
 }
 
-
 /**
  * Block that implements the pass cube post process
  */

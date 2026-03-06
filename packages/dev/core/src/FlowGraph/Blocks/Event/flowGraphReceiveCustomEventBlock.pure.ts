@@ -9,6 +9,7 @@ import type { RichType } from "../../flowGraphRichTypes";
 import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { FlowGraphCoordinator } from "core/FlowGraph/flowGraphCoordinator";
+
 /**
  * Parameters used to create a FlowGraphReceiveCustomEventBlock.
  */

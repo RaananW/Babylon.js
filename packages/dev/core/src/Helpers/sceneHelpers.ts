@@ -4,6 +4,13 @@
  */
 export * from "./sceneHelpers.pure";
 
+import { Nullable } from "../types";
+import { Mesh } from "../Meshes/mesh";
+import { BaseTexture } from "../Materials/Textures/baseTexture";
+import { IEnvironmentHelperOptions, EnvironmentHelper } from "./environmentHelper";
+import { TargetCamera } from "../Cameras/targetCamera";
+import { VRExperienceHelperOptions, VRExperienceHelper } from "../Cameras/VR/vrExperienceHelper";
+import { WebXRDefaultExperienceOptions, WebXRDefaultExperience } from "../XR/webXRDefaultExperience";
 import { Logger } from "../Misc/logger";
 import { Scene } from "../scene";
 import { Vector3 } from "../Maths/math.vector";
@@ -11,20 +18,9 @@ import { Texture } from "../Materials/Textures/texture";
 import { StandardMaterial } from "../Materials/standardMaterial";
 import { PBRMaterial } from "../Materials/PBR/pbrMaterial";
 import { HemisphericLight } from "../Lights/hemisphericLight";
-import { EnvironmentHelper } from "./environmentHelper";
 import { FreeCamera } from "../Cameras/freeCamera";
 import { ArcRotateCamera } from "../Cameras/arcRotateCamera";
-import { VRExperienceHelper } from "../Cameras/VR/vrExperienceHelper";
 import { CreateBox } from "../Meshes/Builders/boxBuilder";
-import { WebXRDefaultExperience } from "../XR/webXRDefaultExperience";
-import type { Nullable } from "../types";
-import type { Mesh } from "../Meshes/mesh";
-import type { BaseTexture } from "../Materials/Textures/baseTexture";
-import type { IEnvironmentHelperOptions } from "./environmentHelper";
-import type { TargetCamera } from "../Cameras/targetCamera";
-import type { VRExperienceHelperOptions } from "../Cameras/VR/vrExperienceHelper";
-import type { WebXRDefaultExperienceOptions } from "../XR/webXRDefaultExperience";
-
 
 Scene.prototype.createDefaultLight = function (replace = false): void {
     // Dispose existing light in replace mode.
@@ -41,7 +37,6 @@ Scene.prototype.createDefaultLight = function (replace = false): void {
         new HemisphericLight("default light", Vector3.Up(), this);
     }
 };
-
 
 Scene.prototype.createDefaultCamera = function (createArcRotateCamera = false, replace = false, attachCameraControls = false): void {
     // Dispose existing camera in replace mode.
@@ -86,12 +81,10 @@ Scene.prototype.createDefaultCamera = function (createArcRotateCamera = false, r
     }
 };
 
-
 Scene.prototype.createDefaultCameraOrLight = function (createArcRotateCamera = false, replace = false, attachCameraControls = false): void {
     this.createDefaultLight(replace);
     this.createDefaultCamera(createArcRotateCamera, replace, attachCameraControls);
 };
-
 
 Scene.prototype.createDefaultSkybox = function (environmentTexture?: BaseTexture, pbr = false, scale = 1000, blur = 0, setGlobalEnvTexture = true): Nullable<Mesh> {
     if (!environmentTexture) {
@@ -134,7 +127,6 @@ Scene.prototype.createDefaultSkybox = function (environmentTexture?: BaseTexture
     return hdrSkybox;
 };
 
-
 Scene.prototype.createDefaultEnvironment = function (options: Partial<IEnvironmentHelperOptions>): Nullable<EnvironmentHelper> {
     if (EnvironmentHelper) {
         return new EnvironmentHelper(options, this);
@@ -142,11 +134,9 @@ Scene.prototype.createDefaultEnvironment = function (options: Partial<IEnvironme
     return null;
 };
 
-
 Scene.prototype.createDefaultVRExperience = function (webVROptions: VRExperienceHelperOptions = {}): VRExperienceHelper {
     return new VRExperienceHelper(this, webVROptions);
 };
-
 
 Scene.prototype.createDefaultXRExperienceAsync = async function (options: WebXRDefaultExperienceOptions = {}): Promise<WebXRDefaultExperience> {
     return await WebXRDefaultExperience.CreateAsync(this, options);

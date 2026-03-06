@@ -11,10 +11,6 @@ import { serialize } from "../Misc/decorators";
 import { SerializationHelper } from "../Misc/decorators.serialization";
 import type { PrePassRenderer } from "../Rendering/prePassRenderer";
 import { ScreenSpaceReflectionsConfiguration } from "../Rendering/screenSpaceReflectionsConfiguration";
-
-import "../Shaders/screenSpaceReflection.fragment";
-import "../Rendering/geometryBufferRendererSceneComponent";
-
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Scene } from "../scene";
 import { Logger } from "core/Misc/logger";

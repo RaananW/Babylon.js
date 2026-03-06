@@ -9,7 +9,6 @@ import { VertexData } from "../mesh.vertexData";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 import { CreateGroundVertexData } from "./groundBuilder";
 
-
 /**
  * Creates the VertexData for a box
  * @param options an object used to set the following optional parameters for the box, required but can be empty

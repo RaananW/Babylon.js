@@ -4,12 +4,12 @@
  */
 export * from "./shadowGeneratorSceneComponent.pure";
 
+import { ShadowGeneratorSceneComponent } from "./shadowGeneratorSceneComponent.pure";
+import { Scene } from "../../scene";
+import { SceneComponentConstants } from "../../sceneComponent";
 import { ShadowGenerator } from "./shadowGenerator";
 import { CascadedShadowGenerator } from "./cascadedShadowGenerator";
-import { SceneComponentConstants } from "../../sceneComponent";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
-import type { Scene } from "../../scene";
-
 
 // Adds the parser to the scene parsers.
 AddParser(SceneComponentConstants.NAME_SHADOWGENERATOR, (parsedData: any, scene: Scene) => {
@@ -26,7 +26,6 @@ AddParser(SceneComponentConstants.NAME_SHADOWGENERATOR, (parsedData: any, scene:
         }
     }
 });
-
 
 ShadowGenerator._SceneComponentInitialization = (scene: Scene) => {
     let component = scene._getComponent(SceneComponentConstants.NAME_SHADOWGENERATOR);

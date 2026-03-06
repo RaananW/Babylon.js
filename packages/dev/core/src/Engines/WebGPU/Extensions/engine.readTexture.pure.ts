@@ -2,8 +2,6 @@
 
 import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
 import type { Nullable } from "../../../types";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-
 
 declare module "../../abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -37,3 +35,5 @@ declare module "../../abstractEngine" {
         ): ArrayBufferView;
     }
 }
+
+export {};

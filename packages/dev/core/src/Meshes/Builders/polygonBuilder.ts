@@ -4,12 +4,13 @@
  */
 export * from "./polygonBuilder.pure";
 
-import { CreatePolygon, ExtrudePolygon } from "./polygonBuilder.pure";
+import { CreatePolygon, CreatePolygonVertexData, ExtrudePolygon } from "./polygonBuilder.pure";
+import { Scene } from "../../scene";
+import { Vector3 } from "../../Maths/math.vector";
 import { Mesh } from "../mesh";
 import { VertexData } from "../mesh.vertexData";
-import type { Scene } from "../../scene";
-import type { Vector3 } from "../../Maths/math.vector";
 
+declare let earcut: any;
 
 VertexData.CreatePolygon = CreatePolygonVertexData;
 
@@ -22,7 +23,6 @@ Mesh.CreatePolygon = (name: string, shape: Vector3[], scene: Scene, holes?: Vect
     };
     return CreatePolygon(name, options, scene, earcutInjection);
 };
-
 
 Mesh.ExtrudePolygon = (
     name: string,

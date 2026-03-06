@@ -6,6 +6,7 @@ import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
 import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+
 /**
  * Block used to compute value of one parameter modulo another
  */

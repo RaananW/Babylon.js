@@ -4,6 +4,7 @@
  */
 export * from "./edgesRenderer.pure";
 
+import { EdgesRenderer, IEdgesRendererOptions, LineEdgesRenderer } from "./edgesRenderer.pure";
 import { AbstractMesh } from "../Meshes/abstractMesh";
 import { LinesMesh, InstancedLinesMesh } from "../Meshes/linesMesh";
 
@@ -15,13 +16,11 @@ AbstractMesh.prototype.disableEdgesRendering = function (): AbstractMesh {
     return this;
 };
 
-
 AbstractMesh.prototype.enableEdgesRendering = function (epsilon = 0.95, checkVerticesInsteadOfIndices = false, options?: IEdgesRendererOptions): AbstractMesh {
     this.disableEdgesRendering();
     this._edgesRenderer = new EdgesRenderer(this, epsilon, checkVerticesInsteadOfIndices, true, options);
     return this;
 };
-
 
 Object.defineProperty(AbstractMesh.prototype, "edgesRenderer", {
     get: function (this: AbstractMesh) {
@@ -36,7 +35,6 @@ LinesMesh.prototype.enableEdgesRendering = function (epsilon = 0.95, checkVertic
     this._edgesRenderer = new LineEdgesRenderer(this, epsilon, checkVerticesInsteadOfIndices);
     return this;
 };
-
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 InstancedLinesMesh.prototype.enableEdgesRendering = function (epsilon = 0.95, checkVerticesInsteadOfIndices = false): InstancedLinesMesh {

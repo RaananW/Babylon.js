@@ -4,8 +4,6 @@ import { FreeCamera } from "./freeCamera";
 import type { Scene } from "../scene";
 import { Vector3 } from "../Maths/math.vector";
 
-
-
 /**
  * This represents a free type of camera. It can be useful in First Person Shooter game for instance.
  * It is identical to the Free Camera and simply adds by default a virtual joystick.

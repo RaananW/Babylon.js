@@ -7,6 +7,7 @@ import { RichTypeAny } from "../../../flowGraphRichTypes";
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import type { AnimationGroup } from "core/Animations/animationGroup";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+
 /**
  * @experimental
  * Block that pauses a running animation

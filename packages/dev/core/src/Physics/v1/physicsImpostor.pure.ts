@@ -17,7 +17,6 @@ import { Space } from "../../Maths/math.axis";
 
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
-
 /**
  * The interface for the physics imposter parameters
  * @see https://doc.babylonjs.com/features/featuresDeepDive/physics/usingPhysicsEngine

@@ -6,7 +6,6 @@ import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 
-
 /**
  * Options for DOM Overlay feature
  */

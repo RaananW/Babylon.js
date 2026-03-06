@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Epsilon } from "./math.constants";
 import type { Viewport } from "./math.viewport";
 import type { DeepImmutable, Nullable, FloatArray, float, Tuple } from "../types";
@@ -13,6 +12,8 @@ import type { Dimension, Tensor, TensorLike, TensorStatic } from "./tensor";
 import type { IVector2Like, IVector3Like, IVector4Like, IQuaternionLike, IMatrixLike, IPlaneLike, IVector3LikeInternal } from "./math.like";
 import { Clamp, Lerp, NormalizeRadians, RandomRange, WithinEpsilon } from "./math.scalar.functions";
 import { CopyMatrixToArray, InvertMatrixToArray, MatrixManagement, MultiplyMatricesToArray } from "./ThinMaths/thinMath.matrix.functions";
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const ExtractAsInt = (value: number) => {
@@ -1173,10 +1174,6 @@ export class Vector2 implements Vector<Tuple<number, 2>, IVector2Like>, IVector2
     }
 }
 Vector2 satisfies TensorStatic<Vector2, IVector2Like>;
-/*#__PURE__*/ Object.defineProperties(Vector2.prototype, {
-    dimension: { value: [2] },
-    rank: { value: 1 },
-});
 
 /**
  * Class used to store (x,y,z) vector representation
@@ -3391,10 +3388,6 @@ export class Vector3 implements Vector<Tuple<number, 3>, IVector3LikeInternal>, 
     }
 }
 Vector3 satisfies VectorStatic<Vector3, IVector3LikeInternal>;
-/*#__PURE__*/ Object.defineProperties(Vector3.prototype, {
-    dimension: { value: [3] },
-    rank: { value: 1 },
-});
 
 /**
  * Vector4 class created for EulerAngle class conversion to Quaternion
@@ -4479,10 +4472,6 @@ export class Vector4 implements Vector<Tuple<number, 4>, IVector4Like>, IVector4
     }
 }
 Vector4 satisfies VectorStatic<Vector4, IVector4Like>;
-/*#__PURE__*/ Object.defineProperties(Vector4.prototype, {
-    dimension: { value: [4] },
-    rank: { value: 1 },
-});
 
 /**
  * Class used to store quaternion data
@@ -6089,10 +6078,6 @@ export class Quaternion implements Tensor<Tuple<number, 4>, Quaternion>, IQuater
     }
 }
 Quaternion satisfies TensorStatic<Quaternion, Quaternion>;
-/*#__PURE__*/ Object.defineProperties(Quaternion.prototype, {
-    dimension: { value: [4] },
-    rank: { value: 1 },
-});
 
 /**
  * Class used to store matrix data (4x4)
@@ -8833,10 +8818,6 @@ export class Matrix implements Tensor<Tuple<Tuple<number, 4>, 4>, Matrix>, IMatr
         return result;
     }
 }
-/*#__PURE__*/ Object.defineProperties(Matrix.prototype, {
-    dimension: { value: [4, 4] },
-    rank: { value: 2 },
-});
 
 /**
  * @internal

@@ -4,15 +4,14 @@
  */
 export * from "./webXROculusTouchMotionController.pure";
 
+import { WebXROculusTouchMotionController } from "./webXROculusTouchMotionController.pure";
+import { Scene } from "../../scene";
 import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
-import type { Scene } from "../../scene";
-
 
 // register the profile
 WebXRMotionControllerManager.RegisterController("oculus-touch", (xrInput: XRInputSource, scene: Scene) => {
     return new WebXROculusTouchMotionController(scene, <any>xrInput.gamepad, xrInput.handedness);
 });
-
 
 WebXRMotionControllerManager.RegisterController("oculus-touch-legacy", (xrInput: XRInputSource, scene: Scene) => {
     return new WebXROculusTouchMotionController(scene, <any>xrInput.gamepad, xrInput.handedness, true);

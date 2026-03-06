@@ -6,7 +6,6 @@ import type { NodeParticleBuildState } from "core/Particles/Node/nodeParticleBui
 import type { NodeParticleConnectionPoint } from "core/Particles/Node/nodeParticleBlockConnectionPoint";
 import type { Particle } from "core/Particles/particle";
 import type { IShapeBlock } from "./IShapeBlock";
-
 import { VertexData } from "core/Meshes/mesh.vertexData";
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
 import { NodeParticleBlock } from "core/Particles/Node/nodeParticleBlock";

@@ -1,12 +1,11 @@
+/**
+ * Re-exports pure implementation and applies runtime side effects.
+ * Import reflectionProbe.pure for tree-shakeable, side-effect-free usage.
+ */
+export * from "./reflectionProbe.pure";
+
 import { ReflectionProbe, ReflectionProbeParse } from "./reflectionProbe.pure";
 import { Scene } from "../scene";
-
-declare module "./reflectionProbe.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
-    namespace ReflectionProbe {
-        export { ReflectionProbeParse as Parse };
-    }
-}
 
 ReflectionProbe.Parse = ReflectionProbeParse;
 
@@ -30,5 +29,3 @@ Scene.prototype.addReflectionProbe = function (newReflectionProbe: ReflectionPro
 
     this.reflectionProbes.push(newReflectionProbe);
 };
-
-export * from "./reflectionProbe.pure";

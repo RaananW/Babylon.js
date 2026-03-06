@@ -1,7 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
 import { Action } from "./action";
-
 import type { ActionManager } from "./actionManager";
 
 /**

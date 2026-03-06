@@ -4,10 +4,9 @@
  */
 export * from "./engine.renderTargetTexture.pure";
 
+import { Nullable } from "../../../types";
+import { RenderTargetTexture } from "../../../Materials/Textures/renderTargetTexture";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
-import type { Nullable } from "../../../types";
-import type { RenderTargetTexture } from "../../../Materials/Textures/renderTargetTexture";
-
 
 ThinWebGPUEngine.prototype.setDepthStencilTexture = function (
     channel: number,

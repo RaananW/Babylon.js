@@ -13,7 +13,6 @@ import type { Nullable } from "../../../types";
 import { Texture } from "../../Textures/texture";
 import type { Scene } from "../../../scene";
 import { Constants } from "../../../Engines/constants";
-import "../../../Shaders/ShadersInclude/helperFunctions";
 import { ImageSourceBlock } from "./Dual/imageSourceBlock";
 import { NodeMaterialConnectionPointCustomObject } from "../nodeMaterialConnectionPointCustomObject";
 import { EngineStore } from "../../../Engines/engineStore";

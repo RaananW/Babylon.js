@@ -8,6 +8,7 @@ import type { FlowGraphSignalConnection } from "../../../flowGraphSignalConnecti
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger";
+
 /**
  * Configuration for the multi gate block.
  */

@@ -20,3 +20,5 @@ declare module "../../Engines/abstractEngine" {
         _debugInsertMarker(text: string): void;
     }
 }
+
+export {};

@@ -2,8 +2,6 @@
 
 import type { Nullable } from "../../types";
 
-
-
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface AbstractEngine {
@@ -76,3 +74,5 @@ declare module "../../Engines/abstractEngine" {
         getAlphaEquation(targetIndex?: number): number;
     }
 }
+
+export {};

@@ -4,8 +4,8 @@
  */
 export * from "./arcRotateCameraVRDeviceOrientationInput.pure";
 
+import { ArcRotateCameraVRDeviceOrientationInput } from "./arcRotateCameraVRDeviceOrientationInput.pure";
 import { ArcRotateCameraInputsManager } from "../../Cameras/arcRotateCameraInputsManager";
-
 
 /**
  * Add orientation input support to the input manager.

@@ -5,6 +5,6 @@
 export * from "./taaMaterialManager.pure";
 
 import { RegisterClass } from "../../../Misc/typeStore";
-
+import { TAAJitterMaterialPlugin } from "./taaMaterialManager.pure";
 
 RegisterClass(`BABYLON.TAAJitterMaterialPlugin`, TAAJitterMaterialPlugin);

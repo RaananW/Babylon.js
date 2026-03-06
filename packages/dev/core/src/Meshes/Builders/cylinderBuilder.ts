@@ -4,14 +4,12 @@
  */
 export * from "./cylinderBuilder.pure";
 
-import { CreateCylinder } from "./cylinderBuilder.pure";
+import { CreateCylinder, CreateCylinderVertexData } from "./cylinderBuilder.pure";
 import { Mesh } from "../mesh";
 import { VertexData } from "../mesh.vertexData";
 import { Scene } from "../../scene";
 
-
 VertexData.CreateCylinder = CreateCylinderVertexData;
-
 
 Mesh.CreateCylinder = (
     name: string,

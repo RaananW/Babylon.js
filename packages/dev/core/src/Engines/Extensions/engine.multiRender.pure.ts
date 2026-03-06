@@ -3,10 +3,7 @@
 import type { IMultiRenderTargetOptions } from "../../Materials/Textures/multiRenderTarget";
 import type { Nullable } from "../../types";
 import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
-import type { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
 import type { TextureSize } from "../../Materials/Textures/textureCreationOptions";
-
 
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -80,3 +77,5 @@ declare module "../../Engines/abstractEngine" {
         restoreSingleAttachmentForRenderTarget(): void;
     }
 }
+
+export {};

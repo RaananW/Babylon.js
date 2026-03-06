@@ -11,7 +11,6 @@ import { FlyCameraInputsManager } from "./flyCameraInputsManager";
 import type { FlyCameraMouseInput } from "../Cameras/Inputs/flyCameraMouseInput";
 import type { FlyCameraKeyboardInput } from "../Cameras/Inputs/flyCameraKeyboardInput";
 import { Tools } from "../Misc/tools";
-
 import type { Collider } from "../Collisions/collider";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 

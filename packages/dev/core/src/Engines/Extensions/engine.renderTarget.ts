@@ -4,24 +4,22 @@
  */
 export * from "./engine.renderTarget.pure";
 
+import { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../Materials/Textures/textureCreationOptions";
+import { Nullable } from "../../types";
+import { RenderTargetWrapper } from "../renderTargetWrapper";
+import { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { ThinEngine } from "../thinEngine";
 import { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
 import { HasStencilAspect } from "core/Materials/Textures/textureHelper.functions";
 import { Constants } from "../constants";
-import type { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../Materials/Textures/textureCreationOptions";
-import type { Nullable } from "../../types";
-import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
-
 
 ThinEngine.prototype._createHardwareRenderTargetWrapper = function (isMulti: boolean, isCube: boolean, size: TextureSize): RenderTargetWrapper {
     const rtWrapper = new WebGLRenderTargetWrapper(isMulti, isCube, size, this, this._gl);
     this._renderTargetWrapperCache.push(rtWrapper);
     return rtWrapper;
 };
-
 
 ThinEngine.prototype.createRenderTargetTexture = function (this: ThinEngine, size: TextureSize, options: boolean | RenderTargetCreationOptions): RenderTargetWrapper {
     const rtWrapper = this._createHardwareRenderTargetWrapper(false, false, size) as WebGLRenderTargetWrapper;
@@ -84,7 +82,6 @@ ThinEngine.prototype.createRenderTargetTexture = function (this: ThinEngine, siz
 
     return rtWrapper;
 };
-
 
 ThinEngine.prototype._createDepthStencilTexture = function (size: TextureSize, options: DepthTextureCreationOptions, rtWrapper: WebGLRenderTargetWrapper): InternalTexture {
     const gl = this._gl;
@@ -178,7 +175,6 @@ ThinEngine.prototype._createDepthStencilTexture = function (size: TextureSize, o
     return internalTexture;
 };
 
-
 ThinEngine.prototype.updateRenderTargetTextureSampleCount = function (rtWrapper: Nullable<WebGLRenderTargetWrapper>, samples: number): number {
     if (this.webGLVersion < 2 || !rtWrapper) {
         return 1;
@@ -256,7 +252,6 @@ ThinEngine.prototype.updateRenderTargetTextureSampleCount = function (rtWrapper:
 
     return samples;
 };
-
 
 ThinEngine.prototype._setupDepthStencilTexture = function (
     internalTexture: InternalTexture,

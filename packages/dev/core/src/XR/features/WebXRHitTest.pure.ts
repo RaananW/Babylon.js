@@ -9,7 +9,6 @@ import type { IWebXRLegacyHitTestOptions, IWebXRLegacyHitResult, IWebXRHitTestFe
 import { Tools } from "../../Misc/tools";
 import type { Nullable } from "../../types";
 
-
 /**
  * Options used for hit testing (version 2)
  */

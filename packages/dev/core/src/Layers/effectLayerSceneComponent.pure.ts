@@ -7,10 +7,8 @@ import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
 import type { ISceneSerializableComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
-import type { AssetContainer } from "../assetContainer";
 import { EngineStore } from "../Engines/engineStore";
 import type { IAssetContainer } from "core/IAssetContainer";
-
 
 /**
  * Defines the layer scene component responsible to manage any effect layers

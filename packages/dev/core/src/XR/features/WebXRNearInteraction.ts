@@ -4,8 +4,8 @@
  */
 export * from "./WebXRNearInteraction.pure";
 
+import { WebXRNearInteraction } from "./WebXRNearInteraction.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 //Register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

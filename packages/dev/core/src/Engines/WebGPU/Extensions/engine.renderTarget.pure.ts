@@ -3,9 +3,7 @@
 import type { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../../Materials/Textures/textureCreationOptions";
 import type { Nullable } from "../../../types";
 import type { RenderTargetWrapper } from "../../renderTargetWrapper";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-
-
+import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
 
 declare module "../../abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -37,3 +35,5 @@ declare module "../../abstractEngine" {
         _setupDepthStencilTexture(internalTexture: InternalTexture, size: TextureSize, bilinearFiltering: boolean, comparisonFunction: number, samples?: number): void;
     }
 }
+
+export {};

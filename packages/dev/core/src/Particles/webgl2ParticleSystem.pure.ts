@@ -4,17 +4,12 @@ import type { VertexBuffer, Buffer } from "../Buffers/buffer";
 import type { ThinEngine } from "../Engines/thinEngine";
 import type { Effect, IEffectCreationOptions } from "../Materials/effect";
 import type { IGPUParticleSystemPlatform } from "./IGPUParticleSystemPlatform";
-
 import { CustomParticleEmitter } from "./EmitterTypes/customParticleEmitter";
 import type { GPUParticleSystem } from "./gpuParticleSystem";
 import type { DataArray, Nullable } from "../types";
 import type { DataBuffer } from "../Buffers/dataBuffer";
 import { UniformBufferEffectCommonAccessor } from "../Materials/uniformBufferEffectCommonAccessor";
 import { Constants } from "../Engines/constants";
-
-import "../Shaders/gpuUpdateParticles.fragment";
-import "../Shaders/gpuUpdateParticles.vertex";
-
 import type { Engine } from "../Engines/engine";
 
 /** @internal */

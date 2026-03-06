@@ -1,5 +1,5 @@
-/* eslint-disable jsdoc/require-returns-check */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/** This file must only contain pure code and pure imports */
+
 import type { Nullable, FloatArray, IndicesArray, DeepImmutable } from "../types";
 import type { Matrix, Vector2 } from "../Maths/math.vector";
 import { Vector3, Vector4, TmpVectors } from "../Maths/math.vector";
@@ -13,10 +13,12 @@ import type { Coroutine } from "../Misc/coroutine";
 import { makeSyncFunction, runCoroutineSync } from "../Misc/coroutine";
 import type { ICreateCapsuleOptions } from "./Builders/capsuleBuilder";
 import { RuntimeError, ErrorCodes } from "../Misc/error";
-
 import type { Geometry } from "../Meshes/geometry";
 import type { Mesh } from "../Meshes/mesh";
 import { SubMesh } from "./subMesh";
+
+/* eslint-disable jsdoc/require-returns-check */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Define an interface for all classes that will get and set the data on vertices
@@ -1878,7 +1880,14 @@ export function VertexDataCreatePlane(options: { size?: number; width?: number; 
  * @returns the VertexData of the box
  * @deprecated use CreateDiscVertexData instead
  */
-export function VertexDataCreateDisc(options: { radius?: number; tessellation?: number; arc?: number; sideOrientation?: number; frontUVs?: Vector4; backUVs?: Vector4 }): VertexData {
+export function VertexDataCreateDisc(options: {
+    radius?: number;
+    tessellation?: number;
+    arc?: number;
+    sideOrientation?: number;
+    frontUVs?: Vector4;
+    backUVs?: Vector4;
+}): VertexData {
     throw _WarnImport("discBuilder");
 }
 
@@ -1895,7 +1904,15 @@ export function VertexDataCreateDisc(options: { radius?: number; tessellation?: 
  * @returns the VertexData of the Polygon
  * @deprecated use CreatePolygonVertexData instead
  */
-export function VertexDataCreatePolygon(polygon: Mesh, sideOrientation: number, fUV?: Vector4[], fColors?: Color4[], frontUVs?: Vector4, backUVs?: Vector4, wrap?: boolean): VertexData {
+export function VertexDataCreatePolygon(
+    polygon: Mesh,
+    sideOrientation: number,
+    fUV?: Vector4[],
+    fColors?: Color4[],
+    frontUVs?: Vector4,
+    backUVs?: Vector4,
+    wrap?: boolean
+): VertexData {
     throw _WarnImport("polygonBuilder");
 }
 
@@ -2430,4 +2447,33 @@ export function VertexDataImportVertexData(parsedVertexData: any, geometry: Geom
     const vertexData = VertexDataParse(parsedVertexData);
 
     geometry.setAllVerticesData(vertexData, parsedVertexData.updatable);
+}
+
+declare module "./mesh.vertexData.pure" {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
+    namespace VertexData {
+        export let CreateRibbon: typeof VertexDataCreateRibbon;
+        export let CreateBox: typeof VertexDataCreateBox;
+        export let CreateTiledBox: typeof VertexDataCreateTiledBox;
+        export let CreateTiledPlane: typeof VertexDataCreateTiledPlane;
+        export let CreateSphere: typeof VertexDataCreateSphere;
+        export let CreateCylinder: typeof VertexDataCreateCylinder;
+        export let CreateTorus: typeof VertexDataCreateTorus;
+        export let CreateLineSystem: typeof VertexDataCreateLineSystem;
+        export let CreateDashedLines: typeof VertexDataCreateDashedLines;
+        export let CreateGround: typeof VertexDataCreateGround;
+        export let CreateTiledGround: typeof VertexDataCreateTiledGround;
+        export let CreateGroundFromHeightMap: typeof VertexDataCreateGroundFromHeightMap;
+        export let CreatePlane: typeof VertexDataCreatePlane;
+        export let CreateDisc: typeof VertexDataCreateDisc;
+        export let CreatePolygon: typeof VertexDataCreatePolygon;
+        export let CreateIcoSphere: typeof VertexDataCreateIcoSphere;
+        export let CreatePolyhedron: typeof VertexDataCreatePolyhedron;
+        export let CreateCapsule: typeof VertexDataCreateCapsule;
+        export let CreateTorusKnot: typeof VertexDataCreateTorusKnot;
+        export let ComputeNormals: typeof VertexDataComputeNormals;
+        export let _ComputeSides: typeof VertexData_ComputeSides;
+        export let Parse: typeof VertexDataParse;
+        export let ImportVertexData: typeof VertexDataImportVertexData;
+    }
 }

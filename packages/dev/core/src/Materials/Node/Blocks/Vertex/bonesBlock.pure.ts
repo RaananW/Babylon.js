@@ -11,7 +11,6 @@ import type { Effect } from "../../../effect";
 import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
 import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
 import { InputBlock } from "../Input/inputBlock";
-
 import type { EffectFallbacks } from "../../../effectFallbacks";
 import { BindBonesParameters, PrepareDefinesForBones } from "../../../materialHelper.functions";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";

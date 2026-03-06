@@ -5,6 +5,7 @@ import { NodeMaterialBlockConnectionPointTypes } from "../Enums/nodeMaterialBloc
 import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
 import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
+
 /**
  * Block used to apply a dot product between 2 vectors
  */

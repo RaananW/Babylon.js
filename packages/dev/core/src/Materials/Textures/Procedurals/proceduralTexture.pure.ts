@@ -9,14 +9,12 @@ import type { Color4, Color3 } from "../../../Maths/math.color";
 import type { AbstractEngine } from "../../../Engines/abstractEngine";
 import { VertexBuffer } from "../../../Buffers/buffer";
 import { SceneComponentConstants } from "../../../sceneComponent";
-
 import { Material } from "../../../Materials/material";
 import type { Effect } from "../../../Materials/effect";
 import { Texture } from "../../../Materials/Textures/texture";
 import type { RenderTargetTextureOptions } from "../../../Materials/Textures/renderTargetTexture";
 import { RenderTargetTexture } from "../../../Materials/Textures/renderTargetTexture";
 import { ProceduralTextureSceneComponent } from "./proceduralTextureSceneComponent";
-
 import type { DataBuffer } from "../../../Buffers/dataBuffer";
 import type { NodeMaterial } from "../../Node/nodeMaterial";
 import type { TextureSize } from "../../../Materials/Textures/textureCreationOptions";

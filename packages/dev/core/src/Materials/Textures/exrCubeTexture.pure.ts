@@ -4,7 +4,6 @@ import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
 import { EnvCubeTexture } from "./envCubeTexture";
 import type { AbstractEngine } from "../../Engines/abstractEngine";
-import "../../Materials/Textures/baseTexture.polynomial";
 import { PanoramaToCubeMapTools } from "../../Misc/HighDynamicRange/panoramaToCubemap";
 import type { CubeMapInfo } from "../../Misc/HighDynamicRange/panoramaToCubemap";
 import { ReadExrDataAsync } from "./Loaders/exrTextureLoader";

@@ -4,9 +4,9 @@
  */
 export * from "./physicsImpostor.pure";
 
+import { IPhysicsEnabledObject, PhysicsImpostor } from "./physicsImpostor.pure";
+import { Scene } from "../../scene";
 import { Mesh } from "../../Meshes/mesh";
-import type { Scene } from "../../scene";
-
 
 Mesh._PhysicsImpostorParser = function (scene: Scene, physicObject: IPhysicsEnabledObject, jsonObject: any): PhysicsImpostor {
     return new PhysicsImpostor(

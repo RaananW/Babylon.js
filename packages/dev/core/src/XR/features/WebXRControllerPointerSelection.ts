@@ -4,8 +4,8 @@
  */
 export * from "./WebXRControllerPointerSelection.pure";
 
+import { WebXRControllerPointerSelection } from "./WebXRControllerPointerSelection.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 //register the plugin
 WebXRFeaturesManager.AddWebXRFeature(

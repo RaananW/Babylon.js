@@ -39,8 +39,7 @@ function GetAllPropertyNames(obj: any): string[] {
 /**
  * Class containing a set of static utilities functions for deep copy.
  */
-export class DeepCopier {
-}
+export class DeepCopier {}
 
 /**
  * Tries to copy an object by duplicating every property

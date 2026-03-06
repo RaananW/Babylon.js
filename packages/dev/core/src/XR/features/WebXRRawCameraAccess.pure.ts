@@ -10,7 +10,6 @@ import { InternalTexture, InternalTextureSource } from "../../Materials/Textures
 import { BaseTexture } from "../../Materials/Textures/baseTexture";
 import type { ThinEngine } from "../../Engines";
 
-
 /**
  * Options for raw camera access
  */

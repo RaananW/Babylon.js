@@ -10,12 +10,11 @@ import { Vector2 } from "core/Maths/math.vector";
 import type { Scene } from "core/scene";
 import type { Nullable } from "core/types";
 
-
 class TAAJitterMaterialDefines extends MaterialDefines {
     TAA_JITTER = false;
 }
 
-class TAAJitterMaterialPlugin extends MaterialPluginBase {
+export class TAAJitterMaterialPlugin extends MaterialPluginBase {
     public static readonly Name = "TAAJitter";
 
     private _manager: Nullable<TAAMaterialManager>;

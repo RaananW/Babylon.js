@@ -16,9 +16,7 @@ import { TransformNode } from "./transformNode";
 import type { Light } from "../Lights/light";
 import { VertexBuffer } from "../Buffers/buffer";
 import { Tools } from "../Misc/tools";
-import type { ThinEngine } from "../Engines/thinEngine";
 import type { Geometry } from "./geometry";
-
 
 /**
  * Creates an instance based on a source mesh.

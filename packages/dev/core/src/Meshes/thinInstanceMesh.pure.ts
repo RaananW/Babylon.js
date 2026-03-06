@@ -1,7 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable, DeepImmutableObject } from "../types";
-
+import type { VertexBuffer, Buffer } from "../Buffers/buffer";
+import type { Matrix } from "../Maths/math.vector";
 
 declare module "./mesh" {
     /** @internal */
@@ -131,3 +132,5 @@ declare module "./mesh" {
         };
     }
 }
+
+export {};

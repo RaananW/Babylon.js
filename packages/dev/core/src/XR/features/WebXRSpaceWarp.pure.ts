@@ -18,7 +18,6 @@ import type { Material } from "../../Materials/material";
 import type { Observer } from "../../Misc/observable";
 import type { ThinEngine } from "../../Engines/thinEngine";
 
-
 /**
  * Used for Space Warp render process
  */

@@ -4,14 +4,13 @@
  */
 export * from "./engine.renderTargetCube.pure";
 
+import { RenderTargetWrapper } from "../renderTargetWrapper";
+import { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
+import { RenderTargetCreationOptions } from "../../Materials/Textures/textureCreationOptions";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { Constants } from "../constants";
 import { ThinEngine } from "../thinEngine";
-import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
-import type { RenderTargetCreationOptions } from "../../Materials/Textures/textureCreationOptions";
-
 
 ThinEngine.prototype.createRenderTargetCubeTexture = function (size: number, options?: RenderTargetCreationOptions): RenderTargetWrapper {
     const rtWrapper = this._createHardwareRenderTargetWrapper(false, true, size) as WebGLRenderTargetWrapper;

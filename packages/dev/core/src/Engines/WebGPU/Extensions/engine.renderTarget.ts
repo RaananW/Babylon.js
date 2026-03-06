@@ -4,23 +4,21 @@
  */
 export * from "./engine.renderTarget.pure";
 
+import { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../../Materials/Textures/textureCreationOptions";
+import { Nullable } from "../../../types";
+import { RenderTargetWrapper } from "../../renderTargetWrapper";
+import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Constants } from "../../constants";
 import { WebGPURenderTargetWrapper } from "../webgpuRenderTargetWrapper";
 import { GetTypeForDepthTexture, HasStencilAspect } from "core/Materials/Textures/textureHelper.functions";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
-import type { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../../Materials/Textures/textureCreationOptions";
-import type { Nullable } from "../../../types";
-import type { RenderTargetWrapper } from "../../renderTargetWrapper";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-
 
 ThinWebGPUEngine.prototype._createHardwareRenderTargetWrapper = function (isMulti: boolean, isCube: boolean, size: TextureSize): WebGPURenderTargetWrapper {
     const rtWrapper = new WebGPURenderTargetWrapper(isMulti, isCube, size, this);
     this._renderTargetWrapperCache.push(rtWrapper);
     return rtWrapper;
 };
-
 
 ThinWebGPUEngine.prototype.createRenderTargetTexture = function (size: TextureSize, options: boolean | RenderTargetCreationOptions): WebGPURenderTargetWrapper {
     const rtWrapper = this._createHardwareRenderTargetWrapper(false, false, size) as WebGPURenderTargetWrapper;
@@ -84,7 +82,6 @@ ThinWebGPUEngine.prototype.createRenderTargetTexture = function (size: TextureSi
     return rtWrapper;
 };
 
-
 ThinWebGPUEngine.prototype._createDepthStencilTexture = function (size: TextureSize, options: DepthTextureCreationOptions, wrapper: WebGPURenderTargetWrapper): InternalTexture {
     const internalOptions = {
         bilinearFiltering: false,
@@ -115,7 +112,6 @@ ThinWebGPUEngine.prototype._createDepthStencilTexture = function (size: TextureS
     return internalTexture;
 };
 
-
 ThinWebGPUEngine.prototype._setupDepthStencilTexture = function (
     internalTexture: InternalTexture,
     size: TextureSize,
@@ -144,7 +140,6 @@ ThinWebGPUEngine.prototype._setupDepthStencilTexture = function (
     internalTexture._cachedWrapU = Constants.TEXTURE_CLAMP_ADDRESSMODE;
     internalTexture._cachedWrapV = Constants.TEXTURE_CLAMP_ADDRESSMODE;
 };
-
 
 ThinWebGPUEngine.prototype.updateRenderTargetTextureSampleCount = function (rtWrapper: Nullable<RenderTargetWrapper>, samples: number): number {
     if (!rtWrapper || !rtWrapper.texture || rtWrapper.samples === samples) {

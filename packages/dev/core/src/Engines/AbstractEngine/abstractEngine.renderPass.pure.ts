@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface AbstractEngine {
@@ -30,3 +29,5 @@ declare module "../../Engines/abstractEngine" {
         releaseRenderPassId(id: number): void;
     }
 }
+
+export {};

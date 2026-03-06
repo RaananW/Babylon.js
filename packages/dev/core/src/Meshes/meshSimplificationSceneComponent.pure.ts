@@ -1,10 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
 import { Scene } from "../scene";
-import type { ISimplificationSettings } from "./meshSimplification";
+import type { ISimplificationSettings, SimplificationQueue, SimplificationType } from "./meshSimplification";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
-
 
 declare module "../scene" {
     /** @internal */

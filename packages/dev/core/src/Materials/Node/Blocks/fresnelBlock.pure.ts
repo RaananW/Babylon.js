@@ -7,8 +7,6 @@ import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
 import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
 import { InputBlock } from "./Input/inputBlock";
 import type { NodeMaterial } from "../nodeMaterial";
-
-import "../../../Shaders/ShadersInclude/fresnelFunction";
 import { ViewDirectionBlock } from "./viewDirectionBlock";
 
 /**

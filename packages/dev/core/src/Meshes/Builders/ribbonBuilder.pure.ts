@@ -10,7 +10,6 @@ import { VertexBuffer } from "../../Buffers/buffer";
 import { VertexData } from "../mesh.vertexData";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-
 /**
  * Creates the VertexData for a Ribbon
  * @param options an object used to set the following optional parameters for the ribbon, required but can be empty

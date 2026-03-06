@@ -4,11 +4,10 @@
  */
 export * from "./engine.readTexture.pure";
 
+import { InternalTexture } from "../../../Materials/Textures/internalTexture";
+import { Nullable } from "../../../types";
+import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
-import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
-import type { Nullable } from "../../../types";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-
 
 // eslint-disable-next-line @typescript-eslint/promise-function-async
 ThinWebGPUEngine.prototype._readTexturePixels = function (
@@ -31,7 +30,6 @@ ThinWebGPUEngine.prototype._readTexturePixels = function (
 
     return this._textureHelper.readPixels(gpuTextureWrapper.underlyingResource!, x, y, width, height, gpuTextureWrapper.format, faceIndex, level, buffer, noDataConversion);
 };
-
 
 ThinWebGPUEngine.prototype._readTexturePixelsSync = function (): ArrayBufferView {
     // eslint-disable-next-line no-throw-literal

@@ -26,7 +26,6 @@ import { Viewport } from "../../Maths/math.viewport";
 import type { Mesh } from "../../Meshes/mesh";
 import { Tools } from "../../Misc/tools";
 
-
 /**
  * Options interface for the pointer selection module
  */

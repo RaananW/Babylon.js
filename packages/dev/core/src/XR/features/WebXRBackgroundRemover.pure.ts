@@ -6,7 +6,6 @@ import type { AbstractMesh } from "../../Meshes/abstractMesh";
 import { Observable } from "../../Misc/observable";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 
-
 /**
  * Options interface for the background remover plugin
  */

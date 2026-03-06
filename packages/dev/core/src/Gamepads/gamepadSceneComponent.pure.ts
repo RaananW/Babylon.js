@@ -4,8 +4,7 @@ import type { Nullable } from "../types";
 import { Scene } from "../scene";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
-
-
+import type { GamepadManager } from "./gamepadManager";
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -4,15 +4,14 @@
  */
 export * from "./nativeEngine.cubeTexture.pure";
 
+import { IWebRequest } from "../../../Misc/interfaces/iWebRequest";
+import { Scene } from "../../../scene";
+import { Nullable } from "../../../types";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Texture } from "../../../Materials/Textures/texture";
 import { CreateRadianceImageDataArrayBufferViews, GetEnvInfo, UploadEnvSpherical } from "../../../Misc/environmentTextureTools";
 import { Constants } from "../../constants";
 import { ThinNativeEngine } from "../../thinNativeEngine";
-import type { IWebRequest } from "../../../Misc/interfaces/iWebRequest";
-import type { Scene } from "../../../scene";
-import type { Nullable } from "../../../types";
-
 
 ThinNativeEngine.prototype.createCubeTexture = function (
     rootUrl: string,

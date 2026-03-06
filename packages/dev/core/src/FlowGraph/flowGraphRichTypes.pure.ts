@@ -6,7 +6,6 @@ import { FlowGraphInteger } from "./CustomTypes/flowGraphInteger";
 import { Constants } from "core/Engines/constants";
 import { FlowGraphMatrix2D, FlowGraphMatrix3D } from "./CustomTypes/flowGraphMatrix";
 
-
 /**
  * The types supported by the flow graph.
  */

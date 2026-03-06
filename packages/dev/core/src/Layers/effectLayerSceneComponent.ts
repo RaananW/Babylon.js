@@ -4,12 +4,12 @@
  */
 export * from "./effectLayerSceneComponent.pure";
 
+import { EffectLayerSceneComponent } from "./effectLayerSceneComponent.pure";
+import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
+import { AssetContainer } from "../assetContainer";
 import { EffectLayer } from "./effectLayer";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
-import type { Scene } from "../scene";
-import type { AssetContainer } from "../assetContainer";
-
 
 // Adds the parser to the scene parsers.
 AddParser(SceneComponentConstants.NAME_EFFECTLAYER, (parsedData: any, scene: Scene, container: AssetContainer, rootUrl: string) => {
@@ -24,7 +24,6 @@ AddParser(SceneComponentConstants.NAME_EFFECTLAYER, (parsedData: any, scene: Sce
         }
     }
 });
-
 
 EffectLayer._SceneComponentInitialization = (scene: Scene) => {
     let component = scene._getComponent(SceneComponentConstants.NAME_EFFECTLAYER) as EffectLayerSceneComponent;

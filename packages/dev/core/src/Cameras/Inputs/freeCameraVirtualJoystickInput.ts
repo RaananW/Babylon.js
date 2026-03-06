@@ -4,8 +4,8 @@
  */
 export * from "./freeCameraVirtualJoystickInput.pure";
 
+import { FreeCameraVirtualJoystickInput } from "./freeCameraVirtualJoystickInput.pure";
 import { FreeCameraInputsManager } from "../../Cameras/freeCameraInputsManager";
-
 
 /**
  * Add virtual joystick input support to the input manager.

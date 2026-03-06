@@ -4,8 +4,8 @@
  */
 export * from "./WebXRControllerMovement.pure";
 
+import { WebXRControllerMovement } from "./WebXRControllerMovement.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
 
 WebXRFeaturesManager.AddWebXRFeature(
     WebXRControllerMovement.Name,

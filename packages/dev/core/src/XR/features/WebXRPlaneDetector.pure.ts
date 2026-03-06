@@ -7,7 +7,6 @@ import { Observable } from "../../Misc/observable";
 import { Vector3, Matrix } from "../../Maths/math.vector";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 
-
 declare const XRPlane: XRPlane;
 
 /**

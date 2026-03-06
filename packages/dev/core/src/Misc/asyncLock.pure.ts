@@ -45,7 +45,6 @@ export class AsyncLock {
         });
         return newOperation;
     }
-
 }
 
 /**

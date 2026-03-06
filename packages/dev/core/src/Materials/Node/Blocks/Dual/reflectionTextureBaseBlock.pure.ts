@@ -14,7 +14,6 @@ import type { Scene } from "../../../../scene";
 import { InputBlock } from "../Input/inputBlock";
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
 import { Constants } from "../../../../Engines/constants";
-
 import { CubeTexture } from "../../../Textures/cubeTexture";
 import { Texture } from "../../../Textures/texture";
 import { EngineStore } from "../../../../Engines/engineStore";

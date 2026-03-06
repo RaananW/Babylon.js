@@ -13,8 +13,6 @@ import type { AbstractEngine } from "../../Engines/abstractEngine";
 import { Observable } from "../../Misc/observable";
 import { SerializationHelper } from "../../Misc/decorators.serialization";
 
-
-
 /**
  * Defines the available options when creating a cube texture
  */

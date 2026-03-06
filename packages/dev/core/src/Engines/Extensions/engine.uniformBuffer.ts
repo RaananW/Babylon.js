@@ -4,13 +4,12 @@
  */
 export * from "./engine.uniformBuffer.pure";
 
+import { FloatArray, Nullable } from "../../types";
+import { DataBuffer } from "../../Buffers/dataBuffer";
+import { IPipelineContext } from "../IPipelineContext";
+import { WebGLPipelineContext } from "../WebGL/webGLPipelineContext";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { WebGLDataBuffer } from "../../Meshes/WebGL/webGLDataBuffer";
-import type { FloatArray, Nullable } from "../../types";
-import type { DataBuffer } from "../../Buffers/dataBuffer";
-import type { IPipelineContext } from "../IPipelineContext";
-import type { WebGLPipelineContext } from "../WebGL/webGLPipelineContext";
-
 
 ThinEngine.prototype.createUniformBuffer = function (elements: FloatArray, _label?: string): DataBuffer {
     const ubo = this._gl.createBuffer();
@@ -34,7 +33,6 @@ ThinEngine.prototype.createUniformBuffer = function (elements: FloatArray, _labe
     return result;
 };
 
-
 ThinEngine.prototype.createDynamicUniformBuffer = function (elements: FloatArray, _label?: string): DataBuffer {
     const ubo = this._gl.createBuffer();
 
@@ -56,7 +54,6 @@ ThinEngine.prototype.createDynamicUniformBuffer = function (elements: FloatArray
     result.references = 1;
     return result;
 };
-
 
 ThinEngine.prototype.updateUniformBuffer = function (uniformBuffer: DataBuffer, elements: FloatArray, offset?: number, count?: number): void {
     this.bindUniformBuffer(uniformBuffer);
@@ -82,17 +79,14 @@ ThinEngine.prototype.updateUniformBuffer = function (uniformBuffer: DataBuffer, 
     this.bindUniformBuffer(null);
 };
 
-
 ThinEngine.prototype.bindUniformBuffer = function (buffer: Nullable<DataBuffer>): void {
     this._gl.bindBuffer(this._gl.UNIFORM_BUFFER, buffer ? buffer.underlyingResource : null);
 };
-
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 ThinEngine.prototype.bindUniformBufferBase = function (buffer: DataBuffer, location: number, name: string): void {
     this._gl.bindBufferBase(this._gl.UNIFORM_BUFFER, location, buffer ? buffer.underlyingResource : null);
 };
-
 
 ThinEngine.prototype.bindUniformBlock = function (pipelineContext: IPipelineContext, blockName: string, index: number): void {
     const program = (pipelineContext as WebGLPipelineContext).program!;

@@ -7,7 +7,6 @@ import type { Nullable } from "../types";
 import type { Analyser } from "./analyser";
 import type { IAudioEngine } from "./Interfaces/IAudioEngine";
 
-
 /**
  * This represents the default audio engine used in babylon.
  * It is responsible to play, synchronize and analyse sounds throughout the  application.

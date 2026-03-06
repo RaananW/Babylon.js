@@ -3,16 +3,16 @@
 import type { IViewportLike } from "../../Maths/math.like";
 import type { Nullable } from "../../types";
 
-
-/**
- * Defines the interface used by objects containing a viewport (like a camera)
- */
 interface IViewportOwnerLike {
     /**
      * Gets or sets the viewport
      */
     viewport: IViewportLike;
 }
+
+/**
+ * Defines the interface used by objects containing a viewport (like a camera)
+ */
 
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -73,3 +73,5 @@ declare module "../../Engines/abstractEngine" {
         _verifyPointerLock(): void;
     }
 }
+
+export {};

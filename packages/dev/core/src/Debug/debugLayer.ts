@@ -4,6 +4,7 @@
  */
 export * from "./debugLayer.pure";
 
+import { DebugLayer } from "./debugLayer.pure";
 import { Scene } from "../scene";
 
 Object.defineProperty(Scene.prototype, "debugLayer", {

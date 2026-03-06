@@ -3,8 +3,7 @@ import type { WebRequest } from "./webRequest";
 /**
  * Class used to define a retry strategy when error happens while loading assets
  */
-export class RetryStrategy {
-}
+export class RetryStrategy {}
 
 /**
  * Function used to defines an exponential back off strategy

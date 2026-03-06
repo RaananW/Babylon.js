@@ -11,12 +11,8 @@ import { GeometryBufferRenderer } from "../Rendering/geometryBufferRenderer";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { MotionBlurConfiguration } from "../Rendering/motionBlurConfiguration";
 import type { PrePassRenderer } from "../Rendering/prePassRenderer";
-
-import "../Animations/animatable";
-import "../Rendering/geometryBufferRendererSceneComponent";
 import { serialize } from "../Misc/decorators";
 import { SerializationHelper } from "../Misc/decorators.serialization";
-
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Scene } from "../scene";
 import { ThinMotionBlurPostProcess } from "./thinMotionBlurPostProcess";

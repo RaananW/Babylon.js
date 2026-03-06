@@ -4,7 +4,7 @@
  */
 export * from "./greasedLinePluginMaterial.pure";
 
+import { GreasedLinePluginMaterial } from "./greasedLinePluginMaterial.pure";
 import { RegisterClass } from "../../Misc/typeStore";
-
 
 RegisterClass(`BABYLON.${GreasedLinePluginMaterial.GREASED_LINE_MATERIAL_NAME}`, GreasedLinePluginMaterial);

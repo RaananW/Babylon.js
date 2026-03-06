@@ -5,7 +5,6 @@ import type { NodeParticleBuildState } from "../nodeParticleBuildState";
 import type { Nullable } from "core/types";
 import type { BaseTexture } from "../../../Materials/Textures/baseTexture";
 import type { ProceduralTexture } from "../../../Materials/Textures/Procedurals/proceduralTexture";
-
 import { Texture } from "core/Materials/Textures/texture";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "../nodeParticleBlock";

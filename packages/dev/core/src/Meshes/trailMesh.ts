@@ -4,9 +4,9 @@
  */
 export * from "./trailMesh.pure";
 
+import { TrailMesh } from "./trailMesh.pure";
 import { Mesh } from "../Meshes/mesh";
-import type { Scene } from "../scene";
-
+import { Scene } from "../scene";
 
 Mesh._TrailMeshParser = (parsedMesh: any, scene: Scene) => {
     return TrailMesh.Parse(parsedMesh, scene);

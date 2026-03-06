@@ -1,11 +1,10 @@
 /**
- * Re-exports all pure types and registers them with the serialization system.
- * Import this file (or the barrel) when you need serialization support (RegisterClass).
+ * Re-exports pure implementation and applies runtime side effects.
  * Import clearBlock.pure for tree-shakeable, side-effect-free usage.
  */
 export * from "./clearBlock.pure";
 
-import { RegisterClass } from "../../../../Misc/typeStore";
 import { NodeRenderGraphClearBlock } from "./clearBlock.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 RegisterClass("BABYLON.NodeRenderGraphClearBlock", NodeRenderGraphClearBlock);

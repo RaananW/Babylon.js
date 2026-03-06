@@ -7,7 +7,6 @@ import type { Mesh } from "../../Meshes/mesh";
 import type { Node } from "../../node";
 import type { PhysicsImpostor } from "./physicsImpostor";
 
-
 declare module "../../Meshes/abstractMesh" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface AbstractMesh {
@@ -50,3 +49,5 @@ declare module "../../Meshes/abstractMesh" {
         _disposePhysicsObserver: Nullable<Observer<Node>>;
     }
 }
+
+export {};

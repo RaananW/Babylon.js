@@ -4,7 +4,6 @@ import type { InternalTexture } from "../../Materials/Textures/internalTexture";
 import type { Nullable } from "../../types";
 import type { ExternalTexture } from "../../Materials/Textures/externalTexture";
 
-
 declare module "../../Engines/abstractEngine" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface AbstractEngine {
@@ -17,3 +16,5 @@ declare module "../../Engines/abstractEngine" {
         updateVideoTexture(texture: Nullable<InternalTexture>, video: HTMLVideoElement | Nullable<ExternalTexture>, invertY: boolean): void;
     }
 }
+
+export {};

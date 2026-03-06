@@ -4,13 +4,12 @@
  */
 export * from "./thinInstanceMesh.pure";
 
+import { Nullable, DeepImmutableObject } from "../types";
 import { Mesh } from "../Meshes/mesh";
 import { VertexBuffer, Buffer } from "../Buffers/buffer";
 import { Matrix, Vector3, TmpVectors } from "../Maths/math.vector";
 import { Logger } from "../Misc/logger";
 import { BoundingInfo } from "core/Culling/boundingInfo";
-import type { Nullable, DeepImmutableObject } from "../types";
-
 
 Mesh.prototype.thinInstanceAdd = function (matrix: DeepImmutableObject<Matrix> | Array<DeepImmutableObject<Matrix>>, refresh: boolean = true): number {
     if (!this.getScene().getEngine().getCaps().instancedArrays) {
@@ -33,11 +32,9 @@ Mesh.prototype.thinInstanceAdd = function (matrix: DeepImmutableObject<Matrix> |
     return index;
 };
 
-
 Mesh.prototype.thinInstanceAddSelf = function (refresh: boolean = true): number {
     return this.thinInstanceAdd(Matrix.IdentityReadOnly, refresh);
 };
-
 
 Mesh.prototype.thinInstanceRegisterAttribute = function (kind: string, stride: number): void {
     // preserve backward compatibility
@@ -56,7 +53,6 @@ Mesh.prototype.thinInstanceRegisterAttribute = function (kind: string, stride: n
 
     this.setVerticesBuffer(this._userThinInstanceBuffersStorage.vertexBuffers[kind]!);
 };
-
 
 Mesh.prototype.thinInstanceSetMatrixAt = function (index: number, matrix: DeepImmutableObject<Matrix>, refresh: boolean = true): boolean {
     if (!this._thinInstanceDataStorage.matrixData || index >= this._thinInstanceDataStorage.instancesCount) {
@@ -82,7 +78,6 @@ Mesh.prototype.thinInstanceSetMatrixAt = function (index: number, matrix: DeepIm
     return true;
 };
 
-
 Mesh.prototype.thinInstanceSetAttributeAt = function (kind: string, index: number, value: Array<number>, refresh: boolean = true): boolean {
     // preserve backward compatibility
     if (kind === VertexBuffer.ColorKind) {
@@ -104,7 +99,6 @@ Mesh.prototype.thinInstanceSetAttributeAt = function (kind: string, index: numbe
     return true;
 };
 
-
 Object.defineProperty(Mesh.prototype, "thinInstanceCount", {
     get: function (this: Mesh) {
         return this._thinInstanceDataStorage.instancesCount;
@@ -121,7 +115,6 @@ Object.defineProperty(Mesh.prototype, "thinInstanceCount", {
     configurable: true,
 });
 
-
 Mesh.prototype._thinInstanceCreateMatrixBuffer = function (kind: string, buffer: Float32Array, staticBuffer: boolean = true): Buffer {
     const matrixBuffer = new Buffer(this.getEngine(), buffer, !staticBuffer, 16, false, true);
 
@@ -131,7 +124,6 @@ Mesh.prototype._thinInstanceCreateMatrixBuffer = function (kind: string, buffer:
 
     return matrixBuffer;
 };
-
 
 Mesh.prototype.thinInstanceSetBuffer = function (kind: string, buffer: Nullable<Float32Array>, stride: number = 0, staticBuffer: boolean = true): void {
     stride = stride || 16;
@@ -203,7 +195,6 @@ Mesh.prototype.thinInstanceSetBuffer = function (kind: string, buffer: Nullable<
     }
 };
 
-
 Mesh.prototype.thinInstanceBufferUpdated = function (kind: string): void {
     if (kind === "matrix") {
         if (this.thinInstanceAllowAutomaticStaticBufferRecreation && this._thinInstanceDataStorage.matrixBuffer && !this._thinInstanceDataStorage.matrixBuffer.isUpdatable()) {
@@ -235,7 +226,6 @@ Mesh.prototype.thinInstanceBufferUpdated = function (kind: string): void {
         }
     }
 };
-
 
 Mesh.prototype.thinInstancePartialBufferUpdate = function (kind: string, dataOrLength: Float32Array | number, offset: number): void {
     if (kind === "matrix") {
@@ -275,7 +265,6 @@ Mesh.prototype.thinInstancePartialBufferUpdate = function (kind: string, dataOrL
     }
 };
 
-
 Mesh.prototype.thinInstanceGetWorldMatrices = function (): Matrix[] {
     if (!this._thinInstanceDataStorage.matrixData || !this._thinInstanceDataStorage.matrixBuffer) {
         return [];
@@ -292,7 +281,6 @@ Mesh.prototype.thinInstanceGetWorldMatrices = function (): Matrix[] {
 
     return this._thinInstanceDataStorage.worldMatrices;
 };
-
 
 Mesh.prototype.thinInstanceRefreshBoundingInfo = function (forceRefreshParentInfo: boolean = false, applySkeleton: boolean = false, applyMorph: boolean = false) {
     if (!this._thinInstanceDataStorage.matrixData || !this._thinInstanceDataStorage.matrixBuffer) {
@@ -335,7 +323,6 @@ Mesh.prototype.thinInstanceRefreshBoundingInfo = function (forceRefreshParentInf
     this._updateBoundingInfo();
 };
 
-
 Mesh.prototype._thinInstanceRecreateBuffer = function (kind: string, staticBuffer: boolean = true) {
     if (kind === "matrix") {
         this._thinInstanceDataStorage.matrixBuffer?.dispose();
@@ -367,7 +354,6 @@ Mesh.prototype._thinInstanceRecreateBuffer = function (kind: string, staticBuffe
         this.setVerticesBuffer(this._userThinInstanceBuffersStorage.vertexBuffers[kind]!);
     }
 };
-
 
 Mesh.prototype._thinInstanceUpdateBufferSize = function (kind: string, numInstances: number = 1) {
     // preserve backward compatibility
@@ -423,7 +409,6 @@ Mesh.prototype._thinInstanceUpdateBufferSize = function (kind: string, numInstan
     }
 };
 
-
 Mesh.prototype._thinInstanceInitializeUserStorage = function () {
     if (!this._userThinInstanceBuffersStorage) {
         this._userThinInstanceBuffersStorage = {
@@ -434,7 +419,6 @@ Mesh.prototype._thinInstanceInitializeUserStorage = function () {
         };
     }
 };
-
 
 Mesh.prototype._disposeThinInstanceSpecificData = function () {
     if (this._thinInstanceDataStorage?.matrixBuffer) {

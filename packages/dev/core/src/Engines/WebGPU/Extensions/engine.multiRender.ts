@@ -4,17 +4,16 @@
  */
 export * from "./engine.multiRender.pure";
 
+import { IMultiRenderTargetOptions } from "../../../Materials/Textures/multiRenderTarget";
+import { Nullable } from "../../../types";
+import { TextureSize } from "../../../Materials/Textures/textureCreationOptions";
+import { RenderTargetWrapper } from "../../renderTargetWrapper";
+import { WebGPURenderTargetWrapper } from "../webgpuRenderTargetWrapper";
+import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Logger } from "../../../Misc/logger";
 import { Constants } from "../../constants";
 import { WebGPUEngine } from "../../webgpuEngine";
-import type { IMultiRenderTargetOptions } from "../../../Materials/Textures/multiRenderTarget";
-import type { Nullable } from "../../../types";
-import type { TextureSize } from "../../../Materials/Textures/textureCreationOptions";
-import type { RenderTargetWrapper } from "../../renderTargetWrapper";
-import type { WebGPURenderTargetWrapper } from "../webgpuRenderTargetWrapper";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-
 
 WebGPUEngine.prototype.unBindMultiColorAttachmentFramebuffer = function (
     rtWrapper: RenderTargetWrapper,
@@ -41,7 +40,6 @@ WebGPUEngine.prototype.unBindMultiColorAttachmentFramebuffer = function (
     this._cacheRenderPipeline.setMRT([]);
     this._cacheRenderPipeline.setMRTAttachments(this._mrtAttachments);
 };
-
 
 WebGPUEngine.prototype.createMultipleRenderTarget = function (size: TextureSize, options: IMultiRenderTargetOptions, initializeBuffers?: boolean): RenderTargetWrapper {
     let generateMipMaps = false;
@@ -219,7 +217,6 @@ WebGPUEngine.prototype.createMultipleRenderTarget = function (size: TextureSize,
     return rtWrapper;
 };
 
-
 WebGPUEngine.prototype.updateMultipleRenderTargetTextureSampleCount = function (rtWrapper: Nullable<RenderTargetWrapper>, samples: number): number {
     if (!rtWrapper || !rtWrapper.textures || rtWrapper.textures.length === 0 || rtWrapper.textures[0].samples === samples) {
         return samples;
@@ -256,7 +253,6 @@ WebGPUEngine.prototype.updateMultipleRenderTargetTextureSampleCount = function (
     return samples;
 };
 
-
 WebGPUEngine.prototype.generateMipMapsMultiFramebuffer = function (texture: RenderTargetWrapper): void {
     const rtWrapper = texture as WebGPURenderTargetWrapper;
 
@@ -275,11 +271,9 @@ WebGPUEngine.prototype.generateMipMapsMultiFramebuffer = function (texture: Rend
     }
 };
 
-
 WebGPUEngine.prototype.resolveMultiFramebuffer = function (texture: RenderTargetWrapper, resolveColors: boolean = true): void {
     this.resolveFramebuffer(texture, resolveColors);
 };
-
 
 WebGPUEngine.prototype.bindAttachments = function (attachments: number[]): void {
     if (attachments.length === 0 || !this._currentRenderTarget) {
@@ -294,7 +288,6 @@ WebGPUEngine.prototype.bindAttachments = function (attachments: number[]): void 
         // the render pass is not created yet so we don't need to call setMRTAttachments: it will be called as part of the render pass creation (see WebGPUEngine._startRenderTargetRenderPass)
     }
 };
-
 
 WebGPUEngine.prototype.buildTextureLayout = function (textureStatus: boolean[], backBufferLayout = false): number[] {
     const result = [];
@@ -314,11 +307,9 @@ WebGPUEngine.prototype.buildTextureLayout = function (textureStatus: boolean[], 
     return result;
 };
 
-
 WebGPUEngine.prototype.restoreSingleAttachment = function (): void {
     // not sure what to do, probably nothing... This function and restoreSingleAttachmentForRenderTarget are not called in Babylon.js so it's hard to know the use case
 };
-
 
 WebGPUEngine.prototype.restoreSingleAttachmentForRenderTarget = function (): void {
     // not sure what to do, probably nothing... This function and restoreSingleAttachment are not called in Babylon.js so it's hard to know the use case

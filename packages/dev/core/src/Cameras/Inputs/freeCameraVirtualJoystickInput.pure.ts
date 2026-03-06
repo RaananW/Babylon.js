@@ -6,7 +6,6 @@ import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
 import type { FreeCamera } from "../../Cameras/freeCamera";
 import { Matrix, Vector3 } from "../../Maths/math.vector";
 
-
 // Module augmentation to abstract virtual joystick from camera.
 declare module "../../Cameras/freeCameraInputsManager" {
     // eslint-disable-next-line @typescript-eslint/naming-convention

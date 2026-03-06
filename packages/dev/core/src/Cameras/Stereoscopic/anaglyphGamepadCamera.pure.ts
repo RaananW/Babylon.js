@@ -6,7 +6,6 @@ import type { Scene } from "../../scene";
 import { Vector3 } from "../../Maths/math.vector";
 import { _SetStereoscopicAnaglyphRigMode } from "../RigModes/stereoscopicAnaglyphRigMode";
 
-
 /**
  * Camera used to simulate anaglyphic rendering (based on GamepadCamera)
  * @see https://doc.babylonjs.com/features/featuresDeepDive/cameras/camera_introduction#anaglyph-cameras

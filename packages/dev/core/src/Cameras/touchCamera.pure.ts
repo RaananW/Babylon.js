@@ -6,7 +6,6 @@ import type { FreeCameraMouseInput } from "../Cameras/Inputs/freeCameraMouseInpu
 import type { Scene } from "../scene";
 import { Vector3 } from "../Maths/math.vector";
 
-
 /**
  * This represents a FPS type of camera controlled by touch.
  * This is like a universal camera minus the Gamepad controls.

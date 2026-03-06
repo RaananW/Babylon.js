@@ -4,18 +4,19 @@
  */
 export * from "./engine.multiview.pure";
 
+import { ICreateSceneUboOptions, Scene } from "../../scene";
+import { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
+import { RenderTargetWrapper } from "../renderTargetWrapper";
+import { AbstractEngine } from "../abstractEngine";
 import { Camera } from "../../Cameras/camera";
 import { Engine } from "../../Engines/engine";
-import { Scene } from "../../scene";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Matrix, TmpVectors } from "../../Maths/math.vector";
 import { UniformBuffer } from "../../Materials/uniformBuffer";
 import { MultiviewRenderTarget } from "../../Materials/Textures/MultiviewRenderTarget";
 import { Frustum } from "../../Maths/math.frustum";
-import type { ICreateSceneUboOptions } from "../../scene";
-import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
-import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { AbstractEngine } from "../abstractEngine";
+
+const CurrentCreateSceneUniformBuffer = Scene.prototype.createSceneUniformBuffer;
 
 function CreateMultiviewUbo(engine: AbstractEngine, name?: string, trackUBOsInFrame?: boolean) {
     const ubo = new UniformBuffer(engine, undefined, true, name, undefined, trackUBOsInFrame);
@@ -26,7 +27,6 @@ function CreateMultiviewUbo(engine: AbstractEngine, name?: string, trackUBOsInFr
     ubo.addUniform("vEyePosition", 4);
     return ubo;
 }
-
 
 Engine.prototype.createMultiviewRenderTargetTexture = function (width: number, height: number, colorTexture?: WebGLTexture, depthStencilTexture?: WebGLTexture) {
     const gl = this._gl;
@@ -69,7 +69,6 @@ Engine.prototype.createMultiviewRenderTargetTexture = function (width: number, h
     return rtWrapper;
 };
 
-
 Engine.prototype.bindMultiviewFramebuffer = function (_multiviewTexture: RenderTargetWrapper) {
     const multiviewTexture = _multiviewTexture as WebGLRenderTargetWrapper;
 
@@ -100,7 +99,6 @@ Engine.prototype.bindMultiviewFramebuffer = function (_multiviewTexture: RenderT
     }
 };
 
-
 Engine.prototype.bindSpaceWarpFramebuffer = function (_spaceWarpTexture: RenderTargetWrapper) {
     const spaceWarpTexture = _spaceWarpTexture as WebGLRenderTargetWrapper;
 
@@ -117,12 +115,9 @@ Engine.prototype.bindSpaceWarpFramebuffer = function (_spaceWarpTexture: RenderT
     }
 };
 
-
 Camera.prototype._useMultiviewToSingleView = false;
 
-
 Camera.prototype._multiviewTexture = null;
-
 
 Camera.prototype._resizeOrCreateMultiviewTexture = function (width: number, height: number) {
     if (!this._multiviewTexture) {
@@ -132,7 +127,6 @@ Camera.prototype._resizeOrCreateMultiviewTexture = function (width: number, heig
         this._multiviewTexture = new MultiviewRenderTarget(this.getScene(), { width: width, height: height });
     }
 };
-
 
 Scene.prototype._transformMatrixR = Matrix.Zero();
 

@@ -29,7 +29,32 @@ import { EffectFallbacks } from "./effectFallbacks";
 import type { Effect, IEffectCreationOptions } from "./effect";
 import { DetailMapConfiguration } from "./material.detailMapConfiguration";
 import { AddClipPlaneUniforms, BindClipPlane } from "./clipPlaneMaterialHelper";
-import { BindBonesParameters, BindFogParameters, BindLights, BindLogDepth, BindMorphTargetParameters, BindTextureMatrix, BindIBLParameters, HandleFallbacksForShadows, PrepareAttributesForBakedVertexAnimation, PrepareAttributesForBones, PrepareAttributesForInstances, PrepareAttributesForMorphTargets, PrepareDefinesForAttributes, PrepareDefinesForFrameBoundValues, PrepareDefinesForLights, PrepareDefinesForIBL, PrepareDefinesForMergedUV, PrepareDefinesForMisc, PrepareDefinesForMultiview, PrepareDefinesForOIT, PrepareDefinesForPrePass, PrepareUniformsAndSamplersForIBL, PrepareUniformsAndSamplersList, PrepareUniformLayoutForIBL } from "./materialHelper.functions";
+import {
+    BindBonesParameters,
+    BindFogParameters,
+    BindLights,
+    BindLogDepth,
+    BindMorphTargetParameters,
+    BindTextureMatrix,
+    BindIBLParameters,
+    HandleFallbacksForShadows,
+    PrepareAttributesForBakedVertexAnimation,
+    PrepareAttributesForBones,
+    PrepareAttributesForInstances,
+    PrepareAttributesForMorphTargets,
+    PrepareDefinesForAttributes,
+    PrepareDefinesForFrameBoundValues,
+    PrepareDefinesForLights,
+    PrepareDefinesForIBL,
+    PrepareDefinesForMergedUV,
+    PrepareDefinesForMisc,
+    PrepareDefinesForMultiview,
+    PrepareDefinesForOIT,
+    PrepareDefinesForPrePass,
+    PrepareUniformsAndSamplersForIBL,
+    PrepareUniformsAndSamplersList,
+    PrepareUniformLayoutForIBL,
+} from "./materialHelper.functions";
 import { SerializationHelper } from "../Misc/decorators.serialization";
 import { ShaderLanguage } from "./shaderLanguage";
 import { MaterialHelperGeometryRendering } from "./materialHelper.geometryrendering";
@@ -37,10 +62,6 @@ import { UVDefinesMixin } from "./uv.defines";
 import { ImageProcessingMixin } from "./imageProcessing";
 
 /* eslint-disable @typescript-eslint/naming-convention */
-
-
-
-
 
 const onCreatedEffectParameters = { effect: null as unknown as Effect, subMesh: null as unknown as Nullable<SubMesh> };
 
