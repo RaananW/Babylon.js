@@ -24,18 +24,6 @@ import type { IParticleSystem } from "core/Particles/IParticleSystem";
 import { Logger } from "../../Misc/logger";
 import { ObjectRenderer } from "core/Rendering/objectRenderer";
 
-declare module "../effect" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface Effect {
-        /**
-         * Sets a depth stencil texture from a render target on the engine to be used in the shader.
-         * @param channel Name of the sampler variable.
-         * @param texture Texture to set.
-         */
-        setDepthStencilTexture(channel: string, texture: Nullable<RenderTargetTexture>): void;
-    }
-}
-
 /**
  * Options for the RenderTargetTexture constructor
  */

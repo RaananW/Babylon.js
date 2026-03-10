@@ -10,6 +10,43 @@ import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
 import { PrePassRenderer } from "./prePassRenderer";
 import { Logger } from "../Misc/logger";
+import type { PrePassRenderTarget } from "../Materials/Textures/prePassRenderTarget";
+
+declare module "../scene" {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    export interface Scene {
+        /** @internal (Backing field) */
+        _prePassRenderer: Nullable<PrePassRenderer>;
+
+        /**
+         * Gets or Sets the current prepass renderer associated to the scene.
+         */
+        prePassRenderer: Nullable<PrePassRenderer>;
+
+        /**
+         * Enables the prepass and associates it with the scene
+         * @returns the PrePassRenderer
+         */
+        enablePrePassRenderer(): Nullable<PrePassRenderer>;
+
+        /**
+         * Disables the prepass associated with the scene
+         */
+        disablePrePassRenderer(): void;
+    }
+}
+
+declare module "../Materials/Textures/renderTargetTexture" {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    export interface RenderTargetTexture {
+        /**
+         * Gets or sets a boolean indicating that the prepass renderer should not be used with this render target
+         */
+        noPrePassRenderer: boolean;
+        /** @internal */
+        _prePassRenderTarget: Nullable<PrePassRenderTarget>;
+    }
+}
 
 Object.defineProperty(Scene.prototype, "prePassRenderer", {
     get: function (this: Scene) {

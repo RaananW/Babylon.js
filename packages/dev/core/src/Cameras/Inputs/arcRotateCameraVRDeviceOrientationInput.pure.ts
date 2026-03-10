@@ -6,16 +6,6 @@ import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
 import { ToolsBackCompatCameraNoPreventDefault, ToolsWarn, ToolsError } from "../../Misc/tools.pure";
 
 // Module augmentation to abstract orientation inputs from camera.
-declare module "../../Cameras/arcRotateCameraInputsManager" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface ArcRotateCameraInputsManager {
-        /**
-         * Add orientation input support to the input manager.
-         * @returns the current input manager
-         */
-        addVRDeviceOrientation(): ArcRotateCameraInputsManager;
-    }
-}
 
 /**
  * Manage the device orientation inputs (gyroscope) to control an arc rotate camera.

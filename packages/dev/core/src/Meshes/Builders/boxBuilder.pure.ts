@@ -4,7 +4,7 @@ import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
 import { Matrix, Vector4 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
-import { Mesh } from "../mesh.pure";
+import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 import { CreateGroundVertexData } from "./groundBuilder.pure";
@@ -256,7 +256,7 @@ export function CreateBox(
 ): Mesh {
     const box = new Mesh(name, scene);
 
-    options.sideOrientation = Mesh._GetDefaultSideOrientation(options.sideOrientation);
+    options.sideOrientation = Mesh_GetDefaultSideOrientation(options.sideOrientation);
     box._originalBuilderSideOrientation = options.sideOrientation;
 
     const vertexData = CreateBoxVertexData(options);

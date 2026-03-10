@@ -7,6 +7,33 @@ export * from "./observableCoroutine.pure";
 import { Observable } from "./observable";
 import { AsyncCoroutine, CoroutineStep, CoroutineScheduler, inlineScheduler, runCoroutineAsync } from "./coroutine";
 
+declare module "./observable" {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    export interface Observable<T> {
+        /**
+         * Internal observable-based coroutine scheduler instance.
+         */
+        _coroutineScheduler?: CoroutineScheduler<void>;
+
+        /**
+         * Internal disposal method for observable-based coroutine scheduler instance.
+         */
+        _coroutineSchedulerDispose?: () => void;
+
+        /**
+         * Runs a coroutine asynchronously on this observable
+         * @param coroutine the iterator resulting from having started the coroutine
+         * @returns a promise which will be resolved when the coroutine finishes or rejected if the coroutine is cancelled
+         */
+        runCoroutineAsync(coroutine: AsyncCoroutine<void>): Promise<void>;
+
+        /**
+         * Cancels all coroutines currently running on this observable
+         */
+        cancelAllCoroutines(): void;
+    }
+}
+
 function CreateObservableScheduler<T>(observable: Observable<any>): { scheduler: CoroutineScheduler<T>; dispose: () => void } {
     const coroutines = new Array<AsyncCoroutine<T>>();
     const onSteps = new Array<(stepResult: CoroutineStep<T>) => void>();

@@ -31,20 +31,6 @@ import { GetExponentOfTwo } from "../Misc/tools.functions";
 import { ThinHighlightLayer } from "./thinHighlightLayer";
 import { ThinGlowBlurPostProcess } from "./thinEffectLayer";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface Scene {
-        /**
-         * Return a the first highlight layer of the scene with a given name.
-         * @param name The name of the highlight layer to look for.
-         * @returns The highlight layer if found otherwise null.
-         */
-        getHighlightLayerByName(name: string): Nullable<HighlightLayer>;
-    }
-}
-
 interface IBlurPostProcess extends PostProcess {
     kernel: number;
 }

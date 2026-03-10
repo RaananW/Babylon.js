@@ -17,7 +17,7 @@ import { PickingInfo } from "../../Collisions/pickingInfo";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { UtilityLayerRenderer } from "../../Rendering/utilityLayerRenderer";
 import type { WebXRAbstractMotionController } from "../motionController/webXRAbstractMotionController";
-import { BoundingSphere , BoundingSphereIntersects } from "../../Culling/boundingSphere.pure";
+import { BoundingSphere, BoundingSphereIntersects } from "../../Culling/boundingSphere.pure";
 import type { TransformNode } from "../../Meshes/transformNode";
 import { StandardMaterial } from "../../Materials/standardMaterial.pure";
 import { Color3, Color3Black } from "../../Maths/math.color.pure";
@@ -26,6 +26,7 @@ import type { Material } from "../../Materials/material";
 import { Animation } from "../../Animations/animation.pure";
 import { QuadraticEase, EasingFunction } from "../../Animations/easing";
 import { Logger } from "core/Misc/logger";
+import { RayCreateFromToToRef } from "../../Culling/ray.core";
 
 // side effects
 
@@ -1045,7 +1046,7 @@ export class WebXRNearInteraction extends WebXRAbstractFeature {
                 distance = tmp;
 
                 // ray between the sphere center and the point on the mesh
-                Ray.CreateFromToToRef(sphere.center, tmpVec, tmpRay);
+                RayCreateFromToToRef(sphere.center, tmpVec, tmpRay);
                 tmpRay.length = distance * 2;
                 intersectionInfo = tmpRay.intersectsMesh(mesh);
 

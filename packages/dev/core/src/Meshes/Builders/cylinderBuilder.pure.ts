@@ -2,7 +2,7 @@
 
 import { Vector4, Vector3, Vector2 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
-import { Mesh } from "../mesh.pure";
+import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import { Scene } from "../../scene.pure";
 import type { Nullable } from "../../types";
@@ -352,7 +352,7 @@ export function CreateCylinder(
 ): Mesh {
     const cylinder = new Mesh(name, scene);
 
-    options.sideOrientation = Mesh._GetDefaultSideOrientation(options.sideOrientation);
+    options.sideOrientation = Mesh_GetDefaultSideOrientation(options.sideOrientation);
     cylinder._originalBuilderSideOrientation = options.sideOrientation;
 
     const vertexData = CreateCylinderVertexData(options);

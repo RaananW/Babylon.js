@@ -9,6 +9,21 @@ import { SceneComponentConstants } from "../../sceneComponent";
 import { Scene } from "../../scene";
 import { PostProcessRenderPipelineManager } from "./postProcessRenderPipelineManager";
 
+declare module "../../scene" {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    export interface Scene {
+        /** @internal (Backing field) */
+        _postProcessRenderPipelineManager: PostProcessRenderPipelineManager;
+
+        /**
+         * Gets the postprocess render pipeline manager
+         * @see https://doc.babylonjs.com/features/featuresDeepDive/postProcesses/postProcessRenderPipeline
+         * @see https://doc.babylonjs.com/features/featuresDeepDive/postProcesses/defaultRenderingPipeline
+         */
+        readonly postProcessRenderPipelineManager: PostProcessRenderPipelineManager;
+    }
+}
+
 Object.defineProperty(Scene.prototype, "postProcessRenderPipelineManager", {
     get: function (this: Scene) {
         if (!this._postProcessRenderPipelineManager) {

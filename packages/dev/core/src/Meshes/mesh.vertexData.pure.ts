@@ -18,8 +18,6 @@ import type { Mesh } from "../Meshes/mesh";
 import { SubMesh } from "./subMesh";
 
 /* eslint-disable jsdoc/require-returns-check */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 /**
  * Define an interface for all classes that will get and set the data on vertices
  */
@@ -2447,33 +2445,4 @@ export function VertexDataImportVertexData(parsedVertexData: any, geometry: Geom
     const vertexData = VertexDataParse(parsedVertexData);
 
     geometry.setAllVerticesData(vertexData, parsedVertexData.updatable);
-}
-
-declare module "./mesh.vertexData.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
-    namespace VertexData {
-        export let CreateRibbon: typeof VertexDataCreateRibbon;
-        export let CreateBox: typeof VertexDataCreateBox;
-        export let CreateTiledBox: typeof VertexDataCreateTiledBox;
-        export let CreateTiledPlane: typeof VertexDataCreateTiledPlane;
-        export let CreateSphere: typeof VertexDataCreateSphere;
-        export let CreateCylinder: typeof VertexDataCreateCylinder;
-        export let CreateTorus: typeof VertexDataCreateTorus;
-        export let CreateLineSystem: typeof VertexDataCreateLineSystem;
-        export let CreateDashedLines: typeof VertexDataCreateDashedLines;
-        export let CreateGround: typeof VertexDataCreateGround;
-        export let CreateTiledGround: typeof VertexDataCreateTiledGround;
-        export let CreateGroundFromHeightMap: typeof VertexDataCreateGroundFromHeightMap;
-        export let CreatePlane: typeof VertexDataCreatePlane;
-        export let CreateDisc: typeof VertexDataCreateDisc;
-        export let CreatePolygon: typeof VertexDataCreatePolygon;
-        export let CreateIcoSphere: typeof VertexDataCreateIcoSphere;
-        export let CreatePolyhedron: typeof VertexDataCreatePolyhedron;
-        export let CreateCapsule: typeof VertexDataCreateCapsule;
-        export let CreateTorusKnot: typeof VertexDataCreateTorusKnot;
-        export let ComputeNormals: typeof VertexDataComputeNormals;
-        export let _ComputeSides: typeof VertexData_ComputeSides;
-        export let Parse: typeof VertexDataParse;
-        export let ImportVertexData: typeof VertexDataImportVertexData;
-    }
 }

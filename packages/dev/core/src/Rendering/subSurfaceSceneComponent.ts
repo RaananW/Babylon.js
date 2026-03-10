@@ -12,6 +12,30 @@ import { SubSurfaceConfiguration } from "./subSurfaceConfiguration";
 import { Color3 } from "../Maths/math.color";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
 
+declare module "../scene" {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    export interface Scene {
+        /** @internal (Backing field) */
+        _subSurfaceConfiguration: Nullable<SubSurfaceConfiguration>;
+
+        /**
+         * Gets or Sets the current prepass renderer associated to the scene.
+         */
+        subSurfaceConfiguration: Nullable<SubSurfaceConfiguration>;
+
+        /**
+         * Enables the subsurface effect for prepass
+         * @returns the SubSurfaceConfiguration
+         */
+        enableSubSurfaceForPrePass(): Nullable<SubSurfaceConfiguration>;
+
+        /**
+         * Disables the subsurface effect for prepass
+         */
+        disableSubSurfaceForPrePass(): void;
+    }
+}
+
 // Adds the parser to the scene parsers.
 AddParser(SceneComponentConstants.NAME_SUBSURFACE, (parsedData: any, scene: Scene) => {
     // Diffusion profiles

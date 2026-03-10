@@ -10,7 +10,8 @@ import type { Material } from "../Materials/material";
 import { EngineStore } from "../Engines/engineStore";
 import { StandardMaterial } from "../Materials/standardMaterial.pure";
 import type { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "../Physics/v1/IPhysicsEnginePlugin";
-import { PhysicsConstraintAxis, PhysicsConstraintAxisLimitMode, type IPhysicsEnginePluginV2, type PhysicsMassProperties } from "../Physics/v2/IPhysicsEnginePlugin";
+import { PhysicsConstraintAxis, PhysicsConstraintAxisLimitMode } from "../Physics/v2/IPhysicsEnginePlugin";
+import type { IPhysicsEnginePluginV2, PhysicsMassProperties } from "../Physics/v2/IPhysicsEnginePlugin";
 import { PhysicsImpostor } from "../Physics/v1/physicsImpostor.pure";
 import { UtilityLayerRenderer } from "../Rendering/utilityLayerRenderer";
 import { CreateCylinder } from "../Meshes/Builders/cylinderBuilder.pure";
@@ -24,7 +25,6 @@ import type { PhysicsConstraint } from "../Physics/v2/physicsConstraint";
 import { AxesViewer } from "./axesViewer";
 import { TransformNode } from "../Meshes/transformNode";
 import { Epsilon } from "../Maths/math.constants";
-
 
 /**
  * Used to show the physics impostor around the specific mesh

@@ -1,7 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
 import { serialize } from "../Misc/decorators";
-import type { Nullable } from "../types";
 import { Scene } from "../scene.pure";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
@@ -20,20 +19,6 @@ import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/
 import { GetExponentOfTwo } from "../Misc/tools.functions";
 import { ThinGlowLayer } from "./thinGlowLayer";
 import type { ThinBlurPostProcess } from "core/PostProcesses/thinBlurPostProcess";
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface Scene {
-        /**
-         * Return the first glow layer of the scene with a given name.
-         * @param name The name of the glow layer to look for.
-         * @returns The glow layer if found otherwise null.
-         */
-        getGlowLayerByName(name: string): Nullable<GlowLayer>;
-    }
-}
 
 /**
  * Glow layer options. This helps customizing the behaviour

@@ -10,6 +10,7 @@ import type { FlowGraphTypes } from "core/FlowGraph/flowGraphRichTypes";
 import { getRichTypeByAnimationType, getRichTypeByFlowGraphType, RichTypeAny, RichTypeNumber } from "core/FlowGraph/flowGraphRichTypes";
 import { Animation } from "core/Animations/animation";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+import { AnimationCreateAnimation } from "../../../../Animations/animation.pure";
 
 /**
  * Configuration for the interpolation block.
@@ -162,12 +163,12 @@ export class FlowGraphInterpolationBlock<T> extends FlowGraphBlock {
             return customBuildAnimation(null, null, context)(keys, 60, type.animationType, easingFunction);
         }
         if (typeof propertyName === "string") {
-            const animation = Animation.CreateAnimation(propertyName, type.animationType, 60, easingFunction);
+            const animation = AnimationCreateAnimation(propertyName, type.animationType, 60, easingFunction);
             animation.setKeys(keys);
             return [animation];
         } else {
             const animations = propertyName.map((name) => {
-                const animation = Animation.CreateAnimation(name, type.animationType, 60, easingFunction);
+                const animation = AnimationCreateAnimation(name, type.animationType, 60, easingFunction);
                 animation.setKeys(keys);
                 return animation;
             });

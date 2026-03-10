@@ -5,7 +5,7 @@ import type { Scene } from "../../scene";
 import type { Vector3, Vector2, Vector4 } from "../../Maths/math.vector";
 import { TmpVectors } from "../../Maths/math.vector.pure";
 import type { Color4 } from "../../Maths/math.color";
-import { Mesh, _CreationDataStorage } from "../mesh.pure";
+import { Mesh, _CreationDataStorage, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { VertexData, VertexDataComputeNormals, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
@@ -318,7 +318,7 @@ export function CreateRibbon(
     const pathArray = options.pathArray;
     const closeArray = options.closeArray;
     const closePath = options.closePath;
-    const sideOrientation = Mesh._GetDefaultSideOrientation(options.sideOrientation);
+    const sideOrientation = Mesh_GetDefaultSideOrientation(options.sideOrientation);
     const instance = options.instance;
     const updatable = options.updatable;
 

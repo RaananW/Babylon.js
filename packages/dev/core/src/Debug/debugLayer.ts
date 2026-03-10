@@ -7,6 +7,23 @@ export * from "./debugLayer.pure";
 import { DebugLayer } from "./debugLayer.pure";
 import { Scene } from "../scene";
 
+declare module "../scene" {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    export interface Scene {
+        /**
+         * @internal
+         * Backing field
+         */
+        _debugLayer?: DebugLayer;
+
+        /**
+         * Gets the debug layer (aka Inspector) associated with the scene
+         * @see https://doc.babylonjs.com/toolsAndResources/inspector
+         */
+        debugLayer: DebugLayer;
+    }
+}
+
 Object.defineProperty(Scene.prototype, "debugLayer", {
     get: function (this: Scene) {
         if (!this._debugLayer) {

@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-import { _WarnImport } from "./devTools";
 import type { ThinEngine } from "../Engines/thinEngine";
 import { Constants } from "../Engines/constants";
 import { EffectRenderer, EffectWrapper } from "../Materials/effectRenderer.pure";

@@ -3,7 +3,7 @@
 import type { Scene } from "../../scene";
 import { Vector4 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
-import { Mesh } from "../mesh.pure";
+import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexData, VertexDataComputeNormals, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import type { Nullable } from "../../types";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
@@ -602,7 +602,7 @@ export function CreatePolyhedron(
 ): Mesh {
     const polyhedron = new Mesh(name, scene);
 
-    options.sideOrientation = Mesh._GetDefaultSideOrientation(options.sideOrientation);
+    options.sideOrientation = Mesh_GetDefaultSideOrientation(options.sideOrientation);
     polyhedron._originalBuilderSideOrientation = options.sideOrientation;
 
     const vertexData = CreatePolyhedronVertexData(options);

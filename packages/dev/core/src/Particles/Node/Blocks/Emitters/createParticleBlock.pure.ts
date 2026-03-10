@@ -5,8 +5,6 @@ import { NodeParticleBlock } from "../../nodeParticleBlock";
 import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint";
 import { ParticleSystem } from "core/Particles/particleSystem";
 import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
-import type { _IExecutionQueueItem } from "core/Particles/Queue/executionQueue";
-import { _RemoveFromQueue } from "core/Particles/Queue/executionQueue";
 import type { Particle } from "core/Particles/particle";
 import type { ThinParticleSystem } from "core/Particles/thinParticleSystem";
 import { Color4 } from "core/Maths/math.color";

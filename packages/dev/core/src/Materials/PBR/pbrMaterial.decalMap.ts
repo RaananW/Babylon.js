@@ -6,7 +6,20 @@ export * from "./pbrMaterial.decalMap.pure";
 
 import { DecalMapConfiguration } from "../material.decalMapConfiguration";
 import { PBRBaseMaterial } from "./pbrBaseMaterial";
+import type { Nullable } from "core/types";
 
+declare module "./pbrBaseMaterial" {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    export interface PBRBaseMaterial {
+        /** @internal */
+        _decalMap: Nullable<DecalMapConfiguration>;
+
+        /**
+         * Defines the decal map parameters for the material.
+         */
+        decalMap: Nullable<DecalMapConfiguration>;
+    }
+}
 
 Object.defineProperty(PBRBaseMaterial.prototype, "decalMap", {
     get: function (this: PBRBaseMaterial) {

@@ -10,31 +10,6 @@ import { Scene } from "../scene.pure";
 import { Constants } from "../Engines/constants";
 import type { UniformBuffer } from "../Materials/uniformBuffer";
 import type { IAssetContainer } from "core/IAssetContainer";
-
-declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface Scene {
-        /**
-         * The list of reflection probes added to the scene
-         * @see https://doc.babylonjs.com/features/featuresDeepDive/environment/reflectionProbes
-         */
-        reflectionProbes: Array<ReflectionProbe>;
-
-        /**
-         * Removes the given reflection probe from this scene.
-         * @param toRemove The reflection probe to remove
-         * @returns The index of the removed reflection probe
-         */
-        removeReflectionProbe(toRemove: ReflectionProbe): number;
-
-        /**
-         * Adds the given reflection probe to this scene.
-         * @param newReflectionProbe The reflection probe to add
-         */
-        addReflectionProbe(newReflectionProbe: ReflectionProbe): void;
-    }
-}
-
 /**
  * Class used to generate realtime reflection / refraction cube textures
  * @see https://doc.babylonjs.com/features/featuresDeepDive/environment/reflectionProbes
@@ -363,11 +338,4 @@ export function ReflectionProbeParse(parsedReflectionProbe: any, scene: Scene, r
     }
 
     return reflectionProbe;
-}
-
-declare module "./reflectionProbe.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
-    namespace ReflectionProbe {
-        export { ReflectionProbeParse as Parse };
-    }
 }

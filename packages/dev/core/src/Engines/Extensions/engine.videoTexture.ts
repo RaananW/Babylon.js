@@ -8,6 +8,20 @@ import { InternalTexture } from "../../Materials/Textures/internalTexture";
 import { Nullable } from "../../types";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { Constants } from "../constants";
+import type { ExternalTexture } from "../../Materials/Textures/externalTexture";
+
+declare module "../../Engines/abstractEngine" {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    export interface AbstractEngine {
+        /**
+         * Update a video texture
+         * @param texture defines the texture to update
+         * @param video defines the video element to use
+         * @param invertY defines if data must be stored with Y axis inverted
+         */
+        updateVideoTexture(texture: Nullable<InternalTexture>, video: HTMLVideoElement | Nullable<ExternalTexture>, invertY: boolean): void;
+    }
+}
 
 ThinEngine.prototype.updateVideoTexture = function (texture: Nullable<InternalTexture>, video: HTMLVideoElement, invertY: boolean): void {
     if (!texture || texture._isDisabled) {

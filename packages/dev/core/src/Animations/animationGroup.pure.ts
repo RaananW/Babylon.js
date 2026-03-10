@@ -1,5 +1,5 @@
 import type { Animatable } from "./animatable.core";
-import { Animation } from "./animation.pure";
+import { Animation, AnimationParse } from "./animation.pure";
 import type { IMakeAnimationAdditiveOptions } from "./animation";
 import type { IAnimationKey } from "./animationKey";
 
@@ -1161,7 +1161,7 @@ export function AnimationGroupParse(parsedAnimationGroup: any, scene: Scene, tar
     const animationGroup = new AnimationGroup(parsedAnimationGroup.name, scene, parsedAnimationGroup.weight, parsedAnimationGroup.playOrder);
     for (let i = 0; i < parsedAnimationGroup.targetedAnimations.length; i++) {
         const targetedAnimation = parsedAnimationGroup.targetedAnimations[i];
-        const animation = Animation.Parse(targetedAnimation.animation);
+        const animation = AnimationParse(targetedAnimation.animation);
 
         const target = targetLookup
             ? targetLookup(targetedAnimation)

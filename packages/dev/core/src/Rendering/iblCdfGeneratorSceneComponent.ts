@@ -10,6 +10,33 @@ import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
 import { IblCdfGenerator } from "./iblCdfGenerator";
 
+declare module "../scene" {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    export interface Scene {
+        /** @internal (Backing field) */
+        _iblCdfGenerator: Nullable<IblCdfGenerator>;
+
+        /**
+         * Gets or Sets the current CDF generator associated to the scene.
+         * The CDF (cumulative distribution function) generator creates CDF maps
+         * for a given IBL texture that can then be used for more efficient
+         * importance sampling.
+         */
+        iblCdfGenerator: Nullable<IblCdfGenerator>;
+
+        /**
+         * Enables a IblCdfGenerator and associates it with the scene.
+         * @returns the IblCdfGenerator
+         */
+        enableIblCdfGenerator(): Nullable<IblCdfGenerator>;
+
+        /**
+         * Disables the GeometryBufferRender associated with the scene
+         */
+        disableIblCdfGenerator(): void;
+    }
+}
+
 Object.defineProperty(Scene.prototype, "iblCdfGenerator", {
     get: function (this: Scene) {
         return this._iblCdfGenerator;

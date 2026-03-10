@@ -24,41 +24,6 @@ import { Constants } from "../Engines/constants";
 import { _RetryWithInterval } from "../Misc/timingTools.pure";
 import { Logger } from "../Misc/logger";
 
-declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface Scene {
-        /** @internal (Backing field) */
-        _boundingBoxRenderer: BoundingBoxRenderer;
-
-        /** @internal (Backing field) */
-        _forceShowBoundingBoxes: boolean;
-
-        /**
-         * Gets or sets a boolean indicating if all bounding boxes must be rendered
-         */
-        forceShowBoundingBoxes: boolean;
-
-        /**
-         * Gets the bounding box renderer associated with the scene
-         * @returns a BoundingBoxRenderer
-         */
-        getBoundingBoxRenderer(): BoundingBoxRenderer;
-    }
-}
-
-declare module "../Meshes/abstractMesh" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface AbstractMesh {
-        /** @internal (Backing field) */
-        _showBoundingBox: boolean;
-
-        /**
-         * Gets or sets a boolean indicating if the bounding box must be rendered as well (false by default)
-         */
-        showBoundingBox: boolean;
-    }
-}
-
 const TempMatrix = Matrix.Identity();
 const TempVec1 = new Vector3();
 const TempVec2 = new Vector3();

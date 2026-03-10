@@ -3,7 +3,7 @@
 import type { Scene } from "../../scene";
 import type { Vector4 } from "../../Maths/math.vector";
 import { Vector3 } from "../../Maths/math.vector.pure";
-import { Mesh } from "../mesh.pure";
+import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { CreateRibbon } from "./ribbonBuilder.pure";
 import type { Nullable } from "../../types";
 
@@ -52,7 +52,7 @@ export function CreateLathe(
     const tessellation = options.tessellation || 64;
     const clip = options.clip || 0;
     const updatable = options.updatable;
-    const sideOrientation = Mesh._GetDefaultSideOrientation(options.sideOrientation);
+    const sideOrientation = Mesh_GetDefaultSideOrientation(options.sideOrientation);
     const cap = options.cap || Mesh.NO_CAP;
     const pi2 = Math.PI * 2;
     const paths = [];

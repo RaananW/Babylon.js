@@ -9,6 +9,39 @@ import { Nullable } from "../../../types";
 import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
 
+declare module "../../abstractEngine" {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    export interface AbstractEngine {
+        /** @internal */
+        _readTexturePixels(
+            texture: InternalTexture,
+            width: number,
+            height: number,
+            faceIndex?: number,
+            level?: number,
+            buffer?: Nullable<ArrayBufferView>,
+            flushRenderer?: boolean,
+            noDataConversion?: boolean,
+            x?: number,
+            y?: number
+        ): Promise<ArrayBufferView>;
+
+        /** @internal */
+        _readTexturePixelsSync(
+            texture: InternalTexture,
+            width: number,
+            height: number,
+            faceIndex?: number,
+            level?: number,
+            buffer?: Nullable<ArrayBufferView>,
+            flushRenderer?: boolean,
+            noDataConversion?: boolean,
+            x?: number,
+            y?: number
+        ): ArrayBufferView;
+    }
+}
+
 // eslint-disable-next-line @typescript-eslint/promise-function-async
 ThinWebGPUEngine.prototype._readTexturePixels = function (
     texture: InternalTexture,

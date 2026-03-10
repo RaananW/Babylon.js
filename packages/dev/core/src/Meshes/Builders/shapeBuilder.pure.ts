@@ -4,7 +4,7 @@ import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
 import type { Vector4 } from "../../Maths/math.vector";
 import { Vector3, TmpVectors, Matrix } from "../../Maths/math.vector.pure";
-import { Mesh } from "../mesh.pure";
+import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { CreateRibbon } from "./ribbonBuilder.pure";
 import { Path3D } from "../../Maths/math.path.pure";
 
@@ -60,7 +60,7 @@ export function ExtrudeShape(
     const rotation = options.rotation || 0;
     const cap = options.cap === 0 ? 0 : options.cap || Mesh.NO_CAP;
     const updatable = options.updatable;
-    const sideOrientation = Mesh._GetDefaultSideOrientation(options.sideOrientation);
+    const sideOrientation = Mesh_GetDefaultSideOrientation(options.sideOrientation);
     const instance = options.instance || null;
     const invertUV = options.invertUV || false;
     const closeShape = options.closeShape || false;
@@ -166,7 +166,7 @@ export function ExtrudeShapeCustom(
     const updatable = options.updatable;
     const firstNormal = options.firstNormal || null;
     const adjustFrame = options.adjustFrame || false;
-    const sideOrientation = Mesh._GetDefaultSideOrientation(options.sideOrientation);
+    const sideOrientation = Mesh_GetDefaultSideOrientation(options.sideOrientation);
     const instance = options.instance;
     const invertUV = options.invertUV || false;
     const capFunction = options.capFunction || null;

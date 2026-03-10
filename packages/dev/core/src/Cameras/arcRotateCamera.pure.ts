@@ -7,7 +7,7 @@ import type { Scene } from "../scene";
 import { Matrix, Vector3, Vector2, TmpVectors, Quaternion } from "../Maths/math.vector.pure";
 import { Clamp } from "../Maths/math.scalar.functions";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
-import { Mesh } from "../Meshes/mesh.pure";
+import { MeshMinMax, MeshCenter } from "../Meshes/mesh.pure";
 import { AutoRotationBehavior } from "../Behaviors/Cameras/autoRotationBehavior";
 import { BouncingBehavior } from "../Behaviors/Cameras/bouncingBehavior";
 import { FramingBehavior } from "../Behaviors/Cameras/framingBehavior";
@@ -1440,7 +1440,7 @@ export class ArcRotateCamera extends TargetCamera {
     public zoomOn(meshes?: AbstractMesh[], doNotUpdateMaxZ = false): void {
         meshes = meshes || this.getScene().meshes;
 
-        const minMaxVector = Mesh.MinMax(meshes);
+        const minMaxVector = MeshMinMax(meshes);
         let distance = this._calculateLowerRadiusFromModelBoundingSphere(minMaxVector.min, minMaxVector.max);
 
         // If there are defined limits, we need to take them into account
@@ -1472,7 +1472,7 @@ export class ArcRotateCamera extends TargetCamera {
         if ((<any>meshesOrMinMaxVectorAndDistance).min === undefined) {
             // meshes
             const meshes = <AbstractMesh[]>meshesOrMinMaxVectorAndDistance || this.getScene().meshes;
-            meshesOrMinMaxVector = Mesh.MinMax(meshes);
+            meshesOrMinMaxVector = MeshMinMax(meshes);
             distance = Vector3.Distance(meshesOrMinMaxVector.min, meshesOrMinMaxVector.max);
         } else {
             //minMaxVector and distance
@@ -1481,7 +1481,7 @@ export class ArcRotateCamera extends TargetCamera {
             distance = minMaxVectorAndDistance.distance;
         }
 
-        this._target = Mesh.Center(meshesOrMinMaxVector);
+        this._target = MeshCenter(meshesOrMinMaxVector);
 
         if (!doNotUpdateMaxZ) {
             this.maxZ = distance * 2;

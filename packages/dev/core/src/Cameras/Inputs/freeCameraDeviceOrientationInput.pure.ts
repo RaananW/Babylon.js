@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../../types";
 import type { ICameraInput } from "../../Cameras/cameraInputsManager";
 import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
 import type { FreeCamera } from "../../Cameras/freeCamera";
@@ -9,21 +8,6 @@ import { ToolsToRadians, ToolsSmoothAngleChange, ToolsWarn, ToolsError } from ".
 import { Observable } from "../../Misc/observable";
 
 // Module augmentation to abstract orientation inputs from camera.
-declare module "../../Cameras/freeCameraInputsManager" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface FreeCameraInputsManager {
-        /**
-         * @internal
-         */
-        _deviceOrientationInput: Nullable<FreeCameraDeviceOrientationInput>;
-        /**
-         * Add orientation input support to the input manager.
-         * @param smoothFactor deviceOrientation smoothing. 0: no smoothing, 1: new data ignored, 0.9 recommended for smoothing
-         * @returns the current input manager
-         */
-        addDeviceOrientation(smoothFactor?: number): FreeCameraInputsManager;
-    }
-}
 
 /**
  * Takes information about the orientation of the device as reported by the deviceorientation event to orient the camera.

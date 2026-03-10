@@ -4,7 +4,7 @@ import type { Scene } from "../../scene";
 import type { Vector3 } from "../../Maths/math.vector";
 import { Vector2, Vector4 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
-import { Mesh } from "../mesh.pure";
+import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import { PolygonMeshBuilder } from "../polygonMesh.pure";
 import type { FloatArray, IndicesArray, Nullable } from "../../types";
@@ -164,7 +164,7 @@ export function CreatePolygon(
     scene: Nullable<Scene> = null,
     earcutInjection = earcut
 ): Mesh {
-    options.sideOrientation = Mesh._GetDefaultSideOrientation(options.sideOrientation);
+    options.sideOrientation = Mesh_GetDefaultSideOrientation(options.sideOrientation);
     const shape = options.shape;
     const holes = options.holes || [];
     const depth = options.depth || 0;

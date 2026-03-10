@@ -3,7 +3,7 @@
 import type { Scene } from "../../scene";
 import type { Vector4 } from "../../Maths/math.vector";
 import { Vector3, Vector2 } from "../../Maths/math.vector.pure";
-import { Mesh } from "../mesh.pure";
+import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import type { Nullable } from "../../types";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
@@ -411,7 +411,7 @@ export function CreateIcoSphere(
 ): Mesh {
     const sphere = new Mesh(name, scene);
 
-    options.sideOrientation = Mesh._GetDefaultSideOrientation(options.sideOrientation);
+    options.sideOrientation = Mesh_GetDefaultSideOrientation(options.sideOrientation);
     sphere._originalBuilderSideOrientation = options.sideOrientation;
 
     const vertexData = CreateIcoSphereVertexData(options);

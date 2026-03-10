@@ -13,9 +13,10 @@ import { Observable } from "../Misc/observable";
 import type { RenderTargetCreationOptions, TextureSize, DepthTextureCreationOptions, InternalTextureCreationOptions } from "../Materials/Textures/textureCreationOptions";
 import type { IPipelineContext } from "./IPipelineContext";
 import type { IColor3Like, IColor4Like, IViewportLike } from "../Maths/math.like";
+import type { ISceneLike } from "./abstractEngine";
 import { Logger } from "../Misc/logger";
 import { Constants } from "./constants";
-import { AbstractEngine, type ISceneLike } from "./abstractEngine";
+import { AbstractEngine } from "./abstractEngine";
 import { ThinEngine } from "./thinEngine";
 import type { IWebRequest } from "../Misc/interfaces/iWebRequest";
 import { EngineStore } from "./engineStore";
@@ -65,13 +66,6 @@ import { PerfCounter } from "../Misc/perfCounter";
 import { DecodeBase64UrlToBinary } from "../Misc/fileTools.pure";
 
 // REVIEW: add a flag to effect to prevent multiple compilations of the same shader.
-declare module "../Materials/effect" {
-    /** internal */
-    export interface Effect {
-        /** internal */
-        _checkedNonFloatVertexBuffers?: boolean;
-    }
-}
 
 declare const _native: INative;
 

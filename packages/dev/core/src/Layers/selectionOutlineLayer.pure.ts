@@ -1,7 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
 import { serialize, serializeAsColor3 } from "../Misc/decorators";
-import type { Nullable } from "../types";
 import { Scene } from "../scene.pure";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
@@ -14,18 +13,6 @@ import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/
 import type { IThinSelectionOutlineLayerOptions } from "./thinSelectionOutlineLayer";
 import { ThinSelectionOutlineLayer } from "./thinSelectionOutlineLayer";
 import type { Color3 } from "../Maths/math.color";
-
-declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    export interface Scene {
-        /**
-         * Return a the first selection outline layer of the scene with a given name.
-         * @param name The name of the selection outline layer to look for.
-         * @returns The selection outline layer if found otherwise null.
-         */
-        getSelectionOutlineLayerByName(name: string): Nullable<SelectionOutlineLayer>;
-    }
-}
 
 /**
  * Selection outline layer options. This helps customizing the behaviour
