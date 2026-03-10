@@ -825,7 +825,6 @@ export class PhysicsCharacterController {
         let solveSequentially = false;
         let axisVel = null;
 
-        // eslint-disable-next-line no-constant-condition
         while (true) {
             // Check for parallel planes
             if (axisLen2 <= eps || solveSequentially) {
@@ -928,7 +927,7 @@ export class PhysicsCharacterController {
 
             const det = r0.dot(sci0.planeNormal);
             let solveSequentially = false;
-            // eslint-disable-next-line no-constant-condition
+
             while (true) {
                 if (Math.abs(det) < eps || solveSequentially) {
                     if (allowResort) {
@@ -969,7 +968,6 @@ export class PhysicsCharacterController {
     }
 
     protected _simplexSolverExamineActivePlanes(info: SimplexSolverInfo, maxSurfaceVelocity: Vector3, velocityIn: Vector3, velocityOut: Vector3) {
-        // eslint-disable-next-line no-constant-condition
         while (true) {
             switch (info.numSupportPlanes) {
                 case 1: {

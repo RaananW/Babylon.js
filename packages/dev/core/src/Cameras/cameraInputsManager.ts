@@ -7,7 +7,7 @@ import { Camera } from "./camera";
  * This is a list of all the different input types that are available in the application.
  * Fo instance: ArcRotateCameraGamepadInput...
  */
-// eslint-disable-next-line no-var, @typescript-eslint/naming-convention
+// eslint-disable-next-line no-var
 export var CameraInputTypes = {};
 
 /**

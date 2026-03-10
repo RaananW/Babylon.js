@@ -12,6 +12,9 @@ export class FrameGraphScreenSpaceCurvatureTask extends FrameGraphPostProcessTas
      */
     public normalTexture: FrameGraphTextureHandle;
 
+    /**
+     *
+     */
     public override readonly postProcess: ThinScreenSpaceCurvaturePostProcess;
 
     /**

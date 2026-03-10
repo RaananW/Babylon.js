@@ -5,8 +5,8 @@
 export * from "./tubeBuilder.pure";
 
 import { CreateTube } from "./tubeBuilder.pure";
-import { Scene } from "../../scene";
-import { Vector3 } from "../../Maths/math.vector";
+import type { Scene } from "../../scene";
+import type { Vector3 } from "../../Maths/math.vector";
 import { Mesh } from "../mesh";
 
 Mesh.CreateTube = (

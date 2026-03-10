@@ -187,7 +187,21 @@ export interface HostInformation {
 export type PrepareTextureProcessFunction = (
     width: number,
     height: number,
-    img: HTMLImageElement | ImageBitmap | { width: number; height: number },
+    img:
+        | HTMLImageElement
+        | ImageBitmap
+        | {
+              /**
+               *
+               */
+              width: number /**
+               *
+               */;
+              /**
+               *
+               */
+              height: number;
+          },
     extension: string,
     texture: InternalTexture,
     continuationCallback: () => void
@@ -197,7 +211,21 @@ export type PrepareTextureFunction = (
     texture: InternalTexture,
     extension: string,
     scene: Nullable<ISceneLike>,
-    img: HTMLImageElement | ImageBitmap | { width: number; height: number },
+    img:
+        | HTMLImageElement
+        | ImageBitmap
+        | {
+              /**
+               *
+               */
+              width: number /**
+               *
+               */;
+              /**
+               *
+               */
+              height: number;
+          },
     invertY: boolean,
     noMipmap: boolean,
     isCompressed: boolean,
@@ -1209,7 +1237,7 @@ export abstract class AbstractEngine {
      * @param flushRenderer true to flush the renderer from the pending commands before reading the pixels
      * @returns a ArrayBufferView promise (Uint8Array) containing RGBA colors
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     public abstract readPixels(x: number, y: number, width: number, height: number, hasAlpha?: boolean, flushRenderer?: boolean): Promise<ArrayBufferView>;
 
     /**
@@ -2445,7 +2473,6 @@ export abstract class AbstractEngine {
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     /** @internal */
     public static _RenderPassIdCounter = 0;
 

@@ -1,6 +1,5 @@
 /** This file must only contain pure code and pure imports */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { DeepImmutable } from "../types";
 import { Vector2, Vector3 } from "./math.vector.pure";
 

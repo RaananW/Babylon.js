@@ -181,7 +181,18 @@ function IsColor4Like(v: any): v is IColor4Like {
     return v != null && typeof v.r === "number" && typeof v.g === "number" && typeof v.b === "number" && typeof v.a === "number";
 }
 
-export type SizeLike = { width: number; height: number };
+export type SizeLike = {
+    /**
+     *
+     */
+    width: number /**
+     *
+     */;
+    /**
+     *
+     */
+    height: number;
+};
 
 function IsSizeLike(v: any): v is SizeLike {
     return v != null && typeof v.width === "number" && typeof v.height === "number";

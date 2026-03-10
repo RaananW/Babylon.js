@@ -6,6 +6,9 @@ import { FrameGraphPostProcessTask } from "./postProcessTask";
  * Task which applies a grain post process.
  */
 export class FrameGraphGrainTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinGrainPostProcess;
 
     /**

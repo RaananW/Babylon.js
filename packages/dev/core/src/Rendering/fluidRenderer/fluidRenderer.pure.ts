@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { Scene } from "core/scene.pure";
+import type { Scene } from "core/scene.pure";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import type { FloatArray, Nullable } from "core/types";
 import type { Observer } from "core/Misc/observable";

@@ -4,11 +4,13 @@
  */
 export * from "./engine.textureSelector.pure";
 
-import { Nullable } from "../../types";
+import type { Nullable } from "../../types";
 import { Engine } from "../engine";
 
 declare module "../../Engines/engine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Engine {
         /** @internal */
         _excludedCompressedTextures: string[];

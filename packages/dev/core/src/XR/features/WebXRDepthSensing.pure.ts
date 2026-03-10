@@ -1,6 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
-import { RawTexture, RawTextureCreateRTexture } from "../../Materials/Textures/rawTexture.pure";
+import type { RawTexture } from "../../Materials/Textures/rawTexture.pure";
+import { RawTextureCreateRTexture } from "../../Materials/Textures/rawTexture.pure";
 import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
@@ -94,7 +95,7 @@ const ShaderViewport = { x: 0, y: 0, width: 1, height: 1 };
 let GlobalRawValueToMeters = 1;
 let ViewIndex = 0;
 let EnableDiscard = true;
-const UvTransform = Matrix.Identity();
+const UvTransform = /*#__PURE__*/ Matrix.Identity();
 const ManagedMaterialPlugins: WebXRDepthSensingMaterialPlugin[] = [];
 
 /**

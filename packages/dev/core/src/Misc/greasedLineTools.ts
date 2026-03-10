@@ -27,7 +27,6 @@ import {
 } from "./greasedLineTools.pure";
 
 declare module "./greasedLineTools.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace GreasedLineTools {
         export let ConvertPoints: typeof GreasedLineToolsConvertPoints;
         export let OmitZeroLengthPredicate: typeof GreasedLineToolsOmitZeroLengthPredicate;

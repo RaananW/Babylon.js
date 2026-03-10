@@ -4,9 +4,9 @@
  */
 export * from "./abstractEngine.cubeTexture.pure";
 
-import { Nullable } from "../../types";
-import { Scene } from "../../scene";
-import { IWebRequest } from "../../Misc/interfaces/iWebRequest";
+import type { Nullable } from "../../types";
+import type { Scene } from "../../scene";
+import type { IWebRequest } from "../../Misc/interfaces/iWebRequest";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { LoadImage } from "../../Misc/fileTools";
@@ -16,7 +16,9 @@ import { _GetCompatibleTextureLoader } from "core/Materials/Textures/Loaders/tex
 import { GetExtensionFromUrl } from "core/Misc/urlTools";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /** @internal */
         createCubeTextureBase(

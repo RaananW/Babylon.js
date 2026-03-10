@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { Scene } from "../scene.pure";
+import type { Scene } from "../scene.pure";
 import type { SmartArrayNoDuplicate } from "../Misc/smartArray";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";

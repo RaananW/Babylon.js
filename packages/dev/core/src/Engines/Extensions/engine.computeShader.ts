@@ -4,18 +4,20 @@
  */
 export * from "./engine.computeShader.pure";
 
-import { ComputeBindingList, ComputeBindingMapping, ComputeCompilationMessages } from "./engine.computeShader.pure";
-import { ComputeEffect, IComputeEffectCreationOptions, IComputeShaderPath } from "../../Compute/computeEffect";
-import { IComputeContext } from "../../Compute/IComputeContext";
-import { IComputePipelineContext } from "../../Compute/IComputePipelineContext";
-import { Nullable } from "../../types";
-import { DataBuffer } from "../../Buffers/dataBuffer";
+import type { ComputeBindingList, ComputeBindingMapping, ComputeCompilationMessages } from "./engine.computeShader.pure";
+import type { ComputeEffect, IComputeEffectCreationOptions, IComputeShaderPath } from "../../Compute/computeEffect";
+import type { IComputeContext } from "../../Compute/IComputeContext";
+import type { IComputePipelineContext } from "../../Compute/IComputePipelineContext";
+import type { Nullable } from "../../types";
+import type { DataBuffer } from "../../Buffers/dataBuffer";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { AbstractEngine } from "../abstractEngine";
 import type { WebGPUPerfCounter } from "../WebGPU/webgpuPerfCounter";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Creates a new compute effect

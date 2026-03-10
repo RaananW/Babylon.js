@@ -14,6 +14,9 @@ export class WebXRGenericTriggerMotionController extends WebXRAbstractMotionCont
      */
     public static ProfileId = "generic-trigger";
 
+    /**
+     *
+     */
     public profileId = WebXRGenericTriggerMotionController.ProfileId;
 
     constructor(scene: Scene, gamepadObject: IMinimalMotionControllerObject, handedness: MotionControllerHandedness) {

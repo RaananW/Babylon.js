@@ -17,7 +17,7 @@ import type { Scene } from "../scene";
 import { _ImportHelper } from "core/import.helper";
 
 /** @internal */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 class _ClickInfo {
     private _singleClick = false;
     private _doubleClick = false;
@@ -135,6 +135,9 @@ export class InputManager {
     private _deviceSourceManager: Nullable<DeviceSourceManager> = null;
 
     // origin MouseEvent
+    /**
+     *
+     */
     _originMouseEvent: IMouseEvent;
     /**
      * Creates a new InputManager

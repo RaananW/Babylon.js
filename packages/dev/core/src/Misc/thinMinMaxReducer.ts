@@ -16,8 +16,14 @@ export const enum DepthTextureType {
  * @internal
  */
 export class ThinMinMaxReducerPostProcess extends EffectWrapper {
+    /**
+     *
+     */
     public static readonly FragmentUrl = "minmaxRedux";
 
+    /**
+     *
+     */
     public static readonly Uniforms = ["texSize"];
 
     protected override _gatherImports(useWebGPU: boolean, list: Promise<any>[]) {
@@ -29,8 +35,14 @@ export class ThinMinMaxReducerPostProcess extends EffectWrapper {
         }
     }
 
+    /**
+     *
+     */
     public textureWidth = 0;
 
+    /**
+     *
+     */
     public textureHeight = 0;
 
     constructor(name: string, engine: Nullable<AbstractEngine> = null, defines = "", options?: EffectWrapperCreationOptions) {
@@ -67,8 +79,14 @@ const MinMax = { min: 0, max: 0 };
  * @internal
  */
 export class ThinMinMaxReducer {
+    /**
+     *
+     */
     public readonly onAfterReductionPerformed = new Observable<{ min: number; max: number }>();
 
+    /**
+     *
+     */
     public readonly reductionSteps: Array<ThinMinMaxReducerPostProcess>;
 
     private _depthRedux: boolean;

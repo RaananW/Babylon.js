@@ -6,7 +6,7 @@ import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture.p
 import { Matrix, Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { Nullable } from "../types";
-import { Scene } from "../scene.pure";
+import type { Scene } from "../scene.pure";
 import { Constants } from "../Engines/constants";
 import type { UniformBuffer } from "../Materials/uniformBuffer";
 import type { IAssetContainer } from "core/IAssetContainer";

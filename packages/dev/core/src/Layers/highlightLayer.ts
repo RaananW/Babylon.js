@@ -5,14 +5,14 @@
 export * from "./highlightLayer.pure";
 
 import { HighlightLayer } from "./highlightLayer.pure";
-import { Nullable } from "../types";
+import type { Nullable } from "../types";
 import { Scene } from "../scene";
 import { RegisterClass } from "../Misc/typeStore";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /**
          * Return a the first highlight layer of the scene with a given name.

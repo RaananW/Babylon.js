@@ -3,7 +3,7 @@
 import { Camera } from "../../Cameras/camera";
 import { ArcRotateCamera } from "../../Cameras/arcRotateCamera.pure";
 import type { Scene } from "../../scene";
-import { Vector3 } from "../../Maths/math.vector.pure";
+import type { Vector3 } from "../../Maths/math.vector.pure";
 import { _SetStereoscopicAnaglyphRigMode } from "../RigModes/stereoscopicAnaglyphRigMode";
 
 /**

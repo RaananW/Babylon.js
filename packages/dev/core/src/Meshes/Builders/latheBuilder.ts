@@ -5,8 +5,8 @@
 export * from "./latheBuilder.pure";
 
 import { CreateLathe } from "./latheBuilder.pure";
-import { Scene } from "../../scene";
-import { Vector3 } from "../../Maths/math.vector";
+import type { Scene } from "../../scene";
+import type { Vector3 } from "../../Maths/math.vector";
 import { Mesh } from "../mesh";
 
 Mesh.CreateLathe = (name: string, shape: Vector3[], radius: number, tessellation: number, scene: Scene, updatable?: boolean, sideOrientation?: number): Mesh => {

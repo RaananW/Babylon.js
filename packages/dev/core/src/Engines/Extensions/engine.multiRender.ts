@@ -4,19 +4,21 @@
  */
 export * from "./engine.multiRender.pure";
 
-import { IMultiRenderTargetOptions } from "../../Materials/Textures/multiRenderTarget";
-import { Nullable } from "../../types";
-import { RenderTargetWrapper } from "../renderTargetWrapper";
-import { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
-import { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
-import { TextureSize } from "../../Materials/Textures/textureCreationOptions";
+import type { IMultiRenderTargetOptions } from "../../Materials/Textures/multiRenderTarget";
+import type { Nullable } from "../../types";
+import type { RenderTargetWrapper } from "../renderTargetWrapper";
+import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
+import type { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
+import type { TextureSize } from "../../Materials/Textures/textureCreationOptions";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { Constants } from "../constants";
 import { ThinEngine } from "../thinEngine";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Unbind a list of render target textures from the webGL context

@@ -4,17 +4,19 @@
  */
 export * from "./engine.rawTexture.pure";
 
-import { Nullable } from "../../types";
+import type { Nullable } from "../../types";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
-import { Scene } from "../../scene";
+import type { Scene } from "../../scene";
 import { Constants } from "../constants";
 import { ThinEngine } from "../thinEngine";
-import { IWebRequest } from "../../Misc/interfaces/iWebRequest";
+import type { IWebRequest } from "../../Misc/interfaces/iWebRequest";
 import { Logger } from "../../Misc/logger";
 import { IsExponentOfTwo } from "../../Misc/tools.functions";
 
 declare module "../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Update a raw texture

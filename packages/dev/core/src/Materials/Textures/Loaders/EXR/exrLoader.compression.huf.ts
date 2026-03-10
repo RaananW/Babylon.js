@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { Nullable } from "core/types";
 import type { DataCursor } from "./exrLoader.core";
 import { ParseUint32, ParseUint8Array } from "./exrLoader.core";

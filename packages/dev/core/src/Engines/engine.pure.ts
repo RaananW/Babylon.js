@@ -17,7 +17,6 @@ import { Logger } from "../Misc/logger";
 import type { RenderTargetWrapper } from "./renderTargetWrapper";
 import { WebGLHardwareTexture } from "./WebGL/webGLHardwareTexture";
 
-
 import type { PostProcess } from "../PostProcesses/postProcess";
 import { AbstractEngine } from "./abstractEngine";
 import {
@@ -126,10 +125,16 @@ export class Engine extends ThinEngine {
     /** LUMINANCE_ALPHA */
     public static readonly TEXTUREFORMAT_LUMINANCE_ALPHA = Constants.TEXTUREFORMAT_LUMINANCE_ALPHA;
     /** RGB */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly TEXTUREFORMAT_RGB = Constants.TEXTUREFORMAT_RGB;
     /** RGBA */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly TEXTUREFORMAT_RGBA = Constants.TEXTUREFORMAT_RGBA;
     /** RED */
     public static readonly TEXTUREFORMAT_RED = Constants.TEXTUREFORMAT_RED;
@@ -140,20 +145,32 @@ export class Engine extends ThinEngine {
     /** RG unsigned short normed to [0, 1] **/
     public static readonly TEXTUREFORMAT_RG16_UNORM = Constants.TEXTUREFORMAT_RG16_UNORM;
     /** RGB unsigned short normed to [0, 1] **/
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly TEXTUREFORMAT_RGB16_UNORM = Constants.TEXTUREFORMAT_RGB16_UNORM;
     /** RGBA unsigned short normed to [0, 1] **/
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly TEXTUREFORMAT_RGBA16_UNORM = Constants.TEXTUREFORMAT_RGBA16_UNORM;
     /** RED signed short normed to [-1, 1] **/
     public static readonly TEXTUREFORMAT_R16_SNORM = Constants.TEXTUREFORMAT_R16_SNORM;
     /** RG signed short normed to [-1, 1] **/
     public static readonly TEXTUREFORMAT_RG16_SNORM = Constants.TEXTUREFORMAT_RG16_SNORM;
     /** RGB signed short normed to [-1, 1] **/
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly TEXTUREFORMAT_RGB16_SNORM = Constants.TEXTUREFORMAT_RGB16_SNORM;
     /** RGBA signed short normed to [-1, 1] **/
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly TEXTUREFORMAT_RGBA16_SNORM = Constants.TEXTUREFORMAT_RGBA16_SNORM;
     /** RG */
     public static readonly TEXTUREFORMAT_RG = Constants.TEXTUREFORMAT_RG;
@@ -164,10 +181,16 @@ export class Engine extends ThinEngine {
     /** RG_INTEGER */
     public static readonly TEXTUREFORMAT_RG_INTEGER = Constants.TEXTUREFORMAT_RG_INTEGER;
     /** RGB_INTEGER */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly TEXTUREFORMAT_RGB_INTEGER = Constants.TEXTUREFORMAT_RGB_INTEGER;
     /** RGBA_INTEGER */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly TEXTUREFORMAT_RGBA_INTEGER = Constants.TEXTUREFORMAT_RGBA_INTEGER;
 
     /** UNSIGNED_BYTE */
@@ -251,13 +274,22 @@ export class Engine extends ThinEngine {
     /** Inverse Cubic coordinates mode */
     public static readonly TEXTURE_INVCUBIC_MODE = Constants.TEXTURE_INVCUBIC_MODE;
     /** Equirectangular coordinates mode */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly TEXTURE_EQUIRECTANGULAR_MODE = Constants.TEXTURE_EQUIRECTANGULAR_MODE;
     /** Equirectangular Fixed coordinates mode */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly TEXTURE_FIXED_EQUIRECTANGULAR_MODE = Constants.TEXTURE_FIXED_EQUIRECTANGULAR_MODE;
     /** Equirectangular Fixed Mirrored coordinates mode */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly TEXTURE_FIXED_EQUIRECTANGULAR_MIRRORED_MODE = Constants.TEXTURE_FIXED_EQUIRECTANGULAR_MIRRORED_MODE;
 
     // Texture rescaling mode
@@ -304,14 +336,13 @@ export class Engine extends ThinEngine {
 
     /** @internal */
 
-    // eslint-disable-next-line jsdoc/require-returns-check
     /**
      * Method called to create the default loading screen.
      * This can be overridden in your own app.
      * @param canvas The rendering canvas element
      * @returns The loading screen
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     public static override DefaultLoadingScreenFactory(canvas: HTMLCanvasElement): ILoadingScreen {
         return AbstractEngine.DefaultLoadingScreenFactory(canvas);
     }

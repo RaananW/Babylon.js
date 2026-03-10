@@ -21,7 +21,8 @@ import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetT
 import type { IShadowLight } from "../../Lights/shadowLight";
 import { Constants } from "../../Engines/constants";
 import { MaterialFlags } from "../materialFlags";
-import { Color3, Color3Black, Color3White } from "../../Maths/math.color.pure";
+import type { Color3 } from "../../Maths/math.color.pure";
+import { Color3Black, Color3White } from "../../Maths/math.color.pure";
 import { EffectFallbacks } from "../effectFallbacks";
 import { AddClipPlaneUniforms, BindClipPlane } from "../clipPlaneMaterialHelper";
 import {

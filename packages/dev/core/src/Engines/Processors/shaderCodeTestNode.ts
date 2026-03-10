@@ -3,6 +3,9 @@ import type { ShaderDefineExpression } from "./Expressions/shaderDefineExpressio
 
 /** @internal */
 export class ShaderCodeTestNode extends ShaderCodeNode {
+    /**
+     *
+     */
     public testExpression: ShaderDefineExpression;
 
     public override isValid(preprocessors: { [key: string]: string }) {

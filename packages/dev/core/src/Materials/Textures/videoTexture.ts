@@ -4,9 +4,10 @@
  */
 export * from "./videoTexture.pure";
 
-import { VideoTexture, VideoTextureSettings } from "./videoTexture.pure";
-import { Nullable } from "../../types";
-import { Scene } from "../../scene";
+import type { VideoTextureSettings } from "./videoTexture.pure";
+import { VideoTexture } from "./videoTexture.pure";
+import type { Nullable } from "../../types";
+import type { Scene } from "../../scene";
 import { Texture } from "../../Materials/Textures/texture";
 import { Constants } from "../../Engines/constants";
 import { RegisterClass } from "core/Misc/typeStore";

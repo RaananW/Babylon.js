@@ -120,7 +120,6 @@ export function RGBDTextureToolsExpandRGBDTexture(texture: Texture) {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             expandRgbdTextureAsync();
         } else {
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
             texture.onLoadObservable.addOnce(expandRgbdTextureAsync);
         }
     }
@@ -134,7 +133,7 @@ export function RGBDTextureToolsExpandRGBDTexture(texture: Texture) {
  * @returns a promise with the internalTexture having its texture replaced by the result of the processing
  */
 // Should have "Async" in the name but this is a breaking change.
-// eslint-disable-next-line no-restricted-syntax
+
 export async function RGBDTextureToolsEncodeTextureToRGBD(
     internalTexture: InternalTexture,
     scene: Scene,

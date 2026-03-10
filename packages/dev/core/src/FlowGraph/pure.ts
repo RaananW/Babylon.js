@@ -1,5 +1,5 @@
 /** Pure barrel — re-exports only side-effect-free modules */
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+
 export * from "./flowGraph";
 export * from "./flowGraphBlock";
 export * from "./flowGraphSignalConnection.pure";

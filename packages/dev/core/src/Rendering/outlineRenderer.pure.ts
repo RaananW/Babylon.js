@@ -3,8 +3,8 @@
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { _InstancesBatch } from "../Meshes/mesh";
-import { Mesh } from "../Meshes/mesh.pure";
-import { Scene } from "../scene.pure";
+import type { Mesh } from "../Meshes/mesh.pure";
+import type { Scene } from "../scene.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { Constants } from "../Engines/constants";
 import type { ISceneComponent } from "../sceneComponent";

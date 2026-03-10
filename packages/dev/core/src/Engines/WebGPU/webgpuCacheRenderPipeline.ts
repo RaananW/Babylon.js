@@ -520,7 +520,7 @@ export abstract class WebGPUCacheRenderPipeline {
             case Constants.MATERIAL_LineLoopDrawMode:
                 // return this._gl.LINE_LOOP;
                 // TODO WEBGPU. Line Loop Mode Fallback at buffer load time.
-                // eslint-disable-next-line no-throw-literal
+
                 throw "LineLoop is an unsupported fillmode in WebGPU";
             case Constants.MATERIAL_LineStripDrawMode:
                 return WebGPUConstants.PrimitiveTopology.LineStrip;
@@ -529,7 +529,7 @@ export abstract class WebGPUCacheRenderPipeline {
             case Constants.MATERIAL_TriangleFanDrawMode:
                 // return this._gl.TRIANGLE_FAN;
                 // TODO WEBGPU. Triangle Fan Mode Fallback at buffer load time.
-                // eslint-disable-next-line no-throw-literal
+
                 throw "TriangleFan is an unsupported fillmode in WebGPU";
             default:
                 return WebGPUConstants.PrimitiveTopology.TriangleList;

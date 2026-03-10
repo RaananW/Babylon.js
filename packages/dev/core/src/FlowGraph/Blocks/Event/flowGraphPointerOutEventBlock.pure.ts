@@ -64,6 +64,9 @@ export class FlowGraphPointerOutEventBlock extends FlowGraphEventBlock {
      */
     public readonly meshOutOfPointer: FlowGraphDataConnection<AbstractMesh>;
 
+    /**
+     *
+     */
     public override readonly type: FlowGraphEventType = FlowGraphEventType.PointerOut;
 
     public constructor(config?: IFlowGraphPointerOutEventBlockConfiguration) {

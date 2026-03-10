@@ -11,6 +11,9 @@ import type { AbstractMesh } from "../../Meshes/abstractMesh";
  * Oculus hand controller class that supports microgestures
  */
 export class WebXROculusHandController extends WebXRAbstractMotionController {
+    /**
+     *
+     */
     public profileId = "oculus-hand";
 
     /**

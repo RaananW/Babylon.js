@@ -35,6 +35,9 @@ export type GeospatialCameraOptions = {
  * Camera equipped to orbit a spherical planet centered at world origin
  */
 export class GeospatialCamera extends Camera {
+    /**
+     *
+     */
     override inputs: GeospatialCameraInputsManager;
 
     /** Movement controller that turns input pixelDeltas into currentFrameDeltas used by camera*/

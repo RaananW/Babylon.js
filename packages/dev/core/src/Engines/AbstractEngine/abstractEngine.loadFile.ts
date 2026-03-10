@@ -4,11 +4,13 @@
  */
 export * from "./abstractEngine.loadFile.pure";
 
-import { IOfflineProvider } from "../../Offline/IOfflineProvider";
+import type { IOfflineProvider } from "../../Offline/IOfflineProvider";
 import { AbstractEngine } from "../../Engines/abstractEngine";
 
 declare module "../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * @internal

@@ -1947,6 +1947,12 @@ export function Color4CheckColors4(colors: number[], count: number): number[] {
  * @internal
  */
 export class TmpColors {
+    /**
+     *
+     */
     public static Color3: Color3[] = /*#__PURE__*/ BuildArray(3, Color3Black);
+    /**
+     *
+     */
     public static Color4: Color4[] = /*#__PURE__*/ BuildArray(3, () => new Color4(0, 0, 0, 0));
 }

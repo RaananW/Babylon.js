@@ -15,14 +15,19 @@ import { Logger } from "./logger";
 import { TimingToolsSetImmediate } from "./timingTools.pure";
 import { GetBlobBufferSource } from "../Buffers/bufferUtils";
 
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/naming-convention */
 
-const Base64DataUrlRegEx = new RegExp(/^data:([^,]+\/[^,]+)?;base64,/i);
+const Base64DataUrlRegEx = /*#__PURE__*/ new RegExp(/^data:([^,]+\/[^,]+)?;base64,/i);
 
 /** @ignore */
 export class LoadFileError extends RuntimeError {
+    /**
+     *
+     */
     public request?: WebRequest;
+    /**
+     *
+     */
     public file?: File;
 
     /**
@@ -242,7 +247,6 @@ export const LoadImage = (
 
     const onErrorHandler = (exception: any) => {
         if (onError) {
-            // eslint-disable-next-line @typescript-eslint/no-base-to-string
             const inputText = url || input.toString();
             onError(`Error while trying to load image: ${inputText.indexOf("http") === 0 || inputText.length <= 128 ? inputText : inputText.slice(0, 128) + "..."}`, exception);
         }
@@ -264,7 +268,6 @@ export const LoadImage = (
                     // eslint-disable-next-line github/no-then
                     .catch((reason) => {
                         if (onError) {
-                            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                             onError("Error while trying to load image: " + input, reason);
                         }
                     });
@@ -469,7 +472,10 @@ export const ReadFile = (
  * @returns a file request object
  * @internal
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export const LoadFile = (
     fileOrUrl: File | string,
     onSuccess: (data: string | ArrayBuffer, responseURL?: string, contentType?: Nullable<string>) => void,
@@ -835,7 +841,20 @@ export const IsBase64DataUrl = (uri: string): boolean => {
     return Base64DataUrlRegEx.test(uri);
 };
 
-export const TestBase64DataUrl = (uri: string): { match: boolean; type: string } => {
+/**
+ *
+ */
+export const TestBase64DataUrl = (
+    uri: string
+): {
+    /**
+     *
+     */
+    match: boolean /**
+     *
+     */;
+    type: string;
+} => {
     const results = Base64DataUrlRegEx.exec(uri);
     if (results === null || results.length === 0) {
         return { match: false, type: "" };

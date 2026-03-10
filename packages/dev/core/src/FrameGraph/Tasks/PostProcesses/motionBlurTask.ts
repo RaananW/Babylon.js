@@ -18,6 +18,9 @@ export class FrameGraphMotionBlurTask extends FrameGraphPostProcessTask {
      */
     public depthTexture?: FrameGraphTextureHandle;
 
+    /**
+     *
+     */
     public override readonly postProcess: ThinMotionBlurPostProcess;
 
     /**

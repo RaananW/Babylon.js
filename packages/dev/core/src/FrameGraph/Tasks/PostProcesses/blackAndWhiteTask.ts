@@ -6,6 +6,9 @@ import { FrameGraphPostProcessTask } from "./postProcessTask";
  * Task which applies a black and white post process.
  */
 export class FrameGraphBlackAndWhiteTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinBlackAndWhitePostProcess;
 
     /**

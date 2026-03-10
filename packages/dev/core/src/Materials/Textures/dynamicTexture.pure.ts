@@ -7,7 +7,6 @@ import { Texture } from "../../Materials/Textures/texture.pure";
 import { Constants } from "../../Engines/constants";
 import type { ICanvas, ICanvasRenderingContext } from "../../Engines/ICanvas";
 
-
 /**
  * Interface defining options used to create a dynamic texture
  */

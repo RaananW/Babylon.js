@@ -17,6 +17,9 @@ import type { InternalTexture } from "core/Materials/Textures/internalTexture";
 export class WebGPUComputeContext implements IComputeContext {
     private static _Counter = 0;
 
+    /**
+     *
+     */
     public readonly uniqueId: number;
 
     private _device: GPUDevice;

@@ -4,11 +4,11 @@
  */
 export * from "./particleSystemComponent.pure";
 
-import { IParticleSystem } from "./IParticleSystem";
-import { Effect } from "../Materials/effect";
-import { Scene } from "../scene";
-import { AssetContainer } from "../assetContainer";
-import { EffectFallbacks } from "../Materials/effectFallbacks";
+import type { IParticleSystem } from "./IParticleSystem";
+import type { Effect } from "../Materials/effect";
+import type { Scene } from "../scene";
+import type { AssetContainer } from "../assetContainer";
+import type { EffectFallbacks } from "../Materials/effectFallbacks";
 import { Mesh } from "../Meshes/mesh";
 import { GPUParticleSystem } from "./gpuParticleSystem";
 import { ParticleSystem } from "./particleSystem";
@@ -18,7 +18,9 @@ import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { AddParser, AddIndividualParser, GetIndividualParser } from "core/Loading/Plugins/babylonFileParser.function";
 
 declare module "../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Create an effect to use with particle systems.
@@ -52,7 +54,9 @@ declare module "../Engines/abstractEngine" {
 }
 
 declare module "../Meshes/mesh" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Mesh {
         /**
          * Returns an array populated with IParticleSystem objects whose the mesh is the emitter

@@ -5,7 +5,7 @@
 export * from "./linesMesh.pure";
 
 import { LinesMesh } from "./linesMesh.pure";
-import { Scene } from "../scene";
+import type { Scene } from "../scene";
 import { Mesh } from "../Meshes/mesh";
 
 Mesh._LinesMeshParser = (parsedMesh: any, scene: Scene): Mesh => {

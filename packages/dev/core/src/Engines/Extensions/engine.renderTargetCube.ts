@@ -4,16 +4,18 @@
  */
 export * from "./engine.renderTargetCube.pure";
 
-import { RenderTargetWrapper } from "../renderTargetWrapper";
-import { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
-import { RenderTargetCreationOptions } from "../../Materials/Textures/textureCreationOptions";
+import type { RenderTargetWrapper } from "../renderTargetWrapper";
+import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
+import type { RenderTargetCreationOptions } from "../../Materials/Textures/textureCreationOptions";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { Constants } from "../constants";
 import { ThinEngine } from "../thinEngine";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Creates a new render target cube wrapper

@@ -57,7 +57,6 @@ import { EngineStore } from "../Engines/engineStore";
 import { Mix, IsExponentOfTwo } from "./tools.functions";
 
 declare module "./tools.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace Tools {
         export let IsAbsoluteUrl: typeof ToolsIsAbsoluteUrl;
         export let FetchToRef: typeof ToolsFetchToRef;

@@ -8,7 +8,9 @@ import { ReflectionProbe, ReflectionProbeParse } from "./reflectionProbe.pure";
 import { Scene } from "../scene";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /**
          * The list of reflection probes added to the scene
@@ -32,7 +34,6 @@ declare module "../scene" {
 }
 
 declare module "./reflectionProbe.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace ReflectionProbe {
         export { ReflectionProbeParse as Parse };
     }

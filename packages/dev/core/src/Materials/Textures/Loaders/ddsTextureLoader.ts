@@ -11,7 +11,10 @@ import type { Engine } from "core/Engines/engine";
  * Implementation of the DDS Texture Loader.
  * @internal
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export class _DDSTextureLoader implements IInternalTextureLoader {
     /**
      * Defines whether the loader supports cascade loading the different faces.

@@ -3,7 +3,8 @@
 import type { Scene, FrameGraphTextureHandle, FrameGraph, NodeRenderGraphBuildState, NodeRenderGraphConnectionPoint } from "core/index";
 import { NodeRenderGraphBlock } from "../../nodeRenderGraphBlock";
 import { NodeRenderGraphBlockConnectionPointTypes } from "../../Types/nodeRenderGraphTypes";
-import { Color4, Color4FromArray } from "../../../../Maths/math.color.pure";
+import type { Color4 } from "../../../../Maths/math.color.pure";
+import { Color4FromArray } from "../../../../Maths/math.color.pure";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { FrameGraphClearTextureTask } from "../../../Tasks/Texture/clearTextureTask";
 

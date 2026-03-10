@@ -6,10 +6,12 @@ export * from "./fluidRenderer.pure";
 
 import { FluidRenderer } from "./fluidRenderer.pure";
 import { Scene } from "core/scene";
-import { Nullable } from "core/types";
+import type { Nullable } from "core/types";
 
 declare module "../../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal (Backing field) */
         _fluidRenderer: Nullable<FluidRenderer>;

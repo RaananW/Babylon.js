@@ -21,7 +21,8 @@ import { BoundingSphere, BoundingSphereIntersects } from "../../Culling/bounding
 import type { TransformNode } from "../../Meshes/transformNode";
 import { StandardMaterial } from "../../Materials/standardMaterial.pure";
 import { Color3, Color3Black } from "../../Maths/math.color.pure";
-import { NodeMaterial, NodeMaterialParseFromFileAsync, NodeMaterialParseFromSnippetAsync } from "../../Materials/Node/nodeMaterial.pure";
+import type { NodeMaterial } from "../../Materials/Node/nodeMaterial.pure";
+import { NodeMaterialParseFromFileAsync, NodeMaterialParseFromSnippetAsync } from "../../Materials/Node/nodeMaterial.pure";
 import type { Material } from "../../Materials/material";
 import { Animation } from "../../Animations/animation.pure";
 import { QuadraticEase, EasingFunction } from "../../Animations/easing";

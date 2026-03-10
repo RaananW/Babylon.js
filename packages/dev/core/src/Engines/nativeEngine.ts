@@ -17,6 +17,5 @@ function applyMixins(derivedCtor: any, constructors: any[]) {
     });
 }
 
-
 // Apply the ThinNativeEngine mixins to the NativeEngine.
 applyMixins(NativeEngine, [ThinNativeEngine]);

@@ -8,7 +8,9 @@ import { FreeCameraVirtualJoystickInput } from "./freeCameraVirtualJoystickInput
 import { FreeCameraInputsManager } from "../../Cameras/freeCameraInputsManager";
 
 declare module "../../Cameras/freeCameraInputsManager" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface FreeCameraInputsManager {
         /**
          * Add virtual joystick input support to the input manager.

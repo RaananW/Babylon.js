@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable babylonjs/available */
-/* eslint-disable jsdoc/require-jsdoc */
+
 // License for the mipmap generation code:
 //
 // Copyright 2020 Brandon Jones
@@ -1356,7 +1356,7 @@ export class WebGPUTextureManager {
                     );
                 } else {
                     // we should never take this code path
-                    // eslint-disable-next-line no-throw-literal
+
                     throw "updateTexture: Can't process the texture data because a GPUTexture was provided instead of an InternalTexture!";
                 }
             }

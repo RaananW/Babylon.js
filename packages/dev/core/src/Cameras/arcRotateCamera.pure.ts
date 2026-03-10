@@ -138,7 +138,6 @@ export class ArcRotateCamera extends TargetCamera {
         this.setPosition(newPosition);
     }
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     protected _upToYMatrix: Matrix;
     protected _yToUpMatrix: Matrix;
 
@@ -243,7 +242,6 @@ export class ArcRotateCamera extends TargetCamera {
      * Use this setting in combination with `upperRadiusLimit` to set a global limit for the Cameras vertical position.
      */
     @serialize()
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     public lowerTargetYLimit: number = -Infinity;
 
     /**

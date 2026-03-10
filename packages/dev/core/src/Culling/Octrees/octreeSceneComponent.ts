@@ -6,13 +6,15 @@ export * from "./octreeSceneComponent.pure";
 
 import { OctreeSceneComponent } from "./octreeSceneComponent.pure";
 import { Scene } from "../../scene";
-import { SubMesh } from "../../Meshes/subMesh";
+import type { SubMesh } from "../../Meshes/subMesh";
 import { AbstractMesh } from "../../Meshes/abstractMesh";
 import { SceneComponentConstants } from "../../sceneComponent";
 import { Octree } from "./octree";
 
 declare module "../../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /**
          * @internal
@@ -38,7 +40,9 @@ declare module "../../scene" {
 }
 
 declare module "../../Meshes/abstractMesh" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractMesh {
         /**
          * @internal

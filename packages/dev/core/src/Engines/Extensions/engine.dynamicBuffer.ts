@@ -4,12 +4,14 @@
  */
 export * from "./engine.dynamicBuffer.pure";
 
-import { DataBuffer } from "../../Buffers/dataBuffer";
-import { IndicesArray, DataArray } from "../../types";
+import type { DataBuffer } from "../../Buffers/dataBuffer";
+import type { IndicesArray, DataArray } from "../../types";
 import { ThinEngine } from "../../Engines/thinEngine";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Update a dynamic index buffer

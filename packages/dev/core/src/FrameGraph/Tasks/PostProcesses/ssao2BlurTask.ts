@@ -7,8 +7,14 @@ import { ThinSSAO2BlurPostProcess } from "core/PostProcesses/thinSSAO2BlurPostPr
  * @internal
  */
 export class FrameGraphSSAO2BlurTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinSSAO2BlurPostProcess;
 
+    /**
+     *
+     */
     public depthTexture: FrameGraphTextureHandle;
 
     constructor(

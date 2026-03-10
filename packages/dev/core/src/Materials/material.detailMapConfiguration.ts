@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { Nullable } from "../types";
 import { Material } from "./material";
 import { serialize, expandToProperty, serializeAsTexture } from "../Misc/decorators";
@@ -20,8 +19,17 @@ import type { AbstractEngine } from "core/Engines/abstractEngine";
  * @internal
  */
 export class MaterialDetailMapDefines extends MaterialDefines {
+    /**
+     *
+     */
     DETAIL = false;
+    /**
+     *
+     */
     DETAILDIRECTUV = 0;
+    /**
+     *
+     */
     DETAIL_NORMALBLENDMETHOD = 0;
 }
 

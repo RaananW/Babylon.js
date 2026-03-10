@@ -5,6 +5,9 @@ const VaryingRegex = /(flat\s)?\s*varying\s*.*/;
 
 /** @internal */
 export class WebGL2ShaderProcessor implements IShaderProcessor {
+    /**
+     *
+     */
     public shaderLanguage = ShaderLanguage.GLSL;
 
     public attributeProcessor(attribute: string) {

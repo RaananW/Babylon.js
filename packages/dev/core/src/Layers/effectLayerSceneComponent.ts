@@ -5,9 +5,9 @@
 export * from "./effectLayerSceneComponent.pure";
 
 import { EffectLayerSceneComponent } from "./effectLayerSceneComponent.pure";
-import { Scene } from "../scene";
+import type { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
-import { AssetContainer } from "../assetContainer";
+import type { AssetContainer } from "../assetContainer";
 import { EffectLayer } from "./effectLayer";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
 

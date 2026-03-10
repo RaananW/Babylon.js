@@ -1,12 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
-import { Sound } from "./sound.pure";
-import { SoundTrack } from "./soundTrack";
+import type { Sound } from "./sound.pure";
+import type { SoundTrack } from "./soundTrack";
 import type { Nullable } from "../types";
 import { Matrix, Vector3 } from "../Maths/math.vector.pure";
 import type { ISceneSerializableComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
-import { Scene } from "../scene.pure";
+import type { Scene } from "../scene.pure";
 import { PrecisionDate } from "../Misc/precisionDate";
 import { EngineStore } from "../Engines/engineStore";
 import { AbstractEngine } from "core/Engines/abstractEngine";
@@ -18,7 +18,7 @@ import type { IAssetContainer } from "core/IAssetContainer";
  * @deprecated please use AudioEngineV2 instead
  */
 export class AudioSceneComponent implements ISceneSerializableComponent {
-    private static _CameraDirection = new Vector3(0, 0, -1);
+    private static _CameraDirection = /*#__PURE__*/ new Vector3(0, 0, -1);
 
     /**
      * The component name helpful to identify the component in the list of scene components.

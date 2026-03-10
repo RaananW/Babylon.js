@@ -12,6 +12,9 @@ import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPro
 export class NodeRenderGraphTonemapPostProcessBlock extends NodeRenderGraphBaseWithPropertiesPostProcessBlock {
     protected override _frameGraphTask: FrameGraphTonemapTask;
 
+    /**
+     *
+     */
     public override _additionalConstructionParameters: [TonemappingOperator];
 
     /**

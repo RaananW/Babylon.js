@@ -9,7 +9,6 @@ import {
 } from "./particleHelper.pure";
 
 declare module "./particleHelper.pure" {
-    // eslint-disable-next-line no-shadow
     namespace ParticleHelper {
         export let CreateDefault: typeof ParticleHelperCreateDefault;
         export let CreateAsync: typeof ParticleHelperCreateAsync;

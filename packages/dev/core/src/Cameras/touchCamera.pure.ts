@@ -4,7 +4,7 @@ import { FreeCamera } from "./freeCamera.pure";
 import type { FreeCameraTouchInput } from "../Cameras/Inputs/freeCameraTouchInput";
 import type { FreeCameraMouseInput } from "../Cameras/Inputs/freeCameraMouseInput";
 import type { Scene } from "../scene";
-import { Vector3 } from "../Maths/math.vector.pure";
+import type { Vector3 } from "../Maths/math.vector.pure";
 
 /**
  * This represents a FPS type of camera controlled by touch.

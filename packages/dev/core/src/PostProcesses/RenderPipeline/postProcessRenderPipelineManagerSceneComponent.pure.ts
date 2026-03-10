@@ -2,7 +2,7 @@
 
 import type { ISceneComponent } from "../../sceneComponent";
 import { SceneComponentConstants } from "../../sceneComponent";
-import { Scene } from "../../scene.pure";
+import type { Scene } from "../../scene.pure";
 
 /**
  * Defines the Render Pipeline scene component responsible to rendering pipelines

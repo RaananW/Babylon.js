@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Matrix, Quaternion, TmpVectors, Vector3 } from "../../../Maths/math.vector";
 import {
@@ -250,7 +249,6 @@ class CollisionEvent {
     public impulseApplied: number = 0;
     public type: number = 0;
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     static readToRef(buffer: any, offset: number, eventOut: CollisionEvent) {
         const intBuf = new Int32Array(buffer, offset);
         const floatBuf = new Float32Array(buffer, offset);
@@ -272,7 +270,6 @@ class TriggerEvent {
     public bodyIdB: bigint = BigInt(0);
     public type: number = 0;
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     static readToRef(buffer: any, offset: number, eventOut: TriggerEvent) {
         const intBuf = new Int32Array(buffer, offset);
         eventOut.type = intBuf[0];
@@ -281,6 +278,9 @@ class TriggerEvent {
     }
 }
 
+/**
+ *
+ */
 export interface HavokPluginParameters {
     /**
      * Maximum number of raycast hits to process

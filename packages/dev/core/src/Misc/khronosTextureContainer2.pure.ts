@@ -195,7 +195,7 @@ export interface IKhronosTextureContainer2Options {
      * Optional container for the KTX2 decoder module and its dependencies. If set, the module will be used from this container and the URLs will be ignored.
      */
     // No need for | any here
-    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+
     binariesAndModulesContainer?: { [key in AllowedKeys]?: ArrayBuffer | any };
 }
 
@@ -258,13 +258,13 @@ export class KhronosTextureContainer2 {
     /**
      * Default number of workers used to handle data decoding
      */
-    public static DefaultNumWorkers = KhronosTextureContainer2.GetDefaultNumWorkers();
+    public static DefaultNumWorkers = /*#__PURE__*/ KhronosTextureContainer2.GetDefaultNumWorkers();
 
     /**
      * Default configuration for the KTX2 decoder.
      * The options defined in this way have priority over those passed when creating a KTX2 texture with new Texture(...).
      */
-    public static DefaultDecoderOptions = new DefaultKTX2DecoderOptions();
+    public static DefaultDecoderOptions = /*#__PURE__*/ new DefaultKTX2DecoderOptions();
 
     private static GetDefaultNumWorkers(): number {
         if (typeof navigator !== "object" || !navigator.hardwareConcurrency) {
@@ -298,7 +298,6 @@ export class KhronosTextureContainer2 {
 
         if (numWorkers && typeof Worker === "function" && typeof URL !== "undefined") {
             KhronosTextureContainer2._WorkerPoolPromise = new Promise((resolve) => {
-                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 const workerContent = `${applyConfig}(${workerFunction})()`;
                 const workerBlobUrl = URL.createObjectURL(new Blob([workerContent], { type: "application/javascript" }));
                 resolve(new AutoReleaseWorkerPool(numWorkers, async () => await initializeWebWorker(new Worker(workerBlobUrl), undefined, urls)));
@@ -311,7 +310,7 @@ export class KhronosTextureContainer2 {
                     KhronosTextureContainer2._KTX2DecoderModule.MSCTranscoder.UseFromWorkerThread = false;
                     KhronosTextureContainer2._KTX2DecoderModule.WASMMemoryManager.LoadBinariesFromCurrentThread = true;
                     applyConfig(urls, KhronosTextureContainer2._KTX2DecoderModule);
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
                     return new KhronosTextureContainer2._KTX2DecoderModule.KTX2Decoder();
                 });
             } else {

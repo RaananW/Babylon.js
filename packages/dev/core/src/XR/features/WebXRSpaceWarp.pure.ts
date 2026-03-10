@@ -321,6 +321,9 @@ export class WebXRSpaceWarp extends WebXRAbstractFeature {
         }
     }
 
+    /**
+     *
+     */
     public override dependsOn: string[] = [WebXRFeatureName.LAYERS];
 
     public override isCompatible(): boolean {

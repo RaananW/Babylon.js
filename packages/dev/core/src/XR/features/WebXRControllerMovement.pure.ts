@@ -72,14 +72,41 @@ export interface IWebXRControllerMovementOptions {
  * Feature context is used in handlers and on each XR frame to control the camera movement/direction.
  */
 export type WebXRControllerMovementFeatureContext = {
+    /**
+     *
+     */
     movementEnabled: boolean;
+    /**
+     *
+     */
     movementOrientationFollowsViewerPose: boolean;
+    /**
+     *
+     */
     movementOrientationFollowsController: boolean;
+    /**
+     *
+     */
     orientationPreferredHandedness?: XRHandedness;
+    /**
+     *
+     */
     movementSpeed: number;
+    /**
+     *
+     */
     movementThreshold: number;
+    /**
+     *
+     */
     rotationEnabled: boolean;
+    /**
+     *
+     */
     rotationSpeed: number;
+    /**
+     *
+     */
     rotationThreshold: number;
 };
 
@@ -87,9 +114,21 @@ export type WebXRControllerMovementFeatureContext = {
  * Current state of Movements shared across components and handlers.
  */
 export type WebXRControllerMovementState = {
+    /**
+     *
+     */
     moveX: number;
+    /**
+     *
+     */
     moveY: number;
+    /**
+     *
+     */
     rotateX: number;
+    /**
+     *
+     */
     rotateY: number;
 };
 

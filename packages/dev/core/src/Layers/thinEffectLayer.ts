@@ -72,8 +72,14 @@ export class ThinGlowBlurPostProcess extends EffectWrapper {
         super._gatherImports(useWebGPU, list);
     }
 
+    /**
+     *
+     */
     public textureWidth: number = 0;
 
+    /**
+     *
+     */
     public textureHeight: number = 0;
 
     public override bind() {

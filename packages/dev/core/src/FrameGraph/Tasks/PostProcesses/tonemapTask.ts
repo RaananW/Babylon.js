@@ -6,6 +6,9 @@ import { FrameGraphPostProcessTask } from "./postProcessTask";
  * Task which applies a tonemap post process.
  */
 export class FrameGraphTonemapTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinTonemapPostProcess;
 
     /**

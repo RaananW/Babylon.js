@@ -7,7 +7,7 @@ export * from "./torusBuilder.pure";
 import { CreateTorus, CreateTorusVertexData } from "./torusBuilder.pure";
 import { Mesh } from "../mesh";
 import { VertexData } from "../mesh.vertexData";
-import { Scene } from "../../scene";
+import type { Scene } from "../../scene";
 
 VertexData.CreateTorus = CreateTorusVertexData;
 

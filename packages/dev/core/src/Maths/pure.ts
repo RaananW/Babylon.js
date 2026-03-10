@@ -1,5 +1,5 @@
 /** Pure barrel — re-exports only side-effect-free modules */
-/* eslint-disable @typescript-eslint/no-restricted-imports */
+
 export * from "./math.scalar";
 export * from "./math.functions";
 export * from "./math.polar.pure";

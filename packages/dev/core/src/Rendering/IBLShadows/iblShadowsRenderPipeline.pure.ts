@@ -1092,7 +1092,7 @@ export class IblShadowsRenderPipeline extends PostProcessRenderPipeline {
                 const matIndex = this._materialsWithRenderPlugin.indexOf(m);
                 if (matIndex !== -1) {
                     this._materialsWithRenderPlugin.splice(matIndex, 1);
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+
                     const plugin = m.pluginManager?.getPlugin<IBLShadowsPluginMaterial>(IBLShadowsPluginMaterial.Name)!;
                     plugin.isEnabled = false;
                 }

@@ -14,7 +14,6 @@ import { PhysicsRaycastResult } from "../../physicsRaycastResult";
 import type { TransformNode } from "../../../Meshes/transformNode";
 import { Epsilon } from "../../../Maths/math.constants";
 
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/naming-convention */
 
 //declare var require: any;
@@ -22,7 +21,13 @@ declare let CANNON: any;
 
 /** @internal */
 export class CannonJSPlugin implements IPhysicsEnginePlugin {
+    /**
+     *
+     */
     public world: any;
+    /**
+     *
+     */
     public name: string = "CannonJSPlugin";
     private _physicsMaterials: any[] = [];
     private _fixedTimeStep: number = 1 / 60;
@@ -31,7 +36,10 @@ export class CannonJSPlugin implements IPhysicsEnginePlugin {
     private _physicsBodiesToRemoveAfterStep = new Array<any>();
     private _firstFrame = true;
     private _tmpQuaternion: Quaternion = new Quaternion();
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public BJSCANNON: any;
 
     public constructor(

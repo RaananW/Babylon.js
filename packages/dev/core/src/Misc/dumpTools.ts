@@ -14,5 +14,4 @@ const InitSideEffects = () => {
     Tools.DumpFramebuffer = DumpFramebuffer;
 };
 
-
 InitSideEffects();

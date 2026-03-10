@@ -118,7 +118,6 @@ export class IBLShadowsPluginMaterial extends MaterialPluginBase {
 
         if (shaderLanguage === ShaderLanguage.WGSL) {
             frag = {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 CUSTOM_FRAGMENT_DEFINITIONS: `
                 #ifdef RENDER_WITH_IBL_SHADOWS
                     var iblShadowsTextureSampler: sampler;
@@ -142,7 +141,6 @@ export class IBLShadowsPluginMaterial extends MaterialPluginBase {
             };
 
             if (this._material instanceof PBRBaseMaterial) {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 frag["CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION"] = `
                 #ifdef RENDER_WITH_IBL_SHADOWS
                     #ifndef UNLIT
@@ -163,7 +161,6 @@ export class IBLShadowsPluginMaterial extends MaterialPluginBase {
                 #endif
             `;
             } else if (this._material instanceof OpenPBRMaterial) {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 frag["CUSTOM_FRAGMENT_BEFORE_IBLLAYERCOMPOSITION"] = `
                 #ifdef RENDER_WITH_IBL_SHADOWS
                     #ifndef UNLIT
@@ -197,7 +194,6 @@ export class IBLShadowsPluginMaterial extends MaterialPluginBase {
             }
         } else {
             frag = {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 CUSTOM_FRAGMENT_DEFINITIONS: `
                 #ifdef RENDER_WITH_IBL_SHADOWS
                     uniform sampler2D iblShadowsTexture;
@@ -219,7 +215,6 @@ export class IBLShadowsPluginMaterial extends MaterialPluginBase {
             };
 
             if (this._material instanceof PBRBaseMaterial) {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 frag["CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION"] = `
                 #ifdef RENDER_WITH_IBL_SHADOWS
                     #ifndef UNLIT
@@ -240,7 +235,6 @@ export class IBLShadowsPluginMaterial extends MaterialPluginBase {
                 #endif
             `;
             } else if (this._material instanceof OpenPBRMaterial) {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 frag["CUSTOM_FRAGMENT_BEFORE_IBLLAYERCOMPOSITION"] = `
                 #ifdef RENDER_WITH_IBL_SHADOWS
                     #ifndef UNLIT

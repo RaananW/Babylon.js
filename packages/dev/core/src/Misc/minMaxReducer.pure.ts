@@ -10,7 +10,6 @@ import { PostProcessManager } from "../PostProcesses/postProcessManager";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { ThinMinMaxReducer, ThinMinMaxReducerPostProcess } from "./thinMinMaxReducer";
 
-
 /**
  * This class computes a min/max reduction from a texture: it means it computes the minimum
  * and maximum values from all values of the texture.

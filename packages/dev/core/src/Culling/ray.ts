@@ -4,9 +4,9 @@
  */
 export * from "./ray.pure";
 
-import { Nullable } from "../types";
-import { Matrix } from "../Maths/math.vector";
-import { PickingInfo } from "../Collisions/pickingInfo";
+import type { Nullable } from "../types";
+import type { Matrix } from "../Maths/math.vector";
+import type { PickingInfo } from "../Collisions/pickingInfo";
 import { Scene } from "../scene";
 import { Camera } from "../Cameras/camera";
 import type { MeshPredicate, TrianglePickingPredicate } from "./ray.core";

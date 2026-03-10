@@ -1,7 +1,6 @@
 import { SpriteManager, SpriteManagerParse, SpriteManagerParseFromFileAsync, SpriteManagerParseFromSnippetAsync } from "./spriteManager.pure";
 
 declare module "./spriteManager.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace SpriteManager {
         export { SpriteManagerParse as Parse };
         export { SpriteManagerParseFromFileAsync as ParseFromFileAsync };

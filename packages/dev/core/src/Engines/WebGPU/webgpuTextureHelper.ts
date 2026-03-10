@@ -19,7 +19,6 @@ import {
 } from "./webgpuTextureHelper.pure";
 
 declare module "./webgpuTextureHelper.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace WebGPUTextureHelper {
         export let ComputeNumMipmapLevels: typeof WebGPUTextureHelperComputeNumMipmapLevels;
         export let GetTextureTypeFromFormat: typeof WebGPUTextureHelperGetTextureTypeFromFormat;

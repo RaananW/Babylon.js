@@ -6,8 +6,14 @@ import { Engine } from "../Engines/engine";
  * @internal
  */
 export class ThinDepthOfFieldMergePostProcess extends EffectWrapper {
+    /**
+     *
+     */
     public static readonly FragmentUrl = "depthOfFieldMerge";
 
+    /**
+     *
+     */
     public static readonly Samplers = ["circleOfConfusionSampler", "blurStep0", "blurStep1", "blurStep2"];
 
     protected override _gatherImports(useWebGPU: boolean, list: Promise<any>[]) {

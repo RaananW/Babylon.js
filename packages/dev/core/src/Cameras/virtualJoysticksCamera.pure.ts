@@ -2,7 +2,7 @@
 
 import { FreeCamera } from "./freeCamera.pure";
 import type { Scene } from "../scene";
-import { Vector3 } from "../Maths/math.vector.pure";
+import type { Vector3 } from "../Maths/math.vector.pure";
 
 /**
  * This represents a free type of camera. It can be useful in First Person Shooter game for instance.

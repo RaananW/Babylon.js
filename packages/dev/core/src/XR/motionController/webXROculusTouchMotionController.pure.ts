@@ -33,6 +33,9 @@ export class WebXROculusTouchMotionController extends WebXRAbstractMotionControl
      */
     public static QUEST_MODEL_BASE_URL: string = "https://controllers.babylonjs.com/oculusQuest/";
 
+    /**
+     *
+     */
     public profileId = "oculus-touch";
 
     constructor(

@@ -306,10 +306,9 @@ export abstract class BaseCameraPointersInput implements ICameraInput<Camera> {
      * Override this method to provide functionality on POINTERDOUBLETAP event.
      * @param type type of event
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     public onDoubleTap(type: string) {}
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     /**
      * Called on pointer POINTERMOVE event if only a single touch is active.
      * Override this method to provide functionality.
@@ -329,7 +328,7 @@ export abstract class BaseCameraPointersInput implements ICameraInput<Camera> {
      * @param previousMultiTouchPanPosition Previous center point between the points
      * @param multiTouchPanPosition Current center point between the points
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     public onMultiTouch(
         _pointA: Nullable<PointerTouch>,
         _pointB: Nullable<PointerTouch>,

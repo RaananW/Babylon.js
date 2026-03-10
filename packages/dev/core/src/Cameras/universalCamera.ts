@@ -5,7 +5,7 @@
 export * from "./universalCamera.pure";
 
 import { UniversalCamera } from "./universalCamera.pure";
-import { Scene } from "../scene";
+import type { Scene } from "../scene";
 import { Vector3 } from "../Maths/math.vector";
 import { Node } from "../node";
 import { Camera } from "./camera";

@@ -10,7 +10,6 @@ import {
 } from "./decorators.serialization.pure";
 
 declare module "./decorators.serialization.pure" {
-    // eslint-disable-next-line no-shadow
     namespace SerializationHelper {
         export let AppendSerializedAnimations: typeof SerializationHelperAppendSerializedAnimations;
         export let Serialize: typeof SerializationHelperSerialize;

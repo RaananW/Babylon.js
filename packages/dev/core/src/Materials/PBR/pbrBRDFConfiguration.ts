@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Constants } from "../../Engines/constants";
 import { serialize, expandToProperty } from "../../Misc/decorators";
 import { MaterialDefines } from "../materialDefines";
@@ -9,14 +8,41 @@ import type { PBRBaseMaterial } from "./pbrBaseMaterial";
  * @internal
  */
 export class MaterialBRDFDefines extends MaterialDefines {
+    /**
+     *
+     */
     BRDF_V_HEIGHT_CORRELATED = false;
+    /**
+     *
+     */
     MS_BRDF_ENERGY_CONSERVATION = false;
+    /**
+     *
+     */
     SPHERICAL_HARMONICS = false;
+    /**
+     *
+     */
     SPECULAR_GLOSSINESS_ENERGY_CONSERVATION = false;
+    /**
+     *
+     */
     MIX_IBL_RADIANCE_WITH_IRRADIANCE = true;
+    /**
+     *
+     */
     LEGACY_SPECULAR_ENERGY_CONSERVATION = false;
+    /**
+     *
+     */
     BASE_DIFFUSE_MODEL = 0;
+    /**
+     *
+     */
     DIELECTRIC_SPECULAR_MODEL = 0;
+    /**
+     *
+     */
     CONDUCTOR_SPECULAR_MODEL = 0;
 }
 

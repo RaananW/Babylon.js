@@ -78,13 +78,34 @@ export interface IMakeAnimationAdditiveOptions {
 /**
  * @internal
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export interface _IAnimationState {
+    /**
+     *
+     */
     key: number;
+    /**
+     *
+     */
     repeatCount: number;
+    /**
+     *
+     */
     workValue?: any;
+    /**
+     *
+     */
     loopMode?: number;
+    /**
+     *
+     */
     offsetValue?: any;
+    /**
+     *
+     */
     highLimitValue?: any;
 }
 

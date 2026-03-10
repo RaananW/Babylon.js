@@ -7,7 +7,10 @@ import { LoadIESData } from "core/Lights/IES/iesLoader";
  * Implementation of the IES Texture Loader.
  * @internal
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export class _IESTextureLoader implements IInternalTextureLoader {
     /**
      * Defines whether the loader supports cascade loading the different faces.
@@ -18,7 +21,6 @@ export class _IESTextureLoader implements IInternalTextureLoader {
      * Uploads the cube texture data to the WebGL texture. It has already been bound.
      */
     public loadCubeData(): void {
-        // eslint-disable-next-line no-throw-literal
         throw ".ies not supported in Cube.";
     }
 

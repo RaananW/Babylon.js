@@ -41,12 +41,24 @@ export class NativeXRFrame implements XRFrame {
         return this._xrPose;
     }
 
+    /**
+     *
+     */
     public readonly fillPoses = this._nativeImpl.fillPoses!.bind(this._nativeImpl);
 
+    /**
+     *
+     */
     public readonly getViewerPose = this._nativeImpl.getViewerPose.bind(this._nativeImpl);
 
+    /**
+     *
+     */
     public readonly getHitTestResults = this._nativeImpl.getHitTestResults.bind(this._nativeImpl);
 
+    /**
+     *
+     */
     public readonly getHitTestResultsForTransientInput = () => {
         throw new Error("XRFrame.getHitTestResultsForTransientInput not supported on native.");
     };
@@ -55,6 +67,9 @@ export class NativeXRFrame implements XRFrame {
         return this._nativeImpl.trackedAnchors;
     }
 
+    /**
+     *
+     */
     public readonly createAnchor = this._nativeImpl.createAnchor!.bind(this._nativeImpl);
 
     public get worldInformation(): XRWorldInformation | undefined {
@@ -65,10 +80,19 @@ export class NativeXRFrame implements XRFrame {
         return this._nativeImpl.detectedPlanes;
     }
 
+    /**
+     *
+     */
     public readonly getJointPose = this._nativeImpl.getJointPose!.bind(this._nativeImpl);
 
+    /**
+     *
+     */
     public readonly fillJointRadii = this._nativeImpl.fillJointRadii!.bind(this._nativeImpl);
 
+    /**
+     *
+     */
     public readonly getLightEstimate = () => {
         throw new Error("XRFrame.getLightEstimate not supported on native.");
     };
@@ -77,6 +101,9 @@ export class NativeXRFrame implements XRFrame {
         return this._nativeImpl.featurePointCloud;
     }
 
+    /**
+     *
+     */
     public readonly getImageTrackingResults = (): XRImageTrackingResult[] => {
         return this._nativeImpl._imageTrackingResults ?? [];
     };

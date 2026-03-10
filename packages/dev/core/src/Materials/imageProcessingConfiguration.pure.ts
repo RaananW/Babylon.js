@@ -12,8 +12,6 @@ import { SerializationHelperSerialize, SerializationHelperParse, SerializationHe
 import type { IImageProcessingConfigurationDefines } from "./imageProcessingConfiguration.defines";
 import { PrepareSamplersForImageProcessing, PrepareUniformsForImageProcessing } from "./imageProcessingConfiguration.functions";
 
-/* eslint-disable @typescript-eslint/naming-convention */
-
 /**
  * This groups together the common properties used for image processing either in direct forward pass
  * or through post processing effect depending on the use of the image processing pipeline in your scene

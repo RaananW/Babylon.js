@@ -33,7 +33,10 @@ function MapSRGBToLinear(format: number): Nullable<number> {
  * Implementation of the KTX Texture Loader.
  * @internal
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export class _KTXTextureLoader implements IInternalTextureLoader {
     /**
      * Defines whether the loader supports cascade loading the different faces.

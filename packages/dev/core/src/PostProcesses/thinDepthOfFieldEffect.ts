@@ -23,6 +23,9 @@ export const enum ThinDepthOfFieldEffectBlurLevel {
     High,
 }
 
+/**
+ *
+ */
 export class ThinDepthOfFieldEffect {
     /** @internal */
     public readonly _circleOfConfusion: ThinCircleOfConfusionPostProcess;

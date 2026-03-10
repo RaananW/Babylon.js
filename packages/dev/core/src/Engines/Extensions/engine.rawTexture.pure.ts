@@ -9,7 +9,6 @@
  * @param is3D true for TEXTURE_3D and false for TEXTURE_2D_ARRAY
  * @internal
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 
 /**
  * Create a function for updateRawTexture3D/updateRawTexture2DArray

@@ -375,7 +375,30 @@ export const enum PhysicsActivationControl {
 /**
  * Represents a pair of bodies connected by a constraint.
  */
-export type ConstrainedBodyPair = { parentBody: PhysicsBody; parentBodyIndex: number; childBody: PhysicsBody; childBodyIndex: number };
+export type ConstrainedBodyPair = {
+    /**
+     *
+     */
+    parentBody: PhysicsBody /**
+     *
+     */;
+    /**
+     *
+     */
+    parentBodyIndex: number /**
+     *
+     */;
+    /**
+     *
+     */
+    childBody: PhysicsBody /**
+     *
+     */;
+    /**
+     *
+     */
+    childBodyIndex: number;
+};
 
 /** @internal */
 export interface IPhysicsEnginePluginV2 {

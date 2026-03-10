@@ -156,7 +156,6 @@ export const GetInternalFormatFromBasisFormat = (basisFormat: number, engine: Ab
     }
 
     if (format === undefined) {
-        // eslint-disable-next-line no-throw-literal
         throw "The chosen Basis transcoder format is not currently supported";
     }
 
@@ -180,7 +179,7 @@ const CreateWorkerAsync = async () => {
                             // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
                             return reject("Basis transcoder requires an environment with a URL constructor");
                         }
-                        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+
                         const workerBlobUrl = URL.createObjectURL(new Blob([`(${workerFunction})()`], { type: "application/javascript" }));
                         LocalWorker = new Worker(workerBlobUrl);
                         // eslint-disable-next-line github/no-then

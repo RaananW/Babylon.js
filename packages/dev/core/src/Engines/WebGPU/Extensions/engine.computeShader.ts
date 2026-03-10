@@ -5,20 +5,23 @@
 export * from "./engine.computeShader.pure";
 
 import * as WebGPUConstants from "../webgpuConstants";
-import { IComputeEffectCreationOptions, IComputeShaderPath, ComputeEffect } from "../../../Compute/computeEffect";
-import { IComputeContext } from "../../../Compute/IComputeContext";
-import { IComputePipelineContext } from "../../../Compute/IComputePipelineContext";
-import { Nullable } from "../../../types";
-import { ComputeBindingList, ComputeBindingMapping, ComputeCompilationMessages } from "../../Extensions/engine.computeShader";
-import { WebGPUPerfCounter } from "../webgpuPerfCounter";
-import { DataBuffer } from "../../../Buffers/dataBuffer";
+import type { IComputeEffectCreationOptions, IComputeShaderPath } from "../../../Compute/computeEffect";
+import { ComputeEffect } from "../../../Compute/computeEffect";
+import type { IComputeContext } from "../../../Compute/IComputeContext";
+import type { IComputePipelineContext } from "../../../Compute/IComputePipelineContext";
+import type { Nullable } from "../../../types";
+import type { ComputeBindingList, ComputeBindingMapping, ComputeCompilationMessages } from "../../Extensions/engine.computeShader";
+import type { WebGPUPerfCounter } from "../webgpuPerfCounter";
+import type { DataBuffer } from "../../../Buffers/dataBuffer";
 import { Logger } from "core/Misc/logger";
 import { WebGPUEngine } from "../../webgpuEngine";
 import { WebGPUComputeContext } from "../webgpuComputeContext";
 import { WebGPUComputePipelineContext } from "../webgpuComputePipelineContext";
 
 declare module "../../webgpuEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface WebGPUEngine {
         /** @internal */
         _createComputePipelineStageDescriptor(computeShader: string, defines: Nullable<string>, entryPoint: string): GPUProgrammableStage;

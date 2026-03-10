@@ -105,7 +105,6 @@ export class ThinTexture {
         return this._texture.is3D;
     }
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     protected set is3D(value: boolean) {
         if (!this._texture) {
             return;
@@ -125,7 +124,6 @@ export class ThinTexture {
         return this._texture.is2DArray;
     }
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     protected set is2DArray(value: boolean) {
         if (!this._texture) {
             return;

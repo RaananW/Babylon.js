@@ -34,6 +34,9 @@ export class StencilState implements IStencilState {
         this.backOpStencilDepthPass = StencilState.REPLACE;
     }
 
+    /**
+     *
+     */
     public func: number;
     public get stencilFunc(): number {
         return this.func;
@@ -43,6 +46,9 @@ export class StencilState implements IStencilState {
         this.func = value;
     }
 
+    /**
+     *
+     */
     public backFunc: number;
     public get stencilBackFunc(): number {
         return this.backFunc;
@@ -52,6 +58,9 @@ export class StencilState implements IStencilState {
         this.backFunc = value;
     }
 
+    /**
+     *
+     */
     public funcRef: number;
     public get stencilFuncRef(): number {
         return this.funcRef;
@@ -61,6 +70,9 @@ export class StencilState implements IStencilState {
         this.funcRef = value;
     }
 
+    /**
+     *
+     */
     public funcMask: number;
     public get stencilFuncMask(): number {
         return this.funcMask;
@@ -70,6 +82,9 @@ export class StencilState implements IStencilState {
         this.funcMask = value;
     }
 
+    /**
+     *
+     */
     public opStencilFail: number;
     public get stencilOpStencilFail(): number {
         return this.opStencilFail;
@@ -79,6 +94,9 @@ export class StencilState implements IStencilState {
         this.opStencilFail = value;
     }
 
+    /**
+     *
+     */
     public opDepthFail: number;
     public get stencilOpDepthFail(): number {
         return this.opDepthFail;
@@ -88,6 +106,9 @@ export class StencilState implements IStencilState {
         this.opDepthFail = value;
     }
 
+    /**
+     *
+     */
     public opStencilDepthPass: number;
     public get stencilOpStencilDepthPass(): number {
         return this.opStencilDepthPass;
@@ -97,6 +118,9 @@ export class StencilState implements IStencilState {
         this.opStencilDepthPass = value;
     }
 
+    /**
+     *
+     */
     public backOpStencilFail: number;
     public get stencilBackOpStencilFail(): number {
         return this.backOpStencilFail;
@@ -106,6 +130,9 @@ export class StencilState implements IStencilState {
         this.backOpStencilFail = value;
     }
 
+    /**
+     *
+     */
     public backOpDepthFail: number;
     public get stencilBackOpDepthFail(): number {
         return this.backOpDepthFail;
@@ -115,6 +142,9 @@ export class StencilState implements IStencilState {
         this.backOpDepthFail = value;
     }
 
+    /**
+     *
+     */
     public backOpStencilDepthPass: number;
     public get stencilBackOpStencilDepthPass(): number {
         return this.backOpStencilDepthPass;
@@ -124,6 +154,9 @@ export class StencilState implements IStencilState {
         this.backOpStencilDepthPass = value;
     }
 
+    /**
+     *
+     */
     public mask: number;
     public get stencilMask(): number {
         return this.mask;
@@ -133,6 +166,9 @@ export class StencilState implements IStencilState {
         this.mask = value;
     }
 
+    /**
+     *
+     */
     public enabled: boolean;
     public get stencilTest(): boolean {
         return this.enabled;

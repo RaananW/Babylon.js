@@ -10,7 +10,9 @@ import type { Scene } from "core/scene";
 import { Logger } from "core/Misc/logger";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /**
          * @internal

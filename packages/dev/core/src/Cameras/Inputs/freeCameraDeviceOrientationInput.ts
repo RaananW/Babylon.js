@@ -9,7 +9,9 @@ import { FreeCameraInputsManager } from "../../Cameras/freeCameraInputsManager";
 import type { Nullable } from "../../types";
 
 declare module "../../Cameras/freeCameraInputsManager" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface FreeCameraInputsManager {
         /**
          * @internal

@@ -15,7 +15,6 @@ import { CopyMatrixToArray, InvertMatrixToArray, MatrixManagement, MultiplyMatri
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const ExtractAsInt = (value: number) => {
     return parseInt(value.toString().replace(/\W/g, ""));
 };

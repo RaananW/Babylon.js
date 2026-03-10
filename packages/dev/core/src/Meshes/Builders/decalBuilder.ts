@@ -5,9 +5,9 @@
 export * from "./decalBuilder.pure";
 
 import { CreateDecal } from "./decalBuilder.pure";
-import { Vector3 } from "../../Maths/math.vector";
+import type { Vector3 } from "../../Maths/math.vector";
 import { Mesh } from "../mesh";
-import { AbstractMesh } from "../abstractMesh";
+import type { AbstractMesh } from "../abstractMesh";
 
 Mesh.CreateDecal = (name: string, sourceMesh: AbstractMesh, position: Vector3, normal: Vector3, size: Vector3, angle: number): Mesh => {
     const options = {

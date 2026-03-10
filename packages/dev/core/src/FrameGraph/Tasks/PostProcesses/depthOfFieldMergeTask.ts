@@ -7,8 +7,14 @@ import { Constants } from "../../../Engines/constants";
  * @internal
  */
 export class FrameGraphDepthOfFieldMergeTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public circleOfConfusionTexture: FrameGraphTextureHandle;
 
+    /**
+     *
+     */
     public blurSteps: FrameGraphTextureHandle[] = [];
 
     constructor(name: string, frameGraph: FrameGraph, thinPostProcess?: ThinDepthOfFieldMergePostProcess) {

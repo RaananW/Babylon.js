@@ -4,17 +4,19 @@
  */
 export * from "./engine.rawTexture.pure";
 
-import { IWebRequest } from "../../../Misc/interfaces/iWebRequest";
-import { Nullable } from "../../../types";
-import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-import { Scene } from "../../../scene";
+import type { IWebRequest } from "../../../Misc/interfaces/iWebRequest";
+import type { Nullable } from "../../../types";
+import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import type { Scene } from "../../../scene";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Constants } from "../../constants";
 import { Logger } from "../../../Misc/logger";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
 
 declare module "../../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Update a raw texture

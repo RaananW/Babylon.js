@@ -173,79 +173,145 @@ export class NodeRenderGraphGeometryRendererBlock extends NodeRenderGraphBaseObj
     }
 
     // View depth
+    /**
+     *
+     */
     @editableInPropertyPage("Format", PropertyTypeForEdition.TextureFormat, "OUTPUT - VIEW DEPTH")
     public viewDepthFormat = Constants.TEXTUREFORMAT_RED;
 
+    /**
+     *
+     */
     @editableInPropertyPage("Type", PropertyTypeForEdition.TextureType, "OUTPUT - VIEW DEPTH")
     public viewDepthType = Constants.TEXTURETYPE_FLOAT;
 
     // Normalized view depth
+    /**
+     *
+     */
     @editableInPropertyPage("Format", PropertyTypeForEdition.TextureFormat, "OUTPUT - NORMALIZED VIEW DEPTH")
     public normalizedViewDepthFormat = Constants.TEXTUREFORMAT_RED;
 
+    /**
+     *
+     */
     @editableInPropertyPage("Type", PropertyTypeForEdition.TextureType, "OUTPUT - NORMALIZED VIEW DEPTH")
     public normalizedViewDepthType = Constants.TEXTURETYPE_HALF_FLOAT;
 
     // Screen depth
+    /**
+     *
+     */
     @editableInPropertyPage("Format", PropertyTypeForEdition.TextureFormat, "OUTPUT - SCREEN DEPTH")
     public screenDepthFormat = Constants.TEXTUREFORMAT_RED;
 
+    /**
+     *
+     */
     @editableInPropertyPage("Type", PropertyTypeForEdition.TextureType, "OUTPUT - SCREEN DEPTH")
     public screenDepthType = Constants.TEXTURETYPE_FLOAT;
 
     // View normal
+    /**
+     *
+     */
     @editableInPropertyPage("Format", PropertyTypeForEdition.TextureFormat, "OUTPUT - VIEW NORMAL")
     public viewNormalFormat = Constants.TEXTUREFORMAT_RGBA;
 
+    /**
+     *
+     */
     @editableInPropertyPage("Type", PropertyTypeForEdition.TextureType, "OUTPUT - VIEW NORMAL")
     public viewNormalType = Constants.TEXTURETYPE_HALF_FLOAT;
 
     // World normal
+    /**
+     *
+     */
     @editableInPropertyPage("Format", PropertyTypeForEdition.TextureFormat, "OUTPUT - WORLD NORMAL")
     public worldNormalFormat = Constants.TEXTUREFORMAT_RGBA;
 
+    /**
+     *
+     */
     @editableInPropertyPage("Type", PropertyTypeForEdition.TextureType, "OUTPUT - WORLD NORMAL")
     public worldNormalType = Constants.TEXTURETYPE_UNSIGNED_BYTE;
 
     // Local position
+    /**
+     *
+     */
     @editableInPropertyPage("Format", PropertyTypeForEdition.TextureFormat, "OUTPUT - LOCAL POSITION")
     public localPositionFormat = Constants.TEXTUREFORMAT_RGBA;
 
+    /**
+     *
+     */
     @editableInPropertyPage("Type", PropertyTypeForEdition.TextureType, "OUTPUT - LOCAL POSITION")
     public localPositionType = Constants.TEXTURETYPE_HALF_FLOAT;
 
     // World Position
+    /**
+     *
+     */
     @editableInPropertyPage("Format", PropertyTypeForEdition.TextureFormat, "OUTPUT - WORLD POSITION")
     public worldPositionFormat = Constants.TEXTUREFORMAT_RGBA;
 
+    /**
+     *
+     */
     @editableInPropertyPage("Type", PropertyTypeForEdition.TextureType, "OUTPUT - WORLD POSITION")
     public worldPositionType = Constants.TEXTURETYPE_HALF_FLOAT;
 
     // Albedo
+    /**
+     *
+     */
     @editableInPropertyPage("Format", PropertyTypeForEdition.TextureFormat, "OUTPUT - ALBEDO")
     public albedoFormat = Constants.TEXTUREFORMAT_RGBA;
 
+    /**
+     *
+     */
     @editableInPropertyPage("Type", PropertyTypeForEdition.TextureType, "OUTPUT - ALBEDO")
     public albedoType = Constants.TEXTURETYPE_UNSIGNED_BYTE;
 
     // Reflectivity
+    /**
+     *
+     */
     @editableInPropertyPage("Format", PropertyTypeForEdition.TextureFormat, "OUTPUT - REFLECTIVITY")
     public reflectivityFormat = Constants.TEXTUREFORMAT_RGBA;
 
+    /**
+     *
+     */
     @editableInPropertyPage("Type", PropertyTypeForEdition.TextureType, "OUTPUT - REFLECTIVITY")
     public reflectivityType = Constants.TEXTURETYPE_UNSIGNED_BYTE;
 
     // Velocity
+    /**
+     *
+     */
     @editableInPropertyPage("Format", PropertyTypeForEdition.TextureFormat, "OUTPUT - VELOCITY")
     public velocityFormat = Constants.TEXTUREFORMAT_RGBA;
 
+    /**
+     *
+     */
     @editableInPropertyPage("Type", PropertyTypeForEdition.TextureType, "OUTPUT - VELOCITY")
     public velocityType = Constants.TEXTURETYPE_UNSIGNED_BYTE;
 
     // Linear velocity
+    /**
+     *
+     */
     @editableInPropertyPage("Format", PropertyTypeForEdition.TextureFormat, "OUTPUT - LINEAR VELOCITY")
     public linearVelocityFormat = Constants.TEXTUREFORMAT_RGBA;
 
+    /**
+     *
+     */
     @editableInPropertyPage("Type", PropertyTypeForEdition.TextureType, "OUTPUT - LINEAR VELOCITY")
     public linearVelocityType = Constants.TEXTURETYPE_HALF_FLOAT;
 

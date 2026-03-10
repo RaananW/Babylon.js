@@ -6,7 +6,8 @@ import { Vector3, Matrix, TmpVectors } from "../Maths/math.vector.pure";
 import { VertexBuffer, Buffer } from "../Buffers/buffer.pure";
 
 import type { Effect } from "../Materials/effect";
-import { RawTexture, RawTextureCreateRGBATexture } from "../Materials/Textures/rawTexture.pure";
+import type { RawTexture } from "../Materials/Textures/rawTexture.pure";
+import { RawTextureCreateRGBATexture } from "../Materials/Textures/rawTexture.pure";
 import { EngineStore } from "../Engines/engineStore";
 import type { IDisposable, Scene } from "../scene";
 
@@ -18,7 +19,8 @@ import type { IAnimatable } from "../Animations/animatable.interface";
 import { DrawWrapper } from "../Materials/drawWrapper";
 
 import type { DataBuffer } from "../Buffers/dataBuffer";
-import { Color4, Color3, TmpColors, Color3LerpToRef } from "../Maths/math.color.pure";
+import type { Color3 } from "../Maths/math.color.pure";
+import { Color4, TmpColors, Color3LerpToRef } from "../Maths/math.color.pure";
 import type { ISize } from "../Maths/math.size";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 

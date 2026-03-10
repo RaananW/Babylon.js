@@ -6,6 +6,9 @@ import { ThinConvolutionPostProcess } from "core/PostProcesses/thinConvolutionPo
  * Task which applies a convolution post process.
  */
 export class FrameGraphConvolutionTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinConvolutionPostProcess;
 
     /**

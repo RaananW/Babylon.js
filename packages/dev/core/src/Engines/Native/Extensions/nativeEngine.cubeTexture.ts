@@ -4,9 +4,9 @@
  */
 export * from "./nativeEngine.cubeTexture.pure";
 
-import { IWebRequest } from "../../../Misc/interfaces/iWebRequest";
-import { Scene } from "../../../scene";
-import { Nullable } from "../../../types";
+import type { IWebRequest } from "../../../Misc/interfaces/iWebRequest";
+import type { Scene } from "../../../scene";
+import type { Nullable } from "../../../types";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Texture } from "../../../Materials/Textures/texture";
 import { CreateRadianceImageDataArrayBufferViews, GetEnvInfo, UploadEnvSpherical } from "../../../Misc/environmentTextureTools";
@@ -16,7 +16,9 @@ import { ThinNativeEngine } from "../../thinNativeEngine";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 declare module "../../../Engines/thinNativeEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface ThinNativeEngine {
         /**
          * Creates a cube texture

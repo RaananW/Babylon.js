@@ -23,6 +23,9 @@ export class FrameGraphCircleOfConfusionTask extends FrameGraphPostProcessTask {
      */
     public camera: Camera;
 
+    /**
+     *
+     */
     public override readonly postProcess: ThinCircleOfConfusionPostProcess;
 
     /**

@@ -4,7 +4,18 @@
  * Type used to locate a resource in a compute shader.
  * TODO: remove this when browsers support reflection for wgsl shaders
  */
-export type ComputeBindingLocation = { group: number; binding: number };
+export type ComputeBindingLocation = {
+    /**
+     *
+     */
+    group: number /**
+     *
+     */;
+    /**
+     *
+     */
+    binding: number;
+};
 
 /**
  * Type used to lookup a resource and retrieve its binding location

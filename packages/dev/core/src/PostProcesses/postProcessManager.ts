@@ -56,6 +56,9 @@ export class PostProcessManager {
         this._indexBuffer = this._scene.getEngine().createIndexBuffer(indices);
     }
 
+    /**
+     *
+     */
     public onBeforeRenderObservable = new Observable<PostProcessManager>();
 
     /**

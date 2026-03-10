@@ -6,10 +6,19 @@ import { Engine } from "../Engines/engine";
  * @internal
  */
 export class ThinSSAO2BlurPostProcess extends EffectWrapper {
+    /**
+     *
+     */
     public static readonly FragmentUrl = "ssao2";
 
+    /**
+     *
+     */
     public static readonly Uniforms = ["outSize", "samples", "soften", "tolerance"];
 
+    /**
+     *
+     */
     public static readonly Samplers = ["textureSampler", "depthSampler"];
 
     protected override _gatherImports(useWebGPU: boolean, list: Promise<any>[]) {
@@ -45,12 +54,24 @@ export class ThinSSAO2BlurPostProcess extends EffectWrapper {
     private readonly _isHorizontal: boolean;
     private _bypassBlur: boolean = false;
 
+    /**
+     *
+     */
     public textureSize: number = 0;
 
+    /**
+     *
+     */
     public bilateralSamples: number = 16;
 
+    /**
+     *
+     */
     public bilateralSoften: number = 0;
 
+    /**
+     *
+     */
     public bilateralTolerance: number = 0;
 
     public set bypassBlur(b: boolean) {

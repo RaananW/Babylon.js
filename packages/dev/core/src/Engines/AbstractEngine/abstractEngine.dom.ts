@@ -4,12 +4,14 @@
  */
 export * from "./abstractEngine.dom.pure";
 
-import { IViewportLike } from "../../Maths/math.like";
-import { Nullable } from "../../types";
+import type { IViewportLike } from "../../Maths/math.like";
+import type { Nullable } from "../../types";
 import { AbstractEngine } from "../abstractEngine";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Gets the HTML element used to attach event listeners

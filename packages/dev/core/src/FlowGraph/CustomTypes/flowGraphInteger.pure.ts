@@ -78,6 +78,9 @@ export class FlowGraphInteger {
         return this.value === other.value;
     }
 
+    /**
+     *
+     */
     public static ClassName = "FlowGraphInteger";
 
     /**

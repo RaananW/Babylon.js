@@ -98,7 +98,6 @@ export interface EngineCapabilities {
     oculusMultiview?: any;
     /** Function used to let the system compiles shaders in background */
     parallelShaderCompile?: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         COMPLETION_STATUS_KHR: number;
     };
     /** Max number of texture samples for MSAA */

@@ -5,7 +5,7 @@
 export * from "./webXRMotionControllerManager.pure";
 
 import { WebXRMotionControllerManager } from "./webXRMotionControllerManager.pure";
-import { Scene } from "../../scene";
+import type { Scene } from "../../scene";
 import { WebXRGenericTriggerMotionController } from "./webXRGenericMotionController";
 
 // register the generic profile(s) here so we will at least have them

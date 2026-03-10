@@ -14,8 +14,6 @@ import type { Scene } from "../../../scene";
 import { RawTextureCreateRGBATexture } from "../../../Materials/Textures/rawTexture.pure";
 import { RandomRange } from "../../../Maths/math.scalar.functions";
 
-
-
 /**
  * Render pipeline to produce ssao effect
  */

@@ -8,7 +8,9 @@ import { ArcRotateCameraVRDeviceOrientationInput } from "./arcRotateCameraVRDevi
 import { ArcRotateCameraInputsManager } from "../../Cameras/arcRotateCameraInputsManager";
 
 declare module "../../Cameras/arcRotateCameraInputsManager" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface ArcRotateCameraInputsManager {
         /**
          * Add orientation input support to the input manager.

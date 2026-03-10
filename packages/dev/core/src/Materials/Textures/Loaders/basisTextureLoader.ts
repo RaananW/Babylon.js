@@ -8,7 +8,10 @@ import { Tools } from "../../../Misc/tools";
  * Loader for .basis file format
  * @internal
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export class _BasisTextureLoader implements IInternalTextureLoader {
     /**
      * Defines whether the loader supports cascade loading the different faces.

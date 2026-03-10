@@ -9,6 +9,9 @@ import type { FlowGraphNumber } from "core/FlowGraph/utils";
 import { getNumericValue, isNumeric } from "core/FlowGraph/utils";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 
+/**
+ *
+ */
 export interface IFlowGraphDataSwitchBlockConfiguration<T> extends IFlowGraphBlockConfiguration {
     /**
      * The possible values for the selection.

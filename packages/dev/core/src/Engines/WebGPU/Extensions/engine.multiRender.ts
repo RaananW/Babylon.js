@@ -4,19 +4,21 @@
  */
 export * from "./engine.multiRender.pure";
 
-import { IMultiRenderTargetOptions } from "../../../Materials/Textures/multiRenderTarget";
-import { Nullable } from "../../../types";
-import { TextureSize } from "../../../Materials/Textures/textureCreationOptions";
-import { RenderTargetWrapper } from "../../renderTargetWrapper";
-import { WebGPURenderTargetWrapper } from "../webgpuRenderTargetWrapper";
-import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import type { IMultiRenderTargetOptions } from "../../../Materials/Textures/multiRenderTarget";
+import type { Nullable } from "../../../types";
+import type { TextureSize } from "../../../Materials/Textures/textureCreationOptions";
+import type { RenderTargetWrapper } from "../../renderTargetWrapper";
+import type { WebGPURenderTargetWrapper } from "../webgpuRenderTargetWrapper";
+import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Logger } from "../../../Misc/logger";
 import { Constants } from "../../constants";
 import { WebGPUEngine } from "../../webgpuEngine";
 
 declare module "../../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Unbind a list of render target textures from the webGL context

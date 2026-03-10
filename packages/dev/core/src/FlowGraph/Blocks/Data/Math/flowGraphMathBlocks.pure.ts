@@ -638,6 +638,9 @@ export class FlowGraphClampBlock extends FlowGraphTernaryOperationBlock<
     }
 }
 
+/**
+ *
+ */
 export function Saturate(a: number): number {
     return Math.min(Math.max(a, 0), 1);
 }

@@ -990,7 +990,6 @@ export class GIRSMRenderPluginMaterial extends MaterialPluginBase {
 
         if (shaderLanguage === ShaderLanguage.WGSL) {
             frag = {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 CUSTOM_FRAGMENT_DEFINITIONS: `
                 #ifdef RENDER_WITH_GIRSM
                     var girsmTextureGIContribSampler: sampler;
@@ -1003,7 +1002,6 @@ export class GIRSMRenderPluginMaterial extends MaterialPluginBase {
                 #endif
             `,
 
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION: `
                 #ifdef RENDER_WITH_GIRSM
                     finalDiffuse += computeIndirect() * surfaceAlbedo.rgb;
@@ -1020,7 +1018,6 @@ export class GIRSMRenderPluginMaterial extends MaterialPluginBase {
             }
         } else {
             frag = {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 CUSTOM_FRAGMENT_DEFINITIONS: `
                 #ifdef RENDER_WITH_GIRSM
                     uniform sampler2D girsmTextureGIContrib;
@@ -1032,7 +1029,6 @@ export class GIRSMRenderPluginMaterial extends MaterialPluginBase {
                 #endif
             `,
 
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION: `
                 #ifdef RENDER_WITH_GIRSM
                     finalDiffuse += computeIndirect() * surfaceAlbedo.rgb;

@@ -4,7 +4,8 @@ import type { Color3Gradient, IValueGradient } from "../Misc/gradients";
 import { FactorGradient, ColorGradient, GradientHelperGetCurrentGradient } from "../Misc/gradients.pure";
 import { Observable } from "../Misc/observable";
 import { Vector3, Matrix, TmpVectors } from "../Maths/math.vector.pure";
-import { Color4, TmpColors, Color4LerpToRef } from "../Maths/math.color.pure";
+import type { Color4 } from "../Maths/math.color.pure";
+import { TmpColors, Color4LerpToRef } from "../Maths/math.color.pure";
 import { Lerp } from "../Maths/math.scalar.functions";
 import { VertexBuffer, Buffer } from "../Buffers/buffer.pure";
 
@@ -31,7 +32,6 @@ import { AddClipPlaneUniforms, BindClipPlane, PrepareStringDefinesForClipPlanes 
 import { Scene } from "../scene.pure";
 import type { Engine } from "../Engines/engine";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
-
 
 import { BindFogParameters, BindLogDepth } from "../Materials/materialHelper.functions";
 import type { PointParticleEmitter } from "./EmitterTypes/pointParticleEmitter";
@@ -420,7 +420,6 @@ export class GPUParticleSystem extends BaseParticleSystem implements IDisposable
      */
     public start(delay = this.startDelay): void {
         if (!this.targetStopDuration && this._hasTargetStopDurationDependantGradient()) {
-            // eslint-disable-next-line no-throw-literal
             throw "Particle system started with a targetStopDuration dependant gradient (eg. startSizeGradients) but no targetStopDuration set";
         }
         if (delay) {

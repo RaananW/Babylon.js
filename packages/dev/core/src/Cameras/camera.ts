@@ -102,7 +102,10 @@ export class Camera extends Node {
     /**
      * Defines that both eyes of the camera should be renderered in a VR mode (carbox).
      */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public static readonly RIG_MODE_VR = Constants.RIG_MODE_VR;
     /**
      * Custom rig mode allowing rig cameras to be populated manually with any number of cameras
@@ -1489,7 +1492,6 @@ export class Camera extends Node {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     static GetConstructorFromName(type: string, name: string, scene: Scene, interaxial_distance: number = 0, isStereoscopicSideBySide: boolean = true): () => Camera {
         const constructorFunc = Node.Construct(type, name, scene, {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             interaxial_distance: interaxial_distance,
             isStereoscopicSideBySide: isStereoscopicSideBySide,
         });

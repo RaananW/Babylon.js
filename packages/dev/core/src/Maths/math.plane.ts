@@ -8,7 +8,6 @@ import {
 } from "./math.plane.pure";
 
 declare module "./math.plane.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace Plane {
         export { PlaneFromArray as FromArray };
         export { PlaneFromPoints as FromPoints };

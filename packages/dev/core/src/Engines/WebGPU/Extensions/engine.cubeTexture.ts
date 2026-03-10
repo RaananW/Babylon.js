@@ -4,17 +4,19 @@
  */
 export * from "./engine.cubeTexture.pure";
 
-import { Nullable } from "../../../types";
-import { DepthTextureCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
-import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-import { Scene } from "../../../scene";
+import type { Nullable } from "../../../types";
+import type { DepthTextureCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
+import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import type { Scene } from "../../../scene";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Constants } from "../../constants";
 import { WebGPUTextureHelper } from "../webgpuTextureHelper";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
 
 declare module "../../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * @internal

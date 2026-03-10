@@ -229,6 +229,9 @@ export class ConeParticleEmitter implements IParticleEmitterType {
         this.emitFromSpawnPointOnly = serializationObject.emitFromSpawnPointOnly !== undefined ? serializationObject.emitFromSpawnPointOnly : false;
     }
 }
+/**
+ *
+ */
 export class ConeDirectedParticleEmitter extends ConeParticleEmitter {
     constructor(
         radius = 1,

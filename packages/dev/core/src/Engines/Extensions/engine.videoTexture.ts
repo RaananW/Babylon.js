@@ -4,14 +4,16 @@
  */
 export * from "./engine.videoTexture.pure";
 
-import { InternalTexture } from "../../Materials/Textures/internalTexture";
-import { Nullable } from "../../types";
+import type { InternalTexture } from "../../Materials/Textures/internalTexture";
+import type { Nullable } from "../../types";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { Constants } from "../constants";
 import type { ExternalTexture } from "../../Materials/Textures/externalTexture";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Update a video texture

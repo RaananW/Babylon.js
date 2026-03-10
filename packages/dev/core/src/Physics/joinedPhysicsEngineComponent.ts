@@ -5,21 +5,23 @@
 export * from "./joinedPhysicsEngineComponent.pure";
 
 import { PhysicsEngineSceneComponent } from "./joinedPhysicsEngineComponent.pure";
-import { Nullable } from "../types";
-import { Vector3 } from "../Maths/math.vector";
-import { AbstractMesh } from "../Meshes/abstractMesh";
+import type { Nullable } from "../types";
+import type { Vector3 } from "../Maths/math.vector";
+import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { SceneComponentConstants } from "../sceneComponent";
 import { Scene } from "../scene";
-import { IPhysicsEngine } from "./IPhysicsEngine";
-import { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin";
-import { IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin";
+import type { IPhysicsEngine } from "./IPhysicsEngine";
+import type { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin";
+import type { IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin";
 import { Logger } from "../Misc/logger";
 import { PhysicsEngine as PhysicsEngineV1 } from "./v1/physicsEngine";
 import { PhysicsEngine as PhysicsEngineV2 } from "./v2/physicsEngine";
 import type { Observable } from "../Misc/observable";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal (Backing field) */
         _physicsEngine: Nullable<IPhysicsEngine>;

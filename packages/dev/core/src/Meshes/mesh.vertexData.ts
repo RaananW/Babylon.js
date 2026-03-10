@@ -32,7 +32,6 @@ import {
 } from "./mesh.vertexData.pure";
 
 declare module "./mesh.vertexData.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace VertexData {
         export let CreateRibbon: typeof VertexDataCreateRibbon;
         export let CreateBox: typeof VertexDataCreateBox;

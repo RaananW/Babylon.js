@@ -5,7 +5,7 @@
 export * from "./webXRMicrosoftMixedRealityController.pure";
 
 import { WebXRMicrosoftMixedRealityController } from "./webXRMicrosoftMixedRealityController.pure";
-import { Scene } from "../../scene";
+import type { Scene } from "../../scene";
 import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
 
 // register the profile

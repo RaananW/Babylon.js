@@ -1,5 +1,5 @@
 /** Pure barrel — re-exports only side-effect-free modules */
-/* eslint-disable @typescript-eslint/no-restricted-imports */
+
 export * from "./baseTexture.pure";
 export * from "./baseTexture.polynomial.pure";
 export * from "./colorGradingTexture.pure";

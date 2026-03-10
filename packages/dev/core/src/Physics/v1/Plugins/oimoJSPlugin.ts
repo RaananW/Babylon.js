@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { IPhysicsEnabledObject } from "../physicsImpostor";
 import { PhysicsImpostor } from "../physicsImpostor";
 import type { IMotorEnabledJoint, DistanceJointData, SpringJointData } from "../physicsJoint";
@@ -16,9 +14,18 @@ declare let OIMO: any;
 
 /** @internal */
 export class OimoJSPlugin implements IPhysicsEnginePlugin {
+    /**
+     *
+     */
     public world: any;
+    /**
+     *
+     */
     public name: string = "OimoJSPlugin";
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public BJSOIMO: any;
     private _raycastResult: PhysicsRaycastResult;
     private _fixedTimeStep: number = 1 / 60;

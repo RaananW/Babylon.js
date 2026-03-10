@@ -28,7 +28,7 @@ export interface _IProcessingOptions {
     platformName: string;
     lookForClosingBracketForUniformBuffer?: boolean;
     processingContext: Nullable<_IShaderProcessingContext>;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
     isNDCHalfZRange: boolean;
     useReverseDepthBuffer: boolean;
     processCodeAfterIncludes?: ShaderCustomProcessingFunction;

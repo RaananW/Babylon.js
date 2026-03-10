@@ -4,8 +4,8 @@
  */
 export * from "./abstractMesh.decalMap.pure";
 
-import { Nullable } from "../types";
-import { MeshUVSpaceRenderer } from "./meshUVSpaceRenderer";
+import type { Nullable } from "../types";
+import type { MeshUVSpaceRenderer } from "./meshUVSpaceRenderer";
 import { AbstractMesh } from "../Meshes/abstractMesh";
 
 declare module "./abstractMesh" {

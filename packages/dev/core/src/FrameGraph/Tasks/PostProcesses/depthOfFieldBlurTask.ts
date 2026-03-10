@@ -8,8 +8,14 @@ import { Vector2 } from "core/Maths/math.vector";
  * @internal
  */
 export class FrameGraphDepthOfFieldBlurTask extends FrameGraphBlurTask {
+    /**
+     *
+     */
     public circleOfConfusionTexture: FrameGraphTextureHandle;
 
+    /**
+     *
+     */
     public circleOfConfusionSamplingMode = Constants.TEXTURE_BILINEAR_SAMPLINGMODE;
 
     constructor(name: string, frameGraph: FrameGraph, thinPostProcess?: ThinDepthOfFieldBlurPostProcess) {

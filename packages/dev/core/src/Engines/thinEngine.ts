@@ -513,7 +513,7 @@ export class ThinEngine extends AbstractEngine {
             astc: this._gl.getExtension("WEBGL_compressed_texture_astc") || this._gl.getExtension("WEBKIT_WEBGL_compressed_texture_astc"),
             bptc: this._gl.getExtension("EXT_texture_compression_bptc") || this._gl.getExtension("WEBKIT_EXT_texture_compression_bptc"),
             s3tc: this._gl.getExtension("WEBGL_compressed_texture_s3tc") || this._gl.getExtension("WEBKIT_WEBGL_compressed_texture_s3tc"),
-            // eslint-disable-next-line @typescript-eslint/naming-convention
+
             s3tc_srgb: this._gl.getExtension("WEBGL_compressed_texture_s3tc_srgb") || this._gl.getExtension("WEBKIT_WEBGL_compressed_texture_s3tc_srgb"),
             pvrtc: this._gl.getExtension("WEBGL_compressed_texture_pvrtc") || this._gl.getExtension("WEBKIT_WEBGL_compressed_texture_pvrtc"),
             etc1: this._gl.getExtension("WEBGL_compressed_texture_etc1") || this._gl.getExtension("WEBKIT_WEBGL_compressed_texture_etc1"),
@@ -2068,7 +2068,6 @@ export class ThinEngine extends AbstractEngine {
         return effect;
     }
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     protected static _ConcatenateShader = _ConcatenateShader;
 
     /**
@@ -3249,7 +3248,6 @@ export class ThinEngine extends AbstractEngine {
      */
     public _rescaleTexture(source: InternalTexture, destination: InternalTexture, scene: Nullable<any>, internalFormat: number, onComplete: () => void): void {}
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     private _unpackFlipYCached: Nullable<boolean> = null;
 
     /**
@@ -3257,7 +3255,10 @@ export class ThinEngine extends AbstractEngine {
      * be interested to not cache the unpack flip y state to ensure a consistent
      * value would be set.
      */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public enableUnpackFlipYCached = true;
 
     /**
@@ -3834,7 +3835,7 @@ export class ThinEngine extends AbstractEngine {
             if (texture && texture.isMultiview) {
                 //this._gl.bindTexture(target, texture ? texture._colorTextureArray : null);
                 Logger.Error(["_bindTextureDirectly called with a multiview texture!", target, texture]);
-                // eslint-disable-next-line no-throw-literal
+
                 throw "_bindTextureDirectly called with a multiview texture!";
             } else {
                 this._gl.bindTexture(target, texture?._hardwareTexture?.underlyingResource ?? null);

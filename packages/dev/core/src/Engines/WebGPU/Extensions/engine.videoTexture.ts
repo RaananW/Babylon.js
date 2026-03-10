@@ -4,14 +4,16 @@
  */
 export * from "./engine.videoTexture.pure";
 
-import { InternalTexture } from "../../../Materials/Textures/internalTexture";
-import { Nullable } from "../../../types";
-import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-import { ExternalTexture } from "../../../Materials/Textures/externalTexture";
+import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
+import type { Nullable } from "../../../types";
+import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import type { ExternalTexture } from "../../../Materials/Textures/externalTexture";
 import { WebGPUEngine } from "../../webgpuEngine";
 
 declare module "../../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Update a video texture

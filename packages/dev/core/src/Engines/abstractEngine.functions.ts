@@ -81,7 +81,7 @@ export function getHostDocument(renderingCanvas: Nullable<HTMLCanvasElement> = n
 /** @internal */
 export function _GetGlobalDefines(
     defines?: { [key: string]: string },
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
     isNDCHalfZRange?: boolean,
     useReverseDepthBuffer?: boolean,
     useExactSrgbConversions?: boolean

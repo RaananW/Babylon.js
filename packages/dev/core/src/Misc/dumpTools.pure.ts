@@ -11,8 +11,6 @@ import { Logger } from "./logger";
 import { EncodeArrayBufferToBase64 } from "./stringTools";
 import { nativeOverride } from "./decorators";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 type DumpResources = {
     canvas: HTMLCanvasElement | OffscreenCanvas;
     dumpEngine: {
@@ -149,7 +147,7 @@ export const EncodeImageAsync = EncodingHelper.EncodeImageAsync;
  * @returns a void promise
  */
 // Should have "Async" in the name but this is a public API and we can't break it now
-// eslint-disable-next-line no-restricted-syntax
+
 export async function DumpFramebuffer(
     width: number,
     height: number,

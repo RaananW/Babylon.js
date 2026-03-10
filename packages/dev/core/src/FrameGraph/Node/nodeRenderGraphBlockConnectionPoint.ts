@@ -1,7 +1,11 @@
-import { NodeRenderGraphConnectionPoint, NodeRenderGraphConnectionPointIsTextureHandle, NodeRenderGraphConnectionPointIsShadowGenerator, NodeRenderGraphConnectionPointIsShadowLight } from "./nodeRenderGraphBlockConnectionPoint.pure";
+import {
+    NodeRenderGraphConnectionPoint,
+    NodeRenderGraphConnectionPointIsTextureHandle,
+    NodeRenderGraphConnectionPointIsShadowGenerator,
+    NodeRenderGraphConnectionPointIsShadowLight,
+} from "./nodeRenderGraphBlockConnectionPoint.pure";
 
 declare module "./nodeRenderGraphBlockConnectionPoint.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace NodeRenderGraphConnectionPoint {
         export { NodeRenderGraphConnectionPointIsTextureHandle as IsTextureHandle };
         export { NodeRenderGraphConnectionPointIsShadowGenerator as IsShadowGenerator };

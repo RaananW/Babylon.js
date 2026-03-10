@@ -10,18 +10,54 @@ export class WebGLPipelineContext implements IPipelineContext {
     private _valueCache: { [key: string]: any } = {};
     private _uniforms: { [key: string]: Nullable<WebGLUniformLocation> };
 
+    /**
+     *
+     */
     public engine: ThinEngine;
+    /**
+     *
+     */
     public program: Nullable<WebGLProgram>;
+    /**
+     *
+     */
     public context?: WebGLRenderingContext;
+    /**
+     *
+     */
     public vertexShader?: WebGLShader;
+    /**
+     *
+     */
     public fragmentShader?: WebGLShader;
+    /**
+     *
+     */
     public isParallelCompiled: boolean;
+    /**
+     *
+     */
     public onCompiled?: () => void;
+    /**
+     *
+     */
     public transformFeedback?: WebGLTransformFeedback | null;
 
+    /**
+     *
+     */
     public vertexCompilationError: Nullable<string> = null;
+    /**
+     *
+     */
     public fragmentCompilationError: Nullable<string> = null;
+    /**
+     *
+     */
     public programLinkError: Nullable<string> = null;
+    /**
+     *
+     */
     public programValidationError: Nullable<string> = null;
 
     /** @internal */

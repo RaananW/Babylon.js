@@ -5,7 +5,6 @@ import type { Effect } from "../Materials/effect";
 import { PostProcess } from "./postProcess.pure";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 
-
 /**
  * StereoscopicInterlacePostProcessI used to render stereo views from a rigged camera with support for alternate line interlacing
  */

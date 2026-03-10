@@ -7,7 +7,10 @@ import { Constants } from "../../../Engines/constants";
  * Implementation of the HDR Texture Loader.
  * @internal
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export class _HDRTextureLoader implements IInternalTextureLoader {
     /**
      * Defines whether the loader supports cascade loading the different faces.
@@ -19,7 +22,6 @@ export class _HDRTextureLoader implements IInternalTextureLoader {
      * Cube texture are not supported by .hdr files
      */
     public loadCubeData(): void {
-        // eslint-disable-next-line no-throw-literal
         throw ".hdr not supported in Cube.";
     }
 

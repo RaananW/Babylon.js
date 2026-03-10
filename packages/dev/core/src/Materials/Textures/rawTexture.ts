@@ -12,7 +12,6 @@ import {
 } from "./rawTexture.pure";
 
 declare module "./rawTexture.pure" {
-    // eslint-disable-next-line no-shadow
     namespace RawTexture {
         export let CreateLuminanceTexture: typeof RawTextureCreateLuminanceTexture;
         export let CreateLuminanceAlphaTexture: typeof RawTextureCreateLuminanceAlphaTexture;

@@ -90,6 +90,9 @@ export function CreateConeEmitter(radius = 1, angle = Math.PI / 4): ConeParticle
     return new ConeParticleEmitter(radius, angle);
 }
 
+/**
+ *
+ */
 export function CreateDirectedConeEmitter(radius = 1, angle = Math.PI / 4, direction1 = new Vector3(0, 1.0, 0), direction2 = new Vector3(0, 1.0, 0)): ConeDirectedParticleEmitter {
     return new ConeDirectedParticleEmitter(radius, angle, direction1, direction2);
 }

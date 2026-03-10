@@ -23,6 +23,9 @@ export class WebGPUDrawContext implements IDrawContext {
      */
     public bindGroups?: GPUBindGroup[];
 
+    /**
+     *
+     */
     public uniqueId: number;
 
     /**
@@ -37,6 +40,9 @@ export class WebGPUDrawContext implements IDrawContext {
      */
     public buffers: { [name: string]: Nullable<WebGPUDataBuffer> };
 
+    /**
+     *
+     */
     public indirectDrawBuffer?: GPUBuffer;
 
     private _materialContextUpdateId: number;

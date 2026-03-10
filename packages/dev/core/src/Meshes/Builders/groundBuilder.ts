@@ -12,10 +12,10 @@ import {
     CreateTiledGround,
     CreateTiledGroundVertexData,
 } from "./groundBuilder.pure";
-import { Scene } from "../../scene";
+import type { Scene } from "../../scene";
 import { Mesh } from "../mesh";
 import { VertexData } from "../mesh.vertexData";
-import { GroundMesh } from "../groundMesh";
+import type { GroundMesh } from "../groundMesh";
 
 VertexData.CreateGround = CreateGroundVertexData;
 

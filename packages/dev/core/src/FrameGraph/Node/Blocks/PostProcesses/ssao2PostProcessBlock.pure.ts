@@ -13,6 +13,9 @@ import { NodeRenderGraphBasePostProcessBlock } from "./basePostProcessBlock";
 export class NodeRenderGraphSSAO2PostProcessBlock extends NodeRenderGraphBasePostProcessBlock {
     protected override _frameGraphTask: FrameGraphSSAO2RenderingPipelineTask;
 
+    /**
+     *
+     */
     public override _additionalConstructionParameters: [number, number, number];
 
     /**

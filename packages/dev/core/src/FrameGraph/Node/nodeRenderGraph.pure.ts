@@ -32,9 +32,9 @@ import { NodeRenderGraphBuildState } from "./nodeRenderGraphBuildState";
 import { NodeRenderGraphCullObjectsBlock } from "./Blocks/cullObjectsBlock.pure";
 
 // declare NODERENDERGRAPHEDITOR namespace for compilation issue
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 declare let NODERENDERGRAPHEDITOR: any;
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 declare let BABYLON: any;
 
 /**
@@ -54,7 +54,6 @@ export class NodeRenderGraph {
     /** Description of custom blocks to use in the node render graph editor */
     public static CustomBlockDescriptions: INodeRenderGraphCustomBlockDescription[] = [];
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     private BJSNODERENDERGRAPHEDITOR = this._getGlobalNodeRenderGraphEditor();
 
     /** @returns the inspector from bundle or global */
@@ -391,7 +390,7 @@ export class NodeRenderGraph {
      * @param maxTimeout Maximum time in ms to wait for the graph to be ready (default is 10000)
      * @returns The promise that resolves when the graph is ready
      */
-    // eslint-disable-next-line @typescript-eslint/promise-function-async, no-restricted-syntax
+
     public async whenReadyAsync(timeStep = 16, maxTimeout = 10000): Promise<void> {
         this._frameGraph.pausedExecution = true;
         await this._frameGraph.whenReadyAsync(timeStep, maxTimeout);

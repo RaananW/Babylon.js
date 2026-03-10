@@ -370,7 +370,7 @@ export class IblCdfGenerator {
      * Explicitly trigger generation of CDF maps when they are ready to render.
      * @returns Promise that resolves when the CDF maps are rendered.
      */
-    // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/promise-function-async
+    // eslint-disable-next-line @typescript-eslint/promise-function-async
     public renderWhenReady(): Promise<void> {
         this._cachedDominantDirection = null;
 

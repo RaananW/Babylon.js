@@ -6,8 +6,14 @@ import { FrameGraphPostProcessTask } from "./postProcessTask";
  * @internal
  */
 export class FrameGraphBloomMergeTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public blurTexture: FrameGraphTextureHandle;
 
+    /**
+     *
+     */
     public override readonly postProcess: ThinBloomMergePostProcess;
 
     constructor(name: string, frameGraph: FrameGraph, thinPostProcess?: ThinBloomMergePostProcess) {

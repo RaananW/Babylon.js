@@ -4,12 +4,14 @@
  */
 export * from "./engine.transformFeedback.pure";
 
-import { Nullable } from "../../types";
-import { DataBuffer } from "../../Buffers/dataBuffer";
+import type { Nullable } from "../../types";
+import type { DataBuffer } from "../../Buffers/dataBuffer";
 import { Engine } from "../../Engines/engine";
 
 declare module "../../Engines/engine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Engine {
         /**
          * Creates a webGL transform feedback object

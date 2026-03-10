@@ -4,10 +4,11 @@
  */
 export * from "./engine.multiview.pure";
 
-import { ICreateSceneUboOptions, Scene } from "../../scene";
-import { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
-import { RenderTargetWrapper } from "../renderTargetWrapper";
-import { AbstractEngine } from "../abstractEngine";
+import type { ICreateSceneUboOptions } from "../../scene";
+import { Scene } from "../../scene";
+import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
+import type { RenderTargetWrapper } from "../renderTargetWrapper";
+import type { AbstractEngine } from "../abstractEngine";
 import { Camera } from "../../Cameras/camera";
 import { Engine } from "../../Engines/engine";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
@@ -19,7 +20,9 @@ import type { Nullable } from "../../types";
 import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
 
 declare module "../../Engines/engine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Engine {
         /**
          * Creates a new multiview render target
@@ -44,7 +47,9 @@ declare module "../../Engines/engine" {
 }
 
 declare module "../../Cameras/camera" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Camera {
         /**
          * @internal
@@ -74,7 +79,9 @@ declare module "../../Cameras/camera" {
 }
 
 declare module "../../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal */
         _transformMatrixR: Matrix;
@@ -107,7 +114,6 @@ Engine.prototype.createMultiviewRenderTargetTexture = function (width: number, h
     const gl = this._gl;
 
     if (!this.getCaps().multiview) {
-        // eslint-disable-next-line no-throw-literal
         throw "Multiview is not supported";
     }
 
@@ -169,7 +175,6 @@ Engine.prototype.bindMultiviewFramebuffer = function (_multiviewTexture: RenderT
             ext.framebufferTextureMultiviewOVR(gl.DRAW_FRAMEBUFFER, gl.DEPTH_STENCIL_ATTACHMENT, multiviewTexture._depthStencilTextureArray, 0, 0, 2);
         }
     } else {
-        // eslint-disable-next-line no-throw-literal
         throw "Invalid multiview frame buffer";
     }
 };

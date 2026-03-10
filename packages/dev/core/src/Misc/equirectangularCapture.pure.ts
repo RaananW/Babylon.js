@@ -45,7 +45,7 @@ export interface EquiRectangularCaptureOptions {
  * @returns the requested capture's pixel-data or auto downloads the file if options.filename is specified
  */
 // Should end with "Async" and start with "C" but we are keeping it as is for backward compatibility
-// eslint-disable-next-line no-restricted-syntax, @typescript-eslint/naming-convention
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export async function captureEquirectangularFromScene(scene: Scene, options: EquiRectangularCaptureOptions): Promise<ArrayBufferView | null> {
     const probe: ReflectionProbe = options.probe ?? new ReflectionProbe("tempProbe", options.size, scene);
     const wasProbeProvided = !!options.probe;

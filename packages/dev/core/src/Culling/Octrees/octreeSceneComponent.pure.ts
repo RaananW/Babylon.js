@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
 import type { ISmartArrayLike } from "../../Misc/smartArray";
-import { Scene } from "../../scene.pure";
+import type { Scene } from "../../scene.pure";
 import { Vector3 } from "../../Maths/math.vector.pure";
 import type { SubMesh } from "../../Meshes/subMesh";
-import { AbstractMesh } from "../../Meshes/abstractMesh.pure";
+import type { AbstractMesh } from "../../Meshes/abstractMesh.pure";
 import { Ray } from "../../Culling/ray.pure";
 import { SceneComponentConstants } from "../../sceneComponent";
 import { EngineStore } from "../../Engines/engineStore";

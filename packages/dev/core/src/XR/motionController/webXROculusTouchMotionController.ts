@@ -5,7 +5,7 @@
 export * from "./webXROculusTouchMotionController.pure";
 
 import { WebXROculusTouchMotionController } from "./webXROculusTouchMotionController.pure";
-import { Scene } from "../../scene";
+import type { Scene } from "../../scene";
 import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
 
 // register the profile

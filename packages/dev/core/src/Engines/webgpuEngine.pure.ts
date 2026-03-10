@@ -8,7 +8,7 @@ import type { IEffectCreationOptions, IShaderPath } from "../Materials/effect";
 import { Effect } from "../Materials/effect";
 import type { EffectFallbacks } from "../Materials/effectFallbacks";
 import { Constants } from "./constants";
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 import * as WebGPUConstants from "./WebGPU/webgpuConstants";
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import type { IWebGPURenderPipelineStageDescriptor } from "./WebGPU/webgpuPipelineContext";
@@ -22,7 +22,13 @@ import { WebGPUShaderProcessorWGSL } from "./WebGPU/webgpuShaderProcessorsWGSL.p
 import type { _IShaderProcessingContext } from "./Processors/shaderProcessingOptions";
 import { WebGPUShaderProcessingContext } from "./WebGPU/webgpuShaderProcessingContext";
 import { Tools } from "../Misc/tools.pure";
-import { WebGPUTextureHelperIsImageBitmap, WebGPUTextureHelperGetWebGPUTextureFormat, WebGPUTextureHelperHasStencilAspect, WebGPUTextureHelperHasDepthAspect, WebGPUTextureHelperGetSample } from "./WebGPU/webgpuTextureHelper.pure";
+import {
+    WebGPUTextureHelperIsImageBitmap,
+    WebGPUTextureHelperGetWebGPUTextureFormat,
+    WebGPUTextureHelperHasStencilAspect,
+    WebGPUTextureHelperHasDepthAspect,
+    WebGPUTextureHelperGetSample,
+} from "./WebGPU/webgpuTextureHelper.pure";
 import { WebGPUTextureManager } from "./WebGPU/webgpuTextureManager";
 import { AbstractEngine } from "./abstractEngine";
 import type { ISceneLike, AbstractEngineOptions } from "./abstractEngine";
@@ -56,7 +62,6 @@ import { WebGPUSnapshotRendering } from "./WebGPU/webgpuSnapshotRendering";
 import type { WebGPUDataBuffer } from "../Meshes/WebGPU/webgpuDataBuffer";
 import type { WebGPURenderTargetWrapper } from "./WebGPU/webgpuRenderTargetWrapper";
 import { AlphaState } from "../States/alphaCullingState";
-
 
 import type { VideoTexture } from "../Materials/Textures/videoTexture";
 import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
@@ -99,7 +104,7 @@ const ViewDescriptorSwapChain: GPUTextureViewDescriptor = {
     mipLevelCount: 1,
     arrayLayerCount: 1,
 };
-const TempColor4 = new Color4();
+const TempColor4 = /*#__PURE__*/ new Color4();
 
 /** @internal */
 interface IWebGPURenderPassWrapper {
@@ -642,7 +647,6 @@ export class WebGPUEngine extends ThinWebGPUEngine {
                 // eslint-disable-next-line github/no-then
                 .then(async (adapter: GPUAdapter | undefined) => {
                     if (!adapter) {
-                        // eslint-disable-next-line no-throw-literal
                         throw "Could not retrieve a WebGPU adapter (adapter is null).";
                     } else {
                         this._adapter = adapter!;
@@ -716,7 +720,7 @@ export class WebGPUEngine extends ThinWebGPUEngine {
                             this._contextWasLost = true;
                             Logger.Warn("WebGPU context lost. " + info);
                             this.onContextLostObservable.notifyObservers(this);
-                            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
                             this._restoreEngineAfterContextLost(async () => {
                                 const snapshotRenderingMode = this.snapshotRenderingMode;
                                 const snapshotRendering = this.snapshotRendering;
@@ -939,7 +943,6 @@ export class WebGPUEngine extends ThinWebGPUEngine {
 
     private _initializeContextAndSwapChain(): void {
         if (!this._renderingCanvas) {
-            // eslint-disable-next-line no-throw-literal
             throw "The rendering canvas has not been set!";
         }
         this._context = this._renderingCanvas.getContext("webgpu") as unknown as GPUCanvasContext;
@@ -1727,7 +1730,6 @@ export class WebGPUEngine extends ThinWebGPUEngine {
      * @internal
      */
     public bindBuffersDirectly(): void {
-        // eslint-disable-next-line no-throw-literal
         throw "Not implemented on WebGPU";
     }
 
@@ -1735,7 +1737,6 @@ export class WebGPUEngine extends ThinWebGPUEngine {
      * @internal
      */
     public updateAndBindInstancesBuffer(): void {
-        // eslint-disable-next-line no-throw-literal
         throw "Not implemented on WebGPU";
     }
 
@@ -2014,7 +2015,6 @@ export class WebGPUEngine extends ThinWebGPUEngine {
      * @internal
      */
     public createRawShaderProgram(): WebGLProgram {
-        // eslint-disable-next-line no-throw-literal
         throw "Not available on WebGPU";
     }
 
@@ -2022,7 +2022,6 @@ export class WebGPUEngine extends ThinWebGPUEngine {
      * @internal
      */
     public createShaderProgram(): WebGLProgram {
-        // eslint-disable-next-line no-throw-literal
         throw "Not available on WebGPU";
     }
 
@@ -2162,7 +2161,7 @@ export class WebGPUEngine extends ThinWebGPUEngine {
         ) {
             if (!effect.effect && this.dbgShowEmptyEnableEffectCalls) {
                 Logger.Log(["drawWrapper=", effect]);
-                // eslint-disable-next-line no-throw-literal
+
                 throw "Invalid call to enableEffect: the effect property is empty!";
             }
             return;
@@ -2173,7 +2172,7 @@ export class WebGPUEngine extends ThinWebGPUEngine {
             this._counters.numEnableDrawWrapper++;
             if (!this._currentMaterialContext) {
                 Logger.Log(["drawWrapper=", effect]);
-                // eslint-disable-next-line no-throw-literal
+
                 throw `Invalid call to enableEffect: the materialContext property is empty!`;
             }
         }
@@ -2875,7 +2874,6 @@ export class WebGPUEngine extends ThinWebGPUEngine {
         }
 
         if (image instanceof HTMLImageElement) {
-            // eslint-disable-next-line no-throw-literal
             throw "WebGPU engine: HTMLImageElement not supported in _uploadImageToTexture!";
         }
 
@@ -3948,7 +3946,7 @@ export class WebGPUEngine extends ThinWebGPUEngine {
      * @param noDelay If true, a call to flushFramebuffer will be issued so that the data can be read back immediately and not in engine.onEndFrameObservable. This can speed up data retrieval, at the cost of a small perf penalty (default: false).
      * @returns If not undefined, returns the (promise) buffer (as provided by the 4th parameter) filled with the data, else it returns a (promise) Uint8Array with the data read from the storage buffer
      */
-    // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/promise-function-async
+    // eslint-disable-next-line @typescript-eslint/promise-function-async
     public readFromStorageBuffer(storageBuffer: DataBuffer, offset?: number, size?: number, buffer?: ArrayBufferView, noDelay?: boolean): Promise<ArrayBufferView> {
         size = size || storageBuffer.capacity;
 
@@ -3973,7 +3971,7 @@ export class WebGPUEngine extends ThinWebGPUEngine {
      * @param noDelay If true, a call to flushFramebuffer will be issued so that the data can be read back immediately and not in engine.onEndFrameObservable. This can speed up data retrieval, at the cost of a small perf penalty (default: false).
      * @returns If not undefined, returns the (promise) buffer (as provided by the 4th parameter) filled with the data, else it returns a (promise) Uint8Array with the data read from the storage buffer
      */
-    // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/promise-function-async
+    // eslint-disable-next-line @typescript-eslint/promise-function-async
     public readFromMultipleStorageBuffers(storageBuffers: DataBuffer[], offset?: number, size?: number, buffer?: ArrayBufferView, noDelay?: boolean): Promise<ArrayBufferView> {
         size = size || storageBuffers[0].capacity;
 

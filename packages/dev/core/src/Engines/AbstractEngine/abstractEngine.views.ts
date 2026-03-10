@@ -4,15 +4,17 @@
  */
 export * from "./abstractEngine.views.pure";
 
-import { EngineView } from "./abstractEngine.views.pure";
-import { Camera } from "../../Cameras/camera";
-import { Nullable } from "../../types";
-import { Scene } from "../../scene";
+import type { EngineView } from "./abstractEngine.views.pure";
+import type { Camera } from "../../Cameras/camera";
+import type { Nullable } from "../../types";
+import type { Scene } from "../../scene";
 import { Observable } from "../../Misc/observable";
 import { AbstractEngine } from "../abstractEngine";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /** @internal */
         _inputElement: Nullable<HTMLElement>;

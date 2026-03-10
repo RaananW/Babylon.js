@@ -4,7 +4,7 @@
  */
 export * from "./subMesh.project.pure";
 
-import { IndicesArray } from "../types";
+import type { IndicesArray } from "../types";
 import { Constants } from "../Engines/constants";
 import { TmpVectors, Vector3 } from "../Maths/math.vector";
 import { SubMesh } from "./subMesh";

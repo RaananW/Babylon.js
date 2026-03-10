@@ -7,10 +7,19 @@ import { TmpVectors } from "core/Maths/math.vector";
  * @internal
  */
 export class ThinSSAO2CombinePostProcess extends EffectWrapper {
+    /**
+     *
+     */
     public static readonly FragmentUrl = "ssaoCombine";
 
+    /**
+     *
+     */
     public static readonly Uniforms = ["viewport"];
 
+    /**
+     *
+     */
     public static readonly Samplers = ["originalColor"];
 
     protected override _gatherImports(useWebGPU: boolean, list: Promise<any>[]) {
@@ -35,8 +44,14 @@ export class ThinSSAO2CombinePostProcess extends EffectWrapper {
         });
     }
 
+    /**
+     *
+     */
     public camera: Nullable<Camera> = null;
 
+    /**
+     *
+     */
     public useViewportInCombineStage = true;
 
     public override bind(noDefaultBindings = false) {

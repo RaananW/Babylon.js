@@ -11,7 +11,7 @@ import { VertexBuffer } from "../Buffers/buffer.pure";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { Mesh } from "../Meshes/mesh";
-import { PrePassConfiguration , PrePassConfigurationAddUniforms , PrePassConfigurationAddSamplers } from "./prePassConfiguration.pure";
+import { PrePassConfiguration, PrePassConfigurationAddUniforms, PrePassConfigurationAddSamplers } from "./prePassConfiguration.pure";
 import { ImageProcessingDefinesMixin } from "./imageProcessingConfiguration.defines";
 import { ImageProcessingConfiguration } from "./imageProcessingConfiguration.pure";
 import type { FresnelParameters } from "./fresnelParameters";
@@ -69,148 +69,568 @@ class StandardMaterialDefinesBase extends UVDefinesMixin(MaterialDefines) {}
 
 /** @internal */
 export class StandardMaterialDefines extends ImageProcessingDefinesMixin(StandardMaterialDefinesBase) {
+    /**
+     *
+     */
     public DIFFUSE = false;
+    /**
+     *
+     */
     public DIFFUSEDIRECTUV = 0;
+    /**
+     *
+     */
     public BAKED_VERTEX_ANIMATION_TEXTURE = false;
+    /**
+     *
+     */
     public AMBIENT = false;
+    /**
+     *
+     */
     public AMBIENTDIRECTUV = 0;
+    /**
+     *
+     */
     public OPACITY = false;
+    /**
+     *
+     */
     public OPACITYDIRECTUV = 0;
+    /**
+     *
+     */
     public OPACITYRGB = false;
+    /**
+     *
+     */
     public REFLECTION = false;
+    /**
+     *
+     */
     public EMISSIVE = false;
+    /**
+     *
+     */
     public EMISSIVEDIRECTUV = 0;
+    /**
+     *
+     */
     public SPECULAR = false;
+    /**
+     *
+     */
     public SPECULARDIRECTUV = 0;
+    /**
+     *
+     */
     public BUMP = false;
+    /**
+     *
+     */
     public BUMPDIRECTUV = 0;
+    /**
+     *
+     */
     public PARALLAX = false;
+    /**
+     *
+     */
     public PARALLAX_RHS = false;
+    /**
+     *
+     */
     public PARALLAXOCCLUSION = false;
+    /**
+     *
+     */
     public SPECULAROVERALPHA = false;
+    /**
+     *
+     */
     public CLIPPLANE = false;
+    /**
+     *
+     */
     public CLIPPLANE2 = false;
+    /**
+     *
+     */
     public CLIPPLANE3 = false;
+    /**
+     *
+     */
     public CLIPPLANE4 = false;
+    /**
+     *
+     */
     public CLIPPLANE5 = false;
+    /**
+     *
+     */
     public CLIPPLANE6 = false;
+    /**
+     *
+     */
     public ALPHATEST = false;
+    /**
+     *
+     */
     public DEPTHPREPASS = false;
+    /**
+     *
+     */
     public ALPHAFROMDIFFUSE = false;
+    /**
+     *
+     */
     public POINTSIZE = false;
+    /**
+     *
+     */
     public FOG = false;
+    /**
+     *
+     */
     public SPECULARTERM = false;
+    /**
+     *
+     */
     public DIFFUSEFRESNEL = false;
+    /**
+     *
+     */
     public OPACITYFRESNEL = false;
+    /**
+     *
+     */
     public REFLECTIONFRESNEL = false;
+    /**
+     *
+     */
     public REFRACTIONFRESNEL = false;
+    /**
+     *
+     */
     public EMISSIVEFRESNEL = false;
+    /**
+     *
+     */
     public FRESNEL = false;
+    /**
+     *
+     */
     public NORMAL = false;
+    /**
+     *
+     */
     public TANGENT = false;
+    /**
+     *
+     */
     public VERTEXCOLOR = false;
+    /**
+     *
+     */
     public VERTEXALPHA = false;
+    /**
+     *
+     */
     public NUM_BONE_INFLUENCERS = 0;
+    /**
+     *
+     */
     public BonesPerMesh = 0;
+    /**
+     *
+     */
     public BONETEXTURE = false;
+    /**
+     *
+     */
     public BONES_VELOCITY_ENABLED = false;
+    /**
+     *
+     */
     public INSTANCES = false;
+    /**
+     *
+     */
     public THIN_INSTANCES = false;
+    /**
+     *
+     */
     public INSTANCESCOLOR = false;
+    /**
+     *
+     */
     public GLOSSINESS = false;
+    /**
+     *
+     */
     public ROUGHNESS = false;
+    /**
+     *
+     */
     public EMISSIVEASILLUMINATION = false;
+    /**
+     *
+     */
     public LINKEMISSIVEWITHDIFFUSE = false;
+    /**
+     *
+     */
     public REFLECTIONFRESNELFROMSPECULAR = false;
+    /**
+     *
+     */
     public LIGHTMAP = false;
+    /**
+     *
+     */
     public LIGHTMAPDIRECTUV = 0;
+    /**
+     *
+     */
     public OBJECTSPACE_NORMALMAP = false;
+    /**
+     *
+     */
     public USELIGHTMAPASSHADOWMAP = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_3D = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_SPHERICAL = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_PLANAR = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_CUBIC = false;
+    /**
+     *
+     */
     public USE_LOCAL_REFLECTIONMAP_CUBIC = false;
+    /**
+     *
+     */
     public USE_LOCAL_REFRACTIONMAP_CUBIC = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_PROJECTION = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_SKYBOX = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_EXPLICIT = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_EQUIRECTANGULAR = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_EQUIRECTANGULAR_FIXED = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_MIRROREDEQUIRECTANGULAR_FIXED = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_OPPOSITEZ = false;
+    /**
+     *
+     */
     public INVERTCUBICMAP = false;
+    /**
+     *
+     */
     public LOGARITHMICDEPTH = false;
+    /**
+     *
+     */
     public REFRACTION = false;
+    /**
+     *
+     */
     public REFRACTIONMAP_3D = false;
+    /**
+     *
+     */
     public REFLECTIONOVERALPHA = false;
+    /**
+     *
+     */
     public TWOSIDEDLIGHTING = false;
+    /**
+     *
+     */
     public SHADOWFLOAT = false;
+    /**
+     *
+     */
     public MORPHTARGETS = false;
+    /**
+     *
+     */
     public MORPHTARGETS_POSITION = false;
+    /**
+     *
+     */
     public MORPHTARGETS_NORMAL = false;
+    /**
+     *
+     */
     public MORPHTARGETS_TANGENT = false;
+    /**
+     *
+     */
     public MORPHTARGETS_UV = false;
+    /**
+     *
+     */
     public MORPHTARGETS_UV2 = false;
+    /**
+     *
+     */
     public MORPHTARGETS_COLOR = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASPOSITIONS = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASNORMALS = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASTANGENTS = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASUVS = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASUV2S = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASCOLORS = false;
+    /**
+     *
+     */
     public NUM_MORPH_INFLUENCERS = 0;
+    /**
+     *
+     */
     public MORPHTARGETS_TEXTURE = false;
+    /**
+     *
+     */
     public NONUNIFORMSCALING = false; // https://playground.babylonjs.com#V6DWIH
+    /**
+     *
+     */
     public PREMULTIPLYALPHA = false; // https://playground.babylonjs.com#LNVJJ7
+    /**
+     *
+     */
     public ALPHATEST_AFTERALLALPHACOMPUTATIONS = false;
+    /**
+     *
+     */
     public ALPHABLEND = true;
 
+    /**
+     *
+     */
     public PREPASS = false;
+    /**
+     *
+     */
     public PREPASS_COLOR = false;
+    /**
+     *
+     */
     public PREPASS_COLOR_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_IRRADIANCE = false;
+    /**
+     *
+     */
     public PREPASS_IRRADIANCE_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_ALBEDO = false;
+    /**
+     *
+     */
     public PREPASS_ALBEDO_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_ALBEDO_SQRT = false;
+    /**
+     *
+     */
     public PREPASS_ALBEDO_SQRT_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_DEPTH = false;
+    /**
+     *
+     */
     public PREPASS_DEPTH_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_SCREENSPACE_DEPTH = false;
+    /**
+     *
+     */
     public PREPASS_SCREENSPACE_DEPTH_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_NORMALIZED_VIEW_DEPTH = false;
+    /**
+     *
+     */
     public PREPASS_NORMALIZED_VIEW_DEPTH_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_NORMAL = false;
+    /**
+     *
+     */
     public PREPASS_NORMAL_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_NORMAL_WORLDSPACE = false;
+    /**
+     *
+     */
     public PREPASS_WORLD_NORMAL = false;
+    /**
+     *
+     */
     public PREPASS_WORLD_NORMAL_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_POSITION = false;
+    /**
+     *
+     */
     public PREPASS_POSITION_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_LOCAL_POSITION = false;
+    /**
+     *
+     */
     public PREPASS_LOCAL_POSITION_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_VELOCITY = false;
+    /**
+     *
+     */
     public PREPASS_VELOCITY_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_VELOCITY_LINEAR = false;
+    /**
+     *
+     */
     public PREPASS_VELOCITY_LINEAR_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_REFLECTIVITY = false;
+    /**
+     *
+     */
     public PREPASS_REFLECTIVITY_INDEX = -1;
+    /**
+     *
+     */
     public SCENE_MRT_COUNT = 0;
 
+    /**
+     *
+     */
     public RGBDLIGHTMAP = false;
+    /**
+     *
+     */
     public RGBDREFLECTION = false;
+    /**
+     *
+     */
     public RGBDREFRACTION = false;
+    /**
+     *
+     */
     public MULTIVIEW = false;
+    /**
+     *
+     */
     public ORDER_INDEPENDENT_TRANSPARENCY = false;
+    /**
+     *
+     */
     public ORDER_INDEPENDENT_TRANSPARENCY_16BITS = false;
+    /**
+     *
+     */
     public CAMERA_ORTHOGRAPHIC = false;
+    /**
+     *
+     */
     public CAMERA_PERSPECTIVE = false;
+    /**
+     *
+     */
     public AREALIGHTSUPPORTED = true;
+    /**
+     *
+     */
     public USE_VERTEX_PULLING = false;
+    /**
+     *
+     */
     public RIGHT_HANDED = false;
 
+    /**
+     *
+     */
     public CLUSTLIGHT_SLICES = 0;
+    /**
+     *
+     */
     public CLUSTLIGHT_BATCH = 0;
 
     /**
@@ -224,6 +644,9 @@ export class StandardMaterialDefines extends ImageProcessingDefinesMixin(Standar
      */
     public IS_REFRACTION_LINEAR = false;
 
+    /**
+     *
+     */
     public DECAL_AFTER_DETAIL = false;
 
     /**

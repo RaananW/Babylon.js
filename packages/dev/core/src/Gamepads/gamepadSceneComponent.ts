@@ -15,7 +15,9 @@ import { ArcRotateCameraGamepadInput } from "../Cameras/Inputs/arcRotateCameraGa
 import type { Nullable } from "../types";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal */
         _gamepadManager: Nullable<GamepadManager>;

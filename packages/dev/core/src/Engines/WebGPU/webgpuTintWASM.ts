@@ -28,8 +28,14 @@ export class WebGPUTintWASM {
         wasmPath: `${Tools._DefaultCdnUrl}/twgsl/twgsl.wasm`,
     };
 
+    /**
+     *
+     */
     public static ShowWGSLShaderCode = false;
 
+    /**
+     *
+     */
     public static DisableUniformityAnalysis = false;
 
     private static _Twgsl: any = null;

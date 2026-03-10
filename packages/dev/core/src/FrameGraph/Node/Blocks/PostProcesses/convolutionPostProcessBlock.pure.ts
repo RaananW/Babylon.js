@@ -12,6 +12,9 @@ import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPro
 export class NodeRenderGraphConvolutionPostProcessBlock extends NodeRenderGraphBaseWithPropertiesPostProcessBlock {
     protected override _frameGraphTask: FrameGraphConvolutionTask;
 
+    /**
+     *
+     */
     public override _additionalConstructionParameters: [number[]];
 
     /**

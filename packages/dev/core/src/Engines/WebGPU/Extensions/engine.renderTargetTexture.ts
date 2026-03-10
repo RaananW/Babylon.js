@@ -4,12 +4,14 @@
  */
 export * from "./engine.renderTargetTexture.pure";
 
-import { Nullable } from "../../../types";
-import { RenderTargetTexture } from "../../../Materials/Textures/renderTargetTexture";
+import type { Nullable } from "../../../types";
+import type { RenderTargetTexture } from "../../../Materials/Textures/renderTargetTexture";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
 
 declare module "../../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Sets a depth stencil texture from a render target to the according uniform.

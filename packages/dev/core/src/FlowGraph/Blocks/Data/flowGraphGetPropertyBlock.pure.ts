@@ -8,6 +8,9 @@ import { RichTypeAny } from "core/FlowGraph/flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { FlowGraphCachedOperationBlock } from "./flowGraphCachedOperationBlock";
 
+/**
+ *
+ */
 export interface IFlowGraphGetPropertyBlockConfiguration<O extends FlowGraphAssetType> extends IFlowGraphBlockConfiguration {
     /**
      * The name of the property that will be set

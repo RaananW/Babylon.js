@@ -6,6 +6,9 @@ import { ThinImageProcessingPostProcess } from "core/PostProcesses/thinImageProc
  * Task which applies an image processing post process.
  */
 export class FrameGraphImageProcessingTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinImageProcessingPostProcess;
 
     /**

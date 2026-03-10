@@ -35,6 +35,9 @@ export class FlowGraphSceneTickEventBlock extends FlowGraphEventBlock {
      */
     public readonly deltaTime: FlowGraphDataConnection<number>;
 
+    /**
+     *
+     */
     public override readonly type: FlowGraphEventType = FlowGraphEventType.SceneBeforeRender;
 
     constructor() {

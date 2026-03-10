@@ -9,7 +9,9 @@ import { PBRBaseMaterial } from "./pbrBaseMaterial";
 import type { Nullable } from "core/types";
 
 declare module "./pbrBaseMaterial" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface PBRBaseMaterial {
         /** @internal */
         _decalMap: Nullable<DecalMapConfiguration>;

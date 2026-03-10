@@ -4,12 +4,14 @@
  */
 export * from "./abstractEngine.states.pure";
 
-import { Nullable } from "../../types";
+import type { Nullable } from "../../types";
 import { AbstractEngine } from "../abstractEngine";
 import { Constants } from "../constants";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Gets the current depth function

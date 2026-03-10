@@ -1,5 +1,3 @@
-/* eslint-disable babylonjs/available */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 import * as WebGPUConstants from "./webgpuConstants";
 import { ILog2 } from "../../Maths/math.scalar.functions";
 import { Constants } from "../constants";
@@ -10,10 +8,16 @@ import type { IHardwareTextureWrapper } from "../../Materials/Textures/hardwareT
 /** @internal */
 export class WebGPUTextureHelper {}
 
+/**
+ *
+ */
 export function WebGPUTextureHelperComputeNumMipmapLevels(width: number, height: number) {
     return ILog2(Math.max(width, height)) + 1;
 }
 
+/**
+ *
+ */
 export function WebGPUTextureHelperGetTextureTypeFromFormat(format: GPUTextureFormat): number {
     switch (format) {
         // One Component = 8 bits unsigned
@@ -143,7 +147,21 @@ export function WebGPUTextureHelperGetTextureTypeFromFormat(format: GPUTextureFo
     return Constants.TEXTURETYPE_UNSIGNED_BYTE;
 }
 
-export function WebGPUTextureHelperGetBlockInformationFromFormat(format: GPUTextureFormat): { width: number; height: number; length: number } {
+/**
+ *
+ */
+export function WebGPUTextureHelperGetBlockInformationFromFormat(format: GPUTextureFormat): {
+    /**
+     *
+     */
+    width: number /**
+     *
+     */;
+    height: number /**
+     *
+     */;
+    length: number;
+} {
     switch (format) {
         // 8 bits formats
         case WebGPUConstants.TextureFormat.R8Unorm:
@@ -205,15 +223,12 @@ export function WebGPUTextureHelperGetBlockInformationFromFormat(format: GPUText
 
         // Depth and stencil formats
         case WebGPUConstants.TextureFormat.Stencil8:
-            // eslint-disable-next-line no-throw-literal
             throw "No fixed size for Stencil8 format!";
         case WebGPUConstants.TextureFormat.Depth16Unorm:
             return { width: 1, height: 1, length: 2 };
         case WebGPUConstants.TextureFormat.Depth24Plus:
-            // eslint-disable-next-line no-throw-literal
             throw "No fixed size for Depth24Plus format!";
         case WebGPUConstants.TextureFormat.Depth24PlusStencil8:
-            // eslint-disable-next-line no-throw-literal
             throw "No fixed size for Depth24PlusStencil8 format!";
         case WebGPUConstants.TextureFormat.Depth32Float:
             return { width: 1, height: 1, length: 4 };
@@ -305,22 +320,61 @@ export function WebGPUTextureHelperGetBlockInformationFromFormat(format: GPUText
     return { width: 1, height: 1, length: 4 };
 }
 
+/**
+ *
+ */
 export function WebGPUTextureHelperIsHardwareTexture(texture: IHardwareTextureWrapper | GPUTexture): texture is IHardwareTextureWrapper {
     return !!(texture as IHardwareTextureWrapper).release;
 }
 
+/**
+ *
+ */
 export function WebGPUTextureHelperIsInternalTexture(texture: InternalTexture | GPUTexture): texture is InternalTexture {
     return !!(texture as InternalTexture).dispose;
 }
 
-export function WebGPUTextureHelperIsImageBitmap(imageBitmap: ImageBitmap | { width: number; height: number }): imageBitmap is ImageBitmap {
+/**
+ *
+ */
+export function WebGPUTextureHelperIsImageBitmap(
+    imageBitmap:
+        | ImageBitmap
+        | {
+              /**
+               *
+               */
+              width: number /**
+               *
+               */;
+              height: number;
+          }
+): imageBitmap is ImageBitmap {
     return (imageBitmap as ImageBitmap).close !== undefined;
 }
 
-export function WebGPUTextureHelperIsImageBitmapArray(imageBitmap: ImageBitmap[] | { width: number; height: number }): imageBitmap is ImageBitmap[] {
+/**
+ *
+ */
+export function WebGPUTextureHelperIsImageBitmapArray(
+    imageBitmap:
+        | ImageBitmap[]
+        | {
+              /**
+               *
+               */
+              width: number /**
+               *
+               */;
+              height: number;
+          }
+): imageBitmap is ImageBitmap[] {
     return Array.isArray(imageBitmap as ImageBitmap[]) && (imageBitmap as ImageBitmap[])[0].close !== undefined;
 }
 
+/**
+ *
+ */
 export function WebGPUTextureHelperIsCompressedFormat(format: GPUTextureFormat): boolean {
     switch (format) {
         case WebGPUConstants.TextureFormat.BC7RGBAUnormSRGB:
@@ -381,6 +435,9 @@ export function WebGPUTextureHelperIsCompressedFormat(format: GPUTextureFormat):
     return false;
 }
 
+/**
+ *
+ */
 export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: number, useSRGBBuffer = false): GPUTextureFormat {
     switch (format) {
         case Constants.TEXTUREFORMAT_DEPTH16:
@@ -426,14 +483,12 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
                 case Constants.TEXTUREFORMAT_RG:
                     return WebGPUConstants.TextureFormat.RG8Snorm;
                 case Constants.TEXTUREFORMAT_RGB:
-                    // eslint-disable-next-line no-throw-literal
                     throw "RGB format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_RED_INTEGER:
                     return WebGPUConstants.TextureFormat.R8Sint;
                 case Constants.TEXTUREFORMAT_RG_INTEGER:
                     return WebGPUConstants.TextureFormat.RG8Sint;
                 case Constants.TEXTUREFORMAT_RGB_INTEGER:
-                    // eslint-disable-next-line no-throw-literal
                     throw "RGB_INTEGER format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_RGBA_INTEGER:
                     return WebGPUConstants.TextureFormat.RGBA8Sint;
@@ -447,7 +502,6 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
                 case Constants.TEXTUREFORMAT_RG:
                     return WebGPUConstants.TextureFormat.RG8Unorm;
                 case Constants.TEXTUREFORMAT_RGB:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_RGB format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_RGBA:
                     return useSRGBBuffer ? WebGPUConstants.TextureFormat.RGBA8UnormSRGB : WebGPUConstants.TextureFormat.RGBA8Unorm;
@@ -458,18 +512,14 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
                 case Constants.TEXTUREFORMAT_RG_INTEGER:
                     return WebGPUConstants.TextureFormat.RG8Uint;
                 case Constants.TEXTUREFORMAT_RGB_INTEGER:
-                    // eslint-disable-next-line no-throw-literal
                     throw "RGB_INTEGER format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_RGBA_INTEGER:
                     return WebGPUConstants.TextureFormat.RGBA8Uint;
                 case Constants.TEXTUREFORMAT_ALPHA:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_ALPHA format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_LUMINANCE:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_LUMINANCE format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_LUMINANCE_ALPHA:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_LUMINANCE_ALPHA format not supported in WebGPU";
                 default:
                     return WebGPUConstants.TextureFormat.RGBA8Unorm;
@@ -481,7 +531,6 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
                 case Constants.TEXTUREFORMAT_RG_INTEGER:
                     return WebGPUConstants.TextureFormat.RG16Sint;
                 case Constants.TEXTUREFORMAT_RGB_INTEGER:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_RGB_INTEGER format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_RGBA_INTEGER:
                     return WebGPUConstants.TextureFormat.RGBA16Sint;
@@ -495,7 +544,6 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
                 case Constants.TEXTUREFORMAT_RG_INTEGER:
                     return WebGPUConstants.TextureFormat.RG16Uint;
                 case Constants.TEXTUREFORMAT_RGB_INTEGER:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_RGB_INTEGER format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_RGBA_INTEGER:
                     return WebGPUConstants.TextureFormat.RGBA16Uint;
@@ -509,7 +557,6 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
                 case Constants.TEXTUREFORMAT_RG_INTEGER:
                     return WebGPUConstants.TextureFormat.RG32Sint;
                 case Constants.TEXTUREFORMAT_RGB_INTEGER:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_RGB_INTEGER format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_RGBA_INTEGER:
                     return WebGPUConstants.TextureFormat.RGBA32Sint;
@@ -523,7 +570,6 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
                 case Constants.TEXTUREFORMAT_RG_INTEGER:
                     return WebGPUConstants.TextureFormat.RG32Uint;
                 case Constants.TEXTUREFORMAT_RGB_INTEGER:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_RGB_INTEGER format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_RGBA_INTEGER:
                     return WebGPUConstants.TextureFormat.RGBA32Uint;
@@ -537,7 +583,6 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
                 case Constants.TEXTUREFORMAT_RG:
                     return WebGPUConstants.TextureFormat.RG32Float; // By default. Other possibility is RG16Float.
                 case Constants.TEXTUREFORMAT_RGB:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_RGB format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_RGBA:
                     return WebGPUConstants.TextureFormat.RGBA32Float; // By default. Other possibility is RGBA16Float.
@@ -551,7 +596,6 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
                 case Constants.TEXTUREFORMAT_RG:
                     return WebGPUConstants.TextureFormat.RG16Float;
                 case Constants.TEXTUREFORMAT_RGB:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_RGB format not supported in WebGPU";
                 case Constants.TEXTUREFORMAT_RGBA:
                     return WebGPUConstants.TextureFormat.RGBA16Float;
@@ -559,14 +603,12 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
                     return WebGPUConstants.TextureFormat.RGBA16Float;
             }
         case Constants.TEXTURETYPE_UNSIGNED_SHORT_5_6_5:
-            // eslint-disable-next-line no-throw-literal
             throw "TEXTURETYPE_UNSIGNED_SHORT_5_6_5 format not supported in WebGPU";
         case Constants.TEXTURETYPE_UNSIGNED_INT_10F_11F_11F_REV:
             switch (format) {
                 case Constants.TEXTUREFORMAT_RGBA:
                     return WebGPUConstants.TextureFormat.RG11B10UFloat;
                 case Constants.TEXTUREFORMAT_RGBA_INTEGER:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_RGBA_INTEGER format not supported in WebGPU when type is TEXTURETYPE_UNSIGNED_INT_10F_11F_11F_REV";
                 default:
                     return WebGPUConstants.TextureFormat.RG11B10UFloat;
@@ -576,16 +618,13 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
                 case Constants.TEXTUREFORMAT_RGBA:
                     return WebGPUConstants.TextureFormat.RGB9E5UFloat;
                 case Constants.TEXTUREFORMAT_RGBA_INTEGER:
-                    // eslint-disable-next-line no-throw-literal
                     throw "TEXTUREFORMAT_RGBA_INTEGER format not supported in WebGPU when type is TEXTURETYPE_UNSIGNED_INT_5_9_9_9_REV";
                 default:
                     return WebGPUConstants.TextureFormat.RGB9E5UFloat;
             }
         case Constants.TEXTURETYPE_UNSIGNED_SHORT_4_4_4_4:
-            // eslint-disable-next-line no-throw-literal
             throw "TEXTURETYPE_UNSIGNED_SHORT_4_4_4_4 format not supported in WebGPU";
         case Constants.TEXTURETYPE_UNSIGNED_SHORT_5_5_5_1:
-            // eslint-disable-next-line no-throw-literal
             throw "TEXTURETYPE_UNSIGNED_SHORT_5_5_5_1 format not supported in WebGPU";
         case Constants.TEXTURETYPE_UNSIGNED_INT_2_10_10_10_REV:
             switch (format) {
@@ -601,6 +640,9 @@ export function WebGPUTextureHelperGetWebGPUTextureFormat(type: number, format: 
     return useSRGBBuffer ? WebGPUConstants.TextureFormat.RGBA8UnormSRGB : WebGPUConstants.TextureFormat.RGBA8Unorm;
 }
 
+/**
+ *
+ */
 export function WebGPUTextureHelperGetNumChannelsFromWebGPUTextureFormat(format: GPUTextureFormat): number {
     switch (format) {
         case WebGPUConstants.TextureFormat.R8Unorm:
@@ -713,10 +755,12 @@ export function WebGPUTextureHelperGetNumChannelsFromWebGPUTextureFormat(format:
             return 4;
     }
 
-    // eslint-disable-next-line no-throw-literal
     throw `Unknown format ${format}!`;
 }
 
+/**
+ *
+ */
 export function WebGPUTextureHelperHasStencilAspect(format: GPUTextureFormat): boolean {
     switch (format) {
         case WebGPUConstants.TextureFormat.Stencil8:
@@ -728,6 +772,9 @@ export function WebGPUTextureHelperHasStencilAspect(format: GPUTextureFormat): b
     return false;
 }
 
+/**
+ *
+ */
 export function WebGPUTextureHelperHasDepthAspect(format: GPUTextureFormat): boolean {
     switch (format) {
         case WebGPUConstants.TextureFormat.Depth16Unorm:
@@ -741,6 +788,9 @@ export function WebGPUTextureHelperHasDepthAspect(format: GPUTextureFormat): boo
     return false;
 }
 
+/**
+ *
+ */
 export function WebGPUTextureHelperHasDepthAndStencilAspects(format: GPUTextureFormat): boolean {
     switch (format) {
         case WebGPUConstants.TextureFormat.Depth32FloatStencil8:
@@ -751,6 +801,9 @@ export function WebGPUTextureHelperHasDepthAndStencilAspects(format: GPUTextureF
     return false;
 }
 
+/**
+ *
+ */
 export function WebGPUTextureHelperGetDepthFormatOnly(format: GPUTextureFormat): GPUTextureFormat {
     switch (format) {
         case WebGPUConstants.TextureFormat.Depth16Unorm:
@@ -768,6 +821,9 @@ export function WebGPUTextureHelperGetDepthFormatOnly(format: GPUTextureFormat):
     return format;
 }
 
+/**
+ *
+ */
 export function WebGPUTextureHelperGetSample(sampleCount: number) {
     // WebGPU only supports 1 or 4
     return sampleCount > 1 ? 4 : 1;

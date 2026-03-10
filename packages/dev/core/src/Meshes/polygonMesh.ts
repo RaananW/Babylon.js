@@ -1,7 +1,6 @@
 import { Polygon, PolygonRectangle, PolygonCircle, PolygonParse, PolygonStartingAt } from "./polygonMesh.pure";
 
 declare module "./polygonMesh.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace Polygon {
         export { PolygonRectangle as Rectangle };
         export { PolygonCircle as Circle };

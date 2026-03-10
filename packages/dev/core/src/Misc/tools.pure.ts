@@ -84,7 +84,7 @@ export class Tools {
      * Sets both the script base URL and the assets base URL to the same value.
      * Setter only!
      */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
     public static set CDNBaseUrl(value: string) {
         Tools.ScriptBaseUrl = value;
         Tools.AssetBaseUrl = value;
@@ -625,7 +625,7 @@ export class Tools {
 
     private static _Performance: Performance;
 
-    private static readonly _NativePerformanceCounterHandles = new Map<string, unknown>();
+    private static readonly _NativePerformanceCounterHandles = /*#__PURE__*/ new Map<string, unknown>();
 
     /**
      * Sets the current performance log level
@@ -924,7 +924,6 @@ export function ToolsMakeArray(obj: any, allowsNullUndefined?: boolean): Nullabl
         return null;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return Array.isArray(obj) ? obj : [obj];
 }
 
@@ -1176,7 +1175,7 @@ export function ToolsUnregisterTopRootEvents(windowElement: Window, events: { na
  * @returns a void promise
  */
 // Should end with Async but this is a breaking change
-// eslint-disable-next-line no-restricted-syntax, @typescript-eslint/require-await, @typescript-eslint/naming-convention
+
 export async function ToolsDumpFramebuffer(
     width: number,
     height: number,
@@ -1215,7 +1214,6 @@ export function ToolsDumpData(
     throw _WarnImport("DumpTools");
 }
 
-// eslint-disable-next-line jsdoc/require-returns-check
 /**
  * Dumps an array buffer
  * @param width defines the rendering width
@@ -1228,7 +1226,10 @@ export function ToolsDumpData(
  * @param quality The quality of the image if lossy mimeType is used (e.g. image/jpeg, image/webp). See {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob | HTMLCanvasElement.toBlob()}'s `quality` parameter.
  * @returns a promise that resolve to the final data
  */
-// eslint-disable-next-line no-restricted-syntax, @typescript-eslint/require-await
+
+/**
+ *
+ */
 export async function ToolsDumpDataAsync(
     width: number,
     height: number,
@@ -1303,7 +1304,10 @@ export function ToolsBackCompatCameraNoPreventDefault(args: IArguments): boolean
  * @param forceDownload force the system to download the image even if a successCallback is provided
  * @param quality The quality of the image if lossy mimeType is used (e.g. image/jpeg, image/webp). See {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob | HTMLCanvasElement.toBlob()}'s `quality` parameter.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+/**
+ *
+ */
 export function ToolsCreateScreenshot(
     engine: AbstractEngine,
     camera: Camera,
@@ -1316,7 +1320,6 @@ export function ToolsCreateScreenshot(
     throw _WarnImport("ScreenshotTools");
 }
 
-// eslint-disable-next-line jsdoc/require-returns-check
 /**
  * Captures a screenshot of the current rendering
  * @see https://doc.babylonjs.com/features/featuresDeepDive/scene/renderToPNG
@@ -1333,7 +1336,10 @@ export function ToolsCreateScreenshot(
  * @returns screenshot as a string of base64-encoded characters. This string can be assigned
  * to the src parameter of an <img> to display it
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-restricted-syntax, @typescript-eslint/require-await
+
+/**
+ *
+ */
 export async function ToolsCreateScreenshotAsync(
     engine: AbstractEngine,
     camera: Camera,
@@ -1368,7 +1374,10 @@ export async function ToolsCreateScreenshotAsync(
  * @param quality The quality of the image if lossy mimeType is used (e.g. image/jpeg, image/webp). See {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob | HTMLCanvasElement.toBlob()}'s `quality` parameter.
  * @param customizeTexture An optional callback that can be used to modify the render target texture before taking the screenshot. This can be used, for instance, to enable camera post-processes before taking the screenshot.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+/**
+ *
+ */
 export function ToolsCreateScreenshotUsingRenderTarget(
     engine: AbstractEngine,
     camera: Camera,
@@ -1387,7 +1396,6 @@ export function ToolsCreateScreenshotUsingRenderTarget(
     throw _WarnImport("ScreenshotTools");
 }
 
-// eslint-disable-next-line jsdoc/require-returns-check
 /**
  * Generates an image screenshot from the specified camera.
  * @see https://doc.babylonjs.com/features/featuresDeepDive/scene/renderToPNG
@@ -1411,7 +1419,10 @@ export function ToolsCreateScreenshotUsingRenderTarget(
  * @returns screenshot as a string of base64-encoded characters. This string can be assigned
  * to the src parameter of an <img> to display it
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-restricted-syntax, @typescript-eslint/require-await
+
+/**
+ *
+ */
 export async function ToolsCreateScreenshotUsingRenderTargetAsync(
     engine: AbstractEngine,
     camera: Camera,
@@ -1538,7 +1549,10 @@ export function ToolsFirst<T>(array: Array<T>, predicate: (item: T) => boolean):
  * @returns a string that can have two forms: "moduleName.className" if module was specified when the class' Name was registered or "className" if there was not module specified.
  * @ignorenaming
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export function ToolsgetFullClassName(object: any, isType = false): Nullable<string> {
     let className = null;
     let moduleName = null;

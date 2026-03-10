@@ -5,6 +5,9 @@ import type { _IShaderProcessingContext } from "../Processors/shaderProcessingOp
 
 /** @internal */
 export class WebGLShaderProcessor implements IShaderProcessor {
+    /**
+     *
+     */
     public shaderLanguage = ShaderLanguage.GLSL;
 
     public postProcessor(

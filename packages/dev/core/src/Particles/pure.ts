@@ -1,5 +1,5 @@
 /** Pure barrel — re-exports only side-effect-free modules */
-/* eslint-disable import/export */
+
 export * from "./baseParticleSystem.pure";
 export * from "./EmitterTypes/pure";
 export * from "./webgl2ParticleSystem.pure";

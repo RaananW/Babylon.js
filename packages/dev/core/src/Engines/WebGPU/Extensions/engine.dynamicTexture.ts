@@ -4,15 +4,17 @@
  */
 export * from "./engine.dynamicTexture.pure";
 
-import { ImageSource, Nullable } from "../../../types";
+import type { ImageSource, Nullable } from "../../../types";
 import type { ICanvas } from "../../../Engines/ICanvas";
-import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { WebGPUEngine } from "../../webgpuEngine";
 import { GetExponentOfTwo } from "../../../Misc/tools.functions";
 
 declare module "../../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Creates a dynamic texture

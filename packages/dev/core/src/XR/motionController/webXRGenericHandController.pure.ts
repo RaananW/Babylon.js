@@ -11,6 +11,9 @@ import type { AbstractMesh } from "../../Meshes/abstractMesh";
  * A generic hand controller class that supports select and a secondary grasp
  */
 export class WebXRGenericHandController extends WebXRAbstractMotionController {
+    /**
+     *
+     */
     public profileId = "generic-hand-select-grasp";
 
     /**

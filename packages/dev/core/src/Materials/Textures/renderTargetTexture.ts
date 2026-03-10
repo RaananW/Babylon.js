@@ -5,13 +5,15 @@
 export * from "./renderTargetTexture.pure";
 
 import { RenderTargetTexture } from "./renderTargetTexture.pure";
-import { Nullable } from "../../types";
-import { Scene } from "../../scene";
+import type { Nullable } from "../../types";
+import type { Scene } from "../../scene";
 import { Texture } from "../../Materials/Textures/texture";
 import { Effect } from "../effect";
 
 declare module "../effect" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Effect {
         /**
          * Sets a depth stencil texture from a render target on the engine to be used in the shader.

@@ -2,12 +2,12 @@
 
 import type { Nullable } from "../types";
 import { Observable } from "../Misc/observable";
-import { Scene } from "../scene.pure";
+import type { Scene } from "../scene.pure";
 import type { Sprite } from "./sprite";
 import type { ISpriteManager } from "./spriteManager";
 import { Ray, RayZero } from "../Culling/ray.core";
 import type { Camera } from "../Cameras/camera";
-import { PickingInfo } from "../Collisions/pickingInfo";
+import type { PickingInfo } from "../Collisions/pickingInfo";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import { ActionEventCreateNewFromSprite } from "../Actions/actionEvent.pure";

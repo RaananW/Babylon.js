@@ -7,15 +7,36 @@ import type { AbstractEngine } from "../abstractEngine";
 import type { NativeShaderProcessingContext } from "./nativeShaderProcessingContext";
 import type { ThinNativeEngine } from "../thinNativeEngine";
 
+/**
+ *
+ */
 export class NativePipelineContext implements IPipelineContext {
+    /**
+     *
+     */
     public isCompiled: boolean = false;
+    /**
+     *
+     */
     public compilationError?: Error;
 
+    /**
+     *
+     */
     public readonly isAsync: boolean;
 
+    /**
+     *
+     */
     public program: NativeProgram;
 
+    /**
+     *
+     */
     public vertexBufferKindToType: { [kind: string]: number } = {};
+    /**
+     *
+     */
     public shaderProcessingContext: Nullable<NativeShaderProcessingContext>;
 
     public get isReady(): boolean {
@@ -26,6 +47,9 @@ export class NativePipelineContext implements IPipelineContext {
         return this.isCompiled;
     }
 
+    /**
+     *
+     */
     public onCompiled?: () => void;
 
     public _getVertexShaderCode(): string | null {

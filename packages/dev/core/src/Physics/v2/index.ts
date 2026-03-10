@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-restricted-imports */
 export { PhysicsEngine as PhysicsEngineV2 } from "./physicsEngine";
 export * from "./physicsBody";
 export * from "./physicsShape";

@@ -2,7 +2,6 @@ export * from "./buffer.pure";
 import { VertexBuffer, VertexBufferDeduceStride, VertexBufferGetDataType, VertexBufferGetTypeByteLength, VertexBufferForEach, VertexBufferGetFloatData } from "./buffer.pure";
 
 declare module "./buffer.pure" {
-    // eslint-disable-next-line no-shadow
     namespace VertexBuffer {
         export let DeduceStride: typeof VertexBufferDeduceStride;
         export let GetDataType: typeof VertexBufferGetDataType;

@@ -21,6 +21,9 @@ import { NodeRenderGraphBasePostProcessBlock } from "./basePostProcessBlock";
 export class NodeRenderGraphSSRPostProcessBlock extends NodeRenderGraphBasePostProcessBlock {
     protected override _frameGraphTask: FrameGraphSSRRenderingPipelineTask;
 
+    /**
+     *
+     */
     public override _additionalConstructionParameters: [number];
 
     /**

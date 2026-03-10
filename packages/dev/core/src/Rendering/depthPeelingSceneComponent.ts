@@ -7,12 +7,14 @@ export * from "./depthPeelingSceneComponent.pure";
 import { DepthPeelingSceneComponent } from "./depthPeelingSceneComponent.pure";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
-import { ThinDepthPeelingRenderer } from "./thinDepthPeelingRenderer";
+import type { ThinDepthPeelingRenderer } from "./thinDepthPeelingRenderer";
 import { Constants } from "../Engines/constants";
 import type { Nullable } from "../types";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /**
          * The depth peeling renderer

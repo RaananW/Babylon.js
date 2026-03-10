@@ -65,7 +65,6 @@ export class PathCursor {
      */
     public move(step: number): PathCursor {
         if (Math.abs(step) > 1) {
-            // eslint-disable-next-line no-throw-literal
             throw "step size should be less than 1.";
         }
 

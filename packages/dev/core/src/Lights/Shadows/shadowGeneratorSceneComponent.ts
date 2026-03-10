@@ -5,7 +5,7 @@
 export * from "./shadowGeneratorSceneComponent.pure";
 
 import { ShadowGeneratorSceneComponent } from "./shadowGeneratorSceneComponent.pure";
-import { Scene } from "../../scene";
+import type { Scene } from "../../scene";
 import { SceneComponentConstants } from "../../sceneComponent";
 import { ShadowGenerator } from "./shadowGenerator";
 import { CascadedShadowGenerator } from "./cascadedShadowGenerator";

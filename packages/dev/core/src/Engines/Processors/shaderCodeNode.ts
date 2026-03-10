@@ -5,9 +5,21 @@ const DefaultVaryingKeywordName = "varying";
 
 /** @internal */
 export class ShaderCodeNode {
+    /**
+     *
+     */
     line: string;
+    /**
+     *
+     */
     children: ShaderCodeNode[] = [];
+    /**
+     *
+     */
     additionalDefineKey?: string;
+    /**
+     *
+     */
     additionalDefineValue?: string;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

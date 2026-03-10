@@ -15,8 +15,6 @@ import type { PhysicsJointData } from "./physicsJoint";
 import { PhysicsJoint } from "./physicsJoint";
 import { Space } from "../../Maths/math.axis";
 
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
 /**
  * The interface for the physics imposter parameters
  * @see https://doc.babylonjs.com/features/featuresDeepDive/physics/usingPhysicsEngine
@@ -197,12 +195,12 @@ export class PhysicsImpostor {
     /**
      * The default object size of the imposter
      */
-    public static DEFAULT_OBJECT_SIZE: Vector3 = new Vector3(1, 1, 1);
+    public static DEFAULT_OBJECT_SIZE: Vector3 = /*#__PURE__*/ new Vector3(1, 1, 1);
 
     /**
      * The identity quaternion of the imposter
      */
-    public static IDENTITY_QUATERNION = Quaternion.Identity();
+    public static IDENTITY_QUATERNION = /*#__PURE__*/ Quaternion.Identity();
 
     /** @internal */
     public _pluginData: any = {};
@@ -232,8 +230,8 @@ export class PhysicsImpostor {
 
     private _isDisposed = false;
 
-    private static _TmpVecs: Vector3[] = BuildArray(3, Vector3.Zero);
-    private static _TmpQuat: Quaternion = Quaternion.Identity();
+    private static _TmpVecs: Vector3[] = /*#__PURE__*/ BuildArray(3, Vector3.Zero);
+    private static _TmpQuat: Quaternion = /*#__PURE__*/ Quaternion.Identity();
 
     /**
      * Specifies if the physics imposter is disposed

@@ -14,6 +14,9 @@ import { OrbitCameraPointersInput } from "./orbitCameraPointersInput";
  *
  */
 export class GeospatialCameraPointersInput extends OrbitCameraPointersInput {
+    /**
+     *
+     */
     public camera: GeospatialCamera;
 
     private _initialPinchSquaredDistance: number = 0;

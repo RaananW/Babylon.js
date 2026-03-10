@@ -2,7 +2,7 @@
 
 import { UniversalCamera } from "./universalCamera.pure";
 import type { Scene } from "../scene";
-import { Vector3 } from "../Maths/math.vector.pure";
+import type { Vector3 } from "../Maths/math.vector.pure";
 
 /**
  * This represents a FPS type of camera. This is only here for back compat purpose.

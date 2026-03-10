@@ -13,7 +13,6 @@ import { ShaderLanguage } from "../../Materials/shaderLanguage";
 
 import { Constants } from "../constants";
 
-
 const builtInName_frag_depth = "fragmentOutputs.fragDepth";
 
 const leftOverVarName = "uniforms";
@@ -220,7 +219,6 @@ export class WebGPUShaderProcessorWGSL extends WebGPUShaderProcessor {
             textureInfo.sampleType = sampleType;
 
             if (textureDimension === undefined) {
-                // eslint-disable-next-line no-throw-literal
                 throw `Can't get the texture dimension corresponding to the texture function "${textureFunc}"!`;
             }
 
@@ -538,7 +536,6 @@ export class WebGPUShaderProcessorWGSL extends WebGPUShaderProcessor {
     private _processSamplers(code: string, isVertex: boolean): string {
         const samplerRegexp = /var\s+(\w+Sampler)\s*:\s*(sampler|sampler_comparison)\s*;/gm;
 
-        // eslint-disable-next-line no-constant-condition
         while (true) {
             const match = samplerRegexp.exec(code);
             if (match === null) {
@@ -584,7 +581,6 @@ export class WebGPUShaderProcessorWGSL extends WebGPUShaderProcessor {
     private _processCustomBuffers(code: string, isVertex: boolean): string {
         const instantiateBufferRegexp = /var<\s*(uniform|storage)\s*(,\s*(read|read_write)\s*)?>\s+(\S+)\s*:\s*(\S+)\s*;/gm;
 
-        // eslint-disable-next-line no-constant-condition
         while (true) {
             const match = instantiateBufferRegexp.exec(code);
             if (match === null) {

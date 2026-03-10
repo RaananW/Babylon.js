@@ -11,9 +11,6 @@ import { Color4 } from "core/Maths/math.color.pure";
 import { Vector2 } from "core/Maths/math.vector.pure";
 import { PointParticleEmitter } from "core/Particles/EmitterTypes/pointParticleEmitter";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-
 const ColorDiff = /*#__PURE__*/ new Color4();
 
 /**

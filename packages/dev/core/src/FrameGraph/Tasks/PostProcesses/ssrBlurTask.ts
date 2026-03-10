@@ -7,6 +7,9 @@ import { Vector2 } from "core/Maths/math.vector";
  * @internal
  */
 export class FrameGraphSSRBlurTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinSSRBlurPostProcess;
 
     constructor(name: string, frameGraph: FrameGraph, thinPostProcess?: ThinSSRBlurPostProcess) {

@@ -1,5 +1,5 @@
 /** Pure barrel — re-exports only side-effect-free modules */
-/* eslint-disable import/export */
+
 export * from "./abstractEngine.cubeTexture.pure";
 export * from "./abstractEngine.loadingScreen.pure";
 export * from "./abstractEngine.dom.pure";

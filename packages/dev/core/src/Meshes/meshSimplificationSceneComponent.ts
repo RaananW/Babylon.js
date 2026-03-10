@@ -6,7 +6,8 @@ export * from "./meshSimplificationSceneComponent.pure";
 
 import { SimplicationQueueSceneComponent } from "./meshSimplificationSceneComponent.pure";
 import { Scene } from "../scene";
-import { ISimplificationSettings, SimplificationQueue, SimplificationType } from "./meshSimplification";
+import type { ISimplificationSettings } from "./meshSimplification";
+import { SimplificationQueue, SimplificationType } from "./meshSimplification";
 import { SceneComponentConstants } from "../sceneComponent";
 import { Mesh } from "./mesh";
 

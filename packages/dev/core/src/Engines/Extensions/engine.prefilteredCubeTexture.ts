@@ -4,9 +4,9 @@
  */
 export * from "./engine.prefilteredCubeTexture.pure";
 
-import { Nullable } from "../../types";
-import { Scene } from "../../scene";
-import { DDSInfo } from "core/Misc/dds";
+import type { Nullable } from "../../types";
+import type { Scene } from "../../scene";
+import type { DDSInfo } from "core/Misc/dds";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
@@ -15,7 +15,9 @@ import { SphericalPolynomial } from "core/Maths/sphericalPolynomial";
 import { BaseTexture } from "core/Materials/Textures/baseTexture";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Create a cube texture from prefiltered data (ie. the mipmaps contain ready to use data for PBR reflection)
@@ -147,6 +149,5 @@ ThinEngine.prototype.createPrefilteredCubeTexture = function (
         }
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     return this.createCubeTexture(rootUrl, scene, null, false, callbackAsync, onError, format, forcedExtension, createPolynomials, lodScale, lodOffset);
 };

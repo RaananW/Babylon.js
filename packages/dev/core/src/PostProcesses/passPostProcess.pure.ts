@@ -5,7 +5,7 @@ import { Constants } from "../Engines/constants";
 import type { Camera } from "../Cameras/camera";
 import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess.pure";
-import { AbstractEngine } from "../Engines/abstractEngine";
+import type { AbstractEngine } from "../Engines/abstractEngine";
 import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Scene } from "../scene";
 import { ThinPassCubePostProcess, ThinPassPostProcess } from "./thinPassPostProcess";

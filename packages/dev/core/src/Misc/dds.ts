@@ -3,7 +3,6 @@ import { DDSTools, DDSToolsGetDDSInfo } from "./dds.pure";
 import "../Engines/AbstractEngine/abstractEngine.cubeTexture";
 
 declare module "./dds.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace DDSTools {
         export { DDSToolsGetDDSInfo as GetDDSInfo };
     }

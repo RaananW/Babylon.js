@@ -2,16 +2,16 @@
 
 import { Tools } from "../Misc/tools.pure";
 import { Observable } from "../Misc/observable";
-import { Scene } from "../scene.pure";
+import type { Scene } from "../scene.pure";
 import { EngineStore } from "../Engines/engineStore";
 import type { IInspectable } from "../Misc/iInspectable";
 import type { Camera } from "../Cameras/camera";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 
 // declare INSPECTOR namespace for compilation issue
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 declare let INSPECTOR: any;
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 declare let BABYLON: any;
 // load the inspector using require, if not present in the global namespace.
 
@@ -222,7 +222,6 @@ export class DebugLayer {
 
     private _scene: Scene;
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     protected BJSINSPECTOR = this._getGlobalInspector();
 
     private _onPropertyChangedObservable?: Observable<{ object: any; property: string; value: any; initialValue: any }>;

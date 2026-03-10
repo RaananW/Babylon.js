@@ -4,15 +4,17 @@
  */
 export * from "./physicsEngineComponent.pure";
 
-import { Nullable } from "../../types";
+import type { Nullable } from "../../types";
 import type { Observer } from "../../Misc/observable";
-import { Vector3 } from "../../Maths/math.vector";
-import { PhysicsBody } from "./physicsBody";
+import type { Vector3 } from "../../Maths/math.vector";
+import type { PhysicsBody } from "./physicsBody";
 import { TransformNode } from "../../Meshes/transformNode";
 import type { Node } from "../../node";
 
 declare module "../../Meshes/transformNode" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface TransformNode {
         /** @internal */
         _physicsBody: Nullable<PhysicsBody>;

@@ -324,7 +324,6 @@ export class NodeParticleConnectionPoint {
      */
     public connectTo(connectionPoint: NodeParticleConnectionPoint, ignoreConstraints = false): NodeParticleConnectionPoint {
         if (!ignoreConstraints && !this.canConnectTo(connectionPoint)) {
-            // eslint-disable-next-line no-throw-literal
             throw `Cannot connect these two connectors. source: "${this.ownerBlock.name}".${this.name}, target: "${connectionPoint.ownerBlock.name}".${connectionPoint.name}`;
         }
 

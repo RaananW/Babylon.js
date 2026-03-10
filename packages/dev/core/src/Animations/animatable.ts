@@ -14,7 +14,9 @@ import type { Nullable } from "../types";
 import type { Vector3 } from "../Maths/math.vector";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /**
          * Sort active animatables based on their playOrder property
@@ -188,7 +190,9 @@ declare module "../scene" {
 }
 
 declare module "../Bones/bone" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Bone {
         /**
          * Copy an animation range from another bone

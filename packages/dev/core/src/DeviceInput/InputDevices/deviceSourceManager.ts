@@ -178,7 +178,7 @@ export class DeviceSourceManager implements IDisposable, IObservableManager {
             case DeviceType.Switch:
             case DeviceType.Generic: {
                 delete this._firstDevice[type];
-                // eslint-disable-next-line no-case-declarations
+
                 const devices = this._devices[type];
                 if (devices) {
                     for (let i = 0; i < devices.length; i++) {

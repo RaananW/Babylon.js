@@ -4,21 +4,23 @@
  */
 export * from "./spriteSceneComponent.pure";
 
-import { InternalSpriteAugmentedScene } from "./spriteSceneComponent.pure";
-import { Nullable } from "../types";
+import type { InternalSpriteAugmentedScene } from "./spriteSceneComponent.pure";
+import type { Nullable } from "../types";
 import { Observable } from "../Misc/observable";
 import { Scene } from "../scene";
-import { Sprite } from "./sprite";
-import { ISpriteManager } from "./spriteManager";
+import type { Sprite } from "./sprite";
+import type { ISpriteManager } from "./spriteManager";
 import { Ray, CreatePickingRayInCameraSpace, CreatePickingRayInCameraSpaceToRef } from "../Culling/ray.core";
-import { Camera } from "../Cameras/camera";
+import type { Camera } from "../Cameras/camera";
 import { PickingInfo } from "../Collisions/pickingInfo";
 import { ActionEvent } from "../Actions/actionEvent";
 import { Constants } from "../Engines/constants";
 import type { IReadonlyObservable } from "../Misc/observable";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal */
         _pointerOverSprite: Nullable<Sprite>;

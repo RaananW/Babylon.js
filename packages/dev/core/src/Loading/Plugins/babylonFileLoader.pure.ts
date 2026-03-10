@@ -31,7 +31,7 @@ import type { MorphTarget } from "../../Morph/morphTarget";
 import { SpriteManagerParse } from "../../Sprites/spriteManager.pure";
 
 /** @internal */
-// eslint-disable-next-line @typescript-eslint/naming-convention, no-var
+// eslint-disable-next-line no-var
 export var _BabylonLoaderRegistered = true;
 
 /**
@@ -62,8 +62,27 @@ export function _ResetTempContainers(): void {
     TempSkeletonIndexContainer = {};
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export const logOperation = (operation: string, producer: { file: string; name: string; version: string; exporter_version: string }) => {
+/**
+ *
+ */
+export const logOperation = (
+    operation: string,
+    producer: {
+        /**
+         *
+         */
+        file: string /**
+         *
+         */;
+        name: string /**
+         *
+         */;
+        version: string /**
+         *
+         */;
+        exporter_version: string;
+    }
+) => {
     return (
         operation +
         " of " +
@@ -71,6 +90,9 @@ export const logOperation = (operation: string, producer: { file: string; name: 
     );
 };
 
+/**
+ *
+ */
 export const LoadDetailLevels = (scene: Scene, mesh: AbstractMesh) => {
     const mastermesh: Mesh = mesh as Mesh;
 
@@ -126,6 +148,9 @@ const FindParent = (parentId: any, parentInstanceIndex: any, scene: Scene) => {
     return parent;
 };
 
+/**
+ *
+ */
 export const FindMaterial = (materialId: any, scene: Scene) => {
     if (typeof materialId !== "number") {
         return scene.getLastMaterialById(materialId, true);
@@ -146,6 +171,9 @@ export function LoadAssetContainerFromSerializedScene(scene: Scene, serializedSc
     return LoadAssetContainer(scene, serializedScene, rootUrl);
 }
 
+/**
+ *
+ */
 export const LoadAssetContainer = (
     scene: Scene,
     data: string | object,

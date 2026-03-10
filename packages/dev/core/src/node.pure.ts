@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Scene } from "./scene";
 import type { Nullable } from "./types";
 import { Matrix, Vector3 } from "./Maths/math.vector.pure";

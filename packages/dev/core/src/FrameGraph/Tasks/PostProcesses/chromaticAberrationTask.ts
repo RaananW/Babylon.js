@@ -6,6 +6,9 @@ import { FrameGraphPostProcessTask } from "./postProcessTask";
  * Task which applies a chromatic aberration post process.
  */
 export class FrameGraphChromaticAberrationTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinChromaticAberrationPostProcess;
 
     /**

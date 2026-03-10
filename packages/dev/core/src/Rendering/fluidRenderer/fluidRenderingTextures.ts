@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import type { Camera } from "core/Cameras/camera";
 import { Constants } from "core/Engines/constants";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
@@ -37,10 +36,19 @@ export class FluidRenderingTextures {
     protected _textureBlurred: Nullable<Texture>;
     protected _blurPostProcesses: Nullable<PostProcess[]>;
 
+    /**
+     *
+     */
     public enableBlur = true;
 
+    /**
+     *
+     */
     public blurSizeDivisor = 1;
 
+    /**
+     *
+     */
     public blurFilterSize = 7;
 
     private _blurNumIterations = 3;
@@ -66,12 +74,24 @@ export class FluidRenderingTextures {
         }
     }
 
+    /**
+     *
+     */
     public blurMaxFilterSize = 100;
 
+    /**
+     *
+     */
     public blurDepthScale = 10;
 
+    /**
+     *
+     */
     public particleSize = 0.02;
 
+    /**
+     *
+     */
     public onDisposeObservable: Observable<FluidRenderingTextures> = new Observable<FluidRenderingTextures>();
 
     public get renderTarget() {

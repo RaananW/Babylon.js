@@ -6,6 +6,9 @@ import { FrameGraphPostProcessTask } from "./postProcessTask";
  * Task which applies a FXAA post process.
  */
 export class FrameGraphFXAATask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinFXAAPostProcess;
 
     /**

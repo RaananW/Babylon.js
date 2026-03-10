@@ -3,7 +3,7 @@
 import { Camera } from "../../Cameras/camera";
 import { GamepadCamera } from "../../Cameras/gamepadCamera.pure";
 import type { Scene } from "../../scene";
-import { Vector3 } from "../../Maths/math.vector.pure";
+import type { Vector3 } from "../../Maths/math.vector.pure";
 import { _SetStereoscopicRigMode } from "../RigModes/stereoscopicRigMode";
 
 /**

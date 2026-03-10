@@ -5,16 +5,7 @@
  */
 export * from "./math.polar.pure";
 
-import {
-    Polar,
-    PolarFromVector2ToRef,
-    PolarFromVector2,
-    PolarFromArray,
-    Spherical,
-    SphericalFromVector3ToRef,
-    SphericalFromVector3,
-    SphericalFromArray,
-} from "./math.polar.pure";
+import { Polar, PolarFromVector2ToRef, PolarFromVector2, PolarFromArray, Spherical, SphericalFromVector3ToRef, SphericalFromVector3, SphericalFromArray } from "./math.polar.pure";
 
 declare module "./math.polar.pure" {
     namespace Polar {

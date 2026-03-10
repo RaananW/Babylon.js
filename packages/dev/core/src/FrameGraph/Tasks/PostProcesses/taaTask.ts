@@ -16,6 +16,9 @@ import { Constants } from "core/Engines/constants";
  * Task which applies a Temporal Anti-Aliasing post process.
  */
 export class FrameGraphTAATask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinTAAPostProcess;
 
     /**

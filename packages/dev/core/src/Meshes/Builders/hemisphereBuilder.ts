@@ -6,7 +6,7 @@ export * from "./hemisphereBuilder.pure";
 
 import { CreateHemisphere } from "./hemisphereBuilder.pure";
 import { Mesh } from "../mesh";
-import { Scene } from "../../scene";
+import type { Scene } from "../../scene";
 
 /**
  * Creates a hemispheric light

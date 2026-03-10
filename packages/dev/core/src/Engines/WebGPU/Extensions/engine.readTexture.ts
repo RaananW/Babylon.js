@@ -4,13 +4,15 @@
  */
 export * from "./engine.readTexture.pure";
 
-import { InternalTexture } from "../../../Materials/Textures/internalTexture";
-import { Nullable } from "../../../types";
-import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
+import type { Nullable } from "../../../types";
+import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
 
 declare module "../../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /** @internal */
         _readTexturePixels(
@@ -65,6 +67,5 @@ ThinWebGPUEngine.prototype._readTexturePixels = function (
 };
 
 ThinWebGPUEngine.prototype._readTexturePixelsSync = function (): ArrayBufferView {
-    // eslint-disable-next-line no-throw-literal
     throw "_readTexturePixelsSync is unsupported in WebGPU!";
 };

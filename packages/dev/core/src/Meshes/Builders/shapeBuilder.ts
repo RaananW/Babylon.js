@@ -5,9 +5,9 @@
 export * from "./shapeBuilder.pure";
 
 import { ExtrudeShape, ExtrudeShapeCustom } from "./shapeBuilder.pure";
-import { Nullable } from "../../types";
-import { Scene } from "../../scene";
-import { Vector3 } from "../../Maths/math.vector";
+import type { Nullable } from "../../types";
+import type { Scene } from "../../scene";
+import type { Vector3 } from "../../Maths/math.vector";
 import { Mesh } from "../mesh";
 
 Mesh.ExtrudeShape = (

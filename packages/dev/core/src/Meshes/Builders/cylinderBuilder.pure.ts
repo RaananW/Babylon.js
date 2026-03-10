@@ -4,7 +4,7 @@ import { Vector4, Vector3, Vector2 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
 import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
-import { Scene } from "../../scene.pure";
+import type { Scene } from "../../scene.pure";
 import type { Nullable } from "../../types";
 import { Axis } from "../../Maths/math.axis";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";

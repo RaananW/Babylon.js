@@ -51,7 +51,7 @@ function ObserveArrayFunction(object: { [key: string]: any }, functionName: stri
         const previousLength = object.length;
         const returnValue = newFunction.previous.apply(object, arguments);
         callback(functionName, previousLength);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
         return returnValue;
     } as any;
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-var */
 /* eslint-disable @typescript-eslint/naming-convention */
 // Type definitions for WebGL 2 extended with Babylon specific types
 

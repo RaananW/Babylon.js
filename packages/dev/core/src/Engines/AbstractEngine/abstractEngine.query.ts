@@ -4,13 +4,16 @@
  */
 export * from "./abstractEngine.query.pure";
 
-import { OcclusionQuery, _OcclusionDataStorage } from "./abstractEngine.query.pure";
-import { AbstractMesh } from "core/Meshes/abstractMesh";
-import { Nullable } from "../../types";
+import type { OcclusionQuery } from "./abstractEngine.query.pure";
+import { _OcclusionDataStorage } from "./abstractEngine.query.pure";
+import { AbstractMesh } from "core/Meshes/abstractMesh.pure";
+import type { Nullable } from "../../types";
 import { AbstractEngine } from "../abstractEngine";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Create a new webGL query (you must be sure that queries are supported by checking getCaps() function)
@@ -53,7 +56,9 @@ declare module "../../Engines/abstractEngine" {
 }
 
 declare module "../../Meshes/abstractMesh" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractMesh {
         /**
          * Backing filed

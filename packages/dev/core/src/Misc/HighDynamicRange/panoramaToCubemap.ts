@@ -94,14 +94,12 @@ export class PanoramaToCubeMapTools {
      */
     public static ConvertPanoramaToCubemap(float32Array: Float32Array, inputWidth: number, inputHeight: number, size: number, supersample = false, invertY = true): CubeMapInfo {
         if (!float32Array) {
-            // eslint-disable-next-line no-throw-literal
             throw "ConvertPanoramaToCubemap: input cannot be null";
         }
 
         let stride = 0;
         if (float32Array.length != inputWidth * inputHeight * 3) {
             if (float32Array.length != inputWidth * inputHeight * 4) {
-                // eslint-disable-next-line no-throw-literal
                 throw "ConvertPanoramaToCubemap: input size is wrong";
             } else {
                 stride = 4;

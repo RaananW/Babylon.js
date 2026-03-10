@@ -5,8 +5,8 @@
 export * from "./ribbonBuilder.pure";
 
 import { CreateRibbon, CreateRibbonVertexData } from "./ribbonBuilder.pure";
-import { Scene } from "../../scene";
-import { Vector3 } from "../../Maths/math.vector";
+import type { Scene } from "../../scene";
+import type { Vector3 } from "../../Maths/math.vector";
 import { Mesh } from "../mesh";
 import { VertexData } from "../mesh.vertexData";
 

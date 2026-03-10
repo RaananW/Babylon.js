@@ -4,7 +4,13 @@ import { RenderTargetWrapper } from "../renderTargetWrapper";
 import type { NativeFramebuffer } from "./nativeInterfaces";
 import type { ThinNativeEngine } from "../thinNativeEngine";
 
+/**
+ *
+ */
 export class NativeRenderTargetWrapper extends RenderTargetWrapper {
+    /**
+     *
+     */
     public override readonly _engine: ThinNativeEngine;
 
     // eslint-disable-next-line @typescript-eslint/naming-convention

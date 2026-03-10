@@ -4,10 +4,10 @@
  */
 export * from "./engine.renderTarget.pure";
 
-import { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../Materials/Textures/textureCreationOptions";
-import { Nullable } from "../../types";
-import { RenderTargetWrapper } from "../renderTargetWrapper";
-import { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
+import type { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../Materials/Textures/textureCreationOptions";
+import type { Nullable } from "../../types";
+import type { RenderTargetWrapper } from "../renderTargetWrapper";
+import type { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { ThinEngine } from "../thinEngine";
@@ -16,7 +16,9 @@ import { HasStencilAspect } from "core/Materials/Textures/textureHelper.function
 import { Constants } from "../constants";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Creates a new render target texture

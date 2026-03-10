@@ -73,7 +73,13 @@ export class NativeXRLayerRenderTargetTextureProvider extends WebXRLayerRenderTa
  * @internal
  */
 export class NativeXRRenderTarget implements WebXRRenderTarget {
+    /**
+     *
+     */
     public canvasContext: WebGLRenderingContext;
+    /**
+     *
+     */
     public xrLayer: Nullable<XRWebGLLayer>;
 
     private _nativeRenderTarget: WebXRRenderTarget;

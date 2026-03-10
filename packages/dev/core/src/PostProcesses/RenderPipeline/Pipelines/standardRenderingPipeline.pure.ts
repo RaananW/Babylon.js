@@ -440,12 +440,10 @@ export class StandardRenderingPipeline extends PostProcessRenderPipeline impleme
      * Specifies if the volumetric lights scattering effect is enabled
      */
     @serialize()
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     public get VLSEnabled(): boolean {
         return this._vlsEnabled;
     }
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     public set VLSEnabled(enabled) {
         if (this._vlsEnabled === enabled) {
             return;

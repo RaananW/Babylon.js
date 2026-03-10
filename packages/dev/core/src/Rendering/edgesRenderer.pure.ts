@@ -2,7 +2,7 @@
 
 import type { Immutable, Nullable } from "../types";
 import { VertexBuffer } from "../Buffers/buffer.pure";
-import { AbstractMesh } from "../Meshes/abstractMesh.pure";
+import type { AbstractMesh } from "../Meshes/abstractMesh.pure";
 import type { Mesh } from "../Meshes/mesh";
 import type { Matrix } from "../Maths/math.vector";
 import { Vector3, TmpVectors } from "../Maths/math.vector.pure";

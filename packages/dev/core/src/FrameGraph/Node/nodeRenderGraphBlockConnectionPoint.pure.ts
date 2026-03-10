@@ -276,7 +276,6 @@ export class NodeRenderGraphConnectionPoint {
      */
     public connectTo(connectionPoint: NodeRenderGraphConnectionPoint, ignoreConstraints = false): NodeRenderGraphConnectionPoint {
         if (!ignoreConstraints && !this.canConnectTo(connectionPoint)) {
-            // eslint-disable-next-line no-throw-literal
             throw `Cannot connect these two connectors. source: "${this.ownerBlock.name}".${this.name}, target: "${connectionPoint.ownerBlock.name}".${connectionPoint.name}`;
         }
 

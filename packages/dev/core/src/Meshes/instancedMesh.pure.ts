@@ -8,7 +8,7 @@ import type { Camera } from "../Cameras/camera";
 import type { Node } from "../node";
 import type { IMeshDataOptions } from "../Meshes/abstractMesh";
 import { AbstractMesh } from "../Meshes/abstractMesh.pure";
-import { Mesh } from "../Meshes/mesh.pure";
+import type { Mesh } from "../Meshes/mesh.pure";
 import type { Material } from "../Materials/material";
 import type { Skeleton } from "../Bones/skeleton";
 import { DeepCopierDeepCopy } from "../Misc/deepCopier.pure";

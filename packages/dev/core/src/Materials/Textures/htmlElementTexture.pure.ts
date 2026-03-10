@@ -5,7 +5,6 @@ import { Matrix } from "../../Maths/math.vector.pure";
 import { Observable } from "../../Misc/observable";
 import type { ExternalTexture } from "./externalTexture";
 
-
 import type { AbstractEngine } from "../../Engines/abstractEngine";
 import type { Scene } from "../../scene";
 import type { WebGPUEngine } from "core/Engines/webgpuEngine";

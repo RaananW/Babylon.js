@@ -482,7 +482,7 @@ export class VideoTexture extends Texture {
      * @param invertY Defines if the video should be stored with invert Y set to true (true by default)
      * @returns The created video texture as a promise
      */
-    public static CreateFromWebCamAsync(
+    public static async CreateFromWebCamAsync(
         scene: Scene,
         constraints: {
             minWidth: number;
@@ -494,7 +494,7 @@ export class VideoTexture extends Texture {
         audioConstaints: boolean | MediaTrackConstraints = false,
         invertY = true
     ): Promise<VideoTexture> {
-        return VideoTextureCreateFromWebCamAsync(scene, constraints, audioConstaints, invertY);
+        return await VideoTextureCreateFromWebCamAsync(scene, constraints, audioConstaints, invertY);
     }
 
     /**

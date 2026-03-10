@@ -5,7 +5,7 @@
 export * from "./subSurfaceSceneComponent.pure";
 
 import { SubSurfaceSceneComponent } from "./subSurfaceSceneComponent.pure";
-import { Nullable } from "../types";
+import type { Nullable } from "../types";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
 import { SubSurfaceConfiguration } from "./subSurfaceConfiguration";
@@ -13,7 +13,9 @@ import { Color3 } from "../Maths/math.color";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal (Backing field) */
         _subSurfaceConfiguration: Nullable<SubSurfaceConfiguration>;

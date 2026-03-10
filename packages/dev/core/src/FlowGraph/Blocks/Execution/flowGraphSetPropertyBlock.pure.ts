@@ -8,6 +8,9 @@ import { RichTypeAny } from "core/FlowGraph/flowGraphRichTypes.pure";
 import type { FlowGraphSignalConnection } from "core/FlowGraph/flowGraphSignalConnection";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 
+/**
+ *
+ */
 export interface IFlowGraphSetPropertyBlockConfiguration<O extends FlowGraphAssetType> {
     /**
      * The name of the property that will be set

@@ -8,7 +8,8 @@ import type { Nullable } from "../types";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import type { IAnimatable } from "../Animations/animatable.interface";
 import { Tags, TagsHasTags, TagsGetTags, TagsAddTagsTo } from "./tags.pure";
-import { Color4, Color3FromArray, Color4FromArray } from "../Maths/math.color.pure";
+import type { Color4 } from "../Maths/math.color.pure";
+import { Color3FromArray, Color4FromArray } from "../Maths/math.color.pure";
 import { Matrix, Quaternion, Vector2, Vector3 } from "../Maths/math.vector.pure";
 import type { Camera } from "../Cameras/camera";
 import { GetMergedStore } from "./decorators.functions";
@@ -18,6 +19,9 @@ export interface ICopySourceOptions {
     /*
      * if a texture is used in more than one channel (e.g diffuse and opacity),
      * only clone it once and reuse it on the other channels. Default false
+     */
+    /**
+     *
      */
     cloneTexturesOnlyOnce?: boolean;
 }

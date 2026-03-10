@@ -2,7 +2,8 @@
 
 import { DeepCopierDeepCopy } from "../Misc/deepCopier.pure";
 import type { DeepImmutable } from "../types";
-import { Color3, Color3FromArray, Color3Black, Color3White } from "../Maths/math.color.pure";
+import type { Color3 } from "../Maths/math.color.pure";
+import { Color3FromArray, Color3Black, Color3White } from "../Maths/math.color.pure";
 import { Constants } from "../Engines/constants";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 

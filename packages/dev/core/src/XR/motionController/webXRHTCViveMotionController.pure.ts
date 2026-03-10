@@ -24,6 +24,9 @@ export class WebXRHTCViveMotionController extends WebXRAbstractMotionController 
      */
     public static MODEL_FILENAME: string = "wand.babylon";
 
+    /**
+     *
+     */
     public profileId = "htc-vive";
 
     /**

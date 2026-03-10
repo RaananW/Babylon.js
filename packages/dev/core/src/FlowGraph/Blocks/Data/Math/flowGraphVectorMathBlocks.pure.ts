@@ -143,6 +143,9 @@ export class FlowGraphRotate3DBlock extends FlowGraphBinaryOperationBlock<Vector
     }
 }
 
+/**
+ *
+ */
 export function TransformVector(a: FlowGraphVector, b: FlowGraphMatrix): FlowGraphVector {
     const className = _GetClassNameOf(a);
     switch (className) {

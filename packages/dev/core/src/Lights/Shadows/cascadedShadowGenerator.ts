@@ -26,9 +26,8 @@ interface ICascade {
     breakDistance: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const UpDir = Vector3.Up();
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 const ZeroVec = Vector3.Zero();
 
 const Tmpv1 = new Vector3();

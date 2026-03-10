@@ -2,7 +2,7 @@
 
 import type { Scene } from "../../scene";
 import { Quaternion, TmpVectors, Vector3 } from "../../Maths/math.vector.pure";
-import { Mesh } from "../mesh.pure";
+import type { Mesh } from "../mesh.pure";
 import { Buffer } from "../../Buffers/buffer.pure";
 import type { Nullable } from "../../types";
 import type { Node } from "../../node";
@@ -22,9 +22,9 @@ export class GreasedLineRibbonMesh extends GreasedLineBaseMesh {
      */
     public static DEFAULT_WIDTH = 0.1;
 
-    private static _RightHandedForwardReadOnlyQuaternion = Quaternion.RotationAxis(Vector3.RightHandedForwardReadOnly, Math.PI / 2);
-    private static _LeftHandedForwardReadOnlyQuaternion = Quaternion.RotationAxis(Vector3.LeftHandedForwardReadOnly, Math.PI / 2);
-    private static _LeftReadOnlyQuaternion = Quaternion.RotationAxis(Vector3.LeftReadOnly, Math.PI / 2);
+    private static _RightHandedForwardReadOnlyQuaternion = /*#__PURE__*/ Quaternion.RotationAxis(Vector3.RightHandedForwardReadOnly, Math.PI / 2);
+    private static _LeftHandedForwardReadOnlyQuaternion = /*#__PURE__*/ Quaternion.RotationAxis(Vector3.LeftHandedForwardReadOnly, Math.PI / 2);
+    private static _LeftReadOnlyQuaternion = /*#__PURE__*/ Quaternion.RotationAxis(Vector3.LeftReadOnly, Math.PI / 2);
 
     /**
      * Direction which the line segment will be thickened if drawn on the XY plane

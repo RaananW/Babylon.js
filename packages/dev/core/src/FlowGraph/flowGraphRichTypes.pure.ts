@@ -1,7 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
 import { Vector2, Vector3, Vector4, Matrix, Quaternion } from "../Maths/math.vector.pure";
-import { Color3, Color3Black, Color4 } from "../Maths/math.color.pure";
+import type { Color3 } from "../Maths/math.color.pure";
+import { Color3Black, Color4 } from "../Maths/math.color.pure";
 import { FlowGraphInteger } from "./CustomTypes/flowGraphInteger.pure";
 import { Constants } from "core/Engines/constants";
 import { FlowGraphMatrix2D, FlowGraphMatrix3D } from "./CustomTypes/flowGraphMatrix";

@@ -7,16 +7,34 @@ import { ThinSSRPostProcess } from "core/PostProcesses/thinSSRPostProcess";
  * @internal
  */
 export class FrameGraphSSRTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public normalTexture: FrameGraphTextureHandle;
 
+    /**
+     *
+     */
     public depthTexture: FrameGraphTextureHandle;
 
+    /**
+     *
+     */
     public reflectivityTexture: FrameGraphTextureHandle;
 
+    /**
+     *
+     */
     public backDepthTexture?: FrameGraphTextureHandle;
 
+    /**
+     *
+     */
     public camera: Camera;
 
+    /**
+     *
+     */
     public override readonly postProcess: ThinSSRPostProcess;
 
     constructor(name: string, frameGraph: FrameGraph, thinPostProcess?: ThinSSRPostProcess) {

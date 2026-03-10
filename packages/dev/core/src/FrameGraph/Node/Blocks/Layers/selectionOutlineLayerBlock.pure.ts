@@ -8,7 +8,7 @@ import { FrameGraphSelectionOutlineLayerTask } from "core/FrameGraph/Tasks/Layer
 import { Constants } from "core/Engines/constants";
 import { NodeRenderGraphConnectionPointCustomObject } from "../../nodeRenderGraphConnectionPointCustomObject";
 import { NodeRenderGraphBaseObjectRendererBlock } from "../Rendering/baseObjectRendererBlock";
-import { Color3 } from "core/Maths/math.color.pure";
+import type { Color3 } from "core/Maths/math.color.pure";
 import { Color3FromArray } from "../../../../Maths/math.color.pure";
 
 /**
@@ -17,6 +17,9 @@ import { Color3FromArray } from "../../../../Maths/math.color.pure";
 export class NodeRenderGraphSelectionOutlineLayerBlock extends NodeRenderGraphBlock {
     protected override _frameGraphTask: FrameGraphSelectionOutlineLayerTask;
 
+    /**
+     *
+     */
     public override _additionalConstructionParameters: [number, number | undefined, number];
 
     /**

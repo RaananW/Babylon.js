@@ -454,6 +454,9 @@ export class ThinImageProcessingPostProcess extends EffectWrapper {
         SKIPFINALCOLORCLAMP: false,
     };
 
+    /**
+     *
+     */
     public override readonly options: Required<NonNullableFields<ThinImageProcessingPostProcessOptions>>;
 
     /**

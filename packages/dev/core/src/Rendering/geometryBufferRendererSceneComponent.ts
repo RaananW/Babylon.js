@@ -5,14 +5,16 @@
 export * from "./geometryBufferRendererSceneComponent.pure";
 
 import { GeometryBufferRendererSceneComponent } from "./geometryBufferRendererSceneComponent.pure";
-import { Nullable } from "../types";
+import type { Nullable } from "../types";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
 import { GeometryBufferRenderer } from "./geometryBufferRenderer";
 import { Constants } from "../Engines/constants";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal (Backing field) */
         _geometryBufferRenderer: Nullable<GeometryBufferRenderer>;
@@ -30,9 +32,29 @@ declare module "../scene" {
          * @returns the GeometryBufferRenderer
          */
         enableGeometryBufferRenderer(
-            ratioOrDimensions?: number | { width: number; height: number },
+            ratioOrDimensions?:
+                | number
+                | {
+                      /**
+                       *
+                       */
+                      width: number /**
+                       *
+                       */;
+                      height: number;
+                  },
             depthFormat?: number,
-            textureTypesAndFormats?: { [key: number]: { textureType: number; textureFormat: number } }
+            textureTypesAndFormats?: {
+                [key: number]: {
+                    /**
+                     *
+                     */
+                    textureType: number /**
+                     *
+                     */;
+                    textureFormat: number;
+                };
+            }
         ): Nullable<GeometryBufferRenderer>;
 
         /**

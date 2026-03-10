@@ -40,7 +40,10 @@ export class SixDofDragBehavior extends BaseSixDofDragBehavior {
     /**
      * If `rotateDraggedObject` is set to `true`, this parameter determines if we are only rotating around the y axis (yaw)
      */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
+    /**
+     *
+     */
     public rotateAroundYOnly = false;
 
     /**

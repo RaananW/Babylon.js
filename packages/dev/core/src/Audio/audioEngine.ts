@@ -5,7 +5,7 @@
 export * from "./audioEngine.pure";
 
 import { AudioEngine } from "./audioEngine.pure";
-import { Nullable } from "../types";
+import type { Nullable } from "../types";
 import { AbstractEngine } from "../Engines/abstractEngine";
 
 // Sets the default audio engine to Babylon.js

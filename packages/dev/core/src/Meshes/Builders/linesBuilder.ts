@@ -5,11 +5,11 @@
 export * from "./linesBuilder.pure";
 
 import { CreateDashedLines, CreateDashedLinesVertexData, CreateLineSystemVertexData, CreateLines } from "./linesBuilder.pure";
-import { Vector3 } from "../../Maths/math.vector";
+import type { Vector3 } from "../../Maths/math.vector";
 import { VertexData } from "../mesh.vertexData";
-import { Nullable } from "../../types";
-import { LinesMesh } from "../../Meshes/linesMesh";
-import { Scene } from "../../scene";
+import type { Nullable } from "../../types";
+import type { LinesMesh } from "../../Meshes/linesMesh";
+import type { Scene } from "../../scene";
 import { Mesh } from "../mesh";
 
 VertexData.CreateLineSystem = CreateLineSystemVertexData;

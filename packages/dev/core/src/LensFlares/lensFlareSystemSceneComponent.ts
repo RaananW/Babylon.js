@@ -5,15 +5,17 @@
 export * from "./lensFlareSystemSceneComponent.pure";
 
 import { LensFlareSystemSceneComponent } from "./lensFlareSystemSceneComponent.pure";
-import { Nullable } from "../types";
+import type { Nullable } from "../types";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
-import { AssetContainer } from "../assetContainer";
+import type { AssetContainer } from "../assetContainer";
 import { LensFlareSystem } from "./lensFlareSystem";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /**
          * Removes the given lens flare system from this scene.

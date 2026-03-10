@@ -18,9 +18,21 @@ import { BindTextureMatrix, PrepareDefinesForMergedUV } from "./materialHelper.f
  * @internal
  */
 export class DecalMapDefines extends MaterialDefines {
+    /**
+     *
+     */
     DECAL = false;
+    /**
+     *
+     */
     DECALDIRECTUV = 0;
+    /**
+     *
+     */
     DECAL_SMOOTHALPHA = false;
+    /**
+     *
+     */
     GAMMADECAL = false;
 }
 

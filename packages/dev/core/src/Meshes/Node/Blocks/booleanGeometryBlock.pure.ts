@@ -8,7 +8,7 @@ import type { NodeGeometryBuildState } from "../nodeGeometryBuildState";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
 import { CSG2, InitializeCSG2Async, IsCSG2Ready } from "core/Meshes/csg2";
 import type { Nullable } from "core/types";
-import { CSG } from "core/Meshes/csg.pure";
+import type { CSG } from "core/Meshes/csg.pure";
 import { CSGFromVertexData } from "../../csg.pure";
 
 /**

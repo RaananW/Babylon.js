@@ -73,19 +73,58 @@ export interface IPipelineGenerationOptions {
  * @internal
  */
 export interface ICreateAndPreparePipelineContextOptions {
+    /**
+     *
+     */
     parallelShaderCompile?: { COMPLETION_STATUS_KHR: number };
+    /**
+     *
+     */
     shaderProcessingContext: Nullable<_IShaderProcessingContext>;
+    /**
+     *
+     */
     existingPipelineContext?: Nullable<IPipelineContext>;
+    /**
+     *
+     */
     name?: string;
+    /**
+     *
+     */
     rebuildRebind?: (vertexSourceCode: string, fragmentSourceCode: string, onCompiled: (pipelineContext: IPipelineContext) => void, onError: (message: string) => void) => void;
+    /**
+     *
+     */
     onRenderingStateCompiled?: (pipelineContext?: IPipelineContext) => void;
+    /**
+     *
+     */
     context?: WebGL2RenderingContext | WebGLRenderingContext;
     // preparePipeline options
+    /**
+     *
+     */
     createAsRaw?: boolean;
+    /**
+     *
+     */
     vertex: string;
+    /**
+     *
+     */
     fragment: string;
+    /**
+     *
+     */
     defines: Nullable<string>;
+    /**
+     *
+     */
     transformFeedbackVaryings: Nullable<string[]>;
+    /**
+     *
+     */
     disableParallelCompilation?: boolean;
 }
 
@@ -118,7 +157,10 @@ export function resetCachedPipeline(pipeline: IPipelineContext): void {
 }
 
 /** @internal */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export function _ProcessShaderCode(
     processorOptions: _IProcessingOptions,
     baseName: any,

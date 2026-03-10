@@ -1,4 +1,3 @@
-/* eslint-disable import/export */
 export * from "./abstractEngine.cubeTexture";
 export * from "./abstractEngine.loadingScreen";
 export * from "./abstractEngine.dom";

@@ -28,7 +28,9 @@ import { ShaderLanguage } from "./shaderLanguage";
 import { ShaderStore } from "../Engines/shaderStore";
 
 declare module "./material" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Material {
         /**
          * Plugin manager for this material
@@ -96,7 +98,6 @@ export class MaterialPluginManager {
         }
 
         if (!plugin.isCompatible(this._material.shaderLanguage)) {
-            // eslint-disable-next-line no-throw-literal
             throw `The plugin "${plugin.name}" can't be added to the material "${this._material.name}" because the plugin is not compatible with the shader language of the material.`;
         }
 
@@ -476,7 +477,10 @@ let MaterialObserver: Nullable<Observer<Material>> = null;
  * @param pluginName The plugin name
  * @param factory The factory function which allows to create the plugin
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export function RegisterMaterialPlugin(pluginName: string, factory: PluginMaterialFactory): void {
     if (!Inited) {
         MaterialObserver = Material.OnEventObservable.add((material: Material) => {
@@ -499,7 +503,10 @@ export function RegisterMaterialPlugin(pluginName: string, factory: PluginMateri
  * @param pluginName The plugin name
  * @returns true if the plugin has been removed, else false
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export function UnregisterMaterialPlugin(pluginName: string): boolean {
     for (let i = 0; i < Plugins.length; ++i) {
         if (Plugins[i][0] === pluginName) {
@@ -516,7 +523,10 @@ export function UnregisterMaterialPlugin(pluginName: string): boolean {
 /**
  * Clear the list of global material plugins
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export function UnregisterAllMaterialPlugins(): void {
     Plugins.length = 0;
     Inited = false;

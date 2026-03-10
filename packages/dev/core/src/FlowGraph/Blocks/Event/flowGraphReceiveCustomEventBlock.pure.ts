@@ -32,6 +32,9 @@ export interface IFlowGraphReceiveCustomEventBlockConfiguration extends IFlowGra
  * `{ x: { type: RichTypeNumber }, y: { type: RichTypeNumber } }`, the block will have two data outputs: x and y.
  */
 export class FlowGraphReceiveCustomEventBlock extends FlowGraphEventBlock {
+    /**
+     *
+     */
     public override initPriority: number = 1;
 
     constructor(

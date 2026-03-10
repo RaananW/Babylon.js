@@ -9,8 +9,14 @@ import { FlowGraphEventType } from "core/FlowGraph/flowGraphEventType";
  * Block that triggers when a scene is ready.
  */
 export class FlowGraphSceneReadyEventBlock extends FlowGraphEventBlock {
+    /**
+     *
+     */
     public override initPriority: number = -1;
 
+    /**
+     *
+     */
     public override readonly type: FlowGraphEventType = FlowGraphEventType.SceneReady;
 
     public override _executeEvent(context: FlowGraphContext, _payload: any): boolean {

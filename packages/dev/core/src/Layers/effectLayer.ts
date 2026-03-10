@@ -585,7 +585,7 @@ export abstract class EffectLayer {
      * @param mesh The mesh to render
      * @returns true if it should render otherwise false
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     protected _shouldRenderMesh(mesh: AbstractMesh): boolean {
         return this._internalThinEffectLayer ? true : this._thinEffectLayer._shouldRenderMesh(mesh);
     }
@@ -613,7 +613,7 @@ export abstract class EffectLayer {
      * @param mesh defines the current mesh to render
      * @returns true if the mesh material should be use
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     protected _useMeshMaterial(mesh: AbstractMesh): boolean {
         return this._internalThinEffectLayer ? false : this._thinEffectLayer._useMeshMaterial(mesh);
     }
@@ -687,7 +687,6 @@ export abstract class EffectLayer {
     public static Parse(parsedEffectLayer: any, scene: Scene, rootUrl: string): EffectLayer {
         const effectLayerType = Tools.Instantiate(parsedEffectLayer.customType);
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return effectLayerType.Parse(parsedEffectLayer, scene, rootUrl);
     }
 }

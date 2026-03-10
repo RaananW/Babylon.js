@@ -5,16 +5,18 @@
 export * from "./depthRendererSceneComponent.pure";
 
 import { DepthRendererSceneComponent } from "./depthRendererSceneComponent.pure";
-import { Nullable } from "../types";
+import type { Nullable } from "../types";
 import { Scene } from "../scene";
-import { Camera } from "../Cameras/camera";
+import type { Camera } from "../Cameras/camera";
 import { SceneComponentConstants } from "../sceneComponent";
-import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
+import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
 import { DepthRenderer } from "./depthRenderer";
 import { Constants } from "../Engines/constants";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal (Backing field) */
         _depthRenderer: { [id: string]: DepthRenderer };
@@ -56,7 +58,6 @@ Scene.prototype.enableDepthRenderer = function (
 ): DepthRenderer {
     camera = camera || this.activeCamera;
     if (!camera) {
-        // eslint-disable-next-line no-throw-literal
         throw "No camera available to enable depth renderer";
     }
     if (!this._depthRenderer) {

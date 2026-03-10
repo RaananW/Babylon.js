@@ -4,13 +4,16 @@
  */
 export * from "./sceneHelpers.pure";
 
-import { Nullable } from "../types";
-import { Mesh } from "../Meshes/mesh";
-import { BaseTexture } from "../Materials/Textures/baseTexture";
-import { IEnvironmentHelperOptions, EnvironmentHelper } from "./environmentHelper";
-import { TargetCamera } from "../Cameras/targetCamera";
-import { VRExperienceHelperOptions, VRExperienceHelper } from "../Cameras/VR/vrExperienceHelper";
-import { WebXRDefaultExperienceOptions, WebXRDefaultExperience } from "../XR/webXRDefaultExperience";
+import type { Nullable } from "../types";
+import type { Mesh } from "../Meshes/mesh";
+import type { BaseTexture } from "../Materials/Textures/baseTexture";
+import type { IEnvironmentHelperOptions } from "./environmentHelper";
+import { EnvironmentHelper } from "./environmentHelper";
+import type { TargetCamera } from "../Cameras/targetCamera";
+import type { VRExperienceHelperOptions } from "../Cameras/VR/vrExperienceHelper";
+import { VRExperienceHelper } from "../Cameras/VR/vrExperienceHelper";
+import type { WebXRDefaultExperienceOptions } from "../XR/webXRDefaultExperience";
+import { WebXRDefaultExperience } from "../XR/webXRDefaultExperience";
 import { Logger } from "../Misc/logger";
 import { Scene } from "../scene";
 import { Vector3 } from "../Maths/math.vector";
@@ -23,7 +26,9 @@ import { ArcRotateCamera } from "../Cameras/arcRotateCamera";
 import { CreateBox } from "../Meshes/Builders/boxBuilder";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /**
          * Creates a default light for the scene.

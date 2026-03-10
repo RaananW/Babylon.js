@@ -32,6 +32,9 @@ export class GeospatialCameraMovement extends CameraMovement {
     /** World-space picked point under cursor for zoom-to-cursor behavior (may be undefined) */
     public computedPerFrameZoomPickPoint?: Vector3;
 
+    /**
+     *
+     */
     public zoomToCursor: boolean = true;
 
     private _tempPickingRay: Ray;

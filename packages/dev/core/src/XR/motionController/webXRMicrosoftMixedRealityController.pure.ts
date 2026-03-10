@@ -82,6 +82,9 @@ export class WebXRMicrosoftMixedRealityController extends WebXRAbstractMotionCon
      */
     public static MODEL_RIGHT_FILENAME: string = "right.glb";
 
+    /**
+     *
+     */
     public profileId = "microsoft-mixed-reality";
 
     constructor(scene: Scene, gamepadObject: IMinimalMotionControllerObject, handedness: MotionControllerHandedness) {

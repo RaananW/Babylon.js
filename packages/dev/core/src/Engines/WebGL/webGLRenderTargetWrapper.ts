@@ -20,7 +20,7 @@ export class WebGLRenderTargetWrapper extends RenderTargetWrapper {
      * @internal
      */
     public _depthStencilBuffer: Nullable<WebGLRenderbuffer> = null;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
     /**
      * @internal
      */

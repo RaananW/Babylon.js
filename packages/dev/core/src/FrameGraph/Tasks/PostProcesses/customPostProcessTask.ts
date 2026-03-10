@@ -6,6 +6,9 @@ import { ThinCustomPostProcess } from "../../../PostProcesses/thinCustomPostProc
  * Task which applies a custom post process.
  */
 export class FrameGraphCustomPostProcessTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinCustomPostProcess;
 
     /**

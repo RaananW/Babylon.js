@@ -62,10 +62,19 @@ class VolumetricLightingBlendVolumeThinPostProcess extends ThinPassPostProcess {
  * @internal
  */
 export class FrameGraphVolumetricLightingBlendVolumeTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: VolumetricLightingBlendVolumeThinPostProcess;
 
+    /**
+     *
+     */
     public depthTexture: FrameGraphTextureHandle;
 
+    /**
+     *
+     */
     public camera: Camera;
 
     constructor(name: string, frameGraph: FrameGraph, enableExtinction = false) {

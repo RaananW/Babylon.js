@@ -334,7 +334,6 @@ export class Ragdoll {
         this._rootBoneName = skeletonRoots[0].name;
         this._rootBoneIndex = this._boneNames.indexOf(this._rootBoneName);
         if (this._rootBoneIndex == -1) {
-            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string
             Logger.Log("Ragdoll creation failed: the array boneNames doesn't have the root bone. The root bone is " + this._skeleton.getChildren());
             return false;
         }

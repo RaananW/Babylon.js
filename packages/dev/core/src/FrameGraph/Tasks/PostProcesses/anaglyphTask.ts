@@ -11,6 +11,9 @@ export class FrameGraphAnaglyphTask extends FrameGraphPostProcessTask {
      */
     public leftTexture: FrameGraphTextureHandle;
 
+    /**
+     *
+     */
     public override readonly postProcess: ThinAnaglyphPostProcess;
 
     /**

@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable } from "../types";
-import { Scene } from "../scene.pure";
+import type { Scene } from "../scene.pure";
 import { Vector3 } from "../Maths/math.vector.pure";
 import { Collider } from "./collider";
 import type { AbstractMesh } from "../Meshes/abstractMesh";

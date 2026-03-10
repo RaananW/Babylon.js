@@ -66,7 +66,6 @@ export class _ENVTextureLoader implements IInternalTextureLoader {
      * Uploads the 2D texture data to the WebGL texture. It has already been bound once in the callback.
      */
     public loadData(): void {
-        // eslint-disable-next-line no-throw-literal
         throw ".env not supported in 2d.";
     }
 }

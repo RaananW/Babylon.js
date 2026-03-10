@@ -3,7 +3,7 @@
 import type { Scene } from "../../scene";
 import type { Matrix } from "../../Maths/math.vector";
 import { Vector3 } from "../../Maths/math.vector.pure";
-import { Mesh } from "../mesh.pure";
+import type { Mesh } from "../mesh.pure";
 import type { Ray, TrianglePickingPredicate } from "../../Culling/ray";
 import { Buffer, VertexBuffer } from "../../Buffers/buffer.pure";
 import { PickingInfo } from "../../Collisions/pickingInfo";
@@ -23,10 +23,10 @@ export class GreasedLineMesh extends GreasedLineBaseMesh {
     private _previousAndSide: FloatArray;
     private _nextAndCounters: FloatArray;
 
-    private static _V_START = new Vector3();
-    private static _V_END = new Vector3();
-    private static _V_OFFSET_START = new Vector3();
-    private static _V_OFFSET_END = new Vector3();
+    private static _V_START = /*#__PURE__*/ new Vector3();
+    private static _V_END = /*#__PURE__*/ new Vector3();
+    private static _V_OFFSET_START = /*#__PURE__*/ new Vector3();
+    private static _V_OFFSET_END = /*#__PURE__*/ new Vector3();
 
     /**
      * Treshold used to pick the mesh

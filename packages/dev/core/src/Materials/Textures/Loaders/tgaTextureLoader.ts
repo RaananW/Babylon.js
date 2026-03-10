@@ -6,7 +6,10 @@ import type { IInternalTextureLoader } from "./internalTextureLoader";
  * Implementation of the TGA Texture Loader.
  * @internal
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export class _TGATextureLoader implements IInternalTextureLoader {
     /**
      * Defines whether the loader supports cascade loading the different faces.
@@ -17,7 +20,6 @@ export class _TGATextureLoader implements IInternalTextureLoader {
      * Uploads the cube texture data to the WebGL texture. It has already been bound.
      */
     public loadCubeData(): void {
-        // eslint-disable-next-line no-throw-literal
         throw ".env not supported in Cube.";
     }
 

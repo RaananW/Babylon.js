@@ -6,7 +6,10 @@ import { AbstractMesh } from "core/Meshes/abstractMesh.pure";
 export type OcclusionQuery = WebGLQuery | number;
 
 /** @internal */
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
+/**
+ *
+ */
 export class _OcclusionDataStorage {
     /** @internal */
     public occlusionInternalRetryCounter = 0;

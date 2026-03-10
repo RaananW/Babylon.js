@@ -316,7 +316,7 @@ export class DirectionalLight extends ShadowLight {
      * @param _activeCamera The camera we are returning the min for (not used)
      * @returns the depth min z
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     public override getDepthMinZ(_activeCamera: Nullable<Camera>): number {
         const engine = this._scene.getEngine();
         return !engine.useReverseDepthBuffer && engine.isNDCHalfZRange ? 0 : 1;
@@ -331,7 +331,7 @@ export class DirectionalLight extends ShadowLight {
      * @param _activeCamera The camera we are returning the max for
      * @returns the depth max z
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     public override getDepthMaxZ(_activeCamera: Nullable<Camera>): number {
         const engine = this._scene.getEngine();
         return engine.useReverseDepthBuffer && engine.isNDCHalfZRange ? 0 : 1;

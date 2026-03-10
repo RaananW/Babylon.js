@@ -70,7 +70,6 @@ export class NodeParticleBuildState {
         }
 
         if (errorMessage) {
-            // eslint-disable-next-line no-throw-literal
             throw "Build of Node Particle System Set failed:\n" + errorMessage;
         }
     }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { Nullable } from "../../types";
 import { serialize, serializeAsTexture, expandToProperty, serializeAsColor3 } from "../../Misc/decorators";
 import { Color3 } from "../../Maths/math.color";
@@ -21,20 +20,62 @@ import { BindTextureMatrix, PrepareDefinesForMergedUV } from "../materialHelper.
  * @internal
  */
 export class MaterialClearCoatDefines extends MaterialDefines {
+    /**
+     *
+     */
     public CLEARCOAT = false;
+    /**
+     *
+     */
     public CLEARCOAT_DEFAULTIOR = false;
+    /**
+     *
+     */
     public CLEARCOAT_TEXTURE = false;
+    /**
+     *
+     */
     public CLEARCOAT_TEXTURE_ROUGHNESS = false;
+    /**
+     *
+     */
     public CLEARCOAT_TEXTUREDIRECTUV = 0;
+    /**
+     *
+     */
     public CLEARCOAT_TEXTURE_ROUGHNESSDIRECTUV = 0;
+    /**
+     *
+     */
     public CLEARCOAT_BUMP = false;
+    /**
+     *
+     */
     public CLEARCOAT_BUMPDIRECTUV = 0;
+    /**
+     *
+     */
     public CLEARCOAT_USE_ROUGHNESS_FROM_MAINTEXTURE = false;
+    /**
+     *
+     */
     public CLEARCOAT_REMAP_F0 = false;
 
+    /**
+     *
+     */
     public CLEARCOAT_TINT = false;
+    /**
+     *
+     */
     public CLEARCOAT_TINT_TEXTURE = false;
+    /**
+     *
+     */
     public CLEARCOAT_TINT_TEXTUREDIRECTUV = 0;
+    /**
+     *
+     */
     public CLEARCOAT_TINT_GAMMATEXTURE = false;
 }
 

@@ -7,7 +7,7 @@ export * from "./sphereBuilder.pure";
 import { CreateSphere, CreateSphereVertexData } from "./sphereBuilder.pure";
 import { Mesh } from "../mesh";
 import { VertexData } from "../mesh.vertexData";
-import { Scene } from "../../scene";
+import type { Scene } from "../../scene";
 
 VertexData.CreateSphere = CreateSphereVertexData;
 

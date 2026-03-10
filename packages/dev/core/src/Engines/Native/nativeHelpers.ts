@@ -6,6 +6,9 @@ import { VertexBuffer } from "core/Buffers/buffer";
 
 declare const _native: INative;
 
+/**
+ *
+ */
 export function getNativeTextureFormat(format: number, type: number): number {
     switch (format) {
         // Depth (type is ignored)
@@ -137,6 +140,9 @@ export function getNativeTextureFormat(format: number, type: number): number {
     throw new RuntimeError(`Unsupported texture format or type: format ${format}, type ${type}.`, ErrorCodes.UnsupportedTextureError);
 }
 
+/**
+ *
+ */
 export function getNativeSamplingMode(samplingMode: number): number {
     switch (samplingMode) {
         case Constants.TEXTURE_NEAREST_NEAREST:
@@ -168,6 +174,9 @@ export function getNativeSamplingMode(samplingMode: number): number {
     }
 }
 
+/**
+ *
+ */
 export function getNativeAddressMode(wrapMode: number): number {
     switch (wrapMode) {
         case Constants.TEXTURE_WRAP_ADDRESSMODE:
@@ -181,6 +190,9 @@ export function getNativeAddressMode(wrapMode: number): number {
     }
 }
 
+/**
+ *
+ */
 export function getNativeStencilFunc(func: number): number {
     switch (func) {
         case Constants.LESS:
@@ -204,6 +216,9 @@ export function getNativeStencilFunc(func: number): number {
     }
 }
 
+/**
+ *
+ */
 export function getNativeStencilOpFail(opFail: number): number {
     switch (opFail) {
         case Constants.KEEP:
@@ -227,6 +242,9 @@ export function getNativeStencilOpFail(opFail: number): number {
     }
 }
 
+/**
+ *
+ */
 export function getNativeStencilDepthFail(depthFail: number): number {
     switch (depthFail) {
         case Constants.KEEP:
@@ -250,6 +268,9 @@ export function getNativeStencilDepthFail(depthFail: number): number {
     }
 }
 
+/**
+ *
+ */
 export function getNativeStencilDepthPass(opPass: number): number {
     switch (opPass) {
         case Constants.KEEP:
@@ -273,6 +294,9 @@ export function getNativeStencilDepthPass(opPass: number): number {
     }
 }
 
+/**
+ *
+ */
 export function getNativeAlphaMode(mode: number): number {
     switch (mode) {
         case Constants.ALPHA_DISABLE:
@@ -302,6 +326,9 @@ export function getNativeAlphaMode(mode: number): number {
     }
 }
 
+/**
+ *
+ */
 export function getNativeAttribType(type: number): number {
     switch (type) {
         case VertexBuffer.BYTE:

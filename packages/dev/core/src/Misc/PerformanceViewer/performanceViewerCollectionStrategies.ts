@@ -30,7 +30,6 @@ import {
 } from "./performanceViewerCollectionStrategies.pure";
 
 declare module "./performanceViewerCollectionStrategies.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace PerfCollectionStrategy {
         export let FpsStrategy: typeof PerfCollectionStrategyFpsStrategy;
         export let ThermalStrategy: typeof PerfCollectionStrategyThermalStrategy;

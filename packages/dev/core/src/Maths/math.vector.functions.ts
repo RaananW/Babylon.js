@@ -104,6 +104,9 @@ export function Vector3ScaleInPlace<T extends IVector3Like>(vector: T, scale: nu
     return vector;
 }
 
+/**
+ *
+ */
 export function Vector3SubtractToRef<T extends IVector3Like>(a: DeepImmutable<IVector3Like>, b: DeepImmutable<IVector3Like>, result: T): T {
     result.x = a.x - b.x;
     result.y = a.y - b.y;
@@ -111,6 +114,9 @@ export function Vector3SubtractToRef<T extends IVector3Like>(a: DeepImmutable<IV
     return result;
 }
 
+/**
+ *
+ */
 export function Vector3CopyToRef<T extends IVector3Like>(source: DeepImmutable<IVector3Like>, result: T): T {
     result.x = source.x;
     result.y = source.y;
@@ -118,6 +124,9 @@ export function Vector3CopyToRef<T extends IVector3Like>(source: DeepImmutable<I
     return result;
 }
 
+/**
+ *
+ */
 export function Vector3LerpToRef<T extends IVector3Like>(start: DeepImmutable<IVector3Like>, end: DeepImmutable<IVector3Like>, amount: number, result: T): T {
     result.x = start.x + (end.x - start.x) * amount;
     result.y = start.y + (end.y - start.y) * amount;
@@ -125,6 +134,9 @@ export function Vector3LerpToRef<T extends IVector3Like>(start: DeepImmutable<IV
     return result;
 }
 
+/**
+ *
+ */
 export function Vector3NormalizeToRef<T extends IVector3Like>(vector: DeepImmutable<IVector3Like>, result: T): T {
     const len = Vector3Length(vector);
     if (len === 0) {

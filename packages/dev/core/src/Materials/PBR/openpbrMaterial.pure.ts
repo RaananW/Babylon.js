@@ -49,7 +49,7 @@ import { Constants } from "../../Engines/constants";
 import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { MaterialPluginEvent } from "../materialPluginEvent";
 import { MaterialHelperGeometryRendering } from "../materialHelper.geometryrendering";
-import { PrePassConfiguration , PrePassConfigurationAddUniforms , PrePassConfigurationAddSamplers } from "../prePassConfiguration.pure";
+import { PrePassConfiguration, PrePassConfigurationAddUniforms, PrePassConfigurationAddSamplers } from "../prePassConfiguration.pure";
 import type { IMaterialCompilationOptions, ICustomShaderNameResolveOptions } from "../../Materials/material";
 import { ShaderLanguage } from "../shaderLanguage";
 import { MaterialFlags } from "../materialFlags";
@@ -204,51 +204,165 @@ class OpenPBRMaterialDefinesBase extends UVDefinesMixin(MaterialDefines) {}
  * @internal
  */
 export class OpenPBRMaterialDefines extends ImageProcessingDefinesMixin(OpenPBRMaterialDefinesBase) {
+    /**
+     *
+     */
     public NUM_SAMPLES = "0";
+    /**
+     *
+     */
     public REALTIME_FILTERING = false;
+    /**
+     *
+     */
     public IBL_CDF_FILTERING = false;
 
+    /**
+     *
+     */
     public VERTEXCOLOR = false;
 
+    /**
+     *
+     */
     public BAKED_VERTEX_ANIMATION_TEXTURE = false;
 
+    /**
+     *
+     */
     public VERTEXALPHA = false;
+    /**
+     *
+     */
     public ALPHATEST = false;
+    /**
+     *
+     */
     public DEPTHPREPASS = false;
+    /**
+     *
+     */
     public ALPHABLEND = false;
+    /**
+     *
+     */
     public ALPHA_FROM_BASE_COLOR_TEXTURE = false;
+    /**
+     *
+     */
     public ALPHATESTVALUE = "0.5";
+    /**
+     *
+     */
     public PREMULTIPLYALPHA = false;
 
+    /**
+     *
+     */
     public REFLECTIVITY_GAMMA = false;
+    /**
+     *
+     */
     public REFLECTIVITYDIRECTUV = 0;
+    /**
+     *
+     */
     public SPECULARTERM = false;
 
+    /**
+     *
+     */
     public LODBASEDMICROSFURACE = true;
 
+    /**
+     *
+     */
     public SPECULAR_ROUGHNESS_FROM_METALNESS_TEXTURE_GREEN = false;
+    /**
+     *
+     */
     public BASE_METALNESS_FROM_METALNESS_TEXTURE_BLUE = false;
+    /**
+     *
+     */
     public AOSTOREINMETALMAPRED = false;
+    /**
+     *
+     */
     public SPECULAR_WEIGHT_IN_ALPHA = false;
+    /**
+     *
+     */
     public SPECULAR_WEIGHT_FROM_SPECULAR_COLOR_TEXTURE = false;
+    /**
+     *
+     */
     public SPECULAR_ROUGHNESS_ANISOTROPY_FROM_TANGENT_TEXTURE = false;
+    /**
+     *
+     */
     public COAT_ROUGHNESS_FROM_GREEN_CHANNEL = false;
+    /**
+     *
+     */
     public COAT_ROUGHNESS_ANISOTROPY_FROM_TANGENT_TEXTURE = false;
+    /**
+     *
+     */
     public USE_GLTF_STYLE_ANISOTROPY = false;
+    /**
+     *
+     */
     public THIN_FILM_THICKNESS_FROM_THIN_FILM_TEXTURE = false;
+    /**
+     *
+     */
     public FUZZ_ROUGHNESS_FROM_TEXTURE_ALPHA = false;
+    /**
+     *
+     */
     public GEOMETRY_THICKNESS_FROM_GREEN_CHANNEL = false;
 
+    /**
+     *
+     */
     public ENVIRONMENTBRDF = false;
+    /**
+     *
+     */
     public ENVIRONMENTBRDF_RGBD = false;
+    /**
+     *
+     */
     public FUZZENVIRONMENTBRDF = false;
 
+    /**
+     *
+     */
     public NORMAL = false;
+    /**
+     *
+     */
     public TANGENT = false;
+    /**
+     *
+     */
     public OBJECTSPACE_NORMALMAP = false;
+    /**
+     *
+     */
     public PARALLAX = false;
+    /**
+     *
+     */
     public PARALLAX_RHS = false;
+    /**
+     *
+     */
     public PARALLAXOCCLUSION = false;
+    /**
+     *
+     */
     public NORMALXYSCALE = true;
     /**
      * Enables anisotropic logic. Still needed because it's used in pbrHelperFunctions
@@ -312,132 +426,468 @@ export class OpenPBRMaterialDefines extends ImageProcessingDefinesMixin(OpenPBRM
      * Refraction of the environment texture (IBL).
      */
     public REFRACTED_ENVIRONMENT = false;
+    /**
+     *
+     */
     public REFRACTED_ENVIRONMENT_OPPOSITEZ = false;
+    /**
+     *
+     */
     public REFRACTED_ENVIRONMENT_LOCAL_CUBE = false;
 
+    /**
+     *
+     */
     public REFLECTION = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_3D = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_SPHERICAL = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_PLANAR = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_CUBIC = false;
+    /**
+     *
+     */
     public USE_LOCAL_REFLECTIONMAP_CUBIC = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_PROJECTION = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_SKYBOX = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_EXPLICIT = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_EQUIRECTANGULAR = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_EQUIRECTANGULAR_FIXED = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_MIRROREDEQUIRECTANGULAR_FIXED = false;
+    /**
+     *
+     */
     public INVERTCUBICMAP = false;
+    /**
+     *
+     */
     public USESPHERICALFROMREFLECTIONMAP = false;
+    /**
+     *
+     */
     public USEIRRADIANCEMAP = false;
+    /**
+     *
+     */
     public USE_IRRADIANCE_DOMINANT_DIRECTION = false;
+    /**
+     *
+     */
     public USESPHERICALINVERTEX = false;
+    /**
+     *
+     */
     public REFLECTIONMAP_OPPOSITEZ = false;
+    /**
+     *
+     */
     public LODINREFLECTIONALPHA = false;
+    /**
+     *
+     */
     public GAMMAREFLECTION = false;
+    /**
+     *
+     */
     public RGBDREFLECTION = false;
+    /**
+     *
+     */
     public RADIANCEOCCLUSION = false;
+    /**
+     *
+     */
     public HORIZONOCCLUSION = false;
 
+    /**
+     *
+     */
     public INSTANCES = false;
+    /**
+     *
+     */
     public THIN_INSTANCES = false;
+    /**
+     *
+     */
     public INSTANCESCOLOR = false;
 
+    /**
+     *
+     */
     public PREPASS = false;
+    /**
+     *
+     */
     public PREPASS_COLOR = false;
+    /**
+     *
+     */
     public PREPASS_COLOR_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_IRRADIANCE = false;
+    /**
+     *
+     */
     public PREPASS_IRRADIANCE_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_ALBEDO = false;
+    /**
+     *
+     */
     public PREPASS_ALBEDO_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_ALBEDO_SQRT = false;
+    /**
+     *
+     */
     public PREPASS_ALBEDO_SQRT_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_DEPTH = false;
+    /**
+     *
+     */
     public PREPASS_DEPTH_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_SCREENSPACE_DEPTH = false;
+    /**
+     *
+     */
     public PREPASS_SCREENSPACE_DEPTH_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_NORMALIZED_VIEW_DEPTH = false;
+    /**
+     *
+     */
     public PREPASS_NORMALIZED_VIEW_DEPTH_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_NORMAL = false;
+    /**
+     *
+     */
     public PREPASS_NORMAL_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_NORMAL_WORLDSPACE = false;
+    /**
+     *
+     */
     public PREPASS_WORLD_NORMAL = false;
+    /**
+     *
+     */
     public PREPASS_WORLD_NORMAL_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_POSITION = false;
+    /**
+     *
+     */
     public PREPASS_POSITION_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_LOCAL_POSITION = false;
+    /**
+     *
+     */
     public PREPASS_LOCAL_POSITION_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_VELOCITY = false;
+    /**
+     *
+     */
     public PREPASS_VELOCITY_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_VELOCITY_LINEAR = false;
+    /**
+     *
+     */
     public PREPASS_VELOCITY_LINEAR_INDEX = -1;
+    /**
+     *
+     */
     public PREPASS_REFLECTIVITY = false;
+    /**
+     *
+     */
     public PREPASS_REFLECTIVITY_INDEX = -1;
+    /**
+     *
+     */
     public SCENE_MRT_COUNT = 0;
 
+    /**
+     *
+     */
     public NUM_BONE_INFLUENCERS = 0;
+    /**
+     *
+     */
     public BonesPerMesh = 0;
+    /**
+     *
+     */
     public BONETEXTURE = false;
+    /**
+     *
+     */
     public BONES_VELOCITY_ENABLED = false;
 
+    /**
+     *
+     */
     public NONUNIFORMSCALING = false;
 
+    /**
+     *
+     */
     public MORPHTARGETS = false;
+    /**
+     *
+     */
     public MORPHTARGETS_POSITION = false;
+    /**
+     *
+     */
     public MORPHTARGETS_NORMAL = false;
+    /**
+     *
+     */
     public MORPHTARGETS_TANGENT = false;
+    /**
+     *
+     */
     public MORPHTARGETS_UV = false;
+    /**
+     *
+     */
     public MORPHTARGETS_UV2 = false;
+    /**
+     *
+     */
     public MORPHTARGETS_COLOR = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASPOSITIONS = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASNORMALS = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASTANGENTS = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASUVS = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASUV2S = false;
+    /**
+     *
+     */
     public MORPHTARGETTEXTURE_HASCOLORS = false;
+    /**
+     *
+     */
     public NUM_MORPH_INFLUENCERS = 0;
+    /**
+     *
+     */
     public MORPHTARGETS_TEXTURE = false;
 
+    /**
+     *
+     */
     public USEPHYSICALLIGHTFALLOFF = false;
+    /**
+     *
+     */
     public USEGLTFLIGHTFALLOFF = false;
+    /**
+     *
+     */
     public TWOSIDEDLIGHTING = false;
+    /**
+     *
+     */
     public MIRRORED = false;
+    /**
+     *
+     */
     public SHADOWFLOAT = false;
+    /**
+     *
+     */
     public CLIPPLANE = false;
+    /**
+     *
+     */
     public CLIPPLANE2 = false;
+    /**
+     *
+     */
     public CLIPPLANE3 = false;
+    /**
+     *
+     */
     public CLIPPLANE4 = false;
+    /**
+     *
+     */
     public CLIPPLANE5 = false;
+    /**
+     *
+     */
     public CLIPPLANE6 = false;
+    /**
+     *
+     */
     public POINTSIZE = false;
+    /**
+     *
+     */
     public FOG = false;
+    /**
+     *
+     */
     public LOGARITHMICDEPTH = false;
+    /**
+     *
+     */
     public CAMERA_ORTHOGRAPHIC = false;
+    /**
+     *
+     */
     public CAMERA_PERSPECTIVE = false;
+    /**
+     *
+     */
     public AREALIGHTSUPPORTED = true;
 
+    /**
+     *
+     */
     public FORCENORMALFORWARD = false;
 
+    /**
+     *
+     */
     public SPECULARAA = false;
 
+    /**
+     *
+     */
     public UNLIT = false;
 
+    /**
+     *
+     */
     public DECAL_AFTER_DETAIL = false;
 
+    /**
+     *
+     */
     public DEBUGMODE = 0;
 
+    /**
+     *
+     */
     public CLUSTLIGHT_SLICES = 0;
+    /**
+     *
+     */
     public CLUSTLIGHT_BATCH = 0;
 
     // BRDF defines
+    /**
+     *
+     */
     BRDF_V_HEIGHT_CORRELATED = true;
+    /**
+     *
+     */
     MS_BRDF_ENERGY_CONSERVATION = true;
+    /**
+     *
+     */
     SPHERICAL_HARMONICS = true;
+    /**
+     *
+     */
     SPECULAR_GLOSSINESS_ENERGY_CONSERVATION = true;
+    /**
+     *
+     */
     MIX_IBL_RADIANCE_WITH_IRRADIANCE = true;
+    /**
+     *
+     */
     LEGACY_SPECULAR_ENERGY_CONSERVATION = false;
+    /**
+     *
+     */
     BASE_DIFFUSE_MODEL = Constants.MATERIAL_DIFFUSE_MODEL_E_OREN_NAYAR;
+    /**
+     *
+     */
     DIELECTRIC_SPECULAR_MODEL = Constants.MATERIAL_DIELECTRIC_SPECULAR_MODEL_OPENPBR;
+    /**
+     *
+     */
     CONDUCTOR_SPECULAR_MODEL = Constants.MATERIAL_CONDUCTOR_SPECULAR_MODEL_OPENPBR;
 
     /**
@@ -473,7 +923,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public baseWeight: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "baseWeight")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _baseWeight: Property<number> = new Property<number>("base_weight", 1, "vBaseWeight", 1);
 
     /**
@@ -482,7 +931,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public baseWeightTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "baseWeightTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _baseWeightTexture: Sampler = new Sampler("base_weight", "baseWeight", "BASE_WEIGHT");
 
     /**
@@ -491,7 +939,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public baseColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "baseColor")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _baseColor: Property<Color3> = new Property<Color3>("base_color", Color3White(), "vBaseColor", 4);
 
     /**
@@ -500,7 +947,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public baseColorTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "baseColorTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _baseColorTexture: Sampler = new Sampler("base_color", "baseColor", "BASE_COLOR");
 
     /**
@@ -509,7 +955,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public baseDiffuseRoughness: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "baseDiffuseRoughness")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _baseDiffuseRoughness: Property<number> = new Property<number>("base_diffuse_roughness", 0, "vBaseDiffuseRoughness", 1);
 
     /**
@@ -518,7 +963,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public baseDiffuseRoughnessTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "baseDiffuseRoughnessTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _baseDiffuseRoughnessTexture: Sampler = new Sampler("base_diffuse_roughness", "baseDiffuseRoughness", "BASE_DIFFUSE_ROUGHNESS");
 
     /**
@@ -527,7 +971,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public baseMetalness: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "baseMetalness")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _baseMetalness: Property<number> = new Property<number>("base_metalness", 0, "vReflectanceInfo", 4, 0);
 
     /**
@@ -536,7 +979,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public baseMetalnessTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "baseMetalnessTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _baseMetalnessTexture: Sampler = new Sampler("base_metalness", "baseMetalness", "BASE_METALNESS");
 
     /**
@@ -545,7 +987,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public specularWeight: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "specularWeight")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _specularWeight: Property<number> = new Property<number>("specular_weight", 1, "vReflectanceInfo", 4, 3);
 
     /**
@@ -554,7 +995,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public specularWeightTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "specularWeightTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _specularWeightTexture: Sampler = new Sampler("specular_weight", "specularWeight", "SPECULAR_WEIGHT");
 
     /**
@@ -563,7 +1003,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public specularColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "specularColor")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _specularColor: Property<Color3> = new Property<Color3>("specular_color", Color3White(), "vSpecularColor", 4);
 
     /**
@@ -572,7 +1011,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public specularColorTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "specularColorTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _specularColorTexture: Sampler = new Sampler("specular_color", "specularColor", "SPECULAR_COLOR");
 
     /**
@@ -581,7 +1019,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public specularRoughness: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "specularRoughness")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _specularRoughness: Property<number> = new Property<number>("specular_roughness", 0.3, "vReflectanceInfo", 4, 1);
 
     /**
@@ -590,7 +1027,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public specularRoughnessTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "specularRoughnessTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _specularRoughnessTexture: Sampler = new Sampler("specular_roughness", "specularRoughness", "SPECULAR_ROUGHNESS");
 
     /**
@@ -599,7 +1035,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public specularRoughnessAnisotropy: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "specularRoughnessAnisotropy")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _specularRoughnessAnisotropy: Property<number> = new Property<number>("specular_roughness_anisotropy", 0, "vSpecularAnisotropy", 3, 2);
 
     /**
@@ -608,7 +1043,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public specularRoughnessAnisotropyTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "specularRoughnessAnisotropyTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _specularRoughnessAnisotropyTexture: Sampler = new Sampler("specular_roughness_anisotropy", "specularRoughnessAnisotropy", "SPECULAR_ROUGHNESS_ANISOTROPY");
 
     /**
@@ -617,7 +1051,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public specularIor: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "specularIor")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _specularIor: Property<number> = new Property<number>("specular_ior", 1.5, "vReflectanceInfo", 4, 2);
 
     /**
@@ -626,7 +1059,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionWeight: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionWeight")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionWeight: Property<number> = new Property<number>("transmission_weight", 0.0, "vTransmissionWeight", 1);
 
     /**
@@ -635,7 +1067,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionWeightTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionWeightTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionWeightTexture: Sampler = new Sampler("transmission_weight", "transmissionWeight", "TRANSMISSION_WEIGHT");
 
     /**
@@ -644,7 +1075,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionColor")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionColor: Property<Color3> = new Property<Color3>("transmission_color", Color3White(), "vTransmissionColor", 3, 0);
 
     /**
@@ -653,7 +1083,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionColorTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionColorTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionColorTexture: Sampler = new Sampler("transmission_color", "transmissionColor", "TRANSMISSION_COLOR");
 
     /**
@@ -662,7 +1091,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionDepth: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionDepth")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionDepth: Property<number> = new Property<number>("transmission_depth", 0.0, "vTransmissionDepth", 1, 0);
 
     /**
@@ -671,7 +1099,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionDepthTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionDepthTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionDepthTexture: Sampler = new Sampler("transmission_depth", "transmissionDepth", "TRANSMISSION_DEPTH");
 
     /**
@@ -680,7 +1107,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionScatter: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionScatter")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionScatter: Property<Color3> = new Property<Color3>("transmission_scatter", Color3Black(), "vTransmissionScatter", 3, 0);
 
     /**
@@ -689,7 +1115,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionScatterTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionScatterTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionScatterTexture: Sampler = new Sampler("transmission_scatter", "transmissionScatter", "TRANSMISSION_SCATTER");
 
     /**
@@ -698,7 +1123,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionScatterAnisotropy: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionScatterAnisotropy")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionScatterAnisotropy: Property<number> = new Property<number>("transmission_scatter_anisotropy", 0.0, "vTransmissionScatterAnisotropy", 1, 0);
 
     /**
@@ -707,7 +1131,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionDispersionScale: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionDispersionScale")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionDispersionScale: Property<number> = new Property<number>("transmission_dispersion_scale", 0.0, "vTransmissionDispersionScale", 1, 0);
 
     /**
@@ -716,7 +1139,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionDispersionScaleTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionDispersionScaleTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionDispersionScaleTexture: Sampler = new Sampler("transmission_dispersion_scale", "transmissionDispersionScale", "TRANSMISSION_DISPERSION_SCALE");
 
     /**
@@ -725,7 +1147,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public transmissionDispersionAbbeNumber: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionDispersionAbbeNumber")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _transmissionDispersionAbbeNumber: Property<number> = new Property<number>("transmission_dispersion_abbe_number", 20.0, "vTransmissionDispersionAbbeNumber", 1, 0);
 
     /**
@@ -734,7 +1155,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public coatWeight: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatWeight")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _coatWeight: Property<number> = new Property<number>("coat_weight", 0.0, "vCoatWeight", 1, 0);
 
     /**
@@ -743,7 +1163,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public coatWeightTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatWeightTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _coatWeightTexture: Sampler = new Sampler("coat_weight", "coatWeight", "COAT_WEIGHT");
 
     /**
@@ -752,7 +1171,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public coatColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatColor")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _coatColor: Property<Color3> = new Property<Color3>("coat_color", Color3White(), "vCoatColor", 3, 0);
 
     /**
@@ -761,7 +1179,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public coatColorTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatColorTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _coatColorTexture: Sampler = new Sampler("coat_color", "coatColor", "COAT_COLOR");
 
     /**
@@ -770,7 +1187,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public coatRoughness: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatRoughness")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _coatRoughness: Property<number> = new Property<number>("coat_roughness", 0.0, "vCoatRoughness", 1, 0);
 
     /**
@@ -779,7 +1195,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public coatRoughnessTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatRoughnessTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _coatRoughnessTexture: Sampler = new Sampler("coat_roughness", "coatRoughness", "COAT_ROUGHNESS");
 
     /**
@@ -788,7 +1203,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public coatRoughnessAnisotropy: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatRoughnessAnisotropy")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _coatRoughnessAnisotropy: Property<number> = new Property<number>("coat_roughness_anisotropy", 0, "vCoatRoughnessAnisotropy", 1);
 
     /**
@@ -797,7 +1211,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public coatRoughnessAnisotropyTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatRoughnessAnisotropyTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _coatRoughnessAnisotropyTexture: Sampler = new Sampler("coat_roughness_anisotropy", "coatRoughnessAnisotropy", "COAT_ROUGHNESS_ANISOTROPY");
 
     /**
@@ -806,7 +1219,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public coatIor: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatIor")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _coatIor: Property<number> = new Property<number>("coat_ior", 1.5, "vCoatIor", 1, 0);
 
     /**
@@ -817,7 +1229,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public coatDarkening: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatDarkening")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _coatDarkening: Property<number> = new Property<number>("coat_darkening", 1.0, "vCoatDarkening", 1, 0);
 
     /**
@@ -828,7 +1239,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public coatDarkeningTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatDarkeningTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _coatDarkeningTexture: Sampler = new Sampler("coat_darkening", "coatDarkening", "COAT_DARKENING");
 
     /**
@@ -843,7 +1253,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public fuzzWeight: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "fuzzWeight")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _fuzzWeight: Property<number> = new Property<number>("fuzz_weight", 0.0, "vFuzzWeight", 1, 0);
 
     /**
@@ -852,7 +1261,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public fuzzWeightTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "fuzzWeightTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _fuzzWeightTexture: Sampler = new Sampler("fuzz_weight", "fuzzWeight", "FUZZ_WEIGHT");
 
     /**
@@ -861,7 +1269,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public fuzzColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "fuzzColor")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _fuzzColor: Property<Color3> = new Property<Color3>("fuzz_color", Color3White(), "vFuzzColor", 3, 0);
 
     /**
@@ -870,7 +1277,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public fuzzColorTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "fuzzColorTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _fuzzColorTexture: Sampler = new Sampler("fuzz_color", "fuzzColor", "FUZZ_COLOR");
 
     /**
@@ -879,7 +1285,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public fuzzRoughness: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "fuzzRoughness")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _fuzzRoughness: Property<number> = new Property<number>("fuzz_roughness", 0.5, "vFuzzRoughness", 1, 0);
 
     /**
@@ -888,7 +1293,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public fuzzRoughnessTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "fuzzRoughnessTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _fuzzRoughnessTexture: Sampler = new Sampler("fuzz_roughness", "fuzzRoughness", "FUZZ_ROUGHNESS");
 
     /**
@@ -897,7 +1301,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public geometryNormalTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "geometryNormalTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _geometryNormalTexture: Sampler = new Sampler("geometry_normal", "geometryNormal", "GEOMETRY_NORMAL");
 
     /**
@@ -906,7 +1309,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public geometryTangent: Vector2;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "geometryTangent")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _geometryTangent: Property<Vector2> = new Property<Vector2>("geometry_tangent", new Vector2(1, 0), "vSpecularAnisotropy", 3, 0);
 
     /**
@@ -927,7 +1329,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public geometryTangentTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "geometryTangentTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _geometryTangentTexture: Sampler = new Sampler("geometry_tangent", "geometryTangent", "GEOMETRY_TANGENT");
 
     /**
@@ -936,7 +1337,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public geometryCoatNormalTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "geometryCoatNormalTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _geometryCoatNormalTexture: Sampler = new Sampler("geometry_coat_normal", "geometryCoatNormal", "GEOMETRY_COAT_NORMAL");
 
     /**
@@ -945,7 +1345,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public geometryCoatTangent: Vector2;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "geometryCoatTangent")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _geometryCoatTangent: Property<Vector2> = new Property<Vector2>("geometry_coat_tangent", new Vector2(1, 0), "vGeometryCoatTangent", 2, 0);
 
     /**
@@ -968,7 +1367,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public geometryCoatTangentTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "geometryCoatTangentTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _geometryCoatTangentTexture: Sampler = new Sampler("geometry_coat_tangent", "geometryCoatTangent", "GEOMETRY_COAT_TANGENT");
 
     /**
@@ -977,7 +1375,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public geometryOpacity: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "geometryOpacity")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _geometryOpacity: Property<number> = new Property<number>("geometry_opacity", 1.0, "vBaseColor", 4, 3);
 
     /**
@@ -986,7 +1383,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public geometryOpacityTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "geometryOpacityTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _geometryOpacityTexture: Sampler = new Sampler("geometry_opacity", "geometryOpacity", "GEOMETRY_OPACITY");
 
     /**
@@ -995,7 +1391,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public geometryThickness: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "geometryThickness")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _geometryThickness: Property<number> = new Property<number>("geometry_thickness", 0.0, "vGeometryThickness", 1, 0);
 
     /**
@@ -1004,7 +1399,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public geometryThicknessTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "geometryThicknessTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _geometryThicknessTexture: Sampler = new Sampler("geometry_thickness", "geometryThickness", "GEOMETRY_THICKNESS");
 
     /**
@@ -1013,7 +1407,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public emissionLuminance: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "emissionLuminance")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _emissionLuminance: Property<number> = new Property<number>("emission_luminance", 1.0, "vLightingIntensity", 4, 1);
 
     /**
@@ -1022,7 +1415,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public emissionColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "emissionColor")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _emissionColor: Property<Color3> = new Property<Color3>("emission_color", Color3Black(), "vEmissionColor", 3);
 
     /**
@@ -1031,7 +1423,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public emissionColorTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "emissionColorTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _emissionColorTexture: Sampler = new Sampler("emission_color", "emissionColor", "EMISSION_COLOR");
 
     /**
@@ -1039,7 +1430,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public thinFilmWeight: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "thinFilmWeight")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _thinFilmWeight: Property<number> = new Property<number>("thin_film_weight", 0.0, "vThinFilmWeight", 1, 0);
 
     /**
@@ -1047,7 +1437,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public thinFilmWeightTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "thinFilmWeightTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _thinFilmWeightTexture: Sampler = new Sampler("thin_film_weight", "thinFilmWeight", "THIN_FILM_WEIGHT");
 
     /**
@@ -1057,7 +1446,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public thinFilmThickness: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "thinFilmThickness")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _thinFilmThickness: Property<number> = new Property<number>("thin_film_thickness", 0.5, "vThinFilmThickness", 2, 0);
 
     /**
@@ -1065,7 +1453,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public thinFilmThicknessMin: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "thinFilmThicknessMin")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _thinFilmThicknessMin: Property<number> = new Property<number>("thin_film_thickness_min", 0.0, "vThinFilmThickness", 2, 1);
 
     /**
@@ -1073,7 +1460,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public thinFilmThicknessTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "thinFilmThicknessTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _thinFilmThicknessTexture: Sampler = new Sampler("thin_film_thickness", "thinFilmThickness", "THIN_FILM_THICKNESS");
 
     /**
@@ -1081,7 +1467,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public thinFilmIor: number;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "thinFilmIor")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _thinFilmIor: Property<number> = new Property<number>("thin_film_ior", 1.4, "vThinFilmIor", 1, 0);
 
     /**
@@ -1089,7 +1474,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      */
     public ambientOcclusionTexture: Nullable<BaseTexture>;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "ambientOcclusionTexture")
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _ambientOcclusionTexture: Sampler = new Sampler("ambient_occlusion", "ambientOcclusion", "AMBIENT_OCCLUSION");
 
     private _propertyList: { [name: string]: Property<any> };

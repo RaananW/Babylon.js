@@ -5,13 +5,15 @@
 export * from "./iblCdfGeneratorSceneComponent.pure";
 
 import { IblCdfGeneratorSceneComponent } from "./iblCdfGeneratorSceneComponent.pure";
-import { Nullable } from "../types";
+import type { Nullable } from "../types";
 import { Scene } from "../scene";
 import { SceneComponentConstants } from "../sceneComponent";
 import { IblCdfGenerator } from "./iblCdfGenerator";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal (Backing field) */
         _iblCdfGenerator: Nullable<IblCdfGenerator>;

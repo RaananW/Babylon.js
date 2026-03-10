@@ -1,5 +1,8 @@
 /** @internal */
 export interface IHardwareTextureWrapper {
+    /**
+     *
+     */
     underlyingResource: any;
 
     set(hardwareTexture: any): void;

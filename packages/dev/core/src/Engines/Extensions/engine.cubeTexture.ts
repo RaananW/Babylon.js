@@ -4,9 +4,9 @@
  */
 export * from "./engine.cubeTexture.pure";
 
-import { Nullable } from "../../types";
-import { Scene } from "../../scene";
-import { DepthTextureCreationOptions } from "../../Materials/Textures/textureCreationOptions";
+import type { Nullable } from "../../types";
+import type { Scene } from "../../scene";
+import type { DepthTextureCreationOptions } from "../../Materials/Textures/textureCreationOptions";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
@@ -14,7 +14,9 @@ import { Constants } from "../constants";
 import { GetExponentOfTwo } from "../../Misc/tools.functions";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * @internal

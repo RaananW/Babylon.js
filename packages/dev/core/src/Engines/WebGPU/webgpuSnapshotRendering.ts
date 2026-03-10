@@ -24,6 +24,9 @@ export class WebGPUSnapshotRendering {
         this._bundleList = bundleList;
     }
 
+    /**
+     *
+     */
     public showDebugLogs = false;
 
     public get enabled(): boolean {

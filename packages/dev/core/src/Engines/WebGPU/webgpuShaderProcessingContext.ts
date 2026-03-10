@@ -255,7 +255,6 @@ export class WebGPUShaderProcessingContext implements _IShaderProcessingContext 
         }
 
         if (this.freeGroupIndex === MaxGroups) {
-            // eslint-disable-next-line no-throw-literal
             throw "Too many textures or UBOs have been declared and it is not supported in WebGPU.";
         }
 

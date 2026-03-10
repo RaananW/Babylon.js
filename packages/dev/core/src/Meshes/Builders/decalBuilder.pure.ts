@@ -10,12 +10,12 @@ import type { AbstractMesh } from "../abstractMesh";
 import type { Camera } from "../../Cameras/camera";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
-const XpAxis = new Vector3(1, 0, 0);
-const XnAxis = new Vector3(-1, 0, 0);
-const YpAxis = new Vector3(0, 1, 0);
-const YnAxis = new Vector3(0, -1, 0);
-const ZpAxis = new Vector3(0, 0, 1);
-const ZnAxis = new Vector3(0, 0, -1);
+const XpAxis = /*#__PURE__*/ new Vector3(1, 0, 0);
+const XnAxis = /*#__PURE__*/ new Vector3(-1, 0, 0);
+const YpAxis = /*#__PURE__*/ new Vector3(0, 1, 0);
+const YnAxis = /*#__PURE__*/ new Vector3(0, -1, 0);
+const ZpAxis = /*#__PURE__*/ new Vector3(0, 0, 1);
+const ZnAxis = /*#__PURE__*/ new Vector3(0, 0, -1);
 
 /** @internal */
 class DecalVertex {

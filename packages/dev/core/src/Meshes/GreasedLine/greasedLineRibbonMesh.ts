@@ -5,7 +5,7 @@
 export * from "./greasedLineRibbonMesh.pure";
 
 import { GreasedLineRibbonMesh } from "./greasedLineRibbonMesh.pure";
-import { Scene } from "../../scene";
+import type { Scene } from "../../scene";
 import { Mesh } from "../mesh";
 
 Mesh._GreasedLineRibbonMeshParser = (parsedMesh: any, scene: Scene): Mesh => {

@@ -7,16 +7,18 @@ export * from "./audioSceneComponent.pure";
 import { AudioSceneComponent } from "./audioSceneComponent.pure";
 import { Sound } from "./sound";
 import { SoundTrack } from "./soundTrack";
-import { Nullable } from "../types";
-import { Vector3 } from "../Maths/math.vector";
+import type { Nullable } from "../types";
+import type { Vector3 } from "../Maths/math.vector";
 import { SceneComponentConstants } from "../sceneComponent";
 import { Scene } from "../scene";
-import { AssetContainer } from "../assetContainer";
+import type { AssetContainer } from "../assetContainer";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /**
          * @internal

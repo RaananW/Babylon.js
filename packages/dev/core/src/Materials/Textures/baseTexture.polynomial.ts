@@ -4,13 +4,15 @@
  */
 export * from "./baseTexture.polynomial.pure";
 
-import { Nullable } from "../../types";
-import { SphericalPolynomial } from "../../Maths/sphericalPolynomial";
+import type { Nullable } from "../../types";
+import type { SphericalPolynomial } from "../../Maths/sphericalPolynomial";
 import { CubeMapToSphericalPolynomialTools } from "../../Misc/HighDynamicRange/cubemapToSphericalPolynomial";
 import { BaseTexture } from "./baseTexture";
 
 declare module "./baseTexture" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface BaseTexture {
         /**
          * Get the polynomial representation of the texture data.

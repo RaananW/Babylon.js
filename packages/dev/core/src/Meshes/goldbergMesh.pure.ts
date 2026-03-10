@@ -5,7 +5,8 @@ import type { Vector2 } from "../Maths/math.vector";
 import { Vector3 } from "../Maths/math.vector.pure";
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import { Mesh } from "../Meshes/mesh.pure";
-import { Color4, Color4FromArray } from "../Maths/math.color.pure";
+import type { Color4 } from "../Maths/math.color.pure";
+import { Color4FromArray } from "../Maths/math.color.pure";
 import { Logger } from "../Misc/logger";
 import type { FloatArray } from "../types";
 

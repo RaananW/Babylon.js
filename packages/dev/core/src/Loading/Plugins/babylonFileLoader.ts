@@ -16,19 +16,19 @@ import {
     logOperation,
 } from "./babylonFileLoader.pure";
 import { Logger } from "../../Misc/logger";
-import { Nullable } from "../../types";
-import { Scene } from "../../scene";
+import type { Nullable } from "../../types";
+import type { Scene } from "../../scene";
 import { Mesh } from "../../Meshes/mesh";
-import { AbstractMesh } from "../../Meshes/abstractMesh";
+import type { AbstractMesh } from "../../Meshes/abstractMesh";
 import { Geometry } from "../../Meshes/geometry";
-import { Node } from "../../node";
+import type { Node } from "../../node";
 import { TransformNode } from "../../Meshes/transformNode";
 import { Material } from "../../Materials/material";
 import { MultiMaterial } from "../../Materials/multiMaterial";
 import { SceneLoaderFlags } from "../sceneLoaderFlags";
 import { Constants } from "../../Engines/constants";
-import { AssetContainer } from "../../assetContainer";
-import { IParticleSystem } from "../../Particles/IParticleSystem";
+import type { AssetContainer } from "../../assetContainer";
+import type { IParticleSystem } from "../../Particles/IParticleSystem";
 import { Skeleton } from "../../Bones/skeleton";
 import { MorphTargetManager } from "../../Morph/morphTargetManager";
 import { GetIndividualParser } from "./babylonFileParser.function";

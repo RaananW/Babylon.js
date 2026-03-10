@@ -2,6 +2,9 @@
  * Manages the defines for the Material
  */
 export class MaterialDefines {
+    /**
+     *
+     */
     public VERTEXOUTPUT_INVARIANT = false;
 
     /** @internal */

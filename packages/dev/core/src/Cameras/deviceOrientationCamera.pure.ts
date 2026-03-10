@@ -2,7 +2,8 @@
 
 import { FreeCamera } from "./freeCamera.pure";
 import type { Scene } from "../scene";
-import { Quaternion, Vector3 } from "../Maths/math.vector.pure";
+import type { Vector3 } from "../Maths/math.vector.pure";
+import { Quaternion } from "../Maths/math.vector.pure";
 import { Axis } from "../Maths/math.axis";
 import type { Nullable } from "../types";
 

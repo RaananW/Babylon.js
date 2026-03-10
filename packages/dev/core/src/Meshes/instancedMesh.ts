@@ -5,10 +5,10 @@
 export * from "./instancedMesh.pure";
 
 import { InstancedMesh } from "./instancedMesh.pure";
-import { Nullable } from "../types";
+import type { Nullable } from "../types";
 import { Mesh } from "../Meshes/mesh";
 import { VertexBuffer } from "../Buffers/buffer";
-import { ThinEngine } from "../Engines/thinEngine";
+import type { ThinEngine } from "../Engines/thinEngine";
 import { RegisterClass } from "../Misc/typeStore";
 
 declare module "./mesh" {

@@ -5,10 +5,13 @@
 export * from "./observableCoroutine.pure";
 
 import { Observable } from "./observable";
-import { AsyncCoroutine, CoroutineStep, CoroutineScheduler, inlineScheduler, runCoroutineAsync } from "./coroutine";
+import type { AsyncCoroutine, CoroutineStep, CoroutineScheduler } from "./coroutine";
+import { inlineScheduler, runCoroutineAsync } from "./coroutine";
 
 declare module "./observable" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Observable<T> {
         /**
          * Internal observable-based coroutine scheduler instance.

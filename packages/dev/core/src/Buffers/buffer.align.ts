@@ -10,7 +10,9 @@ import type { Nullable } from "core/types";
 import type { DataBuffer } from "./dataBuffer";
 
 declare module "./buffer.pure" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface VertexBuffer {
         /**
          * Gets the effective byte stride, that is the byte stride of the buffer that is actually sent to the GPU.

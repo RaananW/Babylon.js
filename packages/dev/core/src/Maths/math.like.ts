@@ -4,8 +4,17 @@ import type { float, int, Tuple } from "../types";
  * @internal
  */
 export interface IColor3Like {
+    /**
+     *
+     */
     r: float;
+    /**
+     *
+     */
     g: float;
+    /**
+     *
+     */
     b: float;
 }
 
@@ -13,6 +22,9 @@ export interface IColor3Like {
  * @internal
  */
 export interface IColor4Like extends IColor3Like {
+    /**
+     *
+     */
     a: float;
 }
 
@@ -20,7 +32,13 @@ export interface IColor4Like extends IColor3Like {
  * @internal
  */
 export interface IVector2Like {
+    /**
+     *
+     */
     x: float;
+    /**
+     *
+     */
     y: float;
 }
 
@@ -28,6 +46,9 @@ export interface IVector2Like {
  * @internal
  */
 export interface IVector3Like extends IVector2Like {
+    /**
+     *
+     */
     z: float;
 }
 
@@ -35,9 +56,21 @@ export interface IVector3Like extends IVector2Like {
  * @internal
  */
 export interface IVector3LikeInternal {
+    /**
+     *
+     */
     _x: number;
+    /**
+     *
+     */
     _y: number;
+    /**
+     *
+     */
     _z: number;
+    /**
+     *
+     */
     _isDirty?: boolean;
 }
 
@@ -45,6 +78,9 @@ export interface IVector3LikeInternal {
  * @internal
  */
 export interface IVector4Like extends IVector3Like {
+    /**
+     *
+     */
     w: float;
 }
 
@@ -52,6 +88,9 @@ export interface IVector4Like extends IVector3Like {
  * @internal
  */
 export interface IQuaternionLike extends IVector3Like {
+    /**
+     *
+     */
     w: float;
 }
 
@@ -59,7 +98,13 @@ export interface IQuaternionLike extends IVector3Like {
  * @internal
  */
 export interface IPlaneLike {
+    /**
+     *
+     */
     normal: IVector3Like;
+    /**
+     *
+     */
     d: float;
     normalize(): void;
 }
@@ -69,6 +114,9 @@ export interface IPlaneLike {
  */
 export interface IMatrixLike {
     asArray(): Tuple<number, 16>;
+    /**
+     *
+     */
     updateFlag: int;
 }
 
@@ -76,8 +124,20 @@ export interface IMatrixLike {
  * @internal
  */
 export interface IViewportLike {
+    /**
+     *
+     */
     x: float;
+    /**
+     *
+     */
     y: float;
+    /**
+     *
+     */
     width: float;
+    /**
+     *
+     */
     height: float;
 }

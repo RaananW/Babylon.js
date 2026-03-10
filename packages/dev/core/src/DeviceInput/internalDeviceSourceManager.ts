@@ -26,7 +26,13 @@ declare module "../Engines/abstractEngine" {
 
 /** @internal */
 export interface IObservableManager {
+    /**
+     *
+     */
     onDeviceConnectedObservable: Observable<DeviceSourceType>;
+    /**
+     *
+     */
     onDeviceDisconnectedObservable: Observable<DeviceSourceType>;
 
     // Functions
@@ -38,6 +44,9 @@ export interface IObservableManager {
 /** @internal */
 export class InternalDeviceSourceManager implements IDisposable {
     // Public Members
+    /**
+     *
+     */
     public readonly _deviceInputSystem: IDeviceInputSystem;
 
     // Private Members
@@ -46,6 +55,9 @@ export class InternalDeviceSourceManager implements IDisposable {
 
     private readonly _registeredManagers = new Array<IObservableManager>();
 
+    /**
+     *
+     */
     public _refCount = 0;
 
     public constructor(engine: AbstractEngine) {
@@ -91,6 +103,9 @@ export class InternalDeviceSourceManager implements IDisposable {
     }
 
     // Public Functions
+    /**
+     *
+     */
     public readonly registerManager = (manager: IObservableManager): void => {
         for (let deviceType = 0; deviceType < this._devices.length; deviceType++) {
             const device = this._devices[deviceType];
@@ -102,6 +117,9 @@ export class InternalDeviceSourceManager implements IDisposable {
         this._registeredManagers.push(manager);
     };
 
+    /**
+     *
+     */
     public readonly unregisterManager = (manager: IObservableManager): void => {
         const idx = this._registeredManagers.indexOf(manager);
 

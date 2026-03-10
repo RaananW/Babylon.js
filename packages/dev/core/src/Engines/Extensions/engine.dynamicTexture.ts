@@ -4,14 +4,16 @@
  */
 export * from "./engine.dynamicTexture.pure";
 
-import { ImageSource, Nullable } from "../../types";
+import type { ImageSource, Nullable } from "../../types";
 import type { ICanvas } from "../../Engines/ICanvas";
 import { GetExponentOfTwo } from "core/Misc/tools.functions";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 
 declare module "../../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Creates a dynamic texture

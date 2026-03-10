@@ -5,13 +5,15 @@
 export * from "./postProcess.pure";
 
 import { PostProcess } from "./postProcess.pure";
-import { Nullable } from "../types";
+import type { Nullable } from "../types";
 import { Effect } from "../Materials/effect";
 import { AbstractEngine } from "../Engines/abstractEngine";
 import { RegisterClass } from "../Misc/typeStore";
 
 declare module "../Engines/abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Sets a texture to the context from a postprocess
@@ -32,7 +34,9 @@ declare module "../Engines/abstractEngine" {
 }
 
 declare module "../Materials/effect" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Effect {
         /**
          * Sets a texture to be the input of the specified post process. (To use the output, pass in the next post process in the pipeline)

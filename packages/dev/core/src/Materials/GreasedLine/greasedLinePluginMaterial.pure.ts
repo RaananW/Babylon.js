@@ -16,7 +16,13 @@ import { ShaderLanguage } from "../shaderLanguage";
 import type { GreasedLineMaterialOptions, IGreasedLineMaterial } from "./greasedLineMaterialInterfaces";
 import { GreasedLineMeshColorDistributionType, GreasedLineMeshColorMode } from "./greasedLineMaterialInterfaces";
 import { GreasedLineMaterialDefaults } from "./greasedLineMaterialDefaults";
-import { GreasedLineToolsColor3toRGBAUint8, GreasedLineToolsCreateColorsTexture, GreasedLineToolsPrepareEmptyColorsTexture, GreasedLineToolsDisposeEmptyColorsTexture, GreasedLineToolsBooleanToNumber } from "../../Misc/greasedLineTools.pure";
+import {
+    GreasedLineToolsColor3toRGBAUint8,
+    GreasedLineToolsCreateColorsTexture,
+    GreasedLineToolsPrepareEmptyColorsTexture,
+    GreasedLineToolsDisposeEmptyColorsTexture,
+    GreasedLineToolsBooleanToNumber,
+} from "../../Misc/greasedLineTools.pure";
 import { GetCustomCode as getCustomCodeGLSL } from "./greasedLinePluginMaterialShadersGLSL";
 import { GetCustomCode as getCustomCodeWGSL } from "./greasedLinePluginMaterialShadersWGSL";
 import type { GreasedLineBaseMesh } from "../../Meshes";

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { serialize, expandToProperty, serializeAsVector2, serializeAsTexture } from "../../Misc/decorators";
 import type { UniformBuffer } from "../../Materials/uniformBuffer";
 import { VertexBuffer } from "../../Buffers/buffer";
@@ -21,10 +20,25 @@ import { BindTextureMatrix, PrepareDefinesForMergedUV } from "../materialHelper.
  * @internal
  */
 export class MaterialAnisotropicDefines extends MaterialDefines {
+    /**
+     *
+     */
     public ANISOTROPIC = false;
+    /**
+     *
+     */
     public ANISOTROPIC_TEXTURE = false;
+    /**
+     *
+     */
     public ANISOTROPIC_TEXTUREDIRECTUV = 0;
+    /**
+     *
+     */
     public ANISOTROPIC_LEGACY = false;
+    /**
+     *
+     */
     public MAINUV1 = false;
 }
 

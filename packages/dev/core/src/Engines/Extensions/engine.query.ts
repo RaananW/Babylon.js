@@ -4,16 +4,18 @@
  */
 export * from "./engine.query.pure";
 
-import { Nullable, int } from "../../types";
+import type { Nullable, int } from "../../types";
 import type { Observer } from "../../Misc/observable";
-import { OcclusionQuery } from "../AbstractEngine/abstractEngine.query";
+import type { OcclusionQuery } from "../AbstractEngine/abstractEngine.query";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { AbstractMesh } from "../../Meshes/abstractMesh";
 import { _TimeToken } from "../../Instrumentation/timeToken";
 import type { AbstractEngine } from "../abstractEngine";
 
 declare module "../../Engines/thinEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface ThinEngine {
         /**
          * @internal

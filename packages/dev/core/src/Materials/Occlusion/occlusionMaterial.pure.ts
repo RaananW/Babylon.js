@@ -2,7 +2,6 @@ import { Color4 } from "../../Maths/math.color.pure";
 import type { Scene } from "../../scene";
 import { ShaderMaterial } from "../shaderMaterial.pure";
 
-
 /**
  * A material to use for fast depth-only rendering.
  * @since 5.0.0

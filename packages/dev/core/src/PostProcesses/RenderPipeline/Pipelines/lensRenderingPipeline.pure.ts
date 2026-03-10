@@ -10,7 +10,6 @@ import type { Scene } from "../../../scene";
 import { RawTextureCreateRGBATexture } from "../../../Materials/Textures/rawTexture.pure";
 import { Constants } from "../../../Engines/constants";
 
-
 import { RandomRange } from "../../../Maths/math.scalar.functions";
 
 /**

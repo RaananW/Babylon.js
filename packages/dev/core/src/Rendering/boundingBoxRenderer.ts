@@ -9,7 +9,9 @@ import { Scene } from "../scene";
 import { AbstractMesh } from "../Meshes/abstractMesh";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal (Backing field) */
         _boundingBoxRenderer: BoundingBoxRenderer;
@@ -31,7 +33,9 @@ declare module "../scene" {
 }
 
 declare module "../Meshes/abstractMesh" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractMesh {
         /** @internal (Backing field) */
         _showBoundingBox: boolean;

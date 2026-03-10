@@ -64,6 +64,9 @@ export class FlowGraphPointerOverEventBlock extends FlowGraphEventBlock {
      */
     public readonly meshUnderPointer: FlowGraphDataConnection<AbstractMesh>;
 
+    /**
+     *
+     */
     public override readonly type: FlowGraphEventType = FlowGraphEventType.PointerOver;
 
     public constructor(config?: IFlowGraphPointerOverEventBlockConfiguration) {

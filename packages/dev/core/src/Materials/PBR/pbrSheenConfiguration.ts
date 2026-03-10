@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { serialize, expandToProperty, serializeAsColor3, serializeAsTexture } from "../../Misc/decorators";
 import type { UniformBuffer } from "../../Materials/uniformBuffer";
 import { Color3 } from "../../Maths/math.color";
@@ -21,15 +20,45 @@ import { BindTextureMatrix, PrepareDefinesForMergedUV } from "../materialHelper.
  * @internal
  */
 export class MaterialSheenDefines extends MaterialDefines {
+    /**
+     *
+     */
     public SHEEN = false;
+    /**
+     *
+     */
     public SHEEN_TEXTURE = false;
+    /**
+     *
+     */
     public SHEEN_GAMMATEXTURE = false;
+    /**
+     *
+     */
     public SHEEN_TEXTURE_ROUGHNESS = false;
+    /**
+     *
+     */
     public SHEEN_TEXTUREDIRECTUV = 0;
+    /**
+     *
+     */
     public SHEEN_TEXTURE_ROUGHNESSDIRECTUV = 0;
+    /**
+     *
+     */
     public SHEEN_LINKWITHALBEDO = false;
+    /**
+     *
+     */
     public SHEEN_ROUGHNESS = false;
+    /**
+     *
+     */
     public SHEEN_ALBEDOSCALING = false;
+    /**
+     *
+     */
     public SHEEN_USE_ROUGHNESS_FROM_MAINTEXTURE = false;
 }
 

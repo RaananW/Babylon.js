@@ -8,7 +8,7 @@ import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
 import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
 import type { FlowGraphTypes } from "core/FlowGraph/flowGraphRichTypes";
 import { getRichTypeByAnimationType, getRichTypeByFlowGraphType, RichTypeAny, RichTypeNumber } from "core/FlowGraph/flowGraphRichTypes.pure";
-import { Animation } from "core/Animations/animation.pure";
+import type { Animation } from "core/Animations/animation.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { AnimationCreateAnimation } from "../../../../Animations/animation.pure";
 

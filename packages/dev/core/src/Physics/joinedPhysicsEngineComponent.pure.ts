@@ -3,7 +3,7 @@
 import { Observable } from "../Misc/observable";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
-import { Scene } from "../scene.pure";
+import type { Scene } from "../scene.pure";
 
 /**
  * Defines the physics engine scene component responsible to manage a physics engine

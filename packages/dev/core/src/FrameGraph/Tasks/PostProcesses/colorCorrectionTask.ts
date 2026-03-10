@@ -6,6 +6,9 @@ import { FrameGraphPostProcessTask } from "./postProcessTask";
  * Task which applies a color correction post process.
  */
 export class FrameGraphColorCorrectionTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinColorCorrectionPostProcess;
 
     /**

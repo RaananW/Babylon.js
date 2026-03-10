@@ -16,11 +16,10 @@ import type { IBoundingInfoHelperPlatform } from "./IBoundingInfoHelperPlatform"
 import { extractMinAndMax } from "core/Maths/math.functions";
 import { Vector3 } from "core/Maths/math.vector.pure";
 
-
 /** @internal */
 export class TransformFeedbackBoundingHelper implements IBoundingInfoHelperPlatform {
-    private static _Min = new Vector3();
-    private static _Max = new Vector3();
+    private static _Min = /*#__PURE__*/ new Vector3();
+    private static _Max = /*#__PURE__*/ new Vector3();
 
     private _engine: Nullable<ThinEngine>;
     private _buffers: { [key: number]: Buffer } = {};

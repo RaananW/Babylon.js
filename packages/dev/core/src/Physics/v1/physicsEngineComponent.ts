@@ -4,17 +4,19 @@
  */
 export * from "./physicsEngineComponent.pure";
 
-import { Nullable } from "../../types";
+import type { Nullable } from "../../types";
 import type { Observer } from "../../Misc/observable";
-import { Vector3 } from "../../Maths/math.vector";
-import { Mesh } from "../../Meshes/mesh";
-import { PhysicsImpostor } from "./physicsImpostor";
+import type { Vector3 } from "../../Maths/math.vector";
+import type { Mesh } from "../../Meshes/mesh";
+import type { PhysicsImpostor } from "./physicsImpostor";
 import { AbstractMesh } from "../../Meshes/abstractMesh";
 import { PhysicsJoint } from "./physicsJoint";
 import type { Node } from "../../node";
 
 declare module "../../Meshes/abstractMesh" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractMesh {
         /** @internal */
         _physicsImpostor: Nullable<PhysicsImpostor>;

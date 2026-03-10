@@ -10,6 +10,9 @@ export class FrameGraphRenderTarget {
     protected _renderTargetWrapper: RenderTargetWrapper | undefined;
     protected _isBackBuffer = false;
 
+    /**
+     *
+     */
     public readonly name: string;
 
     constructor(

@@ -1,7 +1,6 @@
 import { SceneSerializer, SceneSerializerClearCache, SceneSerializerSerialize, SceneSerializerSerializeAsync, SceneSerializerSerializeMesh } from "./sceneSerializer.pure";
 
 declare module "./sceneSerializer.pure" {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace SceneSerializer {
         export { SceneSerializerClearCache as ClearCache };
         export { SceneSerializerSerialize as Serialize };

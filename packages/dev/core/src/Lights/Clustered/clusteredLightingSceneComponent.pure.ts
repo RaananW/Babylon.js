@@ -3,7 +3,7 @@
 import type { Scene } from "core/scene";
 import type { RenderTargetsStageAction, ISceneComponent } from "core/sceneComponent";
 import { SceneComponentConstants } from "core/sceneComponent";
-import { ClusteredLightContainer } from "./clusteredLightContainer.pure";
+import type { ClusteredLightContainer } from "./clusteredLightContainer.pure";
 import { LightConstants } from "../lightConstants";
 
 /**

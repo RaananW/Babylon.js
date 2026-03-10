@@ -4,7 +4,7 @@ import { Camera } from "../../Cameras/camera";
 import { DeviceOrientationCamera } from "../../Cameras/deviceOrientationCamera.pure";
 import { VRCameraMetrics } from "./vrCameraMetrics";
 import type { Scene } from "../../scene";
-import { Vector3 } from "../../Maths/math.vector.pure";
+import type { Vector3 } from "../../Maths/math.vector.pure";
 import { _SetVrRigMode } from "../RigModes/vrRigMode";
 
 /**

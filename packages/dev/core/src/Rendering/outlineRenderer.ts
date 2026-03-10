@@ -9,7 +9,9 @@ import { Mesh } from "../Meshes/mesh";
 import { Scene } from "../scene";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal */
         _outlineRenderer: OutlineRenderer;
@@ -23,7 +25,9 @@ declare module "../scene" {
 }
 
 declare module "../Meshes/abstractMesh" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractMesh {
         /** @internal (Backing field) */
         _renderOutline: boolean;

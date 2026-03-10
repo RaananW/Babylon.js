@@ -43,8 +43,14 @@ export class RenderingGroup {
     /** @internal */
     public _edgesRenderers = new SmartArrayNoDuplicate<IEdgesRenderer>(16);
 
+    /**
+     *
+     */
     public onBeforeTransparentRendering: () => void;
 
+    /**
+     *
+     */
     public disableDepthPrePass = false;
 
     /**

@@ -4,14 +4,17 @@
  */
 export * from "./edgesRenderer.pure";
 
-import { EdgesRenderer, IEdgesRendererOptions, LineEdgesRenderer } from "./edgesRenderer.pure";
+import type { IEdgesRendererOptions } from "./edgesRenderer.pure";
+import { EdgesRenderer, LineEdgesRenderer } from "./edgesRenderer.pure";
 import { AbstractMesh } from "../Meshes/abstractMesh";
 import { LinesMesh, InstancedLinesMesh } from "../Meshes/linesMesh";
 import type { Nullable } from "../types";
 import type { ShaderMaterial } from "../Materials/shaderMaterial.pure";
 
 declare module "../scene" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface Scene {
         /** @internal */
         _edgeRenderLineShader: Nullable<ShaderMaterial>;
@@ -19,7 +22,9 @@ declare module "../scene" {
 }
 
 declare module "../Meshes/abstractMesh" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractMesh {
         /**
          * Gets the edgesRenderer associated with the mesh
@@ -29,7 +34,9 @@ declare module "../Meshes/abstractMesh" {
 }
 
 declare module "../Meshes/linesMesh" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface LinesMesh {
         /**
          * Enables the edge rendering mode on the mesh.
@@ -44,7 +51,9 @@ declare module "../Meshes/linesMesh" {
 }
 
 declare module "../Meshes/linesMesh" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface InstancedLinesMesh {
         /**
          * Enables the edge rendering mode on the mesh.

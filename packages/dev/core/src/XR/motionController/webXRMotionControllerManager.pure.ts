@@ -237,7 +237,7 @@ export class WebXRMotionControllerManager {
             // eslint-disable-next-line github/no-then
             .then(async (profileToLoad: string) => {
                 // load the profile
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
                 if (!this._ProfileLoadingPromises[profileToLoad]) {
                     // eslint-disable-next-line github/no-then
                     this._ProfileLoadingPromises[profileToLoad] = ToolsLoadFileAsync(`${this.BaseRepositoryUrl}/profiles/${profileToLoad}/profile.json`, false).then(

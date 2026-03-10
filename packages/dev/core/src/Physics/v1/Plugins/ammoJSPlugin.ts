@@ -17,7 +17,6 @@ import { PhysicsRaycastResult } from "../../physicsRaycastResult";
 import { WithinEpsilon } from "../../../Maths/math.scalar.functions";
 import { Epsilon } from "../../../Maths/math.constants";
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 declare let Ammo: any;
 
 /**
@@ -1017,7 +1016,6 @@ export class AmmoJSPlugin implements IPhysicsEnginePlugin {
                 const childImpostor = childMesh.getPhysicsImpostor();
                 if (childImpostor) {
                     if (childImpostor.type == PhysicsImpostor.MeshImpostor) {
-                        // eslint-disable-next-line no-throw-literal
                         throw "A child MeshImpostor is not supported. Only primitive impostors are supported as children (eg. box or sphere)";
                     }
                     const shape = this._createShape(childImpostor);

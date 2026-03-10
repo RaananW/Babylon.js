@@ -53,7 +53,6 @@ export abstract class WebGPUShaderProcessor implements IShaderProcessor {
         vec4h: 2,
     };
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     protected static _SamplerFunctionByWebGLSamplerType: { [key: string]: string } = {
         sampler2D: "sampler2D",
         sampler2DArray: "sampler2DArray",
@@ -63,7 +62,6 @@ export abstract class WebGPUShaderProcessor implements IShaderProcessor {
         sampler3D: "sampler3D",
     };
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     protected static _TextureTypeByWebGLSamplerType: { [key: string]: string } = {
         sampler2D: "texture2D",
         sampler2DArray: "texture2DArray",
@@ -74,7 +72,6 @@ export abstract class WebGPUShaderProcessor implements IShaderProcessor {
         sampler3D: "texture3D",
     };
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     protected static _GpuTextureViewDimensionByWebGPUTextureType: { [key: string]: GPUTextureViewDimension } = {
         textureCube: WebGPUConstants.TextureViewDimension.Cube,
         textureCubeArray: WebGPUConstants.TextureViewDimension.CubeArray,
@@ -84,13 +81,12 @@ export abstract class WebGPUShaderProcessor implements IShaderProcessor {
     };
 
     // if the webgl sampler type is not listed in this array, "sampler" is taken by default
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
     protected static _SamplerTypeByWebGLSamplerType: { [key: string]: string } = {
         sampler2DShadow: "samplerShadow",
         sampler2DArrayShadow: "samplerShadow",
     };
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     protected static _IsComparisonSamplerByWebGPUSamplerType: { [key: string]: boolean } = {
         samplerShadow: true,
         samplerArrayShadow: true,

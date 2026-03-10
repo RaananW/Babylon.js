@@ -4,10 +4,10 @@
  */
 export * from "./engine.renderTarget.pure";
 
-import { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../../Materials/Textures/textureCreationOptions";
-import { Nullable } from "../../../types";
-import { RenderTargetWrapper } from "../../renderTargetWrapper";
-import { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import type { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../../Materials/Textures/textureCreationOptions";
+import type { Nullable } from "../../../types";
+import type { RenderTargetWrapper } from "../../renderTargetWrapper";
+import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Constants } from "../../constants";
 import { WebGPURenderTargetWrapper } from "../webgpuRenderTargetWrapper";
@@ -15,7 +15,9 @@ import { GetTypeForDepthTexture, HasStencilAspect } from "core/Materials/Texture
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
 
 declare module "../../abstractEngine" {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    /**
+     *
+     */
     export interface AbstractEngine {
         /**
          * Creates a new render target texture

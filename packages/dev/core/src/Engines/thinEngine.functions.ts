@@ -10,16 +10,49 @@ import { _ConcatenateShader } from "./abstractEngine.functions";
  * @internal
  */
 export interface IThinEngineStateObject {
+    /**
+     *
+     */
     _contextWasLost?: boolean;
+    /**
+     *
+     */
     validateShaderPrograms?: boolean;
+    /**
+     *
+     */
     _webGLVersion: number;
+    /**
+     *
+     */
     parallelShaderCompile?: { COMPLETION_STATUS_KHR: number };
+    /**
+     *
+     */
     disableParallelShaderCompile?: boolean;
+    /**
+     *
+     */
     _context?: WebGLContext;
+    /**
+     *
+     */
     _createShaderProgramInjection?: typeof _createShaderProgram;
+    /**
+     *
+     */
     createRawShaderProgramInjection?: typeof createRawShaderProgram;
+    /**
+     *
+     */
     createShaderProgramInjection?: typeof createShaderProgram;
+    /**
+     *
+     */
     loadFileInjection?: typeof _LoadFile;
+    /**
+     *
+     */
     cachedPipelines: { [name: string]: IPipelineContext };
 }
 

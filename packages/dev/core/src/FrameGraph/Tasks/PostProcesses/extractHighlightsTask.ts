@@ -6,6 +6,9 @@ import { FrameGraphPostProcessTask } from "./postProcessTask";
  * Task used to extract highlights from a scene.
  */
 export class FrameGraphExtractHighlightsTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinExtractHighlightsPostProcess;
 
     /**

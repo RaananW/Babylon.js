@@ -15,79 +15,157 @@ export type MaterialPluginCreated = object;
 
 /** @internal */
 export type MaterialPluginDisposed = {
+    /**
+     *
+     */
     forceDisposeTextures?: boolean;
 };
 
 /** @internal */
 export type MaterialPluginHasTexture = {
+    /**
+     *
+     */
     hasTexture: boolean;
+    /**
+     *
+     */
     texture: BaseTexture;
 };
 
 /** @internal */
 export type MaterialPluginIsReadyForSubMesh = {
+    /**
+     *
+     */
     isReadyForSubMesh: boolean;
+    /**
+     *
+     */
     defines: MaterialDefines;
+    /**
+     *
+     */
     subMesh: SubMesh;
 };
 
 /** @internal */
 export type MaterialPluginGetDefineNames = {
+    /**
+     *
+     */
     defineNames?: { [name: string]: { type: string; default: any } };
 };
 
 /** @internal */
 export type MaterialPluginPrepareEffect = {
+    /**
+     *
+     */
     defines: MaterialDefines;
+    /**
+     *
+     */
     fallbacks: EffectFallbacks;
+    /**
+     *
+     */
     fallbackRank: number;
+    /**
+     *
+     */
     customCode?: ShaderCustomProcessingFunction;
+    /**
+     *
+     */
     attributes: string[];
+    /**
+     *
+     */
     uniforms: string[];
+    /**
+     *
+     */
     samplers: string[];
+    /**
+     *
+     */
     uniformBuffersNames: string[];
+    /**
+     *
+     */
     mesh: AbstractMesh;
+    /**
+     *
+     */
     indexParameters: any;
 };
 
 /** @internal */
 export type MaterialPluginPrepareDefines = {
+    /**
+     *
+     */
     defines: MaterialDefines;
+    /**
+     *
+     */
     mesh: AbstractMesh;
 };
 
 /** @internal */
 export type MaterialPluginPrepareUniformBuffer = {
+    /**
+     *
+     */
     ubo: UniformBuffer;
 };
 
 /** @internal */
 export type MaterialPluginBindForSubMesh = {
+    /**
+     *
+     */
     subMesh: SubMesh;
 };
 
 /** @internal */
 export type MaterialPluginGetAnimatables = {
+    /**
+     *
+     */
     animatables: IAnimatable[];
 };
 
 /** @internal */
 export type MaterialPluginGetActiveTextures = {
+    /**
+     *
+     */
     activeTextures: BaseTexture[];
 };
 
 /** @internal */
 export type MaterialPluginFillRenderTargetTextures = {
+    /**
+     *
+     */
     renderTargets: SmartArray<RenderTargetTexture>;
 };
 
 /** @internal */
 export type MaterialPluginHasRenderTargetTextures = {
+    /**
+     *
+     */
     hasRenderTargetTextures: boolean;
 };
 
 /** @internal */
 export type MaterialPluginHardBindForSubMesh = {
+    /**
+     *
+     */
     subMesh: SubMesh;
 };
 

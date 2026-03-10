@@ -6,10 +6,19 @@ import { Engine } from "../Engines/engine";
  * @internal
  */
 export class ThinBloomMergePostProcess extends EffectWrapper {
+    /**
+     *
+     */
     public static readonly FragmentUrl = "bloomMerge";
 
+    /**
+     *
+     */
     public static readonly Uniforms = ["bloomWeight"];
 
+    /**
+     *
+     */
     public static readonly Samplers = ["bloomBlur"];
 
     protected override _gatherImports(useWebGPU: boolean, list: Promise<any>[]) {

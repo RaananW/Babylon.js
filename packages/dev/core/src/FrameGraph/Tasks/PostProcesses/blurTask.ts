@@ -7,6 +7,9 @@ import { Vector2 } from "core/Maths/math.vector";
  * Task which applies a blur post process.
  */
 export class FrameGraphBlurTask extends FrameGraphPostProcessTask {
+    /**
+     *
+     */
     public override readonly postProcess: ThinBlurPostProcess;
 
     /**

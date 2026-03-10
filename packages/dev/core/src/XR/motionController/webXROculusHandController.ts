@@ -5,7 +5,7 @@
 export * from "./webXROculusHandController.pure";
 
 import { WebXROculusHandController } from "./webXROculusHandController.pure";
-import { Scene } from "../../scene";
+import type { Scene } from "../../scene";
 import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
 
 // register the profiles

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { Nullable } from "../types";
 import { serialize } from "../Misc/decorators";
 import type { Color4 } from "../Maths/math.color";
