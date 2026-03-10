@@ -2,7 +2,7 @@
 
 import type { IEasingFunction, EasingFunction } from "./easing";
 import { Vector3, Quaternion, Vector2, Matrix, TmpVectors } from "../Maths/math.vector.pure";
-import { Color3, Color4 } from "../Maths/math.color.pure";
+import { Color3, Color3Black, Color4 } from "../Maths/math.color.pure";
 import { Hermite, Lerp } from "../Maths/math.scalar.functions";
 import type { DeepImmutable, Nullable } from "../types";
 import type { Scene } from "../scene";
@@ -12,7 +12,7 @@ import { AnimationRange } from "./animationRange";
 import type { AnimationEvent } from "./animationEvent";
 import type { Node } from "../node";
 import type { IAnimatable } from "./animatable.interface";
-import { Size } from "../Maths/math.size.pure";
+import { Size, SizeZero } from "../Maths/math.size.pure";
 import { WebRequest } from "../Misc/webRequest";
 import { Constants } from "../Engines/constants";
 import type { Animatable } from "./animatable";
@@ -31,10 +31,10 @@ export const _StaticOffsetValueVector3: DeepImmutable<Vector3> = Object.freeze(V
 export const _StaticOffsetValueVector2: DeepImmutable<Vector2> = Object.freeze(Vector2.Zero());
 
 // Size
-export const _StaticOffsetValueSize: DeepImmutable<Size> = Object.freeze(Size.Zero());
+export const _StaticOffsetValueSize: DeepImmutable<Size> = Object.freeze(SizeZero());
 
 // Color3
-export const _StaticOffsetValueColor3: DeepImmutable<Color3> = Object.freeze(Color3.Black());
+export const _StaticOffsetValueColor3: DeepImmutable<Color3> = Object.freeze(Color3Black());
 
 // Color4
 export const _StaticOffsetValueColor4: DeepImmutable<Color4> = Object.freeze(new Color4(0, 0, 0, 0));
