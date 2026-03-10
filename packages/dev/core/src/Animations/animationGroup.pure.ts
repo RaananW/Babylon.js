@@ -8,7 +8,7 @@ import { Observable } from "../Misc/observable";
 import type { Nullable } from "../types";
 import { EngineStore } from "../Engines/engineStore";
 
-import { Tags } from "../Misc/tags.pure";
+import { Tags, TagsHasTags, TagsGetTags, TagsAddTagsTo } from "../Misc/tags.pure";
 import type { AnimationGroupMask } from "./animationGroupMask";
 import type { IAssetContainer } from "core/IAssetContainer";
 import { UniqueIdGenerator } from "core/Misc/uniqueIdGenerator";
@@ -947,8 +947,8 @@ export class AnimationGroup implements IDisposable {
             serializationObject.targetedAnimations[targetedAnimationIndex] = targetedAnimation.serialize();
         }
 
-        if (Tags && Tags.HasTags(this)) {
-            serializationObject.tags = Tags.GetTags(this);
+        if (Tags && TagsHasTags(this)) {
+            serializationObject.tags = TagsGetTags(this);
         }
 
         // Metadata
@@ -1175,7 +1175,7 @@ export function AnimationGroupParse(parsedAnimationGroup: any, scene: Scene, tar
     }
 
     if (Tags) {
-        Tags.AddTagsTo(animationGroup, parsedAnimationGroup.tags);
+        TagsAddTagsTo(animationGroup, parsedAnimationGroup.tags);
     }
 
     if (parsedAnimationGroup.from !== null && parsedAnimationGroup.to !== null) {

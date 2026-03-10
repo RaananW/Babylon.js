@@ -9,7 +9,7 @@ import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnect
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { RandomRange } from "../../../../Maths/math.scalar.functions";
-import { RawTexture } from "../../../Textures/rawTexture.pure";
+import { RawTextureCreateRGBATexture } from "../../../Textures/rawTexture.pure";
 import { Constants } from "../../../../Engines/constants";
 import { Texture } from "../../../Textures/texture.pure";
 import type { Effect } from "../../../effect";
@@ -121,7 +121,7 @@ export class AmbientOcclusionBlock extends NodeMaterialBlock {
             data[index++] = 255;
         }
 
-        const texture = RawTexture.CreateRGBATexture(data, size, size, engine, false, false, Constants.TEXTURE_BILINEAR_SAMPLINGMODE);
+        const texture = RawTextureCreateRGBATexture(data, size, size, engine, false, false, Constants.TEXTURE_BILINEAR_SAMPLINGMODE);
         texture.name = "SSAORandomTexture";
         texture.wrapU = Texture.WRAP_ADDRESSMODE;
         texture.wrapV = Texture.WRAP_ADDRESSMODE;

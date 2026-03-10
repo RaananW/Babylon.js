@@ -2,7 +2,7 @@ import type { IDisposable, Scene } from "../scene";
 import type { Nullable } from "../types";
 import { Vector2, Vector3 } from "../Maths/math.vector.pure";
 import { Texture } from "../Materials/Textures/texture.pure";
-import { RawTexture } from "../Materials/Textures/rawTexture.pure";
+import { RawTexture, RawTextureCreateRGBATexture } from "../Materials/Textures/rawTexture.pure";
 import { ShaderMaterial } from "../Materials/shaderMaterial.pure";
 import type { Mesh } from "../Meshes/mesh";
 import type { PickingInfo } from "../Collisions/pickingInfo";
@@ -442,7 +442,7 @@ export class SpriteMap implements ISpriteMap {
 
         const floatArray = new Float32Array(data);
 
-        const t = RawTexture.CreateRGBATexture(floatArray, this.spriteCount, 4, this._scene, false, false, Texture.NEAREST_NEAREST, Constants.TEXTURETYPE_FLOAT);
+        const t = RawTextureCreateRGBATexture(floatArray, this.spriteCount, 4, this._scene, false, false, Texture.NEAREST_NEAREST, Constants.TEXTURETYPE_FLOAT);
 
         return t;
     }
@@ -474,7 +474,7 @@ export class SpriteMap implements ISpriteMap {
         }
 
         const floatArray = new Float32Array(data);
-        const t = RawTexture.CreateRGBATexture(floatArray, _tx, _ty, this._scene, false, false, Texture.NEAREST_NEAREST, Constants.TEXTURETYPE_FLOAT);
+        const t = RawTextureCreateRGBATexture(floatArray, _tx, _ty, this._scene, false, false, Texture.NEAREST_NEAREST, Constants.TEXTURETYPE_FLOAT);
 
         return t;
     }
@@ -536,7 +536,7 @@ export class SpriteMap implements ISpriteMap {
             floatArray = buffer;
         }
 
-        const t = RawTexture.CreateRGBATexture(
+        const t = RawTextureCreateRGBATexture(
             floatArray,
             this.spriteCount,
             this.options.maxAnimationFrames || 4,

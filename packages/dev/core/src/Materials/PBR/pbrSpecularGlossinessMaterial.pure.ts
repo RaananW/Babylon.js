@@ -6,7 +6,7 @@ import type { Color3 } from "../../Maths/math.color";
 import type { BaseTexture } from "../../Materials/Textures/baseTexture";
 import { PBRBaseSimpleMaterial } from "./pbrBaseSimpleMaterial";
 import type { Nullable } from "../../types";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 
 /**
  * The PBR material of BJS following the specular glossiness convention.
@@ -82,7 +82,7 @@ export class PBRSpecularGlossinessMaterial extends PBRBaseSimpleMaterial {
      * @returns cloned material instance
      */
     public override clone(name: string): PBRSpecularGlossinessMaterial {
-        const clone = SerializationHelper.Clone(() => new PBRSpecularGlossinessMaterial(name, this.getScene()), this);
+        const clone = SerializationHelperClone(() => new PBRSpecularGlossinessMaterial(name, this.getScene()), this);
 
         clone.id = name;
         clone.name = name;
@@ -101,7 +101,7 @@ export class PBRSpecularGlossinessMaterial extends PBRBaseSimpleMaterial {
      * @returns the JSON object
      */
     public override serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
         serializationObject.customType = "BABYLON.PBRSpecularGlossinessMaterial";
 
         if (!this.clearCoat.doNotSerialize) {
@@ -134,7 +134,7 @@ export class PBRSpecularGlossinessMaterial extends PBRBaseSimpleMaterial {
      * @returns a new PBRSpecularGlossinessMaterial.
      */
     public static override Parse(source: any, scene: Scene, rootUrl: string): PBRSpecularGlossinessMaterial {
-        const material = SerializationHelper.Parse(() => new PBRSpecularGlossinessMaterial(source.name, scene), source, scene, rootUrl);
+        const material = SerializationHelperParse(() => new PBRSpecularGlossinessMaterial(source.name, scene), source, scene, rootUrl);
         if (source.clearCoat) {
             material.clearCoat.parse(source.clearCoat, scene, rootUrl);
         }

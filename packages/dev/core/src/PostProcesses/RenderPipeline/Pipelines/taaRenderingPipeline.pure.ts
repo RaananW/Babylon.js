@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { serialize } from "../../../Misc/decorators";
-import { SerializationHelper } from "../../../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse } from "../../../Misc/decorators.serialization.pure";
 import type { Camera } from "../../../Cameras/camera";
 import type { Effect } from "../../../Materials/effect";
 import { PostProcess } from "../../postProcess.pure";
@@ -417,7 +417,7 @@ export class TAARenderingPipeline extends PostProcessRenderPipeline {
      * @returns the serialized object
      */
     public serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
         serializationObject.customType = "TAARenderingPipeline";
 
         return serializationObject;
@@ -431,6 +431,6 @@ export class TAARenderingPipeline extends PostProcessRenderPipeline {
      * @returns An instantiated pipeline from the serialized object.
      */
     public static Parse(source: any, scene: Scene, rootUrl: string): TAARenderingPipeline {
-        return SerializationHelper.Parse(() => new TAARenderingPipeline(source._name, scene, source._ratio), source, scene, rootUrl);
+        return SerializationHelperParse(() => new TAARenderingPipeline(source._name, scene, source._ratio), source, scene, rootUrl);
     }
 }

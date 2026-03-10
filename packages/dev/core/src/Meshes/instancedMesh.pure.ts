@@ -11,11 +11,11 @@ import { AbstractMesh } from "../Meshes/abstractMesh.pure";
 import { Mesh } from "../Meshes/mesh.pure";
 import type { Material } from "../Materials/material";
 import type { Skeleton } from "../Bones/skeleton";
-import { DeepCopier } from "../Misc/deepCopier.pure";
+import { DeepCopierDeepCopy } from "../Misc/deepCopier.pure";
 import { TransformNode } from "./transformNode";
 import type { Light } from "../Lights/light";
 import { VertexBuffer } from "../Buffers/buffer.pure";
-import { Tools } from "../Misc/tools.pure";
+import { ToolsWarn } from "../Misc/tools.pure";
 import type { Geometry } from "./geometry";
 
 /**
@@ -113,7 +113,7 @@ export class InstancedMesh extends AbstractMesh {
 
     public override set receiveShadows(_value: boolean) {
         if (this._sourceMesh?.receiveShadows !== _value) {
-            Tools.Warn("Setting receiveShadows on an instanced mesh has no effect");
+            ToolsWarn("Setting receiveShadows on an instanced mesh has no effect");
         }
     }
 
@@ -126,7 +126,7 @@ export class InstancedMesh extends AbstractMesh {
 
     public override set material(_value: Nullable<Material>) {
         if (this._sourceMesh?.material !== _value) {
-            Tools.Warn("Setting material on an instanced mesh has no effect");
+            ToolsWarn("Setting material on an instanced mesh has no effect");
         }
     }
 
@@ -139,7 +139,7 @@ export class InstancedMesh extends AbstractMesh {
 
     public override set visibility(_value: number) {
         if (this._sourceMesh?.visibility !== _value) {
-            Tools.Warn("Setting visibility on an instanced mesh has no effect");
+            ToolsWarn("Setting visibility on an instanced mesh has no effect");
         }
     }
 
@@ -152,7 +152,7 @@ export class InstancedMesh extends AbstractMesh {
 
     public override set skeleton(_value: Nullable<Skeleton>) {
         if (this._sourceMesh?.skeleton !== _value) {
-            Tools.Warn("Setting skeleton on an instanced mesh has no effect");
+            ToolsWarn("Setting skeleton on an instanced mesh has no effect");
         }
     }
 
@@ -538,7 +538,7 @@ export class InstancedMesh extends AbstractMesh {
         const result = (newSourceMesh || this._sourceMesh).createInstance(name);
 
         // Deep copy
-        DeepCopier.DeepCopy(
+        DeepCopierDeepCopy(
             this,
             result,
             [

@@ -4,7 +4,6 @@ import { SystemBlock } from "./Blocks/systemBlock.pure";
 import type { Scene } from "core/scene";
 import { NodeParticleBuildState } from "./nodeParticleBuildState";
 import type { NodeParticleBlock } from "./nodeParticleBlock";
-import { SerializationHelper } from "core/Misc/decorators.serialization";
 import { Observable } from "core/Misc/observable";
 import { GetClass } from "core/Misc/typeStore";
 import { WebRequest } from "core/Misc/webRequest";
@@ -22,6 +21,8 @@ import { BoxShapeBlock } from "./Blocks/Emitters/boxShapeBlock.pure";
 import { CreateParticleBlock } from "./Blocks/Emitters/createParticleBlock.pure";
 import type { Color4 } from "core/Maths/math.color";
 import type { Nullable } from "../../types";
+import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
+import { ToolsWarn } from "../../Misc/tools.pure";
 
 // declare NODEPARTICLEEDITOR namespace for compilation issue
 declare let NODEPARTICLEEDITOR: any;
@@ -123,7 +124,7 @@ export class NodeParticleSystemSet {
                 if (!result) {
                     result = block;
                 } else {
-                    Tools.Warn("More than one block was found with the name `" + name + "`");
+                    ToolsWarn("More than one block was found with the name `" + name + "`");
                     return result;
                 }
             }
@@ -484,7 +485,7 @@ export class NodeParticleSystemSet {
      * @returns the serialized particle system set object
      */
     public serialize(selectedBlocks?: NodeParticleBlock[]): any {
-        const serializationObject = selectedBlocks ? {} : SerializationHelper.Serialize(this);
+        const serializationObject = selectedBlocks ? {} : SerializationHelperSerialize(this);
         serializationObject.editorData = JSON.parse(JSON.stringify(this.editorData)); // Copy
 
         let blocks: NodeParticleBlock[] = [];
@@ -522,7 +523,7 @@ export class NodeParticleSystemSet {
     public clone(name: string): NodeParticleSystemSet {
         const serializationObject = this.serialize();
 
-        const clone = SerializationHelper.Clone(() => new NodeParticleSystemSet(name), this);
+        const clone = SerializationHelperClone(() => new NodeParticleSystemSet(name), this);
         clone.name = name;
         clone.snippetId = this.snippetId;
 
@@ -564,7 +565,7 @@ export function NodeParticleSystemSetCreateDefault(name: string) {
  * @returns a new node particle set
  */
 export function NodeParticleSystemSetParse(source: any): NodeParticleSystemSet {
-    const nodeParticleSet = SerializationHelper.Parse(() => new NodeParticleSystemSet(source.name), source, null);
+    const nodeParticleSet = SerializationHelperParse(() => new NodeParticleSystemSet(source.name), source, null);
 
     nodeParticleSet.parseSerializedObject(source);
 
@@ -587,7 +588,7 @@ export function NodeParticleSystemSetParseFromFileAsync(name: string, url: strin
                 if (request.status == 200) {
                     const serializationObject = JSON.parse(request.responseText);
                     if (!nodeParticleSet) {
-                        nodeParticleSet = SerializationHelper.Parse(() => new NodeParticleSystemSet(name), serializationObject, null);
+                        nodeParticleSet = SerializationHelperParse(() => new NodeParticleSystemSet(name), serializationObject, null);
                     }
 
                     nodeParticleSet.parseSerializedObject(serializationObject);
@@ -626,7 +627,7 @@ export function NodeParticleSystemSetParseFromSnippetAsync(snippetId: string, no
                     const serializationObject = JSON.parse(snippet.nodeParticle);
 
                     if (!nodeParticleSet) {
-                        nodeParticleSet = SerializationHelper.Parse(() => new NodeParticleSystemSet(snippetId), serializationObject, null);
+                        nodeParticleSet = SerializationHelperParse(() => new NodeParticleSystemSet(snippetId), serializationObject, null);
                     }
 
                     nodeParticleSet.parseSerializedObject(serializationObject);

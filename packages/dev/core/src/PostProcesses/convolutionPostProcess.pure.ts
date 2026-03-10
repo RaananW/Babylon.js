@@ -8,7 +8,7 @@ import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Effect } from "../Materials/effect";
 import { Constants } from "../Engines/constants";
 import { serialize } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Scene } from "../scene";
 import { ThinConvolutionPostProcess } from "./thinConvolutionPostProcess";
 
@@ -85,7 +85,7 @@ export class ConvolutionPostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string): Nullable<ConvolutionPostProcess> {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new ConvolutionPostProcess(
                     parsedPostProcess.name,

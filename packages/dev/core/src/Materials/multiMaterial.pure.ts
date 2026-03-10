@@ -6,7 +6,7 @@ import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import { Material } from "../Materials/material";
-import { Tags } from "../Misc/tags.pure";
+import { Tags, TagsGetTags, TagsAddTagsTo } from "../Misc/tags.pure";
 
 /**
  * A multi-material is used to apply different materials to different parts of the same object without the need of
@@ -195,7 +195,7 @@ export class MultiMaterial extends Material {
         serializationObject.id = this.id;
         serializationObject.uniqueId = this.uniqueId;
         if (Tags) {
-            serializationObject.tags = Tags.GetTags(this);
+            serializationObject.tags = TagsGetTags(this);
         }
         serializationObject.materialsUniqueIds = [];
         serializationObject.materials = [];
@@ -257,7 +257,7 @@ export class MultiMaterial extends Material {
         multiMaterial._loadedUniqueId = parsedMultiMaterial.uniqueId;
 
         if (Tags) {
-            Tags.AddTagsTo(multiMaterial, parsedMultiMaterial.tags);
+            TagsAddTagsTo(multiMaterial, parsedMultiMaterial.tags);
         }
 
         if (parsedMultiMaterial.materialsUniqueIds) {

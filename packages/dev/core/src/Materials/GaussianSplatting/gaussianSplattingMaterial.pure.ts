@@ -7,7 +7,7 @@ import type { Effect, IEffectCreationOptions } from "../../Materials/effect";
 import type { Scene } from "../../scene";
 import type { Matrix } from "../../Maths/math.vector";
 import type { GaussianSplattingMesh } from "../../Meshes/GaussianSplatting/gaussianSplattingMesh";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { MaterialDefines } from "../../Materials/materialDefines";
 import { PushMaterial } from "../../Materials/pushMaterial";
@@ -630,7 +630,7 @@ export class GaussianSplattingMaterial extends PushMaterial {
      * @returns The cloned material.
      */
     public override clone(name: string): GaussianSplattingMaterial {
-        const clone = SerializationHelper.Clone(() => new GaussianSplattingMaterial(name, this.getScene()), this);
+        const clone = SerializationHelperClone(() => new GaussianSplattingMaterial(name, this.getScene()), this);
 
         clone.id = name;
         clone.name = name;
@@ -666,7 +666,7 @@ export class GaussianSplattingMaterial extends PushMaterial {
      * @returns the instantiated GaussianSplattingMaterial.
      */
     public static override Parse(source: any, scene: Scene, rootUrl: string): GaussianSplattingMaterial {
-        const material = SerializationHelper.Parse(() => new GaussianSplattingMaterial(source.name, scene), source, scene, rootUrl);
+        const material = SerializationHelperParse(() => new GaussianSplattingMaterial(source.name, scene), source, scene, rootUrl);
 
         Material._ParsePlugins(source, material, scene, rootUrl);
 

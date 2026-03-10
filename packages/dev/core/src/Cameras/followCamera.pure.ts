@@ -2,7 +2,7 @@
 
 import type { Nullable } from "../types";
 import { serialize, serializeAsMeshReference } from "../Misc/decorators";
-import { Tools } from "../Misc/tools.pure";
+import { ToolsToRadians, ToolsBackCompatCameraNoPreventDefault } from "../Misc/tools.pure";
 import { TargetCamera } from "./targetCamera.pure";
 import type { Scene } from "../scene";
 import { TmpVectors, Vector3 } from "../Maths/math.vector.pure";
@@ -128,7 +128,7 @@ export class FollowCamera extends TargetCamera {
         cameraTarget.absoluteRotationQuaternion.toRotationMatrix(rotMatrix);
         const yRotation = Math.atan2(rotMatrix.m[8], rotMatrix.m[10]);
 
-        const radians = Tools.ToRadians(this.rotationOffset) + yRotation;
+        const radians = ToolsToRadians(this.rotationOffset) + yRotation;
         const targetPosition = cameraTarget.getAbsolutePosition();
         const targetX: number = targetPosition.x + Math.sin(radians) * this.radius;
 
@@ -167,7 +167,7 @@ export class FollowCamera extends TargetCamera {
      * @param noPreventDefault Defines whether event caught by the controls should call preventdefault() (https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
      */
     public override attachControl(ignored: any, noPreventDefault?: boolean): void {
-        noPreventDefault = Tools.BackCompatCameraNoPreventDefault(arguments);
+        noPreventDefault = ToolsBackCompatCameraNoPreventDefault(arguments);
         this.inputs.attachElement(noPreventDefault);
 
         this._reset = () => {};

@@ -3,7 +3,7 @@ import { Observable } from "../Misc/observable";
 import type { Nullable } from "../types";
 import type { PointerInfo } from "../Events/pointerEvents";
 import { Quaternion, Matrix, Vector3, TmpVectors } from "../Maths/math.vector.pure";
-import { Color3 } from "../Maths/math.color.pure";
+import { Color3, Color3Yellow, Color3Gray } from "../Maths/math.color.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { Mesh } from "../Meshes/mesh.pure";
 import type { Node } from "../node";
@@ -179,15 +179,15 @@ export class PlaneRotationGizmo extends Gizmo implements IPlaneRotationGizmo {
      */
     constructor(
         planeNormal: Vector3,
-        color: Color3 = Color3.Gray(),
+        color: Color3 = Color3Gray(),
         gizmoLayer: UtilityLayerRenderer = UtilityLayerRenderer.DefaultUtilityLayer,
         tessellation = 32,
         parent: Nullable<RotationGizmo> = null,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         useEulerRotation = false,
         thickness: number = 1,
-        hoverColor: Color3 = Color3.Yellow(),
-        disableColor: Color3 = Color3.Gray()
+        hoverColor: Color3 = Color3Yellow(),
+        disableColor: Color3 = Color3Gray()
     ) {
         super(gizmoLayer);
         this._parent = parent;

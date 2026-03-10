@@ -10,7 +10,7 @@ import { TargetCamera } from "./targetCamera.pure";
 import { FlyCameraInputsManager } from "./flyCameraInputsManager";
 import type { FlyCameraMouseInput } from "../Cameras/Inputs/flyCameraMouseInput";
 import type { FlyCameraKeyboardInput } from "../Cameras/Inputs/flyCameraKeyboardInput";
-import { Tools } from "../Misc/tools.pure";
+import { ToolsBackCompatCameraNoPreventDefault } from "../Misc/tools.pure";
 import type { Collider } from "../Collisions/collider";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 
@@ -285,7 +285,7 @@ export class FlyCamera extends TargetCamera {
      * @param noPreventDefault Defines whether event caught by the controls should call preventdefault() (https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
      */
     public override attachControl(ignored: any, noPreventDefault?: boolean): void {
-        noPreventDefault = Tools.BackCompatCameraNoPreventDefault(arguments);
+        noPreventDefault = ToolsBackCompatCameraNoPreventDefault(arguments);
         this.inputs.attachElement(noPreventDefault);
     }
 

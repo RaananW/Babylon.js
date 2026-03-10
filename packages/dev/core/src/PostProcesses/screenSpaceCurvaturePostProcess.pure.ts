@@ -10,7 +10,7 @@ import { Constants } from "../Engines/constants";
 import type { GeometryBufferRenderer } from "../Rendering/geometryBufferRenderer";
 import { EngineStore } from "../Engines/engineStore";
 import { serialize } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Scene } from "../scene";
 import { ThinScreenSpaceCurvaturePostProcess } from "./thinScreenSpaceCurvaturePostProcess";
@@ -130,7 +130,7 @@ export class ScreenSpaceCurvaturePostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string) {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new ScreenSpaceCurvaturePostProcess(
                     parsedPostProcess.name,

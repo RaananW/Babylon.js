@@ -2,10 +2,10 @@
 
 import type { Observer } from "../Misc/observable";
 import { Observable } from "../Misc/observable";
-import { Tools, AsyncLoop } from "../Misc/tools.pure";
+import { AsyncLoop, ToolsLoadImage, ToolsLoadFile } from "../Misc/tools.pure";
 import type { IAnimatable } from "../Animations/animatable.interface";
-import { DeepCopier } from "../Misc/deepCopier.pure";
-import { Tags } from "../Misc/tags.pure";
+import { DeepCopierDeepCopy } from "../Misc/deepCopier.pure";
+import { Tags, TagsHasTags, TagsGetTags, TagsAddTagsTo } from "../Misc/tags.pure";
 import type { Coroutine } from "../Misc/coroutine";
 import { runCoroutineSync, runCoroutineAsync, createYieldingScheduler } from "../Misc/coroutine";
 import type { Nullable, FloatArray, IndicesArray, DeepImmutable } from "../types";
@@ -15,11 +15,11 @@ import { ScenePerformancePriority } from "../scene.pure";
 import type { Vector4 } from "../Maths/math.vector";
 import { Quaternion, Matrix, Vector3, Vector2 } from "../Maths/math.vector.pure";
 import type { Color4 } from "../Maths/math.color";
-import { Color3 } from "../Maths/math.color.pure";
-import { Node } from "../node.pure";
+import { Color3FromArray } from "../Maths/math.color.pure";
+import { Node , NodeParseAnimationRanges } from "../node.pure";
 import { VertexBuffer, Buffer } from "../Buffers/buffer.pure";
 import type { IGetSetVerticesData } from "./mesh.vertexData";
-import { VertexData } from "./mesh.vertexData.pure";
+import { VertexData, VertexDataComputeNormals } from "./mesh.vertexData.pure";
 import { Geometry } from "./geometry";
 import type { IMeshDataOptions } from "./abstractMesh";
 import { AbstractMesh } from "./abstractMesh.pure";
@@ -31,7 +31,7 @@ import { MultiMaterial } from "../Materials/multiMaterial.pure";
 import { SceneLoaderFlags } from "../Loading/sceneLoaderFlags";
 import type { Skeleton } from "../Bones/skeleton";
 import { Constants } from "../Engines/constants";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperAppendSerializedAnimations } from "../Misc/decorators.serialization.pure";
 import { Logger } from "../Misc/logger";
 import { GetClass } from "../Misc/typeStore";
 import { _WarnImport } from "../Misc/devTools";
@@ -698,7 +698,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
         }
 
         // Deep copy
-        DeepCopier.DeepCopy(
+        DeepCopierDeepCopy(
             source,
             this,
             [
@@ -783,8 +783,8 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
         this._internalMetadata = source._internalMetadata;
 
         // Tags
-        if (Tags && Tags.HasTags(source)) {
-            Tags.AddTagsTo(this, Tags.GetTags(source, true));
+        if (Tags && TagsHasTags(source)) {
+            TagsAddTagsTo(this, TagsGetTags(source, true));
         }
 
         // Enabled. We shouldn't need to check the source's ancestors, as this mesh
@@ -1948,7 +1948,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
                 return this;
             }
 
-            VertexData.ComputeNormals(positions, indices, normals);
+            VertexDataComputeNormals(positions, indices, normals);
             this.updateVerticesData(VertexBuffer.NormalKind, normals, false, false);
         }
         return this;
@@ -3063,7 +3063,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
 
         const getBinaryData = this.delayLoadingFile.indexOf(".babylonbinarymeshdata") !== -1;
 
-        Tools.LoadFile(
+        ToolsLoadFile(
             this.delayLoadingFile,
             (data) => {
                 if (data instanceof ArrayBuffer) {
@@ -3414,7 +3414,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
             }
         };
 
-        Tools.LoadImage(url, onload, onError ? onError : () => {}, scene.offlineProvider);
+        ToolsLoadImage(url, onload, onError ? onError : () => {}, scene.offlineProvider);
         return this;
     }
 
@@ -3480,7 +3480,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
             position.toArray(positions, index);
         }
 
-        VertexData.ComputeNormals(positions, this.getIndices(), normals);
+        VertexDataComputeNormals(positions, this.getIndices(), normals);
 
         if (forceUpdate) {
             this.setVerticesData(VertexBuffer.PositionKind, positions);
@@ -3929,7 +3929,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
             }
 
             const normals: Array<number> = [];
-            VertexData.ComputeNormals(positions, indices, normals);
+            VertexDataComputeNormals(positions, indices, normals);
 
             //create new vertex data object and update
             vertexData.positions = positions;
@@ -4065,8 +4065,8 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
         serializationObject.uniqueId = this.uniqueId;
         serializationObject.type = this.getClassName();
 
-        if (Tags && Tags.HasTags(this)) {
-            serializationObject.tags = Tags.GetTags(this);
+        if (Tags && TagsHasTags(this)) {
+            serializationObject.tags = TagsGetTags(this);
         }
 
         serializationObject.position = this.position.asArray();
@@ -4224,7 +4224,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
             serializationObject.instances.push(serializationInstance);
 
             // Animations
-            SerializationHelper.AppendSerializedAnimations(instance, serializationInstance);
+            SerializationHelperAppendSerializedAnimations(instance, serializationInstance);
             serializationInstance.ranges = instance.serializeAnimationRanges();
         }
 
@@ -4255,7 +4255,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
         }
 
         // Animations
-        SerializationHelper.AppendSerializedAnimations(this, serializationObject);
+        SerializationHelperAppendSerializedAnimations(this, serializationObject);
         serializationObject.ranges = this.serializeAnimationRanges();
 
         // Layer mask
@@ -4440,7 +4440,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
         mesh._waitingParsedUniqueId = parsedMesh.uniqueId;
 
         if (Tags) {
-            Tags.AddTagsTo(mesh, parsedMesh.tags);
+            TagsAddTagsTo(mesh, parsedMesh.tags);
         }
 
         mesh.position = Vector3.FromArray(parsedMesh.position);
@@ -4544,7 +4544,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
         }
 
         if (parsedMesh.overlayColor !== undefined) {
-            mesh.overlayColor = Color3.FromArray(parsedMesh.overlayColor);
+            mesh.overlayColor = Color3FromArray(parsedMesh.overlayColor);
         }
 
         if (parsedMesh.renderOverlay !== undefined) {
@@ -4644,7 +4644,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
                     mesh.animations.push(internalClass.Parse(parsedAnimation));
                 }
             }
-            Node.ParseAnimationRanges(mesh, parsedMesh, scene);
+            NodeParseAnimationRanges(mesh, parsedMesh, scene);
         }
 
         if (parsedMesh.autoAnimate) {
@@ -4684,9 +4684,9 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
 
                 if (Tags) {
                     if (parsedInstance.tags) {
-                        Tags.AddTagsTo(instance, parsedInstance.tags);
+                        TagsAddTagsTo(instance, parsedInstance.tags);
                     } else {
-                        Tags.AddTagsTo(instance, parsedMesh.tags);
+                        TagsAddTagsTo(instance, parsedMesh.tags);
                     }
                 }
 
@@ -4759,7 +4759,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
                             instance.animations.push(internalClass.Parse(parsedAnimation));
                         }
                     }
-                    Node.ParseAnimationRanges(instance, parsedInstance, scene);
+                    NodeParseAnimationRanges(instance, parsedInstance, scene);
 
                     if (parsedInstance.autoAnimate) {
                         scene.beginAnimation(

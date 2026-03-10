@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
-import { RawTexture } from "../../Materials/Textures/rawTexture.pure";
+import { RawTexture, RawTextureCreateRTexture } from "../../Materials/Textures/rawTexture.pure";
 import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
-import { Tools } from "../../Misc/tools.pure";
+import { ToolsWarn, ToolsError } from "../../Misc/tools.pure";
 import { Texture } from "../../Materials/Textures/texture.pure";
 import type { Observer } from "../../Misc/observable";
 import { Observable } from "../../Misc/observable";
@@ -426,7 +426,7 @@ export class WebXRDepthSensing extends WebXRAbstractFeature {
         this.xrNativeFeatureName = "depth-sensing";
 
         // https://immersive-web.github.io/depth-sensing/
-        Tools.Warn("depth-sensing is an experimental and unstable feature.");
+        ToolsWarn("depth-sensing is an experimental and unstable feature.");
         EnableDiscard = !options.useToleranceFactorForDepthSensing;
 
         RegisterMaterialPlugin("WebXRDepthSensingMaterialPlugin", (material) => new WebXRDepthSensingMaterialPlugin(material));
@@ -531,7 +531,7 @@ export class WebXRDepthSensing extends WebXRAbstractFeature {
                     this._updateDepthInformationAndTextureWebGLDepthUsage(this._glBinding, view, this.depthDataFormat);
                     break;
                 default:
-                    Tools.Error("Unknown depth usage");
+                    ToolsError("Unknown depth usage");
                     this.detach();
                     break;
             }
@@ -558,7 +558,7 @@ export class WebXRDepthSensing extends WebXRAbstractFeature {
         this.onGetDepthInMetersAvailable.notifyObservers(getDepthInMeters.bind(depthInfo));
 
         if (!this._cachedDepthImageTexture) {
-            this._cachedDepthImageTexture = RawTexture.CreateRTexture(
+            this._cachedDepthImageTexture = RawTextureCreateRTexture(
                 null,
                 width,
                 height,
@@ -617,7 +617,7 @@ export class WebXRDepthSensing extends WebXRAbstractFeature {
         const internalTexture = this._getInternalTextureFromDepthInfo();
 
         if (!this._cachedDepthImageTexture) {
-            this._cachedDepthImageTexture = RawTexture.CreateRTexture(
+            this._cachedDepthImageTexture = RawTextureCreateRTexture(
                 null,
                 width,
                 height,

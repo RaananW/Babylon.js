@@ -3,7 +3,7 @@
 import { serialize } from "../Misc/decorators";
 import { Color4 } from "../Maths/math.color.pure";
 import type { Effect } from "../Materials/effect";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../Misc/decorators.serialization.pure";
 import { PrepareUniformsForColorCurves } from "./colorCurves.functions";
 
 /**
@@ -540,7 +540,7 @@ export class ColorCurves {
      * @returns The cloned curves
      */
     public clone(): ColorCurves {
-        return SerializationHelper.Clone(() => new ColorCurves(), this);
+        return SerializationHelperClone(() => new ColorCurves(), this);
     }
 
     /**
@@ -548,7 +548,7 @@ export class ColorCurves {
      * @returns a JSON representation
      */
     public serialize(): any {
-        return SerializationHelper.Serialize(this);
+        return SerializationHelperSerialize(this);
     }
 
     /**
@@ -557,6 +557,6 @@ export class ColorCurves {
      * @returns The parsed curves
      */
     public static Parse(source: any): ColorCurves {
-        return SerializationHelper.Parse(() => new ColorCurves(), source, null, null);
+        return SerializationHelperParse(() => new ColorCurves(), source, null, null);
     }
 }

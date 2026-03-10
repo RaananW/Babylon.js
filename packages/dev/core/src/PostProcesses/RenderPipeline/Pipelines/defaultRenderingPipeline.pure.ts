@@ -2,7 +2,7 @@
 
 import type { Nullable } from "../../../types";
 import { serialize } from "../../../Misc/decorators";
-import { SerializationHelper } from "../../../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse } from "../../../Misc/decorators.serialization.pure";
 import type { Observer } from "../../../Misc/observable";
 import { Observable } from "../../../Misc/observable";
 import type { IAnimatable } from "../../../Animations/animatable.interface";
@@ -25,8 +25,8 @@ import { PostProcessRenderEffect } from "../../../PostProcesses/RenderPipeline/p
 import { DepthOfFieldEffect, DepthOfFieldEffectBlurLevel } from "../../../PostProcesses/depthOfFieldEffect";
 import { BloomEffect } from "../../../PostProcesses/bloomEffect";
 import { EngineStore } from "../../../Engines/engineStore";
-import { Tools } from "core/Misc/tools";
 import type { Animation } from "../../../Animations/animation";
+import { ToolsSetImmediate } from "../../../Misc/tools.pure";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -521,7 +521,7 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
                 // Note that the pipeline could have been disposed before the deferred call was executed, but in that case
                 // _buildAllowed will have been set to false, preventing _buildPipeline from being executed.
                 if (avoidReentrancyAtConstructionTime) {
-                    Tools.SetImmediate(() => {
+                    ToolsSetImmediate(() => {
                         this._buildPipeline();
                     });
                 } else {
@@ -849,7 +849,7 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
      * @returns the serialized object
      */
     public serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
         serializationObject.customType = "DefaultRenderingPipeline";
 
         return serializationObject;
@@ -863,6 +863,6 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
      * @returns An instantiated pipeline from the serialized object.
      */
     public static Parse(source: any, scene: Scene, rootUrl: string): DefaultRenderingPipeline {
-        return SerializationHelper.Parse(() => new DefaultRenderingPipeline(source._name, source._name._hdr, scene), source, scene, rootUrl);
+        return SerializationHelperParse(() => new DefaultRenderingPipeline(source._name, source._name._hdr, scene), source, scene, rootUrl);
     }
 }

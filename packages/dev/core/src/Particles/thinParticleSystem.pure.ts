@@ -1,12 +1,12 @@
 import type { Immutable, Nullable } from "../types";
-import { FactorGradient, ColorGradient, Color3Gradient, GradientHelper } from "../Misc/gradients";
+import { FactorGradient, ColorGradient, Color3Gradient } from "../Misc/gradients";
 import type { Observer } from "../Misc/observable";
 import { Observable } from "../Misc/observable";
 import { Vector3, Matrix, TmpVectors } from "../Maths/math.vector.pure";
 import { VertexBuffer, Buffer } from "../Buffers/buffer.pure";
 
 import type { Effect } from "../Materials/effect";
-import { RawTexture } from "../Materials/Textures/rawTexture.pure";
+import { RawTexture, RawTextureCreateRGBATexture } from "../Materials/Textures/rawTexture.pure";
 import { EngineStore } from "../Engines/engineStore";
 import type { IDisposable, Scene } from "../scene";
 
@@ -18,7 +18,7 @@ import type { IAnimatable } from "../Animations/animatable.interface";
 import { DrawWrapper } from "../Materials/drawWrapper";
 
 import type { DataBuffer } from "../Buffers/dataBuffer";
-import { Color4, Color3, TmpColors } from "../Maths/math.color.pure";
+import { Color4, Color3, TmpColors, Color3LerpToRef } from "../Maths/math.color.pure";
 import type { ISize } from "../Maths/math.size";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 
@@ -71,6 +71,7 @@ import {
 } from "./thinParticleSystem.function";
 import type { _IExecutionQueueItem } from "./Queue/executionQueue";
 import { _ConnectAfter, _ConnectBefore, _RemoveFromQueue } from "./Queue/executionQueue";
+import { GradientHelperGetCurrentGradient } from "../Misc/gradients.pure";
 
 /**
  * This represents a thin particle system in Babylon.
@@ -1249,8 +1250,8 @@ export class ThinParticleSystem extends BaseParticleSystem implements IDisposabl
         for (let x = 0; x < this._rawTextureWidth; x++) {
             const ratio = x / this._rawTextureWidth;
 
-            GradientHelper.GetCurrentGradient(ratio, this._rampGradients, (currentGradient, nextGradient, scale) => {
-                Color3.LerpToRef((<Color3Gradient>currentGradient).color, (<Color3Gradient>nextGradient).color, scale, tmpColor);
+            GradientHelperGetCurrentGradient(ratio, this._rampGradients, (currentGradient, nextGradient, scale) => {
+                Color3LerpToRef((<Color3Gradient>currentGradient).color, (<Color3Gradient>nextGradient).color, scale, tmpColor);
                 data[x * 4] = tmpColor.r * 255;
                 data[x * 4 + 1] = tmpColor.g * 255;
                 data[x * 4 + 2] = tmpColor.b * 255;
@@ -1258,7 +1259,7 @@ export class ThinParticleSystem extends BaseParticleSystem implements IDisposabl
             });
         }
 
-        this._rampGradientsTexture = RawTexture.CreateRGBATexture(data, this._rawTextureWidth, 1, this._scene, false, false, Constants.TEXTURE_NEAREST_SAMPLINGMODE);
+        this._rampGradientsTexture = RawTextureCreateRGBATexture(data, this._rawTextureWidth, 1, this._scene, false, false, Constants.TEXTURE_NEAREST_SAMPLINGMODE);
     }
 
     /**
@@ -2128,7 +2129,7 @@ export class ThinParticleSystem extends BaseParticleSystem implements IDisposabl
 
         if (this._emitRateGradients && this._emitRateGradients.length > 0 && this.targetStopDuration) {
             const ratio = this._actualFrame / this.targetStopDuration;
-            GradientHelper.GetCurrentGradient(ratio, this._emitRateGradients, (currentGradient, nextGradient, scale) => {
+            GradientHelperGetCurrentGradient(ratio, this._emitRateGradients, (currentGradient, nextGradient, scale) => {
                 if (currentGradient !== this._currentEmitRateGradient) {
                     this._currentEmitRate1 = this._currentEmitRate2;
                     this._currentEmitRate2 = (<FactorGradient>nextGradient).getFactor();

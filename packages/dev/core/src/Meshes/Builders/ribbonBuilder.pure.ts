@@ -7,7 +7,7 @@ import { TmpVectors } from "../../Maths/math.vector.pure";
 import type { Color4 } from "../../Maths/math.color";
 import { Mesh, _CreationDataStorage } from "../mesh.pure";
 import { VertexBuffer } from "../../Buffers/buffer.pure";
-import { VertexData } from "../mesh.vertexData.pure";
+import { VertexData, VertexDataComputeNormals, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
 /**
@@ -193,7 +193,7 @@ export function CreateRibbonVertexData(options: {
     }
 
     // normals
-    VertexData.ComputeNormals(positions, indices, normals);
+    VertexDataComputeNormals(positions, indices, normals);
 
     if (closePath) {
         // update both the first and last vertex normals to their average value
@@ -239,7 +239,7 @@ export function CreateRibbonVertexData(options: {
     }
 
     // sides
-    VertexData._ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
+    VertexData_ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
 
     // Colors
     let colors: Nullable<Float32Array> = null;
@@ -388,7 +388,7 @@ export function CreateRibbon(
             const indices = instance.getIndices();
             const normals = <FloatArray>instance.getVerticesData(VertexBuffer.NormalKind);
             const params = instance.isFacetDataEnabled ? instance.getFacetDataParameters() : null;
-            VertexData.ComputeNormals(positions, indices, normals, params);
+            VertexDataComputeNormals(positions, indices, normals, params);
 
             if (instance._creationDataStorage && instance._creationDataStorage.closePath) {
                 let indexFirst: number = 0;

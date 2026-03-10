@@ -21,7 +21,7 @@ import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetT
 import type { IShadowLight } from "../../Lights/shadowLight";
 import { Constants } from "../../Engines/constants";
 import { MaterialFlags } from "../materialFlags";
-import { Color3 } from "../../Maths/math.color.pure";
+import { Color3, Color3Black, Color3White } from "../../Maths/math.color.pure";
 import { EffectFallbacks } from "../effectFallbacks";
 import { AddClipPlaneUniforms, BindClipPlane } from "../clipPlaneMaterialHelper";
 import {
@@ -46,7 +46,7 @@ import {
     PrepareUniformsAndSamplersForIBL,
     PrepareUniformLayoutForIBL,
 } from "../materialHelper.functions";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 import { ShaderLanguage } from "../shaderLanguage";
 import { ImageProcessingMixin } from "../imageProcessing";
 
@@ -248,7 +248,7 @@ export class BackgroundMaterial extends BackgroundMaterialBase {
      * Key light Color (multiply against the environment texture)
      */
     @expandToProperty("_markAllSubMeshesAsLightsDirty")
-    public primaryColor = Color3.White();
+    public primaryColor = Color3White();
 
     @serializeAsColor3()
     protected __perceptualColor: Nullable<Color3>;
@@ -511,9 +511,9 @@ export class BackgroundMaterial extends BackgroundMaterialBase {
     // Temp values kept as cache in the material.
     private _renderTargets = new SmartArray<RenderTargetTexture>(16);
     private _reflectionControls = Vector4.Zero();
-    private _white = Color3.White();
-    private _primaryShadowColor = Color3.Black();
-    private _primaryHighlightColor = Color3.Black();
+    private _white = Color3White();
+    private _primaryShadowColor = Color3Black();
+    private _primaryHighlightColor = Color3Black();
 
     private _shadersLoaded = false;
 
@@ -977,7 +977,7 @@ export class BackgroundMaterial extends BackgroundMaterialBase {
                         BindTextureMatrix(this._diffuseTexture, this._uniformBuffer, "diffuse");
                     }
 
-                    BindIBLParameters(scene, defines, this._uniformBuffer, Color3.White(), reflectionTexture, false, true, false, false, false, false, this._reflectionBlur);
+                    BindIBLParameters(scene, defines, this._uniformBuffer, Color3White(), reflectionTexture, false, true, false, false, false, false, this._reflectionBlur);
                 }
 
                 if (this.shadowLevel > 0) {
@@ -1117,7 +1117,7 @@ export class BackgroundMaterial extends BackgroundMaterialBase {
      * @returns The cloned material.
      */
     public override clone(name: string): BackgroundMaterial {
-        return SerializationHelper.Clone(() => new BackgroundMaterial(name, this.getScene()), this);
+        return SerializationHelperClone(() => new BackgroundMaterial(name, this.getScene()), this);
     }
 
     /**
@@ -1146,6 +1146,6 @@ export class BackgroundMaterial extends BackgroundMaterialBase {
      * @returns the instantiated BackgroundMaterial.
      */
     public static override Parse(source: any, scene: Scene, rootUrl: string): BackgroundMaterial {
-        return SerializationHelper.Parse(() => new BackgroundMaterial(source.name, scene), source, scene, rootUrl);
+        return SerializationHelperParse(() => new BackgroundMaterial(source.name, scene), source, scene, rootUrl);
     }
 }

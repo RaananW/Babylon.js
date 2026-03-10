@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-var */
 import type { Nullable } from "../types";
-import { Tools } from "./tools.pure";
+import { ToolsDownload } from "./tools.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 
 interface MediaRecorder {
@@ -102,7 +102,7 @@ export class VideoRecorder {
      * @param options Defines options that can be used to customize the capture.
      */
     constructor(engine: AbstractEngine, options: Partial<VideoRecorderOptions> = {}) {
-        if (!VideoRecorder.IsSupported(engine, options.canvas)) {
+        if (!VideoRecorderIsSupported(engine, options.canvas)) {
             // eslint-disable-next-line no-throw-literal
             throw "Your browser does not support recording so far.";
         }
@@ -230,7 +230,7 @@ export class VideoRecorder {
         window.URL.createObjectURL(superBuffer);
 
         if (this._fileName) {
-            Tools.Download(superBuffer, this._fileName);
+            ToolsDownload(superBuffer, this._fileName);
         }
     }
 }

@@ -8,7 +8,7 @@ import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { serialize } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Nullable } from "../types";
 import type { Scene } from "../scene";
 
@@ -125,7 +125,7 @@ export class RefractionPostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string) {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new RefractionPostProcess(
                     parsedPostProcess.name,

@@ -7,7 +7,7 @@ import { PostProcess } from "../../../PostProcesses/postProcess.pure";
 import { PostProcessRenderPipeline } from "../../../PostProcesses/RenderPipeline/postProcessRenderPipeline";
 import { PostProcessRenderEffect } from "../../../PostProcesses/RenderPipeline/postProcessRenderEffect";
 import type { Scene } from "../../../scene";
-import { RawTexture } from "../../../Materials/Textures/rawTexture.pure";
+import { RawTextureCreateRGBATexture } from "../../../Materials/Textures/rawTexture.pure";
 import { Constants } from "../../../Engines/constants";
 
 
@@ -583,7 +583,7 @@ export class LensRenderingPipeline extends PostProcessRenderPipeline {
             data[index++] = 255;
         }
 
-        const texture = RawTexture.CreateRGBATexture(data, size, size, this._scene, false, false, Constants.TEXTURE_BILINEAR_SAMPLINGMODE);
+        const texture = RawTextureCreateRGBATexture(data, size, size, this._scene, false, false, Constants.TEXTURE_BILINEAR_SAMPLINGMODE);
         texture.name = "LensNoiseTexture";
         texture.wrapU = Texture.WRAP_ADDRESSMODE;
         texture.wrapV = Texture.WRAP_ADDRESSMODE;

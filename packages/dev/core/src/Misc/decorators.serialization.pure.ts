@@ -8,7 +8,7 @@ import type { Nullable } from "../types";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import type { IAnimatable } from "../Animations/animatable.interface";
 import { Tags, TagsHasTags, TagsGetTags, TagsAddTagsTo } from "./tags.pure";
-import { Color3, Color4 } from "../Maths/math.color.pure";
+import { Color4, Color3FromArray, Color4FromArray } from "../Maths/math.color.pure";
 import { Matrix, Quaternion, Vector2, Vector3 } from "../Maths/math.vector.pure";
 import type { Camera } from "../Cameras/camera";
 import { GetMergedStore } from "./decorators.functions";
@@ -241,7 +241,7 @@ export function SerializationHelperParseProperties(source: any, destination: any
                     }
                     break;
                 case 2: // Color3
-                    dest[property] = Color3.FromArray(sourceProperty);
+                    dest[property] = Color3FromArray(sourceProperty);
                     break;
                 case 3: // FresnelParameters
                     dest[property] = SerializationHelper._FresnelParametersParser(sourceProperty);
@@ -261,7 +261,7 @@ export function SerializationHelperParseProperties(source: any, destination: any
                     dest[property] = SerializationHelper._ColorCurvesParser(sourceProperty);
                     break;
                 case 8: // Color 4
-                    dest[property] = Color4.FromArray(sourceProperty);
+                    dest[property] = Color4FromArray(sourceProperty);
                     break;
                 case 9: // Image Processing
                     dest[property] = SerializationHelper._ImageProcessingConfigurationParser(sourceProperty);

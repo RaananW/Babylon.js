@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import { DeepCopier } from "../Misc/deepCopier.pure";
+import { DeepCopierDeepCopy } from "../Misc/deepCopier.pure";
 import type { DeepImmutable } from "../types";
-import { Color3 } from "../Maths/math.color.pure";
+import { Color3, Color3FromArray, Color3Black, Color3White } from "../Maths/math.color.pure";
 import { Constants } from "../Engines/constants";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 
@@ -117,8 +117,8 @@ export class FresnelParameters {
     public constructor(options: IFresnelParametersCreationOptions = {}) {
         this.bias = options.bias === undefined ? 0 : options.bias;
         this.power = options.power === undefined ? 1 : options.power;
-        this.leftColor = options.leftColor || Color3.White();
-        this.rightColor = options.rightColor || Color3.Black();
+        this.leftColor = options.leftColor || Color3White();
+        this.rightColor = options.rightColor || Color3Black();
         if (options.isEnabled === false) {
             this.isEnabled = false;
         }
@@ -131,7 +131,7 @@ export class FresnelParameters {
     public clone(): FresnelParameters {
         const newFresnelParameters = new FresnelParameters();
 
-        DeepCopier.DeepCopy(this, newFresnelParameters);
+        DeepCopierDeepCopy(this, newFresnelParameters);
 
         return newFresnelParameters;
     }
@@ -174,8 +174,8 @@ export class FresnelParameters {
     public static Parse(parsedFresnelParameters: IFresnelParametersSerialized): FresnelParameters {
         return new FresnelParameters({
             isEnabled: parsedFresnelParameters.isEnabled,
-            leftColor: Color3.FromArray(parsedFresnelParameters.leftColor),
-            rightColor: Color3.FromArray(parsedFresnelParameters.rightColor),
+            leftColor: Color3FromArray(parsedFresnelParameters.leftColor),
+            rightColor: Color3FromArray(parsedFresnelParameters.rightColor),
             bias: parsedFresnelParameters.bias,
             power: parsedFresnelParameters.power || 1.0,
         });

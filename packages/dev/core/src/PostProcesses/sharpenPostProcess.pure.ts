@@ -7,7 +7,7 @@ import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess.pure";
 import { Constants } from "../Engines/constants";
 import { serialize } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Scene } from "../scene";
 import { ThinSharpenPostProcess } from "./thinSharpenPostProcess";
@@ -99,7 +99,7 @@ export class SharpenPostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string) {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new SharpenPostProcess(
                     parsedPostProcess.name,

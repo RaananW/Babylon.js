@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { Vector2, Vector3, Vector4, Matrix, Quaternion } from "../Maths/math.vector.pure";
-import { Color3, Color4 } from "../Maths/math.color.pure";
+import { Color3, Color3Black, Color4 } from "../Maths/math.color.pure";
 import { FlowGraphInteger } from "./CustomTypes/flowGraphInteger.pure";
 import { Constants } from "core/Engines/constants";
 import { FlowGraphMatrix2D, FlowGraphMatrix3D } from "./CustomTypes/flowGraphMatrix";
@@ -84,7 +84,7 @@ export const RichTypeMatrix2D: RichType<FlowGraphMatrix2D> = new RichType(FlowGr
 
 export const RichTypeMatrix3D: RichType<FlowGraphMatrix3D> = new RichType(FlowGraphTypes.Matrix3D, new FlowGraphMatrix3D());
 
-export const RichTypeColor3: RichType<Color3> = new RichType(FlowGraphTypes.Color3, Color3.Black(), Constants.ANIMATIONTYPE_COLOR3);
+export const RichTypeColor3: RichType<Color3> = new RichType(FlowGraphTypes.Color3, Color3Black(), Constants.ANIMATIONTYPE_COLOR3);
 
 export const RichTypeColor4: RichType<Color4> = new RichType(FlowGraphTypes.Color4, new Color4(0, 0, 0, 0), Constants.ANIMATIONTYPE_COLOR4);
 

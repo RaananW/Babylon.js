@@ -564,7 +564,7 @@ export class VertexBuffer {
 
         if (type === undefined) {
             const vertexData = this.getData();
-            this.type = vertexData ? VertexBuffer.GetDataType(vertexData) : VertexBuffer.FLOAT;
+            this.type = vertexData ? VertexBufferGetDataType(vertexData) : VertexBuffer.FLOAT;
         } else {
             this.type = type;
         }
@@ -572,11 +572,11 @@ export class VertexBuffer {
         const typeByteLength = GetTypeByteLength(this.type);
 
         if (useBytes) {
-            this._size = size || (stride ? stride / typeByteLength : VertexBuffer.DeduceStride(kind));
+            this._size = size || (stride ? stride / typeByteLength : VertexBufferDeduceStride(kind));
             this.byteStride = stride || this._buffer.byteStride || this._size * typeByteLength;
             this.byteOffset = offset || 0;
         } else {
-            this._size = size || stride || VertexBuffer.DeduceStride(kind);
+            this._size = size || stride || VertexBufferDeduceStride(kind);
             this.byteStride = stride ? stride * typeByteLength : this._buffer.byteStride || this._size * typeByteLength;
             this.byteOffset = (offset || 0) * typeByteLength;
         }

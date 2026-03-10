@@ -3,13 +3,13 @@
 import { WebGLHardwareTexture } from "../../Engines/WebGL/webGLHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Observable } from "../../Misc/observable";
-import { Tools } from "../../Misc/tools.pure";
+import { ToolsWarn } from "../../Misc/tools.pure";
 import type { Nullable } from "../../types";
 import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { Constants } from "../../Engines/constants";
-import { Color3 } from "../../Maths/math.color.pure";
+import { Color3, Color3White } from "../../Maths/math.color.pure";
 import { Vector3 } from "../../Maths/math.vector.pure";
 import { DirectionalLight } from "../../Lights/directionalLight.pure";
 import { BaseTexture } from "../../Materials/Textures/baseTexture.pure";
@@ -105,7 +105,7 @@ export class WebXRLightEstimation extends WebXRAbstractFeature {
     private _xrLightProbe: Nullable<XRLightProbe> = null;
     private _xrWebGLBinding: Nullable<XRWebGLBinding> = null;
     private _lightDirection: Vector3 = Vector3.Up().negateInPlace();
-    private _lightColor: Color3 = Color3.White();
+    private _lightColor: Color3 = Color3White();
     private _intensity: number = 1;
     private _sphericalHarmonics: SphericalHarmonics = new SphericalHarmonics();
     private _cubeMapPollTime = Date.now();
@@ -176,7 +176,7 @@ export class WebXRLightEstimation extends WebXRAbstractFeature {
         this._hdrFilter = new HDRFiltering(this._xrSessionManager.scene.getEngine() as ThinEngine);
 
         // https://immersive-web.github.io/lighting-estimation/
-        Tools.Warn("light-estimation is an experimental and unstable feature.");
+        ToolsWarn("light-estimation is an experimental and unstable feature.");
     }
 
     /**

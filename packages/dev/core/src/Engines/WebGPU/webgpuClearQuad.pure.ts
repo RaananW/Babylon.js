@@ -10,7 +10,7 @@ import type { WebGPUCacheRenderPipeline } from "./webgpuCacheRenderPipeline";
 import { WebGPUCacheRenderPipelineTree } from "./webgpuCacheRenderPipelineTree";
 import type { WebGPUPipelineContext } from "./webgpuPipelineContext";
 import { WebGPUShaderProcessingContext } from "./webgpuShaderProcessingContext";
-import { WebGPUTextureHelper } from "./webgpuTextureHelper.pure";
+import { WebGPUTextureHelperHasStencilAspect, WebGPUTextureHelperGetSample } from "./webgpuTextureHelper.pure";
 import { renderableTextureFormatToIndex } from "./webgpuTextureManager";
 
 import { ShaderLanguage } from "../../Materials/shaderLanguage";
@@ -95,12 +95,12 @@ export class WebGPUClearQuad {
                 label: "clearQuadRenderBundle",
                 colorFormats: this._cacheRenderPipeline.colorFormats,
                 depthStencilFormat: this._depthTextureFormat,
-                sampleCount: WebGPUTextureHelper.GetSample(sampleCount),
+                sampleCount: WebGPUTextureHelperGetSample(sampleCount),
             });
         }
 
         this._cacheRenderPipeline.setDepthWriteEnabled(!!clearDepth);
-        this._cacheRenderPipeline.setStencilEnabled(!!clearStencil && !!this._depthTextureFormat && WebGPUTextureHelper.HasStencilAspect(this._depthTextureFormat));
+        this._cacheRenderPipeline.setStencilEnabled(!!clearStencil && !!this._depthTextureFormat && WebGPUTextureHelperHasStencilAspect(this._depthTextureFormat));
         this._cacheRenderPipeline.setStencilWriteMask(clearStencil ? 0xff : 0);
         this._cacheRenderPipeline.setStencilCompare(clearStencil ? Constants.ALWAYS : Constants.NEVER);
         this._cacheRenderPipeline.setStencilPassOp(clearStencil ? Constants.REPLACE : Constants.KEEP);

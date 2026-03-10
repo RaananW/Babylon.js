@@ -1,5 +1,5 @@
 import type { Color3 } from "../Maths/math.color";
-import { Color4 } from "../Maths/math.color.pure";
+import { Color4, Color4LerpToRef } from "../Maths/math.color.pure";
 
 /** Interface used by value gradients (color, factor, ...) */
 export interface IValueGradient {
@@ -43,7 +43,7 @@ export class ColorGradient implements IValueGradient {
             return;
         }
 
-        Color4.LerpToRef(this.color1, this.color2, Math.random(), result);
+        Color4LerpToRef(this.color1, this.color2, Math.random(), result);
     }
 }
 

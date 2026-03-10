@@ -11,7 +11,7 @@ import type { Camera } from "../Cameras/camera";
 import { Texture } from "../Materials/Textures/texture.pure";
 import { SceneComponentConstants } from "../sceneComponent";
 import { Logger } from "../Misc/logger";
-import { Tools } from "../Misc/tools.pure";
+import { ToolsLoadFile } from "../Misc/tools.pure";
 import { WebRequest } from "../Misc/webRequest";
 import type { SpriteRendererOptions } from "./spriteRenderer";
 import { SpriteRenderer } from "./spriteRenderer";
@@ -445,7 +445,7 @@ export class SpriteManager implements ISpriteManager {
                     throw new Error("Invalid JSON format. Please check documentation for format specifications.");
                 }
             };
-            Tools.LoadFile(jsonUrl, onload, undefined, undefined, false, onerror);
+            ToolsLoadFile(jsonUrl, onload, undefined, undefined, false, onerror);
         }
     }
 

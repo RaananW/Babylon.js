@@ -5,12 +5,12 @@ import { GetEnvironmentBRDFTexture, GetEnvironmentFuzzBRDFTexture } from "../../
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
 import type { Color4 } from "../../Maths/math.color";
-import { Color3 } from "../../Maths/math.color.pure";
+import { Color3, Color3Black, Color3White } from "../../Maths/math.color.pure";
 import { ImageProcessingConfiguration } from "../imageProcessingConfiguration.pure";
 import type { BaseTexture } from "../../Materials/Textures/baseTexture";
 import { Texture } from "../Textures/texture.pure";
 import { Material } from "../material";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 import type { Engine } from "../../Engines/engine";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";
 import type { Effect, IEffectCreationOptions } from "../../Materials/effect";
@@ -49,7 +49,7 @@ import { Constants } from "../../Engines/constants";
 import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { MaterialPluginEvent } from "../materialPluginEvent";
 import { MaterialHelperGeometryRendering } from "../materialHelper.geometryrendering";
-import { PrePassConfiguration } from "../prePassConfiguration.pure";
+import { PrePassConfiguration , PrePassConfigurationAddUniforms , PrePassConfigurationAddSamplers } from "../prePassConfiguration.pure";
 import type { IMaterialCompilationOptions, ICustomShaderNameResolveOptions } from "../../Materials/material";
 import { ShaderLanguage } from "../shaderLanguage";
 import { MaterialFlags } from "../materialFlags";
@@ -492,7 +492,7 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
     public baseColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "baseColor")
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    private _baseColor: Property<Color3> = new Property<Color3>("base_color", Color3.White(), "vBaseColor", 4);
+    private _baseColor: Property<Color3> = new Property<Color3>("base_color", Color3White(), "vBaseColor", 4);
 
     /**
      * Base Color Texture property.
@@ -564,7 +564,7 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
     public specularColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "specularColor")
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    private _specularColor: Property<Color3> = new Property<Color3>("specular_color", Color3.White(), "vSpecularColor", 4);
+    private _specularColor: Property<Color3> = new Property<Color3>("specular_color", Color3White(), "vSpecularColor", 4);
 
     /**
      * Specular Color Texture property.
@@ -645,7 +645,7 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
     public transmissionColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionColor")
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    private _transmissionColor: Property<Color3> = new Property<Color3>("transmission_color", Color3.White(), "vTransmissionColor", 3, 0);
+    private _transmissionColor: Property<Color3> = new Property<Color3>("transmission_color", Color3White(), "vTransmissionColor", 3, 0);
 
     /**
      * Transmission color texture.
@@ -681,7 +681,7 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
     public transmissionScatter: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "transmissionScatter")
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    private _transmissionScatter: Property<Color3> = new Property<Color3>("transmission_scatter", Color3.Black(), "vTransmissionScatter", 3, 0);
+    private _transmissionScatter: Property<Color3> = new Property<Color3>("transmission_scatter", Color3Black(), "vTransmissionScatter", 3, 0);
 
     /**
      * Transmission scatter texture.
@@ -753,7 +753,7 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
     public coatColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "coatColor")
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    private _coatColor: Property<Color3> = new Property<Color3>("coat_color", Color3.White(), "vCoatColor", 3, 0);
+    private _coatColor: Property<Color3> = new Property<Color3>("coat_color", Color3White(), "vCoatColor", 3, 0);
 
     /**
      * Color texture of the clear coat.
@@ -862,7 +862,7 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
     public fuzzColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "fuzzColor")
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    private _fuzzColor: Property<Color3> = new Property<Color3>("fuzz_color", Color3.White(), "vFuzzColor", 3, 0);
+    private _fuzzColor: Property<Color3> = new Property<Color3>("fuzz_color", Color3White(), "vFuzzColor", 3, 0);
 
     /**
      * Color texture of the fuzz layer.
@@ -1023,7 +1023,7 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
     public emissionColor: Color3;
     @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "emissionColor")
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    private _emissionColor: Property<Color3> = new Property<Color3>("emission_color", Color3.Black(), "vEmissionColor", 3);
+    private _emissionColor: Property<Color3> = new Property<Color3>("emission_color", Color3Black(), "vEmissionColor", 3);
 
     /**
      * Defines the texture of the material's emission color.
@@ -1927,7 +1927,7 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      * @returns cloned material instance
      */
     public override clone(name: string, cloneTexturesOnlyOnce: boolean = true, rootUrl = ""): OpenPBRMaterial {
-        const clone = SerializationHelper.Clone(() => new OpenPBRMaterial(name, this.getScene()), this, { cloneTexturesOnlyOnce });
+        const clone = SerializationHelperClone(() => new OpenPBRMaterial(name, this.getScene()), this, { cloneTexturesOnlyOnce });
 
         clone.id = name;
         clone.name = name;
@@ -1959,7 +1959,7 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      * @returns - OpenPBRMaterial
      */
     public static override Parse(source: any, scene: Scene, rootUrl: string): OpenPBRMaterial {
-        const material = SerializationHelper.Parse(() => new OpenPBRMaterial(source.name, scene), source, scene, rootUrl);
+        const material = SerializationHelperParse(() => new OpenPBRMaterial(source.name, scene), source, scene, rootUrl);
 
         if (source.stencil) {
             material.stencil.parse(source.stencil, scene, rootUrl);
@@ -2318,7 +2318,7 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
                         }
                     }
 
-                    BindIBLParameters(scene, defines, ubo, Color3.White(), radianceTexture, this.realTimeFiltering, true, true, true, true, true);
+                    BindIBLParameters(scene, defines, ubo, Color3White(), radianceTexture, this.realTimeFiltering, true, true, true, true, true);
                 }
 
                 // Point size
@@ -2749,8 +2749,8 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
 
         MaterialHelperGeometryRendering.AddUniformsAndSamplers(uniforms, samplers);
 
-        PrePassConfiguration.AddUniforms(uniforms);
-        PrePassConfiguration.AddSamplers(samplers);
+        PrePassConfigurationAddUniforms(uniforms);
+        PrePassConfigurationAddSamplers(samplers);
         AddClipPlaneUniforms(uniforms);
 
         if (ImageProcessingConfiguration) {

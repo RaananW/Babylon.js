@@ -2,7 +2,7 @@
 
 import type { Nullable } from "../types";
 import type { Scene } from "../scene";
-import { Color3, Color4 } from "../Maths/math.color.pure";
+import { Color3, Color4, Color3FromArray } from "../Maths/math.color.pure";
 import type { Node } from "../node";
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import type { SubMesh } from "../Meshes/subMesh";
@@ -320,7 +320,7 @@ export class LinesMesh extends Mesh {
     public static override Parse(parsedMesh: any, scene: Scene): LinesMesh {
         const result = new LinesMesh(parsedMesh.name, scene);
 
-        result.color = Color3.FromArray(parsedMesh.color);
+        result.color = Color3FromArray(parsedMesh.color);
         result.alpha = parsedMesh.alpha;
 
         return result;

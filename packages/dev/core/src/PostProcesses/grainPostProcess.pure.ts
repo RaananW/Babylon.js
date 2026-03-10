@@ -7,7 +7,7 @@ import { PostProcess } from "./postProcess.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { Constants } from "../Engines/constants";
 import { serialize } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Scene } from "../scene";
 import { ThinGrainPostProcess } from "./thinGrainPostProcess";
 
@@ -92,7 +92,7 @@ export class GrainPostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string) {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new GrainPostProcess(
                     parsedPostProcess.name,

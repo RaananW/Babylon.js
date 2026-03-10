@@ -16,6 +16,7 @@ import { FrameGraphVolumetricLightingTask } from "core/FrameGraph/Tasks/PostProc
 import { NodeRenderGraphBlockConnectionPointTypes } from "../../Types/nodeRenderGraphTypes";
 import { Vector3 } from "core/Maths/math.vector";
 import { Color3 } from "core/Maths/math.color";
+import { Color3FromArray } from "../../../../Maths/math.color.pure";
 
 /**
  * Block that implements the volumetric lighting post process
@@ -216,6 +217,6 @@ export class NodeRenderGraphVolumetricLightingBlock extends NodeRenderGraphBlock
         super._deserialize(serializationObject);
         this.phaseG = serializationObject.phaseG;
         this.extinction = Vector3.FromArray(serializationObject.extinction);
-        this.lightPower = Color3.FromArray(serializationObject.lightPower);
+        this.lightPower = Color3FromArray(serializationObject.lightPower);
     }
 }

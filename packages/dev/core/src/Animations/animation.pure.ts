@@ -2,7 +2,7 @@
 
 import type { IEasingFunction, EasingFunction } from "./easing";
 import { Vector3, Quaternion, Vector2, Matrix, TmpVectors } from "../Maths/math.vector.pure";
-import { Color3, Color3Black, Color4 } from "../Maths/math.color.pure";
+import { Color3, Color3Black, Color4, Color3FromArray, Color3Lerp, Color3Hermite, Color4Lerp, Color4Hermite, Color4FromArray } from "../Maths/math.color.pure";
 import { Hermite, Lerp } from "../Maths/math.scalar.functions";
 import type { DeepImmutable, Nullable } from "../types";
 import type { Scene } from "../scene";
@@ -12,12 +12,12 @@ import { AnimationRange } from "./animationRange";
 import type { AnimationEvent } from "./animationEvent";
 import type { Node } from "../node";
 import type { IAnimatable } from "./animatable.interface";
-import { Size, SizeZero } from "../Maths/math.size.pure";
+import { Size, SizeZero, SizeLerp } from "../Maths/math.size.pure";
 import { WebRequest } from "../Misc/webRequest";
 import { Constants } from "../Engines/constants";
 import type { Animatable } from "./animatable";
 import type { RuntimeAnimation } from "./runtimeAnimation";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperAppendSerializedAnimations } from "../Misc/decorators.serialization.pure";
 
 // Static values to help the garbage collector
 
@@ -644,7 +644,7 @@ export class Animation {
      * @returns Interpolated Size value
      */
     public sizeInterpolateFunction(startValue: Size, endValue: Size, gradient: number): Size {
-        return Size.Lerp(startValue, endValue, gradient);
+        return SizeLerp(startValue, endValue, gradient);
     }
 
     /**
@@ -655,7 +655,7 @@ export class Animation {
      * @returns Interpolated Color3 value
      */
     public color3InterpolateFunction(startValue: Color3, endValue: Color3, gradient: number): Color3 {
-        return Color3.Lerp(startValue, endValue, gradient);
+        return Color3Lerp(startValue, endValue, gradient);
     }
 
     /**
@@ -668,7 +668,7 @@ export class Animation {
      * @returns interpolated value
      */
     public color3InterpolateFunctionWithTangents(startValue: Color3, outTangent: Color3, endValue: Color3, inTangent: Color3, gradient: number): Color3 {
-        return Color3.Hermite(startValue, outTangent, endValue, inTangent, gradient);
+        return Color3Hermite(startValue, outTangent, endValue, inTangent, gradient);
     }
 
     /**
@@ -679,7 +679,7 @@ export class Animation {
      * @returns Interpolated Color3 value
      */
     public color4InterpolateFunction(startValue: Color4, endValue: Color4, gradient: number): Color4 {
-        return Color4.Lerp(startValue, endValue, gradient);
+        return Color4Lerp(startValue, endValue, gradient);
     }
 
     /**
@@ -692,7 +692,7 @@ export class Animation {
      * @returns interpolated value
      */
     public color4InterpolateFunctionWithTangents(startValue: Color4, outTangent: Color4, endValue: Color4, inTangent: Color4, gradient: number): Color4 {
-        return Color4.Hermite(startValue, outTangent, endValue, inTangent, gradient);
+        return Color4Hermite(startValue, outTangent, endValue, inTangent, gradient);
     }
 
     /**
@@ -1275,6 +1275,7 @@ export class Animation {
 /**
  * @internal Internal use
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function Animation_PrepareAnimation(
     name: string,
     targetProperty: string,
@@ -1521,6 +1522,7 @@ export function AnimationTransitionTo(
 /**
  * @internal
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function Animation_UniversalLerp(left: any, right: any, amount: number): any {
     const constructor = left.constructor;
     if (constructor.Lerp) {
@@ -1603,27 +1605,27 @@ export function AnimationParse(parsedAnimation: any): Animation {
                 }
                 break;
             case Animation.ANIMATIONTYPE_COLOR3:
-                data = Color3.FromArray(key.values);
+                data = Color3FromArray(key.values);
                 if (key.values[3]) {
-                    inTangent = Color3.FromArray(key.values[3]);
+                    inTangent = Color3FromArray(key.values[3]);
                 }
                 if (key.values[4]) {
-                    outTangent = Color3.FromArray(key.values[4]);
+                    outTangent = Color3FromArray(key.values[4]);
                 }
                 if (key.values[5]) {
                     interpolation = key.values[5];
                 }
                 break;
             case Animation.ANIMATIONTYPE_COLOR4:
-                data = Color4.FromArray(key.values);
+                data = Color4FromArray(key.values);
                 if (key.values[4]) {
-                    inTangent = Color4.FromArray(key.values[4]);
+                    inTangent = Color4FromArray(key.values[4]);
                 }
                 if (key.values[5]) {
-                    outTangent = Color4.FromArray(key.values[5]);
+                    outTangent = Color4FromArray(key.values[5]);
                 }
                 if (key.values[6]) {
-                    interpolation = Color4.FromArray(key.values[6]);
+                    interpolation = Color4FromArray(key.values[6]);
                 }
                 break;
             case Animation.ANIMATIONTYPE_VECTOR3:
@@ -1675,7 +1677,7 @@ export function AnimationParse(parsedAnimation: any): Animation {
  * @param destination Target to store the animations
  */
 export function AnimationAppendSerializedAnimations(source: IAnimatable, destination: any): void {
-    SerializationHelper.AppendSerializedAnimations(source, destination);
+    SerializationHelperAppendSerializedAnimations(source, destination);
 }
 
 declare module "./animation" {

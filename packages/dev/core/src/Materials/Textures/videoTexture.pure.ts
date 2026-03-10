@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { Observable } from "../../Misc/observable";
-import { Tools } from "../../Misc/tools.pure";
+import { Tools, ToolsSetCorsBehavior } from "../../Misc/tools.pure";
 import { Logger } from "../../Misc/logger";
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
@@ -263,15 +263,15 @@ export class VideoTexture extends Texture {
             return <HTMLVideoElement>src;
         }
         if (src instanceof HTMLVideoElement) {
-            Tools.SetCorsBehavior(src.currentSrc, src);
+            ToolsSetCorsBehavior(src.currentSrc, src);
             return src;
         }
         const video: HTMLVideoElement = document.createElement("video");
         if (typeof src === "string") {
-            Tools.SetCorsBehavior(src, video);
+            ToolsSetCorsBehavior(src, video);
             video.src = src;
         } else {
-            Tools.SetCorsBehavior(src[0], video);
+            ToolsSetCorsBehavior(src[0], video);
             for (const url of src) {
                 const source = document.createElement("source");
                 source.src = url;

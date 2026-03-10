@@ -15,7 +15,7 @@ import type { AbstractEngine } from "../../Engines/abstractEngine";
 import { ThinTexture } from "./thinTexture";
 
 import type { Animation } from "../../Animations/animation";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperAppendSerializedAnimations, SerializationHelperSerialize } from "../../Misc/decorators.serialization.pure";
 import type { IAssetContainer } from "core/IAssetContainer";
 
 /**
@@ -881,10 +881,10 @@ export class BaseTexture extends ThinTexture implements IAnimatable {
             return null;
         }
 
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
 
         // Animations
-        SerializationHelper.AppendSerializedAnimations(this, serializationObject);
+        SerializationHelperAppendSerializedAnimations(this, serializationObject);
 
         return serializationObject;
     }

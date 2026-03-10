@@ -30,7 +30,7 @@ import { SubSurfaceBlock } from "./subSurfaceBlock.pure";
 import type { RefractionBlock } from "./refractionBlock";
 import type { PerturbNormalBlock } from "../Fragment/perturbNormalBlock";
 import { Constants } from "../../../../Engines/constants";
-import { Color3 } from "../../../../Maths/math.color.pure";
+import { Color3, Color3White } from "../../../../Maths/math.color.pure";
 import { Logger } from "core/Misc/logger";
 import {
     BindLight,
@@ -95,7 +95,7 @@ export class PBRMetallicRoughnessBlock extends NodeMaterialBlock {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     private _vNormalWName: string;
     private _invertNormalName: string;
-    private _metallicReflectanceColor: Color3 = Color3.White();
+    private _metallicReflectanceColor: Color3 = Color3White();
     private _metallicF0Factor = 1;
     private _vMetallicReflectanceFactorsName: string;
     private _baseDiffuseRoughnessName: string;

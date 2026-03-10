@@ -3,7 +3,7 @@
 import { Vector4, Vector3, Vector2 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
 import { Mesh } from "../mesh.pure";
-import { VertexData } from "../mesh.vertexData.pure";
+import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import { Scene } from "../../scene.pure";
 import type { Nullable } from "../../types";
 import { Axis } from "../../Maths/math.axis";
@@ -285,7 +285,7 @@ export function CreateCylinderVertexData(options: {
     }
 
     // Sides
-    VertexData._ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
+    VertexData_ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
 
     const vertexData = new VertexData();
 

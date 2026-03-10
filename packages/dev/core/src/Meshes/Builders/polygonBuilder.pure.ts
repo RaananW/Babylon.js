@@ -5,7 +5,7 @@ import type { Vector3 } from "../../Maths/math.vector";
 import { Vector2, Vector4 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
 import { Mesh } from "../mesh.pure";
-import { VertexData } from "../mesh.vertexData.pure";
+import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import { PolygonMeshBuilder } from "../polygonMesh.pure";
 import type { FloatArray, IndicesArray, Nullable } from "../../types";
 import { VertexBuffer } from "../../Buffers/buffer.pure";
@@ -115,7 +115,7 @@ export function CreatePolygonVertexData(polygon: Mesh, sideOrientation: number, 
     }
 
     // sides
-    VertexData._ComputeSides(sideOrientation, positions, indices, normals, uvs, frontUVs, backUVs);
+    VertexData_ComputeSides(sideOrientation, positions, indices, normals, uvs, frontUVs, backUVs);
 
     // Result
     const vertexData = new VertexData();

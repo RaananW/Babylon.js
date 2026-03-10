@@ -3,7 +3,7 @@
 import type { ArcRotateCamera } from "../../Cameras/arcRotateCamera";
 import type { ICameraInput } from "../../Cameras/cameraInputsManager";
 import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
-import { Tools } from "../../Misc/tools.pure";
+import { ToolsBackCompatCameraNoPreventDefault, ToolsWarn, ToolsError } from "../../Misc/tools.pure";
 
 // Module augmentation to abstract orientation inputs from camera.
 declare module "../../Cameras/arcRotateCameraInputsManager" {
@@ -55,7 +55,7 @@ export class ArcRotateCameraVRDeviceOrientationInput implements ICameraInput<Arc
      * @param noPreventDefault Defines whether event caught by the controls should call preventdefault() (https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
      */
     public attachControl(noPreventDefault?: boolean): void {
-        noPreventDefault = Tools.BackCompatCameraNoPreventDefault(arguments);
+        noPreventDefault = ToolsBackCompatCameraNoPreventDefault(arguments);
 
         this.camera.attachControl(noPreventDefault);
 
@@ -71,12 +71,12 @@ export class ArcRotateCameraVRDeviceOrientationInput implements ICameraInput<Arc
                         if (response === "granted") {
                             hostWindow.addEventListener("deviceorientation", this._deviceOrientationHandler);
                         } else {
-                            Tools.Warn("Permission not granted.");
+                            ToolsWarn("Permission not granted.");
                         }
                     })
                     // eslint-disable-next-line github/no-then
                     .catch((error: any) => {
-                        Tools.Error(error);
+                        ToolsError(error);
                     });
             } else {
                 hostWindow.addEventListener("deviceorientation", this._deviceOrientationHandler);

@@ -8,7 +8,7 @@ import type { NodeGeometryBlock } from "./nodeGeometryBlock";
 import { NodeGeometryBuildState } from "./nodeGeometryBuildState";
 import { GetClass } from "../../Misc/typeStore";
 import { serialize } from "../../Misc/decorators";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 import { Constants } from "../../Engines/constants";
 import { WebRequest } from "../../Misc/webRequest";
 import { BoxBlock } from "./Blocks/Sources/boxBlock.pure";
@@ -16,7 +16,7 @@ import type { GeometryInputBlock } from "./Blocks/geometryInputBlock";
 import { PrecisionDate } from "../../Misc/precisionDate";
 import type { TeleportOutBlock } from "./Blocks/Teleport/teleportOutBlock";
 import type { TeleportInBlock } from "./Blocks/Teleport/teleportInBlock";
-import { Tools } from "../../Misc/tools.pure";
+import { Tools, ToolsWarn } from "../../Misc/tools.pure";
 import type { Color4 } from "../../Maths/math.color";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 
@@ -151,7 +151,7 @@ export class NodeGeometry {
                 if (!result) {
                     result = block;
                 } else {
-                    Tools.Warn("More than one block was found with the name `" + name + "`");
+                    ToolsWarn("More than one block was found with the name `" + name + "`");
                     return result;
                 }
             }
@@ -586,7 +586,7 @@ export class NodeGeometry {
     public clone(name: string): NodeGeometry {
         const serializationObject = this.serialize();
 
-        const clone = SerializationHelper.Clone(() => new NodeGeometry(name), this);
+        const clone = SerializationHelperClone(() => new NodeGeometry(name), this);
         clone.name = name;
 
         clone.parseSerializedObject(serializationObject);
@@ -602,7 +602,7 @@ export class NodeGeometry {
      * @returns the serialized geometry object
      */
     public serialize(selectedBlocks?: NodeGeometryBlock[]): any {
-        const serializationObject = selectedBlocks ? {} : SerializationHelper.Serialize(this);
+        const serializationObject = selectedBlocks ? {} : SerializationHelperSerialize(this);
         serializationObject.editorData = JSON.parse(JSON.stringify(this.editorData)); // Copy
 
         let blocks: NodeGeometryBlock[] = [];
@@ -668,7 +668,7 @@ export function NodeGeometryCreateDefault(name: string) {
  * @returns a new node geometry
  */
 export function NodeGeometryParse(source: any): NodeGeometry {
-    const nodeGeometry = SerializationHelper.Parse(() => new NodeGeometry(source.name), source, null);
+    const nodeGeometry = SerializationHelperParse(() => new NodeGeometry(source.name), source, null);
 
     nodeGeometry.parseSerializedObject(source);
     nodeGeometry.build();
@@ -698,7 +698,7 @@ export function NodeGeometryParseFromSnippetAsync(snippetId: string, nodeGeometr
                     const serializationObject = JSON.parse(snippet.nodeGeometry);
 
                     if (!nodeGeometry) {
-                        nodeGeometry = SerializationHelper.Parse(() => new NodeGeometry(snippetId), serializationObject, null);
+                        nodeGeometry = SerializationHelperParse(() => new NodeGeometry(snippetId), serializationObject, null);
                     }
 
                     nodeGeometry.parseSerializedObject(serializationObject);

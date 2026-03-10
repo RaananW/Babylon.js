@@ -5,7 +5,7 @@ import type { WebGPUEngine } from "../Engines/webgpuEngine";
 import type { Scene } from "../scene";
 import type { Nullable } from "../types";
 import { serialize } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { ComputeEffect, IComputeEffectCreationOptions, IComputeShaderPath } from "./computeEffect";
 import type { ComputeBindingMapping } from "../Engines/Extensions/engine.computeShader";
 import { ComputeBindingType } from "../Engines/Extensions/engine.computeShader.pure";
@@ -473,7 +473,7 @@ export class ComputeShader {
      * @returns the serialized compute shader object
      */
     public serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
 
         serializationObject.options = this._options;
         serializationObject.shaderPath = this._shaderPath;
@@ -516,7 +516,7 @@ export class ComputeShader {
      * @returns a new compute shader
      */
     public static Parse(source: any, scene: Scene, rootUrl: string): ComputeShader {
-        const compute = SerializationHelper.Parse(
+        const compute = SerializationHelperParse(
             () => new ComputeShader(source.name, scene.getEngine() as WebGPUEngine, source.shaderPath, source.options),
             source,
             scene,

@@ -4,11 +4,11 @@ import { serialize, serializeAsColor3, expandToProperty, serializeAsTexture } fr
 import { GetEnvironmentBRDFTexture } from "../../Misc/brdfTextureTools";
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
-import { Color3 } from "../../Maths/math.color.pure";
+import { Color3, Color3White } from "../../Maths/math.color.pure";
 import type { BaseTexture } from "../../Materials/Textures/baseTexture";
 import { PBRBaseMaterial } from "./pbrBaseMaterial.pure";
 import { Material } from "../material";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 
 /**
  * The Physically based material of BJS.
@@ -203,7 +203,7 @@ export class PBRMaterial extends PBRBaseMaterial {
      */
     @serializeAsColor3()
     @expandToProperty("_markAllSubMeshesAsTexturesDirty")
-    public metallicReflectanceColor = Color3.White();
+    public metallicReflectanceColor = Color3White();
 
     /**
      * Specifies that only the A channel from metallicReflectanceTexture should be used.
@@ -684,7 +684,7 @@ export class PBRMaterial extends PBRBaseMaterial {
      * @returns cloned material instance
      */
     public override clone(name: string, cloneTexturesOnlyOnce: boolean = true, rootUrl = ""): PBRMaterial {
-        const clone = SerializationHelper.Clone(() => new PBRMaterial(name, this.getScene()), this, { cloneTexturesOnlyOnce });
+        const clone = SerializationHelperClone(() => new PBRMaterial(name, this.getScene()), this, { cloneTexturesOnlyOnce });
 
         clone.id = name;
         clone.name = name;
@@ -716,7 +716,7 @@ export class PBRMaterial extends PBRBaseMaterial {
      * @returns - PBRMaterial
      */
     public static override Parse(source: any, scene: Scene, rootUrl: string): PBRMaterial {
-        const material = SerializationHelper.Parse(() => new PBRMaterial(source.name, scene), source, scene, rootUrl);
+        const material = SerializationHelperParse(() => new PBRMaterial(source.name, scene), source, scene, rootUrl);
 
         if (source.stencil) {
             material.stencil.parse(source.stencil, scene, rootUrl);

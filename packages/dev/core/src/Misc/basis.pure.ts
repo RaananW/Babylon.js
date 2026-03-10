@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable } from "../types";
-import { Tools } from "./tools.pure";
+import { Tools, ToolsLoadFileAsync, ToolsWarn } from "./tools.pure";
 import { Texture } from "../Materials/Textures/texture.pure";
 import { InternalTexture, InternalTextureSource } from "../Materials/Textures/internalTexture";
 import { Constants } from "../Engines/constants";
@@ -173,7 +173,7 @@ const CreateWorkerAsync = async () => {
             if (LocalWorker) {
                 res(LocalWorker);
             } else {
-                Tools.LoadFileAsync(Tools.GetBabylonScriptURL(BasisToolsOptions.WasmModuleURL))
+                ToolsLoadFileAsync(Tools.GetBabylonScriptURL(BasisToolsOptions.WasmModuleURL))
                     // eslint-disable-next-line github/no-then
                     .then((wasmBinary) => {
                         if (typeof URL !== "function") {
@@ -320,7 +320,7 @@ export const LoadTextureFromTranscodeResult = (texture: InternalTexture, transco
             }
 
             if (engine._features.basisNeedsPOT && (Math.log2(texture.width) % 1 !== 0 || Math.log2(texture.height) % 1 !== 0)) {
-                Tools.Warn(
+                ToolsWarn(
                     "Loaded .basis texture width and height are not a power of two. Texture wrapping will be set to Texture.CLAMP_ADDRESSMODE as other modes are not supported with non power of two dimensions in webGL 1."
                 );
                 texture._cachedWrapU = Texture.CLAMP_ADDRESSMODE;

@@ -22,7 +22,7 @@ import { WebGPUShaderProcessorWGSL } from "./WebGPU/webgpuShaderProcessorsWGSL.p
 import type { _IShaderProcessingContext } from "./Processors/shaderProcessingOptions";
 import { WebGPUShaderProcessingContext } from "./WebGPU/webgpuShaderProcessingContext";
 import { Tools } from "../Misc/tools.pure";
-import { WebGPUTextureHelper } from "./WebGPU/webgpuTextureHelper.pure";
+import { WebGPUTextureHelperIsImageBitmap, WebGPUTextureHelperGetWebGPUTextureFormat, WebGPUTextureHelperHasStencilAspect, WebGPUTextureHelperHasDepthAspect, WebGPUTextureHelperGetSample } from "./WebGPU/webgpuTextureHelper.pure";
 import { WebGPUTextureManager } from "./WebGPU/webgpuTextureManager";
 import { AbstractEngine } from "./abstractEngine";
 import type { ISceneLike, AbstractEngineOptions } from "./abstractEngine";
@@ -2439,7 +2439,7 @@ export class WebGPUEngine extends ThinWebGPUEngine {
                     // the texture could have been created before reaching this point so don't recreate it if already existing
                     const gpuTextureWrapper = this._textureHelper.createGPUTextureForInternalTexture(texture, imageBitmap.width, imageBitmap.height, undefined, creationFlags);
 
-                    if (WebGPUTextureHelper.IsImageBitmap(imageBitmap)) {
+                    if (WebGPUTextureHelperIsImageBitmap(imageBitmap)) {
                         this._textureHelper.updateTexture(
                             imageBitmap,
                             texture,
@@ -3067,8 +3067,8 @@ export class WebGPUEngine extends ThinWebGPUEngine {
             format = gpuDepthStencilWrapper.format;
         }
 
-        const depthTextureHasStencil = format ? WebGPUTextureHelper.HasStencilAspect(format) : false;
-        const depthTextureHasDepth = format ? WebGPUTextureHelper.HasDepthAspect(format) : false;
+        const depthTextureHasStencil = format ? WebGPUTextureHelperHasStencilAspect(format) : false;
+        const depthTextureHasDepth = format ? WebGPUTextureHelperHasDepthAspect(format) : false;
 
         const colorAttachments: (GPURenderPassColorAttachment | null)[] = [];
 
@@ -3198,7 +3198,7 @@ export class WebGPUEngine extends ThinWebGPUEngine {
 
         this._resetRenderPassStates();
 
-        if (!gpuDepthStencilWrapper || !WebGPUTextureHelper.HasStencilAspect(gpuDepthStencilWrapper.format)) {
+        if (!gpuDepthStencilWrapper || !WebGPUTextureHelperHasStencilAspect(gpuDepthStencilWrapper.format)) {
             this._stencilStateComposer.enabled = false;
         }
     }
@@ -3291,7 +3291,7 @@ export class WebGPUEngine extends ThinWebGPUEngine {
         const depthStencilTexture = this._currentRenderTarget._depthStencilTexture;
 
         this._rttRenderPassWrapper.colorAttachmentGPUTextures[0] = hardwareTexture;
-        this._rttRenderPassWrapper.depthTextureFormat = depthStencilTexture ? WebGPUTextureHelper.GetWebGPUTextureFormat(-1, depthStencilTexture.format) : undefined;
+        this._rttRenderPassWrapper.depthTextureFormat = depthStencilTexture ? WebGPUTextureHelperGetWebGPUTextureFormat(-1, depthStencilTexture.format) : undefined;
 
         this._setDepthTextureFormat(this._rttRenderPassWrapper);
         this._setColorFormat(this._rttRenderPassWrapper);
@@ -3650,7 +3650,7 @@ export class WebGPUEngine extends ThinWebGPUEngine {
                 renderPass2 = this._device.createRenderBundleEncoder({
                     colorFormats: this._cacheRenderPipeline.colorFormats,
                     depthStencilFormat: this._depthTextureFormat,
-                    sampleCount: WebGPUTextureHelper.GetSample(this.currentSampleCount),
+                    sampleCount: WebGPUTextureHelperGetSample(this.currentSampleCount),
                 });
             }
         }

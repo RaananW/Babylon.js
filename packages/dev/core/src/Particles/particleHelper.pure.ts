@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 import type { Nullable } from "../types";
 import type { Scene } from "../scene";
-import { Tools } from "../Misc/tools.pure";
+import { Tools, ToolsLoadFile } from "../Misc/tools.pure";
 import type { Vector3 } from "../Maths/math.vector";
 import { Color4 } from "../Maths/math.color.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
@@ -106,7 +106,7 @@ export function ParticleHelperCreateAsync(type: string, scene: Nullable<Scene>, 
             return reject("Particle system with GPU is not supported.");
         }
 
-        Tools.LoadFile(
+        ToolsLoadFile(
             `${ParticleHelper.BaseAssetsUrl}/systems/${type}.json`,
             (data) => {
                 scene!.removePendingData(token);

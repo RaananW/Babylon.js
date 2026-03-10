@@ -10,7 +10,6 @@ import { Quaternion, Matrix, Vector3, TmpVectors } from "../Maths/math.vector.pu
 import type { Node } from "../node";
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import type { IGetSetVerticesData } from "../Meshes/mesh.vertexData";
-import { VertexData } from "../Meshes/mesh.vertexData.pure";
 import { TransformNode } from "../Meshes/transformNode";
 import type { SubMesh } from "../Meshes/subMesh";
 import { PickingInfo } from "../Collisions/pickingInfo";
@@ -32,7 +31,7 @@ import { _MeshCollisionData } from "../Collisions/meshCollisionData";
 import { _WarnImport } from "../Misc/devTools";
 import type { RawTexture } from "../Materials/Textures/rawTexture";
 import { extractMinAndMax } from "../Maths/math.functions";
-import { Color3, Color4 } from "../Maths/math.color.pure";
+import { Color4, Color3Red } from "../Maths/math.color.pure";
 import { Epsilon } from "../Maths/math.constants";
 import type { Plane } from "../Maths/math.plane";
 import { Axis } from "../Maths/math.axis";
@@ -44,6 +43,7 @@ import type { MorphTarget } from "../Morph/morphTarget";
 import type { Geometry } from "./geometry";
 import { nativeOverride } from "../Misc/decorators";
 import { AbstractEngine } from "core/Engines/abstractEngine";
+import { VertexDataComputeNormals } from "./mesh.vertexData.pure";
 
 function ApplyMorph(data: FloatArray, kind: string, morphTargetManager: MorphTargetManager): void {
     let getTargetData: Nullable<(target: MorphTarget) => Nullable<FloatArray>> = null;
@@ -692,12 +692,12 @@ export abstract class AbstractMesh extends TransformNode implements IDisposable,
     }
 
     /** Defines color to use when rendering outline */
-    public outlineColor = Color3.Red();
+    public outlineColor = Color3Red();
     /** Define width to use when rendering outline */
     public outlineWidth = 0.02;
 
     /** Defines color to use when rendering overlay */
-    public overlayColor = Color3.Red();
+    public overlayColor = Color3Red();
     /** Defines alpha to use when rendering overlay */
     public overlayAlpha = 0.5;
 
@@ -2459,7 +2459,7 @@ export abstract class AbstractMesh extends TransformNode implements IDisposable,
         }
         data.facetParameters.depthSortedFacets = data.depthSortedFacets;
         if (normals) {
-            VertexData.ComputeNormals(positions, indices, normals, data.facetParameters);
+            VertexDataComputeNormals(positions, indices, normals, data.facetParameters);
         }
 
         if (data.facetDepthSort && data.facetDepthSortEnabled) {
@@ -2741,7 +2741,7 @@ export abstract class AbstractMesh extends TransformNode implements IDisposable,
             normals = [];
         }
 
-        VertexData.ComputeNormals(positions, indices, normals, { useRightHandedSystem: this.getScene().useRightHandedSystem });
+        VertexDataComputeNormals(positions, indices, normals, { useRightHandedSystem: this.getScene().useRightHandedSystem });
         this.setVerticesData(VertexBuffer.NormalKind, normals, updatable);
         return this;
     }

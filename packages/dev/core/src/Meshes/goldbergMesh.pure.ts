@@ -5,7 +5,7 @@ import type { Vector2 } from "../Maths/math.vector";
 import { Vector3 } from "../Maths/math.vector.pure";
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import { Mesh } from "../Meshes/mesh.pure";
-import { Color4 } from "../Maths/math.color.pure";
+import { Color4, Color4FromArray } from "../Maths/math.color.pure";
 import { Logger } from "../Misc/logger";
 import type { FloatArray } from "../types";
 
@@ -285,7 +285,7 @@ export class GoldbergMesh extends Mesh {
      */
     public static override Parse(parsedMesh: any, scene: Scene): GoldbergMesh {
         const goldbergData = parsedMesh.goldbergData;
-        goldbergData.faceColors = goldbergData.faceColors.map((el: number[]) => Color4.FromArray(el));
+        goldbergData.faceColors = goldbergData.faceColors.map((el: number[]) => Color4FromArray(el));
         goldbergData.faceCenters = goldbergData.faceCenters.map((el: number[]) => Vector3.FromArray(el));
         goldbergData.faceZaxis = goldbergData.faceZaxis.map((el: number[]) => Vector3.FromArray(el));
         goldbergData.faceXaxis = goldbergData.faceXaxis.map((el: number[]) => Vector3.FromArray(el));

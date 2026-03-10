@@ -9,6 +9,7 @@ import { Constants } from "core/Engines/constants";
 import { NodeRenderGraphConnectionPointCustomObject } from "../../nodeRenderGraphConnectionPointCustomObject";
 import { NodeRenderGraphBaseObjectRendererBlock } from "../Rendering/baseObjectRendererBlock";
 import { Color3 } from "core/Maths/math.color";
+import { Color3FromArray } from "../../../../Maths/math.color.pure";
 
 /**
  * Block that implements the selection outline layer
@@ -254,7 +255,7 @@ export class NodeRenderGraphSelectionOutlineLayerBlock extends NodeRenderGraphBl
 
     public override _deserialize(serializationObject: any) {
         super._deserialize(serializationObject);
-        this.outlineColor = Color3.FromArray(serializationObject.outlineColor);
+        this.outlineColor = Color3FromArray(serializationObject.outlineColor);
         this.outlineThickness = serializationObject.outlineThickness;
         this.occlusionStrength = serializationObject.occlusionStrength;
         this.occlusionThreshold = serializationObject.occlusionThreshold;

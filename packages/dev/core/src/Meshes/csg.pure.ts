@@ -6,7 +6,7 @@ import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { SubMesh } from "../Meshes/subMesh";
 import { Mesh } from "../Meshes/mesh.pure";
 import type { Material } from "../Materials/material";
-import { Color4 } from "../Maths/math.color.pure";
+import { Color4, Color4Lerp, Color4FromArray } from "../Maths/math.color.pure";
 import { Constants } from "../Engines/constants";
 import { VertexData } from "./mesh.vertexData.pure";
 /**
@@ -80,7 +80,7 @@ class Vertex {
             Vector3.Lerp(this.pos, other.pos, t),
             Vector3.Lerp(this.normal, other.normal, t),
             this.uv && other.uv ? Vector2.Lerp(this.uv, other.uv, t) : undefined,
-            this.vertColor && other.vertColor ? Color4.Lerp(this.vertColor, other.vertColor, t) : undefined
+            this.vertColor && other.vertColor ? Color4Lerp(this.vertColor, other.vertColor, t) : undefined
         );
     }
 }
@@ -879,7 +879,7 @@ export function CSGFromVertexData(data: VertexData): CSG {
 
             const normal = normals ? Vector3.FromArray(normals, offset * 3) : Vector3.Zero();
             const uv = uvs ? Vector2.FromArray(uvs, offset * 2) : undefined;
-            const vertColor = vertColors ? Color4.FromArray(vertColors, offset * 4) : undefined;
+            const vertColor = vertColors ? Color4FromArray(vertColors, offset * 4) : undefined;
 
             const position = Vector3.FromArray(positions, offset * 3);
 

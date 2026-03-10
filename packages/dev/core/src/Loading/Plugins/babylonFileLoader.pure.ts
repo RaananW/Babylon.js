@@ -21,14 +21,14 @@ import { AssetContainer } from "../../assetContainer";
 import { ActionManager } from "../../Actions/actionManager";
 import { Skeleton } from "../../Bones/skeleton";
 import { MorphTargetManager } from "../../Morph/morphTargetManager";
-import { ReflectionProbe } from "../../Probes/reflectionProbe.pure";
+import { ReflectionProbeParse } from "../../Probes/reflectionProbe.pure";
 import { GetClass } from "../../Misc/typeStore";
-import { Tools } from "../../Misc/tools.pure";
+import { ToolsWarn } from "../../Misc/tools.pure";
 import { PostProcess } from "../../PostProcesses/postProcess.pure";
-import { SpriteManager } from "core/Sprites/spriteManager";
 import { Parse } from "./babylonFileParser.function";
 import { Observable } from "../../Misc/observable";
 import type { MorphTarget } from "../../Morph/morphTarget";
+import { SpriteManagerParse } from "../../Sprites/spriteManager.pure";
 
 /** @internal */
 // eslint-disable-next-line @typescript-eslint/naming-convention, no-var
@@ -99,7 +99,7 @@ export const LoadDetailLevels = (scene: Scene, mesh: AbstractMesh) => {
                         mastermesh.setEnabled(true);
                     }
                 } else {
-                    Tools.Warn("Invalid level of detail distances for " + mesh.name);
+                    ToolsWarn("Invalid level of detail distances for " + mesh.name);
                 }
             }
         }
@@ -255,7 +255,7 @@ export const LoadAssetContainer = (
         if (parsedData.reflectionProbes !== undefined && parsedData.reflectionProbes !== null) {
             for (index = 0, cache = parsedData.reflectionProbes.length; index < cache; index++) {
                 const parsedReflectionProbe = parsedData.reflectionProbes[index];
-                const reflectionProbe = ReflectionProbe.Parse(parsedReflectionProbe, scene, rootUrl);
+                const reflectionProbe = ReflectionProbeParse(parsedReflectionProbe, scene, rootUrl);
                 if (reflectionProbe) {
                     container.reflectionProbes.push(reflectionProbe);
                     reflectionProbe._parentContainer = container;
@@ -539,7 +539,7 @@ export const LoadAssetContainer = (
         if (parsedData.spriteManagers) {
             for (let index = 0, cache = parsedData.spriteManagers.length; index < cache; index++) {
                 const parsedSpriteManager = parsedData.spriteManagers[index];
-                const spriteManager = SpriteManager.Parse(parsedSpriteManager, scene, rootUrl);
+                const spriteManager = SpriteManagerParse(parsedSpriteManager, scene, rootUrl);
                 container.spriteManagers.push(spriteManager);
                 spriteManager._parentContainer = container;
                 log += "\n\t\tSpriteManager " + spriteManager.name;

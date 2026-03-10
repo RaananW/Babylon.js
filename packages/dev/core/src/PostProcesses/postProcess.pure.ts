@@ -13,7 +13,7 @@ import type { IInspectable } from "../Misc/iInspectable";
 import type { Color4 } from "../Maths/math.color";
 import type { NodeMaterial } from "../Materials/Node/nodeMaterial";
 import { serialize, serializeAsColor4 } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import { GetClass } from "../Misc/typeStore";
 import type { RenderTargetWrapper } from "../Engines/renderTargetWrapper";
 import { ShaderLanguage } from "../Materials/shaderLanguage";
@@ -1160,7 +1160,7 @@ export class PostProcess {
      * @returns the JSON object
      */
     public serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
         const camera = this.getCamera() || (this._scene && this._scene.activeCamera);
         serializationObject.customType = "BABYLON." + this.getClassName();
         serializationObject.cameraId = camera ? camera.id : null;
@@ -1227,7 +1227,7 @@ export class PostProcess {
      * @internal
      */
     public static _Parse(parsedPostProcess: any, targetCamera: Nullable<Camera>, scene: Nullable<Scene>, rootUrl: string): Nullable<PostProcess> {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new PostProcess(
                     parsedPostProcess.name,

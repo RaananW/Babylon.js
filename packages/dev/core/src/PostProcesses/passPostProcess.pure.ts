@@ -6,7 +6,7 @@ import type { Camera } from "../Cameras/camera";
 import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess.pure";
 import { AbstractEngine } from "../Engines/abstractEngine";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Scene } from "../scene";
 import { ThinPassCubePostProcess, ThinPassPostProcess } from "./thinPassPostProcess";
 import { serialize } from "core/Misc/decorators";
@@ -65,7 +65,7 @@ export class PassPostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string) {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new PassPostProcess(
                     parsedPostProcess.name,
@@ -157,7 +157,7 @@ export class PassCubePostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string) {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new PassCubePostProcess(
                     parsedPostProcess.name,

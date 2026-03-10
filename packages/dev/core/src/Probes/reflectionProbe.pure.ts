@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { serializeAsMeshReference, serializeAsVector3 } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture.pure";
 import { Matrix, Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
@@ -319,7 +319,7 @@ export class ReflectionProbe {
      * @returns The JSON representation of the texture
      */
     public serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this, this._renderTargetTexture.serialize());
+        const serializationObject = SerializationHelperSerialize(this, this._renderTargetTexture.serialize());
         serializationObject.isReflectionProbe = true;
         serializationObject.metadata = this.metadata;
 
@@ -346,7 +346,7 @@ export function ReflectionProbeParse(parsedReflectionProbe: any, scene: Scene, r
         }
     }
 
-    reflectionProbe = SerializationHelper.Parse(
+    reflectionProbe = SerializationHelperParse(
         () => reflectionProbe || new ReflectionProbe(parsedReflectionProbe.name, parsedReflectionProbe.renderTargetSize, scene, parsedReflectionProbe._generateMipMaps),
         parsedReflectionProbe,
         scene,

@@ -2,7 +2,7 @@
 
 import type { Nullable } from "../../../types";
 import { serialize, serializeAsTexture } from "../../../Misc/decorators";
-import { SerializationHelper } from "../../../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse } from "../../../Misc/decorators.serialization.pure";
 import type { IAnimatable } from "../../../Animations/animatable.interface";
 import { Logger } from "../../../Misc/logger";
 import { Vector2, Vector3, Matrix, Vector4 } from "../../../Maths/math.vector.pure";
@@ -1644,14 +1644,14 @@ export class StandardRenderingPipeline extends PostProcessRenderPipeline impleme
      * @returns the serialized object
      */
     public serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
 
         if (this.sourceLight) {
             serializationObject.sourceLightId = this.sourceLight.id;
         }
 
         if (this.screenSpaceReflectionPostProcess) {
-            serializationObject.screenSpaceReflectionPostProcess = SerializationHelper.Serialize(this.screenSpaceReflectionPostProcess);
+            serializationObject.screenSpaceReflectionPostProcess = SerializationHelperSerialize(this.screenSpaceReflectionPostProcess);
         }
 
         serializationObject.customType = "StandardRenderingPipeline";
@@ -1667,14 +1667,14 @@ export class StandardRenderingPipeline extends PostProcessRenderPipeline impleme
      * @returns An instantiated pipeline from the serialized object.
      */
     public static Parse(source: any, scene: Scene, rootUrl: string): StandardRenderingPipeline {
-        const p = SerializationHelper.Parse(() => new StandardRenderingPipeline(source._name, scene, source._ratio), source, scene, rootUrl);
+        const p = SerializationHelperParse(() => new StandardRenderingPipeline(source._name, scene, source._ratio), source, scene, rootUrl);
 
         if (source.sourceLightId) {
             p.sourceLight = <SpotLight | DirectionalLight>scene.getLightById(source.sourceLightId);
         }
 
         if (source.screenSpaceReflectionPostProcess) {
-            SerializationHelper.Parse(() => p.screenSpaceReflectionPostProcess, source.screenSpaceReflectionPostProcess, scene, rootUrl);
+            SerializationHelperParse(() => p.screenSpaceReflectionPostProcess, source.screenSpaceReflectionPostProcess, scene, rootUrl);
         }
 
         return p;

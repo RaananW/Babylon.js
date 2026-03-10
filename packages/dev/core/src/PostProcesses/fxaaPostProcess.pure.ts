@@ -8,7 +8,7 @@ import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { Constants } from "../Engines/constants";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import { ThinFXAAPostProcess } from "./thinFXAAPostProcess";
 import type { Scene } from "../scene";
 
@@ -61,7 +61,7 @@ export class FxaaPostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string) {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new FxaaPostProcess(
                     parsedPostProcess.name,

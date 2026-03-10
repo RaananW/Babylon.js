@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable } from "./types";
-import { Tools } from "./Misc/tools.pure";
+import { Tools, ToolsSetImmediate, ToolsRandomId } from "./Misc/tools.pure";
 import type { IAnimatable } from "./Animations/animatable.interface";
 import { PrecisionDate } from "./Misc/precisionDate";
 import type { Observer } from "./Misc/observable";
@@ -9,7 +9,7 @@ import { Observable } from "./Misc/observable";
 import type { ISmartArrayLike } from "./Misc/smartArray";
 import { SmartArrayNoDuplicate, SmartArray } from "./Misc/smartArray";
 import { StringDictionary } from "./Misc/stringDictionary";
-import { Tags } from "./Misc/tags.pure";
+import { Tags, TagsMatchesQuery } from "./Misc/tags.pure";
 import type { Vector2 } from "./Maths/math.vector";
 import { Vector3, Vector4, Matrix } from "./Maths/math.vector.pure";
 import type { IParticleSystem } from "./Particles/IParticleSystem";
@@ -19,7 +19,7 @@ import { PickingInfo } from "./Collisions/pickingInfo";
 import type { ICollisionCoordinator } from "./Collisions/collisionCoordinator";
 import type { PointerEventTypes, PointerInfoPre, PointerInfo } from "./Events/pointerEvents";
 import type { KeyboardInfoPre, KeyboardInfo } from "./Events/keyboardEvents";
-import { ActionEvent } from "./Actions/actionEvent.pure";
+import { ActionEventCreateNew } from "./Actions/actionEvent.pure";
 import { PostProcessManager } from "./PostProcesses/postProcessManager";
 import type { IOfflineProvider } from "./Offline/IOfflineProvider";
 import { FloatingOriginCurrentScene, OverrideMatrixFunctions, ResetMatrixFunctions } from "./Materials/floatingOriginMatrixOverrides";
@@ -53,7 +53,7 @@ import { PerfCounter } from "./Misc/perfCounter";
 import type { IFileRequest } from "./Misc/fileRequest";
 import { Color4, Color3 } from "./Maths/math.color.pure";
 import type { Plane } from "./Maths/math.plane";
-import { Frustum } from "./Maths/math.frustum.pure";
+import { FrustumGetPlanes, FrustumGetPlanesToRef } from "./Maths/math.frustum.pure";
 import { UniqueIdGenerator } from "./Misc/uniqueIdGenerator";
 import type { LoadFileError, RequestFileError, ReadFileError } from "./Misc/fileTools";
 import { ReadFile, RequestFile, LoadFile } from "./Misc/fileTools.pure";
@@ -2778,9 +2778,9 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
 
         // Update frustum
         if (!this._frustumPlanes) {
-            this._frustumPlanes = Frustum.GetPlanes(this._transformMatrix);
+            this._frustumPlanes = FrustumGetPlanes(this._transformMatrix);
         } else {
-            Frustum.GetPlanesToRef(this._transformMatrix, this._frustumPlanes);
+            FrustumGetPlanesToRef(this._transformMatrix, this._frustumPlanes);
         }
 
         if (this._multiviewSceneUboIsActive && this._multiviewSceneUbo!.useUbo) {
@@ -2877,7 +2877,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
             newMesh._addToSceneRootNodes();
         }
 
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewMeshAddedObservable.notifyObservers(newMesh);
         });
 
@@ -3269,7 +3269,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
             }
         }
 
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewLightAddedObservable.notifyObservers(newLight);
         });
     }
@@ -3293,7 +3293,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
         }
 
         this.cameras.push(newCamera);
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewCameraAddedObservable.notifyObservers(newCamera);
         });
 
@@ -3312,7 +3312,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
         }
         this.skeletons.push(newSkeleton);
 
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewSkeletonAddedObservable.notifyObservers(newSkeleton);
         });
     }
@@ -3327,7 +3327,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
         }
         this.particleSystems.push(newParticleSystem);
 
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewParticleSystemAddedObservable.notifyObservers(newParticleSystem);
         });
     }
@@ -3353,7 +3353,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
         }
         this.animationGroups.push(newAnimationGroup);
 
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewAnimationGroupAddedObservable.notifyObservers(newAnimationGroup);
         });
     }
@@ -3367,7 +3367,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
             return;
         }
         this.multiMaterials.push(newMultiMaterial);
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewMultiMaterialAddedObservable.notifyObservers(newMultiMaterial);
         });
     }
@@ -3388,7 +3388,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
 
         newMaterial._indexInSceneMaterialArray = this.materials.length;
         this.materials.push(newMaterial);
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewMaterialAddedObservable.notifyObservers(newMaterial);
         });
     }
@@ -3447,7 +3447,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
      */
     public addFrameGraph(newFrameGraph: FrameGraph): void {
         this.frameGraphs.push(newFrameGraph);
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewFrameGraphAddedObservable.notifyObservers(newFrameGraph);
         });
     }
@@ -3458,7 +3458,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
      */
     public addObjectRenderer(objectRenderer: ObjectRenderer): void {
         this.objectRenderers.push(objectRenderer);
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewObjectRendererAddedObservable.notifyObservers(objectRenderer);
         });
     }
@@ -3472,7 +3472,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
             return;
         }
         this.postProcesses.push(newPostProcess);
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewPostProcessAddedObservable.notifyObservers(newPostProcess);
         });
     }
@@ -3486,7 +3486,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
             return;
         }
         this.effectLayers.push(newEffectLayer);
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewEffectLayerAddedObservable.notifyObservers(newEffectLayer);
         });
     }
@@ -3874,7 +3874,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
 
         this.addGeometry(geometry);
 
-        Tools.SetImmediate(() => {
+        ToolsSetImmediate(() => {
             this.onNewGeometryAddedObservable.notifyObservers(geometry);
         });
 
@@ -4321,7 +4321,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
      */
     public get uid(): string {
         if (!this._uid) {
-            this._uid = Tools.RandomId();
+            this._uid = ToolsRandomId();
         }
         return this._uid;
     }
@@ -5154,7 +5154,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
 
                     if (areIntersecting && currentIntersectionInProgress === -1) {
                         if (action.trigger === Constants.ACTION_OnIntersectionEnterTrigger) {
-                            action._executeCurrent(ActionEvent.CreateNew(sourceMesh, undefined, otherMesh));
+                            action._executeCurrent(ActionEventCreateNew(sourceMesh, undefined, otherMesh));
                             sourceMesh._intersectionsInProgress.push(otherMesh);
                         } else if (action.trigger === Constants.ACTION_OnIntersectionExitTrigger) {
                             sourceMesh._intersectionsInProgress.push(otherMesh);
@@ -5164,7 +5164,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
 
                         //is this trigger an exit trigger? execute an event.
                         if (action.trigger === Constants.ACTION_OnIntersectionExitTrigger) {
-                            action._executeCurrent(ActionEvent.CreateNew(sourceMesh, undefined, otherMesh));
+                            action._executeCurrent(ActionEventCreateNew(sourceMesh, undefined, otherMesh));
                         }
 
                         //if this is an exit trigger, or no exit trigger exists, remove the id from the intersection in progress array.
@@ -6177,7 +6177,7 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
 
         for (const i in list) {
             const item = list[i];
-            if (Tags && Tags.MatchesQuery(item, tagsQuery) && (!filter || filter(item))) {
+            if (Tags && TagsMatchesQuery(item, tagsQuery) && (!filter || filter(item))) {
                 listByTags.push(item);
             }
         }

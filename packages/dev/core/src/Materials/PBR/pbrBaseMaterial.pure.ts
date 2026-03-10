@@ -12,8 +12,8 @@ import type { SubMesh } from "../../Meshes/subMesh";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";
 import type { Mesh } from "../../Meshes/mesh";
 import { PBRBRDFConfiguration } from "./pbrBRDFConfiguration";
-import { PrePassConfiguration } from "../prePassConfiguration.pure";
-import { Color3, TmpColors } from "../../Maths/math.color.pure";
+import { PrePassConfiguration , PrePassConfigurationAddUniforms , PrePassConfigurationAddSamplers } from "../prePassConfiguration.pure";
+import { Color3, TmpColors, Color3White } from "../../Maths/math.color.pure";
 
 import { ImageProcessingDefinesMixin } from "../../Materials/imageProcessingConfiguration.defines";
 import { ImageProcessingConfiguration } from "../../Materials/imageProcessingConfiguration.pure";
@@ -510,7 +510,7 @@ export abstract class PBRBaseMaterial extends PBRBaseMaterialBase {
      * F90 = metallicF0Factor;
      * @internal
      */
-    public _metallicReflectanceColor = Color3.White();
+    public _metallicReflectanceColor = Color3White();
 
     /**
      * Specifies that only the A channel from _metallicReflectanceTexture should be used.
@@ -1500,8 +1500,8 @@ export abstract class PBRBaseMaterial extends PBRBaseMaterialBase {
 
         MaterialHelperGeometryRendering.AddUniformsAndSamplers(uniforms, samplers);
 
-        PrePassConfiguration.AddUniforms(uniforms);
-        PrePassConfiguration.AddSamplers(samplers);
+        PrePassConfigurationAddUniforms(uniforms);
+        PrePassConfigurationAddSamplers(samplers);
         AddClipPlaneUniforms(uniforms);
 
         if (ImageProcessingConfiguration) {

@@ -17,7 +17,7 @@ import type { AnimationPropertiesOverride } from "./Animations/animationProperti
 import type { AbstractMesh } from "./Meshes/abstractMesh";
 import type { Animation } from "./Animations/animation";
 import type { Animatable } from "./Animations/animatable.core";
-import { SerializationHelper } from "./Misc/decorators.serialization.pure";
+import { SerializationHelperClone } from "./Misc/decorators.serialization.pure";
 import type { IAssetContainer } from "./IAssetContainer";
 
 /**
@@ -856,7 +856,7 @@ export class Node implements IBehaviorAware<Node> {
      * @returns the new transform node
      */
     public clone(name: string, newParent: Nullable<Node>, doNotCloneChildren?: boolean): Nullable<Node> {
-        const result = SerializationHelper.Clone(() => new Node(name, this.getScene()), this);
+        const result = SerializationHelperClone(() => new Node(name, this.getScene()), this);
 
         if (newParent) {
             result.parent = newParent;

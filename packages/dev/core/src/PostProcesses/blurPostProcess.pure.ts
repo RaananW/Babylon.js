@@ -9,7 +9,7 @@ import type { Effect } from "../Materials/effect";
 import { Texture } from "../Materials/Textures/texture.pure";
 import { Constants } from "../Engines/constants";
 import { serialize, serializeAsVector2 } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Scene } from "../scene";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import { ThinBlurPostProcess } from "./thinBlurPostProcess";
@@ -147,7 +147,7 @@ export class BlurPostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string): Nullable<BlurPostProcess> {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new BlurPostProcess(
                     parsedPostProcess.name,

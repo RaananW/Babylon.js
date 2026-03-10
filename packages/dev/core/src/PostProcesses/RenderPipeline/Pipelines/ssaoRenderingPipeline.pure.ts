@@ -11,7 +11,7 @@ import { BlurPostProcess } from "../../../PostProcesses/blurPostProcess.pure";
 import { Constants } from "../../../Engines/constants";
 import { serialize } from "../../../Misc/decorators";
 import type { Scene } from "../../../scene";
-import { RawTexture } from "../../../Materials/Textures/rawTexture.pure";
+import { RawTextureCreateRGBATexture } from "../../../Materials/Textures/rawTexture.pure";
 import { RandomRange } from "../../../Maths/math.scalar.functions";
 
 
@@ -348,7 +348,7 @@ export class SSAORenderingPipeline extends PostProcessRenderPipeline {
             data[index++] = 255;
         }
 
-        const texture = RawTexture.CreateRGBATexture(data, size, size, this._scene, false, false, Constants.TEXTURE_BILINEAR_SAMPLINGMODE);
+        const texture = RawTextureCreateRGBATexture(data, size, size, this._scene, false, false, Constants.TEXTURE_BILINEAR_SAMPLINGMODE);
         texture.name = "SSAORandomTexture";
         texture.wrapU = Texture.WRAP_ADDRESSMODE;
         texture.wrapV = Texture.WRAP_ADDRESSMODE;

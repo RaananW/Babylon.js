@@ -12,7 +12,7 @@ import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { MotionBlurConfiguration } from "../Rendering/motionBlurConfiguration";
 import type { PrePassRenderer } from "../Rendering/prePassRenderer";
 import { serialize } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Scene } from "../scene";
 import { ThinMotionBlurPostProcess } from "./thinMotionBlurPostProcess";
@@ -300,7 +300,7 @@ export class MotionBlurPostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string): Nullable<MotionBlurPostProcess> {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new MotionBlurPostProcess(
                     parsedPostProcess.name,

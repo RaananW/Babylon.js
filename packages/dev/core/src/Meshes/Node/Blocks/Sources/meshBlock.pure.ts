@@ -7,6 +7,7 @@ import type { Mesh } from "../../../../Meshes/mesh";
 import { VertexData } from "../../../../Meshes/mesh.vertexData.pure";
 import type { Nullable } from "../../../../types";
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
+import { VertexDataParse } from "../../../mesh.vertexData.pure";
 
 /**
  * Defines a block used to generate a user defined mesh geometry data
@@ -129,7 +130,7 @@ export class MeshBlock extends NodeGeometryBlock {
         super._deserialize(serializationObject);
 
         if (serializationObject.cachedVertexData) {
-            this._cachedVertexData = VertexData.Parse(serializationObject.cachedVertexData);
+            this._cachedVertexData = VertexDataParse(serializationObject.cachedVertexData);
         }
 
         this.serializedCachedData = !!serializationObject.serializedCachedData;

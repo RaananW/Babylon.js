@@ -10,6 +10,7 @@ import { VertexBuffer } from "../Buffers/buffer.pure";
 import { VertexData } from "../Meshes/mesh.vertexData.pure";
 import { Lerp } from "../Maths/math.scalar.functions";
 import type { TransformNode } from "../Meshes/transformNode";
+import { VertexDataComputeNormals } from "./mesh.vertexData.pure";
 
 /**
  * Options to be used when creating a trail mesh
@@ -150,7 +151,7 @@ export class TrailMesh extends Mesh {
                 indices.push(l + j, l + j + this._sectionPolygonPointsCount + 1, l + j + 1);
             }
         }
-        VertexData.ComputeNormals(positions, indices, normals);
+        VertexDataComputeNormals(positions, indices, normals);
         data.positions = positions;
         data.normals = normals;
         data.indices = indices;

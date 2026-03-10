@@ -18,8 +18,8 @@ import { Observable } from "../../Misc/observable";
 import type { InstancedMesh } from "../../Meshes/instancedMesh";
 import type { ISceneLoaderAsyncResult } from "../../Loading/sceneLoader";
 import { SceneLoader } from "../../Loading/sceneLoader";
-import { Color3 } from "../../Maths/math.color.pure";
-import { NodeMaterial } from "../../Materials/Node/nodeMaterial.pure";
+import { Color3, Color3FromInts } from "../../Maths/math.color.pure";
+import { NodeMaterialParseFromFileAsync } from "../../Materials/Node/nodeMaterial.pure";
 import type { InputBlock } from "../../Materials/Node/Blocks/Input/inputBlock";
 import { Material } from "../../Materials/material";
 import { CreateIcoSphere } from "../../Meshes/Builders/icoSphereBuilder.pure";
@@ -690,7 +690,7 @@ export class WebXRHandTracking extends WebXRAbstractFeature {
             // eslint-disable-next-line require-atomic-updates
             WebXRHandTracking._LeftHandGLB = handGLBs[1];
             const shaderUrl = Tools.GetAssetUrl(WebXRHandTracking.DEFAULT_HAND_MODEL_SHADER_URL);
-            const handShader = await NodeMaterial.ParseFromFileAsync("handShader", shaderUrl, scene, undefined, true);
+            const handShader = await NodeMaterialParseFromFileAsync("handShader", shaderUrl, scene, undefined, true);
 
             // depth prepass and alpha mode
             handShader.needDepthPrePass = true;
@@ -702,10 +702,10 @@ export class WebXRHandTracking extends WebXRAbstractFeature {
 
             // shader
             const handColors = {
-                base: Color3.FromInts(116, 63, 203),
-                fresnel: Color3.FromInts(149, 102, 229),
-                fingerColor: Color3.FromInts(177, 130, 255),
-                tipFresnel: Color3.FromInts(220, 200, 255),
+                base: Color3FromInts(116, 63, 203),
+                fresnel: Color3FromInts(149, 102, 229),
+                fingerColor: Color3FromInts(177, 130, 255),
+                tipFresnel: Color3FromInts(220, 200, 255),
                 ...options?.handMeshes?.customColors,
             };
 

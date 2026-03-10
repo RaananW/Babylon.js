@@ -83,7 +83,7 @@ export class KhronosTextureContainer {
         public data: ArrayBufferView,
         facesExpected: number
     ) {
-        if (!KhronosTextureContainer.IsValid(data)) {
+        if (!KhronosTextureContainerIsValid(data)) {
             this.isInvalid = true;
             Logger.Error("texture missing KTX identifier");
             return;

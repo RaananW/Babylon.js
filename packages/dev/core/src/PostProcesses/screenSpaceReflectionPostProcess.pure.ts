@@ -8,7 +8,7 @@ import { PostProcess } from "./postProcess.pure";
 import { Constants } from "../Engines/constants";
 import { GeometryBufferRenderer } from "../Rendering/geometryBufferRenderer.pure";
 import { serialize } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { PrePassRenderer } from "../Rendering/prePassRenderer";
 import { ScreenSpaceReflectionsConfiguration } from "../Rendering/screenSpaceReflectionsConfiguration";
 import type { AbstractEngine } from "../Engines/abstractEngine";
@@ -284,7 +284,7 @@ export class ScreenSpaceReflectionPostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string) {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new ScreenSpaceReflectionPostProcess(
                     parsedPostProcess.name,

@@ -10,7 +10,7 @@ import type { Effect } from "../Materials/effect";
 import type { Material } from "../Materials/material";
 import { EffectLayer } from "./effectLayer";
 import { Constants } from "../Engines/constants";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { IThinSelectionOutlineLayerOptions } from "./thinSelectionOutlineLayer";
 import { ThinSelectionOutlineLayer } from "./thinSelectionOutlineLayer";
 import type { Color3 } from "../Maths/math.color";
@@ -323,7 +323,7 @@ export class SelectionOutlineLayer extends EffectLayer {
      * @returns a serialized SelectionOutline layer object
      */
     public serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
         serializationObject.customType = "BABYLON.SelectionOutlineLayer";
 
         // Selected meshes
@@ -365,7 +365,7 @@ export class SelectionOutlineLayer extends EffectLayer {
      * @returns a parsed SelectionOutline layer
      */
     public static override Parse(parsedSelectionOutlineLayer: any, scene: Scene, rootUrl: string): SelectionOutlineLayer {
-        const selectionOutlineLayer = SerializationHelper.Parse(
+        const selectionOutlineLayer = SerializationHelperParse(
             () => new SelectionOutlineLayer(parsedSelectionOutlineLayer.name, scene, parsedSelectionOutlineLayer.options),
             parsedSelectionOutlineLayer,
             scene,

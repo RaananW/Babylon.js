@@ -5,7 +5,7 @@ import { MultiMaterial } from "../Materials/multiMaterial.pure";
 import type { Material } from "../Materials/material";
 import type { Scene } from "../scene";
 import type { Light } from "../Lights/light";
-import { SerializationHelper } from "./decorators.serialization.pure";
+import { SerializationHelperAppendSerializedAnimations } from "./decorators.serialization.pure";
 import { Texture } from "../Materials/Textures/texture.pure";
 import type { CubeTexture } from "../Materials/Textures/cubeTexture";
 import type { Node } from "../node";
@@ -203,7 +203,7 @@ function _Serialize(scene: Scene, checkSyncReadSupported = true): any {
     }
 
     // Animations
-    SerializationHelper.AppendSerializedAnimations(scene, serializationObject);
+    SerializationHelperAppendSerializedAnimations(scene, serializationObject);
 
     // Animation Groups
     if (scene.animationGroups && scene.animationGroups.length > 0) {

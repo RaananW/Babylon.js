@@ -4,7 +4,7 @@ import type { Observer } from "../../../Misc/observable";
 import type { FlowGraphContext } from "../../flowGraphContext";
 import { FlowGraphEventBlock } from "../../flowGraphEventBlock";
 import type { Nullable } from "../../../types";
-import { Tools } from "../../../Misc/tools.pure";
+import { ToolsWarn } from "../../../Misc/tools.pure";
 import type { RichType } from "../../flowGraphRichTypes";
 import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
@@ -70,7 +70,7 @@ export class FlowGraphReceiveCustomEventBlock extends FlowGraphEventBlock {
             const eventObserver = context._getExecutionVariable<Nullable<Observer<any[]>>>(this, "_eventObserver", null);
             observable.remove(eventObserver);
         } else {
-            Tools.Warn(`FlowGraphReceiveCustomEventBlock: Missing observable for event ${this.config.eventId}`);
+            ToolsWarn(`FlowGraphReceiveCustomEventBlock: Missing observable for event ${this.config.eventId}`);
         }
     }
 

@@ -23,7 +23,7 @@ import { StandardMaterial } from "../../Materials/standardMaterial.pure";
 import { CreateGround } from "../../Meshes/Builders/groundBuilder.pure";
 import { CreateTorus } from "../../Meshes/Builders/torusBuilder.pure";
 import type { PickingInfo } from "../../Collisions/pickingInfo";
-import { Curve3 } from "../../Maths/math.path.pure";
+import { Curve3CreateQuadraticBezier } from "../../Maths/math.path.pure";
 import { CreateLines } from "../../Meshes/Builders/linesBuilder.pure";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { Color3, Color4 } from "../../Maths/math.color.pure";
@@ -1065,7 +1065,7 @@ export class WebXRMotionControllerTeleportation extends WebXRAbstractFeature {
 
         const controllerData = this._controllers[this._currentTeleportationControllerId];
 
-        const quadraticBezierVectors = Curve3.CreateQuadraticBezier(controllerData.xrController.pointer.absolutePosition, pickInfo.ray!.origin, pickInfo.pickedPoint, 25);
+        const quadraticBezierVectors = Curve3CreateQuadraticBezier(controllerData.xrController.pointer.absolutePosition, pickInfo.ray!.origin, pickInfo.pickedPoint, 25);
         const color = controllerData.teleportationState.blocked ? this._blockedRayColor : undefined;
         const colorsArray = this._colorArray.fill(color || this._cachedColor4White);
         // take out the first 2 points, to not start directly from the controller

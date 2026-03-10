@@ -9,8 +9,8 @@ import { Buffer, VertexBuffer } from "../../Buffers/buffer.pure";
 import { PickingInfo } from "../../Collisions/pickingInfo";
 import type { Nullable, FloatArray } from "../../types";
 import type { Node } from "../../node";
-import { DeepCopier } from "../../Misc/deepCopier.pure";
-import { GreasedLineTools } from "../../Misc/greasedLineTools.pure";
+import { DeepCopierDeepCopy } from "../../Misc/deepCopier.pure";
+import { GreasedLineToolsConvertPoints, GreasedLineToolsGetLineLengthArray } from "../../Misc/greasedLineTools.pure";
 import type { GreasedLineMeshOptions } from "./greasedLineBaseMesh";
 import { GreasedLineBaseMesh } from "./greasedLineBaseMesh";
 import type { VertexData } from "../mesh.vertexData";
@@ -50,7 +50,7 @@ export class GreasedLineMesh extends GreasedLineBaseMesh {
         this._nextAndCounters = [];
 
         if (_options.points) {
-            this.addPoints(GreasedLineTools.ConvertPoints(_options.points));
+            this.addPoints(GreasedLineToolsConvertPoints(_options.points));
         }
     }
 
@@ -120,7 +120,7 @@ export class GreasedLineMesh extends GreasedLineBaseMesh {
             nextAndCountersOffset = 0;
 
         for (const p of points) {
-            const lengthArray = GreasedLineTools.GetLineLengthArray(p, tempBuffer);
+            const lengthArray = GreasedLineToolsGetLineLengthArray(p, tempBuffer);
             const totalLength = lengthArray[lengthArray.length - 1];
             for (let j = 0, jj = 0; jj < p.length; j++, jj += 3) {
                 const baseOffset = vertexPositionsOffset + jj * 2;
@@ -223,7 +223,7 @@ export class GreasedLineMesh extends GreasedLineBaseMesh {
     public override clone(name: string = `${this.name}-cloned`, newParent?: Nullable<Node>) {
         const lineOptions = this._createLineOptions();
         const deepCopiedLineOptions = {};
-        DeepCopier.DeepCopy(lineOptions, deepCopiedLineOptions, ["instance"], undefined, true);
+        DeepCopierDeepCopy(lineOptions, deepCopiedLineOptions, ["instance"], undefined, true);
 
         const cloned = new GreasedLineMesh(name, this._scene, <GreasedLineMeshOptions>deepCopiedLineOptions);
         if (newParent) {

@@ -5,7 +5,7 @@ import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess.pure";
 import { Constants } from "../Engines/constants";
 import { serialize } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Nullable } from "../types";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import type { ThinTonemapPostProcessOptions, TonemappingOperator } from "./thinTonemapPostProcess";
@@ -96,7 +96,7 @@ export class TonemapPostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string): Nullable<TonemapPostProcess> {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new TonemapPostProcess(
                     parsedPostProcess.name,

@@ -9,6 +9,7 @@ import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorat
 import { CSG2, InitializeCSG2Async, IsCSG2Ready } from "core/Meshes/csg2";
 import type { Nullable } from "core/types";
 import { CSG } from "core/Meshes/csg";
+import { CSGFromVertexData } from "../../csg.pure";
 
 /**
  * Operations supported by the boolean block
@@ -145,8 +146,8 @@ export class BooleanGeometryBlock extends NodeGeometryBlock {
             let boolCSG: CSG | CSG2;
 
             if (this.useOldCSGEngine) {
-                const csg0 = CSG.FromVertexData(vertexData0);
-                const csg1 = CSG.FromVertexData(vertexData1);
+                const csg0 = CSGFromVertexData(vertexData0);
+                const csg1 = CSGFromVertexData(vertexData1);
                 switch (this.operation) {
                     case BooleanGeometryOperations.Intersect:
                         boolCSG = csg0.intersect(csg1);

@@ -4,7 +4,7 @@ import type { Nullable } from "../types";
 import { Observable } from "./observable";
 import { GetDOMTextContent, IsNavigatorAvailable, IsWindowObjectExist } from "./domManagement";
 import { Logger } from "./logger";
-import { DeepCopier } from "./deepCopier.pure";
+import { DeepCopierDeepCopy } from "./deepCopier.pure";
 import { PrecisionDate } from "./precisionDate";
 import { _WarnImport } from "./devTools";
 import { WebRequest } from "./webRequest";
@@ -21,7 +21,7 @@ import {
     SetCorsBehavior,
 } from "./fileTools";
 import type { IOfflineProvider } from "../Offline/IOfflineProvider";
-import { TimingTools } from "./timingTools.pure";
+import { TimingToolsSetImmediate } from "./timingTools.pure";
 import { InstantiationTools } from "./instantiationTools";
 import { RandomGUID } from "./guid";
 import type { IScreenshotSize } from "./interfaces/screenshotSize";
@@ -270,7 +270,7 @@ export class Tools {
         // run the preprocessor
         scriptUrl = Tools.ScriptPreprocessUrl(scriptUrl);
 
-        if (forceAbsoluteUrl && !Tools.IsAbsoluteUrl(scriptUrl)) {
+        if (forceAbsoluteUrl && !ToolsIsAbsoluteUrl(scriptUrl)) {
             scriptUrl = Tools.GetAbsoluteUrl(scriptUrl);
         }
 
@@ -303,7 +303,7 @@ export class Tools {
 
     private static _LoadScriptNative(scriptUrl: string, onSuccess?: () => void, onError?: (message?: string, exception?: any) => void) {
         if (_native) {
-            Tools.LoadFile(
+            ToolsLoadFile(
                 scriptUrl,
                 (data) => {
                     Function(data as string).apply(null);
@@ -464,7 +464,7 @@ export class Tools {
                     (date.getFullYear() + "-" + (date.getMonth() + 1)).slice(2) + "-" + date.getDate() + "_" + date.getHours() + "-" + ("0" + date.getMinutes()).slice(-2);
                 fileName = "screenshot_" + stringDate + ".png";
             }
-            Tools.Download(blob, fileName);
+            ToolsDownload(blob, fileName);
         } else {
             if (blob && typeof URL !== "undefined") {
                 const url = URL.createObjectURL(blob);
@@ -715,7 +715,7 @@ export class Tools {
     private static _StartMarkNative(counterName: string, condition = true): void {
         if (condition && _native?.startPerformanceCounter) {
             if (Tools._NativePerformanceCounterHandles.has(counterName)) {
-                Tools.Warn(`Performance counter with name ${counterName} is already started.`);
+                ToolsWarn(`Performance counter with name ${counterName} is already started.`);
             } else {
                 const handle = _native.startPerformanceCounter(counterName);
                 Tools._NativePerformanceCounterHandles.set(counterName, handle);
@@ -730,7 +730,7 @@ export class Tools {
                 _native.endPerformanceCounter(handle);
                 Tools._NativePerformanceCounterHandles.delete(counterName);
             } else {
-                Tools.Warn(`Performance counter with name ${counterName} was not started.`);
+                ToolsWarn(`Performance counter with name ${counterName} was not started.`);
             }
         }
     }
@@ -833,7 +833,7 @@ export function ToolsInstantiate(className: string): any {
  * @param action defines the action to execute after the current execution block
  */
 export function ToolsSetImmediate(action: () => void) {
-    TimingTools.SetImmediate(action);
+    TimingToolsSetImmediate(action);
 }
 
 /**
@@ -1109,7 +1109,7 @@ export function ToolsFormat(value: number, decimals = 2): string {
  * @param mustCopyList defines a list of properties to copy (even if they start with _)
  */
 export function ToolsDeepCopy(source: any, destination: any, doNotCopyList?: string[], mustCopyList?: string[]): void {
-    DeepCopier.DeepCopy(source, destination, doNotCopyList, mustCopyList);
+    DeepCopierDeepCopy(source, destination, doNotCopyList, mustCopyList);
 }
 
 /**

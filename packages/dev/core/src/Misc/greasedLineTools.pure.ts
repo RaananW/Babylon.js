@@ -1,4 +1,4 @@
-import { Curve3 } from "../Maths/math.path.pure";
+import { Curve3CreateQuadraticBezier } from "../Maths/math.path.pure";
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import { TmpVectors, Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
@@ -460,7 +460,7 @@ export function GreasedLineToolsGetCircleLinePoints(radiusX: number, segments: n
  * @returns
  */
 export function GreasedLineToolsGetBezierLinePoints(p0: Vector3, p1: Vector3, p2: Vector3, segments: number) {
-    return Curve3.CreateQuadraticBezier(p0, p1, p2, segments)
+    return Curve3CreateQuadraticBezier(p0, p1, p2, segments)
         .getPoints()
         .flatMap((v) => [v.x, v.y, v.z]);
 }

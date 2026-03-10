@@ -22,11 +22,11 @@ import { EffectLayer } from "./effectLayer";
 import { Constants } from "../Engines/constants";
 import { Logger } from "../Misc/logger";
 import type { Color4 } from "../Maths/math.color";
-import { Color3 } from "../Maths/math.color.pure";
+import { Color3, Color3FromArray } from "../Maths/math.color.pure";
 import type { ThinPassPostProcess } from "core/PostProcesses/thinPassPostProcess";
 import type { ThinBlurPostProcess } from "core/PostProcesses/thinBlurPostProcess";
 import type { IThinHighlightLayerOptions } from "./thinHighlightLayer";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import { GetExponentOfTwo } from "../Misc/tools.functions";
 import { ThinHighlightLayer } from "./thinHighlightLayer";
 import { ThinGlowBlurPostProcess } from "./thinEffectLayer";
@@ -557,7 +557,7 @@ export class HighlightLayer extends EffectLayer {
      * @returns a serialized Highlight layer object
      */
     public serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
         serializationObject.customType = "BABYLON.HighlightLayer";
 
         // Highlighted meshes
@@ -603,7 +603,7 @@ export class HighlightLayer extends EffectLayer {
      * @returns a parsed Highlight layer
      */
     public static override Parse(parsedHightlightLayer: any, scene: Scene, rootUrl: string): HighlightLayer {
-        const hl = SerializationHelper.Parse(() => new HighlightLayer(parsedHightlightLayer.name, scene, parsedHightlightLayer.options), parsedHightlightLayer, scene, rootUrl);
+        const hl = SerializationHelperParse(() => new HighlightLayer(parsedHightlightLayer.name, scene, parsedHightlightLayer.options), parsedHightlightLayer, scene, rootUrl);
         let index;
 
         // Excluded meshes
@@ -620,7 +620,7 @@ export class HighlightLayer extends EffectLayer {
             const mesh = scene.getMeshById(highlightedMesh.meshId);
 
             if (mesh) {
-                hl.addMesh(<Mesh>mesh, Color3.FromArray(highlightedMesh.color), highlightedMesh.glowEmissiveOnly);
+                hl.addMesh(<Mesh>mesh, Color3FromArray(highlightedMesh.color), highlightedMesh.glowEmissiveOnly);
             }
         }
 

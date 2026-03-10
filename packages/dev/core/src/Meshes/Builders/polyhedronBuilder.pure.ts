@@ -4,7 +4,7 @@ import type { Scene } from "../../scene";
 import { Vector4 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
 import { Mesh } from "../mesh.pure";
-import { VertexData } from "../mesh.vertexData.pure";
+import { VertexData, VertexDataComputeNormals, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import type { Nullable } from "../../types";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
@@ -548,8 +548,8 @@ export function CreatePolyhedronVertexData(options: {
         }
     }
 
-    VertexData.ComputeNormals(positions, indices, normals);
-    VertexData._ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
+    VertexDataComputeNormals(positions, indices, normals);
+    VertexData_ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
 
     const vertexData = new VertexData();
     vertexData.positions = positions;

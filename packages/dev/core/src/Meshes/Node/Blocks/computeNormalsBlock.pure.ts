@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
-import { VertexData } from "core/Meshes/mesh.vertexData";
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { VertexDataComputeNormals } from "../../mesh.vertexData.pure";
 
 /**
  * Block used to recompute normals for a geometry
@@ -57,7 +57,7 @@ export class ComputeNormalsBlock extends NodeGeometryBlock {
                 vertexData.normals = [];
             }
 
-            VertexData.ComputeNormals(vertexData.positions, vertexData.indices, vertexData.normals);
+            VertexDataComputeNormals(vertexData.positions, vertexData.indices, vertexData.normals);
 
             return vertexData;
         };

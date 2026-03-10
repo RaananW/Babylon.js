@@ -17,11 +17,11 @@ import { PickingInfo } from "../../Collisions/pickingInfo";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { UtilityLayerRenderer } from "../../Rendering/utilityLayerRenderer";
 import type { WebXRAbstractMotionController } from "../motionController/webXRAbstractMotionController";
-import { BoundingSphere } from "../../Culling/boundingSphere.pure";
+import { BoundingSphere , BoundingSphereIntersects } from "../../Culling/boundingSphere.pure";
 import type { TransformNode } from "../../Meshes/transformNode";
 import { StandardMaterial } from "../../Materials/standardMaterial.pure";
-import { Color3 } from "../../Maths/math.color.pure";
-import { NodeMaterial } from "../../Materials/Node/nodeMaterial.pure";
+import { Color3, Color3Black } from "../../Maths/math.color.pure";
+import { NodeMaterial, NodeMaterialParseFromFileAsync, NodeMaterialParseFromSnippetAsync } from "../../Materials/Node/nodeMaterial.pure";
 import type { Material } from "../../Materials/material";
 import { Animation } from "../../Animations/animation.pure";
 import { QuadraticEase, EasingFunction } from "../../Animations/easing";
@@ -647,7 +647,7 @@ export class WebXRNearInteraction extends WebXRAbstractFeature {
         selectionMesh.isVisible = false;
         selectionMesh.rotationQuaternion = Quaternion.Identity();
         const targetMat = new StandardMaterial("targetMat", sceneToRenderTo);
-        targetMat.specularColor = Color3.Black();
+        targetMat.specularColor = Color3Black();
         targetMat.emissiveColor = this.selectionMeshDefaultColor;
         targetMat.backFaceCulling = false;
         selectionMesh.material = targetMat;
@@ -866,9 +866,9 @@ export class WebXRNearInteraction extends WebXRAbstractFeature {
         } else {
             let parsePromise: Promise<NodeMaterial>;
             if (this._options.motionControllerTouchMaterialSnippetUrl) {
-                parsePromise = NodeMaterial.ParseFromFileAsync("motionControllerTouchMaterial", this._options.motionControllerTouchMaterialSnippetUrl, meshCreationScene);
+                parsePromise = NodeMaterialParseFromFileAsync("motionControllerTouchMaterial", this._options.motionControllerTouchMaterialSnippetUrl, meshCreationScene);
             } else {
-                parsePromise = NodeMaterial.ParseFromSnippetAsync("8RUNKL#3", meshCreationScene);
+                parsePromise = NodeMaterialParseFromSnippetAsync("8RUNKL#3", meshCreationScene);
             }
             parsePromise
                 // eslint-disable-next-line github/no-then
@@ -1006,7 +1006,7 @@ export class WebXRNearInteraction extends WebXRAbstractFeature {
             return pi;
         }
 
-        if (!skipBoundingInfo && !BoundingSphere.Intersects(boundingInfo.boundingSphere, sphere)) {
+        if (!skipBoundingInfo && !BoundingSphereIntersects(boundingInfo.boundingSphere, sphere)) {
             return pi;
         }
 

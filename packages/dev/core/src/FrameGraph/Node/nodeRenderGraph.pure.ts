@@ -18,11 +18,11 @@ import { NodeRenderGraphOutputBlock } from "./Blocks/outputBlock.pure";
 import { FrameGraph } from "../frameGraph";
 import { GetClass } from "../../Misc/typeStore";
 import { serialize } from "../../Misc/decorators";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 import { Constants } from "../../Engines/constants";
 import { WebRequest } from "../../Misc/webRequest";
 import { NodeRenderGraphInputBlock } from "./Blocks/inputBlock.pure";
-import { Tools } from "../../Misc/tools.pure";
+import { Tools, ToolsWarn } from "../../Misc/tools.pure";
 import { Engine } from "../../Engines/engine.pure";
 import { NodeRenderGraphBlockConnectionPointTypes } from "./Types/nodeRenderGraphTypes";
 import { NodeRenderGraphClearBlock } from "./Blocks/Textures/clearBlock.pure";
@@ -201,7 +201,7 @@ export class NodeRenderGraph {
                 if (!result) {
                     result = block as T;
                 } else {
-                    Tools.Warn("More than one block was found with the name `" + name + "`");
+                    ToolsWarn("More than one block was found with the name `" + name + "`");
                     return result;
                 }
             }
@@ -692,7 +692,7 @@ export class NodeRenderGraph {
     public clone(name: string): NodeRenderGraph {
         const serializationObject = this.serialize();
 
-        const clone = SerializationHelper.Clone(() => new NodeRenderGraph(name, this._scene), this);
+        const clone = SerializationHelperClone(() => new NodeRenderGraph(name, this._scene), this);
         clone.name = name;
 
         clone.parseSerializedObject(serializationObject);
@@ -707,7 +707,7 @@ export class NodeRenderGraph {
      * @returns the serialized node render graph object
      */
     public serialize(selectedBlocks?: NodeRenderGraphBlock[]): any {
-        const serializationObject = selectedBlocks ? {} : SerializationHelper.Serialize(this);
+        const serializationObject = selectedBlocks ? {} : SerializationHelperSerialize(this);
         serializationObject.editorData = JSON.parse(JSON.stringify(this.editorData)); // Copy
 
         let blocks: NodeRenderGraphBlock[] = [];
@@ -784,7 +784,7 @@ export async function NodeRenderGraphCreateDefaultAsync(name: string, scene: Sce
  * @returns a new node render graph
  */
 export function NodeRenderGraphParse(source: any, scene: Scene, nodeRenderGraphOptions?: INodeRenderGraphCreateOptions, skipBuild: boolean = true): NodeRenderGraph {
-    const renderGraph = SerializationHelper.Parse(() => new NodeRenderGraph(source.name, scene, nodeRenderGraphOptions), source, null);
+    const renderGraph = SerializationHelperParse(() => new NodeRenderGraph(source.name, scene, nodeRenderGraphOptions), source, null);
 
     renderGraph.parseSerializedObject(source);
     if (!skipBuild) {
@@ -824,7 +824,7 @@ export function NodeRenderGraphParseFromSnippetAsync(
                     const serializationObject = JSON.parse(snippet.nodeRenderGraph);
 
                     if (!nodeRenderGraph) {
-                        nodeRenderGraph = SerializationHelper.Parse(() => new NodeRenderGraph(snippetId, scene, nodeRenderGraphOptions), serializationObject, null);
+                        nodeRenderGraph = SerializationHelperParse(() => new NodeRenderGraph(snippetId, scene, nodeRenderGraphOptions), serializationObject, null);
                     }
 
                     nodeRenderGraph.parseSerializedObject(serializationObject);

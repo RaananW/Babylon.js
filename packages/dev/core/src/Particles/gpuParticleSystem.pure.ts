@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { Immutable, Nullable, float, DataArray } from "../types";
 import type { Color3Gradient, IValueGradient } from "../Misc/gradients";
-import { FactorGradient, ColorGradient, GradientHelper } from "../Misc/gradients.pure";
+import { FactorGradient, ColorGradient, GradientHelperGetCurrentGradient } from "../Misc/gradients.pure";
 import { Observable } from "../Misc/observable";
 import { Vector3, Matrix, TmpVectors } from "../Maths/math.vector.pure";
-import { Color4, TmpColors } from "../Maths/math.color.pure";
+import { Color4, TmpColors, Color4LerpToRef } from "../Maths/math.color.pure";
 import { Lerp } from "../Maths/math.scalar.functions";
 import { VertexBuffer, Buffer } from "../Buffers/buffer.pure";
 
@@ -15,7 +15,7 @@ import { BoxParticleEmitter } from "../Particles/EmitterTypes/boxParticleEmitter
 import type { IDisposable } from "../scene";
 import type { Effect } from "../Materials/effect";
 import { ImageProcessingConfiguration } from "../Materials/imageProcessingConfiguration.pure";
-import { RawTexture } from "../Materials/Textures/rawTexture.pure";
+import { RawTexture, RawTextureCreateRGBATexture, RawTextureCreateRTexture } from "../Materials/Textures/rawTexture.pure";
 import { Constants } from "../Engines/constants";
 import { EngineStore } from "../Engines/engineStore";
 import type { IAnimatable } from "../Animations/animatable.interface";
@@ -1634,12 +1634,12 @@ export class GPUParticleSystem extends BaseParticleSystem implements IDisposable
         for (let x = 0; x < this._rawTextureWidth; x++) {
             const ratio = x / this._rawTextureWidth;
 
-            GradientHelper.GetCurrentGradient(ratio, factorGradients, (currentGradient, nextGradient, scale) => {
+            GradientHelperGetCurrentGradient(ratio, factorGradients, (currentGradient, nextGradient, scale) => {
                 data[x] = Lerp((<FactorGradient>currentGradient).factor1, (<FactorGradient>nextGradient).factor1, scale);
             });
         }
 
-        (<any>this)[textureName] = RawTexture.CreateRTexture(data, this._rawTextureWidth, 1, this._scene || this._engine, false, false, Constants.TEXTURE_NEAREST_SAMPLINGMODE);
+        (<any>this)[textureName] = RawTextureCreateRTexture(data, this._rawTextureWidth, 1, this._scene || this._engine, false, false, Constants.TEXTURE_NEAREST_SAMPLINGMODE);
         (<any>this)[textureName].name = textureName.substring(1);
     }
 
@@ -1674,8 +1674,8 @@ export class GPUParticleSystem extends BaseParticleSystem implements IDisposable
         for (let x = 0; x < this._rawTextureWidth; x++) {
             const ratio = x / this._rawTextureWidth;
 
-            GradientHelper.GetCurrentGradient(ratio, this._colorGradients, (currentGradient, nextGradient, scale) => {
-                Color4.LerpToRef((<ColorGradient>currentGradient).color1, (<ColorGradient>nextGradient).color1, scale, tmpColor);
+            GradientHelperGetCurrentGradient(ratio, this._colorGradients, (currentGradient, nextGradient, scale) => {
+                Color4LerpToRef((<ColorGradient>currentGradient).color1, (<ColorGradient>nextGradient).color1, scale, tmpColor);
                 data[x * 4] = tmpColor.r * 255;
                 data[x * 4 + 1] = tmpColor.g * 255;
                 data[x * 4 + 2] = tmpColor.b * 255;
@@ -1683,7 +1683,7 @@ export class GPUParticleSystem extends BaseParticleSystem implements IDisposable
             });
         }
 
-        this._colorGradientsTexture = RawTexture.CreateRGBATexture(data, this._rawTextureWidth, 1, this._scene, false, false, Constants.TEXTURE_NEAREST_SAMPLINGMODE);
+        this._colorGradientsTexture = RawTextureCreateRGBATexture(data, this._rawTextureWidth, 1, this._scene, false, false, Constants.TEXTURE_NEAREST_SAMPLINGMODE);
         this._colorGradientsTexture.name = "colorGradients";
     }
 

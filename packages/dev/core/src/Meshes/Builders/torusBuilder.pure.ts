@@ -3,7 +3,7 @@
 import type { Vector4 } from "../../Maths/math.vector";
 import { Matrix, Vector3, Vector2 } from "../../Maths/math.vector.pure";
 import { Mesh } from "../mesh.pure";
-import { VertexData } from "../mesh.vertexData.pure";
+import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import type { Scene } from "../../scene";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
@@ -72,7 +72,7 @@ export function CreateTorusVertexData(options: { diameter?: number; thickness?: 
     }
 
     // Sides
-    VertexData._ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
+    VertexData_ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
 
     // Result
     const vertexData = new VertexData();

@@ -5,7 +5,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { FrameGraphImageProcessingTask } from "core/FrameGraph/Tasks/PostProcesses/imageProcessingTask";
 import { ThinImageProcessingPostProcess } from "core/PostProcesses/thinImageProcessingPostProcess";
 import { ImageProcessingConfiguration } from "core/Materials/imageProcessingConfiguration";
-import { Color4 } from "../../../../Maths/math.color.pure";
+import { Color4, Color4FromArray } from "../../../../Maths/math.color.pure";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
 
 /**
@@ -251,7 +251,7 @@ export class NodeRenderGraphImageProcessingPostProcessBlock extends NodeRenderGr
         this.vignetteCameraFov = serializationObject.vignetteCameraFov;
         this.vignetteCenterX = serializationObject.vignetteCenterX;
         this.vignetteCenterY = serializationObject.vignetteCenterY;
-        this.vignetteColor = Color4.FromArray(serializationObject.vignetteColor);
+        this.vignetteColor = Color4FromArray(serializationObject.vignetteColor);
         this.vignetteBlendMode = serializationObject.vignetteBlendMode;
         this.ditheringEnabled = serializationObject.ditheringEnabled;
         this.ditheringIntensity = serializationObject.ditheringIntensity;

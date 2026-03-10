@@ -6,8 +6,8 @@ import type { NodeParticleConnectionPoint } from "../nodeParticleBlockConnection
 import type { ParticleGradientValueBlock } from "./particleGradientValueBlock";
 import type { Nullable } from "core/types";
 import { Lerp } from "core/Maths/math.scalar.functions";
-import { Color4 } from "core/Maths/math.color";
 import { Vector2, Vector3 } from "core/Maths/math.vector";
+import { Color4Lerp } from "../../../Maths/math.color.pure";
 
 /**
  * Block used to define a list of gradient entries
@@ -154,7 +154,7 @@ export class ParticleGradientBlock extends NodeParticleBlock {
                             case NodeParticleBlockConnectionPointTypes.Vector3:
                                 return Vector3.Lerp(currentValue, nextValue, scale);
                             case NodeParticleBlockConnectionPointTypes.Color4:
-                                return Color4.Lerp(currentValue, nextValue, scale);
+                                return Color4Lerp(currentValue, nextValue, scale);
                         }
                     }
                     return currentValue;

@@ -5,7 +5,7 @@ import { VertexBuffer } from "../Buffers/buffer.pure";
 import { Mesh } from "../Meshes/mesh.pure";
 import { VertexData } from "../Meshes/mesh.vertexData.pure";
 import type { Nullable } from "../types";
-import { Path2 } from "../Maths/math.path.pure";
+import { Path2, Path2StartingAt } from "../Maths/math.path.pure";
 import { Epsilon } from "../Maths/math.constants";
 import { EngineStore } from "../Engines/engineStore";
 
@@ -139,7 +139,7 @@ export function PolygonParse(input: string): Vector2[] {
  * @returns the started path2
  */
 export function PolygonStartingAt(x: number, y: number): Path2 {
-    return Path2.StartingAt(x, y);
+    return Path2StartingAt(x, y);
 }
 
 /**

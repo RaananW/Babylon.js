@@ -16,7 +16,7 @@ import type { MaterialDefines } from "./materialDefines";
 import type { Material } from "./material";
 import type { BaseTexture } from "./Textures/baseTexture";
 import type { RenderTargetTexture } from "./Textures/renderTargetTexture";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../Misc/decorators.serialization.pure";
 import { ShaderLanguage } from "./shaderLanguage";
 
 /**
@@ -298,7 +298,7 @@ export class MaterialPluginBase {
      * @param plugin define the config where to copy the info
      */
     public copyTo(plugin: MaterialPluginBase): void {
-        SerializationHelper.Clone(() => plugin, this);
+        SerializationHelperClone(() => plugin, this);
     }
 
     /**
@@ -306,7 +306,7 @@ export class MaterialPluginBase {
      * @returns - An object with the serialized config.
      */
     public serialize(): any {
-        return SerializationHelper.Serialize(this);
+        return SerializationHelperSerialize(this);
     }
 
     /**
@@ -316,7 +316,7 @@ export class MaterialPluginBase {
      * @param rootUrl Defines the rootUrl to load from
      */
     public parse(source: any, scene: Scene, rootUrl: string): void {
-        SerializationHelper.Parse(() => this, source, scene, rootUrl);
+        SerializationHelperParse(() => this, source, scene, rootUrl);
     }
 }
 

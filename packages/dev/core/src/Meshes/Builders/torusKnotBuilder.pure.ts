@@ -3,7 +3,7 @@
 import type { Vector4 } from "../../Maths/math.vector";
 import { Vector3 } from "../../Maths/math.vector.pure";
 import { Mesh } from "../mesh.pure";
-import { VertexData } from "../mesh.vertexData.pure";
+import { VertexData, VertexDataComputeNormals, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import type { Scene } from "../../scene";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
@@ -110,10 +110,10 @@ export function CreateTorusKnotVertexData(options: {
     }
 
     // Normals
-    VertexData.ComputeNormals(positions, indices, normals);
+    VertexDataComputeNormals(positions, indices, normals);
 
     // Sides
-    VertexData._ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
+    VertexData_ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
 
     // Result
     const vertexData = new VertexData();

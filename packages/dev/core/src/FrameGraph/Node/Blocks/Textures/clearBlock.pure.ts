@@ -3,7 +3,7 @@
 import type { Scene, FrameGraphTextureHandle, FrameGraph, NodeRenderGraphBuildState, NodeRenderGraphConnectionPoint } from "core/index";
 import { NodeRenderGraphBlock } from "../../nodeRenderGraphBlock";
 import { NodeRenderGraphBlockConnectionPointTypes } from "../../Types/nodeRenderGraphTypes";
-import { Color4 } from "../../../../Maths/math.color.pure";
+import { Color4, Color4FromArray } from "../../../../Maths/math.color.pure";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { FrameGraphClearTextureTask } from "../../../Tasks/Texture/clearTextureTask";
 
@@ -165,7 +165,7 @@ export class NodeRenderGraphClearBlock extends NodeRenderGraphBlock {
 
     public override _deserialize(serializationObject: any) {
         super._deserialize(serializationObject);
-        this.color = Color4.FromArray(serializationObject.color);
+        this.color = Color4FromArray(serializationObject.color);
         this.clearColor = serializationObject.clearColor;
         this.convertColorToLinearSpace = !!serializationObject.convertColorToLinearSpace;
         this.clearDepth = serializationObject.clearDepth;

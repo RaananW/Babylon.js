@@ -19,7 +19,7 @@ import { backbufferColorTextureHandle, backbufferDepthStencilTextureHandle } fro
 import { Constants } from "../Engines/constants";
 import { InternalTextureSource } from "../Materials/Textures/internalTexture";
 import { FrameGraphRenderTarget } from "./frameGraphRenderTarget";
-import { FrameGraphRenderPass } from "./Passes/renderPass.pure";
+import { FrameGraphRenderPassIsRenderPass } from "./Passes/renderPass.pure";
 import { Logger } from "../Misc/logger";
 import { GetTypeForDepthTexture, IsDepthTexture, HasStencilAspect } from "core/Materials/Textures/textureHelper.functions";
 
@@ -201,7 +201,7 @@ export class FrameGraphTextureManager {
         return {
             size: textureSizeIsObject(creationOptions.size) ? { ...creationOptions.size } : creationOptions.size,
             sizeIsPercentage: creationOptions.sizeIsPercentage,
-            options: FrameGraphTextureManager.CloneTextureOptions(creationOptions.options, entry.textureIndex),
+            options: FrameGraphTextureManagerCloneTextureOptions(creationOptions.options, entry.textureIndex),
             isHistoryTexture: preserveHistoryTextureFlag ? creationOptions.isHistoryTexture : false,
         };
     }
@@ -310,7 +310,7 @@ export class FrameGraphTextureManager {
                 size: textureSizeIsObject(creationOptions.size) ? { ...creationOptions.size } : creationOptions.size,
                 sizeIsPercentage: creationOptions.sizeIsPercentage,
                 isHistoryTexture: creationOptions.isHistoryTexture,
-                options: FrameGraphTextureManager.CloneTextureOptions(creationOptions.options, undefined, true),
+                options: FrameGraphTextureManagerCloneTextureOptions(creationOptions.options, undefined, true),
             },
             this._isRecordingTask ? FrameGraphTextureNamespace.Task : FrameGraphTextureNamespace.Graph,
             handle
@@ -406,7 +406,7 @@ export class FrameGraphTextureManager {
             name: textureEntry.name,
             creationOptions: {
                 size: { ...(textureEntry.creationOptions.size as { width: number; height: number; depth?: number; layers?: number }) },
-                options: FrameGraphTextureManager.CloneTextureOptions(textureEntry.creationOptions.options),
+                options: FrameGraphTextureManagerCloneTextureOptions(textureEntry.creationOptions.options),
                 sizeIsPercentage: textureEntry.creationOptions.sizeIsPercentage,
                 isHistoryTexture: false,
             },
@@ -1039,7 +1039,7 @@ export class FrameGraphTextureManager {
             const dependencies = new Set<FrameGraphTextureHandle>();
             const pass = passes[p];
 
-            if (!FrameGraphRenderPass.IsRenderPass(pass)) {
+            if (!FrameGraphRenderPassIsRenderPass(pass)) {
                 continue;
             }
 

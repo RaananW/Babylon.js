@@ -9,9 +9,9 @@ import { Constants } from "../../Engines/constants";
 import { _WarnImport } from "../../Misc/devTools";
 import type { IInspectable } from "../../Misc/iInspectable";
 import type { AbstractEngine } from "../../Engines/abstractEngine";
-import { TimingTools } from "../../Misc/timingTools.pure";
+import { TimingToolsSetImmediate } from "../../Misc/timingTools.pure";
 import { InstantiationTools } from "../../Misc/instantiationTools";
-import { Plane } from "../../Maths/math.plane.pure";
+import { PlaneFromArray } from "../../Maths/math.plane.pure";
 import { EncodeArrayBufferToBase64 } from "../../Misc/stringTools";
 import { GenerateBase64StringFromTexture, GenerateBase64StringFromTextureAsync } from "../../Misc/copyTools";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
@@ -22,7 +22,7 @@ import type { MirrorTexture } from "../../Materials/Textures/mirrorTexture";
 import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
 import type { Scene } from "../../scene";
 import type { VideoTexture, VideoTextureSettings } from "./videoTexture";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 
 /**
  * Defines the available options when creating a texture
@@ -548,7 +548,7 @@ export class Texture extends BaseTexture {
             }
         } else {
             if (this._texture.isReady) {
-                TimingTools.SetImmediate(() => load());
+                TimingToolsSetImmediate(() => load());
             } else {
                 const loadObserver = this._texture.onLoadedObservable.add(load);
                 this._texture.onErrorObservable.add((e) => {
@@ -655,7 +655,7 @@ export class Texture extends BaseTexture {
         } else {
             if (this._delayedOnLoad) {
                 if (this._texture.isReady) {
-                    TimingTools.SetImmediate(this._delayedOnLoad);
+                    TimingToolsSetImmediate(this._delayedOnLoad);
                 } else {
                     this._texture.onLoadedObservable.add(this._delayedOnLoad);
                 }
@@ -883,7 +883,7 @@ export class Texture extends BaseTexture {
             useSRGBBuffer: this._useSRGBBuffer,
         };
 
-        return SerializationHelper.Clone(() => {
+        return SerializationHelperClone(() => {
             return new Texture(this._texture ? this._texture.url : null, this.getScene(), options);
         }, this);
     }
@@ -1037,7 +1037,7 @@ export class Texture extends BaseTexture {
             }
         };
 
-        const texture = SerializationHelper.Parse(
+        const texture = SerializationHelperParse(
             () => {
                 let generateMipMaps: boolean = true;
                 if (parsedTexture.noMipmap) {
@@ -1046,7 +1046,7 @@ export class Texture extends BaseTexture {
                 if (parsedTexture.mirrorPlane) {
                     const mirrorTexture = Texture._CreateMirror(parsedTexture.name, parsedTexture.renderTargetSize, scene, generateMipMaps);
                     mirrorTexture._waitingRenderList = parsedTexture.renderList;
-                    mirrorTexture.mirrorPlane = Plane.FromArray(parsedTexture.mirrorPlane);
+                    mirrorTexture.mirrorPlane = PlaneFromArray(parsedTexture.mirrorPlane);
                     onLoaded(mirrorTexture);
                     return mirrorTexture;
                 } else if (parsedTexture.isRenderTarget && !parsedTexture.base64String) {

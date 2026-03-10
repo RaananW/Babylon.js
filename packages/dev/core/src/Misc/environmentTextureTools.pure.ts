@@ -10,7 +10,7 @@ import { Constants } from "../Engines/constants";
 import { Scene } from "../scene.pure";
 import { PostProcess } from "../PostProcesses/postProcess.pure";
 import { Logger } from "../Misc/logger";
-import { RGBDTextureTools } from "./rgbdTextureTools.pure";
+import { RGBDTextureToolsEncodeTextureToRGBD } from "./rgbdTextureTools.pure";
 import { DumpDataAsync } from "../Misc/dumpTools.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
@@ -460,7 +460,7 @@ async function _GetTextureEncodedDataAsync(
     const engine = hostingScene.getEngine();
     const tempTexture = engine.createRawTexture(faceData, size, size, Constants.TEXTUREFORMAT_RGBA, false, true, Constants.TEXTURE_NEAREST_SAMPLINGMODE, null, textureType);
 
-    await RGBDTextureTools.EncodeTextureToRGBD(tempTexture, hostingScene, textureType);
+    await RGBDTextureToolsEncodeTextureToRGBD(tempTexture, hostingScene, textureType);
 
     const rgbdEncodedData = await engine._readTexturePixels(tempTexture, size, size);
 

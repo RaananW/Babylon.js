@@ -4,9 +4,9 @@ import type { Scene } from "../../scene";
 import { Vector3 } from "../../Maths/math.vector.pure";
 import { Color3 } from "../../Maths/math.color.pure";
 import { Mesh } from "../mesh.pure";
-import { VertexData } from "../mesh.vertexData.pure";
+import { VertexData, VertexDataComputeNormals } from "../mesh.vertexData.pure";
 import { GroundMesh } from "../groundMesh.pure";
-import { Tools } from "../../Misc/tools.pure";
+import { ToolsLoadImage } from "../../Misc/tools.pure";
 import type { Nullable } from "../../types";
 import { EngineStore } from "../../Engines/engineStore";
 import { Epsilon } from "../../Maths/math.constants";
@@ -288,7 +288,7 @@ export function CreateGroundFromHeightMapVertexData(options: {
     }
 
     // Normals
-    VertexData.ComputeNormals(positions, indices, normals);
+    VertexDataComputeNormals(positions, indices, normals);
 
     // Result
     const vertexData = new VertexData();
@@ -482,7 +482,7 @@ export function CreateGroundFromHeightMap(
             onBufferLoaded(buffer, bufferWidth, bufferHeight);
         };
 
-        Tools.LoadImage(url, onload, options.onError ? options.onError : () => {}, scene.offlineProvider);
+        ToolsLoadImage(url, onload, options.onError ? options.onError : () => {}, scene.offlineProvider);
     } else {
         onBufferLoaded(url.data, url.width, url.height);
     }

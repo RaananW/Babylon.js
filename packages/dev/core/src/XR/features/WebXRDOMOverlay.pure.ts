@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { Tools } from "../../Misc/tools.pure";
+import { ToolsWarn } from "../../Misc/tools.pure";
 import type { Nullable } from "../../types";
 import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { WebXRSessionManager } from "../webXRSessionManager";
@@ -87,7 +87,7 @@ export class WebXRDomOverlay extends WebXRAbstractFeature {
         this.xrNativeFeatureName = "dom-overlay";
 
         // https://immersive-web.github.io/dom-overlays/
-        Tools.Warn("dom-overlay is an experimental and unstable feature.");
+        ToolsWarn("dom-overlay is an experimental and unstable feature.");
     }
 
     /**
@@ -145,12 +145,12 @@ export class WebXRDomOverlay extends WebXRAbstractFeature {
      */
     public async getXRSessionInitExtension(): Promise<Partial<XRSessionInit>> {
         if (this.options.element === undefined) {
-            Tools.Warn('"element" option must be provided to attach xr-dom-overlay feature.');
+            ToolsWarn('"element" option must be provided to attach xr-dom-overlay feature.');
             return {};
         } else if (typeof this.options.element === "string") {
             const selectedElement = document.querySelector(this.options.element);
             if (selectedElement === null) {
-                Tools.Warn(`element not found '${this.options.element}' (not requesting xr-dom-overlay)`);
+                ToolsWarn(`element not found '${this.options.element}' (not requesting xr-dom-overlay)`);
                 return {};
             }
             this._element = selectedElement;

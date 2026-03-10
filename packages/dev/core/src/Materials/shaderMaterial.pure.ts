@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../Misc/decorators.serialization.pure";
 import type { Nullable } from "../types";
 import { Scene } from "../scene.pure";
 import { Matrix, Quaternion } from "../Maths/math.vector.pure";
@@ -1344,7 +1344,7 @@ export class ShaderMaterial extends PushMaterial {
      * @returns the cloned material
      */
     public override clone(name: string): ShaderMaterial {
-        const result = SerializationHelper.Clone(() => new ShaderMaterial(name, this.getScene(), this._shaderPath, this._options, this._storeEffectOnSubMeshes), this);
+        const result = SerializationHelperClone(() => new ShaderMaterial(name, this.getScene(), this._shaderPath, this._options, this._storeEffectOnSubMeshes), this);
 
         result.name = name;
         result.id = name;
@@ -1540,7 +1540,7 @@ export class ShaderMaterial extends PushMaterial {
      * @returns the serialized material object
      */
     public override serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
         serializationObject.customType = "BABYLON.ShaderMaterial";
         serializationObject.uniqueId = this.uniqueId;
 
@@ -1705,7 +1705,7 @@ export class ShaderMaterial extends PushMaterial {
      * @returns a new material
      */
     public static override Parse(source: any, scene: Scene, rootUrl: string): ShaderMaterial {
-        const material = SerializationHelper.Parse(
+        const material = SerializationHelperParse(
             () => new ShaderMaterial(source.name, scene, source.shaderPath, source.options, source.storeEffectOnSubMeshes),
             source,
             scene,

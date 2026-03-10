@@ -10,7 +10,7 @@ import type { Scene } from "../../scene";
 import type { WebXRControllerComponent } from "../motionController/webXRControllerComponent";
 import type { Nullable } from "../../types";
 import { Matrix, Vector3 } from "../../Maths/math.vector.pure";
-import { Color3 } from "../../Maths/math.color.pure";
+import { Color3, Color3Black } from "../../Maths/math.color.pure";
 import { Axis } from "../../Maths/math.axis";
 import { StandardMaterial } from "../../Materials/standardMaterial.pure";
 import { CreateCylinder } from "../../Meshes/Builders/cylinderBuilder.pure";
@@ -24,7 +24,7 @@ import type { WebXRCamera } from "../webXRCamera";
 import type { Node } from "../../node";
 import { Viewport } from "../../Maths/math.viewport";
 import type { Mesh } from "../../Meshes/mesh";
-import { Tools } from "../../Misc/tools.pure";
+import { ToolsWarn } from "../../Misc/tools.pure";
 
 /**
  * Options interface for the pointer selection module
@@ -825,7 +825,7 @@ export class WebXRControllerPointerSelection extends WebXRAbstractFeature {
                     }
                 }
             } catch (e) {
-                Tools.Warn("controller already detached.");
+                ToolsWarn("controller already detached.");
             }
         });
     }
@@ -871,7 +871,7 @@ export class WebXRControllerPointerSelection extends WebXRAbstractFeature {
         selectionMesh.isPickable = false;
         selectionMesh.isVisible = false;
         const targetMat = new StandardMaterial("targetMat", sceneToRenderTo);
-        targetMat.specularColor = Color3.Black();
+        targetMat.specularColor = Color3Black();
         targetMat.emissiveColor = this.selectionMeshDefaultColor;
         targetMat.backFaceCulling = false;
         selectionMesh.material = targetMat;

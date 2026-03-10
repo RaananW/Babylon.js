@@ -5,7 +5,7 @@ import type { Scene } from "../../scene";
 import { Matrix, Vector4 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
 import { Mesh } from "../mesh.pure";
-import { VertexData } from "../mesh.vertexData.pure";
+import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 import { CreateGroundVertexData } from "./groundBuilder.pure";
 
@@ -129,7 +129,7 @@ export function CreateBoxVertexData(options: {
     }
 
     // sides
-    VertexData._ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
+    VertexData_ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
 
     // Result
     const vertexData = new VertexData();

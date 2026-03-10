@@ -2,7 +2,7 @@
 
 import type { WebXRAbstractMotionController, IMotionControllerProfile } from "./webXRAbstractMotionController";
 import type { Scene } from "../../scene";
-import { Tools } from "../../Misc/tools.pure";
+import { ToolsLoadFileAsync } from "../../Misc/tools.pure";
 import { WebXRProfiledMotionController } from "./webXRProfiledMotionController";
 import type { Nullable } from "../../types";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";
@@ -192,7 +192,7 @@ export class WebXRMotionControllerManager {
     public static async UpdateProfilesList(): Promise<{
         [profile: string]: string;
     }> {
-        const data = await Tools.LoadFileAsync(this.BaseRepositoryUrl + "/profiles/profilesList.json", false);
+        const data = await ToolsLoadFileAsync(this.BaseRepositoryUrl + "/profiles/profilesList.json", false);
         this._ProfilesList = JSON.parse(data);
         return await this._ProfilesList!;
     }
@@ -240,7 +240,7 @@ export class WebXRMotionControllerManager {
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 if (!this._ProfileLoadingPromises[profileToLoad]) {
                     // eslint-disable-next-line github/no-then
-                    this._ProfileLoadingPromises[profileToLoad] = Tools.LoadFileAsync(`${this.BaseRepositoryUrl}/profiles/${profileToLoad}/profile.json`, false).then(
+                    this._ProfileLoadingPromises[profileToLoad] = ToolsLoadFileAsync(`${this.BaseRepositoryUrl}/profiles/${profileToLoad}/profile.json`, false).then(
                         (data) => <IMotionControllerProfile>JSON.parse(data)
                     );
                 }

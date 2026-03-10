@@ -16,7 +16,7 @@ import { ShaderLanguage } from "../shaderLanguage";
 import type { GreasedLineMaterialOptions, IGreasedLineMaterial } from "./greasedLineMaterialInterfaces";
 import { GreasedLineMeshColorDistributionType, GreasedLineMeshColorMode } from "./greasedLineMaterialInterfaces";
 import { GreasedLineMaterialDefaults } from "./greasedLineMaterialDefaults";
-import { GreasedLineTools } from "../../Misc/greasedLineTools.pure";
+import { GreasedLineToolsColor3toRGBAUint8, GreasedLineToolsCreateColorsTexture, GreasedLineToolsPrepareEmptyColorsTexture, GreasedLineToolsDisposeEmptyColorsTexture, GreasedLineToolsBooleanToNumber } from "../../Misc/greasedLineTools.pure";
 import { GetCustomCode as getCustomCodeGLSL } from "./greasedLinePluginMaterialShadersGLSL";
 import { GetCustomCode as getCustomCodeWGSL } from "./greasedLinePluginMaterialShadersWGSL";
 import type { GreasedLineBaseMesh } from "../../Meshes";
@@ -188,15 +188,15 @@ export class GreasedLinePluginMaterial extends MaterialPluginBase implements IGr
             this.colorsTexture = options.colorsTexture; // colorsTexture from options takes precedence
         } else {
             if (this._colors) {
-                this.colorsTexture = GreasedLineTools.CreateColorsTexture(`${material.name}-colors-texture`, this._colors, this.colorsSampling, this._scene);
+                this.colorsTexture = GreasedLineToolsCreateColorsTexture(`${material.name}-colors-texture`, this._colors, this.colorsSampling, this._scene);
             } else {
                 this._color = this._color ?? GreasedLineMaterialDefaults.DEFAULT_COLOR;
-                GreasedLineTools.PrepareEmptyColorsTexture(this._scene);
+                GreasedLineToolsPrepareEmptyColorsTexture(this._scene);
             }
         }
 
         this._engine.onDisposeObservable.add(() => {
-            GreasedLineTools.DisposeEmptyColorsTexture();
+            GreasedLineToolsDisposeEmptyColorsTexture();
         });
     }
 
@@ -305,7 +305,7 @@ export class GreasedLinePluginMaterial extends MaterialPluginBase implements IGr
         }
 
         const dashOptions = TmpVectors.Vector4[0];
-        dashOptions.x = GreasedLineTools.BooleanToNumber(this.useDash);
+        dashOptions.x = GreasedLineToolsBooleanToNumber(this.useDash);
         dashOptions.y = this._dashArray;
         dashOptions.z = this.dashOffset;
         dashOptions.w = this.dashRatio;
@@ -315,7 +315,7 @@ export class GreasedLinePluginMaterial extends MaterialPluginBase implements IGr
         colorModeVisibilityColorsWidthUseColors.x = this.colorMode;
         colorModeVisibilityColorsWidthUseColors.y = this.visibility;
         colorModeVisibilityColorsWidthUseColors.z = this.colorsTexture ? this.colorsTexture.getSize().width : 0;
-        colorModeVisibilityColorsWidthUseColors.w = GreasedLineTools.BooleanToNumber(this.useColors);
+        colorModeVisibilityColorsWidthUseColors.w = GreasedLineToolsBooleanToNumber(this.useColors);
         uniformBuffer.updateVector4("grl_colorMode_visibility_colorsWidth_useColors", colorModeVisibilityColorsWidthUseColors);
 
         if (this._color) {
@@ -405,11 +405,11 @@ export class GreasedLinePluginMaterial extends MaterialPluginBase implements IGr
         }
 
         if (this.colorsTexture && origColorsCount === colors.length && !forceNewTexture) {
-            const colorArray = GreasedLineTools.Color3toRGBAUint8(colors);
+            const colorArray = GreasedLineToolsColor3toRGBAUint8(colors);
             this.colorsTexture.update(colorArray);
         } else {
             this.colorsTexture?.dispose();
-            this.colorsTexture = GreasedLineTools.CreateColorsTexture(`${this._material.name}-colors-texture`, colors, this.colorsSampling, this._scene);
+            this.colorsTexture = GreasedLineToolsCreateColorsTexture(`${this._material.name}-colors-texture`, colors, this.colorsSampling, this._scene);
         }
     }
 
@@ -608,9 +608,9 @@ export class GreasedLinePluginMaterial extends MaterialPluginBase implements IGr
             this.resolution = greasedLineMaterialOptions.resolution;
         }
         if (this.colors) {
-            this.colorsTexture = GreasedLineTools.CreateColorsTexture(`${this._material.name}-colors-texture`, this.colors, this.colorsSampling, scene);
+            this.colorsTexture = GreasedLineToolsCreateColorsTexture(`${this._material.name}-colors-texture`, this.colors, this.colorsSampling, scene);
         } else {
-            GreasedLineTools.PrepareEmptyColorsTexture(scene);
+            GreasedLineToolsPrepareEmptyColorsTexture(scene);
         }
 
         this.markAllDefinesAsDirty();
@@ -626,7 +626,7 @@ export class GreasedLinePluginMaterial extends MaterialPluginBase implements IGr
         dest.colorsTexture?.dispose();
 
         if (this._colors) {
-            dest.colorsTexture = GreasedLineTools.CreateColorsTexture(`${dest._material.name}-colors-texture`, this._colors, dest.colorsSampling, this._scene);
+            dest.colorsTexture = GreasedLineToolsCreateColorsTexture(`${dest._material.name}-colors-texture`, this._colors, dest.colorsSampling, this._scene);
         }
 
         dest.setColor(this.color, true);

@@ -2,7 +2,7 @@
 
 import { Logger } from "../../../Misc/logger";
 import { serialize } from "../../../Misc/decorators";
-import { SerializationHelper } from "../../../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse } from "../../../Misc/decorators.serialization.pure";
 import type { Camera } from "../../../Cameras/camera";
 import type { Effect } from "../../../Materials/effect";
 import { Texture } from "../../../Materials/Textures/texture.pure";
@@ -596,7 +596,7 @@ export class SSAO2RenderingPipeline extends PostProcessRenderPipeline {
      * @returns the serialized object
      */
     public serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
         serializationObject.customType = "SSAO2RenderingPipeline";
 
         return serializationObject;
@@ -610,7 +610,7 @@ export class SSAO2RenderingPipeline extends PostProcessRenderPipeline {
      * @returns An instantiated pipeline from the serialized object.
      */
     public static Parse(source: any, scene: Scene, rootUrl: string): SSAO2RenderingPipeline {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => new SSAO2RenderingPipeline(source._name, scene, source._ratio, undefined, source._forceGeometryBuffer, source._textureType),
             source,
             scene,

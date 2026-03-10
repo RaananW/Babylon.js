@@ -12,7 +12,7 @@ import { BaseError, ErrorCodes, RuntimeError } from "./error";
 import { DecodeBase64ToBinary, DecodeBase64ToString, EncodeArrayBufferToBase64 } from "./stringTools";
 import { EngineStore } from "../Engines/engineStore";
 import { Logger } from "./logger";
-import { TimingTools } from "./timingTools.pure";
+import { TimingToolsSetImmediate } from "./timingTools.pure";
 import { GetBlobBufferSource } from "../Buffers/bufferUtils";
 
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -526,7 +526,7 @@ export const LoadFile = (
             }
         }
 
-        TimingTools.SetImmediate(() => {
+        TimingToolsSetImmediate(() => {
             fileRequest.onCompleteObservable.notifyObservers(fileRequest);
         });
 

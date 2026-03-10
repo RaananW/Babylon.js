@@ -11,7 +11,7 @@ import { VRDeviceOrientationFreeCamera } from "../../Cameras/VR/vrDeviceOrientat
 import { PointerEventTypes } from "../../Events/pointerEvents";
 import type { Scene, IDisposable } from "../../scene";
 import { Quaternion, Matrix, Vector3 } from "../../Maths/math.vector.pure";
-import { Color3, Color4 } from "../../Maths/math.color.pure";
+import { Color3, Color4, Color3Black } from "../../Maths/math.color.pure";
 import type { StickValues } from "../../Gamepads/gamepad";
 import { Gamepad } from "../../Gamepads/gamepad";
 import type { Xbox360Pad } from "../../Gamepads/xboxGamepad";
@@ -154,7 +154,7 @@ class VRExperienceHelperGazer implements IDisposable {
             this._gazeTracker.isPickable = false;
             this._gazeTracker.isVisible = false;
             const targetMat = new StandardMaterial("targetMat", scene);
-            targetMat.specularColor = Color3.Black();
+            targetMat.specularColor = Color3Black();
             targetMat.emissiveColor = new Color3(0.7, 0.7, 0.7);
             targetMat.backFaceCulling = false;
             this._gazeTracker.material = targetMat;

@@ -5,7 +5,7 @@ import { Mesh } from "../Meshes/mesh.pure";
 import { CreateBox } from "../Meshes/Builders/boxBuilder.pure";
 import { CreateSphere } from "../Meshes/Builders/sphereBuilder.pure";
 import { Matrix, Quaternion, TmpVectors, Vector3 } from "../Maths/math.vector.pure";
-import { Color3, Color4 } from "../Maths/math.color.pure";
+import { Color4, Color3Red, Color3Green, Color3Blue, Color3White } from "../Maths/math.color.pure";
 import type { Material } from "../Materials/material";
 import { EngineStore } from "../Engines/engineStore";
 import { StandardMaterial } from "../Materials/standardMaterial.pure";
@@ -626,7 +626,7 @@ export class PhysicsViewer {
         if (!this._debugMaterial) {
             this._debugMaterial = new StandardMaterial("", scene);
             this._debugMaterial.wireframe = true;
-            this._debugMaterial.emissiveColor = Color3.White();
+            this._debugMaterial.emissiveColor = Color3White();
             this._debugMaterial.disableLighting = true;
         }
 
@@ -645,7 +645,7 @@ export class PhysicsViewer {
 
     private _getDebugAxisColoredMaterial(axisNumber: number, scene: Scene): Material {
         const material = new StandardMaterial("", scene);
-        material.emissiveColor = axisNumber == 0 ? Color3.Red() : axisNumber == 1 ? Color3.Green() : Color3.Blue();
+        material.emissiveColor = axisNumber == 0 ? Color3Red() : axisNumber == 1 ? Color3Green() : Color3Blue();
         material.disableLighting = true;
         return material;
     }

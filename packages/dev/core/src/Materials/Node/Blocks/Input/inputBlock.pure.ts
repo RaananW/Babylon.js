@@ -12,12 +12,13 @@ import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnect
 import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import { GetClass } from "../../../../Misc/typeStore";
-import { Color3, Color4, TmpColors, TmpVectors } from "../../../../Maths/math.pure";
+import { Color4, TmpColors, TmpVectors } from "../../../../Maths/math.pure";
 import { AnimatedInputBlockTypes } from "./animatedInputBlockTypes";
 import { Observable } from "../../../../Misc/observable";
 import type { NodeMaterial } from "../../nodeMaterial";
 import { PrecisionDate } from "../../../../Misc/precisionDate";
 import { ShaderLanguage } from "../../../../Materials/shaderLanguage";
+import { Color3White } from "../../../../Maths/math.color.pure";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -473,7 +474,7 @@ export class InputBlock extends NodeMaterialBlock {
                 this.value = Vector4.Zero();
                 break;
             case NodeMaterialBlockConnectionPointTypes.Color3:
-                this.value = Color3.White();
+                this.value = Color3White();
                 break;
             case NodeMaterialBlockConnectionPointTypes.Color4:
                 this.value = new Color4(1, 1, 1, 1);

@@ -8,7 +8,7 @@ import { ColorCurves } from "../Materials/colorCurves.pure";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import type { Effect } from "../Materials/effect";
 import { Mix } from "../Misc/tools.functions";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../Misc/decorators.serialization.pure";
 import type { IImageProcessingConfigurationDefines } from "./imageProcessingConfiguration.defines";
 import { PrepareSamplersForImageProcessing, PrepareUniformsForImageProcessing } from "./imageProcessingConfiguration.functions";
 
@@ -607,7 +607,7 @@ export class ImageProcessingConfiguration {
      * @returns The cloned image processing
      */
     public clone(): ImageProcessingConfiguration {
-        return SerializationHelper.Clone(() => new ImageProcessingConfiguration(), this);
+        return SerializationHelperClone(() => new ImageProcessingConfiguration(), this);
     }
 
     /**
@@ -615,7 +615,7 @@ export class ImageProcessingConfiguration {
      * @returns a JSON representation
      */
     public serialize(): any {
-        return SerializationHelper.Serialize(this);
+        return SerializationHelperSerialize(this);
     }
 
     /**
@@ -624,7 +624,7 @@ export class ImageProcessingConfiguration {
      * @returns The parsed image processing
      */
     public static Parse(source: any): ImageProcessingConfiguration {
-        const parsed = SerializationHelper.Parse(() => new ImageProcessingConfiguration(), source, null, null);
+        const parsed = SerializationHelperParse(() => new ImageProcessingConfiguration(), source, null, null);
         // Backward compatibility
         if (source.vignetteCentreX !== undefined) {
             parsed.vignetteCenterX = source.vignetteCentreX;

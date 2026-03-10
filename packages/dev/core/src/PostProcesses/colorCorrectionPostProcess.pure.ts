@@ -5,7 +5,7 @@ import { PostProcess } from "./postProcess.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Camera } from "../Cameras/camera";
 import { serialize } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Nullable } from "../types";
 import type { Scene } from "../scene";
 import { ThinColorCorrectionPostProcess } from "./thinColorCorrectionPostProcess";
@@ -75,7 +75,7 @@ export class ColorCorrectionPostProcess extends PostProcess {
      * @internal
      */
     public static override _Parse(parsedPostProcess: any, targetCamera: Camera, scene: Scene, rootUrl: string): Nullable<ColorCorrectionPostProcess> {
-        return SerializationHelper.Parse(
+        return SerializationHelperParse(
             () => {
                 return new ColorCorrectionPostProcess(
                     parsedPostProcess.name,

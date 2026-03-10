@@ -11,7 +11,7 @@ import { WebXRControllerComponent } from "../motionController/webXRControllerCom
 import { Matrix, Quaternion, Vector3 } from "../../Maths/math.vector.pure";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import type { MotionControllerComponentType } from "../motionController/webXRAbstractMotionController";
-import { Tools } from "../../Misc/tools.pure";
+import { ToolsError } from "../../Misc/tools.pure";
 
 /**
  * The options container for the controller movement module
@@ -328,7 +328,7 @@ export class WebXRControllerMovement extends WebXRAbstractFeature {
         super(_xrSessionManager);
 
         if (!options || options.xrInput === undefined) {
-            Tools.Error('WebXRControllerMovement feature requires "xrInput" option.');
+            ToolsError('WebXRControllerMovement feature requires "xrInput" option.');
             return;
         }
 

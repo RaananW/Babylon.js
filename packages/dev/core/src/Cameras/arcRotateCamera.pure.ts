@@ -18,7 +18,7 @@ import type { ArcRotateCameraKeyboardMoveInput } from "../Cameras/Inputs/arcRota
 import type { ArcRotateCameraMouseWheelInput } from "../Cameras/Inputs/arcRotateCameraMouseWheelInput";
 import { ArcRotateCameraInputsManager } from "../Cameras/arcRotateCameraInputsManager";
 import { Epsilon } from "../Maths/math.constants";
-import { Tools } from "../Misc/tools.pure";
+import { ToolsBackCompatCameraNoPreventDefault } from "../Misc/tools.pure";
 import type { Collider } from "../Collisions/collider";
 import type { TransformNode } from "core/Meshes/transformNode";
 
@@ -992,7 +992,7 @@ export class ArcRotateCamera extends TargetCamera {
     public override attachControl(ignored: any, noPreventDefault?: boolean, useCtrlForPanning: boolean | number = true, panningMouseButton: number = 2): void {
         const args = arguments;
 
-        noPreventDefault = Tools.BackCompatCameraNoPreventDefault(args);
+        noPreventDefault = ToolsBackCompatCameraNoPreventDefault(args);
         this._useCtrlForPanning = useCtrlForPanning as boolean;
         this._panningMouseButton = panningMouseButton;
         // backwards compatibility

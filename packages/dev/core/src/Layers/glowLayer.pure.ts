@@ -16,7 +16,7 @@ import type { IThinGlowLayerOptions } from "./thinGlowLayer";
 import { EffectLayer } from "./effectLayer";
 import { Constants } from "../Engines/constants";
 import type { Color4 } from "core/Maths/math.color";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import { GetExponentOfTwo } from "../Misc/tools.functions";
 import { ThinGlowLayer } from "./thinGlowLayer";
 import type { ThinBlurPostProcess } from "core/PostProcesses/thinBlurPostProcess";
@@ -492,7 +492,7 @@ export class GlowLayer extends EffectLayer {
      * @returns a serialized glow layer object
      */
     public serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
         serializationObject.customType = "BABYLON.GlowLayer";
 
         let index;
@@ -534,7 +534,7 @@ export class GlowLayer extends EffectLayer {
      * @returns a parsed Glow Layer
      */
     public static override Parse(parsedGlowLayer: any, scene: Scene, rootUrl: string): GlowLayer {
-        const gl = SerializationHelper.Parse(() => new GlowLayer(parsedGlowLayer.name, scene, parsedGlowLayer.options), parsedGlowLayer, scene, rootUrl);
+        const gl = SerializationHelperParse(() => new GlowLayer(parsedGlowLayer.name, scene, parsedGlowLayer.options), parsedGlowLayer, scene, rootUrl);
         let index;
 
         // Excluded meshes

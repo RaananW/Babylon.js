@@ -3,7 +3,7 @@
 import { ThinParticleSystem } from "./thinParticleSystem.pure";
 import type { IParticleEmitterType } from "./EmitterTypes/IParticleEmitterType";
 import { SubEmitter, SubEmitterType } from "./subEmitter";
-import { Color3, Color4 } from "../Maths/math.color.pure";
+import { Color3FromArray, Color4FromArray } from "../Maths/math.color.pure";
 import { Vector3 } from "../Maths/math.vector.pure";
 import type { IParticleSystem } from "./IParticleSystem";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
@@ -15,7 +15,7 @@ import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import type { Effect } from "../Materials/effect";
 import type { Particle } from "./particle";
 import { Constants } from "../Engines/constants";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperAppendSerializedAnimations } from "../Misc/decorators.serialization.pure";
 import { MeshParticleEmitter } from "./EmitterTypes/meshParticleEmitter";
 import { CustomParticleEmitter } from "./EmitterTypes/customParticleEmitter";
 import { BoxParticleEmitter } from "./EmitterTypes/boxParticleEmitter";
@@ -599,9 +599,9 @@ export class ParticleSystem extends ThinParticleSystem {
         if (parsedParticleSystem.noiseStrength) {
             particleSystem.noiseStrength = Vector3.FromArray(parsedParticleSystem.noiseStrength);
         }
-        particleSystem.color1 = Color4.FromArray(parsedParticleSystem.color1);
-        particleSystem.color2 = Color4.FromArray(parsedParticleSystem.color2);
-        particleSystem.colorDead = Color4.FromArray(parsedParticleSystem.colorDead);
+        particleSystem.color1 = Color4FromArray(parsedParticleSystem.color1);
+        particleSystem.color2 = Color4FromArray(parsedParticleSystem.color2);
+        particleSystem.colorDead = Color4FromArray(parsedParticleSystem.colorDead);
         particleSystem.updateSpeed = parsedParticleSystem.updateSpeed;
         particleSystem.targetStopDuration = parsedParticleSystem.targetStopDuration;
         particleSystem.blendMode = parsedParticleSystem.blendMode;
@@ -610,15 +610,15 @@ export class ParticleSystem extends ThinParticleSystem {
             for (const colorGradient of parsedParticleSystem.colorGradients) {
                 particleSystem.addColorGradient(
                     colorGradient.gradient,
-                    Color4.FromArray(colorGradient.color1),
-                    colorGradient.color2 ? Color4.FromArray(colorGradient.color2) : undefined
+                    Color4FromArray(colorGradient.color1),
+                    colorGradient.color2 ? Color4FromArray(colorGradient.color2) : undefined
                 );
             }
         }
 
         if (parsedParticleSystem.rampGradients) {
             for (const rampGradient of parsedParticleSystem.rampGradients) {
-                particleSystem.addRampGradient(rampGradient.gradient, Color3.FromArray(rampGradient.color));
+                particleSystem.addRampGradient(rampGradient.gradient, Color3FromArray(rampGradient.color));
             }
             particleSystem.useRampGradients = parsedParticleSystem.useRampGradients;
         }
@@ -845,7 +845,7 @@ export class ParticleSystem extends ThinParticleSystem {
         ParticleSystem._Parse(parsedParticleSystem, particleSystem, sceneOrEngine, rootUrl);
 
         if (parsedParticleSystem.textureMask) {
-            particleSystem.textureMask = Color4.FromArray(parsedParticleSystem.textureMask);
+            particleSystem.textureMask = Color4FromArray(parsedParticleSystem.textureMask);
         }
 
         if (parsedParticleSystem.worldOffset) {
@@ -956,7 +956,7 @@ export class ParticleSystem extends ThinParticleSystem {
         serializationObject.isLocal = particleSystem.isLocal;
 
         // Animations
-        SerializationHelper.AppendSerializedAnimations(particleSystem, serializationObject);
+        SerializationHelperAppendSerializedAnimations(particleSystem, serializationObject);
         serializationObject.beginAnimationOnStart = particleSystem.beginAnimationOnStart;
         serializationObject.beginAnimationFrom = particleSystem.beginAnimationFrom;
         serializationObject.beginAnimationTo = particleSystem.beginAnimationTo;

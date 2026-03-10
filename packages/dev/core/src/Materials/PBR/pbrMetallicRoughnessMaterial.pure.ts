@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { serialize, serializeAsColor3, expandToProperty, serializeAsTexture } from "../../Misc/decorators";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 import type { Scene } from "../../scene";
 import type { Color3 } from "../../Maths/math.color";
 import type { BaseTexture } from "../../Materials/Textures/baseTexture";
@@ -85,7 +85,7 @@ export class PBRMetallicRoughnessMaterial extends PBRBaseSimpleMaterial {
      * @returns cloned material instance
      */
     public override clone(name: string): PBRMetallicRoughnessMaterial {
-        const clone = SerializationHelper.Clone(() => new PBRMetallicRoughnessMaterial(name, this.getScene()), this);
+        const clone = SerializationHelperClone(() => new PBRMetallicRoughnessMaterial(name, this.getScene()), this);
 
         clone.id = name;
         clone.name = name;
@@ -104,7 +104,7 @@ export class PBRMetallicRoughnessMaterial extends PBRBaseSimpleMaterial {
      * @returns the JSON object
      */
     public override serialize(): any {
-        const serializationObject = SerializationHelper.Serialize(this);
+        const serializationObject = SerializationHelperSerialize(this);
         serializationObject.customType = "BABYLON.PBRMetallicRoughnessMaterial";
 
         if (!this.clearCoat.doNotSerialize) {
@@ -137,7 +137,7 @@ export class PBRMetallicRoughnessMaterial extends PBRBaseSimpleMaterial {
      * @returns a new PBRMetalRoughnessMaterial
      */
     public static override Parse(source: any, scene: Scene, rootUrl: string): PBRMetallicRoughnessMaterial {
-        const material = SerializationHelper.Parse(() => new PBRMetallicRoughnessMaterial(source.name, scene), source, scene, rootUrl);
+        const material = SerializationHelperParse(() => new PBRMetallicRoughnessMaterial(source.name, scene), source, scene, rootUrl);
         if (source.clearCoat) {
             material.clearCoat.parse(source.clearCoat, scene, rootUrl);
         }

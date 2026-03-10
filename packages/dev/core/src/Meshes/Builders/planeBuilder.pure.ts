@@ -3,7 +3,7 @@
 import type { Scene } from "../../scene";
 import type { Vector4 } from "../../Maths/math.vector";
 import { Mesh } from "../mesh.pure";
-import { VertexData } from "../mesh.vertexData.pure";
+import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import type { Nullable } from "../../types";
 import type { Plane } from "../../Maths/math.plane";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
@@ -59,7 +59,7 @@ export function CreatePlaneVertexData(options: { size?: number; width?: number; 
     indices.push(3);
 
     // Sides
-    VertexData._ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
+    VertexData_ComputeSides(sideOrientation, positions, indices, normals, uvs, options.frontUVs, options.backUVs);
 
     // Result
     const vertexData = new VertexData();

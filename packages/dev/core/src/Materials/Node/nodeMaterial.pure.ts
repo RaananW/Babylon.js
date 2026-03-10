@@ -19,7 +19,7 @@ import { MaterialDefines } from "../../Materials/materialDefines";
 import type { NodeMaterialOptimizer } from "./Optimizers/nodeMaterialOptimizer";
 import type { Nullable } from "../../types";
 import { VertexBuffer } from "../../Buffers/buffer.pure";
-import { Tools } from "../../Misc/tools.pure";
+import { Tools, ToolsWarn } from "../../Misc/tools.pure";
 import { SfeModeDefine } from "./Blocks/Fragment/smartFilterFragmentOutputBlock.pure";
 import { TransformBlock } from "./Blocks/transformBlock.pure";
 import { VertexOutputBlock } from "./Blocks/Vertex/vertexOutputBlock.pure";
@@ -27,7 +27,7 @@ import { FragmentOutputBlock } from "./Blocks/Fragment/fragmentOutputBlock.pure"
 import { InputBlock } from "./Blocks/Input/inputBlock.pure";
 import { GetClass } from "../../Misc/typeStore";
 import { serialize } from "../../Misc/decorators";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperSerialize, SerializationHelperParseProperties, SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 import type { TextureBlock } from "./Blocks/Dual/textureBlock";
 import type { ReflectionTextureBaseBlock } from "./Blocks/Dual/reflectionTextureBaseBlock";
 import type { RefractionBlock } from "./Blocks/PBR/refractionBlock";
@@ -49,7 +49,7 @@ import { Texture } from "../Textures/texture.pure";
 import type { IParticleSystem } from "../../Particles/IParticleSystem";
 import { BaseParticleSystem } from "../../Particles/baseParticleSystem.pure";
 import { ColorSplitterBlock } from "./Blocks/colorSplitterBlock.pure";
-import { TimingTools } from "../../Misc/timingTools.pure";
+import { TimingToolsSetImmediate } from "../../Misc/timingTools.pure";
 import { ProceduralTexture } from "../Textures/Procedurals/proceduralTexture.pure";
 import { AnimatedInputBlockTypes } from "./Blocks/Input/animatedInputBlockTypes";
 import { TrigonometryBlock, TrigonometryBlockOperations } from "./Blocks/trigonometryBlock.pure";
@@ -480,7 +480,7 @@ export class NodeMaterial extends NodeMaterialBase {
                 if (!result) {
                     result = block;
                 } else {
-                    Tools.Warn("More than one block was found with the name `" + name + "`");
+                    ToolsWarn("More than one block was found with the name `" + name + "`");
                     return result;
                 }
             }
@@ -1265,7 +1265,7 @@ export class NodeMaterial extends NodeMaterialBase {
             if (result) {
                 Effect.RegisterShader(tempName, this._fragmentCompilationState._builtCompilationString, this._vertexCompilationState._builtCompilationString);
 
-                TimingTools.SetImmediate(() =>
+                TimingToolsSetImmediate(() =>
                     postProcess.updateEffect(
                         defines.toString(),
                         this._fragmentCompilationState.uniforms,
@@ -1342,7 +1342,7 @@ export class NodeMaterial extends NodeMaterialBase {
             if (result) {
                 Effect.RegisterShader(tempName, this._fragmentCompilationState._builtCompilationString, this._vertexCompilationState._builtCompilationString, this.shaderLanguage);
 
-                TimingTools.SetImmediate(() => {
+                TimingToolsSetImmediate(() => {
                     effect = this.getScene().getEngine().createEffect(
                         {
                             vertexElement: tempName,
@@ -2189,7 +2189,7 @@ export class NodeMaterial extends NodeMaterialBase {
      * @returns a promise that will fulfil when the material is fully loaded
      */
     public async loadAsync(url: string, rootUrl: string = "") {
-        return await NodeMaterial.ParseFromFileAsync("", url, this.getScene(), rootUrl, true, this);
+        return await NodeMaterialParseFromFileAsync("", url, this.getScene(), rootUrl, true, this);
     }
 
     private _gatherBlocks(rootNode: NodeMaterialBlock, list: NodeMaterialBlock[]) {
@@ -2282,7 +2282,7 @@ export class NodeMaterial extends NodeMaterialBase {
      * @returns the serialized material object
      */
     public override serialize(selectedBlocks?: NodeMaterialBlock[]): any {
-        const serializationObject = selectedBlocks ? {} : SerializationHelper.Serialize(this);
+        const serializationObject = selectedBlocks ? {} : SerializationHelperSerialize(this);
         serializationObject.editorData = JSON.parse(JSON.stringify(this.editorData)); // Copy
 
         let blocks: NodeMaterialBlock[] = [];
@@ -2369,7 +2369,7 @@ export class NodeMaterial extends NodeMaterialBase {
         const id = this.id;
         const uniqueId = this.uniqueId;
 
-        SerializationHelper.ParseProperties(source, this, this.getScene(), rootUrl);
+        SerializationHelperParseProperties(source, this, this.getScene(), rootUrl);
 
         this.id = id;
         this.uniqueId = uniqueId;
@@ -2486,7 +2486,7 @@ export class NodeMaterial extends NodeMaterialBase {
     public override clone(name: string, shareEffect: boolean = false): NodeMaterial {
         const serializationObject = this.serialize();
 
-        const clone = SerializationHelper.Clone(() => new NodeMaterial(name, this.getScene(), this.options), this);
+        const clone = SerializationHelperClone(() => new NodeMaterial(name, this.getScene(), this.options), this);
 
         clone.parseSerializedObject(serializationObject);
 
@@ -2538,7 +2538,7 @@ export class NodeMaterial extends NodeMaterialBase {
  * @returns a new node material
  */
 export function NodeMaterialParse(source: any, scene: Scene, rootUrl: string = "", shaderLanguage = ShaderLanguage.GLSL): NodeMaterial {
-    const nodeMaterial = SerializationHelper.Parse(() => new NodeMaterial(source.name, scene, { shaderLanguage: shaderLanguage }), source, scene, rootUrl);
+    const nodeMaterial = SerializationHelperParse(() => new NodeMaterial(source.name, scene, { shaderLanguage: shaderLanguage }), source, scene, rootUrl);
 
     nodeMaterial.parseSerializedObject(source, rootUrl);
     nodeMaterial.build();
@@ -2617,7 +2617,7 @@ export function NodeMaterialParseFromSnippetAsync(
                     const serializationObject = JSON.parse(snippet.nodeMaterial);
 
                     if (!nodeMaterial) {
-                        nodeMaterial = SerializationHelper.Parse(() => new NodeMaterial(snippetId, scene, options), serializationObject, scene, rootUrl);
+                        nodeMaterial = SerializationHelperParse(() => new NodeMaterial(snippetId, scene, options), serializationObject, scene, rootUrl);
                         nodeMaterial.uniqueId = scene.getUniqueId();
                     }
 

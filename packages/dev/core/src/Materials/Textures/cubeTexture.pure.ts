@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { serialize, serializeAsMatrix, serializeAsVector3 } from "../../Misc/decorators";
-import { Tools } from "../../Misc/tools.pure";
+import { ToolsSetImmediate } from "../../Misc/tools.pure";
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
 import { Matrix, TmpVectors, Vector3 } from "../../Maths/math.vector.pure";
@@ -11,7 +11,7 @@ import { Constants } from "../../Engines/constants";
 import { GetClass } from "../../Misc/typeStore";
 import type { AbstractEngine } from "../../Engines/abstractEngine";
 import { Observable } from "../../Misc/observable";
-import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 
 /**
  * Defines the available options when creating a cube texture
@@ -505,7 +505,7 @@ export class CubeTexture extends BaseTexture {
             this._texture?.onLoadedObservable.add(() => this.onLoadObservable.notifyObservers(this));
         } else {
             if (this._texture.isReady) {
-                Tools.SetImmediate(() => onLoadProcessing());
+                ToolsSetImmediate(() => onLoadProcessing());
             } else {
                 this._texture.onLoadedObservable.add(() => onLoadProcessing());
             }
@@ -520,7 +520,7 @@ export class CubeTexture extends BaseTexture {
      * @returns a cube texture
      */
     public static Parse(parsedTexture: any, scene: Scene, rootUrl: string): CubeTexture {
-        const texture = SerializationHelper.Parse(
+        const texture = SerializationHelperParse(
             () => {
                 let prefiltered: boolean = false;
                 if (parsedTexture.prefiltered) {
@@ -572,7 +572,7 @@ export class CubeTexture extends BaseTexture {
     public override clone(): CubeTexture {
         let uniqueId = 0;
 
-        const newCubeTexture = SerializationHelper.Clone(() => {
+        const newCubeTexture = SerializationHelperClone(() => {
             const cubeTexture = new CubeTexture(this.url, this.getScene() || this._getEngine()!, this._extensions, this._noMipmap, this._files);
             uniqueId = cubeTexture.uniqueId;
 

@@ -6,12 +6,12 @@ import type { IAnimatable } from "../Animations/animatable.interface";
 import type { Nullable } from "../types";
 import { Scene } from "../scene.pure";
 import type { Matrix } from "../Maths/math.vector";
-import { Color3 } from "../Maths/math.color.pure";
+import { Color3, Color3White } from "../Maths/math.color.pure";
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { Mesh } from "../Meshes/mesh";
-import { PrePassConfiguration } from "./prePassConfiguration.pure";
+import { PrePassConfiguration , PrePassConfigurationAddUniforms , PrePassConfigurationAddSamplers } from "./prePassConfiguration.pure";
 import { ImageProcessingDefinesMixin } from "./imageProcessingConfiguration.defines";
 import { ImageProcessingConfiguration } from "./imageProcessingConfiguration.pure";
 import type { FresnelParameters } from "./fresnelParameters";
@@ -55,7 +55,7 @@ import {
     PrepareUniformsAndSamplersList,
     PrepareUniformLayoutForIBL,
 } from "./materialHelper.functions";
-import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { SerializationHelperParse, SerializationHelperClone } from "../Misc/decorators.serialization.pure";
 import { ShaderLanguage } from "./shaderLanguage";
 import { MaterialHelperGeometryRendering } from "./materialHelper.geometryrendering";
 import { UVDefinesMixin } from "./uv.defines";
@@ -1223,8 +1223,8 @@ export class StandardMaterial extends StandardMaterialBase {
 
             MaterialHelperGeometryRendering.AddUniformsAndSamplers(uniforms, samplers);
 
-            PrePassConfiguration.AddUniforms(uniforms);
-            PrePassConfiguration.AddSamplers(samplers);
+            PrePassConfigurationAddUniforms(uniforms);
+            PrePassConfigurationAddSamplers(samplers);
 
             if (ImageProcessingConfiguration) {
                 ImageProcessingConfiguration.PrepareUniforms(uniforms, defines);
@@ -1482,7 +1482,7 @@ export class StandardMaterial extends StandardMaterialBase {
                         ubo.updateFloat("alphaCutOff", this.alphaCutOff);
                     }
 
-                    BindIBLParameters(scene, defines, ubo, Color3.White(), this._reflectionTexture, false, false, true, false, false, false, this.roughness);
+                    BindIBLParameters(scene, defines, ubo, Color3White(), this._reflectionTexture, false, false, true, false, false, false, this.roughness);
                     if (!this._reflectionTexture || !StandardMaterial.ReflectionTextureEnabled) {
                         ubo.updateFloat2("vReflectionInfos", 0.0, this.roughness);
                     }
@@ -1830,7 +1830,7 @@ export class StandardMaterial extends StandardMaterialBase {
      * @returns the cloned material
      */
     public override clone(name: string, cloneTexturesOnlyOnce: boolean = true, rootUrl = ""): StandardMaterial {
-        const result = SerializationHelper.Clone(() => new StandardMaterial(name, this.getScene()), this, { cloneTexturesOnlyOnce });
+        const result = SerializationHelperClone(() => new StandardMaterial(name, this.getScene()), this, { cloneTexturesOnlyOnce });
 
         result.name = name;
         result.id = name;
@@ -1850,7 +1850,7 @@ export class StandardMaterial extends StandardMaterialBase {
      * @returns a new standard material
      */
     public static override Parse(source: any, scene: Scene, rootUrl: string): StandardMaterial {
-        const material = SerializationHelper.Parse(() => new StandardMaterial(source.name, scene), source, scene, rootUrl);
+        const material = SerializationHelperParse(() => new StandardMaterial(source.name, scene), source, scene, rootUrl);
 
         if (source.stencil) {
             material.stencil.parse(source.stencil, scene, rootUrl);

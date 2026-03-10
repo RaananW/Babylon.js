@@ -6,8 +6,8 @@ import { Mesh } from "../mesh.pure";
 import { Buffer } from "../../Buffers/buffer.pure";
 import type { Nullable } from "../../types";
 import type { Node } from "../../node";
-import { DeepCopier } from "../../Misc/deepCopier.pure";
-import { GreasedLineTools } from "../../Misc/greasedLineTools.pure";
+import { DeepCopierDeepCopy } from "../../Misc/deepCopier.pure";
+import { GreasedLineToolsConvertPoints, GreasedLineToolsToVector3Array } from "../../Misc/greasedLineTools.pure";
 import type { GreasedLineMeshOptions, GreasedLineRibbonOptions } from "./greasedLineBaseMesh";
 import { GreasedLineBaseMesh, GreasedLineRibbonAutoDirectionMode, GreasedLineRibbonFacesMode, GreasedLineRibbonPointsMode } from "./greasedLineBaseMesh";
 import type { VertexData } from "../mesh.vertexData";
@@ -77,7 +77,7 @@ export class GreasedLineRibbonMesh extends GreasedLineBaseMesh {
         this._pathsOptions = _pathOptions ?? [];
 
         if (_options.points) {
-            this.addPoints(GreasedLineTools.ConvertPoints(_options.points), _options, !!_pathOptions);
+            this.addPoints(GreasedLineToolsConvertPoints(_options.points), _options, !!_pathOptions);
         }
     }
 
@@ -178,7 +178,7 @@ export class GreasedLineRibbonMesh extends GreasedLineBaseMesh {
             const subPoints = points.slice(c, c + pathCount);
             c += pathCount;
             if (pathOptions.ribbonOptions?.pointsMode === GreasedLineRibbonPointsMode.POINTS_MODE_PATHS) {
-                indiceOffset = this._preprocess(GreasedLineTools.ToVector3Array(subPoints) as Vector3[][], indiceOffset, pathOptions);
+                indiceOffset = this._preprocess(GreasedLineToolsToVector3Array(subPoints) as Vector3[][], indiceOffset, pathOptions);
             } else {
                 if (pathOptions.ribbonOptions?.directionsAutoMode === GreasedLineRibbonAutoDirectionMode.AUTO_DIRECTIONS_NONE) {
                     if (!pathOptions.ribbonOptions.directions) {
@@ -367,7 +367,7 @@ export class GreasedLineRibbonMesh extends GreasedLineBaseMesh {
         const path2 = [];
         if (ribbonInfo.pointsMode === GreasedLineRibbonPointsMode.POINTS_MODE_POINTS) {
             const width = ribbonInfo.width! / 2;
-            const pointVectors = GreasedLineTools.ToVector3Array(points) as Vector3[];
+            const pointVectors = GreasedLineToolsToVector3Array(points) as Vector3[];
             let direction: Nullable<Vector3> = null;
             let fatDirection: Nullable<Vector3> = null;
 
@@ -444,8 +444,8 @@ export class GreasedLineRibbonMesh extends GreasedLineBaseMesh {
         const lineOptions = this._createLineOptions();
         const deepCopiedLineOptions: any = {};
         const pathOptionsCloned: any = [];
-        DeepCopier.DeepCopy(this._pathsOptions, pathOptionsCloned, undefined, undefined, true);
-        DeepCopier.DeepCopy(lineOptions, deepCopiedLineOptions, ["instance"], undefined, true);
+        DeepCopierDeepCopy(this._pathsOptions, pathOptionsCloned, undefined, undefined, true);
+        DeepCopierDeepCopy(lineOptions, deepCopiedLineOptions, ["instance"], undefined, true);
 
         const cloned = new GreasedLineRibbonMesh(name, this._scene, <GreasedLineMeshOptions>deepCopiedLineOptions, pathOptionsCloned);
         if (newParent) {

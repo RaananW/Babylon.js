@@ -13,6 +13,7 @@ import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleB
 import { TmpVectors, Vector3, Vector4 } from "core/Maths/math.vector";
 import { RandomRange } from "core/Maths/math.scalar.functions";
 import { _CreateLocalPositionData } from "./emitters.functions";
+import { VertexDataParse } from "../../../../Meshes/mesh.vertexData.pure";
 
 /**
  * Defines a block used to generate particle shape from mesh geometry data
@@ -279,7 +280,7 @@ export class MeshShapeBlock extends NodeParticleBlock implements IShapeBlock {
         super._deserialize(serializationObject);
 
         if (serializationObject.cachedVertexData) {
-            this._cachedVertexData = VertexData.Parse(serializationObject.cachedVertexData);
+            this._cachedVertexData = VertexDataParse(serializationObject.cachedVertexData);
         }
 
         this.serializedCachedData = !!serializationObject.serializedCachedData;
