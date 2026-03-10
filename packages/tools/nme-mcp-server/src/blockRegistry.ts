@@ -696,7 +696,7 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         },
     },
     MatrixBuilderBlock: {
-        className: "MatrixBuilderBlock",
+        className: "MatrixBuilder",
         category: "Matrix",
         description: "Builds a matrix from individual row vectors.",
         target: "Neutral",
@@ -1107,13 +1107,13 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
             { name: "ambientClr", type: "Color3" },
             { name: "diffuseDir", type: "Color3" },
             { name: "specularDir", type: "Color3" },
+            { name: "clearcoatDir", type: "Color3" },
+            { name: "sheenDir", type: "Color3" },
             { name: "diffuseInd", type: "Color3" },
             { name: "specularInd", type: "Color3" },
-            { name: "specularEnvironmentR0", type: "Color3" },
-            { name: "specularEnvironmentR90", type: "Color3" },
+            { name: "clearcoatInd", type: "Color3" },
+            { name: "sheenInd", type: "Color3" },
             { name: "refraction", type: "Color3" },
-            { name: "clearcoat", type: "Object" },
-            { name: "sheen", type: "Object" },
             { name: "lighting", type: "Color3" },
             { name: "shadow", type: "Float" },
             { name: "alpha", type: "Float" },
@@ -1327,6 +1327,316 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         ],
         outputs: [{ name: "blendColor", type: "Color4" }],
     },
+
+    // ─── Normal Mapping ──────────────────────────────────────────────────
+    TBNBlock: {
+        className: "TBNBlock",
+        category: "Fragment",
+        description: "Computes the Tangent-Bitangent-Normal (TBN) matrix for tangent-space normal mapping. " + "Connect to PerturbNormalBlock or ClearCoatBlock TBN input.",
+        target: "Fragment",
+        inputs: [
+            { name: "normal", type: "AutoDetect" },
+            { name: "tangent", type: "Vector4" },
+            { name: "world", type: "Matrix" },
+        ],
+        outputs: [
+            { name: "TBN", type: "Object" },
+            { name: "row0", type: "Vector3" },
+            { name: "row1", type: "Vector3" },
+            { name: "row2", type: "Vector3" },
+        ],
+    },
+    HeightToNormalBlock: {
+        className: "HeightToNormalBlock",
+        category: "Fragment",
+        description:
+            "Converts a height field (Float) to a normal vector using screen-space derivatives. " + "Output is in tangent space by default (xyz with 0.5 offset) or world space.",
+        target: "Fragment",
+        inputs: [
+            { name: "input", type: "Float" },
+            { name: "worldPosition", type: "Vector3" },
+            { name: "worldNormal", type: "Vector3" },
+            { name: "worldTangent", type: "AutoDetect", isOptional: true },
+        ],
+        outputs: [
+            { name: "output", type: "Vector4" },
+            { name: "xyz", type: "Vector3" },
+        ],
+        properties: {
+            generateInWorldSpace: "boolean — false=tangent space (default), true=world space",
+            automaticNormalizationNormal: "boolean — auto-normalize normal input (default true)",
+            automaticNormalizationTangent: "boolean — auto-normalize tangent input (default true)",
+        },
+        defaultSerializedProperties: {
+            generateInWorldSpace: false,
+            automaticNormalizationNormal: true,
+            automaticNormalizationTangent: true,
+        },
+    },
+
+    // ─── Matrix ──────────────────────────────────────────────────────────
+    MatrixSplitterBlock: {
+        className: "MatrixSplitterBlock",
+        category: "Matrix",
+        description: "Splits a 4×4 matrix into its individual row and column vectors.",
+        target: "Neutral",
+        inputs: [{ name: "input", type: "Matrix" }],
+        outputs: [
+            { name: "row0", type: "Vector4" },
+            { name: "row1", type: "Vector4" },
+            { name: "row2", type: "Vector4" },
+            { name: "row3", type: "Vector4" },
+            { name: "col0", type: "Vector4" },
+            { name: "col1", type: "Vector4" },
+            { name: "col2", type: "Vector4" },
+            { name: "col3", type: "Vector4" },
+        ],
+    },
+
+    // ─── Fragment Depth ──────────────────────────────────────────────────
+    FragDepthBlock: {
+        className: "FragDepthBlock",
+        category: "Fragment",
+        description: "Writes to gl_FragDepth. Provide either a direct depth float, " + "or worldPos + viewProjection to compute depth automatically.",
+        target: "Fragment",
+        inputs: [
+            { name: "depth", type: "Float", isOptional: true },
+            { name: "worldPos", type: "Vector4", isOptional: true },
+            { name: "viewProjection", type: "Matrix", isOptional: true },
+        ],
+        outputs: [],
+    },
+
+    // ─── Ambient Occlusion ───────────────────────────────────────────────
+    AmbientOcclusionBlock: {
+        className: "AmbientOcclusionBlock",
+        category: "Fragment",
+        description: "Evaluates screen-space ambient occlusion (SSAO) from a depth texture.",
+        target: "Fragment",
+        inputs: [
+            { name: "source", type: "Object" },
+            { name: "screenSize", type: "Vector2" },
+        ],
+        outputs: [{ name: "occlusion", type: "Float" }],
+        properties: {
+            radius: "number — SSAO radius (default 0.0001)",
+            area: "number — SSAO area (default 0.0075)",
+            fallOff: "number — SSAO falloff (default 0.000001)",
+        },
+        defaultSerializedProperties: {
+            radius: 0.0001,
+            area: 0.0075,
+            fallOff: 0.000001,
+        },
+    },
+
+    // ─── Clip Planes ─────────────────────────────────────────────────────
+    ClipPlanesBlock: {
+        className: "ClipPlanesBlock",
+        category: "Misc",
+        description: "Implements clip planes for the material. Connect worldPosition to enable clipping.",
+        target: "VertexAndFragment",
+        inputs: [{ name: "worldPosition", type: "Vector4" }],
+        outputs: [],
+    },
+
+    // ─── Control Flow / Loops ────────────────────────────────────────────
+    LoopBlock: {
+        className: "LoopBlock",
+        category: "Logic",
+        description:
+            "Wraps code in a for loop. The input value is passed through and the output is the result after all iterations. " +
+            "Use StorageReadBlock/StorageWriteBlock to read/write loop variables.",
+        target: "Neutral",
+        inputs: [
+            { name: "input", type: "AutoDetect" },
+            { name: "iterations", type: "Float", isOptional: true },
+        ],
+        outputs: [
+            { name: "output", type: "BasedOnInput" },
+            { name: "index", type: "Float" },
+            { name: "loopID", type: "Object" },
+        ],
+        properties: {
+            iterations: "number — number of loop iterations (default 4)",
+        },
+        defaultSerializedProperties: { iterations: 4 },
+    },
+    StorageReadBlock: {
+        className: "StorageReadBlock",
+        category: "Logic",
+        description: "Reads the current iteration value from a LoopBlock. Connect the loopID output to this block.",
+        target: "Neutral",
+        inputs: [{ name: "loopID", type: "Object" }],
+        outputs: [{ name: "value", type: "AutoDetect" }],
+    },
+    StorageWriteBlock: {
+        className: "StorageWriteBlock",
+        category: "Logic",
+        description: "Writes a value into the loop variable inside a LoopBlock iteration.",
+        target: "Neutral",
+        inputs: [
+            { name: "loopID", type: "Object" },
+            { name: "value", type: "AutoDetect" },
+        ],
+        outputs: [],
+    },
+
+    // ─── PrePass ─────────────────────────────────────────────────────────
+    PrePassOutputBlock: {
+        className: "PrePassOutputBlock",
+        category: "Output",
+        description: "Writes to multiple prepass render targets (depth, position, normal, reflectivity, velocity).",
+        target: "Fragment",
+        inputs: [
+            { name: "viewDepth", type: "Float", isOptional: true },
+            { name: "screenDepth", type: "Float", isOptional: true },
+            { name: "worldPosition", type: "AutoDetect", isOptional: true },
+            { name: "localPosition", type: "AutoDetect", isOptional: true },
+            { name: "viewNormal", type: "AutoDetect", isOptional: true },
+            { name: "worldNormal", type: "AutoDetect", isOptional: true },
+            { name: "reflectivity", type: "AutoDetect", isOptional: true },
+            { name: "velocity", type: "AutoDetect", isOptional: true },
+            { name: "velocityLinear", type: "AutoDetect", isOptional: true },
+        ],
+        outputs: [],
+    },
+    PrePassTextureBlock: {
+        className: "PrePassTextureBlock",
+        category: "Input",
+        description: "Reads from prepass render target textures (position, depth, normal, etc.).",
+        target: "VertexAndFragment",
+        inputs: [],
+        outputs: [
+            { name: "position", type: "Object" },
+            { name: "localPosition", type: "Object" },
+            { name: "depth", type: "Object" },
+            { name: "screenDepth", type: "Object" },
+            { name: "normal", type: "Object" },
+            { name: "worldNormal", type: "Object" },
+        ],
+    },
+    DepthSourceBlock: {
+        className: "DepthSourceBlock",
+        category: "Input",
+        description: "Provides a depth texture from the scene's depth renderer as an image source.",
+        target: "VertexAndFragment",
+        inputs: [],
+        outputs: [{ name: "source", type: "Object" }],
+    },
+
+    // ─── Gaussian Splatting ──────────────────────────────────────────────
+    GaussianSplattingBlock: {
+        className: "GaussianSplattingBlock",
+        category: "GaussianSplatting",
+        description: "Vertex computation for Gaussian Splatting rendering with spherical harmonics support.",
+        target: "Vertex",
+        inputs: [
+            { name: "splatPosition", type: "Vector3" },
+            { name: "splatScale", type: "Vector2", isOptional: true },
+            { name: "world", type: "Matrix" },
+            { name: "view", type: "Matrix" },
+            { name: "projection", type: "Matrix" },
+        ],
+        outputs: [
+            { name: "splatVertex", type: "Vector4" },
+            { name: "SH", type: "Color3" },
+        ],
+    },
+    GaussianBlock: {
+        className: "GaussianBlock",
+        category: "GaussianSplatting",
+        description: "Fragment part of Gaussian Splatting that processes splatted color values.",
+        target: "Fragment",
+        inputs: [{ name: "splatColor", type: "Color4" }],
+        outputs: [
+            { name: "rgba", type: "Color4" },
+            { name: "rgb", type: "Color3" },
+            { name: "alpha", type: "Float" },
+        ],
+    },
+    SplatReaderBlock: {
+        className: "SplatReaderBlock",
+        category: "GaussianSplatting",
+        description: "Reads splat data (position and color) from textures for Gaussian Splatting.",
+        target: "Vertex",
+        inputs: [{ name: "splatIndex", type: "Float" }],
+        outputs: [
+            { name: "splatPosition", type: "Vector3" },
+            { name: "splatColor", type: "Color4" },
+        ],
+    },
+
+    // ─── Smart Filter (SFE) ─────────────────────────────────────────────
+    SmartFilterFragmentOutputBlock: {
+        className: "SmartFilterFragmentOutputBlock",
+        category: "Output",
+        description: "Fragment output for the Smart Filter Editor (SFE) framework. Outputs as nmeMain() function.",
+        target: "Fragment",
+        inputs: [{ name: "rgba", type: "Color4" }],
+        outputs: [],
+    },
+    SmartFilterTextureBlock: {
+        className: "SmartFilterTextureBlock",
+        category: "Texture",
+        description: "Texture block for the SFE framework. Supports compositing with optional ImageSourceBlock.",
+        target: "VertexAndFragment",
+        inputs: [
+            { name: "uv", type: "Vector2" },
+            { name: "source", type: "Object", isOptional: true },
+        ],
+        outputs: [
+            { name: "rgba", type: "Color4" },
+            { name: "rgb", type: "Color3" },
+            { name: "r", type: "Float" },
+            { name: "g", type: "Float" },
+            { name: "b", type: "Float" },
+            { name: "a", type: "Float" },
+        ],
+        properties: {
+            isMainInput: "boolean — whether this is the main SFE input (default false)",
+        },
+        defaultSerializedProperties: { isMainInput: false },
+    },
+
+    // ─── Utility / Editor ────────────────────────────────────────────────
+    ElbowBlock: {
+        className: "ElbowBlock",
+        category: "Utility",
+        description: "Pass-through block that preserves input type. Used for visual routing in the NME editor.",
+        target: "Neutral",
+        inputs: [{ name: "input", type: "AutoDetect" }],
+        outputs: [{ name: "output", type: "BasedOnInput" }],
+    },
+    NodeMaterialDebugBlock: {
+        className: "NodeMaterialDebugBlock",
+        category: "Debug",
+        description: "Renders intermediate shader values for debugging. Only one should be active per material.",
+        target: "Fragment",
+        inputs: [{ name: "debug", type: "AutoDetect" }],
+        outputs: [],
+        properties: {
+            renderAlpha: "boolean — whether to render alpha channel (default false)",
+            isActive: "boolean — whether this debug output is active (default false)",
+        },
+        defaultSerializedProperties: { isActive: false, renderAlpha: false },
+    },
+    CustomBlock: {
+        className: "CustomBlock",
+        category: "Custom",
+        description:
+            "User-defined block with arbitrary shader code and dynamic inputs/outputs. " +
+            "Configure via the 'options' property with code, functionName, target, inParameters, outParameters.",
+        target: "Neutral",
+        inputs: [],
+        outputs: [],
+        properties: {
+            options:
+                "Object — { code: string[], functionName: string, target: string, " +
+                "inParameters: Array<{name, type}>, outParameters: Array<{name, type}>, " +
+                "inLinkedConnectionTypes: Array }",
+        },
+    },
 };
 
 /**
@@ -1359,4 +1669,15 @@ export function GetBlockCatalogSummary(): string {
  */
 export function GetBlockTypeDetails(blockType: string): IBlockTypeInfo | undefined {
     return BlockRegistry[blockType];
+}
+
+/**
+ * Reverse lookup: className (as it appears in customType after stripping "BABYLON.")
+ * → IBlockTypeInfo.  This handles cases where the registry key differs from the
+ * className (e.g. key "MatrixBuilderBlock" → className "MatrixBuilder",
+ * key "TeleportInBlock" → className "NodeMaterialTeleportInBlock").
+ */
+export const BlockRegistryByClassName: Record<string, IBlockTypeInfo> = {};
+for (const info of Object.values(BlockRegistry)) {
+    BlockRegistryByClassName[info.className] = info;
 }

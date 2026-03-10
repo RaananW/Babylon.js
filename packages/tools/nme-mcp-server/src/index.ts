@@ -630,29 +630,39 @@ server.registerTool(
     "get_snippet_url",
     {
         description:
-            "Generate a URL that opens the material in the Babylon.js Node Material Editor (nme.babylonjs.com). " +
-            "The full JSON is Base64-encoded in the URL fragment, so this only works for small-to-medium materials. " +
-            "For large materials, use export_material_json and share the file instead.",
+            "Export the material JSON and provide instructions for loading it in the Babylon.js Node Material Editor. " +
+            "Optionally writes the JSON to a file. The user can then load it via the NME editor's 'Load' button, " +
+            "or use NodeMaterial.Parse() at runtime.",
         inputSchema: {
             materialName: z.string().describe("Name of the material"),
+            outputFile: z.string().optional().describe("Optional absolute file path to write the JSON to. If not provided, instructions are returned with inline JSON."),
         },
     },
-    async ({ materialName }) => {
+    async ({ materialName, outputFile }) => {
         const json = manager.exportJSON(materialName);
         if (!json) {
             return { content: [{ type: "text", text: `Material "${materialName}" not found.` }], isError: true };
         }
-        // Base64-encode the JSON for the NME URL
-        const encoded = Buffer.from(json).toString("base64");
-        const url = `https://nme.babylonjs.com/#${encoded}`;
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Open this material in the NME editor:\n${url}\n\nNote: For very large materials, use the snippet server instead (save to playground).`,
-                },
-            ],
-        };
+
+        const lines: string[] = [];
+        lines.push("## How to load this material in the Node Material Editor\n");
+        lines.push("1. Open https://nme.babylonjs.com");
+        lines.push("2. Click the hamburger menu (☰) → 'Load'");
+        lines.push("3. Select the exported JSON file or paste the JSON content\n");
+
+        if (outputFile) {
+            try {
+                mkdirSync(dirname(outputFile), { recursive: true });
+                writeFileSync(outputFile, json, "utf-8");
+                lines.push(`JSON written to: ${outputFile}`);
+            } catch (e) {
+                return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+            }
+        } else {
+            lines.push("Use export_material_json with an outputFile to save to disk for easier loading.");
+        }
+
+        return { content: [{ type: "text", text: lines.join("\n") }] };
     }
 );
 

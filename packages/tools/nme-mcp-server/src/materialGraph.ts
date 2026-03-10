@@ -14,7 +14,7 @@
  *    export.  Multiple graphs can coexist (keyed by material name).
  */
 
-import { BlockRegistry, type IBlockTypeInfo } from "./blockRegistry.js";
+import { BlockRegistry, BlockRegistryByClassName, type IBlockTypeInfo } from "./blockRegistry.js";
 
 // ─── Types ────────────────────────────────────────────────────────────────
 
@@ -263,8 +263,8 @@ function _resolveOutputType(block: ISerializedBlock, outputName: string): string
         return "AutoDetect";
     }
 
-    // For other blocks, look up registry
-    const info = BlockRegistry[blockClass];
+    // For other blocks, look up registry by className
+    const info = BlockRegistryByClassName[blockClass];
     if (!info) {
         return "AutoDetect";
     }
@@ -283,7 +283,7 @@ function _resolveInputType(block: ISerializedBlock, inputName: string): string {
     if (!blockClass) {
         return "AutoDetect";
     }
-    const info = BlockRegistry[blockClass];
+    const info = BlockRegistryByClassName[blockClass];
     if (!info) {
         return "AutoDetect";
     }
@@ -327,7 +327,7 @@ function _checkTypeCompatibility(
     // Different vec sizes: incompatible (e.g. Color3→Color4, vec3→vec4)
     // Find a better input on the target block that matches the output group
     const blockClass = targetBlock.customType?.replace("BABYLON.", "");
-    const info = blockClass ? BlockRegistry[blockClass] : undefined;
+    const info = blockClass ? BlockRegistryByClassName[blockClass] : undefined;
     let suggestion: string | undefined;
 
     if (info) {
@@ -964,7 +964,7 @@ export class MaterialGraphManager {
 
             // Apply mandatory defaults from the registry for any block type
             const typeName = block.customType.replace("BABYLON.", "");
-            const info = BlockRegistry[typeName];
+            const info = BlockRegistryByClassName[typeName];
             if (info?.defaultSerializedProperties) {
                 for (const [key, value] of Object.entries(info.defaultSerializedProperties)) {
                     if (block[key] === undefined) {
