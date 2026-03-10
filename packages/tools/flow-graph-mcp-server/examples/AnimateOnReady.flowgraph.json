@@ -1,0 +1,229 @@
+{
+  "_flowGraphs": [
+    {
+      "allBlocks": [
+        {
+          "className": "FlowGraphSceneReadyEventBlock",
+          "config": {},
+          "uniqueId": "fg-00000042-19cd99516ac",
+          "dataInputs": [],
+          "dataOutputs": [],
+          "signalInputs": [
+            {
+              "uniqueId": "fg-00000043-19cd99516ac",
+              "name": "in",
+              "_connectionType": 0,
+              "connectedPointIds": []
+            }
+          ],
+          "signalOutputs": [
+            {
+              "uniqueId": "fg-00000044-19cd99516ac",
+              "name": "out",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            },
+            {
+              "uniqueId": "fg-00000045-19cd99516ac",
+              "name": "done",
+              "_connectionType": 1,
+              "connectedPointIds": [
+                "fg-00000048-19cd99516ac"
+              ]
+            },
+            {
+              "uniqueId": "fg-00000046-19cd99516ac",
+              "name": "error",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            }
+          ],
+          "metadata": {
+            "displayName": "onReady"
+          }
+        },
+        {
+          "className": "FlowGraphPlayAnimationBlock",
+          "config": {
+            "targetMesh": "hero"
+          },
+          "uniqueId": "fg-00000047-19cd99516ac",
+          "dataInputs": [
+            {
+              "uniqueId": "fg-0000004f-19cd99516ad",
+              "name": "speed",
+              "_connectionType": 0,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "number",
+                "defaultValue": 0
+              },
+              "optional": false
+            },
+            {
+              "uniqueId": "fg-00000050-19cd99516ad",
+              "name": "loop",
+              "_connectionType": 0,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "boolean",
+                "defaultValue": false
+              },
+              "optional": false
+            },
+            {
+              "uniqueId": "fg-00000051-19cd99516ad",
+              "name": "from",
+              "_connectionType": 0,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "number",
+                "defaultValue": 0
+              },
+              "optional": false
+            },
+            {
+              "uniqueId": "fg-00000052-19cd99516ad",
+              "name": "to",
+              "_connectionType": 0,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "number",
+                "defaultValue": 0
+              },
+              "optional": false
+            },
+            {
+              "uniqueId": "fg-00000053-19cd99516ad",
+              "name": "animationGroup",
+              "_connectionType": 0,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              },
+              "optional": false
+            },
+            {
+              "uniqueId": "fg-00000054-19cd99516ad",
+              "name": "animation",
+              "_connectionType": 0,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              },
+              "optional": true
+            },
+            {
+              "uniqueId": "fg-00000055-19cd99516ad",
+              "name": "object",
+              "_connectionType": 0,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              },
+              "optional": true
+            }
+          ],
+          "dataOutputs": [
+            {
+              "uniqueId": "fg-00000056-19cd99516ad",
+              "name": "currentFrame",
+              "_connectionType": 1,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "number",
+                "defaultValue": 0
+              }
+            },
+            {
+              "uniqueId": "fg-00000057-19cd99516ad",
+              "name": "currentTime",
+              "_connectionType": 1,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "number",
+                "defaultValue": 0
+              }
+            },
+            {
+              "uniqueId": "fg-00000058-19cd99516ad",
+              "name": "currentAnimationGroup",
+              "_connectionType": 1,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              }
+            }
+          ],
+          "signalInputs": [
+            {
+              "uniqueId": "fg-00000048-19cd99516ac",
+              "name": "in",
+              "_connectionType": 0,
+              "connectedPointIds": []
+            }
+          ],
+          "signalOutputs": [
+            {
+              "uniqueId": "fg-00000049-19cd99516ac",
+              "name": "out",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            },
+            {
+              "uniqueId": "fg-0000004a-19cd99516ad",
+              "name": "done",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            },
+            {
+              "uniqueId": "fg-0000004b-19cd99516ad",
+              "name": "error",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            },
+            {
+              "uniqueId": "fg-0000004c-19cd99516ad",
+              "name": "animationLoopEvent",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            },
+            {
+              "uniqueId": "fg-0000004d-19cd99516ad",
+              "name": "animationEndEvent",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            },
+            {
+              "uniqueId": "fg-0000004e-19cd99516ad",
+              "name": "animationGroupLoopEvent",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            }
+          ],
+          "metadata": {
+            "displayName": "playAnim"
+          }
+        }
+      ],
+      "executionContexts": [
+        {
+          "uniqueId": "fg-00000041-19cd99516ac",
+          "_userVariables": {},
+          "_connectionValues": {}
+        }
+      ]
+    }
+  ],
+  "dispatchEventsSynchronously": false
+}

@@ -1,0 +1,300 @@
+{
+  "_flowGraphs": [
+    {
+      "allBlocks": [
+        {
+          "className": "FlowGraphSceneTickEventBlock",
+          "config": {},
+          "uniqueId": "fg-0000005a-19cd99516b4",
+          "dataInputs": [],
+          "dataOutputs": [
+            {
+              "uniqueId": "fg-0000005f-19cd99516b4",
+              "name": "timeSinceStart",
+              "_connectionType": 1,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "number",
+                "defaultValue": 0
+              }
+            },
+            {
+              "uniqueId": "fg-00000060-19cd99516b4",
+              "name": "deltaTime",
+              "_connectionType": 1,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "number",
+                "defaultValue": 0
+              }
+            }
+          ],
+          "signalInputs": [
+            {
+              "uniqueId": "fg-0000005b-19cd99516b4",
+              "name": "in",
+              "_connectionType": 0,
+              "connectedPointIds": []
+            }
+          ],
+          "signalOutputs": [
+            {
+              "uniqueId": "fg-0000005c-19cd99516b4",
+              "name": "out",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            },
+            {
+              "uniqueId": "fg-0000005d-19cd99516b4",
+              "name": "done",
+              "_connectionType": 1,
+              "connectedPointIds": [
+                "fg-0000006b-19cd99516b4"
+              ]
+            },
+            {
+              "uniqueId": "fg-0000005e-19cd99516b4",
+              "name": "error",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            }
+          ],
+          "metadata": {
+            "displayName": "onTick"
+          }
+        },
+        {
+          "className": "FlowGraphGetVariableBlock",
+          "config": {
+            "variable": "counter"
+          },
+          "uniqueId": "fg-00000061-19cd99516b4",
+          "dataInputs": [],
+          "dataOutputs": [
+            {
+              "uniqueId": "fg-00000062-19cd99516b4",
+              "name": "value",
+              "_connectionType": 1,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              }
+            }
+          ],
+          "signalInputs": [],
+          "signalOutputs": [],
+          "metadata": {
+            "displayName": "getCounter"
+          }
+        },
+        {
+          "className": "FlowGraphConstantBlock",
+          "config": {
+            "value": 1,
+            "type": "number"
+          },
+          "uniqueId": "fg-00000063-19cd99516b4",
+          "dataInputs": [],
+          "dataOutputs": [
+            {
+              "uniqueId": "fg-00000064-19cd99516b4",
+              "name": "output",
+              "_connectionType": 1,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              }
+            }
+          ],
+          "signalInputs": [],
+          "signalOutputs": [],
+          "metadata": {
+            "displayName": "one"
+          }
+        },
+        {
+          "className": "FlowGraphAddBlock",
+          "config": {},
+          "uniqueId": "fg-00000065-19cd99516b4",
+          "dataInputs": [
+            {
+              "uniqueId": "fg-00000066-19cd99516b4",
+              "name": "a",
+              "_connectionType": 0,
+              "connectedPointIds": [
+                "fg-00000062-19cd99516b4"
+              ],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              },
+              "optional": false
+            },
+            {
+              "uniqueId": "fg-00000067-19cd99516b4",
+              "name": "b",
+              "_connectionType": 0,
+              "connectedPointIds": [
+                "fg-00000064-19cd99516b4"
+              ],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              },
+              "optional": false
+            }
+          ],
+          "dataOutputs": [
+            {
+              "uniqueId": "fg-00000068-19cd99516b4",
+              "name": "value",
+              "_connectionType": 1,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              }
+            },
+            {
+              "uniqueId": "fg-00000069-19cd99516b4",
+              "name": "isValid",
+              "_connectionType": 1,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "boolean",
+                "defaultValue": false
+              }
+            }
+          ],
+          "signalInputs": [],
+          "signalOutputs": [],
+          "metadata": {
+            "displayName": "add"
+          }
+        },
+        {
+          "className": "FlowGraphSetVariableBlock",
+          "config": {
+            "variable": "counter"
+          },
+          "uniqueId": "fg-0000006a-19cd99516b4",
+          "dataInputs": [
+            {
+              "uniqueId": "fg-0000006e-19cd99516b4",
+              "name": "value",
+              "_connectionType": 0,
+              "connectedPointIds": [
+                "fg-00000068-19cd99516b4"
+              ],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              },
+              "optional": false
+            }
+          ],
+          "dataOutputs": [],
+          "signalInputs": [
+            {
+              "uniqueId": "fg-0000006b-19cd99516b4",
+              "name": "in",
+              "_connectionType": 0,
+              "connectedPointIds": []
+            }
+          ],
+          "signalOutputs": [
+            {
+              "uniqueId": "fg-0000006c-19cd99516b4",
+              "name": "out",
+              "_connectionType": 1,
+              "connectedPointIds": [
+                "fg-00000070-19cd99516b4"
+              ]
+            },
+            {
+              "uniqueId": "fg-0000006d-19cd99516b4",
+              "name": "error",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            }
+          ],
+          "metadata": {
+            "displayName": "setCounter"
+          }
+        },
+        {
+          "className": "FlowGraphConsoleLogBlock",
+          "config": {},
+          "uniqueId": "fg-0000006f-19cd99516b4",
+          "dataInputs": [
+            {
+              "uniqueId": "fg-00000073-19cd99516b4",
+              "name": "message",
+              "_connectionType": 0,
+              "connectedPointIds": [
+                "fg-00000068-19cd99516b4"
+              ],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              },
+              "optional": false
+            },
+            {
+              "uniqueId": "fg-00000074-19cd99516b4",
+              "name": "logType",
+              "_connectionType": 0,
+              "connectedPointIds": [],
+              "className": "FlowGraphDataConnection",
+              "richType": {
+                "typeName": "any"
+              },
+              "optional": true
+            }
+          ],
+          "dataOutputs": [],
+          "signalInputs": [
+            {
+              "uniqueId": "fg-00000070-19cd99516b4",
+              "name": "in",
+              "_connectionType": 0,
+              "connectedPointIds": []
+            }
+          ],
+          "signalOutputs": [
+            {
+              "uniqueId": "fg-00000071-19cd99516b4",
+              "name": "out",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            },
+            {
+              "uniqueId": "fg-00000072-19cd99516b4",
+              "name": "error",
+              "_connectionType": 1,
+              "connectedPointIds": []
+            }
+          ],
+          "metadata": {
+            "displayName": "logCounter"
+          }
+        }
+      ],
+      "executionContexts": [
+        {
+          "uniqueId": "fg-00000059-19cd99516b4",
+          "_userVariables": {
+            "counter": 0
+          },
+          "_connectionValues": {}
+        }
+      ]
+    }
+  ],
+  "dispatchEventsSynchronously": false
+}
