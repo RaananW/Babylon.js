@@ -1113,6 +1113,16 @@ export class GuiManager {
             result[key] = value;
         }
 
+        // Grid: Babylon.js expects rowCount / columnCount for parsing
+        if (ctrl.className === "Grid") {
+            if (ctrl.rows) {
+                result.rowCount = ctrl.rows.length;
+            }
+            if (ctrl.columns) {
+                result.columnCount = ctrl.columns.length;
+            }
+        }
+
         if (ctrl.children && ctrl.children.length > 0) {
             result.children = ctrl.children.map((child) => this._cloneControlForExport(tex, child));
         }
