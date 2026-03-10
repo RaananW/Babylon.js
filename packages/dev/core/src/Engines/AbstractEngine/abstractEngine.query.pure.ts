@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { AbstractMesh } from "core/Meshes/abstractMesh";
+import { AbstractMesh } from "core/Meshes/abstractMesh.pure";
 
 /** @internal */
 export type OcclusionQuery = WebGLQuery | number;

@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Scene, FrameGraph } from "core/index";
-import { Vector2 } from "core/Maths/math.vector";
+import { Vector2 } from "core/Maths/math.vector.pure";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { FrameGraphChromaticAberrationTask } from "core/FrameGraph/Tasks/PostProcesses/chromaticAberrationTask";
 import { ThinChromaticAberrationPostProcess } from "core/PostProcesses/thinChromaticAberrationPostProcess";

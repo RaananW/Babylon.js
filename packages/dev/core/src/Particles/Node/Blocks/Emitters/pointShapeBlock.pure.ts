@@ -5,7 +5,7 @@ import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
 import type { Particle } from "core/Particles/particle";
 import type { IShapeBlock } from "./IShapeBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
-import { Vector3 } from "core/Maths/math.vector";
+import { Vector3 } from "core/Maths/math.vector.pure";
 import { NodeParticleBlock } from "../../nodeParticleBlock";
 import { RandomRange } from "core/Maths/math.scalar.functions";
 import { _CreateLocalPositionData } from "./emitters.functions";

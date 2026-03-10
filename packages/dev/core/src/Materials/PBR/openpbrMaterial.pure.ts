@@ -56,7 +56,7 @@ import { MaterialFlags } from "../materialFlags";
 import type { SubMesh } from "../../Meshes/subMesh";
 import { Logger } from "core/Misc/logger";
 import { UVDefinesMixin } from "../uv.defines";
-import { Vector2, Vector4, TmpVectors } from "core/Maths/math.vector";
+import { Vector2, Vector4, TmpVectors } from "core/Maths/math.vector.pure";
 import type { Vector3, Matrix } from "core/Maths/math.vector";
 import type { Mesh } from "../../Meshes/mesh";
 import { ImageProcessingMixin } from "../imageProcessing";

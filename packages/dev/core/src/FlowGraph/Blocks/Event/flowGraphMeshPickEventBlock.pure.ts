@@ -9,7 +9,7 @@ import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
 import { _IsDescendantOf } from "../../utils";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
-import { RichTypeAny, RichTypeNumber, RichTypeVector3 } from "core/FlowGraph/flowGraphRichTypes";
+import { RichTypeAny, RichTypeNumber, RichTypeVector3 } from "core/FlowGraph/flowGraphRichTypes.pure";
 import type { Vector3 } from "core/Maths/math.vector";
 import { FlowGraphEventType } from "core/FlowGraph/flowGraphEventType";
 

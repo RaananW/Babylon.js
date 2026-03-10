@@ -3,7 +3,7 @@
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
-import { Vector2, Vector3, Vector4 } from "core/Maths/math.vector";
+import { Vector2, Vector3, Vector4 } from "core/Maths/math.vector.pure";
 
 /**
  * Block used to clamp a float

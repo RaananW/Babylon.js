@@ -4,7 +4,7 @@ import type { Scene, FrameGraph } from "core/index";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { FrameGraphBlurTask } from "core/FrameGraph/Tasks/PostProcesses/blurTask";
 import { ThinBlurPostProcess } from "core/PostProcesses/thinBlurPostProcess";
-import { Vector2 } from "core/Maths/math.vector";
+import { Vector2 } from "core/Maths/math.vector.pure";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
 
 /**

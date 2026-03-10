@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
-import { Vector2, Vector3 } from "core/Maths/math.vector";
+import { Vector2, Vector3 } from "core/Maths/math.vector.pure";
 import { NodeParticleBlock } from "../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
 import type { NodeParticleConnectionPoint } from "../nodeParticleBlockConnectionPoint";
-import { Color4 } from "core/Maths/math.color";
+import { Color4 } from "core/Maths/math.color.pure";
 
 /**
  * Block used to lerp between 2 values

@@ -7,7 +7,7 @@ import type { TransformNode } from "../../Meshes/transformNode";
 import { Matrix, Quaternion } from "../../Maths/math.pure";
 import { Observable } from "../../Misc/observable";
 import { Mesh } from "../../Meshes/mesh.pure";
-import { VertexBuffer } from "core/Buffers/buffer";
+import { VertexBuffer } from "core/Buffers/buffer.pure";
 import { Logger } from "core/Misc/logger";
 
 /**

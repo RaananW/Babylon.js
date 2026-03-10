@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { Vector4 } from "core/Maths/math.vector";
+import { Vector4 } from "core/Maths/math.vector.pure";
 import type { Vector2 } from "core/Maths/math.vector";
 import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryConnectionPointTypes";
 import type { INodeGeometryTextureData } from "../../Interfaces/nodeGeometryTextureData";

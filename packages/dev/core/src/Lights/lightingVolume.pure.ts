@@ -1,15 +1,15 @@
 import type { AbstractEngine, Engine, Nullable, RenderTargetWrapper, Scene, ShadowGenerator, WebGPUEngine } from "core/index";
 import { AbortError } from "core/Misc/error";
 import { Constants } from "core/Engines/constants";
-import { Matrix, Vector3, TmpVectors } from "core/Maths/math.vector";
-import { DirectionalLight } from "core/Lights/directionalLight";
-import { Mesh } from "core/Meshes/mesh";
-import { ComputeShader } from "core/Compute/computeShader";
+import { Matrix, Vector3, TmpVectors } from "core/Maths/math.vector.pure";
+import { DirectionalLight } from "core/Lights/directionalLight.pure";
+import { Mesh } from "core/Meshes/mesh.pure";
+import { ComputeShader } from "core/Compute/computeShader.pure";
 import { CopyTextureToTexture } from "core/Misc/copyTextureToTexture";
 import { UniformBuffer } from "core/Materials/uniformBuffer";
 import { StorageBuffer } from "core/Buffers/storageBuffer";
-import { BaseTexture } from "core/Materials/Textures/baseTexture";
-import { VertexBuffer } from "core/Buffers/buffer";
+import { BaseTexture } from "core/Materials/Textures/baseTexture.pure";
+import { VertexBuffer } from "core/Buffers/buffer.pure";
 
 
 const TmpVec3 = new Vector3();

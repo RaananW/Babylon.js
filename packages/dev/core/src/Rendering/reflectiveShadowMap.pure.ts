@@ -1,19 +1,19 @@
 /** This file must only contain pure code and pure imports */
 
 import { Constants } from "core/Engines/constants";
-import { MultiRenderTarget } from "core/Materials/Textures/multiRenderTarget";
+import { MultiRenderTarget } from "core/Materials/Textures/multiRenderTarget.pure";
 import type { UniformBuffer } from "core/Materials/uniformBuffer";
-import { Color3, Color4 } from "core/Maths/math.color";
-import { Matrix, TmpVectors } from "core/Maths/math.vector";
+import { Color3, Color4 } from "core/Maths/math.color.pure";
+import { Matrix, TmpVectors } from "core/Maths/math.vector.pure";
 import type { AbstractMesh } from "core/Meshes/abstractMesh";
 import type { Scene } from "core/scene";
 import type { WebGPURenderTargetWrapper } from "core/Engines/WebGPU/webgpuRenderTargetWrapper";
-import { MaterialPluginBase } from "core/Materials/materialPluginBase";
+import { MaterialPluginBase } from "core/Materials/materialPluginBase.pure";
 import type { Material } from "core/Materials/material";
 import type { StandardMaterial } from "core/Materials/standardMaterial";
 import { MaterialDefines } from "core/Materials/materialDefines";
 import type { SpotLight } from "core/Lights/spotLight";
-import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial";
+import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial.pure";
 import { expandToProperty, serialize } from "core/Misc/decorators";
 import { Light } from "core/Lights/light";
 import type { DirectionalLight } from "core/Lights/directionalLight";

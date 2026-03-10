@@ -3,7 +3,7 @@
 import { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
 import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
 import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
-import { getRichTypeFromValue } from "core/FlowGraph/flowGraphRichTypes";
+import { getRichTypeFromValue } from "core/FlowGraph/flowGraphRichTypes.pure";
 import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
 import { defaultValueSerializationFunction } from "core/FlowGraph/serialization";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";

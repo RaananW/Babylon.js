@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { Vector3 } from "core/Maths/math.vector";
+import { Vector3 } from "core/Maths/math.vector.pure";
 import { Light } from "core/Lights/light";
 import type { Effect } from "core/Materials/effect";
 import { serialize } from "core/Misc/decorators";

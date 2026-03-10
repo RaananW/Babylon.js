@@ -21,7 +21,7 @@ import type { ExternalTexture } from "core/Materials/Textures/externalTexture";
 import type { VideoTexture } from "core/Materials/Textures/videoTexture";
 import { WebGPUPerfCounter } from "core/Engines/WebGPU/webgpuPerfCounter";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
-import { _RetryWithInterval } from "core/Misc/timingTools";
+import { _RetryWithInterval } from "core/Misc/timingTools.pure";
 import type { InternalTexture } from "core/Materials/Textures/internalTexture";
 
 /**

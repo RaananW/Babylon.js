@@ -7,7 +7,7 @@ import type { Particle } from "core/Particles/particle";
 import { NodeParticleBlockConnectionPointTypes } from "core/Particles/Node/Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "core/Particles/Node/nodeParticleBlock";
 import { RandomRange } from "core/Maths/math.scalar.functions";
-import { Vector3 } from "core/Maths/math.vector";
+import { Vector3 } from "core/Maths/math.vector.pure";
 import { editableInPropertyPage, PropertyTypeForEdition } from "core/Decorators/nodeDecorator";
 import { _CreateLocalPositionData } from "./emitters.functions";
 

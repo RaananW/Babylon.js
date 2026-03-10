@@ -7,7 +7,7 @@ import type { FloatArray, Nullable } from "../types";
 import { MaterialDefines } from "./materialDefines";
 import type { PBRBaseMaterial } from "./PBR/pbrBaseMaterial";
 import type { StandardMaterial } from "./standardMaterial";
-import { Color3 } from "core/Maths/math";
+import { Color3 } from "core/Maths/math.pure";
 import type { Mesh } from "core/Meshes/mesh";
 import { Logger } from "core/Misc/logger";
 import { expandToProperty, serialize, serializeAsColor3 } from "core/Misc/decorators";

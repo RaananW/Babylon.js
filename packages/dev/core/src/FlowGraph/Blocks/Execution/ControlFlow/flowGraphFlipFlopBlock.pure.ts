@@ -3,7 +3,7 @@
 import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
 import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
 import { FlowGraphExecutionBlock } from "core/FlowGraph/flowGraphExecutionBlock";
-import { RichTypeBoolean } from "core/FlowGraph/flowGraphRichTypes";
+import { RichTypeBoolean } from "core/FlowGraph/flowGraphRichTypes.pure";
 import type { FlowGraphSignalConnection } from "core/FlowGraph/flowGraphSignalConnection";
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";

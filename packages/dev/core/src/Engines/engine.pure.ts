@@ -32,7 +32,7 @@ import {
     _CommonInit,
 } from "./engine.common";
 import { PerfCounter } from "../Misc/perfCounter";
-import { _RetryWithInterval } from "core/Misc/timingTools";
+import { _RetryWithInterval } from "core/Misc/timingTools.pure";
 
 /**
  * The engine class is responsible for interfacing with all lower-level APIs such as WebGL and Audio

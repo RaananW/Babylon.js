@@ -5,7 +5,7 @@ import type { FlowGraphDataConnection } from "../../../flowGraphDataConnection";
 import { FlowGraphAsyncExecutionBlock } from "../../../flowGraphAsyncExecutionBlock";
 import { RichTypeAny, RichTypeNumber, RichTypeBoolean } from "../../../flowGraphRichTypes.pure";
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
-import { AnimationGroup } from "core/Animations/animationGroup";
+import { AnimationGroup } from "core/Animations/animationGroup.pure";
 import type { Animation } from "core/Animations/animation";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 

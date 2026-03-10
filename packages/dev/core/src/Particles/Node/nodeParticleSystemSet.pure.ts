@@ -8,7 +8,7 @@ import { Observable } from "core/Misc/observable";
 import { GetClass } from "core/Misc/typeStore";
 import { WebRequest } from "core/Misc/webRequest";
 import { Constants } from "core/Engines/constants";
-import { Tools } from "core/Misc/tools";
+import { Tools } from "core/Misc/tools.pure";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 import { ParticleInputBlock } from "./Blocks/particleInputBlock.pure";
 import { ParticleTextureSourceBlock } from "./Blocks/particleSourceTextureBlock.pure";

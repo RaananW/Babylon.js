@@ -4,9 +4,9 @@ import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock
 import { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
 import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
 import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
-import { RichTypeAny, RichTypeFlowGraphInteger } from "core/FlowGraph/flowGraphRichTypes";
+import { RichTypeAny, RichTypeFlowGraphInteger } from "core/FlowGraph/flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger";
+import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pure";
 
 /**
  * This block takes an object as input and an array and returns the index of the object in the array.

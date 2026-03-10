@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
-import { Vector2, Vector3 } from "core/Maths/math.vector";
+import { Vector2, Vector3 } from "core/Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
 import type { Observer } from "core/Misc/observable";
 import { NodeParticleBlock } from "../nodeParticleBlock";
 import type { NodeParticleConnectionPoint } from "../nodeParticleBlockConnectionPoint";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
 import type { NodeParticleBuildState } from "../nodeParticleBuildState";
-import { Color4 } from "core/Maths/math.color";
+import { Color4 } from "core/Maths/math.color.pure";
 
 /**
  * Operations supported by the Math block

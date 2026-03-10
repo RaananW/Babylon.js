@@ -1,16 +1,16 @@
 /** This file must only contain pure code and pure imports */
 
 import { MaterialDefines } from "core/Materials/materialDefines";
-import { MaterialPluginBase } from "core/Materials/materialPluginBase";
+import { MaterialPluginBase } from "core/Materials/materialPluginBase.pure";
 import type { InternalTexture } from "core/Materials/Textures/internalTexture";
 import type { Material } from "core/Materials/material";
 import { Constants } from "core/Engines/constants";
 import type { StandardMaterial } from "core/Materials/standardMaterial";
-import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial";
+import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial.pure";
 import type { UniformBuffer } from "core/Materials/uniformBuffer";
 import { expandToProperty, serialize } from "core/Misc/decorators";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
-import { OpenPBRMaterial } from "core/Materials/PBR/openpbrMaterial";
+import { OpenPBRMaterial } from "core/Materials/PBR/openpbrMaterial.pure";
 
 /**
  * @internal

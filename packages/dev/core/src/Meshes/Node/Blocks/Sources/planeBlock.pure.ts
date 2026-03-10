@@ -7,7 +7,7 @@ import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
 import { GeometryInputBlock } from "../geometryInputBlock.pure";
 import { Matrix } from "../../../../Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
-import { CreateGroundVertexData } from "core/Meshes/Builders/groundBuilder";
+import { CreateGroundVertexData } from "core/Meshes/Builders/groundBuilder.pure";
 
 /**
  * Defines a block used to generate plane geometry data

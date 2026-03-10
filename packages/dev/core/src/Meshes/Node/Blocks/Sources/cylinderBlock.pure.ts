@@ -6,7 +6,7 @@ import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnect
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
 import { GeometryInputBlock } from "../geometryInputBlock.pure";
 import type { Vector4 } from "../../../../Maths/math.vector";
-import { CreateCylinderVertexData } from "core/Meshes/Builders/cylinderBuilder";
+import { CreateCylinderVertexData } from "core/Meshes/Builders/cylinderBuilder.pure";
 import type { Color4 } from "../../../../Maths/math.color";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
 

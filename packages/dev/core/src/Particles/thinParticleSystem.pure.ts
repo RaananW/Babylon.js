@@ -1,5 +1,5 @@
 import type { Immutable, Nullable } from "../types";
-import { FactorGradient, ColorGradient, Color3Gradient } from "../Misc/gradients";
+import { FactorGradient, ColorGradient, Color3Gradient } from "../Misc/gradients.pure";
 import type { Observer } from "../Misc/observable";
 import { Observable } from "../Misc/observable";
 import { Vector3, Matrix, TmpVectors } from "../Maths/math.vector.pure";

@@ -6,11 +6,11 @@ import type { NodeParticleBuildState } from "core/Particles/Node/nodeParticleBui
 import type { NodeParticleConnectionPoint } from "core/Particles/Node/nodeParticleBlockConnectionPoint";
 import type { Particle } from "core/Particles/particle";
 import type { IShapeBlock } from "./IShapeBlock";
-import { VertexData } from "core/Meshes/mesh.vertexData";
+import { VertexData } from "core/Meshes/mesh.vertexData.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
 import { NodeParticleBlock } from "core/Particles/Node/nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
-import { TmpVectors, Vector3, Vector4 } from "core/Maths/math.vector";
+import { TmpVectors, Vector3, Vector4 } from "core/Maths/math.vector.pure";
 import { RandomRange } from "core/Maths/math.scalar.functions";
 import { _CreateLocalPositionData } from "./emitters.functions";
 import { VertexDataParse } from "../../../../Meshes/mesh.vertexData.pure";

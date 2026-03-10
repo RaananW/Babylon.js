@@ -7,7 +7,7 @@ import { RichTypeFlowGraphInteger } from "../../../flowGraphRichTypes.pure";
 import type { FlowGraphSignalConnection } from "../../../flowGraphSignalConnection";
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger";
+import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pure";
 
 /**
  * Configuration for the multi gate block.

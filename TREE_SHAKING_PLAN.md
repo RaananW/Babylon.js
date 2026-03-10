@@ -503,26 +503,37 @@ wrapper.
 ### 7.2 — Fix `.pure.ts` → non-pure import specifiers (Problem B)
 
 Rewrite imports in `.pure.ts` files to point to `.pure` specifiers where a `.pure.ts` companion
-exists.
+exists. This prevents circular dependencies (e.g., `abstractMesh.pure → abstractEngine.query →
+abstractEngine.query.pure → abstractMesh → abstractMesh.pure`) and ensures the pure import
+chain stays side-effect-free.
 
 ```diff
 -import { Vector3 } from "../Maths/math.vector";
 +import { Vector3 } from "../Maths/math.vector.pure";
 ```
 
-**Scope**: 788 imports across ~300 `.pure.ts` files need rewriting.
+**Scope**: 162 value imports across 106 `.pure.ts` files rewritten.
+
+**Automation**: `scripts/treeshaking/fixPureImports.mjs`
+
+- Scans all `.pure.ts` files for value imports (not `import type`)
+- Handles both relative (`../foo/bar`) and `core/` path-alias imports
+- Only rewrites if `TARGET.pure.ts` exists on disk
+- Idempotent (safe to run multiple times)
+- Usage: `node scripts/treeshaking/fixPureImports.mjs [--dry-run] [--verbose]`
 
 **Constraints**:
 
 - Only rewrite if `TARGET.pure.ts` exists (don't create false references)
-- Handle TypeScript path resolution (relative paths, index resolution)
+- Handle TypeScript path resolution (relative paths, `core/` alias)
 - Must not break type augmentations (the `.ts` wrapper's `declare module` targets the `.pure` file)
+- Skip `.functions` imports (already side-effect-free by convention)
 
-- [ ] **7.2a** — Create script to rewrite `.pure.ts` import specifiers
-- [ ] **7.2b** — Run on all `.pure.ts` files, verify compilation
+- [x] **7.2a** — Create script to rewrite `.pure.ts` import specifiers (`fixPureImports.mjs`)
+- [x] **7.2b** — Run on all `.pure.ts` files (162 imports in 106 files), verify compilation (0 errors)
 - [ ] **7.2c** — Upgrade ESLint rule `no-side-effect-imports-in-pure` to also flag value imports
       from non-pure specifiers (when a `.pure` alternative exists)
-- [ ] **7.2d** — Verify bundle smoke tests still pass
+- [x] **7.2d** — Verify bundle smoke tests still pass (all pass)
 
 ### 7.3 — Add `exports` field to public `package.json`
 

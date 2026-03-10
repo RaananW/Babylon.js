@@ -5,7 +5,7 @@ import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
 import { GeometryInputBlock } from "../geometryInputBlock.pure";
-import { CreateSegmentedBoxVertexData } from "core/Meshes/Builders/boxBuilder";
+import { CreateSegmentedBoxVertexData } from "core/Meshes/Builders/boxBuilder.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
 
 /**

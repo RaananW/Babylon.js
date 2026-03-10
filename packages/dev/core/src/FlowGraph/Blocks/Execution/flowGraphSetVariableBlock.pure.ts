@@ -5,7 +5,7 @@ import type { FlowGraphContext } from "../../flowGraphContext";
 import { FlowGraphExecutionBlockWithOutSignal } from "../../flowGraphExecutionBlockWithOutSignal";
 import type { FlowGraphSignalConnection } from "../../flowGraphSignalConnection";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RichTypeAny } from "core/FlowGraph/flowGraphRichTypes";
+import { RichTypeAny } from "core/FlowGraph/flowGraphRichTypes.pure";
 
 /**
  * The configuration of the FlowGraphGetVariableBlock.

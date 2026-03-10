@@ -16,16 +16,16 @@ import { PostProcessRenderPipeline } from "../../PostProcesses/RenderPipeline/po
 import { PostProcessRenderEffect } from "core/PostProcesses/RenderPipeline/postProcessRenderEffect";
 import type { Camera } from "core/Cameras/camera";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
-import { GeometryBufferRenderer } from "core/Rendering/geometryBufferRenderer";
-import { RawTexture } from "core/Materials/Textures/rawTexture";
+import { GeometryBufferRenderer } from "core/Rendering/geometryBufferRenderer.pure";
+import { RawTexture } from "core/Materials/Textures/rawTexture.pure";
 import { RawTexture3D } from "core/Materials/Textures/rawTexture3D";
-import { Engine } from "core/Engines/engine";
+import { Engine } from "core/Engines/engine.pure";
 import { IBLShadowsPluginMaterial } from "./iblShadowsPluginMaterial.pure";
-import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial";
-import { StandardMaterial } from "core/Materials/standardMaterial";
+import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial.pure";
+import { StandardMaterial } from "core/Materials/standardMaterial.pure";
 import type { Material } from "core/Materials/material";
 import { Observable } from "core/Misc/observable";
-import { OpenPBRMaterial } from "core/Materials/PBR/openpbrMaterial";
+import { OpenPBRMaterial } from "core/Materials/PBR/openpbrMaterial.pure";
 import { Tools } from "../../Misc/tools.pure";
 
 interface IIblShadowsSettings {

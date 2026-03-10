@@ -13,7 +13,7 @@ import {
     RichTypeQuaternion,
     RichTypeVector3,
 } from "core/FlowGraph/flowGraphRichTypes";
-import { Matrix, Quaternion, Vector3 } from "core/Maths/math.vector";
+import { Matrix, Quaternion, Vector3 } from "core/Maths/math.vector.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { FlowGraphUnaryOperationBlock } from "../flowGraphUnaryOperationBlock";
 import type { FlowGraphMatrix2D } from "core/FlowGraph/CustomTypes/flowGraphMatrix";

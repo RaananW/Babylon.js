@@ -13,15 +13,15 @@ import { Constants } from "../../Engines/constants";
 import { WebGLHardwareTexture } from "../../Engines/WebGL/webGLHardwareTexture";
 import type { InternalTexture } from "../../Materials/Textures/internalTexture";
 import type { ThinEngine } from "../../Engines/thinEngine";
-import { MaterialPluginBase } from "core/Materials/materialPluginBase";
+import { MaterialPluginBase } from "core/Materials/materialPluginBase.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import type { Material } from "core/Materials/material";
 import { MaterialDefines } from "core/Materials/materialDefines";
 import type { UniformBuffer } from "core/Materials/uniformBuffer";
-import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial";
+import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial.pure";
 import { RegisterMaterialPlugin, UnregisterMaterialPlugin } from "core/Materials/materialPluginManager";
 import type { Camera } from "core/Cameras/camera";
-import { Matrix } from "core/Maths/math.vector";
+import { Matrix } from "core/Maths/math.vector.pure";
 import type { Engine } from "core/Engines/engine";
 
 export type WebXRDepthUsage = "cpu" | "gpu";

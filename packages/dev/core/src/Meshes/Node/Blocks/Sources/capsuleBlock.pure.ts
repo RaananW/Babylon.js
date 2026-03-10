@@ -6,7 +6,7 @@ import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnect
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
 import { GeometryInputBlock } from "../geometryInputBlock.pure";
 import type { Vector3 } from "../../../../Maths/math.vector";
-import { CreateCapsuleVertexData } from "core/Meshes/Builders/capsuleBuilder";
+import { CreateCapsuleVertexData } from "core/Meshes/Builders/capsuleBuilder.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
 
 /**

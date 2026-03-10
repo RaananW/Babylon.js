@@ -27,7 +27,7 @@ import { TransformNode } from "../../Meshes/transformNode";
 import { Axis } from "../../Maths/math.axis";
 import { Constants } from "../../Engines/constants";
 import type { WebXRCompositionLayerWrapper } from "./Layers/WebXRCompositionLayer";
-import { Tools } from "core/Misc/tools";
+import { Tools } from "core/Misc/tools.pure";
 import type { WebXRCamera } from "../webXRCamera";
 import type { Node } from "../../node";
 

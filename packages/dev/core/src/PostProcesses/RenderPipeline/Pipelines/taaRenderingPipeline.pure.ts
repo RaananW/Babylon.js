@@ -10,7 +10,7 @@ import { PostProcessRenderEffect } from "../postProcessRenderEffect";
 import type { Scene } from "../../../scene";
 import { Constants } from "../../../Engines/constants";
 import type { Nullable } from "../../../types";
-import { PassPostProcess } from "core/PostProcesses/passPostProcess";
+import { PassPostProcess } from "core/PostProcesses/passPostProcess.pure";
 import type { RenderTargetWrapper } from "core/Engines/renderTargetWrapper";
 import { ThinTAAPostProcess } from "core/PostProcesses/thinTAAPostProcess";
 import type { PrePassEffectConfiguration } from "core/Rendering/prePassEffectConfiguration";

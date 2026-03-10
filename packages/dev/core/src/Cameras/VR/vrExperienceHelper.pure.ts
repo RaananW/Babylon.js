@@ -32,7 +32,7 @@ import { WebXRState } from "../../XR/webXRTypes";
 import { CreateGround } from "../../Meshes/Builders/groundBuilder.pure";
 import type { IPointerEvent } from "../../Events/deviceInputEvents";
 import type { Mesh } from "core/Meshes/mesh";
-import { CreateTorus } from "core/Meshes/Builders/torusBuilder";
+import { CreateTorus } from "core/Meshes/Builders/torusBuilder.pure";
 
 /**
  * Options to modify the vr teleportation behavior.

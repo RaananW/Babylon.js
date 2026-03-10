@@ -4,8 +4,8 @@ import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryC
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
-import { Vector3 } from "core/Maths/math.vector";
-import { VertexData } from "core/Meshes/mesh.vertexData";
+import { Vector3 } from "core/Maths/math.vector.pure";
+import { VertexData } from "core/Meshes/mesh.vertexData.pure";
 
 /**
  * Defines a block used to generate a geometry data from a list of points

@@ -9,7 +9,7 @@ import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import type { FlowGraphNumber } from "core/FlowGraph/utils";
 import { getNumericValue } from "core/FlowGraph/utils";
-import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger";
+import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pure";
 
 /**
  * Configuration for the For Loop block.

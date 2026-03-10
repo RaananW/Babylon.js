@@ -7,7 +7,7 @@ import type { IShapeBlock } from "./IShapeBlock";
 import { RandomRange } from "core/Maths/math.scalar.functions";
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "../../nodeParticleBlock";
-import { Vector3 } from "core/Maths/math.vector";
+import { Vector3 } from "core/Maths/math.vector.pure";
 import { _CreateLocalPositionData } from "./emitters.functions";
 
 /**

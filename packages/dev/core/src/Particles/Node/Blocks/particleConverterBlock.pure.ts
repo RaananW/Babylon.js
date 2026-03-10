@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { Color4 } from "core/Maths/math.color";
+import { Color4 } from "core/Maths/math.color.pure";
 import { Vector2, Vector3 } from "../../../Maths/math.vector.pure";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "../nodeParticleBlock";

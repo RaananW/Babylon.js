@@ -14,8 +14,8 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { NodeRenderGraphBlock } from "../../nodeRenderGraphBlock";
 import { FrameGraphVolumetricLightingTask } from "core/FrameGraph/Tasks/PostProcesses/volumetricLightingTask";
 import { NodeRenderGraphBlockConnectionPointTypes } from "../../Types/nodeRenderGraphTypes";
-import { Vector3 } from "core/Maths/math.vector";
-import { Color3 } from "core/Maths/math.color";
+import { Vector3 } from "core/Maths/math.vector.pure";
+import { Color3 } from "core/Maths/math.color.pure";
 import { Color3FromArray } from "../../../../Maths/math.color.pure";
 
 /**

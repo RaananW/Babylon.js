@@ -7,7 +7,7 @@ import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnect
 import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
 import type { Particle } from "core/Particles/particle";
 import { _ConnectAtTheEnd } from "core/Particles/Queue/executionQueue";
-import { Vector3 } from "core/Maths/math.vector";
+import { Vector3 } from "core/Maths/math.vector.pure";
 
 const ToAttractor: Vector3 = /*#__PURE__*/ Vector3.Zero();
 const Force: Vector3 = /*#__PURE__*/ Vector3.Zero();
