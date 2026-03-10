@@ -7,7 +7,7 @@ import type { IOfflineProvider } from "../Offline/IOfflineProvider";
 import type { IFileRequest } from "./fileRequest";
 import { Observable } from "./observable";
 import { FilesInputStore } from "./filesInputStore";
-import { RetryStrategy } from "./retryStrategy.pure";
+import { RetryStrategyExponentialBackoff } from "./retryStrategy.pure";
 import { BaseError, ErrorCodes, RuntimeError } from "./error";
 import { DecodeBase64ToBinary, DecodeBase64ToString, EncodeArrayBufferToBase64 } from "./stringTools";
 import { EngineStore } from "../Engines/engineStore";
@@ -105,7 +105,7 @@ export const FileToolsOptions: {
      * When defining this function, return the wait time before trying again or return -1 to
      * stop retrying and error out.
      */
-    DefaultRetryStrategy: RetryStrategy.ExponentialBackoff(),
+    DefaultRetryStrategy: RetryStrategyExponentialBackoff(),
 
     /**
      * Gets or sets the base URL to use to load assets

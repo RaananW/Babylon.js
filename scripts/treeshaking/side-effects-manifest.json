@@ -1,8 +1,8 @@
 {
   "stats": {
-    "totalFiles": 3031,
-    "filesWithSideEffects": 1420,
-    "filesWithoutSideEffects": 1611,
+    "totalFiles": 3035,
+    "filesWithSideEffects": 1421,
+    "filesWithoutSideEffects": 1614,
     "byType": {
       "RegisterClass": 536,
       "declare-module": 159,
@@ -2501,17 +2501,22 @@
       ]
     },
     {
+      "file": "Engines/thinNativeEngine.pure.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 68,
+          "text": "declare module \"../Materials/effect\" {"
+        }
+      ]
+    },
+    {
       "file": "Engines/thinNativeEngine.ts",
       "sideEffects": [
         {
           "type": "bare-import",
-          "line": 63,
+          "line": 3,
           "text": "import \"../Buffers/buffer.align\";"
-        },
-        {
-          "type": "declare-module",
-          "line": 69,
-          "text": "declare module \"../Materials/effect\" {"
         }
       ]
     },
@@ -3075,12 +3080,12 @@
       "sideEffects": [
         {
           "type": "bare-import",
-          "line": 16,
+          "line": 3,
           "text": "import \"../../ShadersWGSL/clearQuad.vertex\";"
         },
         {
           "type": "bare-import",
-          "line": 17,
+          "line": 4,
           "text": "import \"../../ShadersWGSL/clearQuad.fragment\";"
         }
       ]
@@ -3090,47 +3095,47 @@
       "sideEffects": [
         {
           "type": "bare-import",
-          "line": 16,
+          "line": 3,
           "text": "import \"../../ShadersWGSL/ShadersInclude/bakedVertexAnimationDeclaration\";"
         },
         {
           "type": "bare-import",
-          "line": 17,
+          "line": 4,
           "text": "import \"../../ShadersWGSL/ShadersInclude/bakedVertexAnimation\";"
         },
         {
           "type": "bare-import",
-          "line": 18,
+          "line": 5,
           "text": "import \"../../ShadersWGSL/ShadersInclude/instancesDeclaration\";"
         },
         {
           "type": "bare-import",
-          "line": 19,
+          "line": 6,
           "text": "import \"../../ShadersWGSL/ShadersInclude/instancesVertex\";"
         },
         {
           "type": "bare-import",
-          "line": 20,
+          "line": 7,
           "text": "import \"../../ShadersWGSL/ShadersInclude/helperFunctions\";"
         },
         {
           "type": "bare-import",
-          "line": 21,
+          "line": 8,
           "text": "import \"../../ShadersWGSL/ShadersInclude/fresnelFunction\";"
         },
         {
           "type": "bare-import",
-          "line": 22,
+          "line": 9,
           "text": "import \"../../ShadersWGSL/ShadersInclude/meshUboDeclaration\";"
         },
         {
           "type": "bare-import",
-          "line": 23,
+          "line": 10,
           "text": "import \"../../ShadersWGSL/ShadersInclude/sceneUboDeclaration\";"
         },
         {
           "type": "bare-import",
-          "line": 24,
+          "line": 11,
           "text": "import \"../../ShadersWGSL/ShadersInclude/decalFragment\";"
         }
       ]
@@ -9670,7 +9675,7 @@
       "sideEffects": [
         {
           "type": "bare-import",
-          "line": 25,
+          "line": 3,
           "text": "import \"../Engines/Extensions/engine.alpha\";"
         }
       ]

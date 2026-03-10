@@ -104,7 +104,10 @@ function rewriteFile(filePath) {
         // companion, so blindly rewriting would break compilation.
         const regularPath = resolved + ".ts";
         if (existsSync(regularPath)) {
-            const regularContent = readFileSync(regularPath, "utf-8").trimStart();
+            // Strip leading comments and whitespace to find the first real statement
+            const regularContent = readFileSync(regularPath, "utf-8")
+                .replace(/^\s*(\/\*[\s\S]*?\*\/\s*|\/\/[^\n]*\n\s*)*/m, "")
+                .trimStart();
             if (!regularContent.startsWith("export * from")) {
                 return line;
             }

@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { ThinParticleSystem } from "./thinParticleSystem";
+import { ThinParticleSystem } from "./thinParticleSystem.pure";
 import type { IParticleEmitterType } from "./EmitterTypes/IParticleEmitterType";
 import { SubEmitter, SubEmitterType } from "./subEmitter";
 import { Color3, Color4 } from "../Maths/math.color.pure";
