@@ -8,7 +8,7 @@ import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import type { Scene } from "../../../scene";
 import { editableInPropertyPage, PropertyTypeForEdition } from "core/Decorators/nodeDecorator";
 import type { NodeMaterial } from "../nodeMaterial";
-import { InputBlock } from "./Input/inputBlock";
+import { InputBlock } from "./Input/inputBlock.pure";
 
 /**
  * Operations supported by the ConditionalBlock block

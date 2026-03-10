@@ -5,9 +5,9 @@ import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
 import type { NodeMaterial } from "../../nodeMaterial";
-import { InputBlock } from "../Input/inputBlock";
+import { InputBlock } from "../Input/inputBlock.pure";
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
-import { ReflectionTextureBaseBlock } from "./reflectionTextureBaseBlock";
+import { ReflectionTextureBaseBlock } from "./reflectionTextureBaseBlock.pure";
 import type { NodeMaterialBlock } from "../../nodeMaterialBlock";
 import { Logger } from "core/Misc/logger";
 

@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
-import { Vector3 } from "../../Maths/math.vector";
+import { Vector3 } from "../../Maths/math.vector.pure";
 import type { Color4 } from "../../Maths/math.color";
-import { _CreationDataStorage } from "../mesh";
-import { VertexData } from "../mesh.vertexData";
+import { _CreationDataStorage } from "../mesh.pure";
+import { VertexData } from "../mesh.vertexData.pure";
 import type { FloatArray, Nullable } from "../../types";
-import { LinesMesh } from "../../Meshes/linesMesh";
+import { LinesMesh } from "../../Meshes/linesMesh.pure";
 import type { Scene } from "../../scene";
-import { VertexBuffer } from "../../Buffers/buffer";
+import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { Logger } from "../../Misc/logger";
 import type { Material } from "../../Materials/material";
 

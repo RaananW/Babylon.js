@@ -2,10 +2,10 @@
 
 import type { Nullable } from "../types";
 import { serialize, serializeAsMeshReference } from "../Misc/decorators";
-import { Tools } from "../Misc/tools";
-import { TargetCamera } from "./targetCamera";
+import { Tools } from "../Misc/tools.pure";
+import { TargetCamera } from "./targetCamera.pure";
 import type { Scene } from "../scene";
-import { TmpVectors, Vector3 } from "../Maths/math.vector";
+import { TmpVectors, Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { FollowCameraInputsManager } from "./followCameraInputsManager";
 

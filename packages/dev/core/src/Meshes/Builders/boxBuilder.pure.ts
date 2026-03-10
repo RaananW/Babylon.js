@@ -2,12 +2,12 @@
 
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
-import { Matrix, Vector4 } from "../../Maths/math.vector";
-import { Color4 } from "../../Maths/math.color";
-import { Mesh } from "../mesh";
-import { VertexData } from "../mesh.vertexData";
+import { Matrix, Vector4 } from "../../Maths/math.vector.pure";
+import { Color4 } from "../../Maths/math.color.pure";
+import { Mesh } from "../mesh.pure";
+import { VertexData } from "../mesh.vertexData.pure";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
-import { CreateGroundVertexData } from "./groundBuilder";
+import { CreateGroundVertexData } from "./groundBuilder.pure";
 
 /**
  * Creates the VertexData for a box

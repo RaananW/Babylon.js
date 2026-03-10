@@ -4,13 +4,13 @@ import type { Observer } from "../../Misc/observable";
 import type { Nullable } from "../../types";
 import type { Camera } from "../../Cameras/camera";
 import type { Scene } from "../../scene";
-import { Matrix, Vector3, Vector2 } from "../../Maths/math.vector";
-import { Texture } from "../../Materials/Textures/texture";
-import { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
+import { Matrix, Vector3, Vector2 } from "../../Maths/math.vector.pure";
+import { Texture } from "../../Materials/Textures/texture.pure";
+import { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture.pure";
 import type { ImageProcessingConfiguration } from "../../Materials/imageProcessingConfiguration";
-import { BlurPostProcess } from "../../PostProcesses/blurPostProcess";
+import { BlurPostProcess } from "../../PostProcesses/blurPostProcess.pure";
 import { Constants } from "../../Engines/constants";
-import { Plane } from "../../Maths/math.plane";
+import { Plane } from "../../Maths/math.plane.pure";
 import type { UniformBuffer } from "../uniformBuffer";
 import type { TextureSize } from "../../Materials/Textures/textureCreationOptions";
 

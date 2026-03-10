@@ -4,7 +4,7 @@ import type { Nullable } from "../types";
 import { Observable } from "./observable";
 import { GetDOMTextContent, IsNavigatorAvailable, IsWindowObjectExist } from "./domManagement";
 import { Logger } from "./logger";
-import { DeepCopier } from "./deepCopier";
+import { DeepCopier } from "./deepCopier.pure";
 import { PrecisionDate } from "./precisionDate";
 import { _WarnImport } from "./devTools";
 import { WebRequest } from "./webRequest";
@@ -21,7 +21,7 @@ import {
     SetCorsBehavior,
 } from "./fileTools";
 import type { IOfflineProvider } from "../Offline/IOfflineProvider";
-import { TimingTools } from "./timingTools";
+import { TimingTools } from "./timingTools.pure";
 import { InstantiationTools } from "./instantiationTools";
 import { RandomGUID } from "./guid";
 import type { IScreenshotSize } from "./interfaces/screenshotSize";

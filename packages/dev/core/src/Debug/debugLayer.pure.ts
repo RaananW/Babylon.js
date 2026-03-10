@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import { Tools } from "../Misc/tools";
+import { Tools } from "../Misc/tools.pure";
 import { Observable } from "../Misc/observable";
-import { Scene } from "../scene";
+import { Scene } from "../scene.pure";
 import { EngineStore } from "../Engines/engineStore";
 import type { IInspectable } from "../Misc/iInspectable";
 import type { Camera } from "../Cameras/camera";

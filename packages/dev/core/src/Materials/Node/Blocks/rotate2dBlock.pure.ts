@@ -5,7 +5,7 @@ import { NodeMaterialBlockConnectionPointTypes } from "../Enums/nodeMaterialBloc
 import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
-import { InputBlock } from "./Input/inputBlock";
+import { InputBlock } from "./Input/inputBlock.pure";
 
 /**
  * Block used to rotate a 2d vector by a given angle

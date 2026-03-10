@@ -2,19 +2,19 @@
 
 import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
-import { CurrentScreenBlock } from "./currentScreenBlock";
-import { InputBlock } from "../Input/inputBlock";
+import { CurrentScreenBlock } from "./currentScreenBlock.pure";
+import { InputBlock } from "../Input/inputBlock.pure";
 import type { NodeMaterialBlock } from "../../nodeMaterialBlock";
 import type { NodeMaterial } from "../../nodeMaterial";
 import type { Scene } from "core/scene";
-import { SfeModeDefine } from "../Fragment/smartFilterFragmentOutputBlock";
+import { SfeModeDefine } from "../Fragment/smartFilterFragmentOutputBlock.pure";
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
 import type { Nullable } from "../../../../types";
 import type { BaseTexture } from "../../../Textures/baseTexture";
 import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
-import { ImageSourceBlock } from "./imageSourceBlock";
+import { ImageSourceBlock } from "./imageSourceBlock.pure";
 
 /**
  * Base block used for creating Smart Filter shader blocks for the SFE framework.

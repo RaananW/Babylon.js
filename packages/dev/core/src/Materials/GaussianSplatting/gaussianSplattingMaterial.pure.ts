@@ -7,14 +7,14 @@ import type { Effect, IEffectCreationOptions } from "../../Materials/effect";
 import type { Scene } from "../../scene";
 import type { Matrix } from "../../Maths/math.vector";
 import type { GaussianSplattingMesh } from "../../Meshes/GaussianSplatting/gaussianSplattingMesh";
-import { SerializationHelper } from "../../Misc/decorators.serialization";
-import { VertexBuffer } from "../../Buffers/buffer";
+import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
+import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { MaterialDefines } from "../../Materials/materialDefines";
 import { PushMaterial } from "../../Materials/pushMaterial";
 import { AddClipPlaneUniforms, BindClipPlane } from "../clipPlaneMaterialHelper";
 import { Camera } from "../../Cameras/camera";
 import { ShadowDepthWrapper } from "../../Materials/shadowDepthWrapper";
-import { ShaderMaterial } from "../../Materials/shaderMaterial";
+import { ShaderMaterial } from "../../Materials/shaderMaterial.pure";
 import { MaterialPluginEvent } from "../materialPluginEvent";
 import { Material } from "../material";
 import {

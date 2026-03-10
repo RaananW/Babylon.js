@@ -4,9 +4,9 @@ import { WebXRFeatureName } from "../webXRFeaturesManager";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import type { TransformNode } from "../../Meshes/transformNode";
-import { Matrix, Quaternion } from "../../Maths/math";
+import { Matrix, Quaternion } from "../../Maths/math.pure";
 import { Observable } from "../../Misc/observable";
-import { Mesh } from "../../Meshes/mesh";
+import { Mesh } from "../../Meshes/mesh.pure";
 import { VertexBuffer } from "core/Buffers/buffer";
 import { Logger } from "core/Misc/logger";
 

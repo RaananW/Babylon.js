@@ -3,7 +3,7 @@
 import { serialize } from "../Misc/decorators";
 import type { Camera } from "../Cameras/camera";
 import type { Scene } from "../scene";
-import { Matrix, Vector3 } from "../Maths/math.vector";
+import { Matrix, Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { Light } from "./light";
 import { ShadowLight } from "./shadowLight";

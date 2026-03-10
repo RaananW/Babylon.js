@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { Action } from "./action";
+import { Action } from "./action.pure";
 import type { ActionManager } from "./actionManager";
 
 /**

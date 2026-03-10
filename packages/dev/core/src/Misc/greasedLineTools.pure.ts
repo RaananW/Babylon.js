@@ -1,15 +1,15 @@
-import { Curve3 } from "../Maths/math.path";
-import { VertexBuffer } from "../Buffers/buffer";
-import { TmpVectors, Vector3 } from "../Maths/math.vector";
+import { Curve3 } from "../Maths/math.path.pure";
+import { VertexBuffer } from "../Buffers/buffer.pure";
+import { TmpVectors, Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { IFontData } from "../Meshes/Builders/textBuilder";
 import { CreateTextShapePaths } from "../Meshes/Builders/textBuilder";
 import type { FloatArray, IndicesArray } from "../types";
 import type { GreasedLinePoints, GreasedLinePointsOptions } from "../Meshes/GreasedLine/greasedLineBaseMesh";
 import type { Color3 } from "../Maths/math.color";
-import { RawTexture } from "../Materials/Textures/rawTexture";
+import { RawTexture } from "../Materials/Textures/rawTexture.pure";
 import type { Scene } from "../scene";
-import { Engine } from "../Engines/engine";
+import { Engine } from "../Engines/engine.pure";
 import { GreasedLineMaterialDefaults } from "../Materials/GreasedLine/greasedLineMaterialDefaults";
 
 /**

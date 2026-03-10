@@ -37,5 +37,5 @@ export * from "./mesh.vertexData.subdivide";
 export * from "./thinInstanceMesh.pure";
 export * from "./thinInstanceMesh.pure";
 export * from "./Node/pure";
-export * from "./GaussianSplatting/gaussianSplattingMesh";
+export * from "./GaussianSplatting/gaussianSplattingMesh.pure";
 export * from "./GreasedLine/pure";

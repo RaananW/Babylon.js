@@ -2,10 +2,10 @@
 
 import { Camera } from "../Cameras/camera";
 import type { PostProcessOptions } from "./postProcess";
-import { PostProcess } from "./postProcess";
+import { PostProcess } from "./postProcess.pure";
 import { Constants } from "../Engines/constants";
 import { serialize } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 import type { Nullable } from "../types";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import type { ThinTonemapPostProcessOptions, TonemappingOperator } from "./thinTonemapPostProcess";

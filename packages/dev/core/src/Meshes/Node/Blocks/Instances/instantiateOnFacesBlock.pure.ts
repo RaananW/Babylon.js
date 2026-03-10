@@ -6,7 +6,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryC
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
 import type { INodeGeometryExecutionContext } from "../../Interfaces/nodeGeometryExecutionContext";
 import type { VertexData } from "../../../mesh.vertexData";
-import { Vector2, Vector3 } from "../../../../Maths/math.vector";
+import { Vector2, Vector3 } from "../../../../Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
 import type { Nullable } from "../../../../types";
 import type { INodeGeometryInstancingContext } from "../../Interfaces/nodeGeometryInstancingContext";

@@ -18,7 +18,7 @@ import type { StandardMaterial } from "core/Materials/standardMaterial";
 import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial";
 import type { UniformBuffer } from "core/Materials/uniformBuffer";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
-import { GeometryBufferRenderer } from "../geometryBufferRenderer";
+import { GeometryBufferRenderer } from "../geometryBufferRenderer.pure";
 import { BaseTexture } from "core/Materials/Textures/baseTexture";
 import type { WebGPURenderTargetWrapper } from "core/Engines/WebGPU/webgpuRenderTargetWrapper";
 import { expandToProperty, serialize } from "core/Misc/decorators";

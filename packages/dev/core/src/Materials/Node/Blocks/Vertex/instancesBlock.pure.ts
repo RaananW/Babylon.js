@@ -8,7 +8,7 @@ import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
 import type { AbstractMesh } from "../../../../Meshes/abstractMesh";
 import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
-import { InputBlock } from "../Input/inputBlock";
+import { InputBlock } from "../Input/inputBlock.pure";
 import type { SubMesh } from "../../../../Meshes/subMesh";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 

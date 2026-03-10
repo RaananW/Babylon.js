@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { RichTypeBoolean } from "../../../flowGraphRichTypes";
+import { RichTypeBoolean } from "../../../flowGraphRichTypes.pure";
 import type { FlowGraphContext } from "../../../flowGraphContext";
 import type { FlowGraphDataConnection } from "../../../flowGraphDataConnection";
 import { FlowGraphExecutionBlock } from "../../../flowGraphExecutionBlock";

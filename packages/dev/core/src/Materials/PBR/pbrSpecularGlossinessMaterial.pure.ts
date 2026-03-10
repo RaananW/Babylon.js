@@ -6,7 +6,7 @@ import type { Color3 } from "../../Maths/math.color";
 import type { BaseTexture } from "../../Materials/Textures/baseTexture";
 import { PBRBaseSimpleMaterial } from "./pbrBaseSimpleMaterial";
 import type { Nullable } from "../../types";
-import { SerializationHelper } from "../../Misc/decorators.serialization";
+import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
 
 /**
  * The PBR material of BJS following the specular glossiness convention.

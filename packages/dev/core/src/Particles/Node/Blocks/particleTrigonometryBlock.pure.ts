@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable } from "../../../types";
-import { Vector2, Vector3 } from "../../../Maths/math.vector";
+import { Vector2, Vector3 } from "../../../Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
 import { NodeParticleBlock } from "../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";

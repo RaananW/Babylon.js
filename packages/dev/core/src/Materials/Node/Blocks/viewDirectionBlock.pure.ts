@@ -7,7 +7,7 @@ import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnection
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterial } from "../nodeMaterial";
 import { NodeMaterialSystemValues } from "../Enums/nodeMaterialSystemValues";
-import { InputBlock } from "./Input/inputBlock";
+import { InputBlock } from "./Input/inputBlock.pure";
 
 /**
  * Block used to get the view direction

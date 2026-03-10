@@ -5,7 +5,7 @@ import { Observable } from "../Misc/observable";
 import type { Vector3 } from "../Maths/math.vector";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
-import { Scene } from "../scene";
+import { Scene } from "../scene.pure";
 import type { IPhysicsEngine } from "./IPhysicsEngine";
 import type { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin";
 import type { IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin";

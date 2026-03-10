@@ -8,7 +8,7 @@ import type { Scene } from "../../../scene";
 import type { Nullable } from "../../../types";
 import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialConnectionPointDirection } from "../nodeMaterialBlockConnectionPoint";
-import { ImageSourceBlock } from "./Dual/imageSourceBlock";
+import { ImageSourceBlock } from "./Dual/imageSourceBlock.pure";
 import { NodeMaterialConnectionPointCustomObject } from "../nodeMaterialConnectionPointCustomObject";
 
 /**

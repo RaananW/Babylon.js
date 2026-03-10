@@ -3,9 +3,9 @@
 import type { Nullable } from "../types";
 import type { Camera } from "../Cameras/camera";
 import type { PostProcessOptions } from "./postProcess";
-import { PostProcess } from "./postProcess";
+import { PostProcess } from "./postProcess.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
-import { SerializationHelper } from "../Misc/decorators.serialization";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 import type { Scene } from "../scene";
 
 /**

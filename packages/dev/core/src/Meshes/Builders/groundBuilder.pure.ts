@@ -1,12 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Scene } from "../../scene";
-import { Vector3 } from "../../Maths/math.vector";
-import { Color3 } from "../../Maths/math.color";
-import { Mesh } from "../mesh";
-import { VertexData } from "../mesh.vertexData";
-import { GroundMesh } from "../groundMesh";
-import { Tools } from "../../Misc/tools";
+import { Vector3 } from "../../Maths/math.vector.pure";
+import { Color3 } from "../../Maths/math.color.pure";
+import { Mesh } from "../mesh.pure";
+import { VertexData } from "../mesh.vertexData.pure";
+import { GroundMesh } from "../groundMesh.pure";
+import { Tools } from "../../Misc/tools.pure";
 import type { Nullable } from "../../types";
 import { EngineStore } from "../../Engines/engineStore";
 import { Epsilon } from "../../Maths/math.constants";

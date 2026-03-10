@@ -6,7 +6,7 @@ import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
 import { NodeMaterialConnectionPointDirection } from "../nodeMaterialBlockConnectionPoint";
 import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
-import { LoopBlock } from "./loopBlock";
+import { LoopBlock } from "./loopBlock.pure";
 import { NodeMaterialConnectionPointCustomObject } from "../nodeMaterialConnectionPointCustomObject";
 
 /**

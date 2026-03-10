@@ -9,13 +9,13 @@ import type { WebXRInputSource } from "../webXRInputSource";
 import type { Scene } from "../../scene";
 import type { WebXRControllerComponent } from "../motionController/webXRControllerComponent";
 import type { Nullable } from "../../types";
-import { Matrix, Vector3 } from "../../Maths/math.vector";
-import { Color3 } from "../../Maths/math.color";
+import { Matrix, Vector3 } from "../../Maths/math.vector.pure";
+import { Color3 } from "../../Maths/math.color.pure";
 import { Axis } from "../../Maths/math.axis";
-import { StandardMaterial } from "../../Materials/standardMaterial";
-import { CreateCylinder } from "../../Meshes/Builders/cylinderBuilder";
-import { CreateTorus } from "../../Meshes/Builders/torusBuilder";
-import { Ray } from "../../Culling/ray";
+import { StandardMaterial } from "../../Materials/standardMaterial.pure";
+import { CreateCylinder } from "../../Meshes/Builders/cylinderBuilder.pure";
+import { CreateTorus } from "../../Meshes/Builders/torusBuilder.pure";
+import { Ray } from "../../Culling/ray.pure";
 import { PickingInfo } from "../../Collisions/pickingInfo";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { UtilityLayerRenderer } from "../../Rendering/utilityLayerRenderer";
@@ -24,7 +24,7 @@ import type { WebXRCamera } from "../webXRCamera";
 import type { Node } from "../../node";
 import { Viewport } from "../../Maths/math.viewport";
 import type { Mesh } from "../../Meshes/mesh";
-import { Tools } from "../../Misc/tools";
+import { Tools } from "../../Misc/tools.pure";
 
 /**
  * Options interface for the pointer selection module

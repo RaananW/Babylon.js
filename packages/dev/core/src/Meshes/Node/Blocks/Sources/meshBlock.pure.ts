@@ -4,7 +4,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryC
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import type { Mesh } from "../../../../Meshes/mesh";
-import { VertexData } from "../../../../Meshes/mesh.vertexData";
+import { VertexData } from "../../../../Meshes/mesh.vertexData.pure";
 import type { Nullable } from "../../../../types";
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
 

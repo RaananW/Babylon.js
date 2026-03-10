@@ -210,6 +210,16 @@ function analyzeFile(filePath) {
 
         // --- Detection rules ---
 
+        // 0. Bare (side-effect) imports: import "./something" or import "../something"
+        //    These execute the imported module purely for its side effects.
+        if (/^import\s+["']/.test(trimmed)) {
+            sideEffects.push({
+                type: "bare-import",
+                line: lineNum,
+                text: trimmed.substring(0, 120),
+            });
+        }
+
         // 1. RegisterClass(...)
         if (/\bRegisterClass\s*\(/.test(trimmed)) {
             sideEffects.push({

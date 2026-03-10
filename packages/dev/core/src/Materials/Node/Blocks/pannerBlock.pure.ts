@@ -5,7 +5,7 @@ import { NodeMaterialBlockConnectionPointTypes } from "../Enums/nodeMaterialBloc
 import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
 import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
-import { InputBlock } from "./Input/inputBlock";
+import { InputBlock } from "./Input/inputBlock.pure";
 import type { NodeMaterial } from "../nodeMaterial";
 import { AnimatedInputBlockTypes } from "./Input/animatedInputBlockTypes";
 import { NodeMaterialModes } from "../Enums/nodeMaterialModes";

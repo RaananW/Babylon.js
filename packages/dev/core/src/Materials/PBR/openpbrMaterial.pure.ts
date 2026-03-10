@@ -5,12 +5,12 @@ import { GetEnvironmentBRDFTexture, GetEnvironmentFuzzBRDFTexture } from "../../
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
 import type { Color4 } from "../../Maths/math.color";
-import { Color3 } from "../../Maths/math.color";
-import { ImageProcessingConfiguration } from "../imageProcessingConfiguration";
+import { Color3 } from "../../Maths/math.color.pure";
+import { ImageProcessingConfiguration } from "../imageProcessingConfiguration.pure";
 import type { BaseTexture } from "../../Materials/Textures/baseTexture";
-import { Texture } from "../Textures/texture";
+import { Texture } from "../Textures/texture.pure";
 import { Material } from "../material";
-import { SerializationHelper } from "../../Misc/decorators.serialization";
+import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
 import type { Engine } from "../../Engines/engine";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";
 import type { Effect, IEffectCreationOptions } from "../../Materials/effect";
@@ -46,10 +46,10 @@ import {
     PrepareUniformLayoutForIBL,
 } from "../materialHelper.functions";
 import { Constants } from "../../Engines/constants";
-import { VertexBuffer } from "../../Buffers/buffer";
+import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { MaterialPluginEvent } from "../materialPluginEvent";
 import { MaterialHelperGeometryRendering } from "../materialHelper.geometryrendering";
-import { PrePassConfiguration } from "../prePassConfiguration";
+import { PrePassConfiguration } from "../prePassConfiguration.pure";
 import type { IMaterialCompilationOptions, ICustomShaderNameResolveOptions } from "../../Materials/material";
 import { ShaderLanguage } from "../shaderLanguage";
 import { MaterialFlags } from "../materialFlags";
@@ -64,7 +64,7 @@ import { PushMaterial } from "../pushMaterial";
 import { SmartArray } from "../../Misc/smartArray";
 import type { RenderTargetTexture } from "../Textures/renderTargetTexture";
 import type { IAnimatable } from "../../Animations/animatable.interface";
-import { Tools } from "../../Misc/tools";
+import { Tools } from "../../Misc/tools.pure";
 import type { UniformBuffer } from "../../Materials/uniformBuffer";
 
 /* eslint-disable @typescript-eslint/naming-convention */

@@ -3,4 +3,4 @@ export * from "./vrCameraMetrics";
 export * from "./vrDeviceOrientationArcRotateCamera.pure";
 export * from "./vrDeviceOrientationFreeCamera.pure";
 export * from "./vrDeviceOrientationGamepadCamera.pure";
-export * from "./vrExperienceHelper";
+export * from "./vrExperienceHelper.pure";

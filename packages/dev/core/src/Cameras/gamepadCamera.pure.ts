@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import { UniversalCamera } from "./universalCamera";
+import { UniversalCamera } from "./universalCamera.pure";
 import type { Scene } from "../scene";
-import { Vector3 } from "../Maths/math.vector";
+import { Vector3 } from "../Maths/math.vector.pure";
 
 /**
  * This represents a FPS type of camera. This is only here for back compat purpose.

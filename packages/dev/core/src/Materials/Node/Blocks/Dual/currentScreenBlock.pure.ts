@@ -8,7 +8,7 @@ import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnect
 import type { NodeMaterialDefines } from "../../nodeMaterial";
 import type { BaseTexture } from "../../../Textures/baseTexture";
 import type { Nullable } from "../../../../types";
-import { Texture } from "../../../Textures/texture";
+import { Texture } from "../../../Textures/texture.pure";
 import type { Scene } from "../../../../scene";
 import type { InputBlock } from "../Input/inputBlock";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";

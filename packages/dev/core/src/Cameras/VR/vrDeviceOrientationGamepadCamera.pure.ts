@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
-import { VRDeviceOrientationFreeCamera } from "./vrDeviceOrientationFreeCamera";
+import { VRDeviceOrientationFreeCamera } from "./vrDeviceOrientationFreeCamera.pure";
 import { VRCameraMetrics } from "./vrCameraMetrics";
 import type { Scene } from "../../scene";
-import { Vector3 } from "../../Maths/math.vector";
+import { Vector3 } from "../../Maths/math.vector.pure";
 import { _SetVrRigMode } from "../RigModes/vrRigMode";
 
 /**

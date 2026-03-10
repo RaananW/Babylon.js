@@ -1,6 +1,6 @@
 /** Pure barrel — re-exports only side-effect-free modules */
 export * from "./pbrAnisotropicConfiguration";
-export * from "./pbrBaseMaterial";
+export * from "./pbrBaseMaterial.pure";
 export * from "./pbrBaseSimpleMaterial";
 export * from "./pbrBRDFConfiguration";
 export * from "./pbrClearCoatConfiguration";

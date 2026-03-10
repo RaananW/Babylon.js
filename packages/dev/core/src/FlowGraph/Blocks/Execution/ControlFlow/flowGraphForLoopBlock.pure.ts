@@ -4,7 +4,7 @@ import type { FlowGraphSignalConnection } from "../../../flowGraphSignalConnecti
 import type { FlowGraphDataConnection } from "../../../flowGraphDataConnection";
 import { FlowGraphExecutionBlockWithOutSignal } from "core/FlowGraph/flowGraphExecutionBlockWithOutSignal";
 import type { FlowGraphContext } from "../../../flowGraphContext";
-import { RichTypeAny, RichTypeFlowGraphInteger, RichTypeNumber } from "../../../flowGraphRichTypes";
+import { RichTypeAny, RichTypeFlowGraphInteger, RichTypeNumber } from "../../../flowGraphRichTypes.pure";
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import type { FlowGraphNumber } from "core/FlowGraph/utils";

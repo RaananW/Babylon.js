@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { Tools } from "../../Misc/tools";
+import { Tools } from "../../Misc/tools.pure";
 import type { Nullable } from "../../types";
 import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { WebXRSessionManager } from "../webXRSessionManager";

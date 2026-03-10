@@ -10,7 +10,7 @@ import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterial } from "../../nodeMaterial";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { Constants } from "../../../../Engines/constants";
-import { ImageSourceBlock } from "../Dual/imageSourceBlock";
+import { ImageSourceBlock } from "../Dual/imageSourceBlock.pure";
 
 /**
  * Block used to read from prepass textures

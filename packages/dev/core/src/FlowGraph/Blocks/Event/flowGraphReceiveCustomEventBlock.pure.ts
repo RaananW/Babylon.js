@@ -4,7 +4,7 @@ import type { Observer } from "../../../Misc/observable";
 import type { FlowGraphContext } from "../../flowGraphContext";
 import { FlowGraphEventBlock } from "../../flowGraphEventBlock";
 import type { Nullable } from "../../../types";
-import { Tools } from "../../../Misc/tools";
+import { Tools } from "../../../Misc/tools.pure";
 import type { RichType } from "../../flowGraphRichTypes";
 import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";

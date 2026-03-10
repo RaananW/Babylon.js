@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { GeospatialCameraInputsManager } from "./geospatialCameraInputsManager";
-import { Vector3, Matrix, TmpVectors } from "../Maths/math.vector";
+import { Vector3, Matrix, TmpVectors } from "../Maths/math.vector.pure";
 import type { Vector2 } from "../Maths/math.vector";
 import { Epsilon } from "../Maths/math.constants";
 import { Camera } from "./camera";

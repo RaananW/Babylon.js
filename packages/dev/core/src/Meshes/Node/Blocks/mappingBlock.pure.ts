@@ -5,7 +5,7 @@ import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnection
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import type { NodeGeometryBuildState } from "../nodeGeometryBuildState";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
-import { Vector2, Vector3 } from "../../../Maths/math.vector";
+import { Vector2, Vector3 } from "../../../Maths/math.vector.pure";
 
 /**
  * Type of mappings supported by the mapping block

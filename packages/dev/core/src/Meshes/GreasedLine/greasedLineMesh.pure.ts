@@ -2,15 +2,15 @@
 
 import type { Scene } from "../../scene";
 import type { Matrix } from "../../Maths/math.vector";
-import { Vector3 } from "../../Maths/math.vector";
-import { Mesh } from "../mesh";
+import { Vector3 } from "../../Maths/math.vector.pure";
+import { Mesh } from "../mesh.pure";
 import type { Ray, TrianglePickingPredicate } from "../../Culling/ray";
-import { Buffer, VertexBuffer } from "../../Buffers/buffer";
+import { Buffer, VertexBuffer } from "../../Buffers/buffer.pure";
 import { PickingInfo } from "../../Collisions/pickingInfo";
 import type { Nullable, FloatArray } from "../../types";
 import type { Node } from "../../node";
-import { DeepCopier } from "../../Misc/deepCopier";
-import { GreasedLineTools } from "../../Misc/greasedLineTools";
+import { DeepCopier } from "../../Misc/deepCopier.pure";
+import { GreasedLineTools } from "../../Misc/greasedLineTools.pure";
 import type { GreasedLineMeshOptions } from "./greasedLineBaseMesh";
 import { GreasedLineBaseMesh } from "./greasedLineBaseMesh";
 import type { VertexData } from "../mesh.vertexData";

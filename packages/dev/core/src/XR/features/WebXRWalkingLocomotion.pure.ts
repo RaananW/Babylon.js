@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Engine } from "../../Engines/engine";
-import { TmpVectors, Vector2, Vector3 } from "../../Maths/math.vector";
+import { TmpVectors, Vector2, Vector3 } from "../../Maths/math.vector.pure";
 import type { TransformNode } from "../../Meshes/transformNode";
 import { Logger } from "../../Misc/logger";
 import { Observable } from "../../Misc/observable";

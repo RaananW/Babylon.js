@@ -7,7 +7,7 @@ import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
 import type { NodeMaterial } from "../../nodeMaterial";
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
-import { InputBlock } from "../Input/inputBlock";
+import { InputBlock } from "../Input/inputBlock.pure";
 
 /**
  * Block used to transform a vector3 or a vector4 into screen space

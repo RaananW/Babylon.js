@@ -1,17 +1,17 @@
 /** This file must only contain pure code and pure imports */
 
 import { serialize, serializeAsMatrix, serializeAsVector3 } from "../../Misc/decorators";
-import { Tools } from "../../Misc/tools";
+import { Tools } from "../../Misc/tools.pure";
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
-import { Matrix, TmpVectors, Vector3 } from "../../Maths/math.vector";
-import { BaseTexture } from "../../Materials/Textures/baseTexture";
-import { Texture } from "../../Materials/Textures/texture";
+import { Matrix, TmpVectors, Vector3 } from "../../Maths/math.vector.pure";
+import { BaseTexture } from "../../Materials/Textures/baseTexture.pure";
+import { Texture } from "../../Materials/Textures/texture.pure";
 import { Constants } from "../../Engines/constants";
 import { GetClass } from "../../Misc/typeStore";
 import type { AbstractEngine } from "../../Engines/abstractEngine";
 import { Observable } from "../../Misc/observable";
-import { SerializationHelper } from "../../Misc/decorators.serialization";
+import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
 
 /**
  * Defines the available options when creating a cube texture

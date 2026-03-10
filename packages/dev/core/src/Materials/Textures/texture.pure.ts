@@ -3,15 +3,15 @@
 import { serialize } from "../../Misc/decorators";
 import { Observable } from "../../Misc/observable";
 import type { Nullable } from "../../types";
-import { Matrix, TmpVectors, Vector3 } from "../../Maths/math.vector";
-import { BaseTexture } from "../../Materials/Textures/baseTexture";
+import { Matrix, TmpVectors, Vector3 } from "../../Maths/math.vector.pure";
+import { BaseTexture } from "../../Materials/Textures/baseTexture.pure";
 import { Constants } from "../../Engines/constants";
 import { _WarnImport } from "../../Misc/devTools";
 import type { IInspectable } from "../../Misc/iInspectable";
 import type { AbstractEngine } from "../../Engines/abstractEngine";
-import { TimingTools } from "../../Misc/timingTools";
+import { TimingTools } from "../../Misc/timingTools.pure";
 import { InstantiationTools } from "../../Misc/instantiationTools";
-import { Plane } from "../../Maths/math.plane";
+import { Plane } from "../../Maths/math.plane.pure";
 import { EncodeArrayBufferToBase64 } from "../../Misc/stringTools";
 import { GenerateBase64StringFromTexture, GenerateBase64StringFromTextureAsync } from "../../Misc/copyTools";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
@@ -22,7 +22,7 @@ import type { MirrorTexture } from "../../Materials/Textures/mirrorTexture";
 import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
 import type { Scene } from "../../scene";
 import type { VideoTexture, VideoTextureSettings } from "./videoTexture";
-import { SerializationHelper } from "../../Misc/decorators.serialization";
+import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
 
 /**
  * Defines the available options when creating a texture

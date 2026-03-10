@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
-import { TouchCamera } from "./touchCamera";
+import { TouchCamera } from "./touchCamera.pure";
 import type { FreeCameraGamepadInput } from "../Cameras/Inputs/freeCameraGamepadInput";
 import type { Scene } from "../scene";
-import { Vector3 } from "../Maths/math.vector";
+import { Vector3 } from "../Maths/math.vector.pure";
 
 /**
  * The Universal Camera is the one to choose for first person shooter type games, and works with all the keyboard, mouse, touch and gamepads. This replaces the earlier Free Camera,

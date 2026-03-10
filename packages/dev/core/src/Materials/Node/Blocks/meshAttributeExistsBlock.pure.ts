@@ -5,8 +5,8 @@ import { NodeMaterialBlockConnectionPointTypes } from "../Enums/nodeMaterialBloc
 import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
 import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
-import { InputBlock } from "./Input/inputBlock";
-import { MorphTargetsBlock } from "./Vertex/morphTargetsBlock";
+import { InputBlock } from "./Input/inputBlock.pure";
+import { MorphTargetsBlock } from "./Vertex/morphTargetsBlock.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
 import type { Scene } from "core/scene";
 

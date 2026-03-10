@@ -3,13 +3,13 @@
 import { serialize, serializeAsTexture } from "../Misc/decorators";
 import type { Nullable } from "../types";
 import type { Scene } from "../scene";
-import { Matrix, Vector3 } from "../Maths/math.vector";
+import { Matrix, Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { Effect } from "../Materials/effect";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import { Light } from "./light";
 import { ShadowLight } from "./shadowLight";
-import { Texture } from "../Materials/Textures/texture";
+import { Texture } from "../Materials/Textures/texture.pure";
 import type { ProceduralTexture } from "../Materials/Textures/Procedurals/proceduralTexture";
 import type { Camera } from "../Cameras/camera";
 import { Constants } from "core/Engines/constants";

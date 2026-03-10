@@ -9,7 +9,7 @@ import { WebXRProjectionLayerWrapper, DefaultXRProjectionLayerInit } from "./Lay
 import { WebXRCompositionLayerRenderTargetTextureProvider, WebXRCompositionLayerWrapper } from "./Layers/WebXRCompositionLayer";
 import type { ThinTexture } from "../../Materials/Textures/thinTexture";
 import type { DynamicTexture } from "../../Materials/Textures/dynamicTexture";
-import { Color4 } from "../../Maths/math.color";
+import { Color4 } from "../../Maths/math.color.pure";
 import type { LensFlareSystem } from "../../LensFlares/lensFlareSystem";
 import type { ThinEngine } from "../../Engines";
 

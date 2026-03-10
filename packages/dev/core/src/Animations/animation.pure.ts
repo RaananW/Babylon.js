@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
 import type { IEasingFunction, EasingFunction } from "./easing";
-import { Vector3, Quaternion, Vector2, Matrix, TmpVectors } from "../Maths/math.vector";
-import { Color3, Color4 } from "../Maths/math.color";
+import { Vector3, Quaternion, Vector2, Matrix, TmpVectors } from "../Maths/math.vector.pure";
+import { Color3, Color4 } from "../Maths/math.color.pure";
 import { Hermite, Lerp } from "../Maths/math.scalar.functions";
 import type { DeepImmutable, Nullable } from "../types";
 import type { Scene } from "../scene";
@@ -12,12 +12,12 @@ import { AnimationRange } from "./animationRange";
 import type { AnimationEvent } from "./animationEvent";
 import type { Node } from "../node";
 import type { IAnimatable } from "./animatable.interface";
-import { Size } from "../Maths/math.size";
+import { Size } from "../Maths/math.size.pure";
 import { WebRequest } from "../Misc/webRequest";
 import { Constants } from "../Engines/constants";
 import type { Animatable } from "./animatable";
 import type { RuntimeAnimation } from "./runtimeAnimation";
-import { SerializationHelper } from "../Misc/decorators.serialization";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 
 // Static values to help the garbage collector
 

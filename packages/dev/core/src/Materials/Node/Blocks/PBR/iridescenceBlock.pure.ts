@@ -6,7 +6,7 @@ import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
 import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
-import { InputBlock } from "../Input/inputBlock";
+import { InputBlock } from "../Input/inputBlock.pure";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import type { NodeMaterialDefines } from "../../nodeMaterial";
 import type { Scene } from "../../../../scene";

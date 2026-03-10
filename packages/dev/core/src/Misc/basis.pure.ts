@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable } from "../types";
-import { Tools } from "./tools";
-import { Texture } from "../Materials/Textures/texture";
+import { Tools } from "./tools.pure";
+import { Texture } from "../Materials/Textures/texture.pure";
 import { InternalTexture, InternalTextureSource } from "../Materials/Textures/internalTexture";
 import { Constants } from "../Engines/constants";
 import { initializeWebWorker, workerFunction } from "./basisWorker";

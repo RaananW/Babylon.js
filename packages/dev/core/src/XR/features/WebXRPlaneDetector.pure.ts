@@ -4,7 +4,7 @@ import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { TransformNode } from "../../Meshes/transformNode";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import { Observable } from "../../Misc/observable";
-import { Vector3, Matrix } from "../../Maths/math.vector";
+import { Vector3, Matrix } from "../../Maths/math.vector.pure";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 
 declare const XRPlane: XRPlane;

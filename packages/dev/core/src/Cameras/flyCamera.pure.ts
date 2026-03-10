@@ -4,13 +4,13 @@ import { serialize, serializeAsVector3 } from "../Misc/decorators";
 import type { Nullable } from "../types";
 import type { Scene } from "../scene";
 import type { Quaternion } from "../Maths/math.vector";
-import { Vector3 } from "../Maths/math.vector";
+import { Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
-import { TargetCamera } from "./targetCamera";
+import { TargetCamera } from "./targetCamera.pure";
 import { FlyCameraInputsManager } from "./flyCameraInputsManager";
 import type { FlyCameraMouseInput } from "../Cameras/Inputs/flyCameraMouseInput";
 import type { FlyCameraKeyboardInput } from "../Cameras/Inputs/flyCameraKeyboardInput";
-import { Tools } from "../Misc/tools";
+import { Tools } from "../Misc/tools.pure";
 import type { Collider } from "../Collisions/collider";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 

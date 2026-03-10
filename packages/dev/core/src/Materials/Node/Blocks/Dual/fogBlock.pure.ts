@@ -10,7 +10,7 @@ import type { Effect } from "../../../effect";
 import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
 import type { AbstractMesh } from "../../../../Meshes/abstractMesh";
 import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
-import { InputBlock } from "../Input/inputBlock";
+import { InputBlock } from "../Input/inputBlock.pure";
 import { GetFogState } from "core/Materials/materialHelper.functions";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 

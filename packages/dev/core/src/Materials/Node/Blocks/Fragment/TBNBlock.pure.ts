@@ -9,7 +9,7 @@ import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockCon
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
-import { InputBlock } from "../Input/inputBlock";
+import { InputBlock } from "../Input/inputBlock.pure";
 import type { AbstractMesh } from "../../../../Meshes/abstractMesh";
 import { ShaderLanguage } from "../../../../Materials/shaderLanguage";
 

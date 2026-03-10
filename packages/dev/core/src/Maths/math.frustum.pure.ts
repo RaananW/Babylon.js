@@ -2,7 +2,7 @@
 
 import type { Matrix, Vector3 } from "./math.vector";
 import type { DeepImmutable } from "../types";
-import { Plane } from "./math.plane";
+import { Plane } from "./math.plane.pure";
 
 /**
  * Represents a camera frustum

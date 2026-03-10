@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable } from "../types";
-import { Tools } from "../Misc/tools";
+import { Tools } from "../Misc/tools.pure";
 import { Logger } from "../Misc/logger";
 import { GetTGAHeader } from "../Misc/tga";
 import type { IOfflineProvider } from "./IOfflineProvider";

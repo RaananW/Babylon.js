@@ -4,7 +4,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryC
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
-import { GeometryInputBlock } from "../geometryInputBlock";
+import { GeometryInputBlock } from "../geometryInputBlock.pure";
 import type { Vector3 } from "../../../../Maths/math.vector";
 import { CreateCapsuleVertexData } from "core/Meshes/Builders/capsuleBuilder";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";

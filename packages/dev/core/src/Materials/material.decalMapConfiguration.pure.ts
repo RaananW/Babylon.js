@@ -2,7 +2,7 @@
 
 import { serialize, expandToProperty } from "../Misc/decorators";
 import { MaterialDefines } from "./materialDefines";
-import { MaterialPluginBase } from "./materialPluginBase";
+import { MaterialPluginBase } from "./materialPluginBase.pure";
 import { Constants } from "../Engines/constants";
 import { MaterialFlags } from "./materialFlags";
 import type { Scene } from "core/scene";

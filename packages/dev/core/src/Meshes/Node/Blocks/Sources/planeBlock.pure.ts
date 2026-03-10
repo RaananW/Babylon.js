@@ -4,8 +4,8 @@ import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryC
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
-import { GeometryInputBlock } from "../geometryInputBlock";
-import { Matrix } from "../../../../Maths/math.vector";
+import { GeometryInputBlock } from "../geometryInputBlock.pure";
+import { Matrix } from "../../../../Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
 import { CreateGroundVertexData } from "core/Meshes/Builders/groundBuilder";
 

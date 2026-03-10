@@ -6,7 +6,7 @@ import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnect
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
-import { InputBlock } from "../Input/inputBlock";
+import { InputBlock } from "../Input/inputBlock.pure";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import type { Nullable } from "../../../../types";
 import type { BaseTexture } from "../../../Textures/baseTexture";
@@ -15,8 +15,8 @@ import type { Effect } from "../../../effect";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import type { Scene } from "../../../../scene";
 import { NodeMaterialBlock } from "../../nodeMaterialBlock";
-import { CubeTexture } from "../../../Textures/cubeTexture";
-import { Texture } from "../../../Textures/texture";
+import { CubeTexture } from "../../../Textures/cubeTexture.pure";
+import { Texture } from "../../../Textures/texture.pure";
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 

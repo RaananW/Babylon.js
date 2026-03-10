@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
 import { serialize } from "../../../Misc/decorators";
-import { SerializationHelper } from "../../../Misc/decorators.serialization";
+import { SerializationHelper } from "../../../Misc/decorators.serialization.pure";
 import type { Camera } from "../../../Cameras/camera";
 import type { Effect } from "../../../Materials/effect";
-import { PostProcess } from "../../postProcess";
+import { PostProcess } from "../../postProcess.pure";
 import { PostProcessRenderPipeline } from "../postProcessRenderPipeline";
 import { PostProcessRenderEffect } from "../postProcessRenderEffect";
 import type { Scene } from "../../../scene";

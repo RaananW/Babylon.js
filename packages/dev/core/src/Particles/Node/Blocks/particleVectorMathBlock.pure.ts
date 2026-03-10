@@ -5,7 +5,7 @@ import type { NodeParticleBuildState } from "../nodeParticleBuildState";
 import { NodeParticleBlock } from "../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
-import { Vector3 } from "../../../Maths/math.vector";
+import { Vector3 } from "../../../Maths/math.vector.pure";
 
 /**
  * Operations supported by the Vector Math block

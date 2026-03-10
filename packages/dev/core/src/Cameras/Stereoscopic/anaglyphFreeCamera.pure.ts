@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
 import { Camera } from "../../Cameras/camera";
-import { FreeCamera } from "../../Cameras/freeCamera";
+import { FreeCamera } from "../../Cameras/freeCamera.pure";
 import type { Scene } from "../../scene";
-import { Vector3 } from "../../Maths/math.vector";
+import { Vector3 } from "../../Maths/math.vector.pure";
 import { _SetStereoscopicAnaglyphRigMode } from "../RigModes/stereoscopicAnaglyphRigMode";
 
 /**

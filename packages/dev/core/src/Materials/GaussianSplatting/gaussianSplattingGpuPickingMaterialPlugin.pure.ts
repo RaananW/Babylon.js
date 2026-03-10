@@ -6,9 +6,9 @@ import type { AbstractEngine } from "../../Engines/abstractEngine";
 import type { SubMesh } from "../../Meshes/subMesh";
 import type { UniformBuffer } from "../uniformBuffer";
 import type { MaterialDefines } from "../materialDefines";
-import { MaterialPluginBase } from "../materialPluginBase";
+import { MaterialPluginBase } from "../materialPluginBase.pure";
 import { ShaderLanguage } from "../shaderLanguage";
-import { GaussianSplattingMaxPartCount } from "./gaussianSplattingMaterial";
+import { GaussianSplattingMaxPartCount } from "./gaussianSplattingMaterial.pure";
 import type { GaussianSplattingMaterial } from "./gaussianSplattingMaterial";
 
 /**

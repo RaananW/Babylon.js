@@ -6,7 +6,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConn
 import type { NodeGeometryBuildState } from "../nodeGeometryBuildState";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
 import { WithinEpsilon } from "../../../Maths/math.scalar.functions";
-import { GeometryInputBlock } from "./geometryInputBlock";
+import { GeometryInputBlock } from "./geometryInputBlock.pure";
 import type { NodeGeometry } from "../nodeGeometry";
 
 /**

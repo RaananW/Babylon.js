@@ -8,29 +8,29 @@ import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockCon
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
-import { InputBlock } from "../Input/inputBlock";
+import { InputBlock } from "../Input/inputBlock.pure";
 import type { Light } from "../../../../Lights/light";
 import type { Nullable } from "../../../../types";
 import type { AbstractMesh } from "../../../../Meshes/abstractMesh";
 import type { Effect } from "../../../effect";
 import type { Mesh } from "../../../../Meshes/mesh";
-import { PBRBaseMaterial } from "../../../PBR/pbrBaseMaterial";
+import { PBRBaseMaterial } from "../../../PBR/pbrBaseMaterial.pure";
 import type { Scene } from "../../../../scene";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
-import { SheenBlock } from "./sheenBlock";
+import { SheenBlock } from "./sheenBlock.pure";
 import type { BaseTexture } from "../../../Textures/baseTexture";
 import { GetEnvironmentBRDFTexture } from "../../../../Misc/brdfTextureTools";
 import { MaterialFlags } from "../../../materialFlags";
-import { AnisotropyBlock } from "./anisotropyBlock";
-import { ReflectionBlock } from "./reflectionBlock";
-import { ClearCoatBlock } from "./clearCoatBlock";
-import { IridescenceBlock } from "./iridescenceBlock";
-import { SubSurfaceBlock } from "./subSurfaceBlock";
+import { AnisotropyBlock } from "./anisotropyBlock.pure";
+import { ReflectionBlock } from "./reflectionBlock.pure";
+import { ClearCoatBlock } from "./clearCoatBlock.pure";
+import { IridescenceBlock } from "./iridescenceBlock.pure";
+import { SubSurfaceBlock } from "./subSurfaceBlock.pure";
 import type { RefractionBlock } from "./refractionBlock";
 import type { PerturbNormalBlock } from "../Fragment/perturbNormalBlock";
 import { Constants } from "../../../../Engines/constants";
-import { Color3 } from "../../../../Maths/math.color";
+import { Color3 } from "../../../../Maths/math.color.pure";
 import { Logger } from "core/Misc/logger";
 import {
     BindLight,

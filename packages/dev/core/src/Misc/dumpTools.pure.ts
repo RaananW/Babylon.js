@@ -3,8 +3,8 @@
 import { _WarnImport } from "./devTools";
 import type { ThinEngine } from "../Engines/thinEngine";
 import { Constants } from "../Engines/constants";
-import { EffectRenderer, EffectWrapper } from "../Materials/effectRenderer";
-import { Tools } from "./tools";
+import { EffectRenderer, EffectWrapper } from "../Materials/effectRenderer.pure";
+import { Tools } from "./tools.pure";
 import { Clamp } from "../Maths/math.scalar.functions";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { EngineStore } from "../Engines/engineStore";

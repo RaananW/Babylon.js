@@ -4,7 +4,7 @@ import type { Scene, FrameGraph } from "core/index";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { FrameGraphFilterTask } from "core/FrameGraph/Tasks/PostProcesses/filterTask";
 import { ThinFilterPostProcess } from "core/PostProcesses/thinFilterPostProcess";
-import { Matrix } from "../../../../Maths/math.vector";
+import { Matrix } from "../../../../Maths/math.vector.pure";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
 
 /**

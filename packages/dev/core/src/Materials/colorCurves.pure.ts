@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
 import { serialize } from "../Misc/decorators";
-import { Color4 } from "../Maths/math.color";
+import { Color4 } from "../Maths/math.color.pure";
 import type { Effect } from "../Materials/effect";
-import { SerializationHelper } from "../Misc/decorators.serialization";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 import { PrepareUniformsForColorCurves } from "./colorCurves.functions";
 
 /**

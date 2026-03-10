@@ -4,7 +4,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryC
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
-import { GeometryInputBlock } from "../geometryInputBlock";
+import { GeometryInputBlock } from "../geometryInputBlock.pure";
 import type { Vector4 } from "../../../../Maths/math.vector";
 import { CreateDiscVertexData } from "core/Meshes/Builders/discBuilder";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";

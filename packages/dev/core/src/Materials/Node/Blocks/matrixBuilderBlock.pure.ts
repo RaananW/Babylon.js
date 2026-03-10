@@ -5,8 +5,8 @@ import { NodeMaterialBlockConnectionPointTypes } from "../Enums/nodeMaterialBloc
 import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
-import { InputBlock } from "./Input/inputBlock";
-import { Vector4 } from "../../../Maths/math.vector";
+import { InputBlock } from "./Input/inputBlock.pure";
+import { Vector4 } from "../../../Maths/math.vector.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
 /**

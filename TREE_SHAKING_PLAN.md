@@ -405,17 +405,174 @@ Phase 0 (Audit tooling)  ← DONE
               └─> Phase 4 (static helpers)   ← DONE (69% coverage, expandable)
                     └─> Phase 5 (sideEffects in package.json)  ← DONE
                           └─> Phase 6 (CI guardrails)  ← DONE
+                                └─> Phase 7 (pure barrel integrity)  ← TODO
+                                      ├─> 7.1 (split 32 bare-import files)
+                                      ├─> 7.2 (fix 788 pure→non-pure imports)
+                                      ├─> 7.3 (add exports field to package.json)
+                                      └─> 7.4 (add bare-import detection to audit)
 ```
+
+## Phase 7 — Fix Pure Barrel Integrity
+
+### Problem Statement
+
+The pure barrel chain (`@babylonjs/core/pure` → `*/pure.ts` → `*.pure.ts`) has two integrity problems
+that undermine tree-shaking for external consumers:
+
+**Problem A — Bare side-effect imports leaking through pure barrels**
+
+32 files exported from `pure.ts` barrels contain bare `import "./something"` statements that pull
+in side-effectful modules (prototype augmentations, shader registrations, engine extensions).
+When a bundler processes `import { Engine } from "@babylonjs/core/pure"`, it must evaluate
+`engine.js`, which unconditionally executes 18 bare imports that augment `ThinEngine.prototype`.
+The pure barrel offers **zero benefit** for these imports — the bundler has no choice but to include them.
+
+**Total**: 88 bare side-effect imports across 32 files leaking through pure barrels.
+
+Top offenders:
+| File | Bare Imports |
+| ---- | ------------ |
+| `Engines/engine.ts` | 18 |
+| `Engines/webgpuEngine.ts` | 17 |
+| `PostProcesses/RenderPipeline/Pipelines/lensRenderingPipeline.ts` | 5 |
+| `PostProcesses/RenderPipeline/Pipelines/ssaoRenderingPipeline.ts` | 4 |
+| `Particles/gpuParticleSystem.ts` | 3 |
+| `Physics/physicsEngineComponent.ts` | 3 |
+| 26 other files | 1–2 each |
+
+**Problem B — `.pure.ts` files importing from non-pure module specifiers**
+
+788 value imports across `.pure.ts` files point to non-pure module specifiers (e.g.,
+`import { Vector3 } from "../Maths/math.vector"` instead of `"../Maths/math.vector.pure"`).
+
+**This is architecturally concerning** but **not a bundler-level problem today**: when a bundler
+resolves `import { Vector3 } from "../Maths/math.vector"`, it finds the binding via the
+wrapper's `export * from "./math.vector.pure"` re-export. If `math.vector.ts` is not in the
+`sideEffects` array (it is — because of `RegisterClass`), the bundler may or may not prune
+the side effects depending on whether any other module also imports `math.vector.ts`.
+
+In practice, because `math.vector.ts` appears in the `sideEffects` array, bundlers treat it
+as side-effectful and **will execute its `RegisterClass` calls** even though the pure consumer
+only wanted the class definition. This is a correctness leak.
+
+**The correct rule**: `.pure.ts` files should only import from other `.pure.ts` files or from
+files confirmed pure by the manifest. Importing from a non-pure specifier should be a lint error.
+
+### 7.1 — Split files with bare side-effect imports (Problem A)
+
+For each of the 32 files, create a `.pure.ts` companion that contains the class/function
+definitions without the bare imports. The non-pure wrapper keeps the bare imports + re-exports.
+
+**Pattern** (using `engine.ts` as example):
+
+```ts
+// engine.pure.ts — class definition only, NO bare imports
+import { ThinEngine } from "./thinEngine";
+// ... other value/type imports ...
+export class Engine extends ThinEngine {
+    /* full class body */
+}
+
+// engine.ts — existing file becomes thin wrapper
+export * from "./engine.pure";
+import "./Extensions/engine.alpha";
+import "./Extensions/engine.rawTexture";
+// ... all 18 bare imports ...
+```
+
+Then update `Engines/pure.ts` barrel:
+
+```diff
+-export * from "./engine";
++export * from "./engine.pure";
+```
+
+**Approach**: Extend `scripts/treeshaking/splitSideEffects.mjs` to handle bare-import separation,
+or create a targeted `splitBareImports.mjs` script. The logic is simpler than Phase 2's
+`RegisterClass` splitting — just move the class body to `.pure.ts` and keep bare imports in the
+wrapper.
+
+**Files to split**: 32 files (88 bare imports total). Many are engine-related.
+
+- [ ] **7.1a** — Create automation script for bare-import splitting
+- [ ] **7.1b** — Run on all 32 files, verify compilation
+- [ ] **7.1c** — Update pure barrel references (`pure.ts` files)
+- [ ] **7.1d** — Regenerate manifest + sync `sideEffects` array
+- [ ] **7.1e** — Update bundle smoke tests
+
+### 7.2 — Fix `.pure.ts` → non-pure import specifiers (Problem B)
+
+Rewrite imports in `.pure.ts` files to point to `.pure` specifiers where a `.pure.ts` companion
+exists.
+
+```diff
+-import { Vector3 } from "../Maths/math.vector";
++import { Vector3 } from "../Maths/math.vector.pure";
+```
+
+**Scope**: 788 imports across ~300 `.pure.ts` files need rewriting.
+
+**Constraints**:
+
+- Only rewrite if `TARGET.pure.ts` exists (don't create false references)
+- Handle TypeScript path resolution (relative paths, index resolution)
+- Must not break type augmentations (the `.ts` wrapper's `declare module` targets the `.pure` file)
+
+- [ ] **7.2a** — Create script to rewrite `.pure.ts` import specifiers
+- [ ] **7.2b** — Run on all `.pure.ts` files, verify compilation
+- [ ] **7.2c** — Upgrade ESLint rule `no-side-effect-imports-in-pure` to also flag value imports
+      from non-pure specifiers (when a `.pure` alternative exists)
+- [ ] **7.2d** — Verify bundle smoke tests still pass
+
+### 7.3 — Add `exports` field to public `package.json`
+
+External bundlers don't see the smoke test's custom `moduleSideEffects` configuration.
+The package needs an `exports` field to signal that the `/pure` entry point is side-effect-free.
+
+```json
+"exports": {
+    ".": {
+        "types": "./index.d.ts",
+        "import": "./index.js"
+    },
+    "./pure": {
+        "types": "./pure.d.ts",
+        "import": "./pure.js",
+        "sideEffects": false
+    },
+    "./*": {
+        "types": "./*.d.ts",
+        "import": "./*.js"
+    }
+}
+```
+
+- [ ] **7.3a** — Add `exports` field to `packages/public/@babylonjs/core/package.json`
+- [ ] **7.3b** — Verify deep imports still work (`@babylonjs/core/Maths/math.vector`, etc.)
+- [ ] **7.3c** — Test in external project (Vite, webpack) that `/pure` actually tree-shakes
+
+### 7.4 — Add bare-import detection to audit tooling
+
+The `auditSideEffects.mjs` manifest currently does not track bare `import "./foo"` statements
+as a side-effect type. This means files like `engine.ts` (18 bare imports for prototype
+augmentation) are invisible to the audit.
+
+- [ ] **7.4a** — Add `bare-import` detection type to `auditSideEffects.mjs`
+- [ ] **7.4b** — Regenerate manifest with new detection
+- [ ] **7.4c** — Update `syncSideEffects.mjs` to include files with bare imports
 
 ## Risk Mitigation
 
-| Risk                           | Mitigation                                              |
-| ------------------------------ | ------------------------------------------------------- |
-| Breaking existing imports      | `FILE.ts` always re-exports `FILE.pure.ts`              |
-| Circular dependencies          | Audit detects cycles; `import/no-cycle` already enabled |
-| Prototype augmentation in pure | ESLint rule (6.1) + bundle tests (6.2)                  |
-| Massive PRs                    | One PR per subdirectory (Phase 2.2 priority order)      |
-| Shader files in pure           | Blocked by glob pattern in ESLint rule                  |
+| Risk                            | Mitigation                                              |
+| ------------------------------- | ------------------------------------------------------- |
+| Breaking existing imports       | `FILE.ts` always re-exports `FILE.pure.ts`              |
+| Circular dependencies           | Audit detects cycles; `import/no-cycle` already enabled |
+| Prototype augmentation in pure  | ESLint rule (6.1) + bundle tests (6.2)                  |
+| Massive PRs                     | One PR per subdirectory (Phase 2.2 priority order)      |
+| Shader files in pure            | Blocked by glob pattern in ESLint rule                  |
+| Bare imports in pure barrel     | Phase 7.1 splits + 7.4 audit detection                  |
+| Pure importing non-pure         | Phase 7.2 rewrites + 7.2c ESLint enforcement            |
+| External bundler can't optimize | Phase 7.3 `exports` field with `sideEffects: false`     |
 
 ---
 

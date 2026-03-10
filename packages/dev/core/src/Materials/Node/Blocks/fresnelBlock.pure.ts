@@ -5,9 +5,9 @@ import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import { NodeMaterialBlockConnectionPointTypes } from "../Enums/nodeMaterialBlockConnectionPointTypes";
 import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
 import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
-import { InputBlock } from "./Input/inputBlock";
+import { InputBlock } from "./Input/inputBlock.pure";
 import type { NodeMaterial } from "../nodeMaterial";
-import { ViewDirectionBlock } from "./viewDirectionBlock";
+import { ViewDirectionBlock } from "./viewDirectionBlock.pure";
 
 /**
  * Block used to compute fresnel value

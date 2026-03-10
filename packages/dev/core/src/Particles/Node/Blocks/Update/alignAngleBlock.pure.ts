@@ -7,7 +7,7 @@ import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
 import type { ThinParticleSystem } from "core/Particles/thinParticleSystem";
 import type { Particle } from "core/Particles/particle";
 import { _ConnectAtTheEnd } from "core/Particles/Queue/executionQueue";
-import { Vector3 } from "../../../../Maths/math.vector";
+import { Vector3 } from "../../../../Maths/math.vector.pure";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 
 /**

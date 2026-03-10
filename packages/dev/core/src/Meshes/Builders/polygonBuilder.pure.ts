@@ -2,13 +2,13 @@
 
 import type { Scene } from "../../scene";
 import type { Vector3 } from "../../Maths/math.vector";
-import { Vector2, Vector4 } from "../../Maths/math.vector";
-import { Color4 } from "../../Maths/math.color";
-import { Mesh } from "../mesh";
-import { VertexData } from "../mesh.vertexData";
-import { PolygonMeshBuilder } from "../polygonMesh";
+import { Vector2, Vector4 } from "../../Maths/math.vector.pure";
+import { Color4 } from "../../Maths/math.color.pure";
+import { Mesh } from "../mesh.pure";
+import { VertexData } from "../mesh.vertexData.pure";
+import { PolygonMeshBuilder } from "../polygonMesh.pure";
 import type { FloatArray, IndicesArray, Nullable } from "../../types";
-import { VertexBuffer } from "../../Buffers/buffer";
+import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { EngineStore } from "../../Engines/engineStore";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 

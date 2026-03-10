@@ -3,7 +3,7 @@
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryConnectionPointTypes";
-import { VertexDataMaterialInfo } from "../../../../Meshes/mesh.vertexData";
+import { VertexDataMaterialInfo } from "../../../../Meshes/mesh.vertexData.pure";
 import type { VertexData } from "../../../../Meshes/mesh.vertexData";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";

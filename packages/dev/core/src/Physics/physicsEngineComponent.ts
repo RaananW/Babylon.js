@@ -1,4 +1,4 @@
-// back compat
+export * from "./physicsEngineComponent.pure";
 
 import "./joinedPhysicsEngineComponent";
 import "./v1/physicsEngineComponent";

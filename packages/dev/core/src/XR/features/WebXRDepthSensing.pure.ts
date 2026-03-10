@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import { RawTexture } from "../../Materials/Textures/rawTexture";
+import { RawTexture } from "../../Materials/Textures/rawTexture.pure";
 import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
-import { Tools } from "../../Misc/tools";
-import { Texture } from "../../Materials/Textures/texture";
+import { Tools } from "../../Misc/tools.pure";
+import { Texture } from "../../Materials/Textures/texture.pure";
 import type { Observer } from "../../Misc/observable";
 import { Observable } from "../../Misc/observable";
 import type { Nullable } from "../../types";

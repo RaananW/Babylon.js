@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Vector4 } from "../../Maths/math.vector";
-import { Vector3, Matrix } from "../../Maths/math.vector";
-import { Mesh } from "../mesh";
-import { VertexData } from "../mesh.vertexData";
+import { Vector3, Matrix } from "../../Maths/math.vector.pure";
+import { Mesh } from "../mesh.pure";
+import { VertexData } from "../mesh.vertexData.pure";
 import type { Scene } from "../../scene";
 import type { Nullable } from "../../types";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";

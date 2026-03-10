@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
 import { Observable } from "../../Misc/observable";
-import { Tools } from "../../Misc/tools";
+import { Tools } from "../../Misc/tools.pure";
 import { Logger } from "../../Misc/logger";
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
-import { Texture } from "../../Materials/Textures/texture";
+import { Texture } from "../../Materials/Textures/texture.pure";
 import { Constants } from "../../Engines/constants";
 import type { ExternalTexture } from "./externalTexture";
 import type { WebGPUEngine } from "core/Engines";

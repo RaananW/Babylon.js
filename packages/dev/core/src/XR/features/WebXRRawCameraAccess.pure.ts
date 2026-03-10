@@ -7,7 +7,7 @@ import { Observable } from "../../Misc/observable";
 import { Constants } from "../../Engines/constants";
 import { WebGLHardwareTexture } from "../../Engines/WebGL/webGLHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
-import { BaseTexture } from "../../Materials/Textures/baseTexture";
+import { BaseTexture } from "../../Materials/Textures/baseTexture.pure";
 import type { ThinEngine } from "../../Engines";
 
 /**

@@ -16,7 +16,7 @@ import type { MaterialDefines } from "./materialDefines";
 import type { Material } from "./material";
 import type { BaseTexture } from "./Textures/baseTexture";
 import type { RenderTargetTexture } from "./Textures/renderTargetTexture";
-import { SerializationHelper } from "../Misc/decorators.serialization";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 import { ShaderLanguage } from "./shaderLanguage";
 
 /**

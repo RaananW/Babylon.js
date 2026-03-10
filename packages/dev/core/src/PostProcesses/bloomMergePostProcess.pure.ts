@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { PostProcessOptions } from "./postProcess";
-import { PostProcess } from "./postProcess";
+import { PostProcess } from "./postProcess.pure";
 import type { Nullable } from "../types";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Effect } from "../Materials/effect";

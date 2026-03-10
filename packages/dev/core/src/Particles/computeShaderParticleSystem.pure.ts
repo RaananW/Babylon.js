@@ -2,7 +2,7 @@
 
 import type { WebGPUEngine } from "../Engines/webgpuEngine";
 import { StorageBuffer } from "../Buffers/storageBuffer";
-import { ComputeShader } from "../Compute/computeShader";
+import { ComputeShader } from "../Compute/computeShader.pure";
 import { UniformBuffer } from "../Materials/uniformBuffer";
 import type { IGPUParticleSystemPlatform } from "./IGPUParticleSystemPlatform";
 import type { Buffer, VertexBuffer } from "../Buffers/buffer";

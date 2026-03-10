@@ -1,12 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
-import { Action } from "./action";
+import { Action } from "./action.pure";
 import type { Condition } from "./condition";
 import { Logger } from "../Misc/logger";
 import { Observable } from "../Misc/observable";
-import { Color3 } from "../Maths/math.color";
-import { Vector3, Matrix, Quaternion } from "../Maths/math.vector";
-import { Animation } from "../Animations/animation";
+import { Color3 } from "../Maths/math.color.pure";
+import { Vector3, Matrix, Quaternion } from "../Maths/math.vector.pure";
+import { Animation } from "../Animations/animation.pure";
 
 /**
  * This defines an action responsible to change the value of a property

@@ -3,8 +3,8 @@
 import { serializeAsColor3, serializeAsVector3 } from "../Misc/decorators";
 import type { Nullable } from "../types";
 import type { Scene } from "../scene";
-import { Matrix, Vector3 } from "../Maths/math.vector";
-import { Color3 } from "../Maths/math.color";
+import { Matrix, Vector3 } from "../Maths/math.vector.pure";
+import { Color3 } from "../Maths/math.color.pure";
 import type { Effect } from "../Materials/effect";
 import { Light } from "./light";
 import type { IShadowGenerator } from "./Shadows/shadowGenerator";

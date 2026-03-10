@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
-import { FlowGraphTypes, getRichTypeByFlowGraphType, RichTypeAny, RichTypeBoolean, RichTypeFlowGraphInteger, RichTypeNumber } from "../../../flowGraphRichTypes";
+import { FlowGraphTypes, getRichTypeByFlowGraphType, RichTypeAny, RichTypeBoolean, RichTypeFlowGraphInteger, RichTypeNumber } from "../../../flowGraphRichTypes.pure";
 import { FlowGraphBinaryOperationBlock } from "../flowGraphBinaryOperationBlock";
 import { FlowGraphConstantOperationBlock } from "../flowGraphConstantOperationBlock";
-import { Quaternion, Matrix, Vector2, Vector3, Vector4 } from "../../../../Maths/math.vector";
+import { Quaternion, Matrix, Vector2, Vector3, Vector4 } from "../../../../Maths/math.vector.pure";
 import { FlowGraphUnaryOperationBlock } from "../flowGraphUnaryOperationBlock";
 import { FlowGraphTernaryOperationBlock } from "../flowGraphTernaryOperationBlock";
-import { FlowGraphInteger } from "../../../CustomTypes/flowGraphInteger";
+import { FlowGraphInteger } from "../../../CustomTypes/flowGraphInteger.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
 import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";

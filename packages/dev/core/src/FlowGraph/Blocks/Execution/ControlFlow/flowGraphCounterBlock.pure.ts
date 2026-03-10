@@ -2,7 +2,7 @@
 
 import type { FlowGraphContext } from "../../../flowGraphContext";
 import type { FlowGraphDataConnection } from "../../../flowGraphDataConnection";
-import { RichTypeNumber } from "../../../flowGraphRichTypes";
+import { RichTypeNumber } from "../../../flowGraphRichTypes.pure";
 import type { FlowGraphSignalConnection } from "../../../flowGraphSignalConnection";
 import { FlowGraphExecutionBlockWithOutSignal } from "../../../flowGraphExecutionBlockWithOutSignal";
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";

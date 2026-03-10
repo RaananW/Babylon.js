@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { InternalTexture } from "../Materials/Textures/internalTexture";
-import { Engine } from "./engine";
+import { Engine } from "./engine.pure";
 import type { ThinNativeEngineOptions } from "./thinNativeEngine";
 import { ThinNativeEngine } from "./thinNativeEngine";
 

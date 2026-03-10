@@ -4,7 +4,7 @@ import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnect
 import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryConnectionPointTypes";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
 import type { VertexData } from "../../../mesh.vertexData";
-import { Vector3 } from "../../../../Maths/math.vector";
+import { Vector3 } from "../../../../Maths/math.vector.pure";
 import { InstantiateBaseBlock } from "./instantiateBaseBlock";
 
 /**

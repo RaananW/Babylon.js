@@ -1,5 +1,5 @@
 import type { Animatable } from "./animatable.core";
-import { Animation } from "./animation";
+import { Animation } from "./animation.pure";
 import type { IMakeAnimationAdditiveOptions } from "./animation";
 import type { IAnimationKey } from "./animationKey";
 
@@ -8,7 +8,7 @@ import { Observable } from "../Misc/observable";
 import type { Nullable } from "../types";
 import { EngineStore } from "../Engines/engineStore";
 
-import { Tags } from "../Misc/tags";
+import { Tags } from "../Misc/tags.pure";
 import type { AnimationGroupMask } from "./animationGroupMask";
 import type { IAssetContainer } from "core/IAssetContainer";
 import { UniqueIdGenerator } from "core/Misc/uniqueIdGenerator";

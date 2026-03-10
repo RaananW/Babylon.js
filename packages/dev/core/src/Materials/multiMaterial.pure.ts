@@ -6,7 +6,7 @@ import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import { Material } from "../Materials/material";
-import { Tags } from "../Misc/tags";
+import { Tags } from "../Misc/tags.pure";
 
 /**
  * A multi-material is used to apply different materials to different parts of the same object without the need of

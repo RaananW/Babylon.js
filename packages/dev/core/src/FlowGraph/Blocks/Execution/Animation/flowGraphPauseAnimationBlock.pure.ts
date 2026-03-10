@@ -3,7 +3,7 @@
 import type { FlowGraphContext } from "../../../flowGraphContext";
 import type { FlowGraphDataConnection } from "../../../flowGraphDataConnection";
 import { FlowGraphExecutionBlockWithOutSignal } from "../../../flowGraphExecutionBlockWithOutSignal";
-import { RichTypeAny } from "../../../flowGraphRichTypes";
+import { RichTypeAny } from "../../../flowGraphRichTypes.pure";
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import type { AnimationGroup } from "core/Animations/animationGroup";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";

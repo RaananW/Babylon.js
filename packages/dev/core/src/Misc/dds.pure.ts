@@ -9,8 +9,6 @@ import { CubeMapToSphericalPolynomialTools } from "../Misc/HighDynamicRange/cube
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { FromHalfFloat, ToHalfFloat } from "./textureTools";
 
-import "../Engines/AbstractEngine/abstractEngine.cubeTexture";
-
 // Based on demo done by Brandon Jones - http://media.tojicode.com/webgl-samples/dds.html
 // All values and structures referenced from:
 // http://msdn.microsoft.com/en-us/library/bb943991.aspx/

@@ -4,16 +4,16 @@ import { serialize, serializeAsColor3, expandToProperty, serializeAsFresnelParam
 import { SmartArray } from "../Misc/smartArray";
 import type { IAnimatable } from "../Animations/animatable.interface";
 import type { Nullable } from "../types";
-import { Scene } from "../scene";
+import { Scene } from "../scene.pure";
 import type { Matrix } from "../Maths/math.vector";
-import { Color3 } from "../Maths/math.color";
-import { VertexBuffer } from "../Buffers/buffer";
+import { Color3 } from "../Maths/math.color.pure";
+import { VertexBuffer } from "../Buffers/buffer.pure";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { Mesh } from "../Meshes/mesh";
-import { PrePassConfiguration } from "./prePassConfiguration";
+import { PrePassConfiguration } from "./prePassConfiguration.pure";
 import { ImageProcessingDefinesMixin } from "./imageProcessingConfiguration.defines";
-import { ImageProcessingConfiguration } from "./imageProcessingConfiguration";
+import { ImageProcessingConfiguration } from "./imageProcessingConfiguration.pure";
 import type { FresnelParameters } from "./fresnelParameters";
 import type { ICustomShaderNameResolveOptions } from "../Materials/material";
 import { Material } from "../Materials/material";
@@ -55,7 +55,7 @@ import {
     PrepareUniformsAndSamplersList,
     PrepareUniformLayoutForIBL,
 } from "./materialHelper.functions";
-import { SerializationHelper } from "../Misc/decorators.serialization";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 import { ShaderLanguage } from "./shaderLanguage";
 import { MaterialHelperGeometryRendering } from "./materialHelper.geometryrendering";
 import { UVDefinesMixin } from "./uv.defines";

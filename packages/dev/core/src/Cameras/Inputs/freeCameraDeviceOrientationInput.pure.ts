@@ -4,8 +4,8 @@ import type { Nullable } from "../../types";
 import type { ICameraInput } from "../../Cameras/cameraInputsManager";
 import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
 import type { FreeCamera } from "../../Cameras/freeCamera";
-import { Quaternion } from "../../Maths/math.vector";
-import { Tools } from "../../Misc/tools";
+import { Quaternion } from "../../Maths/math.vector.pure";
+import { Tools } from "../../Misc/tools.pure";
 import { Observable } from "../../Misc/observable";
 
 // Module augmentation to abstract orientation inputs from camera.

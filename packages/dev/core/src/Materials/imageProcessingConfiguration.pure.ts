@@ -3,12 +3,12 @@
 import { serialize, serializeAsTexture, serializeAsColorCurves, serializeAsColor4 } from "../Misc/decorators";
 import { Observable } from "../Misc/observable";
 import type { Nullable } from "../types";
-import { Color4 } from "../Maths/math.color";
-import { ColorCurves } from "../Materials/colorCurves";
+import { Color4 } from "../Maths/math.color.pure";
+import { ColorCurves } from "../Materials/colorCurves.pure";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import type { Effect } from "../Materials/effect";
 import { Mix } from "../Misc/tools.functions";
-import { SerializationHelper } from "../Misc/decorators.serialization";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 import type { IImageProcessingConfigurationDefines } from "./imageProcessingConfiguration.defines";
 import { PrepareSamplersForImageProcessing, PrepareUniformsForImageProcessing } from "./imageProcessingConfiguration.functions";
 

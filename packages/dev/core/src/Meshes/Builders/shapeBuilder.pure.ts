@@ -3,10 +3,10 @@
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
 import type { Vector4 } from "../../Maths/math.vector";
-import { Vector3, TmpVectors, Matrix } from "../../Maths/math.vector";
-import { Mesh } from "../mesh";
-import { CreateRibbon } from "./ribbonBuilder";
-import { Path3D } from "../../Maths/math.path";
+import { Vector3, TmpVectors, Matrix } from "../../Maths/math.vector.pure";
+import { Mesh } from "../mesh.pure";
+import { CreateRibbon } from "./ribbonBuilder.pure";
+import { Path3D } from "../../Maths/math.path.pure";
 
 /**
  * Creates an extruded shape mesh. The extrusion is a parametric shape. It has no predefined shape. Its final shape will depend on the input parameters.

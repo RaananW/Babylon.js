@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable } from "../types";
-import { Vector2, Vector3 } from "../Maths/math.vector";
+import { Vector2, Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { ImageProcessingConfiguration } from "../Materials/imageProcessingConfiguration";
 import { ImageProcessingConfigurationDefines } from "../Materials/imageProcessingConfiguration.defines";
@@ -9,7 +9,7 @@ import type { ColorGradient, FactorGradient, Color3Gradient, IValueGradient } fr
 import type { BoxParticleEmitter } from "../Particles/EmitterTypes/boxParticleEmitter";
 import { Constants } from "../Engines/constants";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
-import { Color4 } from "../Maths/math.color";
+import { Color4 } from "../Maths/math.color.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { IClipPlanesHolder } from "../Misc/interfaces/iClipPlanesHolder";
 import type { Plane } from "../Maths/math.plane";

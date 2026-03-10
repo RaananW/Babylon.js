@@ -2,20 +2,20 @@
 
 import type { Nullable, FloatArray, IndicesArray } from "../types";
 import type { Vector3 } from "../Maths/math.vector";
-import { Matrix, TmpVectors } from "../Maths/math.vector";
+import { Matrix, TmpVectors } from "../Maths/math.vector.pure";
 import { Logger } from "../Misc/logger";
 import type { Camera } from "../Cameras/camera";
 import type { Node } from "../node";
 import type { IMeshDataOptions } from "../Meshes/abstractMesh";
-import { AbstractMesh } from "../Meshes/abstractMesh";
-import { Mesh } from "../Meshes/mesh";
+import { AbstractMesh } from "../Meshes/abstractMesh.pure";
+import { Mesh } from "../Meshes/mesh.pure";
 import type { Material } from "../Materials/material";
 import type { Skeleton } from "../Bones/skeleton";
-import { DeepCopier } from "../Misc/deepCopier";
+import { DeepCopier } from "../Misc/deepCopier.pure";
 import { TransformNode } from "./transformNode";
 import type { Light } from "../Lights/light";
-import { VertexBuffer } from "../Buffers/buffer";
-import { Tools } from "../Misc/tools";
+import { VertexBuffer } from "../Buffers/buffer.pure";
+import { Tools } from "../Misc/tools.pure";
 import type { Geometry } from "./geometry";
 
 /**

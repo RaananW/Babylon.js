@@ -10,7 +10,7 @@ import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
 import type { Effect } from "../../../effect";
 import type { Mesh } from "../../../../Meshes/mesh";
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
-import { InputBlock } from "../Input/inputBlock";
+import { InputBlock } from "../Input/inputBlock.pure";
 import type { Light } from "../../../../Lights/light";
 import type { Nullable } from "../../../../types";
 import type { Scene } from "../../../../scene";

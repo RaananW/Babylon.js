@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
-import { AbstractMesh } from "../Meshes/abstractMesh";
-import { Mesh } from "../Meshes/mesh";
+import { AbstractMesh } from "../Meshes/abstractMesh.pure";
+import { Mesh } from "../Meshes/mesh.pure";
 import type { Nullable } from "../types";
 import type { Observer } from "../Misc/observable";
 import type { Scene } from "../scene";
-import { Vector3 } from "../Maths/math.vector";
-import { VertexBuffer } from "../Buffers/buffer";
-import { VertexData } from "../Meshes/mesh.vertexData";
+import { Vector3 } from "../Maths/math.vector.pure";
+import { VertexBuffer } from "../Buffers/buffer.pure";
+import { VertexData } from "../Meshes/mesh.vertexData.pure";
 import { Lerp } from "../Maths/math.scalar.functions";
 import type { TransformNode } from "../Meshes/transformNode";
 

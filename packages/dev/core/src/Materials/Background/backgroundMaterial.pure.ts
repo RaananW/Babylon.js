@@ -6,8 +6,8 @@ import { Logger } from "../../Misc/logger";
 import type { Nullable, int, float } from "../../types";
 import type { Scene } from "../../scene";
 import type { Matrix } from "../../Maths/math.vector";
-import { TmpVectors, Vector3, Vector4 } from "../../Maths/math.vector";
-import { VertexBuffer } from "../../Buffers/buffer";
+import { TmpVectors, Vector3, Vector4 } from "../../Maths/math.vector.pure";
+import { VertexBuffer } from "../../Buffers/buffer.pure";
 import type { SubMesh } from "../../Meshes/subMesh";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";
 import type { Mesh } from "../../Meshes/mesh";
@@ -15,13 +15,13 @@ import type { IEffectCreationOptions } from "../../Materials/effect";
 import { MaterialDefines } from "../../Materials/materialDefines";
 import { PushMaterial } from "../../Materials/pushMaterial";
 import { ImageProcessingDefinesMixin } from "../../Materials/imageProcessingConfiguration.defines";
-import { ImageProcessingConfiguration } from "../../Materials/imageProcessingConfiguration";
+import { ImageProcessingConfiguration } from "../../Materials/imageProcessingConfiguration.pure";
 import type { BaseTexture } from "../../Materials/Textures/baseTexture";
 import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
 import type { IShadowLight } from "../../Lights/shadowLight";
 import { Constants } from "../../Engines/constants";
 import { MaterialFlags } from "../materialFlags";
-import { Color3 } from "../../Maths/math.color";
+import { Color3 } from "../../Maths/math.color.pure";
 import { EffectFallbacks } from "../effectFallbacks";
 import { AddClipPlaneUniforms, BindClipPlane } from "../clipPlaneMaterialHelper";
 import {
@@ -46,7 +46,7 @@ import {
     PrepareUniformsAndSamplersForIBL,
     PrepareUniformLayoutForIBL,
 } from "../materialHelper.functions";
-import { SerializationHelper } from "../../Misc/decorators.serialization";
+import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
 import { ShaderLanguage } from "../shaderLanguage";
 import { ImageProcessingMixin } from "../imageProcessing";
 

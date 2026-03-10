@@ -7,10 +7,10 @@ import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnect
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import type { Nullable } from "../../../../types";
-import { Texture } from "../../../Textures/texture";
+import { Texture } from "../../../Textures/texture.pure";
 import { Constants } from "../../../../Engines/constants";
 import type { Effect } from "../../../effect";
-import { NodeMaterial } from "../../nodeMaterial";
+import { NodeMaterial } from "../../nodeMaterial.pure";
 import type { Scene } from "../../../../scene";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { EngineStore } from "../../../../Engines/engineStore";

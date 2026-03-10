@@ -2,7 +2,7 @@
 
 import type { ISceneComponent } from "../../sceneComponent";
 import { SceneComponentConstants } from "../../sceneComponent";
-import { Scene } from "../../scene";
+import { Scene } from "../../scene.pure";
 import type { PostProcessRenderPipelineManager } from "./postProcessRenderPipelineManager";
 
 declare module "../../scene" {

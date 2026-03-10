@@ -3,7 +3,7 @@
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
-import { Vector3 } from "../../../Maths/math.vector";
+import { Vector3 } from "../../../Maths/math.vector.pure";
 import { Clamp } from "../../../Maths/math.scalar.functions";
 import { NodeGeometryContextualSources } from "../Enums/nodeGeometryContextualSources";
 

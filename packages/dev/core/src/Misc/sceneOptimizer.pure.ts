@@ -2,7 +2,7 @@
 import type { Scene, IDisposable } from "../scene";
 import { EngineStore } from "../Engines/engineStore";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
-import { Mesh } from "../Meshes/mesh";
+import { Mesh } from "../Meshes/mesh.pure";
 import type { Nullable } from "../types";
 import type { Observer } from "./observable";
 import { Observable } from "./observable";

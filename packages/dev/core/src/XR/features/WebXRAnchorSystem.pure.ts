@@ -3,7 +3,7 @@
 import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import { Observable } from "../../Misc/observable";
-import { Matrix, Vector3, Quaternion } from "../../Maths/math.vector";
+import { Matrix, Vector3, Quaternion } from "../../Maths/math.vector.pure";
 import type { TransformNode } from "../../Meshes/transformNode";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import type { IWebXRHitResult } from "./WebXRHitTest";

@@ -7,9 +7,9 @@ import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockCon
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
-import { ReflectionTextureBaseBlock } from "../Dual/reflectionTextureBaseBlock";
+import { ReflectionTextureBaseBlock } from "../Dual/reflectionTextureBaseBlock.pure";
 import type { Nullable } from "../../../../types";
-import { Texture } from "../../../Textures/texture";
+import { Texture } from "../../../Textures/texture.pure";
 import type { BaseTexture } from "../../../Textures/baseTexture";
 import type { Mesh } from "../../../../Meshes/mesh";
 import type { SubMesh } from "../../../../Meshes/subMesh";

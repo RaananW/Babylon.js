@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Vector3 } from "../Maths/math.vector";
+import { Vector3 } from "../Maths/math.vector.pure";
 import type { Nullable } from "../types";
 import type { Color3 } from "../Maths/math.color";
-import { TmpVectors } from "./math";
+import { TmpVectors } from "./math.pure";
 
 // https://dickyjim.wordpress.com/2013/09/04/spherical-harmonics-for-beginners/
 // http://silviojemma.com/public/papers/lighting/spherical-harmonic-lighting.pdf

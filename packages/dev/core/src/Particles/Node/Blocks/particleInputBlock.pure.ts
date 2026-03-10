@@ -2,7 +2,7 @@
 
 import { Observable } from "../../../Misc/observable";
 import { GetClass } from "../../../Misc/typeStore";
-import { Matrix, Vector2, Vector3 } from "../../../Maths/math.vector";
+import { Matrix, Vector2, Vector3 } from "../../../Maths/math.vector.pure";
 import { NodeParticleBlock } from "../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
 import type { NodeParticleConnectionPoint } from "../nodeParticleBlockConnectionPoint";

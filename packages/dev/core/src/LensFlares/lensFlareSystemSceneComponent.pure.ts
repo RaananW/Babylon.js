@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
-import { Tools } from "../Misc/tools";
+import { Tools } from "../Misc/tools.pure";
 import type { Nullable } from "../types";
 import type { Camera } from "../Cameras/camera";
-import { Scene } from "../scene";
+import { Scene } from "../scene.pure";
 import type { ISceneSerializableComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import type { IAssetContainer } from "core/IAssetContainer";

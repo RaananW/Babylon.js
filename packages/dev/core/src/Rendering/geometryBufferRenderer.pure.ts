@@ -1,17 +1,17 @@
 /** This file must only contain pure code and pure imports */
 
-import { Matrix } from "../Maths/math.vector";
-import { VertexBuffer } from "../Buffers/buffer";
+import { Matrix } from "../Maths/math.vector.pure";
+import { VertexBuffer } from "../Buffers/buffer.pure";
 import type { SubMesh } from "../Meshes/subMesh";
 import { Constants } from "../Engines/constants";
 import type { SmartArray } from "../Misc/smartArray";
-import { Texture } from "../Materials/Textures/texture";
+import { Texture } from "../Materials/Textures/texture.pure";
 import type { InternalTexture } from "../Materials/Textures/internalTexture";
-import { MultiRenderTarget } from "../Materials/Textures/multiRenderTarget";
+import { MultiRenderTarget } from "../Materials/Textures/multiRenderTarget.pure";
 import type { PrePassRenderer } from "../Rendering/prePassRenderer";
 import type { Scene } from "../scene";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
-import { Color4 } from "../Maths/math.color";
+import { Color4 } from "../Maths/math.color.pure";
 import { _WarnImport } from "../Misc/devTools";
 import type { Observer } from "../Misc/observable";
 import type { AbstractEngine } from "../Engines/abstractEngine";

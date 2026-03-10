@@ -2,9 +2,9 @@
 
 import type { Scene } from "../../scene";
 import type { Vector4 } from "../../Maths/math.vector";
-import { Vector3 } from "../../Maths/math.vector";
-import { Mesh } from "../mesh";
-import { CreateRibbon } from "./ribbonBuilder";
+import { Vector3 } from "../../Maths/math.vector.pure";
+import { Mesh } from "../mesh.pure";
+import { CreateRibbon } from "./ribbonBuilder.pure";
 import type { Nullable } from "../../types";
 
 /**

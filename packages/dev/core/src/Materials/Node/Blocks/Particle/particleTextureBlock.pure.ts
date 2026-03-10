@@ -6,10 +6,10 @@ import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
 import type { NodeMaterialDefines, NodeMaterial } from "../../nodeMaterial";
-import { InputBlock } from "../Input/inputBlock";
+import { InputBlock } from "../Input/inputBlock.pure";
 import type { BaseTexture } from "../../../Textures/baseTexture";
 import type { Nullable } from "../../../../types";
-import { Texture } from "../../../Textures/texture";
+import { Texture } from "../../../Textures/texture.pure";
 import type { Scene } from "../../../../scene";
 
 /**

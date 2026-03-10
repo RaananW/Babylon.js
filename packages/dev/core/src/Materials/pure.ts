@@ -23,7 +23,7 @@ export * from "./Textures/pure";
 export * from "./uniformBuffer";
 export * from "./materialFlags";
 export * from "./Node/pure";
-export * from "./effectRenderer";
+export * from "./effectRenderer.pure";
 export * from "./shadowDepthWrapper";
 export * from "./drawWrapper.functions";
 export * from "./drawWrapper";

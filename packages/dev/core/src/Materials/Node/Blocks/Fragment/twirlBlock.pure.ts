@@ -5,8 +5,8 @@ import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialB
 import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
 import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
-import { InputBlock } from "../Input/inputBlock";
-import { Vector2 } from "../../../../Maths/math.vector";
+import { InputBlock } from "../Input/inputBlock.pure";
+import { Vector2 } from "../../../../Maths/math.vector.pure";
 
 /**
  * Block used to generate a twirl

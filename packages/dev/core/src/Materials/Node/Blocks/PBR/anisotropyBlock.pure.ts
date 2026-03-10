@@ -7,7 +7,7 @@ import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnect
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
-import { TBNBlock } from "../Fragment/TBNBlock";
+import { TBNBlock } from "../Fragment/TBNBlock.pure";
 import type { Mesh } from "../../../../Meshes/mesh";
 import type { Effect } from "../../../effect";
 import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";

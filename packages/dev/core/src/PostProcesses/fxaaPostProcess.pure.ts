@@ -3,12 +3,12 @@
 import type { Nullable } from "../types";
 import type { Camera } from "../Cameras/camera";
 import type { Effect } from "../Materials/effect";
-import { Texture } from "../Materials/Textures/texture";
+import { Texture } from "../Materials/Textures/texture.pure";
 import type { PostProcessOptions } from "./postProcess";
-import { PostProcess } from "./postProcess";
+import { PostProcess } from "./postProcess.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { Constants } from "../Engines/constants";
-import { SerializationHelper } from "../Misc/decorators.serialization";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 import { ThinFXAAPostProcess } from "./thinFXAAPostProcess";
 import type { Scene } from "../scene";
 

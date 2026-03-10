@@ -1,12 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
-import { Sound } from "./sound";
+import { Sound } from "./sound.pure";
 import { SoundTrack } from "./soundTrack";
 import type { Nullable } from "../types";
-import { Matrix, Vector3 } from "../Maths/math.vector";
+import { Matrix, Vector3 } from "../Maths/math.vector.pure";
 import type { ISceneSerializableComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
-import { Scene } from "../scene";
+import { Scene } from "../scene.pure";
 import { PrecisionDate } from "../Misc/precisionDate";
 import { EngineStore } from "../Engines/engineStore";
 import { AbstractEngine } from "core/Engines/abstractEngine";

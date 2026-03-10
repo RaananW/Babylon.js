@@ -4,8 +4,8 @@ import { WebXRFeatureName } from "../webXRFeaturesManager";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import { Observable } from "../../Misc/observable";
-import { Vector3, TmpVectors } from "../../Maths/math.vector";
-import { Ray } from "../../Culling/ray";
+import { Vector3, TmpVectors } from "../../Maths/math.vector.pure";
+import { Ray } from "../../Culling/ray.pure";
 import type { Nullable } from "../../types";
 
 /**

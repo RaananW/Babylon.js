@@ -4,8 +4,8 @@ import type { IMinimalMotionControllerObject, MotionControllerHandedness, IMotio
 import { WebXRAbstractMotionController } from "./webXRAbstractMotionController";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";
 import type { Scene } from "../../scene";
-import { Mesh } from "../../Meshes/mesh";
-import { Quaternion } from "../../Maths/math.vector";
+import { Mesh } from "../../Meshes/mesh.pure";
+import { Quaternion } from "../../Maths/math.vector.pure";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 

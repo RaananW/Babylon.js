@@ -1,18 +1,18 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Camera } from "../Cameras/camera";
-import { Texture } from "../Materials/Textures/texture";
-import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
-import { FxaaPostProcess } from "../PostProcesses/fxaaPostProcess";
+import { Texture } from "../Materials/Textures/texture.pure";
+import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture.pure";
+import { FxaaPostProcess } from "../PostProcesses/fxaaPostProcess.pure";
 import { Constants } from "../Engines/constants";
 import { Logger } from "./logger";
-import { Tools } from "./tools";
+import { Tools } from "./tools.pure";
 import type { IScreenshotSize } from "./interfaces/screenshotSize";
-import { DumpData } from "./dumpTools";
+import { DumpData } from "./dumpTools.pure";
 import type { Nullable } from "../types";
 import { ApplyPostProcess } from "./textureTools";
 import type { AbstractEngine } from "../Engines/abstractEngine";
-import { _RetryWithInterval } from "./timingTools";
+import { _RetryWithInterval } from "./timingTools.pure";
 import type { FrameGraph } from "../FrameGraph/frameGraph";
 import { backbufferColorTextureHandle } from "../FrameGraph/frameGraphTypes";
 import { FrameGraphFXAATask } from "../FrameGraph/Tasks/PostProcesses/fxaaTask";

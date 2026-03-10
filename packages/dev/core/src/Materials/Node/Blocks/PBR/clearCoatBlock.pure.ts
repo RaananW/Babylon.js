@@ -6,7 +6,7 @@ import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
 import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
-import { InputBlock } from "../Input/inputBlock";
+import { InputBlock } from "../Input/inputBlock.pure";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
 import type { ReflectionBlock } from "./reflectionBlock";
@@ -18,7 +18,7 @@ import type { PBRMetallicRoughnessBlock } from "./pbrMetallicRoughnessBlock";
 import type { PerturbNormalBlock } from "../Fragment/perturbNormalBlock";
 import { PBRClearCoatConfiguration } from "../../../PBR/pbrClearCoatConfiguration";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
-import { TBNBlock } from "../Fragment/TBNBlock";
+import { TBNBlock } from "../Fragment/TBNBlock.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
 /**

@@ -3,8 +3,8 @@
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
 import type { Vector4 } from "../../Maths/math.vector";
-import { Mesh } from "../mesh";
-import { VertexData } from "../mesh.vertexData";
+import { Mesh } from "../mesh.pure";
+import { VertexData } from "../mesh.vertexData.pure";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
 /**

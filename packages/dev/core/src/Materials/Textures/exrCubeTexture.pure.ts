@@ -2,7 +2,7 @@
 
 import type { Nullable } from "../../types";
 import type { Scene } from "../../scene";
-import { EnvCubeTexture } from "./envCubeTexture";
+import { EnvCubeTexture } from "./envCubeTexture.pure";
 import type { AbstractEngine } from "../../Engines/abstractEngine";
 import { PanoramaToCubeMapTools } from "../../Misc/HighDynamicRange/panoramaToCubemap";
 import type { CubeMapInfo } from "../../Misc/HighDynamicRange/panoramaToCubemap";

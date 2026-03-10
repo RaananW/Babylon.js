@@ -3,13 +3,13 @@
 import type { Vector2 } from "../Maths/math.vector";
 import type { Nullable } from "../types";
 import type { PostProcessOptions } from "./postProcess";
-import { PostProcess } from "./postProcess";
+import { PostProcess } from "./postProcess.pure";
 import type { Camera } from "../Cameras/camera";
 import type { Effect } from "../Materials/effect";
-import { Texture } from "../Materials/Textures/texture";
+import { Texture } from "../Materials/Textures/texture.pure";
 import { Constants } from "../Engines/constants";
 import { serialize, serializeAsVector2 } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 import type { Scene } from "../scene";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import { ThinBlurPostProcess } from "./thinBlurPostProcess";

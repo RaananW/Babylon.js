@@ -4,7 +4,7 @@ import type { FlowGraphContext } from "../../flowGraphContext";
 import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
 import { FlowGraphBlock } from "../../flowGraphBlock";
 import type { FlowGraphDataConnection } from "../../flowGraphDataConnection";
-import { RichTypeAny } from "../../flowGraphRichTypes";
+import { RichTypeAny } from "../../flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 
 /**

@@ -11,7 +11,7 @@ import type { Effect } from "../../../effect";
 import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
 import type { Mesh } from "../../../../Meshes/mesh";
 import type { Light } from "../../../../Lights/light";
-import { PointLight } from "../../../../Lights/pointLight";
+import { PointLight } from "../../../../Lights/pointLight.pure";
 import type { ShadowGenerator } from "../../../../Lights/Shadows/shadowGenerator";
 import type { ShadowLight } from "../../../../Lights";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";

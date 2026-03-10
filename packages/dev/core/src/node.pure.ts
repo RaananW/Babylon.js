@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Scene } from "./scene";
 import type { Nullable } from "./types";
-import { Matrix, Vector3 } from "./Maths/math.vector";
+import { Matrix, Vector3 } from "./Maths/math.vector.pure";
 import type { AbstractEngine } from "./Engines/abstractEngine";
 import type { IBehaviorAware, Behavior } from "./Behaviors/behavior";
 import { serialize } from "./Misc/decorators";
@@ -17,7 +17,7 @@ import type { AnimationPropertiesOverride } from "./Animations/animationProperti
 import type { AbstractMesh } from "./Meshes/abstractMesh";
 import type { Animation } from "./Animations/animation";
 import type { Animatable } from "./Animations/animatable.core";
-import { SerializationHelper } from "./Misc/decorators.serialization";
+import { SerializationHelper } from "./Misc/decorators.serialization.pure";
 import type { IAssetContainer } from "./IAssetContainer";
 
 /**

@@ -4,7 +4,7 @@ export * from "./baseParticleSystem.pure";
 export * from "./EmitterTypes/pure";
 export * from "./webgl2ParticleSystem.pure";
 export * from "./computeShaderParticleSystem.pure";
-export * from "./gpuParticleSystem";
+export * from "./gpuParticleSystem.pure";
 export * from "./IParticleSystem";
 export * from "./particle";
 export * from "./particleHelper.pure";

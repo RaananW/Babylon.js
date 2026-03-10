@@ -9,8 +9,8 @@ import type { AbstractMesh } from "../../../../Meshes/abstractMesh";
 import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
 import type { Effect } from "../../../effect";
 import type { Mesh } from "../../../../Meshes/mesh";
-import { VertexBuffer } from "../../../../Buffers/buffer";
-import { InputBlock } from "../Input/inputBlock";
+import { VertexBuffer } from "../../../../Buffers/buffer.pure";
+import { InputBlock } from "../Input/inputBlock.pure";
 import { BindMorphTargetParameters, PrepareDefinesForMorphTargets } from "../../../materialHelper.functions";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 

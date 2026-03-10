@@ -9,13 +9,13 @@ import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnect
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { RandomRange } from "../../../../Maths/math.scalar.functions";
-import { RawTexture } from "../../../Textures/rawTexture";
+import { RawTexture } from "../../../Textures/rawTexture.pure";
 import { Constants } from "../../../../Engines/constants";
-import { Texture } from "../../../Textures/texture";
+import { Texture } from "../../../Textures/texture.pure";
 import type { Effect } from "../../../effect";
 import type { AbstractEngine } from "../../../../Engines/abstractEngine";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
-import { ImageSourceBlock } from "../Dual/imageSourceBlock";
+import { ImageSourceBlock } from "../Dual/imageSourceBlock.pure";
 import type { DepthSourceBlock } from "../Dual/depthSourceBlock";
 
 /**

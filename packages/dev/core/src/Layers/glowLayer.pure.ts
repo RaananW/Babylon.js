@@ -2,21 +2,21 @@
 
 import { serialize } from "../Misc/decorators";
 import type { Nullable } from "../types";
-import { Scene } from "../scene";
+import { Scene } from "../scene.pure";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { Mesh } from "../Meshes/mesh";
-import { Texture } from "../Materials/Textures/texture";
-import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
+import { Texture } from "../Materials/Textures/texture.pure";
+import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture.pure";
 import type { Effect } from "../Materials/effect";
 import type { Material } from "../Materials/material";
 import type { PostProcess } from "../PostProcesses/postProcess";
-import { BlurPostProcess } from "../PostProcesses/blurPostProcess";
+import { BlurPostProcess } from "../PostProcesses/blurPostProcess.pure";
 import type { IThinGlowLayerOptions } from "./thinGlowLayer";
 import { EffectLayer } from "./effectLayer";
 import { Constants } from "../Engines/constants";
 import type { Color4 } from "core/Maths/math.color";
-import { SerializationHelper } from "../Misc/decorators.serialization";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 import { GetExponentOfTwo } from "../Misc/tools.functions";
 import { ThinGlowLayer } from "./thinGlowLayer";
 import type { ThinBlurPostProcess } from "core/PostProcesses/thinBlurPostProcess";

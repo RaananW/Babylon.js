@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import { DeepCopier } from "../Misc/deepCopier";
+import { DeepCopier } from "../Misc/deepCopier.pure";
 import type { DeepImmutable } from "../types";
-import { Color3 } from "../Maths/math.color";
+import { Color3 } from "../Maths/math.color.pure";
 import { Constants } from "../Engines/constants";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 

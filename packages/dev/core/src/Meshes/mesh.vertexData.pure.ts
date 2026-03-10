@@ -2,11 +2,11 @@
 
 import type { Nullable, FloatArray, IndicesArray, DeepImmutable } from "../types";
 import type { Matrix, Vector2 } from "../Maths/math.vector";
-import { Vector3, Vector4, TmpVectors } from "../Maths/math.vector";
-import { VertexBuffer } from "../Buffers/buffer";
+import { Vector3, Vector4, TmpVectors } from "../Maths/math.vector.pure";
+import { VertexBuffer } from "../Buffers/buffer.pure";
 import { _WarnImport } from "../Misc/devTools";
 import type { Color3 } from "../Maths/math.color";
-import { Color4 } from "../Maths/math.color";
+import { Color4 } from "../Maths/math.color.pure";
 import { Logger } from "../Misc/logger";
 import { nativeOverride } from "../Misc/decorators";
 import type { Coroutine } from "../Misc/coroutine";

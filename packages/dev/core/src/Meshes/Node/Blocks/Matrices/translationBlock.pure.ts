@@ -4,8 +4,8 @@ import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryConnectionPointTypes";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
-import { GeometryInputBlock } from "../geometryInputBlock";
-import { Matrix, Vector3 } from "../../../../Maths/math.vector";
+import { GeometryInputBlock } from "../geometryInputBlock.pure";
+import { Matrix, Vector3 } from "../../../../Maths/math.vector.pure";
 
 /**
  * Block used to get a translation matrix

@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import { MaterialPluginBase } from "./materialPluginBase";
+import { MaterialPluginBase } from "./materialPluginBase.pure";
 import type { Scene } from "../scene";
 import type { UniformBuffer } from "./uniformBuffer";
 import type { FloatArray, Nullable } from "../types";

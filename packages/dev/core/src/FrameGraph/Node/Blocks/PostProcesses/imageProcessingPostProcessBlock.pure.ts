@@ -5,7 +5,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { FrameGraphImageProcessingTask } from "core/FrameGraph/Tasks/PostProcesses/imageProcessingTask";
 import { ThinImageProcessingPostProcess } from "core/PostProcesses/thinImageProcessingPostProcess";
 import { ImageProcessingConfiguration } from "core/Materials/imageProcessingConfiguration";
-import { Color4 } from "../../../../Maths/math.color";
+import { Color4 } from "../../../../Maths/math.color.pure";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
 
 /**

@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import { FreeCamera } from "./freeCamera";
+import { FreeCamera } from "./freeCamera.pure";
 import type { Scene } from "../scene";
-import { Vector3 } from "../Maths/math.vector";
+import { Vector3 } from "../Maths/math.vector.pure";
 
 /**
  * This represents a free type of camera. It can be useful in First Person Shooter game for instance.

@@ -7,10 +7,10 @@ import type { SubMesh } from "../../Meshes/subMesh";
 import type { UniformBuffer } from "../uniformBuffer";
 import type { MaterialDefines } from "../materialDefines";
 import { serialize, expandToProperty } from "../../Misc/decorators";
-import { Color3 } from "../../Maths/math.color";
-import { MaterialPluginBase } from "../materialPluginBase";
+import { Color3 } from "../../Maths/math.color.pure";
+import { MaterialPluginBase } from "../materialPluginBase.pure";
 import { ShaderLanguage } from "../shaderLanguage";
-import { GaussianSplattingMaxPartCount } from "./gaussianSplattingMaterial";
+import { GaussianSplattingMaxPartCount } from "./gaussianSplattingMaterial.pure";
 import type { GaussianSplattingMaterial } from "./gaussianSplattingMaterial";
 
 /**

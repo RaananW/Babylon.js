@@ -10,7 +10,7 @@ import type { NodeMaterialDefines, NodeMaterial } from "../../nodeMaterial";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import type { Effect } from "../../../effect";
 import type { Mesh } from "../../../../Meshes/mesh";
-import { BindLogDepth } from "../../../materialHelper.functions";
+import { BindLogDepth } from "../../../materialHelper.functions.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
 /**

@@ -1,15 +1,15 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Immutable, Nullable } from "../types";
-import { VertexBuffer } from "../Buffers/buffer";
-import { AbstractMesh } from "../Meshes/abstractMesh";
+import { VertexBuffer } from "../Buffers/buffer.pure";
+import { AbstractMesh } from "../Meshes/abstractMesh.pure";
 import type { Mesh } from "../Meshes/mesh";
 import type { Matrix } from "../Maths/math.vector";
-import { Vector3, TmpVectors } from "../Maths/math.vector";
+import { Vector3, TmpVectors } from "../Maths/math.vector.pure";
 import type { IDisposable, Scene } from "../scene";
 import type { Observer } from "../Misc/observable";
 import { Material } from "../Materials/material";
-import { ShaderMaterial } from "../Materials/shaderMaterial";
+import { ShaderMaterial } from "../Materials/shaderMaterial.pure";
 import { Camera } from "../Cameras/camera";
 import { Constants } from "../Engines/constants";
 import type { Node } from "../node";

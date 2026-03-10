@@ -14,12 +14,12 @@ import type {
     IFrameGraphPass,
 } from "core/index";
 import { getDimensionsFromTextureSize, textureSizeIsObject } from "../Materials/Textures/textureCreationOptions";
-import { Texture } from "../Materials/Textures/texture";
+import { Texture } from "../Materials/Textures/texture.pure";
 import { backbufferColorTextureHandle, backbufferDepthStencilTextureHandle } from "./frameGraphTypes";
 import { Constants } from "../Engines/constants";
 import { InternalTextureSource } from "../Materials/Textures/internalTexture";
 import { FrameGraphRenderTarget } from "./frameGraphRenderTarget";
-import { FrameGraphRenderPass } from "./Passes/renderPass";
+import { FrameGraphRenderPass } from "./Passes/renderPass.pure";
 import { Logger } from "../Misc/logger";
 import { GetTypeForDepthTexture, IsDepthTexture, HasStencilAspect } from "core/Materials/Textures/textureHelper.functions";
 

@@ -1,15 +1,15 @@
 /** This file must only contain pure code and pure imports */
 
-import { SerializationHelper } from "../Misc/decorators.serialization";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 import type { Nullable } from "../types";
-import { Scene } from "../scene";
-import { Matrix, Quaternion } from "../Maths/math.vector";
+import { Scene } from "../scene.pure";
+import { Matrix, Quaternion } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { Mesh } from "../Meshes/mesh";
 import type { SubMesh } from "../Meshes/subMesh";
-import { VertexBuffer } from "../Buffers/buffer";
+import { VertexBuffer } from "../Buffers/buffer.pure";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
-import { Texture } from "../Materials/Textures/texture";
+import { Texture } from "../Materials/Textures/texture.pure";
 import type { Effect, IEffectCreationOptions, IShaderPath } from "./effect";
 import { EffectFallbacks } from "./effectFallbacks";
 import { WebRequest } from "../Misc/webRequest";

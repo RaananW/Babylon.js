@@ -1,12 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
 import { serializeAsMeshReference, serializeAsVector3 } from "../Misc/decorators";
-import { SerializationHelper } from "../Misc/decorators.serialization";
-import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
-import { Matrix, Vector3 } from "../Maths/math.vector";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture.pure";
+import { Matrix, Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { Nullable } from "../types";
-import { Scene } from "../scene";
+import { Scene } from "../scene.pure";
 import { Constants } from "../Engines/constants";
 import type { UniformBuffer } from "../Materials/uniformBuffer";
 import type { IAssetContainer } from "core/IAssetContainer";

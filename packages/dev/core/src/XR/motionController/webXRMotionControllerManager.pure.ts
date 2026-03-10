@@ -2,7 +2,7 @@
 
 import type { WebXRAbstractMotionController, IMotionControllerProfile } from "./webXRAbstractMotionController";
 import type { Scene } from "../../scene";
-import { Tools } from "../../Misc/tools";
+import { Tools } from "../../Misc/tools.pure";
 import { WebXRProfiledMotionController } from "./webXRProfiledMotionController";
 import type { Nullable } from "../../types";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";

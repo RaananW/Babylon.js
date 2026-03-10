@@ -2,7 +2,7 @@
 
 import type { Nullable } from "../types";
 import type { PostProcessOptions } from "./postProcess";
-import { PostProcess } from "./postProcess";
+import { PostProcess } from "./postProcess.pure";
 import type { Effect } from "../Materials/effect";
 import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
 import type { Camera } from "../Cameras/camera";

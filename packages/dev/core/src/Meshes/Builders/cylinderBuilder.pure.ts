@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
-import { Vector4, Vector3, Vector2 } from "../../Maths/math.vector";
-import { Color4 } from "../../Maths/math.color";
-import { Mesh } from "../mesh";
-import { VertexData } from "../mesh.vertexData";
-import { Scene } from "../../scene";
+import { Vector4, Vector3, Vector2 } from "../../Maths/math.vector.pure";
+import { Color4 } from "../../Maths/math.color.pure";
+import { Mesh } from "../mesh.pure";
+import { VertexData } from "../mesh.vertexData.pure";
+import { Scene } from "../../scene.pure";
 import type { Nullable } from "../../types";
 import { Axis } from "../../Maths/math.axis";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";

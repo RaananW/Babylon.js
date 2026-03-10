@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
 import { Observable } from "../Misc/observable";
-import { Vector2, Vector3 } from "../Maths/math.vector";
-import { Color3, Color4 } from "../Maths/math.color";
+import { Vector2, Vector3 } from "../Maths/math.vector.pure";
+import { Color3, Color4 } from "../Maths/math.color.pure";
 import type { Condition } from "./condition";
 import type { AbstractActionManager } from "./abstractActionManager";
 import type { Nullable } from "../types";

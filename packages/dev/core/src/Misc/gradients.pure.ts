@@ -1,5 +1,5 @@
 import type { Color3 } from "../Maths/math.color";
-import { Color4 } from "../Maths/math.color";
+import { Color4 } from "../Maths/math.color.pure";
 
 /** Interface used by value gradients (color, factor, ...) */
 export interface IValueGradient {

@@ -1,27 +1,27 @@
 /** This file must only contain pure code and pure imports */
 
-import { Scene } from "../scene";
-import { Buffer, VertexBuffer } from "../Buffers/buffer";
+import { Scene } from "../scene.pure";
+import { Buffer, VertexBuffer } from "../Buffers/buffer.pure";
 import type { SubMesh } from "../Meshes/subMesh";
-import { AbstractMesh } from "../Meshes/abstractMesh";
-import { Matrix, Vector3 } from "../Maths/math.vector";
+import { AbstractMesh } from "../Meshes/abstractMesh.pure";
+import { Matrix, Vector3 } from "../Maths/math.vector.pure";
 import { SmartArray } from "../Misc/smartArray";
 import type { Nullable, FloatArray, IndicesArray } from "../types";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
-import { BoundingBox } from "../Culling/boundingBox";
+import { BoundingBox } from "../Culling/boundingBox.pure";
 import type { Effect } from "../Materials/effect";
 import { Material } from "../Materials/material";
-import { ShaderMaterial } from "../Materials/shaderMaterial";
+import { ShaderMaterial } from "../Materials/shaderMaterial.pure";
 import type { DataBuffer } from "../Buffers/dataBuffer";
-import { Color3 } from "../Maths/math.color";
+import { Color3 } from "../Maths/math.color.pure";
 import { Observable } from "../Misc/observable";
 import { DrawWrapper } from "../Materials/drawWrapper";
 import { UniformBuffer } from "../Materials/uniformBuffer";
-import { CreateBoxVertexData } from "../Meshes/Builders/boxBuilder";
+import { CreateBoxVertexData } from "../Meshes/Builders/boxBuilder.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { Constants } from "../Engines/constants";
-import { _RetryWithInterval } from "../Misc/timingTools";
+import { _RetryWithInterval } from "../Misc/timingTools.pure";
 import { Logger } from "../Misc/logger";
 
 declare module "../scene" {
