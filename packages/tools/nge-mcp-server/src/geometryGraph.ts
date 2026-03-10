@@ -141,6 +141,132 @@ const ContextualSourceToType: Record<number, number> = {
     [ContextualSources.LatticeControl]: ConnectionPointTypes.Vector3,
 };
 
+// ─── Block Enum Properties ────────────────────────────────────────────────
+
+/** MathBlockOperations */
+const MathBlockOperations: Record<string, number> = {
+    Add: 0,
+    Subtract: 1,
+    Multiply: 2,
+    Divide: 3,
+    Max: 4,
+    Min: 5,
+};
+
+/** GeometryTrigonometryBlockOperations */
+const TrigonometryOperations: Record<string, number> = {
+    Cos: 0,
+    Sin: 1,
+    Abs: 2,
+    Exp: 3,
+    Round: 4,
+    Floor: 5,
+    Ceiling: 6,
+    Sqrt: 7,
+    Log: 8,
+    Tan: 9,
+    ArcTan: 10,
+    ArcCos: 11,
+    ArcSin: 12,
+    Sign: 13,
+    Negate: 14,
+    OneMinus: 15,
+    Reciprocal: 16,
+    ToDegrees: 17,
+    ToRadians: 18,
+    Fract: 19,
+    Exp2: 20,
+};
+
+/** ConditionBlockTests */
+const ConditionBlockTests: Record<string, number> = {
+    Equal: 0,
+    NotEqual: 1,
+    LessThan: 2,
+    GreaterThan: 3,
+    LessOrEqual: 4,
+    GreaterOrEqual: 5,
+    Xor: 6,
+    Or: 7,
+    And: 8,
+};
+
+/** BooleanGeometryOperations */
+const BooleanGeometryOperations: Record<string, number> = {
+    Intersect: 0,
+    Subtract: 1,
+    Union: 2,
+};
+
+/** RandomBlockLocks */
+const RandomBlockLocks: Record<string, number> = {
+    None: 0,
+    LoopID: 1,
+    InstanceID: 2,
+    Once: 3,
+};
+
+/** Aggregations */
+const Aggregations: Record<string, number> = {
+    Max: 0,
+    Min: 1,
+    Sum: 2,
+};
+
+/** MappingTypes */
+const MappingTypes: Record<string, number> = {
+    Spherical: 0,
+    Cylindrical: 1,
+    Cubic: 2,
+};
+
+/** GeometryEaseBlockTypes / GeometryCurveBlockTypes */
+const EaseTypes: Record<string, number> = {
+    EaseInSine: 0,
+    EaseOutSine: 1,
+    EaseInOutSine: 2,
+    EaseInQuad: 3,
+    EaseOutQuad: 4,
+    EaseInOutQuad: 5,
+    EaseInCubic: 6,
+    EaseOutCubic: 7,
+    EaseInOutCubic: 8,
+    EaseInQuart: 9,
+    EaseOutQuart: 10,
+    EaseInOutQuart: 11,
+    EaseInQuint: 12,
+    EaseOutQuint: 13,
+    EaseInOutQuint: 14,
+    EaseInExpo: 15,
+    EaseOutExpo: 16,
+    EaseInOutExpo: 17,
+    EaseInCirc: 18,
+    EaseOutCirc: 19,
+    EaseInOutCirc: 20,
+    EaseInBack: 21,
+    EaseOutBack: 22,
+    EaseInOutBack: 23,
+    EaseInElastic: 24,
+    EaseOutElastic: 25,
+    EaseInOutElastic: 26,
+};
+
+/**
+ * Maps block type names to their property→enum-map pairs.
+ * When a property value is a string, we look up the numeric equivalent here.
+ */
+const BlockEnumProperties: Record<string, Record<string, Record<string, number>>> = {
+    MathBlock: { operation: MathBlockOperations },
+    GeometryTrigonometryBlock: { operation: TrigonometryOperations },
+    ConditionBlock: { test: ConditionBlockTests },
+    BooleanGeometryBlock: { operation: BooleanGeometryOperations },
+    RandomBlock: { lockMode: RandomBlockLocks },
+    AggregatorBlock: { aggregation: Aggregations },
+    MappingBlock: { mapping: MappingTypes },
+    GeometryEaseBlock: { type: EaseTypes },
+    GeometryCurveBlock: { curveType: EaseTypes },
+};
+
 // ─── Manager ──────────────────────────────────────────────────────────────
 
 /**
@@ -275,6 +401,8 @@ export class GeometryGraphManager {
                     if (typeof cv === "number" && cv !== ContextualSources.None && ContextualSourceToType[cv] !== undefined) {
                         block["type"] = ContextualSourceToType[cv];
                     }
+                } else if (typeof value === "string" && BlockEnumProperties[blockType]?.[key]) {
+                    block[key] = BlockEnumProperties[blockType][key][value] ?? value;
                 } else {
                     block[key] = value;
                 }
@@ -676,6 +804,16 @@ export class GeometryGraphManager {
                     }
                 }
             }
+
+            // Convert any remaining string enum values to numbers
+            const enumProps = BlockEnumProperties[typeName];
+            if (enumProps) {
+                for (const [key, enumMap] of Object.entries(enumProps)) {
+                    if (typeof block[key] === "string") {
+                        block[key] = enumMap[block[key] as string] ?? block[key];
+                    }
+                }
+            }
         }
 
         // Compute a proper layered graph layout for the editor
@@ -893,6 +1031,8 @@ export class GeometryGraphManager {
                 if (typeof cv === "number" && cv !== ContextualSources.None && ContextualSourceToType[cv] !== undefined) {
                     block["type"] = ContextualSourceToType[cv];
                 }
+            } else if (typeof value === "string" && BlockEnumProperties[typeName]?.[key]) {
+                block[key] = BlockEnumProperties[typeName][key][value] ?? value;
             } else {
                 block[key] = value;
             }

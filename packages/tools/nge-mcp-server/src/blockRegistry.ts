@@ -1187,6 +1187,23 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         defaultSerializedProperties: { serializedCachedData: false },
     },
 
+    GeometryCurveBlock: {
+        className: "GeometryCurveBlock",
+        category: "Math",
+        description: "Applies an easing/curve function to the input. Same curves as GeometryEaseBlock but serialised as curveType.",
+        inputs: [{ name: "input", type: "AutoDetect" }],
+        outputs: [{ name: "output", type: "BasedOnInput" }],
+        properties: {
+            curveType:
+                "GeometryCurveBlockTypes — EaseInSine (0), EaseOutSine (1), EaseInOutSine (2), EaseInQuad (3), EaseOutQuad (4), " +
+                "EaseInOutQuad (5), EaseInCubic (6), EaseOutCubic (7), EaseInOutCubic (8), EaseInQuart (9), EaseOutQuart (10), " +
+                "EaseInOutQuart (11), EaseInQuint (12), EaseOutQuint (13), EaseInOutQuint (14), EaseInExpo (15), EaseOutExpo (16), " +
+                "EaseInOutExpo (17), EaseInCirc (18), EaseOutCirc (19), EaseInOutCirc (20), EaseInBack (21), EaseOutBack (22), " +
+                "EaseInOutBack (23), EaseInElastic (24), EaseOutElastic (25), EaseInOutElastic (26). Default: EaseInOutSine",
+        },
+        defaultSerializedProperties: { curveType: 2 },
+    },
+
     GeometryTextureFetchBlock: {
         className: "GeometryTextureFetchBlock",
         category: "Texture",
