@@ -139,6 +139,99 @@ export const AnimationTypes: Record<string, number> = {
     Time: 1,
 };
 
+/** TrigonometryBlockOperations — numeric enum values Babylon.js expects */
+export const TrigonometryOperations: Record<string, number> = {
+    Cos: 0,
+    Sin: 1,
+    Abs: 2,
+    Exp: 3,
+    Exp2: 4,
+    Round: 5,
+    Floor: 6,
+    Ceiling: 7,
+    Sqrt: 8,
+    Log: 9,
+    Tan: 10,
+    ArcTan: 11,
+    ArcCos: 12,
+    ArcSin: 13,
+    Fract: 14,
+    Sign: 15,
+    Radians: 16,
+    Degrees: 17,
+    Set: 18,
+};
+
+/** ConditionalBlockConditions — numeric enum values Babylon.js expects */
+export const ConditionalConditions: Record<string, number> = {
+    Equal: 0,
+    NotEqual: 1,
+    LessThan: 2,
+    GreaterThan: 3,
+    LessOrEqual: 4,
+    GreaterOrEqual: 5,
+    Xor: 6,
+    Or: 7,
+    And: 8,
+};
+
+/** MeshAttributeExistsBlockTypes — numeric enum values Babylon.js expects */
+export const MeshAttributeExistsTypes: Record<string, number> = {
+    None: 0,
+    Normal: 1,
+    Tangent: 2,
+    VertexColor: 3,
+    UV1: 4,
+    UV2: 5,
+    UV3: 6,
+    UV4: 7,
+    UV5: 8,
+    UV6: 9,
+};
+
+/** CurveBlockTypes — numeric enum values Babylon.js expects */
+export const CurveTypes: Record<string, number> = {
+    EaseInSine: 0,
+    EaseOutSine: 1,
+    EaseInOutSine: 2,
+    EaseInQuad: 3,
+    EaseOutQuad: 4,
+    EaseInOutQuad: 5,
+    EaseInCubic: 6,
+    EaseOutCubic: 7,
+    EaseInOutCubic: 8,
+    EaseInQuart: 9,
+    EaseOutQuart: 10,
+    EaseInOutQuart: 11,
+    EaseInQuint: 12,
+    EaseOutQuint: 13,
+    EaseInOutQuint: 14,
+    EaseInExpo: 15,
+    EaseOutExpo: 16,
+    EaseInOutExpo: 17,
+    EaseInCirc: 18,
+    EaseOutCirc: 19,
+    EaseInOutCirc: 20,
+    EaseInBack: 21,
+    EaseOutBack: 22,
+    EaseInOutBack: 23,
+    EaseInElastic: 24,
+    EaseOutElastic: 25,
+    EaseInOutElastic: 26,
+};
+
+/**
+ * Mapping from block class name → property name → enum string-to-number map.
+ * Used by setBlockProperties() to convert human-readable enum strings to the
+ * numeric values Babylon.js expects during deserialization.
+ */
+const BlockEnumProperties: Record<string, Record<string, Record<string, number>>> = {
+    TrigonometryBlock: { operation: TrigonometryOperations },
+    ConditionalBlock: { condition: ConditionalConditions },
+    MeshAttributeExistsBlock: { attributeType: MeshAttributeExistsTypes },
+    CurveBlock: { curveType: CurveTypes },
+};
+
 /**
  * Valid vertex buffer attribute names in Babylon.js.
  * Used to validate and normalise InputBlock attributeName values.
@@ -972,6 +1065,16 @@ export class MaterialGraphManager {
                     }
                 }
             }
+
+            // Convert any remaining string enum values to numbers
+            const enumProps = BlockEnumProperties[typeName];
+            if (enumProps) {
+                for (const [key, enumMap] of Object.entries(enumProps)) {
+                    if (typeof block[key] === "string") {
+                        block[key] = enumMap[block[key] as string] ?? block[key];
+                    }
+                }
+            }
         }
 
         // Normalise RemapBlock: ensure sourceRange / targetRange are Vector2 arrays.
@@ -1250,6 +1353,10 @@ export class MaterialGraphManager {
             } else if (typeName === "InputBlock" && key === "mode" && typeof value === "string") {
                 const modeMap: Record<string, number> = { Uniform: 0, Attribute: 1, Varying: 2, Undefined: 3 };
                 block["mode"] = modeMap[value] ?? value;
+            } else if (typeof value === "string" && BlockEnumProperties[typeName]?.[key]) {
+                // Convert human-readable enum string to numeric value for non-InputBlock blocks
+                const enumMap = BlockEnumProperties[typeName][key];
+                block[key] = enumMap[value] ?? value;
             } else {
                 block[key] = value;
             }

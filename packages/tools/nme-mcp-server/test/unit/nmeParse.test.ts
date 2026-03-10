@@ -122,6 +122,31 @@ describe("NME MCP Server – Babylon.js Parse", () => {
         });
     }
 
+    // ── MCP-generated example materials ─────────────────────────────────
+
+    const exampleFiles = ["BricksAndMortar.json", "CheckeredBoard.json", "Water.json", "HumanSkin.json", "Psychedelic.json"];
+
+    for (const file of exampleFiles) {
+        it(`should parse example material: ${file}`, () => {
+            let jsonStr: string;
+            try {
+                jsonStr = readNmeJson(`examples/${file}`);
+            } catch {
+                console.warn(`Skipping example ${file}: not found`);
+                return;
+            }
+
+            const source = JSON.parse(jsonStr);
+            const material = NodeMaterial.Parse(source, scene);
+
+            expect(material).toBeDefined();
+            expect(material.attachedBlocks.length).toBeGreaterThan(0);
+            expect(material.attachedBlocks.length).toBe(source.blocks.length);
+
+            material.dispose();
+        });
+    }
+
     // ── Inline minimal material (always runs, no file dependency) ────────
 
     it("should parse a minimal inline material", () => {
@@ -243,4 +268,58 @@ describe("NME MCP Server – Babylon.js Parse", () => {
 
         material.dispose();
     });
+
+    // ── Deep validation of example materials ────────────────────────────
+
+    const deepExamples = ["BricksAndMortar.json", "CheckeredBoard.json", "Water.json"];
+
+    for (const file of deepExamples) {
+        it(`should build and have connections: ${file}`, () => {
+            let jsonStr: string;
+            try {
+                jsonStr = readNmeJson(`examples/${file}`);
+            } catch {
+                console.warn(`Skipping deep test for ${file}: not found`);
+                return;
+            }
+
+            const source = JSON.parse(jsonStr);
+            const material = NodeMaterial.Parse(source, scene);
+
+            expect(material).toBeDefined();
+            expect(material.attachedBlocks.length).toBe(source.blocks.length);
+
+            // Check that connections have been restored
+            let connectedInputCount = 0;
+            for (const block of material.attachedBlocks) {
+                for (const inp of block.inputs) {
+                    if (inp.isConnected) {
+                        connectedInputCount++;
+                    }
+                }
+            }
+
+            // Count expected connections from the source JSON
+            let expectedConnections = 0;
+            for (const b of source.blocks) {
+                for (const inp of b.inputs ?? []) {
+                    if (inp.targetBlockId !== undefined && inp.targetBlockId !== null) {
+                        expectedConnections++;
+                    }
+                }
+            }
+
+            console.log(`${file}: ${connectedInputCount}/${expectedConnections} connections restored, ${material.attachedBlocks.length} blocks`);
+
+            // All connections from the JSON should be restored in the parsed material
+            expect(connectedInputCount).toBe(expectedConnections);
+
+            // Try building the material (shader compilation)
+            expect(() => {
+                material.build(false);
+            }).not.toThrow();
+
+            material.dispose();
+        });
+    }
 });

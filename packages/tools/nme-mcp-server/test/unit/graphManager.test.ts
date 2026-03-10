@@ -283,4 +283,60 @@ describe("NME MCP Server – Graph Manager Validation", () => {
         const criticalWarnings = validResult.filter((w) => w.includes("Missing"));
         expect(criticalWarnings.length).toBe(0);
     });
+
+    it("converts enum string properties to numeric values", () => {
+        const mgr = new MaterialGraphManager();
+        mgr.createMaterial("enumTest");
+
+        // TrigonometryBlock with string "Sin" should become numeric 1
+        const trig = mgr.addBlock("enumTest", "TrigonometryBlock", "sinBlock");
+        expect(typeof trig).not.toBe("string");
+        const trigId = (trig as any).block.id;
+        const result = mgr.setBlockProperties("enumTest", trigId, { operation: "Sin" });
+        expect(result).toBe("OK");
+
+        // Export and check the operation is numeric
+        // (need enough blocks for valid export — just add output blocks too)
+        mgr.addBlock("enumTest", "InputBlock", "pos", { type: "Vector3", mode: "Attribute", attributeName: "position" });
+        mgr.addBlock("enumTest", "InputBlock", "wvp", { type: "Matrix", systemValue: "WorldViewProjection" });
+        mgr.addBlock("enumTest", "TransformBlock", "transform");
+        mgr.addBlock("enumTest", "VertexOutputBlock", "vertOut");
+        mgr.addBlock("enumTest", "FragmentOutputBlock", "fragOut");
+        mgr.addBlock("enumTest", "InputBlock", "color", { type: "Color3", value: [1, 0, 0] });
+        mgr.connectBlocks("enumTest", 2, "output", 4, "vector");
+        mgr.connectBlocks("enumTest", 3, "output", 4, "transform");
+        mgr.connectBlocks("enumTest", 4, "output", 5, "vector");
+        mgr.connectBlocks("enumTest", 7, "output", 6, "rgb");
+
+        const json = mgr.exportJSON("enumTest");
+        expect(json).toBeDefined();
+        const parsed = JSON.parse(json!);
+        const trigBlock = parsed.blocks.find((b: any) => b.name === "sinBlock");
+        expect(trigBlock).toBeDefined();
+        expect(trigBlock.operation).toBe(1); // Sin = 1
+
+        // Also verify ConditionalBlock
+        const mgr2 = new MaterialGraphManager();
+        mgr2.createMaterial("condTest");
+        const cond = mgr2.addBlock("condTest", "ConditionalBlock", "condBlock");
+        const condId = (cond as any).block.id;
+        mgr2.setBlockProperties("condTest", condId, { condition: "GreaterThan" });
+        // Quick export to trigger normalization
+        mgr2.addBlock("condTest", "InputBlock", "pos", { type: "Vector3", mode: "Attribute", attributeName: "position" });
+        mgr2.addBlock("condTest", "InputBlock", "wvp", { type: "Matrix", systemValue: "WorldViewProjection" });
+        mgr2.addBlock("condTest", "TransformBlock", "transform");
+        mgr2.addBlock("condTest", "VertexOutputBlock", "vertOut");
+        mgr2.addBlock("condTest", "FragmentOutputBlock", "fragOut");
+        mgr2.addBlock("condTest", "InputBlock", "color", { type: "Color3", value: [1, 0, 0] });
+        mgr2.connectBlocks("condTest", 2, "output", 4, "vector");
+        mgr2.connectBlocks("condTest", 3, "output", 4, "transform");
+        mgr2.connectBlocks("condTest", 4, "output", 5, "vector");
+        mgr2.connectBlocks("condTest", 7, "output", 6, "rgb");
+
+        const json2 = mgr2.exportJSON("condTest");
+        const parsed2 = JSON.parse(json2!);
+        const condBlock = parsed2.blocks.find((b: any) => b.name === "condBlock");
+        expect(condBlock).toBeDefined();
+        expect(condBlock.condition).toBe(3); // GreaterThan = 3
+    });
 });
