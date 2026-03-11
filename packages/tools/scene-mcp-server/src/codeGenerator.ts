@@ -455,18 +455,90 @@ function generateLight(light: ISerializedLight, sceneVar: string): string {
 
     // Set remaining properties
     const skipProps = new Set(["direction", "position", "angle", "exponent"]);
+    // Shadow-related properties that are handled separately when shadowEnabled is true
+    const shadowGenProps = new Set([
+        "shadowEnabled",
+        "shadowMapSize",
+        "shadowDarkness",
+        "shadowBias",
+        "shadowNormalBias",
+        "shadowFilter",
+        "shadowMinZ",
+        "shadowMaxZ",
+        "shadowFrustumSize",
+        "shadowOrthoScale",
+        "shadowForceBackFacesOnly",
+    ]);
+    const hasShadow = !!props.shadowEnabled;
+
     for (const [key, value] of Object.entries(props)) {
         if (skipProps.has(key)) {
             continue;
         }
-        if (key === "shadowEnabled" && value) {
-            lines.push(`const ${v}ShadowGen = new BABYLON.ShadowGenerator(${props.shadowMapSize ?? 1024}, ${v});`);
+        if (shadowGenProps.has(key)) {
+            // Handled below in the shadow generator block
             continue;
         }
-        if (key === "shadowMapSize") {
-            continue;
-        } // handled with shadowEnabled
         lines.push(`${v}.${key} = ${emitPropertyValue(key, value)};`);
+    }
+
+    // Shadow generator setup
+    if (hasShadow) {
+        const mapSize = (props.shadowMapSize as number) ?? 1024;
+
+        // Shadow frustum size — set on the light BEFORE creating the generator
+        // Controls coverage area; larger = covers more ground but lower shadow resolution
+        if (props.shadowFrustumSize !== undefined) {
+            lines.push(`${v}.shadowFrustumSize = ${props.shadowFrustumSize};`);
+        }
+
+        lines.push(`const ${v}ShadowGen = new BABYLON.ShadowGenerator(${mapSize}, ${v});`);
+
+        // Quality: use Percentage Closer Filtering for reliable shadows
+        const filter = props.shadowFilter as string | undefined;
+        if (filter === "contactHardening" || filter === "PCSS") {
+            lines.push(`${v}ShadowGen.useContactHardeningShadow = true;`);
+        } else if (filter === "blurExponential") {
+            lines.push(`${v}ShadowGen.useBlurExponentialShadowMap = true;`);
+        } else {
+            // Default to PCF — much better than the raw shadow map default
+            lines.push(`${v}ShadowGen.usePercentageCloserFiltering = true;`);
+        }
+
+        // Bias to fix shadow acne / peter-panning
+        if (props.shadowBias !== undefined) {
+            lines.push(`${v}ShadowGen.bias = ${props.shadowBias};`);
+        }
+        if (props.shadowNormalBias !== undefined) {
+            lines.push(`${v}ShadowGen.normalBias = ${props.shadowNormalBias};`);
+        }
+        // Darkness (0 = fully dark shadow, 1 = no shadow)
+        if (props.shadowDarkness !== undefined) {
+            lines.push(`${v}ShadowGen.darkness = ${props.shadowDarkness};`);
+        }
+        // Force back-faces-only rendering in the shadow map.
+        // Defaults to true — prevents self-shadowing on curved / complex geometry.
+        const forceBack = props.shadowForceBackFacesOnly !== undefined ? !!props.shadowForceBackFacesOnly : true;
+        if (forceBack) {
+            lines.push(`${v}ShadowGen.forceBackFacesOnly = true;`);
+        }
+
+        // For directional lights, auto-calculate shadow Z bounds for proper frustum
+        if (light.type === "DirectionalLight") {
+            lines.push(`${v}.autoCalcShadowZBounds = true;`);
+            // Ortho scale factor — multiplier on auto-calculated shadow frustum
+            if (props.shadowOrthoScale !== undefined) {
+                lines.push(`${v}.shadowOrthoScale = ${props.shadowOrthoScale};`);
+            }
+        } else {
+            // For other lights, emit explicit min/max Z if provided
+            if (props.shadowMinZ !== undefined) {
+                lines.push(`${v}.shadowMinZ = ${props.shadowMinZ};`);
+            }
+            if (props.shadowMaxZ !== undefined) {
+                lines.push(`${v}.shadowMaxZ = ${props.shadowMaxZ};`);
+            }
+        }
     }
 
     if (light.isEnabled === false) {

@@ -255,6 +255,21 @@ export const LightTypes: Record<string, ILightTypeInfo> = {
             specular: { type: "Color3", default: [1, 1, 1], description: "Specular color" },
             shadowEnabled: { type: "boolean", default: false, description: "Whether this light casts shadows" },
             shadowMapSize: { type: "number", default: 1024, description: "Shadow map resolution" },
+            shadowFilter: { type: "string", default: "PCF", description: "Shadow filtering mode: 'PCF' (default), 'contactHardening' / 'PCSS', or 'blurExponential'" },
+            shadowBias: { type: "number", default: undefined, description: "Shadow generator bias (fixes shadow acne)" },
+            shadowNormalBias: { type: "number", default: undefined, description: "Shadow generator normal bias (fixes peter-panning)" },
+            shadowDarkness: { type: "number", default: undefined, description: "Shadow darkness (0 = fully dark, 1 = no shadow)" },
+            shadowFrustumSize: {
+                type: "number",
+                default: undefined,
+                description: "Fixed shadow frustum size — controls shadow coverage area. Larger = covers more but lower resolution",
+            },
+            shadowOrthoScale: { type: "number", default: undefined, description: "Ortho scale multiplier for auto-calculated shadow frustum bounds (DirectionalLight only)" },
+            shadowForceBackFacesOnly: {
+                type: "boolean",
+                default: true,
+                description: "Render only back faces into the shadow map. Defaults to true — prevents self-shadowing on curved/complex geometry",
+            },
         },
     },
     SpotLight: {

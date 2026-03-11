@@ -951,6 +951,7 @@ export class SceneManager {
     }
 
     deleteScene(name: string): boolean {
+        this.idCounters.delete(name);
         return this.scenes.delete(name);
     }
 
