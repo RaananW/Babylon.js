@@ -152,6 +152,26 @@ server.registerResource("scene-overview", "scene://overview", {}, async (uri) =>
                 "1. On the producing server, call the export tool with `outputFile` to write JSON to disk",
                 "2. On this server, call the import/attach tool with the corresponding `*File` parameter (e.g. `nmeJsonFile`, `coordinatorJsonFile`, `guiJsonFile`, `nrgJsonFile`, `ngeJsonFile`)",
                 "Only the file path passes through the conversation — the JSON never enters the context window.",
+                "",
+                "## Shadows Best Practices",
+                "To get working, high-quality shadows in a scene:",
+                "",
+                "### 1. Light setup (DirectionalLight or SpotLight)",
+                "- Set `shadowEnabled: true` in the light properties",
+                "- Set `shadowMapSize: 2048` (or 1024 for performance) for resolution",
+                "- For DirectionalLight: set `shadowFrustumSize` to match your ground size (e.g. 20 for a 20x20 ground)",
+                "- Optionally set `shadowDarkness` (0 = fully dark, 1 = invisible; 0.3 is a good default)",
+                "",
+                "### 2. Mesh shadow roles",
+                "- On meshes that CAST shadows: `set_mesh_properties` with `castsShadows: true`",
+                "- On meshes that RECEIVE shadows (e.g. ground): `set_mesh_properties` with `receiveShadows: true`",
+                "- A mesh can both cast and receive shadows",
+                "",
+                "### 3. Automatic quality settings (handled by the code generator)",
+                "The following are applied automatically — no manual configuration needed:",
+                "- PCF filtering (smooth shadow edges)",
+                "- `forceBackFacesOnly = true` (prevents self-shadowing on curved geometry)",
+                "- `autoCalcShadowZBounds = true` for DirectionalLight (proper depth range)",
             ].join("\n"),
         },
     ],
@@ -291,6 +311,53 @@ server.registerPrompt("create-character-scene", { description: "Create a scene w
                     "## Step 7: Validate and export",
                     "14. validate_scene",
                     "15. export_scene_code (for runnable TypeScript) or export_scene_json (for raw JSON)",
+                ].join("\n"),
+            },
+        },
+    ],
+}));
+
+server.registerPrompt("create-shadow-scene", { description: "Create a scene with proper shadow setup — directional light, shadow casters, and receivers" }, () => ({
+    messages: [
+        {
+            role: "user",
+            content: {
+                type: "text",
+                text: [
+                    "Create a scene with proper real-time shadows. Follow these steps exactly:",
+                    "",
+                    "## Step 1: Scene + Camera",
+                    "1. create_scene 'ShadowScene' description 'Scene with shadows'",
+                    "2. add_camera 'cam' type 'ArcRotateCamera' properties {alpha: -1.5, beta: 1.0, radius: 12, target: [0, 1.5, 0]}, isActive=true",
+                    "",
+                    "## Step 2: Lights (shadow-casting + ambient fill)",
+                    "3. add_light 'sun' type 'DirectionalLight' properties {direction: [-1, -2, 1], intensity: 1.2, shadowEnabled: true}",
+                    "4. configure_light 'sun' properties {shadowMapSize: 2048, shadowFrustumSize: 20, shadowDarkness: 0.3}",
+                    "   - shadowMapSize: resolution (1024 or 2048)",
+                    "   - shadowFrustumSize: match your ground dimensions (e.g. 20 for a 20×20 ground)",
+                    "   - shadowDarkness: 0 = black, 1 = invisible (0.3 is a good default)",
+                    "5. add_light 'ambient' type 'HemisphericLight' properties {intensity: 0.4}",
+                    "   (ambient fill prevents pitch-black non-shadowed areas)",
+                    "",
+                    "## Step 3: Materials",
+                    "6. add_material 'objectMat' type 'PBRMaterial' properties {albedoColor: [0.8, 0.2, 0.1], metallic: 0.3, roughness: 0.4}",
+                    "7. add_material 'groundMat' type 'PBRMaterial' properties {albedoColor: [0.6, 0.6, 0.6], metallic: 0, roughness: 0.9}",
+                    "",
+                    "## Step 4: Meshes with shadow roles",
+                    "8. add_mesh 'myObject' type 'Sphere' options {diameter: 2}, transform {position: [0, 2, 0]}",
+                    "9. set_mesh_properties meshId='myObject' castsShadows=true   ← CASTS shadows",
+                    "10. assign_material meshId='myObject' materialId='objectMat'",
+                    "11. add_mesh 'ground' type 'Ground' options {width: 20, height: 20}",
+                    "12. set_mesh_properties meshId='ground' receiveShadows=true   ← RECEIVES shadows",
+                    "13. assign_material meshId='ground' materialId='groundMat'",
+                    "",
+                    "## Step 5: Preview",
+                    "14. start_preview",
+                    "",
+                    "## Key points:",
+                    "- castsShadows (double 's') on objects, receiveShadows on ground",
+                    "- shadowFrustumSize should match ground size to avoid clipping",
+                    "- PCF filtering and forceBackFacesOnly are applied automatically by the code generator",
                 ].join("\n"),
             },
         },
@@ -627,7 +694,8 @@ server.registerTool(
 server.registerTool(
     "add_light",
     {
-        description: "Add a light to the scene.",
+        description:
+            "Add a light to the scene. For shadows: set shadowEnabled=true, then use configure_light to set shadowMapSize (2048 recommended) and shadowFrustumSize (match ground size for DirectionalLight). Don't forget to mark meshes with castsShadows/receiveShadows via set_mesh_properties.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().describe("Name for the light"),
@@ -723,7 +791,11 @@ server.registerTool(
             "- HemisphericLight: direction, intensity, diffuse, specular, groundColor\n" +
             "- PointLight: position, intensity, diffuse, specular, range\n" +
             "- DirectionalLight: direction, position, intensity, diffuse, specular, shadowEnabled\n" +
-            "- SpotLight: direction, position, angle, exponent, intensity, diffuse, specular, range, shadowEnabled",
+            "- SpotLight: direction, position, angle, exponent, intensity, diffuse, specular, range, shadowEnabled\n" +
+            "\nShadow properties (in the properties bag): shadowEnabled, shadowMapSize (2048 recommended), " +
+            "shadowFrustumSize (match ground size for DirectionalLight), shadowDarkness (0–1, e.g. 0.3), " +
+            "shadowBias, shadowNormalBias, shadowFilter ('pcf'|'contactHardening'|'blurExponential'), " +
+            "shadowForceBackFacesOnly (default true — prevents self-shadow on curved meshes).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             lightId: z.string().optional().describe("Light ID or name"),
@@ -1206,7 +1278,9 @@ server.registerTool(
         description:
             "Update DISPLAY properties on a mesh: visibility, pickability, shadow settings, tags, metadata. " +
             "This does NOT change the mesh's geometry or size — primitive dimensions (width, height, diameter) are fixed at creation time. " +
-            "To resize, use remove_mesh + add_mesh. To move/rotate/scale, use set_transform.",
+            "To resize, use remove_mesh + add_mesh. To move/rotate/scale, use set_transform.\n" +
+            "For shadows: set castsShadows=true on meshes that should cast shadows (e.g. objects), " +
+            "and receiveShadows=true on meshes that should receive them (e.g. ground). Both can be true on the same mesh.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             meshId: z.string().describe("Mesh ID or name"),
