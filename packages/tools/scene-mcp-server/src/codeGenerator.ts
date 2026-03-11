@@ -1512,25 +1512,6 @@ function generateGUI(guiJson: unknown, sceneVar: string): IGUIGenResult {
 //  ES6 post-processor
 // ═══════════════════════════════════════════════════════════════════════════
 
-const BABYLON_GUI_CLASSES = new Set([
-    "AdvancedDynamicTexture",
-    "Button",
-    "TextBlock",
-    "Container",
-    "Rectangle",
-    "StackPanel",
-    "Grid",
-    "Image",
-    "Slider",
-    "InputText",
-    "Checkbox",
-    "RadioButton",
-    "Control",
-    "ScrollViewer",
-    "Ellipse",
-    "Line",
-]);
-
 /**
  * Convert UMD-style code (using `BABYLON.*` globals) into ES module code
  * with proper import statements from `@babylonjs/*` packages.
@@ -2453,7 +2434,6 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
 
     // ── HTML boilerplate (UMD only) ───────────────────────────────────────
     if (opts.includeHtmlBoilerplate && opts.format !== "es6") {
-        const hasAudio = (scene.sounds ?? []).length > 0;
         // Strip TypeScript type assertions for inline <script> (must be valid JS)
         const codeContent = sections.join("\n").replace(/ as \w+/g, "");
         return [
