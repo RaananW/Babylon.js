@@ -1417,4 +1417,28 @@ describe("Scene MCP Server – SceneManager", () => {
         const ps = mgr.getScene("s")!.particleSystems[0];
         expect(ps.velocityGradients).toHaveLength(2);
     });
+
+    // ── clearAll ────────────────────────────────────────────────────────
+
+    it("clearAll removes all scenes and resets state", () => {
+        const mgr = new SceneManager();
+        mgr.createScene("a");
+        mgr.createScene("b");
+        expect(mgr.listScenes().length).toBe(2);
+
+        mgr.clearAll();
+        expect(mgr.listScenes()).toEqual([]);
+        expect(mgr.getScene("a")).toBeUndefined();
+        expect(mgr.getScene("b")).toBeUndefined();
+
+        // Can create new scenes after clear
+        mgr.createScene("c");
+        expect(mgr.listScenes()).toEqual(["c"]);
+    });
+
+    it("clearAll on empty manager is a no-op", () => {
+        const mgr = new SceneManager();
+        mgr.clearAll();
+        expect(mgr.listScenes()).toEqual([]);
+    });
 });

@@ -954,6 +954,14 @@ export class SceneManager {
         return this.scenes.delete(name);
     }
 
+    /**
+     * Remove all scenes from memory, resetting the manager to its initial state.
+     */
+    clearAll(): void {
+        this.scenes.clear();
+        this.idCounters.clear();
+    }
+
     listScenes(): string[] {
         return Array.from(this.scenes.keys());
     }

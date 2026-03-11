@@ -167,6 +167,14 @@ export class RenderGraphManager {
     }
 
     /**
+     * Remove all render graphs from memory, resetting the manager to its initial state.
+     */
+    public clearAll(): void {
+        this._graphs.clear();
+        this._nextId = 1;
+    }
+
+    /**
      * List names of all current render graphs.
      * @returns Array of graph names
      */

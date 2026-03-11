@@ -843,4 +843,28 @@ describe("Flow Graph MCP Server – FlowGraphManager Validation", () => {
             expect(extract.category).toBe("Extract");
         }
     });
+
+    // ── clearAll ────────────────────────────────────────────────────────
+
+    it("clearAll removes all graphs and resets state", () => {
+        const mgr = new FlowGraphManager();
+        mgr.createGraph("a");
+        mgr.createGraph("b");
+        expect(mgr.listGraphs().length).toBe(2);
+
+        mgr.clearAll();
+        expect(mgr.listGraphs()).toEqual([]);
+        expect(mgr.getGraph("a")).toBeUndefined();
+        expect(mgr.getGraph("b")).toBeUndefined();
+
+        // Can create new graphs after clear
+        mgr.createGraph("c");
+        expect(mgr.listGraphs()).toEqual(["c"]);
+    });
+
+    it("clearAll on empty manager is a no-op", () => {
+        const mgr = new FlowGraphManager();
+        mgr.clearAll();
+        expect(mgr.listGraphs()).toEqual([]);
+    });
 });

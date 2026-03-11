@@ -206,6 +206,13 @@ export class FlowGraphManager {
         return this._graphs.delete(name);
     }
 
+    /**
+     * Remove all flow graphs from memory, resetting the manager to its initial state.
+     */
+    public clearAll(): void {
+        this._graphs.clear();
+    }
+
     // ── Block operations ───────────────────────────────────────────────
 
     /**

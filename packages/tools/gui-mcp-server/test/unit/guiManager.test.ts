@@ -815,4 +815,28 @@ describe("GUI MCP Server – GuiManager Validation", () => {
         const issues = mgr.validateTexture("hud");
         expect(issues.every((i) => !i.startsWith("ERROR"))).toBe(true);
     });
+
+    // ── clearAll ────────────────────────────────────────────────────────
+
+    it("clearAll removes all textures and resets state", () => {
+        const mgr = new GuiManager();
+        mgr.createTexture("a");
+        mgr.createTexture("b");
+        expect(mgr.listTextures().length).toBe(2);
+
+        mgr.clearAll();
+        expect(mgr.listTextures()).toEqual([]);
+        expect(mgr.getTexture("a")).toBeUndefined();
+        expect(mgr.getTexture("b")).toBeUndefined();
+
+        // Can create new textures after clear
+        mgr.createTexture("c");
+        expect(mgr.listTextures()).toEqual(["c"]);
+    });
+
+    it("clearAll on empty manager is a no-op", () => {
+        const mgr = new GuiManager();
+        mgr.clearAll();
+        expect(mgr.listTextures()).toEqual([]);
+    });
 });

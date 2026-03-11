@@ -445,4 +445,28 @@ describe("NGE MCP Server – Graph Manager Validation", () => {
         expect(Array.isArray(parsed.editorData.locations)).toBe(true);
         expect(parsed.editorData.locations.length).toBe(2);
     });
+
+    // ── clearAll ────────────────────────────────────────────────────────
+
+    it("clearAll removes all geometries and resets state", () => {
+        const mgr = new GeometryGraphManager();
+        mgr.createGeometry("a");
+        mgr.createGeometry("b");
+        expect(mgr.listGeometries().length).toBe(2);
+
+        mgr.clearAll();
+        expect(mgr.listGeometries()).toEqual([]);
+        expect(mgr.getGeometry("a")).toBeUndefined();
+        expect(mgr.getGeometry("b")).toBeUndefined();
+
+        // Can create new geometries after clear
+        mgr.createGeometry("c");
+        expect(mgr.listGeometries()).toEqual(["c"]);
+    });
+
+    it("clearAll on empty manager is a no-op", () => {
+        const mgr = new GeometryGraphManager();
+        mgr.clearAll();
+        expect(mgr.listGeometries()).toEqual([]);
+    });
 });

@@ -280,6 +280,14 @@ server.registerTool(
     }
 );
 
+server.registerTool("clear_all", { description: "Remove all material graphs from memory, resetting the server to a clean state." }, async () => {
+    const names = manager.listMaterials();
+    manager.clearAll();
+    return {
+        content: [{ type: "text", text: names.length > 0 ? `Cleared ${names.length} material(s): ${names.join(", ")}` : "Nothing to clear — memory was already empty." }],
+    };
+});
+
 server.registerTool("list_materials", { description: "List all material graphs currently in memory." }, async () => {
     const names = manager.listMaterials();
     return {

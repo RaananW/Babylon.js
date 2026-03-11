@@ -136,6 +136,13 @@ export class GuiManager {
         return this._textures.delete(name);
     }
 
+    /**
+     * Remove all GUI textures from memory, resetting the manager to its initial state.
+     */
+    clearAll(): void {
+        this._textures.clear();
+    }
+
     listTextures(): string[] {
         return Array.from(this._textures.keys());
     }

@@ -339,4 +339,28 @@ describe("NME MCP Server – Graph Manager Validation", () => {
         expect(condBlock).toBeDefined();
         expect(condBlock.condition).toBe(3); // GreaterThan = 3
     });
+
+    // ── clearAll ────────────────────────────────────────────────────────
+
+    it("clearAll removes all materials and resets state", () => {
+        const mgr = new MaterialGraphManager();
+        mgr.createMaterial("a");
+        mgr.createMaterial("b");
+        expect(mgr.listMaterials().length).toBe(2);
+
+        mgr.clearAll();
+        expect(mgr.listMaterials()).toEqual([]);
+        expect(mgr.getMaterial("a")).toBeUndefined();
+        expect(mgr.getMaterial("b")).toBeUndefined();
+
+        // Can create new materials after clear
+        mgr.createMaterial("c");
+        expect(mgr.listMaterials()).toEqual(["c"]);
+    });
+
+    it("clearAll on empty manager is a no-op", () => {
+        const mgr = new MaterialGraphManager();
+        mgr.clearAll();
+        expect(mgr.listMaterials()).toEqual([]);
+    });
 });

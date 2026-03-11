@@ -403,6 +403,14 @@ server.registerTool(
     }
 );
 
+server.registerTool("clear_all", { description: "Remove all render graphs from memory, resetting the server to a clean state." }, async () => {
+    const names = manager.list();
+    manager.clearAll();
+    return {
+        content: [{ type: "text", text: names.length > 0 ? `Cleared ${names.length} render graph(s): ${names.join(", ")}` : "Nothing to clear — memory was already empty." }],
+    };
+});
+
 server.registerTool("list_render_graphs", { description: "List all render graphs currently in memory." }, async () => {
     const names = manager.list();
     return {

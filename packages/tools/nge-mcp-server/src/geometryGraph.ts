@@ -329,6 +329,15 @@ export class GeometryGraphManager {
         return this._geometries.delete(name);
     }
 
+    /**
+     * Remove all geometry graphs from memory, resetting the manager to its initial state.
+     */
+    clearAll(): void {
+        this._geometries.clear();
+        this._nextId.clear();
+        this._nextX.clear();
+    }
+
     // ── Block CRUD ─────────────────────────────────────────────────────
 
     /**

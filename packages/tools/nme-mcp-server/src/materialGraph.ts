@@ -509,6 +509,15 @@ export class MaterialGraphManager {
         return this._materials.delete(name);
     }
 
+    /**
+     * Remove all material graphs from memory, resetting the manager to its initial state.
+     */
+    clearAll(): void {
+        this._materials.clear();
+        this._nextId.clear();
+        this._nextX.clear();
+    }
+
     // ── Block CRUD ─────────────────────────────────────────────────────
 
     /**
