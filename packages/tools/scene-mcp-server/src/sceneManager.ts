@@ -29,7 +29,7 @@ import {
     PhysicsConstraintTypes,
 } from "./catalog.js";
 
-import { generateSceneCode, generateProjectFiles, type ICodeGeneratorOptions } from "./codeGenerator.js";
+import { generateSceneCode, generateProjectFiles, generateSnippet, type ICodeGeneratorOptions, type ISnippetOptions } from "./codeGenerator.js";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Serialized types — these form the scene descriptor JSON
@@ -2853,6 +2853,21 @@ export class SceneManager {
             opts.nodeGeometryMeshes = scene.nodeGeometryMeshes;
         }
         return generateProjectFiles(scene, opts);
+    }
+
+    /**
+     * Generate a code snippet for specific objects or feature categories.
+     * The snippet is designed to be added to an existing Babylon.js scene.
+     * @param sceneName The name of the scene
+     * @param options Snippet options (objectIds, categories, format, sceneVarName)
+     * @returns The generated code snippet, or null if scene not found
+     */
+    exportSnippet(sceneName: string, options: ISnippetOptions): string | null {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return null;
+        }
+        return generateSnippet(scene, options);
     }
 
     importJSON(sceneName: string, json: string): string {

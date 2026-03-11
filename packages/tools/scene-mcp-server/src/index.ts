@@ -2978,6 +2978,46 @@ server.registerTool(
     }
 );
 
+server.registerTool(
+    "export_snippet",
+    {
+        description:
+            "Export a code snippet for specific objects or feature categories from a scene. " +
+            "Unlike export_scene_code (which generates a complete scene from scratch), this generates " +
+            "PARTIAL code designed to be added to an EXISTING Babylon.js scene. " +
+            "The snippet does NOT include engine/canvas/scene creation, render loops, or HTML boilerplate. " +
+            "It includes a comment header listing the variables that must already exist in the user's code. " +
+            "Use this when the user already has a scene and wants to add specific features like shadows, " +
+            "physics, animations, post-processing, glow/highlight layers, etc. " +
+            "You can select objects by ID, by feature category, or both.",
+        inputSchema: {
+            sceneName: z.string().describe("Name of the scene to export from"),
+            objectIds: z.array(z.string()).optional().describe("Specific object IDs to include (meshes, lights, materials, etc.). Dependencies are resolved automatically."),
+            categories: z
+                .array(z.enum(["shadows", "physics", "animations", "particles", "postProcessing", "glow", "highlights", "sounds", "materials", "meshes", "lights"]))
+                .optional()
+                .describe("Feature categories to include. Each pulls in all relevant objects for that feature."),
+            format: z.enum(["umd", "es6"]).default("umd").describe("Output format: 'umd' for BABYLON.* globals, 'es6' for @babylonjs/* imports"),
+            sceneVarName: z.string().default("scene").describe("Variable name of the existing scene object in the user's code"),
+        },
+    },
+    async ({ sceneName, objectIds, categories, format, sceneVarName }) => {
+        if (!objectIds?.length && !categories?.length) {
+            return { content: [{ type: "text", text: "At least one of objectIds or categories must be provided." }], isError: true };
+        }
+        const snippet = manager.exportSnippet(sceneName, {
+            objectIds,
+            categories,
+            format,
+            sceneVarName,
+        });
+        if (!snippet) {
+            return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+        }
+        return { content: [{ type: "text", text: snippet }] };
+    }
+);
+
 // ═══════════════════════════════════════════════════════════════════════════
 //  Tools — Batch operations
 // ═══════════════════════════════════════════════════════════════════════════

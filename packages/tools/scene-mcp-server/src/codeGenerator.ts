@@ -2511,3 +2511,558 @@ export function generateProjectFiles(scene: ISerializedScene, options?: ICodeGen
 
     return files;
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Snippet generator — partial code for existing scenes
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Feature categories that can be extracted as snippets */
+export type SnippetCategory = "shadows" | "physics" | "animations" | "particles" | "postProcessing" | "glow" | "highlights" | "sounds" | "materials" | "meshes" | "lights";
+
+/**
+ * Options for snippet code generation.
+ */
+export interface ISnippetOptions {
+    /**
+     * Specific object IDs to include in the snippet.
+     * All objects with these IDs (and their direct dependencies) will be included.
+     */
+    objectIds?: string[];
+    /**
+     * Feature categories to include. Each category pulls in all relevant objects.
+     */
+    categories?: SnippetCategory[];
+    /**
+     * Output format: "umd" for BABYLON.* globals, "es6" for @babylonjs/* imports.
+     * @default "umd"
+     */
+    format?: "umd" | "es6";
+    /**
+     * Variable name for the existing scene object.
+     * @default "scene"
+     */
+    sceneVarName?: string;
+}
+
+/**
+ * Generates a code snippet for specific objects or feature categories from a scene.
+ * The generated code is intended to be added to an **existing** Babylon.js scene —
+ * it does NOT include engine/canvas/scene creation, render loop, or HTML boilerplate.
+ *
+ * The snippet includes a comment header listing the variables that must already
+ * exist in the user's code for the snippet to work.
+ * @param scene - The serialized scene definition to extract the snippet from
+ * @param options - Configuration for which objects/features to include in the snippet
+ * @returns The generated code snippet string
+ */
+export function generateSnippet(scene: ISerializedScene, options: ISnippetOptions): string {
+    const format = options.format ?? "umd";
+    const S = options.sceneVarName ?? "scene";
+    const objectIds = new Set(options.objectIds ?? []);
+    const categories = new Set(options.categories ?? []);
+
+    // ── Collect objects by ID ─────────────────────────────────────────────
+    const includedMeshes = new Set<string>();
+    const includedLights = new Set<string>();
+    const includedMaterials = new Set<string>();
+    const includedCameras = new Set<string>();
+    const includedAnimations = new Set<string>();
+    const includedAnimationGroups = new Set<string>();
+    const includedTransformNodes = new Set<string>();
+    const includedSounds = new Set<string>();
+    const includedParticles = new Set<string>();
+    const includedConstraints = new Set<string>();
+    const includedGlowLayers = new Set<string>();
+    const includedHighlightLayers = new Set<string>();
+    let includeRenderPipeline = false;
+    let includePhysicsInit = false;
+
+    // Map IDs to their collection types for fast lookup
+    const idToCollection = new Map<string, string>();
+    for (const m of scene.meshes) {
+        idToCollection.set(m.id, "mesh");
+        idToCollection.set(m.name, "mesh");
+    }
+    for (const l of scene.lights) {
+        idToCollection.set(l.id, "light");
+        idToCollection.set(l.name, "light");
+    }
+    for (const mat of scene.materials) {
+        idToCollection.set(mat.id, "material");
+        idToCollection.set(mat.name, "material");
+    }
+    for (const c of scene.cameras) {
+        idToCollection.set(c.id, "camera");
+        idToCollection.set(c.name, "camera");
+    }
+    for (const a of scene.animations) {
+        idToCollection.set(a.id, "animation");
+        idToCollection.set(a.name, "animation");
+    }
+    for (const ag of scene.animationGroups) {
+        idToCollection.set(ag.id, "animationGroup");
+        idToCollection.set(ag.name, "animationGroup");
+    }
+    for (const tn of scene.transformNodes) {
+        idToCollection.set(tn.id, "transformNode");
+        idToCollection.set(tn.name, "transformNode");
+    }
+    for (const s of scene.sounds ?? []) {
+        idToCollection.set(s.id, "sound");
+        idToCollection.set(s.name, "sound");
+    }
+    for (const ps of scene.particleSystems ?? []) {
+        idToCollection.set(ps.id, "particleSystem");
+        idToCollection.set(ps.name, "particleSystem");
+    }
+    for (const c of scene.physicsConstraints ?? []) {
+        idToCollection.set(c.id, "constraint");
+        idToCollection.set(c.name, "constraint");
+    }
+    for (const g of scene.glowLayers ?? []) {
+        idToCollection.set(g.id, "glowLayer");
+        idToCollection.set(g.name, "glowLayer");
+    }
+    for (const h of scene.highlightLayers ?? []) {
+        idToCollection.set(h.id, "highlightLayer");
+        idToCollection.set(h.name, "highlightLayer");
+    }
+
+    // Add explicitly requested IDs
+    for (const id of objectIds) {
+        const type = idToCollection.get(id);
+        switch (type) {
+            case "mesh":
+                includedMeshes.add(id);
+                break;
+            case "light":
+                includedLights.add(id);
+                break;
+            case "material":
+                includedMaterials.add(id);
+                break;
+            case "camera":
+                includedCameras.add(id);
+                break;
+            case "animation":
+                includedAnimations.add(id);
+                break;
+            case "animationGroup":
+                includedAnimationGroups.add(id);
+                break;
+            case "transformNode":
+                includedTransformNodes.add(id);
+                break;
+            case "sound":
+                includedSounds.add(id);
+                break;
+            case "particleSystem":
+                includedParticles.add(id);
+                break;
+            case "constraint":
+                includedConstraints.add(id);
+                break;
+            case "glowLayer":
+                includedGlowLayers.add(id);
+                break;
+            case "highlightLayer":
+                includedHighlightLayers.add(id);
+                break;
+        }
+    }
+
+    // ── Expand by category ────────────────────────────────────────────────
+    if (categories.has("shadows")) {
+        for (const light of scene.lights) {
+            if (light.properties.shadowEnabled) {
+                includedLights.add(light.id);
+            }
+        }
+        // Include meshes that cast or receive shadows
+        for (const mesh of scene.meshes) {
+            if (mesh.castsShadows || mesh.receiveShadows) {
+                includedMeshes.add(mesh.id);
+            }
+        }
+    }
+
+    if (categories.has("physics")) {
+        includePhysicsInit = true;
+        for (const mesh of scene.meshes) {
+            if (mesh.physics) {
+                includedMeshes.add(mesh.id);
+            }
+        }
+        for (const c of scene.physicsConstraints ?? []) {
+            includedConstraints.add(c.id);
+        }
+    }
+
+    if (categories.has("animations")) {
+        for (const a of scene.animations) {
+            includedAnimations.add(a.id);
+        }
+        for (const ag of scene.animationGroups) {
+            includedAnimationGroups.add(ag.id);
+        }
+    }
+
+    if (categories.has("particles")) {
+        for (const ps of scene.particleSystems ?? []) {
+            includedParticles.add(ps.id);
+        }
+    }
+
+    if (categories.has("postProcessing")) {
+        includeRenderPipeline = true;
+    }
+
+    if (categories.has("glow")) {
+        for (const g of scene.glowLayers ?? []) {
+            includedGlowLayers.add(g.id);
+        }
+    }
+
+    if (categories.has("highlights")) {
+        for (const h of scene.highlightLayers ?? []) {
+            includedHighlightLayers.add(h.id);
+        }
+    }
+
+    if (categories.has("sounds")) {
+        for (const s of scene.sounds ?? []) {
+            includedSounds.add(s.id);
+        }
+    }
+
+    if (categories.has("materials")) {
+        for (const mat of scene.materials) {
+            includedMaterials.add(mat.id);
+        }
+    }
+
+    if (categories.has("meshes")) {
+        for (const m of scene.meshes) {
+            includedMeshes.add(m.id);
+        }
+    }
+
+    if (categories.has("lights")) {
+        for (const l of scene.lights) {
+            includedLights.add(l.id);
+        }
+    }
+
+    // ── Resolve dependencies ──────────────────────────────────────────────
+    // Meshes included for physics need their materials too
+    // Constraints need their parent/child meshes
+    for (const c of scene.physicsConstraints ?? []) {
+        if (includedConstraints.has(c.id)) {
+            if (c.parentMeshId) {
+                includedMeshes.add(c.parentMeshId);
+            }
+            if (c.childMeshId) {
+                includedMeshes.add(c.childMeshId);
+            }
+        }
+    }
+
+    // ── Track assumed-existing variables (objects referenced but not created) ──
+    const createdVars = new Set<string>();
+    const assumedVars = new Set<string>();
+    assumedVars.add(S); // the scene variable is always assumed
+
+    /**
+     * Mark a variable as created by this snippet
+     * @param name The original object name (ID or name) to mark as created
+     */
+    function markCreated(name: string): void {
+        createdVars.add(varName(name));
+    }
+
+    /**
+     * Track a reference — if we don't create it, we assume it exists
+     * @param name The original object name (ID or name) being referenced
+     */
+    function trackRef(name: string): void {
+        const v = varName(name);
+        if (!createdVars.has(v)) {
+            assumedVars.add(v);
+        }
+    }
+
+    // ── Generate code sections ────────────────────────────────────────────
+    const parts: string[] = [];
+
+    // Physics initialization
+    if (includePhysicsInit && (scene.environment.physicsEnabled || scene.meshes.some((m) => m.physics))) {
+        parts.push(generatePhysicsInit(scene.environment, S));
+        parts.push(``);
+    }
+
+    // Lights (only included ones)
+    const lightsToEmit = scene.lights.filter((l) => includedLights.has(l.id) || includedLights.has(l.name));
+    if (lightsToEmit.length > 0) {
+        parts.push(`// ─── Lights ───────────────────────────────────────────────────────────────`);
+        for (const light of lightsToEmit) {
+            parts.push(generateLight(light, S));
+            markCreated(light.name);
+            parts.push(``);
+        }
+    }
+
+    // Materials (only included ones)
+    const matsToEmit = scene.materials.filter((m) => includedMaterials.has(m.id) || includedMaterials.has(m.name));
+    if (matsToEmit.length > 0) {
+        parts.push(`// ─── Materials ────────────────────────────────────────────────────────────`);
+        for (const mat of matsToEmit) {
+            parts.push(generateMaterial(mat, S));
+            markCreated(mat.name);
+            parts.push(``);
+        }
+    }
+
+    // Transform nodes (only included ones)
+    const tnsToEmit = scene.transformNodes.filter((tn) => includedTransformNodes.has(tn.id) || includedTransformNodes.has(tn.name));
+    if (tnsToEmit.length > 0) {
+        parts.push(`// ─── Transform Nodes ──────────────────────────────────────────────────────`);
+        for (const tn of tnsToEmit) {
+            parts.push(generateTransformNode(tn, S));
+            markCreated(tn.name);
+            parts.push(``);
+        }
+    }
+
+    // Meshes (only included ones)
+    const meshesToEmit = scene.meshes.filter((m) => includedMeshes.has(m.id) || includedMeshes.has(m.name));
+    if (meshesToEmit.length > 0) {
+        parts.push(`// ─── Meshes ───────────────────────────────────────────────────────────────`);
+        for (const mesh of meshesToEmit) {
+            parts.push(generateMesh(mesh, S));
+            markCreated(mesh.name);
+            parts.push(``);
+        }
+    }
+
+    // Material assignments for included meshes
+    const matAssignments: string[] = [];
+    for (const mesh of meshesToEmit) {
+        if (mesh.materialId) {
+            const mat = scene.materials.find((m) => m.id === mesh.materialId || m.name === mesh.materialId);
+            if (mat) {
+                if (!createdVars.has(varName(mat.name))) {
+                    trackRef(mat.name);
+                }
+                matAssignments.push(`${varName(mesh.name)}.material = ${varName(mat.name)};`);
+            }
+        }
+    }
+    if (matAssignments.length > 0) {
+        parts.push(`// ─── Material Assignments ─────────────────────────────────────────────────`);
+        parts.push(matAssignments.join("\n"));
+        parts.push(``);
+    }
+
+    // Shadow setup
+    const shadowParts: string[] = [];
+    for (const light of scene.lights) {
+        if (light.properties.shadowEnabled) {
+            const lightVar = varName(light.name);
+            // If we didn't create this light, we need to reference it + its shadow generator
+            if (!createdVars.has(lightVar)) {
+                trackRef(light.name);
+                // Also track the shadow generator variable
+                assumedVars.add(`${lightVar}ShadowGen`);
+            }
+            for (const mesh of scene.meshes) {
+                if (mesh.castsShadows) {
+                    const meshVar = varName(mesh.name);
+                    if (!createdVars.has(meshVar)) {
+                        trackRef(mesh.name);
+                    }
+                    shadowParts.push(`${lightVar}ShadowGen.addShadowCaster(${meshVar});`);
+                }
+            }
+        }
+    }
+    // receiveShadows for included meshes
+    for (const mesh of meshesToEmit) {
+        if (mesh.receiveShadows) {
+            shadowParts.push(`${varName(mesh.name)}.receiveShadows = true;`);
+        }
+    }
+    // Also check non-emitted meshes if shadows category is selected
+    if (categories.has("shadows")) {
+        for (const mesh of scene.meshes) {
+            if (mesh.receiveShadows && !includedMeshes.has(mesh.id) && !includedMeshes.has(mesh.name)) {
+                trackRef(mesh.name);
+                shadowParts.push(`${varName(mesh.name)}.receiveShadows = true;`);
+            }
+        }
+    }
+    if (shadowParts.length > 0) {
+        parts.push(`// ─── Shadow Setup ─────────────────────────────────────────────────────────`);
+        parts.push(shadowParts.join("\n"));
+        parts.push(``);
+    }
+
+    // Animations (only included ones)
+    const animsToEmit = scene.animations.filter((a) => includedAnimations.has(a.id) || includedAnimations.has(a.name));
+    if (animsToEmit.length > 0) {
+        parts.push(`// ─── Animations ───────────────────────────────────────────────────────────`);
+        for (const anim of animsToEmit) {
+            parts.push(generateAnimation(anim, S));
+            markCreated(anim.name);
+            parts.push(``);
+        }
+        // Attach animations to targets
+        parts.push(`// Attach animations to targets`);
+        for (const anim of animsToEmit) {
+            const target =
+                scene.meshes.find((m) => m.id === anim.targetId || m.name === anim.targetId) ??
+                scene.transformNodes.find((n) => n.id === anim.targetId || n.name === anim.targetId);
+            if (target) {
+                if (!createdVars.has(varName(target.name))) {
+                    trackRef(target.name);
+                }
+                parts.push(`${varName(target.name)}.animations.push(${varName(anim.name)});`);
+            }
+        }
+        parts.push(``);
+    }
+
+    // Animation groups (only included)
+    const agsToEmit = scene.animationGroups.filter((ag) => includedAnimationGroups.has(ag.id) || includedAnimationGroups.has(ag.name));
+    if (agsToEmit.length > 0) {
+        parts.push(`// ─── Animation Groups ─────────────────────────────────────────────────────`);
+        for (const ag of agsToEmit) {
+            parts.push(generateAnimationGroup(ag, scene, S));
+            markCreated(ag.name);
+            parts.push(``);
+        }
+    }
+
+    // Physics bodies for included meshes
+    const physMeshes = meshesToEmit.filter((m) => m.physics);
+    if (physMeshes.length > 0) {
+        parts.push(`// ─── Physics Bodies ───────────────────────────────────────────────────────`);
+        for (const mesh of physMeshes) {
+            parts.push(generatePhysicsBody(mesh.name, mesh, false));
+            parts.push(``);
+        }
+    }
+
+    // Physics constraints (only included)
+    const constraintsToEmit = (scene.physicsConstraints ?? []).filter((c) => includedConstraints.has(c.id) || includedConstraints.has(c.name));
+    if (constraintsToEmit.length > 0) {
+        parts.push(`// ─── Physics Constraints ──────────────────────────────────────────────────`);
+        for (const constraint of constraintsToEmit) {
+            // Track mesh references
+            const parentMesh = scene.meshes.find((m) => m.id === constraint.parentMeshId || m.name === constraint.parentMeshId);
+            const childMesh = scene.meshes.find((m) => m.id === constraint.childMeshId || m.name === constraint.childMeshId);
+            if (parentMesh && !createdVars.has(varName(parentMesh.name))) {
+                trackRef(parentMesh.name);
+            }
+            if (childMesh && !createdVars.has(varName(childMesh.name))) {
+                trackRef(childMesh.name);
+            }
+            parts.push(generatePhysicsConstraint(constraint, scene));
+            markCreated(constraint.name);
+            parts.push(``);
+        }
+    }
+
+    // Sounds (only included)
+    const soundsToEmit = (scene.sounds ?? []).filter((s) => includedSounds.has(s.id) || includedSounds.has(s.name));
+    if (soundsToEmit.length > 0) {
+        parts.push(`// ─── Sounds ───────────────────────────────────────────────────────────────`);
+        for (const snd of soundsToEmit) {
+            parts.push(generateSound(snd, S));
+            markCreated(snd.name);
+            parts.push(``);
+        }
+    }
+
+    // Particle systems (only included)
+    const particlesToEmit = (scene.particleSystems ?? []).filter((ps) => includedParticles.has(ps.id) || includedParticles.has(ps.name));
+    if (particlesToEmit.length > 0) {
+        parts.push(`// ─── Particle Systems ─────────────────────────────────────────────────────`);
+        for (const ps of particlesToEmit) {
+            parts.push(generateParticleSystem(ps, S));
+            markCreated(ps.name);
+            parts.push(``);
+        }
+    }
+
+    // Render pipeline
+    if (includeRenderPipeline && scene.renderPipeline) {
+        parts.push(generateRenderPipeline(scene.renderPipeline, S));
+        parts.push(``);
+    }
+
+    // Glow layers (only included)
+    const glowsToEmit = (scene.glowLayers ?? []).filter((g) => includedGlowLayers.has(g.id) || includedGlowLayers.has(g.name));
+    if (glowsToEmit.length > 0) {
+        parts.push(`// ─── Glow Layers ──────────────────────────────────────────────────────────`);
+        for (const glow of glowsToEmit) {
+            // Track referenced meshes
+            for (const meshId of [...(glow.includedOnlyMeshIds ?? []), ...(glow.excludedMeshIds ?? [])]) {
+                const mesh = scene.meshes.find((m) => m.id === meshId || m.name === meshId);
+                if (mesh && !createdVars.has(varName(mesh.name))) {
+                    trackRef(mesh.name);
+                }
+            }
+            parts.push(generateGlowLayer(glow, scene, S));
+            markCreated(glow.name);
+            parts.push(``);
+        }
+    }
+
+    // Highlight layers (only included)
+    const hlsToEmit = (scene.highlightLayers ?? []).filter((h) => includedHighlightLayers.has(h.id) || includedHighlightLayers.has(h.name));
+    if (hlsToEmit.length > 0) {
+        parts.push(`// ─── Highlight Layers ─────────────────────────────────────────────────────`);
+        for (const hl of hlsToEmit) {
+            for (const entry of hl.meshes) {
+                const mesh = scene.meshes.find((m) => m.id === entry.meshId || m.name === entry.meshId);
+                if (mesh && !createdVars.has(varName(mesh.name))) {
+                    trackRef(mesh.name);
+                }
+            }
+            parts.push(generateHighlightLayer(hl, scene, S));
+            markCreated(hl.name);
+            parts.push(``);
+        }
+    }
+
+    // ── Build the preamble comment ────────────────────────────────────────
+    // Remove variables that we end up creating
+    for (const v of createdVars) {
+        assumedVars.delete(v);
+    }
+
+    const header: string[] = [];
+    header.push(`// ═══════════════════════════════════════════════════════════════════════════`);
+    header.push(`// Code snippet generated by Scene MCP Server`);
+    header.push(`// Add this code to your existing Babylon.js scene.`);
+    if (assumedVars.size > 0) {
+        header.push(`//`);
+        header.push(`// This snippet assumes the following variables already exist in your code:`);
+        for (const v of [...assumedVars].sort()) {
+            header.push(`//   - ${v}`);
+        }
+    }
+    header.push(`// ═══════════════════════════════════════════════════════════════════════════`);
+    header.push(``);
+
+    let result = header.join("\n") + parts.join("\n");
+
+    // ── ES6 conversion ────────────────────────────────────────────────────
+    if (format === "es6") {
+        const hasPhysics = includePhysicsInit || physMeshes.length > 0 || constraintsToEmit.length > 0;
+        const hasAudio = soundsToEmit.length > 0;
+        result = convertToES6(result, hasPhysics, false, hasAudio, false);
+    }
+
+    return result;
+}
