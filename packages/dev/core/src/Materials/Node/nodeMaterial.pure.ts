@@ -1674,7 +1674,7 @@ export class NodeMaterial extends NodeMaterialBase {
             const previousEffect = subMesh.effect;
             // Compilation
             const join = defines.toString();
-            let effect = engine.createEffect(
+            const effect = engine.createEffect(
                 {
                     vertex: "nodeMaterial" + this._buildId,
                     fragment: "nodeMaterial" + this._buildId,
@@ -1706,7 +1706,6 @@ export class NodeMaterial extends NodeMaterialBase {
 
                 // Use previous effect while new one is compiling
                 if (this.allowShaderHotSwapping && previousEffect && !effect.isReady()) {
-                    effect = previousEffect;
                     defines.markAsUnprocessed();
 
                     if (result.lightDisposed) {

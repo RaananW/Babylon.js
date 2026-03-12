@@ -1185,7 +1185,7 @@ export function Curve3ArcThru3Points(first: Vector3, second: Vector3, third: Vec
     } else {
         const dStep = 1 / steps;
         let theta = 0;
-        let point = Vector3.Zero();
+        let point: Vector3;
         do {
             point = center.add(xAxis.scale(radius * Math.cos(theta)).add(yAxis.scale(radius * Math.sin(theta))));
             arc.push(point);

@@ -1750,7 +1750,7 @@ export abstract class PBRBaseMaterial extends PBRBaseMaterialBase {
 
         const previousEffect = subMesh.effect;
         const lightDisposed = defines._areLightsDisposed;
-        let effect = this._prepareEffect(mesh, subMesh.getRenderingMesh(), defines, this.onCompiled, this.onError, useInstances, null);
+        const effect = this._prepareEffect(mesh, subMesh.getRenderingMesh(), defines, this.onCompiled, this.onError, useInstances, null);
 
         let forceWasNotReadyPreviously = false;
 
@@ -1763,7 +1763,6 @@ export abstract class PBRBaseMaterial extends PBRBaseMaterialBase {
 
             // Use previous effect while new one is compiling
             if (this.allowShaderHotSwapping && previousEffect && !effect.isReady()) {
-                effect = previousEffect;
                 defines.markAsUnprocessed();
 
                 forceWasNotReadyPreviously = this.isFrozen;
@@ -1865,7 +1864,7 @@ export abstract class PBRBaseMaterial extends PBRBaseMaterialBase {
             fallbacks.addFallback(fallbackRank++, "BUMP");
         }
 
-        fallbackRank = HandleFallbacksForShadows(defines, fallbacks, this._maxSimultaneousLights, fallbackRank++);
+        fallbackRank = HandleFallbacksForShadows(defines, fallbacks, this._maxSimultaneousLights, fallbackRank);
 
         if (defines.SPECULARTERM) {
             fallbacks.addFallback(fallbackRank++, "SPECULARTERM");

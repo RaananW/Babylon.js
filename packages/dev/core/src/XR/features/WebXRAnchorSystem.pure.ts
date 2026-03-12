@@ -217,7 +217,7 @@ export class WebXRAnchorSystem extends WebXRAbstractFeature {
                     });
                 });
             } catch (error) {
-                throw new Error(error);
+                throw new Error(String(error), { cause: error });
             }
         }
     }
@@ -417,7 +417,7 @@ export class WebXRAnchorSystem extends WebXRAbstractFeature {
             try {
                 return await xrFrame.createAnchor(xrTransformation, this._referenceSpaceForFrameAnchors ?? this._xrSessionManager.referenceSpace);
             } catch (error) {
-                throw new Error(error);
+                throw new Error(String(error), { cause: error });
             }
         } else {
             this.detach();

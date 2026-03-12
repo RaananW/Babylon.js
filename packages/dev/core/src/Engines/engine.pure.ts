@@ -399,8 +399,6 @@ export class Engine extends ThinEngine {
         }
 
         this._features.supportRenderPasses = true;
-
-        options = this._creationOptions;
     }
 
     protected override _initGLContext(): void {

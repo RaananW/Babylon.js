@@ -7,6 +7,7 @@ import type { Effect, IEffectCreationOptions } from "../../Materials/effect";
 import type { Scene } from "../../scene";
 import type { Matrix } from "../../Maths/math.vector";
 import type { GaussianSplattingMesh } from "../../Meshes/GaussianSplatting/gaussianSplattingMesh";
+import type { AbstractEngine } from "../../Engines/abstractEngine";
 import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { MaterialDefines } from "../../Materials/materialDefines";
@@ -28,9 +29,29 @@ import {
 } from "../materialHelper.functions";
 import { ShaderLanguage } from "../shaderLanguage";
 
-// Can be up to 256, then we'll need to change the partIndices texture format to uint16
-// with Mac WebGL 2 on Apple Silicon, we can encounter lower MAX_UNIFORM_BLOCK_SIZE limits (16 KB compared to 64 KB)
-// Using 128 to be conservative and not fail to compile splat shaders.
+/**
+ * Computes the maximum number of Gaussian Splatting compound parts supported by the given engine.
+ * The limit is derived from the engine's maximum vertex uniform vectors capability.
+ * @param engine - The engine to compute the limit for
+ * @returns The maximum number of parts supported
+ */
+export function GetGaussianSplattingMaxPartCount(engine: AbstractEngine): number {
+    // Each GS compound part requires 5 uniform vectors: 4 for the mat4 world matrix + 1 for the visibility float.
+    // The maximum number of parts is limited by the engine's uniform vector capacity and by the uint8 partIndices texture format (max 256).
+
+    const uniformsPerSplat = 5;
+    const reservedUniforms = 40; // base shader uniforms + margin for plugins/clip planes
+    const absoluteMax = 256; // uint8 partIndices texture format limit
+
+    const maxUniformVectors = engine.getCaps().maxVertexUniformVectors;
+    const available = Math.max(maxUniformVectors - reservedUniforms, 0);
+    const maxFromUniforms = Math.floor(available / uniformsPerSplat);
+    return Math.min(Math.max(maxFromUniforms, 1), absoluteMax);
+}
+
+/**
+ * @deprecated Use {@link GetGaussianSplattingMaxPartCount} with an engine instance instead.
+ */
 export const GaussianSplattingMaxPartCount = 128;
 
 /**
@@ -61,7 +82,7 @@ class GaussianSplattingMaterialDefines extends MaterialDefines {
     public COMPENSATION = false;
     /** Defines whether this is a compound splat */
     public IS_COMPOUND = false;
-    /** Defines the maximum number of parts */
+    /** Defines the maximum number of parts (computed from engine caps at runtime) */
     public MAX_PART_COUNT = GaussianSplattingMaxPartCount;
 
     /**
@@ -246,6 +267,7 @@ export class GaussianSplattingMaterial extends PushMaterial {
         }
 
         defines["IS_COMPOUND"] = gsMesh.isCompound;
+        defines["MAX_PART_COUNT"] = GetGaussianSplattingMaxPartCount(engine);
 
         // Compensation
         const splatMaterial = gsMesh.material as GaussianSplattingMaterial;
@@ -336,6 +358,15 @@ export class GaussianSplattingMaterial extends PushMaterial {
     public setSourceMesh(mesh: GaussianSplattingMesh) {
         this._sourceMesh = mesh;
     }
+
+    /**
+     * Gets the source mesh of this material, which is the Gaussian Splatting mesh that provides the data for rendering
+     * @returns The Gaussian Splatting mesh that provides the data for rendering, or null if not set
+     */
+    public getSourceMesh(): GaussianSplattingMesh | null {
+        return this._sourceMesh;
+    }
+
     /**
      * Bind material effect for a specific Gaussian Splatting mesh
      * @param mesh Gaussian splatting mesh
@@ -565,7 +596,7 @@ export class GaussianSplattingMaterial extends PushMaterial {
 
         if (compoundMesh) {
             defines.push("#define IS_COMPOUND");
-            defines.push(`#define MAX_PART_COUNT ${GaussianSplattingMaxPartCount}`);
+            defines.push(`#define MAX_PART_COUNT ${GetGaussianSplattingMaxPartCount(scene.getEngine())}`);
         }
 
         const shaderMaterial = new ShaderMaterial(

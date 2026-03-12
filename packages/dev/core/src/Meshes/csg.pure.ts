@@ -820,7 +820,7 @@ export class CSG {
                     );
                     materialMaxIndex = Math.max(subMeshObj.materialIndex, materialMaxIndex);
                 }
-                materialIndexOffset += ++materialMaxIndex;
+                materialIndexOffset += materialMaxIndex + 1;
             }
         }
 

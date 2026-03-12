@@ -192,6 +192,7 @@ export class EdgesRenderer implements IEdgesRenderer {
             shader.disableDepthWrite = true;
             shader.backFaceCulling = false;
             shader.checkReadyOnEveryCall = scene.getEngine().isWebGPU;
+            shader.doNotSerialize = true;
 
             scene._edgeRenderLineShader = shader;
 

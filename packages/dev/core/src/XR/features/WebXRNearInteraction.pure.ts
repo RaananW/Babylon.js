@@ -520,7 +520,7 @@ export class WebXRNearInteraction extends WebXRAbstractFeature {
             }
 
             const accuratePickInfo = (originalScenePick: Nullable<PickingInfo>, utilityScenePick: Nullable<PickingInfo>): Nullable<PickingInfo> => {
-                let pick = null;
+                let pick: Nullable<PickingInfo>;
                 if (!utilityScenePick || !utilityScenePick.hit) {
                     // No hit in utility scene
                     pick = originalScenePick;

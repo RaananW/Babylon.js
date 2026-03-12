@@ -8,7 +8,7 @@ import type { UniformBuffer } from "../uniformBuffer";
 import type { MaterialDefines } from "../materialDefines";
 import { MaterialPluginBase } from "../materialPluginBase.pure";
 import { ShaderLanguage } from "../shaderLanguage";
-import { GaussianSplattingMaxPartCount } from "./gaussianSplattingMaterial.pure";
+import { GetGaussianSplattingMaxPartCount } from "./gaussianSplattingMaterial.pure";
 import type { GaussianSplattingMaterial } from "./gaussianSplattingMaterial";
 
 /**
@@ -30,10 +30,10 @@ export class GaussianSplattingGpuPickingMaterialPlugin extends MaterialPluginBas
      * @param material The GaussianSplattingMaterial to attach the plugin to.
      * @param maxPartCount The maximum number of parts supported for compound meshes.
      */
-    constructor(material: GaussianSplattingMaterial, maxPartCount = GaussianSplattingMaxPartCount) {
+    constructor(material: GaussianSplattingMaterial, maxPartCount?: number) {
         super(material, "GaussianSplatGpuPicking", 200);
 
-        this._maxPartCount = maxPartCount;
+        this._maxPartCount = maxPartCount ?? GetGaussianSplattingMaxPartCount(material.getScene().getEngine());
         this._enable(true);
     }
 
