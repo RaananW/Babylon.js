@@ -406,6 +406,128 @@ server.registerPrompt("create-physics-playground", { description: "Build an inte
     ],
 }));
 
+server.registerPrompt("create-particle-scene", { description: "Create a scene with a fire-like particle system using gradients and emitter shapes" }, () => ({
+    messages: [
+        {
+            role: "user",
+            content: {
+                type: "text",
+                text: [
+                    "Create a scene with a fire particle effect rising from a sphere.",
+                    "",
+                    "## Step 1: Scene setup",
+                    "1. create_scene 'ParticleScene' description 'Fire particle effect'",
+                    "2. add_camera 'cam' type 'ArcRotateCamera' properties {alpha: -1.57, beta: 1.2, radius: 8, target: [0,1,0]}, isActive=true",
+                    "3. add_light 'light' type 'HemisphericLight' properties {direction: [0,1,0], intensity: 0.5}",
+                    "",
+                    "## Step 2: Emitter mesh",
+                    "4. add_mesh 'emitter' type 'Sphere' options {diameter: 0.5}, transform {position: [0,0,0]}",
+                    "5. set_mesh_properties meshId='emitter' visibility=0 (invisible emitter)",
+                    "",
+                    "## Step 3: Particle system",
+                    "6. add_particle_system 'fire' capacity=2000 emitter='emitter' emitterType='Cone' emitterOptions={radius:0.3, angle:0.5} emitRate=200 minLifeTime=0.3 maxLifeTime=1.5 minSize=0.2 maxSize=0.8 blendMode='ADD' particleTexture='https://playground.babylonjs.com/textures/flare.png' gravity={x:0,y:2,z:0}",
+                    "",
+                    "## Step 4: Color gradients (birth → death)",
+                    "7. add_particle_gradient particleSystemId='fire' gradientType='color' gradient=0 value={r:1,g:0.8,b:0,a:1}",
+                    "8. add_particle_gradient particleSystemId='fire' gradientType='color' gradient=0.5 value={r:1,g:0.3,b:0,a:0.8}",
+                    "9. add_particle_gradient particleSystemId='fire' gradientType='color' gradient=1 value={r:0.2,g:0,b:0,a:0}",
+                    "",
+                    "## Step 5: Size gradient (grow then shrink)",
+                    "10. add_particle_gradient particleSystemId='fire' gradientType='size' gradient=0 value=0.3",
+                    "11. add_particle_gradient particleSystemId='fire' gradientType='size' gradient=0.5 value=0.8",
+                    "12. add_particle_gradient particleSystemId='fire' gradientType='size' gradient=1 value=0.1",
+                    "",
+                    "## Step 6: Glow layer for the fire",
+                    "13. add_glow_layer 'fireGlow' intensity=0.8 blurKernelSize=32",
+                    "",
+                    "14. validate_scene, start_preview",
+                ].join("\n"),
+            },
+        },
+    ],
+}));
+
+server.registerPrompt("create-animated-scene", { description: "Create a scene with keyframe animations and an animation group" }, () => ({
+    messages: [
+        {
+            role: "user",
+            content: {
+                type: "text",
+                text: [
+                    "Create a scene with a bouncing box and a rotating light.",
+                    "",
+                    "## Step 1: Scene setup",
+                    "1. create_scene 'AnimatedScene' description 'Bouncing box with rotating light'",
+                    "2. add_camera 'cam' type 'ArcRotateCamera' properties {alpha: -1.57, beta: 1.0, radius: 10, target: [0,1,0]}, isActive=true",
+                    "3. add_light 'ambient' type 'HemisphericLight' properties {direction: [0,1,0], intensity: 0.3}",
+                    "4. add_light 'pointLight' type 'PointLight' properties {intensity: 1, diffuse: [1,0.8,0.5]}, transform {position: [3,3,0]}",
+                    "",
+                    "## Step 2: Meshes",
+                    "5. add_mesh 'ground' type 'Ground' options {width: 10, height: 10}",
+                    "6. add_mesh 'box' type 'Box' transform {position: [0,1,0]}",
+                    "7. add_material 'boxMat' type 'PBRMaterial' properties {albedoColor: [0.2, 0.5, 0.9], metallic: 0.5, roughness: 0.3}",
+                    "8. assign_material meshId='box' materialId='boxMat'",
+                    "",
+                    "## Step 3: Bounce animation (position.y with easing)",
+                    "9. add_animation name='bounce' targetId='box' property='position.y' fps=60 loopMode='Cycle' easingFunction='BounceEase' easingMode=1 keys=[",
+                    "     {frame: 0, value: 3},",
+                    "     {frame: 30, value: 0.5},",
+                    "     {frame: 60, value: 3}",
+                    "   ]",
+                    "",
+                    "## Step 4: Light orbit animation (rotation around Y axis)",
+                    "10. add_animation name='lightOrbit' targetId='pointLight' property='position' fps=60 loopMode='Cycle' keys=[",
+                    "      {frame: 0, value: {x:3, y:3, z:0}},",
+                    "      {frame: 30, value: {x:0, y:3, z:3}},",
+                    "      {frame: 60, value: {x:-3, y:3, z:0}},",
+                    "      {frame: 90, value: {x:0, y:3, z:-3}},",
+                    "      {frame: 120, value: {x:3, y:3, z:0}}",
+                    "    ]",
+                    "",
+                    "## Step 5: Group them",
+                    "11. create_animation_group name='sceneAnims' animationIds=['bounce','lightOrbit'] autoStart=true isLooping=true",
+                    "",
+                    "12. validate_scene, start_preview",
+                ].join("\n"),
+            },
+        },
+    ],
+}));
+
+server.registerPrompt("create-audio-scene", { description: "Create a scene with background music and spatial 3D audio attached to a mesh" }, () => ({
+    messages: [
+        {
+            role: "user",
+            content: {
+                type: "text",
+                text: [
+                    "Create a scene with background music and a spatial sound source.",
+                    "",
+                    "## Step 1: Scene setup",
+                    "1. create_scene 'AudioScene' description 'Scene with spatial audio'",
+                    "2. add_camera 'cam' type 'ArcRotateCamera' properties {alpha: -1.57, beta: 1.2, radius: 10, target: [0,1,0]}, isActive=true",
+                    "3. add_light 'light' type 'HemisphericLight' properties {direction: [0,1,0], intensity: 0.7}",
+                    "4. add_mesh 'ground' type 'Ground' options {width: 20, height: 20}",
+                    "",
+                    "## Step 2: Sound-emitting mesh",
+                    "5. add_mesh 'speaker' type 'Sphere' options {diameter: 1}, transform {position: [3,1,0]}",
+                    "6. add_material 'speakerMat' type 'PBRMaterial' properties {albedoColor: [0.1,0.8,0.2], emissiveColor: [0,0.3,0], metallic: 0.8}",
+                    "7. assign_material meshId='speaker' materialId='speakerMat'",
+                    "",
+                    "## Step 3: Background music (non-spatial, loops)",
+                    "8. add_sound 'bgMusic' url='YOUR_MUSIC_URL.mp3' soundType='streaming' autoplay=true loop=true volume=0.3",
+                    "",
+                    "## Step 4: Spatial sound attached to the speaker mesh",
+                    "9. add_sound 'spatialFx' url='YOUR_SOUND_URL.mp3' soundType='static' autoplay=true loop=true volume=0.8 spatialEnabled=true spatialMaxDistance=30 spatialMinDistance=1 spatialRolloffFactor=1.5 attachedMeshId='speaker'",
+                    "   The sound volume will change as the camera orbits closer/farther from the speaker mesh.",
+                    "",
+                    "10. validate_scene, start_preview",
+                ].join("\n"),
+            },
+        },
+    ],
+}));
+
 // ═══════════════════════════════════════════════════════════════════════════
 //  Tools — Scene lifecycle
 // ═══════════════════════════════════════════════════════════════════════════

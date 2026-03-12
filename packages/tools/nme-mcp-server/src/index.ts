@@ -242,6 +242,42 @@ server.registerPrompt("create-simple-color-material", { description: "Create the
     ],
 }));
 
+server.registerPrompt("create-textured-material", { description: "Create a PBR material that samples a diffuse texture using UV coordinates" }, () => ({
+    messages: [
+        {
+            role: "user",
+            content: {
+                type: "text",
+                text: [
+                    "Create a PBR material with a diffuse texture. Steps:",
+                    "1. create_material 'TexturedPBR'",
+                    "2. Add InputBlock type Vector3, attributeName 'position', name 'position'",
+                    "3. Add InputBlock type Matrix, systemValue 'WorldViewProjection', name 'wvp'",
+                    "4. Add InputBlock type Matrix, systemValue 'World', name 'world'",
+                    "5. Add InputBlock type Matrix, systemValue 'View', name 'view'",
+                    "6. Add InputBlock type Vector3, systemValue 'CameraPosition', name 'cameraPosition'",
+                    "7. Add InputBlock type Vector3, attributeName 'normal', name 'normal'",
+                    "8. Add InputBlock type Vector2, attributeName 'uv', name 'uv'",
+                    "9. Add TransformBlock 'worldPos' — connect world→transform, position→vector",
+                    "10. Add TransformBlock 'clipPos' — connect wvp→transform, position→vector",
+                    "11. Add VertexOutputBlock — connect clipPos.output→vector",
+                    "12. Add TextureBlock 'diffuseTex'",
+                    "13. set_block_properties on diffuseTex: { texture: 'https://playground.babylonjs.com/textures/floor.png' }",
+                    "    (A bare URL string is auto-converted to a full texture descriptor on export)",
+                    "14. Connect uv.output → diffuseTex.uv",
+                    "15. Add PBRMetallicRoughnessBlock 'pbr'",
+                    "16. Connect worldPos.output→pbr.worldPosition, normal→pbr.worldNormal, view→pbr.view, cameraPosition→pbr.cameraPosition",
+                    "17. Connect diffuseTex.rgb → pbr.baseColor",
+                    "18. Add InputBlock type Float, value 0.0, name 'metallic' → pbr.metallic",
+                    "19. Add InputBlock type Float, value 0.5, name 'roughness' → pbr.roughness",
+                    "20. Add FragmentOutputBlock — connect pbr.lighting→rgb",
+                    "21. validate_material, then export_material_json",
+                ].join("\n"),
+            },
+        },
+    ],
+}));
+
 // ═══════════════════════════════════════════════════════════════════════════
 //  Tools
 // ═══════════════════════════════════════════════════════════════════════════

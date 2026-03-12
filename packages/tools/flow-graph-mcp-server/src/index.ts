@@ -280,6 +280,53 @@ server.registerPrompt("create-tick-counter", { description: "Create a flow graph
     ],
 }));
 
+server.registerPrompt("create-state-machine", { description: "Create a flow graph that uses variables to track state and switch behavior" }, () => ({
+    messages: [
+        {
+            role: "user",
+            content: {
+                type: "text",
+                text: [
+                    "Create a flow graph that tracks an on/off state via a variable and toggles it on mesh click.",
+                    "This pattern is useful for doors, switches, lamps, or any togglable object.",
+                    "",
+                    "Steps:",
+                    "1. create_graph 'StateMachine'",
+                    "2. set_variable 'isActive' to false",
+                    "",
+                    "## Read state on click",
+                    "3. Add MeshPickEvent block with config { targetMesh: { type: 'Mesh', name: 'TARGET_MESH_NAME' } }",
+                    "   ⚠ targetMesh is REQUIRED — without it, click events silently never fire.",
+                    "4. Add GetVariable block (config { variable: 'isActive' })",
+                    "",
+                    "## Branch on current state",
+                    "5. Add Branch block",
+                    "6. Connect MeshPickEvent.done → Branch.in  ⚠ Use 'done', NOT 'out'!",
+                    "7. Connect GetVariable.value → Branch.condition",
+                    "",
+                    "## Turn OFF path (isActive was true → set to false)",
+                    "8. Add Constant block with value false",
+                    "9. Add SetVariable block (config { variable: 'isActive' })",
+                    "10. Connect Branch.onTrue → SetVariable.in (signal)",
+                    "11. Connect Constant(false).output → SetVariable.value (data)",
+                    "12. Add ConsoleLog block — connect SetVariable.out → ConsoleLog.in",
+                    "    Connect a Constant('Deactivated') → ConsoleLog.message",
+                    "",
+                    "## Turn ON path (isActive was false → set to true)",
+                    "13. Add Constant block with value true",
+                    "14. Add SetVariable block (config { variable: 'isActive' })",
+                    "15. Connect Branch.onFalse → SetVariable.in (signal)",
+                    "16. Connect Constant(true).output → SetVariable.value (data)",
+                    "17. Add ConsoleLog block — connect SetVariable.out → ConsoleLog.in",
+                    "    Connect a Constant('Activated') → ConsoleLog.message",
+                    "",
+                    "18. validate_graph, then export_graph_json",
+                ].join("\n"),
+            },
+        },
+    ],
+}));
+
 // ═══════════════════════════════════════════════════════════════════════════
 //  Tools
 // ═══════════════════════════════════════════════════════════════════════════

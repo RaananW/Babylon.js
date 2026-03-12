@@ -295,6 +295,41 @@ server.registerPrompt("create-scattered-instances", { description: "Step-by-step
     ],
 }));
 
+server.registerPrompt("create-deformed-terrain", { description: "Create a subdivided plane deformed by noise to produce terrain-like geometry" }, () => ({
+    messages: [
+        {
+            role: "user",
+            content: {
+                type: "text",
+                text: [
+                    "Create a terrain by deforming a subdivided grid with noise.",
+                    "NOTE: Input values (subdivisions, scale) are INPUT PORTS fed by GeometryInputBlocks.",
+                    "",
+                    "Steps:",
+                    "1. create_geometry 'Terrain'",
+                    "2. Add GridBlock named 'grid'",
+                    "3. Add GeometryInputBlock 'gridSize' type Float, value 20 → connect to grid.size",
+                    "4. Add GeometryInputBlock 'subdivs' type Int, value 64 → connect to grid.subdivisions",
+                    "5. Add SetPositionsBlock named 'setPos'",
+                    "6. Connect grid.geometry → setPos.geometry",
+                    "7. Add Positions contextual input: GeometryInputBlock 'positions' contextualValue 'Positions' (Vector3)",
+                    "8. Add NoiseSampleBlock named 'noise'",
+                    "9. Connect positions.output → noise.position",
+                    "10. Add GeometryInputBlock 'noiseScale' type Float, value 0.15 → noise.amplitude",
+                    "11. Add VectorConverterBlock (or compose) to turn noise.output (Float) into a Y-offset Vector3:",
+                    "    a. Add GeometryInputBlock 'zero' type Float, value 0",
+                    "    b. Add CreateVector3Block 'offset' — connect zero→x, noise.output→y, zero→z",
+                    "12. Add AddBlock 'displaced' — connect positions→left, offset→right",
+                    "13. Connect displaced.output → setPos.positions",
+                    "14. Add ComputeNormalsBlock 'normals' — connect setPos.output → normals.geometry",
+                    "15. Add GeometryOutputBlock 'output' — connect normals.output → output.geometry",
+                    "16. validate_geometry, then export_geometry_json",
+                ].join("\n"),
+            },
+        },
+    ],
+}));
+
 // ═══════════════════════════════════════════════════════════════════════════
 //  Tools
 // ═══════════════════════════════════════════════════════════════════════════
