@@ -410,6 +410,11 @@ Phase 0 (Audit tooling)  ← DONE
                                       ├─> 7.2 (fix 788 pure→non-pure imports)
                                       ├─> 7.3 (add exports field to package.json)
                                       └─> 7.4 (add bare-import detection to audit)
+                                            └─> Phase 8 (tree-shakeable shader includes)  ← IN PROGRESS
+                                                  ├─> 8.1 (new build templates)
+                                                  ├─> 8.2 (flatten transitive includes)
+                                                  ├─> 8.3 (regenerate all shader .ts files)
+                                                  └─> 8.4 (verify + update sideEffects)
 ```
 
 ## Phase 7 — Fix Pure Barrel Integrity
@@ -572,18 +577,215 @@ augmentation) are invisible to the audit.
 - [ ] **7.4b** — Regenerate manifest with new detection
 - [ ] **7.4c** — Update `syncSideEffects.mjs` to include files with bare imports
 
+## Phase 8 — Tree-Shakeable Shader Includes
+
+### Problem Statement
+
+Shader files are the **single largest category of side-effectful files** (331 files). Every shader
+include file (`ShadersInclude/*.ts`) self-registers into the global `ShaderStore.IncludesShadersStore`
+dictionary at module evaluation time. Main shader files import their includes via bare side-effect
+imports. This means:
+
+1. **Bundlers cannot tree-shake unused shader includes.** A bare `import "./ShadersInclude/helperFunctions"`
+   has no export binding — the bundler must execute it unconditionally.
+2. **Unused shaders drag in all their includes.** If a shader file is imported (even transitively),
+   all ~30 of its include imports are unconditionally loaded and registered.
+3. **331 files** in the `sideEffects` array are shader store writes — the largest single category.
+
+### Current Architecture
+
+```
+┌─────────────────────────────┐    ┌──────────────────────────┐
+│ ShadersInclude/              │    │ Shaders/                  │
+│  helperFunctions.ts          │    │  default.fragment.ts      │
+│  ┌─────────────────────────┐ │    │  ┌──────────────────────┐ │
+│  │ import { ShaderStore }  │ │    │  │ import { ShaderStore }│ │
+│  │ const name = "..."      │ │    │  │ import "./ShadersIncl │ │
+│  │ const shader = `...`    │ │    │  │  ude/helperFunctions" │ │ ← bare import
+│  │                         │ │    │  │ // ...28 more bare    │ │
+│  │ // SIDE EFFECT:         │ │    │  │ // imports            │ │
+│  │ IncludesShadersStore    │ │    │  │                       │ │
+│  │   [name] = shader;      │ │    │  │ // SIDE EFFECT:       │ │
+│  │                         │ │    │  │ ShadersStore[name]    │ │
+│  │ export const helper... =│ │    │  │   = shader;           │ │
+│  │   { name, shader }      │ │◄───│  │                       │ │
+│  └─────────────────────────┘ │    │  │ export const default  │ │
+│                              │    │  │   PixelShader = {...}  │ │
+└─────────────────────────────┘    │  └──────────────────────┘ │
+                                    └──────────────────────────┘
+```
+
+**Key insight**: Include files already export `{ name, shader }`, but nobody uses the export.
+The main shader files use bare imports purely for the side effect of registering into
+`IncludesShadersStore`. The `ProcessIncludes` runtime resolver then looks up includes by
+name in this global store.
+
+### Solution Design
+
+Transform shader includes from self-registering side-effect modules into **pure data modules**.
+Registration moves to the main shader files, which use named imports to pull in their includes
+and register them explicitly.
+
+#### New Architecture
+
+```
+┌─────────────────────────────┐    ┌──────────────────────────────────┐
+│ ShadersInclude/              │    │ Shaders/                          │
+│  helperFunctions.ts          │    │  default.fragment.ts              │
+│  ┌─────────────────────────┐ │    │  ┌──────────────────────────────┐ │
+│  │ // PURE — no ShaderStore│ │    │  │ import { ShaderStore }       │ │
+│  │ const name = "..."      │ │    │  │ import { helperFunctions }   │ │ ← named import
+│  │ const shader = `...`    │ │    │  │ import { lightFragment... }  │ │
+│  │                         │ │    │  │ // ...28 more named imports  │ │
+│  │ export const helper... =│ │    │  │                              │ │
+│  │   { name, shader }      │ │◄───│  │ // Register shader + deps   │ │
+│  └─────────────────────────┘ │    │  │ ShadersStore[name] = shader  │ │
+│                              │    │  │ RegisterShaderIncludes(       │ │
+│  ✅ Pure module — no side    │    │  │   IncludesShadersStore,       │ │
+│     effect, tree-shakeable   │    │  │   [helperFunctions, ...]     │ │
+└─────────────────────────────┘    │  │ )                             │ │
+                                    │  │ export const default...      │ │
+                                    │  └──────────────────────────────┘ │
+                                    └──────────────────────────────────┘
+```
+
+#### Why This Enables Tree-Shaking
+
+- If your app uses only `PBRMaterial` → only `pbr.fragment.ts` + `pbr.vertex.ts` are imported
+- These pull in their ~40 includes via **named imports** (bundler-visible bindings)
+- `default.fragment.ts` is NOT imported → its ~30 includes are NOT imported → **tree-shaken away**
+- Include files that no main shader references are dead code — eliminated by the bundler
+
+#### Changes Required
+
+**1. New build template for include files** (`buildShaders.ts`):
+
+```ts
+// Old — self-registering (side-effectful):
+import { ShaderStore } from "../../Engines/shaderStore";
+const name = "helperFunctions";
+const shader = `...`;
+if (!ShaderStore.IncludesShadersStore[name]) {
+    ShaderStore.IncludesShadersStore[name] = shader;
+}
+export const helperFunctions = { name, shader };
+
+// New — pure data export:
+const name = "helperFunctions";
+const shader = `...`;
+export const helperFunctions = { name, shader };
+```
+
+**2. New build template for main shader files** (`buildShaders.ts`):
+
+```ts
+// Old — bare side-effect imports:
+import { ShaderStore } from "../Engines/shaderStore";
+import "./ShadersInclude/helperFunctions";
+import "./ShadersInclude/lightFragmentDeclaration";
+// ...
+const name = "defaultPixelShader";
+const shader = `...`;
+if (!ShaderStore.ShadersStore[name]) {
+    ShaderStore.ShadersStore[name] = shader;
+}
+export const defaultPixelShader = { name, shader };
+
+// New — named imports + explicit registration:
+import { ShaderStore } from "../Engines/shaderStore";
+import { helperFunctions } from "./ShadersInclude/helperFunctions";
+import { lightFragmentDeclaration } from "./ShadersInclude/lightFragmentDeclaration";
+// ...
+const name = "defaultPixelShader";
+const shader = `...`;
+if (!ShaderStore.ShadersStore[name]) {
+    ShaderStore.ShadersStore[name] = shader;
+}
+const includes = [helperFunctions, lightFragmentDeclaration /* ... */];
+for (const inc of includes) {
+    if (!ShaderStore.IncludesShadersStore[inc.name]) {
+        ShaderStore.IncludesShadersStore[inc.name] = inc.shader;
+    }
+}
+export const defaultPixelShader = { name, shader };
+```
+
+**3. Transitive include flattening** (build-time):
+
+Some includes themselves use `#include<...>` (nested includes). The `ProcessIncludes` runtime
+resolver handles this recursively, but all includes must be registered _before_ processing begins.
+The build tool must:
+
+1. Parse `#include<...>` from the main shader's `.fx` source
+2. For each include, also parse its `.fx` file for nested `#include<...>`
+3. Recurse until stable (full transitive closure)
+4. Generate named imports for ALL transitively-needed includes
+
+This ensures the main shader file registers every include that `ProcessIncludes` will look up.
+
+**4. Backwards compatibility**:
+
+- Existing import paths (`import "./ShadersInclude/helperFunctions"`) still resolve — the file
+  still exists, it's just pure now. A bare import does nothing harmful, it just doesn't register.
+- `ShaderStore.IncludesShadersStore` remains the runtime truth — `ProcessIncludes` is unchanged.
+- Users who manually registered custom includes via `ShaderStore.IncludesShadersStore["name"] = "..."`
+  are unaffected — that API is unchanged.
+- Users who imported include files for their own custom shaders can switch to named imports:
+    ```ts
+    import { helperFunctions } from "core/Shaders/ShadersInclude/helperFunctions";
+    ShaderStore.IncludesShadersStore[helperFunctions.name] = helperFunctions.shader;
+    ```
+
+**5. Non-core packages** (addons, materials, etc.):
+
+Non-core shaders that reference core includes (e.g., `#include<core/helperFunctions>`) will
+import the core include by named import and register it the same way. The build tool already
+handles cross-package include resolution.
+
+### Implementation Steps
+
+- [ ] **8.1** — Modify `buildShaders.ts`: new templates for includes vs. main shaders
+    - Include template: pure data export, no `ShaderStore` import
+    - Main shader template: named imports + registration loop
+    - Both GLSL and WGSL variants
+- [ ] **8.2** — Add transitive include flattening to `GetIncludes()` in `buildShaders.ts`
+    - Read `.fx` files of includes to find nested `#include<...>` directives
+    - Build full dependency closure
+    - Generate correct import ordering (includes before main shader registration)
+- [ ] **8.3** — Regenerate all shader `.ts` files
+    - Run `npm run compile:assets` in `@dev/core` (and other packages)
+    - Verify TypeScript compilation: 0 errors
+    - Verify runtime: shaders still compile and render correctly
+- [ ] **8.4** — Update `sideEffects` array and verify
+    - ShadersInclude files become pure → remove from `sideEffects`
+    - Main shader files still have side effects (store registration) → keep in `sideEffects`
+    - Regenerate manifest, sync `sideEffects`, run bundle smoke tests
+
+### Impact Analysis
+
+| Metric                                        | Before | After    |
+| --------------------------------------------- | ------ | -------- |
+| Side-effectful shader include files           | ~164   | **0**    |
+| Side-effectful main shader files              | ~167   | ~167     |
+| Files in `sideEffects` array (shader-related) | ~331   | **~167** |
+| Tree-shakeable include files                  | 0      | **~164** |
+| Unused include elimination                    | No     | **Yes**  |
+
 ## Risk Mitigation
 
-| Risk                            | Mitigation                                              |
-| ------------------------------- | ------------------------------------------------------- |
-| Breaking existing imports       | `FILE.ts` always re-exports `FILE.pure.ts`              |
-| Circular dependencies           | Audit detects cycles; `import/no-cycle` already enabled |
-| Prototype augmentation in pure  | ESLint rule (6.1) + bundle tests (6.2)                  |
-| Massive PRs                     | One PR per subdirectory (Phase 2.2 priority order)      |
-| Shader files in pure            | Blocked by glob pattern in ESLint rule                  |
-| Bare imports in pure barrel     | Phase 7.1 splits + 7.4 audit detection                  |
-| Pure importing non-pure         | Phase 7.2 rewrites + 7.2c ESLint enforcement            |
-| External bundler can't optimize | Phase 7.3 `exports` field with `sideEffects: false`     |
+| Risk                            | Mitigation                                               |
+| ------------------------------- | -------------------------------------------------------- |
+| Breaking existing imports       | `FILE.ts` always re-exports `FILE.pure.ts`               |
+| Circular dependencies           | Audit detects cycles; `import/no-cycle` already enabled  |
+| Prototype augmentation in pure  | ESLint rule (6.1) + bundle tests (6.2)                   |
+| Massive PRs                     | One PR per subdirectory (Phase 2.2 priority order)       |
+| Shader files in pure            | Blocked by glob pattern in ESLint rule                   |
+| Bare imports in pure barrel     | Phase 7.1 splits + 7.4 audit detection                   |
+| Pure importing non-pure         | Phase 7.2 rewrites + 7.2c ESLint enforcement             |
+| External bundler can't optimize | Phase 7.3 `exports` field with `sideEffects: false`      |
+| Shader include not registered   | Build flattens transitive deps; ProcessIncludes fallback |
+| Custom shader missing include   | Users switch to named import + manual registration       |
+| Nested includes not registered  | Build-time transitive closure ensures all deps imported  |
 
 ---
 
