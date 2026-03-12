@@ -452,7 +452,7 @@ export class PointerDragBehavior implements Behavior<AbstractMesh> {
             if (this.updateDragPlane) {
                 this._updateDragPlanePosition(ray, pickedPoint);
             }
-            let dragLength = 0;
+            let dragLength: number;
             // depending on the drag mode option drag accordingly
             if (this._options.dragAxis) {
                 // Convert local drag axis to world if useObjectOrientationForDragging

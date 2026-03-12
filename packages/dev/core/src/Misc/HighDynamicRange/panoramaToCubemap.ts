@@ -97,7 +97,7 @@ export class PanoramaToCubeMapTools {
             throw "ConvertPanoramaToCubemap: input cannot be null";
         }
 
-        let stride = 0;
+        let stride: number;
         if (float32Array.length != inputWidth * inputHeight * 3) {
             if (float32Array.length != inputWidth * inputHeight * 4) {
                 throw "ConvertPanoramaToCubemap: input size is wrong";

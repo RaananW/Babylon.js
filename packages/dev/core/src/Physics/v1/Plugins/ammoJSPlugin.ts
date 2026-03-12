@@ -737,10 +737,6 @@ export class AmmoJSPlugin implements IPhysicsEnginePlugin {
     private _softVertexData(impostor: PhysicsImpostor): VertexData {
         const object = impostor.object;
         if (object && object.getIndices && object.getWorldMatrix && object.getChildMeshes) {
-            let indices = object.getIndices();
-            if (!indices) {
-                indices = [];
-            }
             let vertexPositions = object.getVerticesData(VertexBuffer.PositionKind);
             if (!vertexPositions) {
                 vertexPositions = [];
@@ -837,11 +833,6 @@ export class AmmoJSPlugin implements IPhysicsEnginePlugin {
     private _createCloth(impostor: PhysicsImpostor) {
         const object = impostor.object;
         if (object && object.getIndices) {
-            let indices = object.getIndices();
-            if (!indices) {
-                indices = [];
-            }
-
             const vertexData = this._softVertexData(impostor);
             const vertexPositions = vertexData.positions;
             const vertexNormals = vertexData.normals;

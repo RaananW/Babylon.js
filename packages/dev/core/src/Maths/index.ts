@@ -11,3 +11,5 @@ export * from "./math.color.functions";
 export * from "./math.quaternion.functions";
 export * from "./ThinMaths/index";
 export * from "./math.scalar.functions";
+export * from "./math.geospatial";
+export * from "./math.geospatial.functions";
