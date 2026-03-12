@@ -40,10 +40,19 @@ import { RenderGraphManager } from "./renderGraph.js";
 const manager = new RenderGraphManager();
 
 // ─── MCP Server ──────────────────────────────────────────────────────────
-const server = new McpServer({
-    name: "babylonjs-nrg",
-    version: "1.0.0",
-});
+const server = new McpServer(
+    {
+        name: "babylonjs-nrg",
+        version: "1.0.0",
+    },
+    {
+        instructions: [
+            "You build Babylon.js Node Render Graphs (custom render pipelines). Workflow: create_render_graph → add blocks (NodeRenderGraphInputBlock, object/geometry renderers, post-process blocks, NodeRenderGraphOutputBlock) → connect ports → validate_graph → export_graph_json.",
+            "Every render graph needs an InputBlock (provides camera/scene) and an OutputBlock (final framebuffer). Use get_block_type_info to discover ports.",
+            "Output JSON can be consumed by the Scene MCP via attach_node_render_graph.",
+        ].join(" "),
+    }
+);
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Resources  (read-only reference data an agent can always consult)

@@ -89,10 +89,20 @@ const PhysicsSchema = z
     .describe("Inline physics body. If provided, a physics body is automatically added to this mesh after creation.");
 
 // ─── MCP Server ───────────────────────────────────────────────────────────
-const server = new McpServer({
-    name: "babylonjs-scene",
-    version: "1.0.0",
-});
+const server = new McpServer(
+    {
+        name: "babylonjs-scene",
+        version: "1.0.0",
+    },
+    {
+        instructions: [
+            "You build complete Babylon.js 3D scenes. Workflow: create_scene → add camera (set isActive) → add lights → add meshes/models → create & assign materials → validate_scene → start_preview or export_scene_code.",
+            "For shadows: use DirectionalLight/SpotLight with shadowEnabled, set castsShadows on casters and receiveShadows on receivers.",
+            "For materials from the NME MCP, geometry from the NGE MCP, render pipelines from the NRG MCP, behaviors from the Flow Graph MCP, or UI from the GUI MCP: prefer file-based handoff (outputFile on the producer, *File param here) to keep large JSON out of the context window.",
+            "Always validate before exporting. Use start_preview to see results in a browser.",
+        ].join(" "),
+    }
+);
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Resources (read-only reference data)

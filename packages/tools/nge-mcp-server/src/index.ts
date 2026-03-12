@@ -32,10 +32,19 @@ import { GeometryGraphManager } from "./geometryGraph.js";
 const manager = new GeometryGraphManager();
 
 // ─── MCP Server ───────────────────────────────────────────────────────────
-const server = new McpServer({
-    name: "babylonjs-nge",
-    version: "1.0.0",
-});
+const server = new McpServer(
+    {
+        name: "babylonjs-nge",
+        version: "1.0.0",
+    },
+    {
+        instructions: [
+            "You build Babylon.js procedural geometry via Node Geometry graphs. Workflow: create_geometry → add blocks (source geometry blocks like BoxBlock, then transform/math blocks, then GeometryOutputBlock) → connect ports → validate_geometry → export_geometry_json.",
+            "Every geometry needs a GeometryOutputBlock. Use get_block_type_info to discover ports before connecting.",
+            "Output JSON can be consumed by the Scene MCP via add_node_geometry_mesh.",
+        ].join(" "),
+    }
+);
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Resources (read-only reference data)

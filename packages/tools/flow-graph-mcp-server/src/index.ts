@@ -33,10 +33,20 @@ import { FlowGraphManager } from "./flowGraphManager.js";
 const manager = new FlowGraphManager();
 
 // ─── MCP Server ───────────────────────────────────────────────────────────
-const server = new McpServer({
-    name: "babylonjs-flow-graph",
-    version: "1.0.0",
-});
+const server = new McpServer(
+    {
+        name: "babylonjs-flow-graph",
+        version: "1.0.0",
+    },
+    {
+        instructions: [
+            "You build Babylon.js Flow Graphs (visual scripting). Workflow: create_graph → add event blocks (entry points) → add action/logic blocks → connect signals (execution flow) and data (typed values) → validate_graph → export_graph_json.",
+            "Signal connections drive execution order; data connections carry values. Every graph needs at least one event block as an entry point.",
+            "For MeshPickEvent, targetMesh config is required or clicks silently never fire. Use the 'done' signal output (not 'out') for per-event firing.",
+            "Output JSON can be consumed by the Scene MCP via attach_flow_graph.",
+        ].join(" "),
+    }
+);
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Resources (read-only reference data)

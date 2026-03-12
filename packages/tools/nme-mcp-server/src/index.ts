@@ -32,10 +32,20 @@ import { MaterialGraphManager } from "./materialGraph.js";
 const manager = new MaterialGraphManager();
 
 // ─── MCP Server ───────────────────────────────────────────────────────────
-const server = new McpServer({
-    name: "babylonjs-nme",
-    version: "1.0.0",
-});
+const server = new McpServer(
+    {
+        name: "babylonjs-nme",
+        version: "1.0.0",
+    },
+    {
+        instructions: [
+            "You build Babylon.js Node Materials (shader graphs). Workflow: create_material → add blocks (InputBlock for attributes/uniforms, then processing blocks, then output blocks) → connect ports → validate_material → export_material_json.",
+            "Every material needs at minimum: position attribute → TransformBlock → VertexOutputBlock, and a FragmentOutputBlock.",
+            "Use get_block_type_info to discover a block's ports before connecting. Enum properties (e.g. TrigonometryBlock.operation) must be set by name (e.g. 'Sin'), not numeric value.",
+            "Output JSON can be loaded in the Scene MCP via add_material with type NodeMaterial, or opened in the NME web editor.",
+        ].join(" "),
+    }
+);
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Resources (read-only reference data)

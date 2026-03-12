@@ -34,10 +34,19 @@ import { GuiManager } from "./guiManager.js";
 const manager = new GuiManager();
 
 // ─── MCP Server ───────────────────────────────────────────────────────────
-const server = new McpServer({
-    name: "babylonjs-gui",
-    version: "1.0.0",
-});
+const server = new McpServer(
+    {
+        name: "babylonjs-gui",
+        version: "1.0.0",
+    },
+    {
+        instructions: [
+            "You build Babylon.js 2D GUI layouts (AdvancedDynamicTexture). Workflow: create_gui → add controls (containers first, then leaf controls inside them) → set properties → validate_gui → export_gui_json.",
+            "All controls must have a parent. The root container is created automatically. Use Grid for complex layouts, StackPanel for linear layouts.",
+            "Sizes accept '200px', '50%', or a number. Output JSON can be consumed by the Scene MCP via attach_gui.",
+        ].join(" "),
+    }
+);
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Resources (read-only reference data)
