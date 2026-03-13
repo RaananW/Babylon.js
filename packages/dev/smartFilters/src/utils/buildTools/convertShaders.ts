@@ -23,6 +23,7 @@ export function ConvertShaders(shaderPath: string, smartFiltersCorePath: string,
         shaderFiles = [
             {
                 name: fileName,
+                parentPath: dirPath,
                 path: dirPath,
                 isFile: () => true,
                 isDirectory: () => false,
@@ -38,10 +39,11 @@ export function ConvertShaders(shaderPath: string, smartFiltersCorePath: string,
         Logger.Log(`Error: ${shaderPath} is neither a file nor a directory.`);
         return;
     }
-
     // Convert all shaders
     for (const shaderFile of shaderFiles) {
-        const fullPathAndFileName = path.join(shaderFile.path, shaderFile.name);
+        // Use parentPath (Node 20.12+/21.7+) with fallback to path (older Node versions)
+        const dirPath = shaderFile.parentPath ?? shaderFile.path;
+        const fullPathAndFileName = path.join(dirPath, shaderFile.name);
         ConvertShader(fullPathAndFileName, smartFiltersCorePath, babylonCorePath);
     }
 }
