@@ -23,6 +23,10 @@
         "babylonjs-render-graph": {
             "command": "node",
             "args": ["./packages/tools/node-render-graph-mcp-server/dist/index.js"]
+        },
+        "babylonjs-npe": {
+            "command": "node",
+            "args": ["./packages/tools/npe-mcp-server/dist/index.js"]
         }
     }
 }
