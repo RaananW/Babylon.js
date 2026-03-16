@@ -29,25 +29,25 @@ bash scripts/analyze-org-prs.sh --since 2024-01-01 --until 2025-01-01
 
 **Options:**
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `-o, --org NAME` | GitHub org | `BabylonJS` |
-| `-d, --output-dir DIR` | Output directory | `./pr-analysis` |
-| `-s, --since DATE` | Start date (ISO) | 7 years ago |
-| `-u, --until DATE` | End date (ISO) | today |
-| `-r, --repos REPOS` | Comma-separated repo names | all non-fork repos |
-| `--include-forks` | Include forked repos | off |
-| `--detailed` | Fetch reviews, comments, participants (slower) | off |
-| `--skip-existing` | Skip repos whose output file already exists | off |
+| Flag                   | Description                                    | Default            |
+| ---------------------- | ---------------------------------------------- | ------------------ |
+| `-o, --org NAME`       | GitHub org                                     | `BabylonJS`        |
+| `-d, --output-dir DIR` | Output directory                               | `./pr-analysis`    |
+| `-s, --since DATE`     | Start date (ISO)                               | 7 years ago        |
+| `-u, --until DATE`     | End date (ISO)                                 | today              |
+| `-r, --repos REPOS`    | Comma-separated repo names                     | all non-fork repos |
+| `--include-forks`      | Include forked repos                           | off                |
+| `--detailed`           | Fetch reviews, comments, participants (slower) | off                |
+| `--skip-existing`      | Skip repos whose output file already exists    | off                |
 
 **Output files:**
 
-| File | Description |
-|------|-------------|
-| `pr-analysis/raw/<repo>.json` | Raw PR data per repo |
+| File                            | Description                          |
+| ------------------------------- | ------------------------------------ |
+| `pr-analysis/raw/<repo>.json`   | Raw PR data per repo                 |
 | `pr-analysis/combined_prs.json` | All repos merged into one JSON array |
-| `pr-analysis/combined_prs.csv` | Flat CSV for Excel/Google Sheets |
-| `pr-analysis/summary.txt` | High-level statistics |
+| `pr-analysis/combined_prs.csv`  | Flat CSV for Excel/Google Sheets     |
+| `pr-analysis/summary.txt`       | High-level statistics                |
 
 The CSV contains these columns: `repo`, `number`, `title`, `state`, `author`, `author_is_bot`, `created_at`, `updated_at`, `closed_at`, `merged_at`, `merged_by`, `days_to_close`, `days_to_merge`, `additions`, `deletions`, `total_lines_changed`, `changed_files`, `base_branch`, `head_branch`, `is_draft`, `review_decision`, `label_names`, `url`.
 
