@@ -29,6 +29,8 @@ declare const Reflect: any;
 /**
  * Defines the minimum interface to fulfill in order to be a sprite manager.
  */
+
+export * from "./spriteManager.types";
 export interface ISpriteManager extends IDisposable {
     /**
      * Gets or sets the unique id of the sprite manager
@@ -885,4 +887,21 @@ export function SpriteManagerParseFromSnippetAsync(snippetId: string, scene: Sce
         request.open("GET", SpriteManager.SnippetUrl + "/" + snippetId.replace(/#/g, "/"));
         request.send();
     });
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for spriteManager.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerSpriteManager(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    SpriteManager.Parse = SpriteManagerParse;
+    SpriteManager.ParseFromFileAsync = SpriteManagerParseFromFileAsync;
+    SpriteManager.ParseFromSnippetAsync = SpriteManagerParseFromSnippetAsync;
 }

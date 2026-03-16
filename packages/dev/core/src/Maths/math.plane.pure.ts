@@ -5,6 +5,8 @@ import type { IPlaneLike } from "./math.like";
 /**
  * Represents a plane by the equation ax + by + cz + d = 0
  */
+
+export * from "./math.plane.types";
 export class Plane implements IPlaneLike {
     private static _TmpMatrix = /*#__PURE__*/ Matrix.Identity();
 
@@ -219,4 +221,23 @@ export function PlaneFromPositionAndNormalToRef<T extends Plane>(origin: DeepImm
 export function PlaneSignedDistanceToPlaneFromPositionAndNormal(origin: DeepImmutable<Vector3>, normal: DeepImmutable<Vector3>, point: DeepImmutable<Vector3>): number {
     const d = -(normal.x * origin.x + normal.y * origin.y + normal.z * origin.z);
     return Vector3.Dot(point, normal) + d;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for math.plane.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerMathPlane(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Plane.FromArray = PlaneFromArray;
+    Plane.FromPoints = PlaneFromPoints;
+    Plane.FromPositionAndNormal = PlaneFromPositionAndNormal;
+    Plane.FromPositionAndNormalToRef = PlaneFromPositionAndNormalToRef;
+    Plane.SignedDistanceToPlaneFromPositionAndNormal = PlaneSignedDistanceToPlaneFromPositionAndNormal;
 }

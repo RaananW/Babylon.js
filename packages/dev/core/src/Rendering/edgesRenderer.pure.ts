@@ -1,8 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./edgesRenderer.types";
+
 import type { Immutable, Nullable } from "../types";
 import { VertexBuffer } from "../Buffers/buffer.pure";
-import type { AbstractMesh } from "../Meshes/abstractMesh.pure";
+import { AbstractMesh } from "../Meshes/abstractMesh.pure";
 import type { Mesh } from "../Meshes/mesh";
 import type { Matrix } from "../Maths/math.vector";
 import { Vector3, TmpVectors } from "../Maths/math.vector.pure";
@@ -17,6 +19,7 @@ import type { DataBuffer } from "../Buffers/dataBuffer";
 import { SmartArray } from "../Misc/smartArray";
 import { DrawWrapper } from "../Materials/drawWrapper";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { LinesMesh, InstancedLinesMesh } from "../Meshes/linesMesh";
 
 /**
  * FaceAdjacencies Helper class to generate edges
@@ -1010,4 +1013,51 @@ export class LineEdgesRenderer extends EdgesRenderer {
 
         this._indicesCount = this._linesIndices.length;
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for edgesRenderer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerEdgesRenderer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    AbstractMesh.prototype.disableEdgesRendering = function (): AbstractMesh {
+        if (this._edgesRenderer) {
+            this._edgesRenderer.dispose();
+            this._edgesRenderer = null;
+        }
+        return this;
+    };
+
+    AbstractMesh.prototype.enableEdgesRendering = function (epsilon = 0.95, checkVerticesInsteadOfIndices = false, options?: IEdgesRendererOptions): AbstractMesh {
+        this.disableEdgesRendering();
+        this._edgesRenderer = new EdgesRenderer(this, epsilon, checkVerticesInsteadOfIndices, true, options);
+        return this;
+    };
+
+    Object.defineProperty(AbstractMesh.prototype, "edgesRenderer", {
+        get: function (this: AbstractMesh) {
+            return this._edgesRenderer;
+        },
+        enumerable: true,
+        configurable: true,
+    });
+
+    LinesMesh.prototype.enableEdgesRendering = function (epsilon = 0.95, checkVerticesInsteadOfIndices = false): AbstractMesh {
+        this.disableEdgesRendering();
+        this._edgesRenderer = new LineEdgesRenderer(this, epsilon, checkVerticesInsteadOfIndices);
+        return this;
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    InstancedLinesMesh.prototype.enableEdgesRendering = function (epsilon = 0.95, checkVerticesInsteadOfIndices = false): InstancedLinesMesh {
+        LinesMesh.prototype.enableEdgesRendering.apply(this, arguments);
+        return this;
+    };
 }

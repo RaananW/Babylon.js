@@ -1,8 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./postProcessRenderPipelineManagerSceneComponent.types";
+
 import type { ISceneComponent } from "../../sceneComponent";
 import { SceneComponentConstants } from "../../sceneComponent";
-import type { Scene } from "../../scene.pure";
+import { Scene } from "../../scene.pure";
+import { PostProcessRenderPipelineManager } from "./postProcessRenderPipelineManager";
 
 /**
  * Defines the Render Pipeline scene component responsible to rendering pipelines
@@ -57,4 +60,35 @@ export class PostProcessRenderPipelineManagerSceneComponent implements ISceneCom
             this.scene._postProcessRenderPipelineManager.update();
         }
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for postProcessRenderPipelineManagerSceneComponent.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerPostProcessRenderPipelineManagerSceneComponent(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Object.defineProperty(Scene.prototype, "postProcessRenderPipelineManager", {
+        get: function (this: Scene) {
+            if (!this._postProcessRenderPipelineManager) {
+                // Register the G Buffer component to the scene.
+                let component = this._getComponent(SceneComponentConstants.NAME_POSTPROCESSRENDERPIPELINEMANAGER) as PostProcessRenderPipelineManagerSceneComponent;
+                if (!component) {
+                    component = new PostProcessRenderPipelineManagerSceneComponent(this);
+                    this._addComponent(component);
+                }
+                this._postProcessRenderPipelineManager = new PostProcessRenderPipelineManager();
+            }
+
+            return this._postProcessRenderPipelineManager;
+        },
+        enumerable: true,
+        configurable: true,
+    });
 }

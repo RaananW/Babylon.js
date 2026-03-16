@@ -40,6 +40,8 @@ declare let BABYLON: any;
 /**
  * Defines a node render graph
  */
+
+export * from "./nodeRenderGraph.types";
 export class NodeRenderGraph {
     private static _BuildIdGenerator: number = 0;
 
@@ -850,3 +852,20 @@ export function NodeRenderGraphParseFromSnippetAsync(
     });
 }
 NodeRenderGraph;
+
+let _registered = false;
+
+/**
+ * Register side effects for nodeRenderGraph.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerNodeRenderGraph(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    NodeRenderGraph.CreateDefaultAsync = NodeRenderGraphCreateDefaultAsync;
+    NodeRenderGraph.Parse = NodeRenderGraphParse;
+    NodeRenderGraph.ParseFromSnippetAsync = NodeRenderGraphParseFromSnippetAsync;
+}

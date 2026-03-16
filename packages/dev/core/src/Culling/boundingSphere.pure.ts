@@ -6,6 +6,8 @@ import type { Plane } from "../Maths/math.plane";
 /**
  * Class used to store bounding sphere information
  */
+
+export * from "./boundingSphere.types";
 export class BoundingSphere {
     /**
      * Gets the center of the bounding sphere in local space
@@ -193,4 +195,19 @@ export function BoundingSphereIntersects(sphere0: DeepImmutable<BoundingSphere>,
     }
 
     return true;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for boundingSphere.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerBoundingSphere(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    BoundingSphere.Intersects = BoundingSphereIntersects;
 }

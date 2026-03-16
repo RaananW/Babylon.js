@@ -10,6 +10,8 @@ import { textureSizeIsObject } from "../../../Materials/Textures/textureCreation
 /**
  * Task used to generate a cascaded shadow map from a list of objects.
  */
+
+export * from "./csmShadowGeneratorTask.types";
 export class FrameGraphCascadedShadowGeneratorTask extends FrameGraphShadowGeneratorTask {
     protected override _shadowGenerator: CascadedShadowGenerator | undefined;
 
@@ -371,4 +373,19 @@ export class FrameGraphCascadedShadowGeneratorTask extends FrameGraphShadowGener
  */
 export function FrameGraphCascadedShadowGeneratorTaskIsCascadedShadowGenerator(task: FrameGraphShadowGeneratorTask): task is FrameGraphCascadedShadowGeneratorTask {
     return (task as FrameGraphCascadedShadowGeneratorTask).numCascades !== undefined;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for csmShadowGeneratorTask.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerCsmShadowGeneratorTask(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    FrameGraphCascadedShadowGeneratorTask.IsCascadedShadowGenerator = FrameGraphCascadedShadowGeneratorTaskIsCascadedShadowGenerator;
 }

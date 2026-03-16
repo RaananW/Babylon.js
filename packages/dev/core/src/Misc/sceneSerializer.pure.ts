@@ -384,6 +384,8 @@ function _CollectPromises(obj: any, promises: Array<Promise<any>>): void {
 /**
  * Class used to serialize a scene into a string
  */
+
+export * from "./sceneSerializer.types";
 export class SceneSerializer {}
 
 /**
@@ -461,4 +463,22 @@ export function SceneSerializerSerializeMesh(toSerialize: any /* Mesh || Mesh[] 
     }
 
     return serializationObject;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for sceneSerializer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerSceneSerializer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    SceneSerializer.ClearCache = SceneSerializerClearCache;
+    SceneSerializer.Serialize = SceneSerializerSerialize;
+    SceneSerializer.SerializeAsync = SceneSerializerSerializeAsync;
+    SceneSerializer.SerializeMesh = SceneSerializerSerializeMesh;
 }

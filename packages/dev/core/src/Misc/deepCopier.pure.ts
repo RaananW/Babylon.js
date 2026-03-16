@@ -39,6 +39,8 @@ function GetAllPropertyNames(obj: any): string[] {
 /**
  * Class containing a set of static utilities functions for deep copy.
  */
+
+export * from "./deepCopier.types";
 export class DeepCopier {}
 
 /**
@@ -104,4 +106,19 @@ export function DeepCopierDeepCopy(source: any, destination: any, doNotCopyList?
             Logger.Warn(e.message);
         }
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for deepCopier.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerDeepCopier(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    DeepCopier.DeepCopy = DeepCopierDeepCopy;
 }

@@ -1,5 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./math.polar.types";
+
 import type { DeepImmutable } from "../types";
 import { Vector2, Vector3 } from "./math.vector.pure";
 
@@ -722,4 +724,26 @@ export function SphericalFromVector3(vector: DeepImmutable<Vector3>): Spherical 
  */
 export function SphericalFromArray(array: number[]) {
     return new Spherical(array[0], array[1], array[2]);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for math.polar.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerMathPolar(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Polar.FromVector2ToRef = PolarFromVector2ToRef;
+    Polar.FromVector2 = PolarFromVector2;
+    Polar.FromArray = PolarFromArray;
+
+    // Spherical static methods
+    Spherical.FromVector3ToRef = SphericalFromVector3ToRef;
+    Spherical.FromVector3 = SphericalFromVector3;
+    Spherical.FromArray = SphericalFromArray;
 }

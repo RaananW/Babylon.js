@@ -1,10 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./highlightLayer.types";
+
 import { serialize } from "../Misc/decorators";
 import { Observable } from "../Misc/observable";
 import type { Nullable } from "../types";
 import type { Camera } from "../Cameras/camera";
-import type { Scene } from "../scene.pure";
+import { Scene } from "../scene.pure";
 import { Vector2 } from "../Maths/math.vector.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { SubMesh } from "../Meshes/subMesh";
@@ -31,6 +33,7 @@ import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/
 import { GetExponentOfTwo } from "../Misc/tools.functions";
 import { ThinHighlightLayer } from "./thinHighlightLayer";
 import { ThinGlowBlurPostProcess } from "./thinEffectLayer";
+import { RegisterClass } from "../Misc/typeStore";
 
 interface IBlurPostProcess extends PostProcess {
     kernel: number;
@@ -613,4 +616,29 @@ export class HighlightLayer extends EffectLayer {
 
         return hl;
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for highlightLayer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerHighlightLayer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Scene.prototype.getHighlightLayerByName = function (name: string): Nullable<HighlightLayer> {
+        for (let index = 0; index < this.effectLayers?.length; index++) {
+            if (this.effectLayers[index].name === name && this.effectLayers[index].getEffectName() === HighlightLayer.EffectName) {
+                return (<any>this.effectLayers[index]) as HighlightLayer;
+            }
+        }
+
+        return null;
+    };
+
+    RegisterClass("BABYLON.HighlightLayer", HighlightLayer);
 }

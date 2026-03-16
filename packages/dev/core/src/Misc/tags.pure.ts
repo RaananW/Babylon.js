@@ -1,5 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./tags.types";
+
 import { AndOrNotEvaluator } from "./andOrNotEvaluator";
 
 /**
@@ -162,4 +164,35 @@ export function TagsMatchesQuery(obj: any, tagsQuery: string): boolean {
     }
 
     return AndOrNotEvaluator.Eval(tagsQuery, (r) => TagsHasTags(obj) && obj._tags[r]);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for tags.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerTags(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Tags.EnableFor = TagsEnableFor;
+
+    Tags.DisableFor = TagsDisableFor;
+
+    Tags.HasTags = TagsHasTags;
+
+    Tags.GetTags = TagsGetTags;
+
+    Tags.AddTagsTo = TagsAddTagsTo;
+
+    Tags._AddTagTo = Tags_AddTagTo;
+
+    Tags.RemoveTagsFrom = TagsRemoveTagsFrom;
+
+    Tags._RemoveTagFrom = Tags_RemoveTagFrom;
+
+    Tags.MatchesQuery = TagsMatchesQuery;
 }

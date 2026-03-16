@@ -5,6 +5,8 @@ import type { InternalTexture } from "../../Materials/Textures/internalTexture";
 import type { IHardwareTextureWrapper } from "../../Materials/Textures/hardwareTextureWrapper";
 
 /** @internal */
+
+export * from "./webgpuTextureHelper.types";
 /** @internal */
 export class WebGPUTextureHelper {}
 
@@ -827,4 +829,33 @@ export function WebGPUTextureHelperGetDepthFormatOnly(format: GPUTextureFormat):
 export function WebGPUTextureHelperGetSample(sampleCount: number) {
     // WebGPU only supports 1 or 4
     return sampleCount > 1 ? 4 : 1;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for webgpuTextureHelper.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerWebgpuTextureHelper(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    WebGPUTextureHelper.ComputeNumMipmapLevels = WebGPUTextureHelperComputeNumMipmapLevels;
+    WebGPUTextureHelper.GetTextureTypeFromFormat = WebGPUTextureHelperGetTextureTypeFromFormat;
+    WebGPUTextureHelper.GetBlockInformationFromFormat = WebGPUTextureHelperGetBlockInformationFromFormat;
+    WebGPUTextureHelper.IsHardwareTexture = WebGPUTextureHelperIsHardwareTexture;
+    WebGPUTextureHelper.IsInternalTexture = WebGPUTextureHelperIsInternalTexture;
+    WebGPUTextureHelper.IsImageBitmap = WebGPUTextureHelperIsImageBitmap;
+    WebGPUTextureHelper.IsImageBitmapArray = WebGPUTextureHelperIsImageBitmapArray;
+    WebGPUTextureHelper.IsCompressedFormat = WebGPUTextureHelperIsCompressedFormat;
+    WebGPUTextureHelper.GetWebGPUTextureFormat = WebGPUTextureHelperGetWebGPUTextureFormat;
+    WebGPUTextureHelper.GetNumChannelsFromWebGPUTextureFormat = WebGPUTextureHelperGetNumChannelsFromWebGPUTextureFormat;
+    WebGPUTextureHelper.HasStencilAspect = WebGPUTextureHelperHasStencilAspect;
+    WebGPUTextureHelper.HasDepthAspect = WebGPUTextureHelperHasDepthAspect;
+    WebGPUTextureHelper.HasDepthAndStencilAspects = WebGPUTextureHelperHasDepthAndStencilAspects;
+    WebGPUTextureHelper.GetDepthFormatOnly = WebGPUTextureHelperGetDepthFormatOnly;
+    WebGPUTextureHelper.GetSample = WebGPUTextureHelperGetSample;
 }

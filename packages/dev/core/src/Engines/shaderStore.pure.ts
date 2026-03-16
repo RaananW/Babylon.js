@@ -3,6 +3,8 @@ import { ShaderLanguage } from "../Materials/shaderLanguage";
 /**
  * Defines the shader related stores and directory
  */
+
+export * from "./shaderStore.types";
 export class ShaderStore {
     /**
      * Gets or sets the relative url used to load shaders if using the engine in non-minified mode
@@ -56,4 +58,21 @@ export function ShaderStoreGetShadersStore(shaderLanguage = ShaderLanguage.GLSL)
  */
 export function ShaderStoreGetIncludesShadersStore(shaderLanguage = ShaderLanguage.GLSL): { [key: string]: string } {
     return shaderLanguage === ShaderLanguage.GLSL ? ShaderStore.IncludesShadersStore : ShaderStore.IncludesShadersStoreWGSL;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for shaderStore.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerShaderStore(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    ShaderStore.GetShadersRepository = ShaderStoreGetShadersRepository;
+    ShaderStore.GetShadersStore = ShaderStoreGetShadersStore;
+    ShaderStore.GetIncludesShadersStore = ShaderStoreGetIncludesShadersStore;
 }

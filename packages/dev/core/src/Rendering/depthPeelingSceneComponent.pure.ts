@@ -1,9 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "../scene.pure";
+export * from "./depthPeelingSceneComponent.types";
+
+import { Scene } from "../scene.pure";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import { DepthPeelingRenderer } from "./depthPeelingRenderer";
+import type { ThinDepthPeelingRenderer } from "./thinDepthPeelingRenderer";
+import { Constants } from "../Engines/constants";
 
 /**
  * Scene component to render order independent transparency with depth peeling
@@ -47,4 +51,52 @@ export class DepthPeelingSceneComponent implements ISceneComponent {
         this.scene.depthPeelingRenderer?.dispose();
         this.scene.depthPeelingRenderer = null;
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for depthPeelingSceneComponent.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerDepthPeelingSceneComponent(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Object.defineProperty(Scene.prototype, "depthPeelingRenderer", {
+        get: function (this: Scene) {
+            if (!this._depthPeelingRenderer) {
+                let component = this._getComponent(SceneComponentConstants.NAME_DEPTHPEELINGRENDERER) as DepthPeelingSceneComponent;
+                if (!component) {
+                    component = new DepthPeelingSceneComponent(this);
+                    this._addComponent(component);
+                }
+            }
+
+            return this._depthPeelingRenderer;
+        },
+        set: function (this: Scene, value: ThinDepthPeelingRenderer) {
+            this._depthPeelingRenderer = value;
+        },
+        enumerable: true,
+        configurable: true,
+    });
+
+    Object.defineProperty(Scene.prototype, "useOrderIndependentTransparency", {
+        get: function (this: Scene) {
+            return this._useOrderIndependentTransparency;
+        },
+        set: function (this: Scene, value: boolean) {
+            if (this._useOrderIndependentTransparency === value) {
+                return;
+            }
+            this._useOrderIndependentTransparency = value;
+            this.markAllMaterialsAsDirty(Constants.MATERIAL_AllDirtyFlag);
+            this.prePassRenderer?.markAsDirty();
+        },
+        enumerable: true,
+        configurable: true,
+    });
 }

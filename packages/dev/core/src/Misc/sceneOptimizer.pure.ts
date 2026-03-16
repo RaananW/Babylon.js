@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
+export * from "./sceneOptimizer.types";
 import type { Scene, IDisposable } from "../scene";
 import { EngineStore } from "../Engines/engineStore";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
@@ -872,4 +874,22 @@ export function SceneOptimizerOptimizeAsync(scene: Scene, options?: SceneOptimiz
     optimizer.start();
 
     return optimizer;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for sceneOptimizer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerSceneOptimizer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    SceneOptimizerOptions.LowDegradationAllowed = SceneOptimizerOptionsLowDegradationAllowed;
+    SceneOptimizerOptions.ModerateDegradationAllowed = SceneOptimizerOptionsModerateDegradationAllowed;
+    SceneOptimizerOptions.HighDegradationAllowed = SceneOptimizerOptionsHighDegradationAllowed;
+    SceneOptimizer.OptimizeAsync = SceneOptimizerOptimizeAsync;
 }

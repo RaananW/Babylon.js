@@ -1,11 +1,14 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./iblCdfGeneratorSceneComponent.types";
+
 import type { Nullable } from "../types";
-import type { Scene } from "../scene.pure";
+import { Scene } from "../scene.pure";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import type { Observer } from "../Misc/observable";
+import { IblCdfGenerator } from "./iblCdfGenerator";
 
 /**
  * Defines the IBL CDF Generator scene component responsible for generating CDF maps for a given IBL.
@@ -59,4 +62,64 @@ export class IblCdfGeneratorSceneComponent implements ISceneComponent {
     }
 
     private _newIblObserver: Nullable<Observer<Nullable<BaseTexture>>> = null;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for iblCdfGeneratorSceneComponent.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerIblCdfGeneratorSceneComponent(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Object.defineProperty(Scene.prototype, "iblCdfGenerator", {
+        get: function (this: Scene) {
+            return this._iblCdfGenerator;
+        },
+        set: function (this: Scene, value: Nullable<IblCdfGenerator>) {
+            if (value) {
+                this._iblCdfGenerator = value;
+            }
+        },
+        enumerable: true,
+        configurable: true,
+    });
+
+    Scene.prototype.enableIblCdfGenerator = function (): Nullable<IblCdfGenerator> {
+        if (this._iblCdfGenerator) {
+            return this._iblCdfGenerator;
+        }
+
+        this._iblCdfGenerator = new IblCdfGenerator(this);
+        if (!this._iblCdfGenerator.isSupported) {
+            this._iblCdfGenerator = null;
+            return null;
+        }
+        if (this.environmentTexture) {
+            this._iblCdfGenerator.iblSource = this.environmentTexture;
+        }
+        return this._iblCdfGenerator;
+    };
+
+    Scene.prototype.disableIblCdfGenerator = function (): void {
+        if (!this._iblCdfGenerator) {
+            return;
+        }
+
+        this._iblCdfGenerator.dispose();
+        this._iblCdfGenerator = null;
+    };
+
+    IblCdfGenerator._SceneComponentInitialization = (scene: Scene) => {
+        // Register the CDF generator component to the scene.
+        let component = scene._getComponent(SceneComponentConstants.NAME_IBLCDFGENERATOR) as IblCdfGeneratorSceneComponent;
+        if (!component) {
+            component = new IblCdfGeneratorSceneComponent(scene);
+            scene._addComponent(component);
+        }
+    };
 }

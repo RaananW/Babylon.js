@@ -12,6 +12,8 @@ import type { DrawWrapper } from "../Materials/drawWrapper";
 /**
  * Class used to store bounding box information
  */
+
+export * from "./boundingBox.types";
 export class BoundingBox implements ICullable {
     /**
      * Gets the 8 vectors representing the bounding box in local space
@@ -362,4 +364,21 @@ export function BoundingBoxIsInFrustum(boundingVectors: Array<DeepImmutable<Vect
         }
     }
     return true;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for boundingBox.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerBoundingBox(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    BoundingBox.Intersects = BoundingBoxIntersects;
+    BoundingBox.IsCompletelyInFrustum = BoundingBoxIsCompletelyInFrustum;
+    BoundingBox.IsInFrustum = BoundingBoxIsInFrustum;
 }

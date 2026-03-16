@@ -1,5 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./math.frustum.types";
+
 import type { Matrix, Vector3 } from "./math.vector";
 import type { DeepImmutable } from "../types";
 import { Plane } from "./math.plane.pure";
@@ -145,4 +147,27 @@ export function FrustumIsPointInFrustum(point: Vector3, frustumPlanes: Array<Dee
         }
     }
     return true;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for math.frustum.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerMathFrustum(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Frustum.GetPlanes = FrustumGetPlanes;
+    Frustum.GetNearPlaneToRef = FrustumGetNearPlaneToRef;
+    Frustum.GetFarPlaneToRef = FrustumGetFarPlaneToRef;
+    Frustum.GetLeftPlaneToRef = FrustumGetLeftPlaneToRef;
+    Frustum.GetRightPlaneToRef = FrustumGetRightPlaneToRef;
+    Frustum.GetTopPlaneToRef = FrustumGetTopPlaneToRef;
+    Frustum.GetBottomPlaneToRef = FrustumGetBottomPlaneToRef;
+    Frustum.GetPlanesToRef = FrustumGetPlanesToRef;
+    Frustum.IsPointInFrustum = FrustumIsPointInFrustum;
 }

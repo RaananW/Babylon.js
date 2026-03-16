@@ -8,6 +8,8 @@ import type { Nullable } from "../../types";
 /**
  * Defines the general structure of what is necessary for a collection strategy.
  */
+
+export * from "./performanceViewerCollectionStrategies.types";
 export interface IPerfViewerCollectionStrategy {
     /**
      * The id of the strategy.
@@ -557,4 +559,44 @@ export function PerfCollectionStrategyGpuFrameTimeStrategy(): PerfStrategyInitia
             },
         };
     };
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for performanceViewerCollectionStrategies.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerPerformanceViewerCollectionStrategies(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    PerfCollectionStrategy.FpsStrategy = PerfCollectionStrategyFpsStrategy;
+    PerfCollectionStrategy.ThermalStrategy = PerfCollectionStrategyThermalStrategy;
+    PerfCollectionStrategy.PowerSupplyStrategy = PerfCollectionStrategyPowerSupplyStrategy;
+    PerfCollectionStrategy.PressureStrategy = PerfCollectionStrategyPressureStrategy;
+    PerfCollectionStrategy.TotalMeshesStrategy = PerfCollectionStrategyTotalMeshesStrategy;
+    PerfCollectionStrategy.ActiveMeshesStrategy = PerfCollectionStrategyActiveMeshesStrategy;
+    PerfCollectionStrategy.ActiveIndicesStrategy = PerfCollectionStrategyActiveIndicesStrategy;
+    PerfCollectionStrategy.ActiveFacesStrategy = PerfCollectionStrategyActiveFacesStrategy;
+    PerfCollectionStrategy.ActiveBonesStrategy = PerfCollectionStrategyActiveBonesStrategy;
+    PerfCollectionStrategy.ActiveParticlesStrategy = PerfCollectionStrategyActiveParticlesStrategy;
+    PerfCollectionStrategy.DrawCallsStrategy = PerfCollectionStrategyDrawCallsStrategy;
+    PerfCollectionStrategy.TotalLightsStrategy = PerfCollectionStrategyTotalLightsStrategy;
+    PerfCollectionStrategy.TotalVerticesStrategy = PerfCollectionStrategyTotalVerticesStrategy;
+    PerfCollectionStrategy.TotalMaterialsStrategy = PerfCollectionStrategyTotalMaterialsStrategy;
+    PerfCollectionStrategy.TotalTexturesStrategy = PerfCollectionStrategyTotalTexturesStrategy;
+    PerfCollectionStrategy.AbsoluteFpsStrategy = PerfCollectionStrategyAbsoluteFpsStrategy;
+    PerfCollectionStrategy.MeshesSelectionStrategy = PerfCollectionStrategyMeshesSelectionStrategy;
+    PerfCollectionStrategy.RenderTargetsStrategy = PerfCollectionStrategyRenderTargetsStrategy;
+    PerfCollectionStrategy.ParticlesStrategy = PerfCollectionStrategyParticlesStrategy;
+    PerfCollectionStrategy.SpritesStrategy = PerfCollectionStrategySpritesStrategy;
+    PerfCollectionStrategy.AnimationsStrategy = PerfCollectionStrategyAnimationsStrategy;
+    PerfCollectionStrategy.PhysicsStrategy = PerfCollectionStrategyPhysicsStrategy;
+    PerfCollectionStrategy.RenderStrategy = PerfCollectionStrategyRenderStrategy;
+    PerfCollectionStrategy.FrameTotalStrategy = PerfCollectionStrategyFrameTotalStrategy;
+    PerfCollectionStrategy.InterFrameStrategy = PerfCollectionStrategyInterFrameStrategy;
+    PerfCollectionStrategy.GpuFrameTimeStrategy = PerfCollectionStrategyGpuFrameTimeStrategy;
 }

@@ -1,10 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./outlineRenderer.types";
+
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { _InstancesBatch } from "../Meshes/mesh";
-import type { Mesh } from "../Meshes/mesh.pure";
-import type { Scene } from "../scene.pure";
+import { Mesh } from "../Meshes/mesh.pure";
+import { Scene } from "../scene.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { Constants } from "../Engines/constants";
 import type { ISceneComponent } from "../sceneComponent";
@@ -424,4 +426,54 @@ export class OutlineRenderer implements ISceneComponent {
             this._engine.setColorWrite(true);
         }
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for outlineRenderer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerOutlineRenderer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Scene.prototype.getOutlineRenderer = function (): OutlineRenderer {
+        if (!this._outlineRenderer) {
+            this._outlineRenderer = new OutlineRenderer(this);
+        }
+        return this._outlineRenderer;
+    };
+
+    Object.defineProperty(Mesh.prototype, "renderOutline", {
+        get: function (this: Mesh) {
+            return this._renderOutline;
+        },
+        set: function (this: Mesh, value: boolean) {
+            if (value) {
+                // Lazy Load the component.
+                this.getScene().getOutlineRenderer();
+            }
+            this._renderOutline = value;
+        },
+        enumerable: true,
+        configurable: true,
+    });
+
+    Object.defineProperty(Mesh.prototype, "renderOverlay", {
+        get: function (this: Mesh) {
+            return this._renderOverlay;
+        },
+        set: function (this: Mesh, value: boolean) {
+            if (value) {
+                // Lazy Load the component.
+                this.getScene().getOutlineRenderer();
+            }
+            this._renderOverlay = value;
+        },
+        enumerable: true,
+        configurable: true,
+    });
 }

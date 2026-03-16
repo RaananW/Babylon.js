@@ -1,7 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./prePassRendererSceneComponent.types";
+
 import type { Nullable } from "../types";
-import type { Scene } from "../scene.pure";
+import { Scene } from "../scene.pure";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
@@ -10,6 +12,8 @@ import type { _InstancesBatch } from "../Meshes/mesh";
 import type { Effect } from "../Materials/effect";
 import type { Camera } from "../Cameras/camera";
 import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
+import { PrePassRenderer } from "./prePassRenderer";
+import { Logger } from "../Misc/logger";
 
 /**
  * Defines the Geometry Buffer scene component responsible to manage a G-Buffer useful
@@ -127,4 +131,63 @@ export class PrePassRendererSceneComponent implements ISceneComponent {
     public dispose(): void {
         this.scene.disablePrePassRenderer();
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for prePassRendererSceneComponent.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerPrePassRendererSceneComponent(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Object.defineProperty(Scene.prototype, "prePassRenderer", {
+        get: function (this: Scene) {
+            return this._prePassRenderer;
+        },
+        set: function (this: Scene, value: Nullable<PrePassRenderer>) {
+            if (value && value.isSupported) {
+                this._prePassRenderer = value;
+            }
+        },
+        enumerable: true,
+        configurable: true,
+    });
+
+    Scene.prototype.enablePrePassRenderer = function (): Nullable<PrePassRenderer> {
+        if (this._prePassRenderer) {
+            return this._prePassRenderer;
+        }
+
+        this._prePassRenderer = new PrePassRenderer(this);
+
+        if (!this._prePassRenderer.isSupported) {
+            this._prePassRenderer = null;
+            Logger.Error("PrePassRenderer needs WebGL 2 support.\n" + "Maybe you tried to use the following features that need the PrePassRenderer :\n" + " + Subsurface Scattering");
+        }
+
+        return this._prePassRenderer;
+    };
+
+    Scene.prototype.disablePrePassRenderer = function (): void {
+        if (!this._prePassRenderer) {
+            return;
+        }
+
+        this._prePassRenderer.dispose();
+        this._prePassRenderer = null;
+    };
+
+    PrePassRenderer._SceneComponentInitialization = (scene: Scene) => {
+        // Register the G Buffer component to the scene.
+        let component = scene._getComponent(SceneComponentConstants.NAME_PREPASSRENDERER) as PrePassRendererSceneComponent;
+        if (!component) {
+            component = new PrePassRendererSceneComponent(scene);
+            scene._addComponent(component);
+        }
+    };
 }

@@ -1,5 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./math.path.types";
+
 import type { DeepImmutable, Nullable } from "../types";
 import { Clamp, WithinEpsilon } from "./math.scalar.functions";
 import { Vector2, Vector3, Quaternion, Matrix } from "./math.vector.pure";
@@ -1197,4 +1199,35 @@ export function Curve3ArcThru3Points(first: Vector3, second: Vector3, third: Vec
         }
     }
     return new Curve3(arc);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for math.path.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerMathPath(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    BezierCurve.Interpolate = BezierCurveInterpolate;
+
+    // Angle static methods
+    Angle.BetweenTwoPoints = AngleBetweenTwoPoints;
+    Angle.BetweenTwoVectors = AngleBetweenTwoVectors;
+    Angle.FromRadians = AngleFromRadians;
+    Angle.FromDegrees = AngleFromDegrees;
+
+    // Path2 static methods
+    Path2.StartingAt = Path2StartingAt;
+
+    // Curve3 static methods
+    Curve3.CreateQuadraticBezier = Curve3CreateQuadraticBezier;
+    Curve3.CreateCubicBezier = Curve3CreateCubicBezier;
+    Curve3.CreateHermiteSpline = Curve3CreateHermiteSpline;
+    Curve3.CreateCatmullRomSpline = Curve3CreateCatmullRomSpline;
+    Curve3.ArcThru3Points = Curve3ArcThru3Points;
 }

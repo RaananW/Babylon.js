@@ -1,4 +1,6 @@
 /** This file must only contain pure code and pure imports */
+
+export * from "./decorators.serialization.types";
 import type { FresnelParameters } from "../Materials/fresnelParameters";
 import type { ImageProcessingConfiguration } from "../Materials/imageProcessingConfiguration";
 import { _WarnImport } from "./devTools";
@@ -326,4 +328,24 @@ export function SerializationHelperClone<T>(creationFunction: () => T, source: T
  */
 export function SerializationHelperInstanciate<T>(creationFunction: () => T, source: T): T {
     return CopySource(creationFunction, source, true);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for decorators.serialization.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerDecoratorsSerialization(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    SerializationHelper.AppendSerializedAnimations = SerializationHelperAppendSerializedAnimations;
+    SerializationHelper.Serialize = SerializationHelperSerialize;
+    SerializationHelper.ParseProperties = SerializationHelperParseProperties;
+    SerializationHelper.Parse = SerializationHelperParse;
+    SerializationHelper.Clone = SerializationHelperClone;
+    SerializationHelper.Instanciate = SerializationHelperInstanciate;
 }

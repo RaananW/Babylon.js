@@ -1,35 +1,4 @@
-/**
- * Re-exports pure implementation and applies runtime side effects.
- * Import standardMaterial.decalMap.pure for tree-shakeable, side-effect-free usage.
- */
 export * from "./standardMaterial.decalMap.pure";
 
-import { DecalMapConfiguration } from "./material.decalMapConfiguration";
-import { StandardMaterial } from "./standardMaterial";
-import type { Nullable } from "core/types";
-
-declare module "./standardMaterial" {
-    /**
-     *
-     */
-    export interface StandardMaterial {
-        /** @internal */
-        _decalMap: Nullable<DecalMapConfiguration>;
-
-        /**
-         * Defines the decal map parameters for the material.
-         */
-        decalMap: Nullable<DecalMapConfiguration>;
-    }
-}
-
-Object.defineProperty(StandardMaterial.prototype, "decalMap", {
-    get: function (this: StandardMaterial) {
-        if (!this._decalMap) {
-            this._decalMap = new DecalMapConfiguration(this);
-        }
-        return this._decalMap;
-    },
-    enumerable: true,
-    configurable: true,
-});
+import { registerStandardMaterialDecalMap } from "./standardMaterial.decalMap.pure";
+registerStandardMaterialDecalMap();

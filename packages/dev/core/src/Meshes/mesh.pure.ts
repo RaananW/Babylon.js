@@ -1,5 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./mesh.types";
+
 import type { Observer } from "../Misc/observable";
 import { Observable } from "../Misc/observable";
 import { AsyncLoop, ToolsLoadImage, ToolsLoadFile } from "../Misc/tools.pure";
@@ -51,6 +53,7 @@ import type { LinesMesh } from "./linesMesh";
 import type { GroundMesh } from "./groundMesh";
 import type { DataBuffer } from "core/Buffers/dataBuffer";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
+import { RegisterClass } from "../Misc/typeStore";
 
 /* eslint-disable jsdoc/require-returns-check */
 
@@ -5900,4 +5903,75 @@ export function MeshCreateCapsule(_name: string, _options: ICreateCapsuleOptions
  */
 export function MeshExtendToGoldberg(_mesh: Mesh): Mesh {
     throw new Error("Import MeshBuilder to populate this function");
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for mesh.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerMesh(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Mesh._GetDefaultSideOrientation = Mesh_GetDefaultSideOrientation;
+
+    Mesh.MinMax = MeshMinMax;
+
+    Mesh.Center = MeshCenter;
+
+    Mesh.CreateRibbon = MeshCreateRibbon;
+
+    Mesh.CreateDisc = MeshCreateDisc;
+
+    Mesh.CreateBox = MeshCreateBox;
+
+    Mesh.CreateSphere = MeshCreateSphere;
+
+    Mesh.CreateHemisphere = MeshCreateHemisphere;
+
+    Mesh.CreateCylinder = MeshCreateCylinder;
+
+    Mesh.CreateTorus = MeshCreateTorus;
+
+    Mesh.CreateTorusKnot = MeshCreateTorusKnot;
+
+    Mesh.CreateLines = MeshCreateLines;
+
+    Mesh.CreateDashedLines = MeshCreateDashedLines;
+
+    Mesh.CreatePolygon = MeshCreatePolygon;
+
+    Mesh.ExtrudePolygon = MeshExtrudePolygon;
+
+    Mesh.ExtrudeShape = MeshExtrudeShape;
+
+    Mesh.ExtrudeShapeCustom = MeshExtrudeShapeCustom;
+
+    Mesh.CreateLathe = MeshCreateLathe;
+
+    Mesh.CreatePlane = MeshCreatePlane;
+
+    Mesh.CreateGround = MeshCreateGround;
+
+    Mesh.CreateTiledGround = MeshCreateTiledGround;
+
+    Mesh.CreateGroundFromHeightMap = MeshCreateGroundFromHeightMap;
+
+    Mesh.CreateTube = MeshCreateTube;
+
+    Mesh.CreatePolyhedron = MeshCreatePolyhedron;
+
+    Mesh.CreateIcoSphere = MeshCreateIcoSphere;
+
+    Mesh.CreateDecal = MeshCreateDecal;
+
+    Mesh.CreateCapsule = MeshCreateCapsule;
+
+    Mesh.ExtendToGoldberg = MeshExtendToGoldberg;
+
+    RegisterClass("BABYLON.Mesh", Mesh);
 }

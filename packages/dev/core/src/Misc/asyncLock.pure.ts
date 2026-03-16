@@ -15,6 +15,8 @@ import { Deferred } from "./deferred";
  * }
  * ```
  */
+
+export * from "./asyncLock.types";
 export class AsyncLock {
     private _currentOperation: Promise<void> = Promise.resolve();
 
@@ -76,4 +78,19 @@ export async function AsyncLockLockAsync<T>(func: () => T | Promise<T>, locks: A
     }
 
     return await deferred.promise;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for asyncLock.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerAsyncLock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    AsyncLock.LockAsync = AsyncLockLockAsync;
 }

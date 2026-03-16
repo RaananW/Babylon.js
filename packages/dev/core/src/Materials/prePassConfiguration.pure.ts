@@ -7,6 +7,8 @@ import { Constants } from "../Engines/constants";
 /**
  * Configuration needed for prepass-capable materials
  */
+
+export * from "./prePassConfiguration.types";
 export class PrePassConfiguration {
     /**
      * Previous world matrices of meshes carrying this material
@@ -92,4 +94,20 @@ export function PrePassConfigurationAddUniforms(uniforms: string[]): void {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function PrePassConfigurationAddSamplers(samplers: string[]): void {
     // pass
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for prePassConfiguration.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerPrePassConfiguration(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    PrePassConfiguration.AddUniforms = PrePassConfigurationAddUniforms;
+    PrePassConfiguration.AddSamplers = PrePassConfigurationAddSamplers;
 }

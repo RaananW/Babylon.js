@@ -410,6 +410,17 @@ Phase 0 (Audit tooling)  ← DONE
                                       ├─> 7.2 (fix 788 pure→non-pure imports)
                                       ├─> 7.3 (add exports field to package.json)
                                       └─> 7.4 (add bare-import detection to audit)
+                                            └─> Phase 8 (tree-shakeable shader includes)
+                                            └─> Phase 9 (callable registration functions)
+                                                  ├─> 9.1 (pilot: physics)
+                                                  ├─> 9.2 (pilot: engine extension)
+                                                  ├─> 9.3 (automation script)
+                                                  ├─> 9.4 (prototype augmentations ×84)
+                                                  ├─> 9.5 (AddNodeConstructor ×25)
+                                                  ├─> 9.6 (update pure barrels)
+                                                  ├─> 9.7 (update sideEffects manifest)
+                                                  ├─> 9.8 (bundle smoke tests)
+                                                  └─> 9.9 (update instructions)
                                             └─> Phase 8 (tree-shakeable shader includes)  ← IN PROGRESS
                                                   ├─> 8.1 (new build templates)
                                                   ├─> 8.2 (flatten transitive includes)
@@ -770,6 +781,259 @@ handles cross-package include resolution.
 | Files in `sideEffects` array (shader-related) | ~331   | **~167** |
 | Tree-shakeable include files                  | 0      | **~164** |
 | Unused include elimination                    | No     | **Yes**  |
+
+## Phase 9 — Callable Side-Effect Registration Functions
+
+### Problem Statement
+
+The current architecture requires consumers to use **bare side-effect imports** to opt into
+prototype augmentations and other runtime extensions:
+
+```ts
+import "@babylonjs/core/Physics/joinedPhysicsEngineComponent"; // side-effect, not tree-shakeable
+```
+
+This pattern has three problems:
+
+1. **Opaque and non-discoverable** — there's no function to find via autocomplete; you must know
+   the file path or consult documentation
+2. **Not tree-shakeable from a single barrel** — a barrel file that re-exports everything
+   (including side effects) cannot be tree-shaken, because bare imports have no named bindings
+   for the bundler to analyze
+3. **All-or-nothing** — importing the file runs _every_ side effect it contains, even if the
+   consumer only needs a subset
+
+### Solution: Wrap Side Effects in Callable Functions
+
+Move the runtime side effects (prototype assignments, `RegisterClass`, `AddNodeConstructor`, etc.)
+into an **exported function** in the pure file. The non-pure file calls that function at module
+scope for backward compatibility. Consumers using the pure barrel can call the function explicitly.
+
+#### File Architecture (Option C — Separate Types)
+
+Each side-effect module becomes **three files**:
+
+```
+component.types.ts   — declare module augmentation (types only, zero runtime bytes)
+component.pure.ts    — registration function + pure code
+                        export * from "./component.types"; ← re-exports types
+component.ts         — backward-compatible wrapper:
+                        export * from "./component.pure"; ← includes types transitively
+                        import { registerComponent } from "./component.pure";
+                        registerComponent();               ← side effect
+```
+
+**Key design decisions:**
+
+- **`.types.ts` IS re-exported from `.pure.ts`** — since `declare module` blocks are globally
+  ambient (visible everywhere once part of the compilation), isolating them from the pure barrel
+  has no real effect. Re-exporting from `.pure.ts` is more consistent: importing from `.pure.ts`
+  gives you both the registration function and the augmented types in one import.
+- **`.ts` re-exports `.pure.ts`** — which transitively includes `.types.ts`, so legacy consumers
+  who `import "...component"` get both the side effects and the types, matching today's behavior.
+- The registration function is **idempotent** — a `_registered` guard ensures double-calls
+  (e.g., from both a manual call and a transitive non-pure import) are harmless.
+
+#### Naming Convention
+
+Registration functions use **`register` + PascalCase(filename)**:
+
+| File                              | Function Name                            |
+| --------------------------------- | ---------------------------------------- |
+| `joinedPhysicsEngineComponent.ts` | `registerJoinedPhysicsEngineComponent()` |
+| `engine.videoTexture.ts`          | `registerEngineVideoTexture()`           |
+| `depthRendererSceneComponent.ts`  | `registerDepthRendererSceneComponent()`  |
+| `engine.multiRender.ts`           | `registerEngineMultiRender()`            |
+| `boundingBoxRenderer.ts`          | `registerBoundingBoxRenderer()`          |
+| `engine.uniformBuffer.ts`         | `registerEngineUniformBuffer()`          |
+
+**Rationale**: Typing `register` in an IDE lists all available registration functions.
+The name maps 1:1 to the filename, so existing knowledge of side-effect import paths transfers
+directly. The pattern is fully automatable — no human-curated names needed.
+
+#### Pattern: Prototype Augmentation (e.g., `joinedPhysicsEngineComponent`)
+
+**`joinedPhysicsEngineComponent.types.ts`** — types only:
+
+```ts
+import type { Nullable } from "../types";
+import type { Vector3 } from "../Maths/math.vector.pure";
+import type { IPhysicsEngine } from "./IPhysicsEngine";
+import type { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin";
+import type { IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin";
+import type { Observable } from "../Misc/observable";
+import type { Scene } from "../scene.pure";
+
+declare module "../scene.pure" {
+    export interface Scene {
+        /** @internal */ _physicsEngine: Nullable<IPhysicsEngine>;
+        /** @internal */ _physicsTimeAccumulator: number;
+        getPhysicsEngine(): Nullable<IPhysicsEngine>;
+        enablePhysics(gravity?: Nullable<Vector3>, plugin?: IPhysicsEnginePluginV1 | IPhysicsEnginePluginV2): boolean;
+        disablePhysicsEngine(): void;
+        isPhysicsEnabled(): boolean;
+        deleteCompoundImpostor(compound: any): void;
+        /** @internal */ _advancePhysicsEngineStep(step: number): void;
+        onBeforePhysicsObservable: Observable<Scene>;
+        onAfterPhysicsObservable: Observable<Scene>;
+    }
+}
+```
+
+**`joinedPhysicsEngineComponent.pure.ts`** — registration function:
+
+```ts
+export * from "./joinedPhysicsEngineComponent.types";
+export { PhysicsEngineSceneComponent } from "./joinedPhysicsEngineComponent.impl";
+
+import { Scene } from "../scene.pure";
+// ... other imports ...
+
+let _registered = false;
+export function registerJoinedPhysicsEngineComponent() {
+    if (_registered) return;
+    _registered = true;
+
+    Scene.prototype.getPhysicsEngine = function (): Nullable<IPhysicsEngine> {
+        return this._physicsEngine ?? null;
+    };
+    // ... rest of prototype assignments ...
+}
+```
+
+**`joinedPhysicsEngineComponent.ts`** — backward-compatible wrapper:
+
+```ts
+export * from "./joinedPhysicsEngineComponent.pure";
+import { registerJoinedPhysicsEngineComponent } from "./joinedPhysicsEngineComponent.pure";
+registerJoinedPhysicsEngineComponent();
+```
+
+#### Pattern: `RegisterClass`-only files
+
+Files that only have `RegisterClass` calls don't need a `.types.ts` (no `declare module`).
+The pure file already exists from Phase 2. The registration function wraps the `RegisterClass` call:
+
+```ts
+// camera.pure.ts — class definition (already exists from Phase 2)
+export class Camera extends Node { ... }
+
+// In camera.pure.ts — add registration function:
+import { RegisterClass } from "../Misc/typeStore";
+let _registered = false;
+export function registerCamera() {
+    if (_registered) return;
+    _registered = true;
+    RegisterClass("BABYLON.Camera", Camera);
+}
+
+// camera.ts — backward-compatible wrapper (simplified from current):
+export * from "./camera.pure";
+import { registerCamera } from "./camera.pure";
+registerCamera();
+```
+
+Wait — this would make `.pure.ts` import `RegisterClass` which is itself a runtime side-effect
+concern. **Alternative**: keep `RegisterClass` calls in the non-pure file as today. Only prototype
+augmentations and `AddNodeConstructor` calls get the registration function pattern, since those
+are the ones that block tree-shaking of classes like `Engine` and `Scene`.
+
+**Decision**: Phase 9 targets **only prototype augmentation files (~84 files, 344 assignments)**
+and **`AddNodeConstructor` files (~25 files)** — the side effects that actually block useful
+code from being tree-shaken. `RegisterClass` splits are already handled by Phase 2 and don't
+need callable functions (they're simple file-level isolation).
+
+#### Consumer Experience
+
+```ts
+// === Legacy (unchanged, backward compatible) ===
+import { Scene } from "@babylonjs/core/scene";
+import "@babylonjs/core/Physics/joinedPhysicsEngineComponent"; // side-effect
+scene.enablePhysics(); // ✅ types visible, runtime works
+
+// === Pure barrel — explicit registration ===
+import { Scene } from "@babylonjs/core/scene.pure";
+import { registerJoinedPhysicsEngineComponent } from "@babylonjs/core/Physics/joinedPhysicsEngineComponent.pure";
+import "@babylonjs/core/Physics/joinedPhysicsEngineComponent.types"; // opt-in types
+registerJoinedPhysicsEngineComponent();
+scene.enablePhysics(); // ✅ types visible, runtime works
+
+// === Pure barrel — physics NOT imported ===
+import { Scene } from "@babylonjs/core/scene.pure";
+scene.enablePhysics(); // ❌ TypeScript error — .types.ts was never imported
+```
+
+### Scope
+
+| Category                    | Files | Side Effects | In Scope?                        |
+| --------------------------- | ----- | ------------ | -------------------------------- |
+| Prototype augmentations     | ~84   | 344          | ✅ Yes                           |
+| `AddNodeConstructor` calls  | ~25   | 26           | ✅ Yes                           |
+| `RegisterClass`-only        | ~406  | 535          | ❌ No (already split in Phase 2) |
+| Shader store writes         | ~331  | 331          | ❌ No (Phase 8)                  |
+| Static property assignments | ~59   | 66           | ❌ No (Phase 4)                  |
+
+### Implementation Steps
+
+- [x] **9.1** — Pilot: `Physics/joinedPhysicsEngineComponent` (manual, validate pattern)
+    - Create `.types.ts` with `declare module` blocks
+    - Move prototype assignments into `registerJoinedPhysicsEngineComponent()` in `.pure.ts`
+    - Update `.ts` wrapper to call function + re-export `.types.ts`
+    - Verify: TypeScript compilation, bundle smoke test, runtime behavior
+- [x] **9.2** — Pilot: `Engines/Extensions/engine.multiRender` (engine augmentation pattern)
+    - Same three-file split on a `ThinEngine.prototype` augmentation
+    - Verify the `declare module` target path resolves correctly for engine classes
+- [x] **9.3** — Automation script: `scripts/treeshaking/wrapSideEffects.mjs`
+    - Scan files with `declare module` blocks
+    - For each file:
+        1. Extract `declare module` blocks → `FILE.types.ts`
+        2. Wrap prototype assignments / side effects into `registerFILENAME()` function in `.pure.ts`
+        3. Add idempotency guard (`let _registered = false`)
+        4. Update `.ts` wrapper: `export * from ".pure"` + call registration function
+    - Handle mixed files (prototype + `RegisterClass`) — both go into the function
+    - Handle files that don't yet have a `.pure.ts` split — create manually (4 files)
+    - **Result**: 134 files batch-processed + 4 manual splits + 7 manual post-fixes = **0 TypeScript errors**
+- [x] **9.4** — Run automation on all ~139 `declare module` files (prototype augmentations + AddNodeConstructor + others)
+    - TypeScript compilation: **0 errors** ✅
+    - Bundle smoke tests: pending
+    - Verify runtime: pending
+- [ ] **9.6** — Update pure barrels (`generatePureBarrels.mjs`)
+    - Pure barrels now export the registration functions (but NOT `.types.ts`)
+    - Consumers of `@babylonjs/core/pure` see `registerXxx` in autocomplete
+    - Consumers of `@babylonjs/core` (non-pure) get everything as before
+- [ ] **9.7** — Update `sideEffects` manifest and sync
+    - Files that were side-effectful only due to prototype assignments may now become pure
+      (the `.pure.ts` file exports a function, which is pure — calling it is the side effect)
+    - Re-run `auditSideEffects.mjs`, regenerate manifest, sync to `package.json`
+- [ ] **9.8** — Add bundle smoke tests for registration functions
+    - Test: bare import of `.pure.ts` with registration function → 0-1 bytes (function tree-shaken)
+    - Test: import + call → bundles correctly
+    - Test: import `.types.ts` alone → 0 bytes (type-only)
+- [ ] **9.9** — Update `.github/instructions/side-effect-imports.instructions.md`
+    - Add new "pure path" import patterns alongside legacy patterns
+    - Document the `register` + `import .types.ts` two-import pattern
+
+### Impact Analysis
+
+| Metric                                                | Before | After    |
+| ----------------------------------------------------- | ------ | -------- |
+| Files requiring bare side-effect imports              | ~109   | **~0**   |
+| Prototype augmentations behind callable function      | 0      | **~344** |
+| `AddNodeConstructor` behind callable function         | 0      | **~26**  |
+| New `.types.ts` files                                 | 0      | **~91**  |
+| Registration functions discoverable via `register`    | 0      | **~109** |
+| `Engine` class tree-shakeable (without augmentations) | No     | **Yes**  |
+| `Scene` class tree-shakeable (without augmentations)  | No     | **Yes**  |
+
+### Risks & Mitigations
+
+| Risk                                            | Mitigation                                                |
+| ----------------------------------------------- | --------------------------------------------------------- |
+| `declare module` target path must match `.pure` | Script validates `declare module` specifier resolves      |
+| Double-registration (pure + legacy import)      | Idempotency guard (`_registered` flag)                    |
+| Missing `.types.ts` import → no autocomplete    | Legacy `.ts` re-exports types; only pure path affected    |
+| Consumers forget to call registration function  | Runtime crash is the same as forgetting bare import today |
+| Large PR size (~109 files × 3)                  | Process by directory (Engines/, Physics/, etc.)           |
 
 ## Risk Mitigation
 

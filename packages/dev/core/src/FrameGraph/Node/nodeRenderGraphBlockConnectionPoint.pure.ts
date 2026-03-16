@@ -12,6 +12,8 @@ import { NodeRenderGraphBlockConnectionPointTypes, NodeRenderGraphConnectionPoin
 /**
  * Defines a connection point for a block
  */
+
+export * from "./nodeRenderGraphBlockConnectionPoint.types";
 export class NodeRenderGraphConnectionPoint {
     private readonly _ownerBlock: NodeRenderGraphBlock;
     private _connectedPoint: Nullable<NodeRenderGraphConnectionPoint> = null;
@@ -404,4 +406,21 @@ export function NodeRenderGraphConnectionPointIsShadowGenerator(value: NodeRende
  */
 export function NodeRenderGraphConnectionPointIsShadowLight(value: NodeRenderGraphBlockConnectionPointValueType | undefined): boolean {
     return value !== undefined && (value as IShadowLight).setShadowProjectionMatrix !== undefined;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for nodeRenderGraphBlockConnectionPoint.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerNodeRenderGraphBlockConnectionPoint(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    NodeRenderGraphConnectionPoint.IsTextureHandle = NodeRenderGraphConnectionPointIsTextureHandle;
+    NodeRenderGraphConnectionPoint.IsShadowGenerator = NodeRenderGraphConnectionPointIsShadowGenerator;
+    NodeRenderGraphConnectionPoint.IsShadowLight = NodeRenderGraphConnectionPointIsShadowLight;
 }

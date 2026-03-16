@@ -1,5 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./renderTargetTexture.types";
+
 import type { Observer } from "../../Misc/observable";
 import { Observable } from "../../Misc/observable";
 import type { SmartArray } from "../../Misc/smartArray";
@@ -23,6 +25,7 @@ import type { AbstractEngine } from "../../Engines/abstractEngine";
 import type { IParticleSystem } from "core/Particles/IParticleSystem";
 import { Logger } from "../../Misc/logger";
 import { ObjectRenderer } from "core/Rendering/objectRenderer";
+import { Effect } from "../effect";
 
 /**
  * Options for the RenderTargetTexture constructor
@@ -1397,4 +1400,26 @@ export class RenderTargetTexture extends Texture implements IRenderTargetTexture
     public getViewCount() {
         return 1;
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for renderTargetTexture.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerRenderTargetTexture(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Effect.prototype.setDepthStencilTexture = function (channel: string, texture: Nullable<RenderTargetTexture>): void {
+        this._engine.setDepthStencilTexture(this._samplers[channel], this._uniforms[channel], texture, channel);
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Texture._CreateRenderTargetTexture = (name: string, renderTargetSize: number, scene: Scene, generateMipMaps: boolean, creationFlags?: number) => {
+        return new RenderTargetTexture(name, renderTargetSize, scene, generateMipMaps);
+    };
 }

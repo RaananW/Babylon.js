@@ -12,6 +12,8 @@ import { VertexData } from "./mesh.vertexData.pure";
 /**
  * Unique ID when we import meshes from Babylon to CSG
  */
+
+export * from "./csg.types";
 let CurrentCSGMeshId = 0;
 
 /**
@@ -1010,4 +1012,20 @@ export function CSGFromMesh(mesh: Mesh, absolute = false): CSG {
     CurrentCSGMeshId++;
 
     return csg;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for csg.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerCsg(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    CSG.FromVertexData = CSGFromVertexData;
+    CSG.FromMesh = CSGFromMesh;
 }

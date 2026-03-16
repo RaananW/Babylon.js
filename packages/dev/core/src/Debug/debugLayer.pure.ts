@@ -1,8 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./debugLayer.types";
+
 import { Tools } from "../Misc/tools.pure";
 import { Observable } from "../Misc/observable";
-import type { Scene } from "../scene.pure";
+import { Scene } from "../scene.pure";
 import { EngineStore } from "../Engines/engineStore";
 import type { IInspectable } from "../Misc/iInspectable";
 import type { Camera } from "../Cameras/camera";
@@ -438,4 +440,28 @@ export class DebugLayer {
             }
         });
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for debugLayer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerDebugLayer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Object.defineProperty(Scene.prototype, "debugLayer", {
+        get: function (this: Scene) {
+            if (!this._debugLayer) {
+                this._debugLayer = new DebugLayer(this);
+            }
+            return this._debugLayer;
+        },
+        enumerable: true,
+        configurable: true,
+    });
 }

@@ -1,6 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "core/scene.pure";
+export * from "./fluidRenderer.types";
+
+import { Scene } from "core/scene.pure";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import type { FloatArray, Nullable } from "core/types";
 import type { Observer } from "core/Misc/observable";
@@ -535,4 +537,43 @@ export class FluidRenderer {
         this.targetRenderers.length = 0;
         this._cameras.clear();
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for fluidRenderer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerFluidRenderer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Object.defineProperty(Scene.prototype, "fluidRenderer", {
+        get: function (this: Scene) {
+            return this._fluidRenderer;
+        },
+        set: function (this: Scene, value: Nullable<FluidRenderer>) {
+            this._fluidRenderer = value;
+        },
+        enumerable: true,
+        configurable: true,
+    });
+
+    Scene.prototype.enableFluidRenderer = function (): Nullable<FluidRenderer> {
+        if (this._fluidRenderer) {
+            return this._fluidRenderer;
+        }
+
+        this._fluidRenderer = new FluidRenderer(this);
+
+        return this._fluidRenderer;
+    };
+
+    Scene.prototype.disableFluidRenderer = function (): void {
+        this._fluidRenderer?.dispose();
+        this._fluidRenderer = null;
+    };
 }

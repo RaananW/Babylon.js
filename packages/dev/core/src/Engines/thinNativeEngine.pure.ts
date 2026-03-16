@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
+export * from "./thinNativeEngine.types";
 import type { Nullable, IndicesArray, DataArray, FloatArray, DeepImmutable, int } from "../types";
 
 import type { VertexBuffer } from "../Buffers/buffer";

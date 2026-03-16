@@ -1,12 +1,14 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./reflectionProbe.types";
+
 import { serializeAsMeshReference, serializeAsVector3 } from "../Misc/decorators";
 import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture.pure";
 import { Matrix, Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { Nullable } from "../types";
-import type { Scene } from "../scene.pure";
+import { Scene } from "../scene.pure";
 import { Constants } from "../Engines/constants";
 import type { UniformBuffer } from "../Materials/uniformBuffer";
 import type { IAssetContainer } from "core/IAssetContainer";
@@ -337,4 +339,40 @@ export function ReflectionProbeParse(parsedReflectionProbe: any, scene: Scene, r
     }
 
     return reflectionProbe;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for reflectionProbe.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerReflectionProbe(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    ReflectionProbe.Parse = ReflectionProbeParse;
+
+    Scene.prototype.removeReflectionProbe = function (toRemove: ReflectionProbe): number {
+        if (!this.reflectionProbes) {
+            return -1;
+        }
+
+        const index = this.reflectionProbes.indexOf(toRemove);
+        if (index !== -1) {
+            this.reflectionProbes.splice(index, 1);
+        }
+
+        return index;
+    };
+
+    Scene.prototype.addReflectionProbe = function (newReflectionProbe: ReflectionProbe): void {
+        if (!this.reflectionProbes) {
+            this.reflectionProbes = [];
+        }
+
+        this.reflectionProbes.push(newReflectionProbe);
+    };
 }

@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
+export * from "./dds.types";
 import { Clamp } from "../Maths/math.scalar.functions";
 import type { SphericalPolynomial } from "../Maths/sphericalPolynomial";
 import { Constants } from "../Engines/constants";
@@ -721,4 +723,19 @@ export function DDSToolsGetDDSInfo(data: ArrayBufferView): DDSInfo {
         dxgiFormat: dxgiFormat,
         textureType: textureType,
     };
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for dds.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerDds(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    DDSTools.GetDDSInfo = DDSToolsGetDDSInfo;
 }

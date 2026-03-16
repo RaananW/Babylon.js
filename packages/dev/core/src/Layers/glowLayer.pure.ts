@@ -1,7 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./glowLayer.types";
+
 import { serialize } from "../Misc/decorators";
-import type { Scene } from "../scene.pure";
+import { Scene } from "../scene.pure";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { Mesh } from "../Meshes/mesh";
@@ -19,6 +21,8 @@ import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/
 import { GetExponentOfTwo } from "../Misc/tools.functions";
 import { ThinGlowLayer } from "./thinGlowLayer";
 import type { ThinBlurPostProcess } from "core/PostProcesses/thinBlurPostProcess";
+import type { Nullable } from "../types";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * Glow layer options. This helps customizing the behaviour
@@ -540,4 +544,29 @@ export class GlowLayer extends EffectLayer {
 
         return gl;
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for glowLayer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerGlowLayer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Scene.prototype.getGlowLayerByName = function (name: string): Nullable<GlowLayer> {
+        for (let index = 0; index < this.effectLayers?.length; index++) {
+            if (this.effectLayers[index].name === name && this.effectLayers[index].getEffectName() === GlowLayer.EffectName) {
+                return (<any>this.effectLayers[index]) as GlowLayer;
+            }
+        }
+
+        return null;
+    };
+
+    RegisterClass("BABYLON.GlowLayer", GlowLayer);
 }

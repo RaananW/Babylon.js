@@ -11,6 +11,8 @@ import { ShaderLanguage } from "core/Materials/shaderLanguage";
 /**
  * Class used to host RGBD texture specific utilities
  */
+
+export * from "./rgbdTextureTools.types";
 export class RGBDTextureTools {}
 
 /**
@@ -145,4 +147,20 @@ export async function RGBDTextureToolsEncodeTextureToRGBD(
         await import("../ShadersWGSL/rgbdEncode.fragment");
     }
     return await ApplyPostProcess("rgbdEncode", internalTexture, scene, outputTextureType, Constants.TEXTURE_NEAREST_SAMPLINGMODE, Constants.TEXTUREFORMAT_RGBA);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for rgbdTextureTools.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerRgbdTextureTools(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RGBDTextureTools.ExpandRGBDTexture = RGBDTextureToolsExpandRGBDTexture;
+    RGBDTextureTools.EncodeTextureToRGBD = RGBDTextureToolsEncodeTextureToRGBD;
 }

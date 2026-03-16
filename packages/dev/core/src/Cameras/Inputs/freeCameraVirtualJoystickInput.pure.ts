@@ -1,10 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./freeCameraVirtualJoystickInput.types";
+
 import { VirtualJoystick, JoystickAxis } from "../../Misc/virtualJoystick";
 import type { ICameraInput } from "../../Cameras/cameraInputsManager";
 import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
 import type { FreeCamera } from "../../Cameras/freeCamera";
 import { Matrix, Vector3 } from "../../Maths/math.vector.pure";
+import { FreeCameraInputsManager } from "../../Cameras/freeCameraInputsManager";
 
 // Module augmentation to abstract virtual joystick from camera.
 
@@ -104,3 +107,21 @@ export class FreeCameraVirtualJoystickInput implements ICameraInput<FreeCamera> 
 }
 
 (<any>CameraInputTypes)["FreeCameraVirtualJoystickInput"] = FreeCameraVirtualJoystickInput;
+
+let _registered = false;
+
+/**
+ * Register side effects for freeCameraVirtualJoystickInput.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerFreeCameraVirtualJoystickInput(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    FreeCameraInputsManager.prototype.addVirtualJoystick = function (): FreeCameraInputsManager {
+        this.add(new FreeCameraVirtualJoystickInput());
+        return this;
+    };
+}

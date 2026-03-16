@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
+export * from "./khronosTextureContainer.types";
 import { Logger } from "../Misc/logger";
 import type { InternalTexture } from "../Materials/Textures/internalTexture";
 
@@ -211,4 +213,19 @@ export function KhronosTextureContainerIsValid(data: ArrayBufferView): boolean {
     }
 
     return false;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for khronosTextureContainer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerKhronosTextureContainer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    KhronosTextureContainer.IsValid = KhronosTextureContainerIsValid;
 }

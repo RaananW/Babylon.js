@@ -1,9 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./arcRotateCameraVRDeviceOrientationInput.types";
+
 import type { ArcRotateCamera } from "../../Cameras/arcRotateCamera";
 import type { ICameraInput } from "../../Cameras/cameraInputsManager";
 import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
 import { ToolsBackCompatCameraNoPreventDefault, ToolsWarn, ToolsError } from "../../Misc/tools.pure";
+import { ArcRotateCameraInputsManager } from "../../Cameras/arcRotateCameraInputsManager";
 
 // Module augmentation to abstract orientation inputs from camera.
 
@@ -130,3 +133,21 @@ export class ArcRotateCameraVRDeviceOrientationInput implements ICameraInput<Arc
 }
 
 (<any>CameraInputTypes)["ArcRotateCameraVRDeviceOrientationInput"] = ArcRotateCameraVRDeviceOrientationInput;
+
+let _registered = false;
+
+/**
+ * Register side effects for arcRotateCameraVRDeviceOrientationInput.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerArcRotateCameraVRDeviceOrientationInput(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    ArcRotateCameraInputsManager.prototype.addVRDeviceOrientation = function (): ArcRotateCameraInputsManager {
+        this.add(new ArcRotateCameraVRDeviceOrientationInput());
+        return this;
+    };
+}

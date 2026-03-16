@@ -15,6 +15,8 @@ import { GreasedLineMaterialDefaults } from "../Materials/GreasedLine/greasedLin
 /**
  * Tool functions for GreasedLine
  */
+
+export * from "./greasedLineTools.types";
 export class GreasedLineTools {
     /**
      * Omit duplicate lines predicate for the MeshesToLines function
@@ -594,4 +596,41 @@ export function GreasedLineToolsDisposeEmptyColorsTexture() {
  */
 export function GreasedLineToolsBooleanToNumber(bool?: boolean) {
     return bool ? 1 : 0;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for greasedLineTools.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerGreasedLineTools(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    GreasedLineTools.ConvertPoints = GreasedLineToolsConvertPoints;
+    GreasedLineTools.OmitZeroLengthPredicate = GreasedLineToolsOmitZeroLengthPredicate;
+    GreasedLineTools.MeshesToLines = GreasedLineToolsMeshesToLines;
+    GreasedLineTools.ToVector3Array = GreasedLineToolsToVector3Array;
+    GreasedLineTools.ToNumberArray = GreasedLineToolsToNumberArray;
+    GreasedLineTools.GetPointsCountInfo = GreasedLineToolsGetPointsCountInfo;
+    GreasedLineTools.GetLineLength = GreasedLineToolsGetLineLength;
+    GreasedLineTools.GetLineLengthArray = GreasedLineToolsGetLineLengthArray;
+    GreasedLineTools.SegmentizeSegmentByCount = GreasedLineToolsSegmentizeSegmentByCount;
+    GreasedLineTools.SegmentizeLineBySegmentLength = GreasedLineToolsSegmentizeLineBySegmentLength;
+    GreasedLineTools.SegmentizeLineBySegmentCount = GreasedLineToolsSegmentizeLineBySegmentCount;
+    GreasedLineTools.GetLineSegments = GreasedLineToolsGetLineSegments;
+    GreasedLineTools.GetMinMaxSegmentLength = GreasedLineToolsGetMinMaxSegmentLength;
+    GreasedLineTools.GetPositionOnLineByVisibility = GreasedLineToolsGetPositionOnLineByVisibility;
+    GreasedLineTools.GetCircleLinePoints = GreasedLineToolsGetCircleLinePoints;
+    GreasedLineTools.GetBezierLinePoints = GreasedLineToolsGetBezierLinePoints;
+    GreasedLineTools.GetArrowCap = GreasedLineToolsGetArrowCap;
+    GreasedLineTools.GetPointsFromText = GreasedLineToolsGetPointsFromText;
+    GreasedLineTools.Color3toRGBAUint8 = GreasedLineToolsColor3toRGBAUint8;
+    GreasedLineTools.CreateColorsTexture = GreasedLineToolsCreateColorsTexture;
+    GreasedLineTools.PrepareEmptyColorsTexture = GreasedLineToolsPrepareEmptyColorsTexture;
+    GreasedLineTools.DisposeEmptyColorsTexture = GreasedLineToolsDisposeEmptyColorsTexture;
+    GreasedLineTools.BooleanToNumber = GreasedLineToolsBooleanToNumber;
 }

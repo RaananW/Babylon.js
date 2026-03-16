@@ -1,9 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "../scene.pure";
+export * from "./boundingBoxRenderer.types";
+
+import { Scene } from "../scene.pure";
 import { Buffer, VertexBuffer } from "../Buffers/buffer.pure";
 import type { SubMesh } from "../Meshes/subMesh";
-import type { AbstractMesh } from "../Meshes/abstractMesh.pure";
+import { AbstractMesh } from "../Meshes/abstractMesh.pure";
 import { Matrix, Vector3 } from "../Maths/math.vector.pure";
 import { SmartArray } from "../Misc/smartArray";
 import type { Nullable, FloatArray, IndicesArray } from "../types";
@@ -760,4 +762,55 @@ export class BoundingBoxRenderer implements ISceneComponent {
         }
         this._cleanupInstances();
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for boundingBoxRenderer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerBoundingBoxRenderer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Object.defineProperty(Scene.prototype, "forceShowBoundingBoxes", {
+        get: function (this: Scene) {
+            return this._forceShowBoundingBoxes || false;
+        },
+        set: function (this: Scene, value: boolean) {
+            this._forceShowBoundingBoxes = value;
+            // Lazyly creates a BB renderer if needed.
+            if (value) {
+                this.getBoundingBoxRenderer();
+            }
+        },
+        enumerable: true,
+        configurable: true,
+    });
+
+    Scene.prototype.getBoundingBoxRenderer = function (): BoundingBoxRenderer {
+        if (!this._boundingBoxRenderer) {
+            this._boundingBoxRenderer = new BoundingBoxRenderer(this);
+        }
+
+        return this._boundingBoxRenderer;
+    };
+
+    Object.defineProperty(AbstractMesh.prototype, "showBoundingBox", {
+        get: function (this: AbstractMesh) {
+            return this._showBoundingBox || false;
+        },
+        set: function (this: AbstractMesh, value: boolean) {
+            this._showBoundingBox = value;
+            // Lazyly creates a BB renderer if needed.
+            if (value) {
+                this.getScene().getBoundingBoxRenderer();
+            }
+        },
+        enumerable: true,
+        configurable: true,
+    });
 }

@@ -14,6 +14,8 @@ declare let earcut: any;
 /**
  * Vector2 wth index property
  */
+
+export * from "./polygonMesh.types";
 class IndexedVector2 extends Vector2 {
     /** @internal */
     constructor(
@@ -396,4 +398,22 @@ export class PolygonMeshBuilder {
             startIndex += 4;
         }
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for polygonMesh.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerPolygonMesh(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Polygon.Rectangle = PolygonRectangle;
+    Polygon.Circle = PolygonCircle;
+    Polygon.Parse = PolygonParse;
+    Polygon.StartingAt = PolygonStartingAt;
 }

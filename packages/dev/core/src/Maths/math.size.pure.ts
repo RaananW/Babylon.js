@@ -1,6 +1,8 @@
 /**
  * Interface for the size containing width and height
  */
+
+export * from "./math.size.types";
 export interface ISize {
     /**
      * Width
@@ -167,4 +169,20 @@ export function SizeLerp(start: Size, end: Size, amount: number): Size {
     const h = start.height + (end.height - start.height) * amount;
 
     return new Size(w, h);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for math.size.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerMathSize(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Size.Zero = SizeZero;
+    Size.Lerp = SizeLerp;
 }

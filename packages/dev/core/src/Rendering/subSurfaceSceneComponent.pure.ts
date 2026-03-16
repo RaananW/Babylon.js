@@ -1,8 +1,14 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "../scene.pure";
+export * from "./subSurfaceSceneComponent.types";
+
+import { Scene } from "../scene.pure";
 import type { ISceneSerializableComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
+import type { Nullable } from "../types";
+import { SubSurfaceConfiguration } from "./subSurfaceConfiguration";
+import { Color3 } from "../Maths/math.color";
+import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
 
 /**
  * Defines the Geometry Buffer scene component responsible to manage a G-Buffer useful
@@ -88,4 +94,78 @@ export class SubSurfaceSceneComponent implements ISceneSerializableComponent {
     public dispose(): void {
         // Nothing to do for this component
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for subSurfaceSceneComponent.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerSubSurfaceSceneComponent(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    AddParser(SceneComponentConstants.NAME_SUBSURFACE, (parsedData: any, scene: Scene) => {
+        // Diffusion profiles
+        if (parsedData.ssDiffusionProfileColors !== undefined && parsedData.ssDiffusionProfileColors !== null) {
+            scene.enableSubSurfaceForPrePass();
+            if (scene.subSurfaceConfiguration) {
+                for (let index = 0, cache = parsedData.ssDiffusionProfileColors.length; index < cache; index++) {
+                    const color = parsedData.ssDiffusionProfileColors[index];
+                    scene.subSurfaceConfiguration.addDiffusionProfile(new Color3(color.r, color.g, color.b));
+                }
+            }
+        }
+    });
+
+    Object.defineProperty(Scene.prototype, "subSurfaceConfiguration", {
+        get: function (this: Scene) {
+            return this._subSurfaceConfiguration;
+        },
+        set: function (this: Scene, value: Nullable<SubSurfaceConfiguration>) {
+            if (value) {
+                if (this.enablePrePassRenderer()) {
+                    this._subSurfaceConfiguration = value;
+                }
+            }
+        },
+        enumerable: true,
+        configurable: true,
+    });
+
+    Scene.prototype.enableSubSurfaceForPrePass = function (): Nullable<SubSurfaceConfiguration> {
+        if (this._subSurfaceConfiguration) {
+            return this._subSurfaceConfiguration;
+        }
+
+        const prePassRenderer = this.enablePrePassRenderer();
+        if (prePassRenderer) {
+            this._subSurfaceConfiguration = new SubSurfaceConfiguration(this);
+            prePassRenderer.addEffectConfiguration(this._subSurfaceConfiguration);
+            return this._subSurfaceConfiguration;
+        }
+
+        return null;
+    };
+
+    Scene.prototype.disableSubSurfaceForPrePass = function (): void {
+        if (!this._subSurfaceConfiguration) {
+            return;
+        }
+
+        this._subSurfaceConfiguration.dispose();
+        this._subSurfaceConfiguration = null;
+    };
+
+    SubSurfaceConfiguration._SceneComponentInitialization = (scene: Scene) => {
+        // Register the G Buffer component to the scene.
+        let component = scene._getComponent(SceneComponentConstants.NAME_SUBSURFACE) as SubSurfaceSceneComponent;
+        if (!component) {
+            component = new SubSurfaceSceneComponent(scene);
+            scene._addComponent(component);
+        }
+    };
 }

@@ -4,6 +4,8 @@ import { FrameGraphPass } from "./pass";
 /**
  * Type used to define layer and face indices for multi-render target rendering scenarios.
  */
+
+export * from "./renderPass.types";
 export type LayerAndFaceIndex = {
     /** Index of the texture to update */
     targetIndex: number;
@@ -174,4 +176,19 @@ export class FrameGraphRenderPass extends FrameGraphPass<FrameGraphRenderContext
  */
 export function FrameGraphRenderPassIsRenderPass(pass: IFrameGraphPass): pass is FrameGraphRenderPass {
     return (pass as FrameGraphRenderPass).setRenderTarget !== undefined;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for renderPass.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerRenderPass(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    FrameGraphRenderPass.IsRenderPass = FrameGraphRenderPassIsRenderPass;
 }

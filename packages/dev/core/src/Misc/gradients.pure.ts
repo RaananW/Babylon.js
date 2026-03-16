@@ -3,6 +3,8 @@ import type { Color4 } from "../Maths/math.color.pure";
 import { Color4LerpToRef } from "../Maths/math.color.pure";
 
 /** Interface used by value gradients (color, factor, ...) */
+
+export * from "./gradients.types";
 export interface IValueGradient {
     /**
      * Gets or sets the gradient value (between 0 and 1)
@@ -136,4 +138,19 @@ export function GradientHelperGetCurrentGradient(ratio: number, gradients: IValu
     // Use last index if over
     const lastIndex = gradients.length - 1;
     updateFunc(gradients[lastIndex], gradients[lastIndex], 1.0);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for gradients.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerGradients(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    GradientHelper.GetCurrentGradient = GradientHelperGetCurrentGradient;
 }

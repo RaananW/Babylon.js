@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
+export * from "./videoRecorder.types";
 /* eslint-disable no-var */
 import type { Nullable } from "../types";
 import { ToolsDownload } from "./tools.pure";
@@ -240,4 +242,19 @@ export class VideoRecorder {
 export function VideoRecorderIsSupported(engine: AbstractEngine, canvas?: HTMLCanvasElement): boolean {
     const targetCanvas = canvas ?? engine.getRenderingCanvas();
     return !!targetCanvas && typeof (<any>targetCanvas).captureStream === "function";
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for videoRecorder.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerVideoRecorder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VideoRecorder.IsSupported = VideoRecorderIsSupported;
 }

@@ -1,5 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./nodeMaterial.types";
+
 import type { NodeMaterialBlock } from "./nodeMaterialBlock";
 import { PushMaterial } from "../pushMaterial";
 import type { Scene } from "../../scene";
@@ -73,6 +75,7 @@ import type { LoopBlock } from "./Blocks/loopBlock";
 import { MaterialHelperGeometryRendering } from "../materialHelper.geometryrendering";
 import { UVDefinesMixin } from "../uv.defines";
 import { ImageProcessingMixin } from "../imageProcessing";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -2675,4 +2678,27 @@ export function NodeMaterialCreateDefault(name: string, scene?: Scene) {
     newMaterial.build();
 
     return newMaterial;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for nodeMaterial.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerNodeMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeMaterial", NodeMaterial);
+
+    NodeMaterial.Parse = NodeMaterialParse;
+
+    NodeMaterial.ParseFromFileAsync = NodeMaterialParseFromFileAsync;
+
+    NodeMaterial.ParseFromSnippetAsync = NodeMaterialParseFromSnippetAsync;
+
+    NodeMaterial.CreateDefault = NodeMaterialCreateDefault;
 }

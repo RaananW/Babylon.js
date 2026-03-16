@@ -31,6 +31,8 @@ declare let BABYLON: any;
 /**
  * Interface used to configure the node particle editor
  */
+
+export * from "./nodeParticleSystemSet.types";
 export interface INodeParticleEditorOptions {
     /** Define the URL to load node editor script from */
     editorURL?: string;
@@ -649,4 +651,22 @@ export function NodeParticleSystemSetParseFromSnippetAsync(snippetId: string, no
         request.open("GET", NodeParticleSystemSet.SnippetUrl + "/" + snippetId.replace(/#/g, "/"));
         request.send();
     });
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for nodeParticleSystemSet.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerNodeParticleSystemSet(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    NodeParticleSystemSet.CreateDefault = NodeParticleSystemSetCreateDefault;
+    NodeParticleSystemSet.Parse = NodeParticleSystemSetParse;
+    NodeParticleSystemSet.ParseFromFileAsync = NodeParticleSystemSetParseFromFileAsync;
+    NodeParticleSystemSet.ParseFromSnippetAsync = NodeParticleSystemSetParseFromSnippetAsync;
 }

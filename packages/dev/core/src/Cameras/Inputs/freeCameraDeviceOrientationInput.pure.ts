@@ -1,11 +1,14 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./freeCameraDeviceOrientationInput.types";
+
 import type { ICameraInput } from "../../Cameras/cameraInputsManager";
 import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
 import type { FreeCamera } from "../../Cameras/freeCamera";
 import { Quaternion } from "../../Maths/math.vector.pure";
 import { ToolsToRadians, ToolsSmoothAngleChange, ToolsWarn, ToolsError } from "../../Misc/tools.pure";
 import { Observable } from "../../Misc/observable";
+import { FreeCameraInputsManager } from "../../Cameras/freeCameraInputsManager";
 
 // Module augmentation to abstract orientation inputs from camera.
 
@@ -220,3 +223,28 @@ export class FreeCameraDeviceOrientationInput implements ICameraInput<FreeCamera
 }
 
 (<any>CameraInputTypes)["FreeCameraDeviceOrientationInput"] = FreeCameraDeviceOrientationInput;
+
+let _registered = false;
+
+/**
+ * Register side effects for freeCameraDeviceOrientationInput.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerFreeCameraDeviceOrientationInput(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    FreeCameraInputsManager.prototype.addDeviceOrientation = function (smoothFactor?: number): FreeCameraInputsManager {
+        if (!this._deviceOrientationInput) {
+            this._deviceOrientationInput = new FreeCameraDeviceOrientationInput();
+            if (smoothFactor) {
+                this._deviceOrientationInput.smoothFactor = smoothFactor;
+            }
+            this.add(this._deviceOrientationInput);
+        }
+
+        return this;
+    };
+}

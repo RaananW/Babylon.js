@@ -22,6 +22,8 @@ import type { IAssetContainer } from "./IAssetContainer";
 /**
  * Defines how a node can be built from a string name.
  */
+
+export * from "./node.types";
 export type NodeConstructor = (name: string, scene: Scene, options?: any) => () => Node;
 
 /** @internal */
@@ -1049,4 +1051,19 @@ export function NodeParseAnimationRanges(node: Node, parsedNode: any, _scene: Sc
             node.createAnimationRange(data.name, data.from, data.to);
         }
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for node.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerNode(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.ParseAnimationRanges = NodeParseAnimationRanges;
 }

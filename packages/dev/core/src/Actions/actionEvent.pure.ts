@@ -7,6 +7,8 @@ import type { Vector2 } from "../Maths/math.vector";
 /**
  * Interface used to define ActionEvent
  */
+
+export * from "./actionEvent.types";
 export interface IActionEvent {
     /** The mesh or sprite that triggered the action */
     source: any;
@@ -95,4 +97,22 @@ export function ActionEventCreateNewFromScene(scene: Scene, evt: any): ActionEve
  */
 export function ActionEventCreateNewFromPrimitive(prim: any, pointerPos: Vector2, evt?: Event, additionalData?: any): ActionEvent {
     return new ActionEvent(prim, pointerPos.x, pointerPos.y, null, evt, additionalData);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for actionEvent.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerActionEvent(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    ActionEvent.CreateNew = ActionEventCreateNew;
+    ActionEvent.CreateNewFromSprite = ActionEventCreateNewFromSprite;
+    ActionEvent.CreateNewFromScene = ActionEventCreateNewFromScene;
+    ActionEvent.CreateNewFromPrimitive = ActionEventCreateNewFromPrimitive;
 }

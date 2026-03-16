@@ -1,7 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./selectionOutlineLayer.types";
+
 import { serialize, serializeAsColor3 } from "../Misc/decorators";
-import type { Scene } from "../scene.pure";
+import { Scene } from "../scene.pure";
 import type { SubMesh } from "../Meshes/subMesh";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import type { Mesh } from "../Meshes/mesh";
@@ -13,6 +15,8 @@ import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/
 import type { IThinSelectionOutlineLayerOptions } from "./thinSelectionOutlineLayer";
 import { ThinSelectionOutlineLayer } from "./thinSelectionOutlineLayer";
 import type { Color3 } from "../Maths/math.color";
+import type { Nullable } from "../types";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * Selection outline layer options. This helps customizing the behaviour
@@ -386,4 +390,29 @@ export class SelectionOutlineLayer extends EffectLayer {
 
         return selectionOutlineLayer;
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for selectionOutlineLayer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerSelectionOutlineLayer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Scene.prototype.getSelectionOutlineLayerByName = function (name: string): Nullable<SelectionOutlineLayer> {
+        for (let index = 0; index < this.effectLayers?.length; index++) {
+            if (this.effectLayers[index].name === name && this.effectLayers[index].getEffectName() === SelectionOutlineLayer.EffectName) {
+                return (<any>this.effectLayers[index]) as SelectionOutlineLayer;
+            }
+        }
+
+        return null;
+    };
+
+    RegisterClass("BABYLON.SelectionOutlineLayer", SelectionOutlineLayer);
 }

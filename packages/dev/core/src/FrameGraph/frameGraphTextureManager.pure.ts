@@ -58,6 +58,8 @@ enum FrameGraphTextureNamespace {
 /**
  * Manages the textures used by a frame graph
  */
+
+export * from "./frameGraphTextureManager.types";
 export class FrameGraphTextureManager {
     private static _Counter = 2; // 0 and 1 are reserved for backbuffer textures
 
@@ -1275,4 +1277,19 @@ export function FrameGraphTextureManagerCloneTextureOptions(options: FrameGraphT
               creationFlags: options.creationFlags ? [...options.creationFlags] : undefined,
               labels: options.labels && preserveLabels ? [...options.labels] : undefined,
           };
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for frameGraphTextureManager.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerFrameGraphTextureManager(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    FrameGraphTextureManager.CloneTextureOptions = FrameGraphTextureManagerCloneTextureOptions;
 }

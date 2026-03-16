@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
+export * from "./sphericalPolynomial.types";
 import { Vector3 } from "../Maths/math.vector.pure";
 import type { Nullable } from "../types";
 import type { Color3 } from "../Maths/math.color";
@@ -485,4 +487,22 @@ export function SphericalPolynomialFromArray(data: ArrayLike<ArrayLike<number>>)
     Vector3.FromArrayToRef(data[7], 0, sp.zx);
     Vector3.FromArrayToRef(data[8], 0, sp.xy);
     return sp;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for sphericalPolynomial.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerSphericalPolynomial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    SphericalHarmonics.FromArray = SphericalHarmonicsFromArray;
+    SphericalHarmonics.FromPolynomial = SphericalHarmonicsFromPolynomial;
+    SphericalPolynomial.FromHarmonics = SphericalPolynomialFromHarmonics;
+    SphericalPolynomial.FromArray = SphericalPolynomialFromArray;
 }

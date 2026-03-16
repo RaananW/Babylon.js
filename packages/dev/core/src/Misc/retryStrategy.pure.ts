@@ -3,6 +3,8 @@ import type { WebRequest } from "./webRequest";
 /**
  * Class used to define a retry strategy when error happens while loading assets
  */
+
+export * from "./retryStrategy.types";
 export class RetryStrategy {}
 
 /**
@@ -19,4 +21,19 @@ export function RetryStrategyExponentialBackoff(maxRetries = 3, baseInterval = 5
 
         return Math.pow(2, retryIndex) * baseInterval;
     };
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for retryStrategy.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerRetryStrategy(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RetryStrategy.ExponentialBackoff = RetryStrategyExponentialBackoff;
 }

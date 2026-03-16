@@ -1,4 +1,6 @@
 /** This file must only contain pure code and pure imports */
+
+export * from "./rawTexture.types";
 import { Texture } from "./texture.pure";
 import { Constants } from "../../Engines/constants";
 import type { Nullable } from "../../types";
@@ -365,4 +367,26 @@ export function RawTextureCreateRStorageTexture(
     type: number = Constants.TEXTURETYPE_FLOAT
 ): RawTexture {
     return new RawTexture(data, width, height, Constants.TEXTUREFORMAT_R, sceneOrEngine, generateMipMaps, invertY, samplingMode, type, Constants.TEXTURE_CREATIONFLAG_STORAGE);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for rawTexture.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerRawTexture(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RawTexture.CreateLuminanceTexture = RawTextureCreateLuminanceTexture;
+    RawTexture.CreateLuminanceAlphaTexture = RawTextureCreateLuminanceAlphaTexture;
+    RawTexture.CreateAlphaTexture = RawTextureCreateAlphaTexture;
+    RawTexture.CreateRGBTexture = RawTextureCreateRGBTexture;
+    RawTexture.CreateRGBATexture = RawTextureCreateRGBATexture;
+    RawTexture.CreateRGBAStorageTexture = RawTextureCreateRGBAStorageTexture;
+    RawTexture.CreateRTexture = RawTextureCreateRTexture;
+    RawTexture.CreateRStorageTexture = RawTextureCreateRStorageTexture;
 }

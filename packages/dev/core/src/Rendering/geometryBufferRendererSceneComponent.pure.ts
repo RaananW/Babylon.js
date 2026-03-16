@@ -1,10 +1,15 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "../scene.pure";
+export * from "./geometryBufferRendererSceneComponent.types";
+
+import { Scene } from "../scene.pure";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import type { SmartArrayNoDuplicate } from "../Misc/smartArray";
 import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
+import type { Nullable } from "../types";
+import { GeometryBufferRenderer } from "./geometryBufferRenderer";
+import { Constants } from "../Engines/constants";
 
 /**
  * Defines the Geometry Buffer scene component responsible to manage a G-Buffer useful
@@ -56,4 +61,65 @@ export class GeometryBufferRendererSceneComponent implements ISceneComponent {
             renderTargets.push(this.scene._geometryBufferRenderer.getGBuffer());
         }
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for geometryBufferRendererSceneComponent.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerGeometryBufferRendererSceneComponent(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Object.defineProperty(Scene.prototype, "geometryBufferRenderer", {
+        get: function (this: Scene) {
+            return this._geometryBufferRenderer;
+        },
+        set: function (this: Scene, value: Nullable<GeometryBufferRenderer>) {
+            if (value && value.isSupported) {
+                this._geometryBufferRenderer = value;
+            }
+        },
+        enumerable: true,
+        configurable: true,
+    });
+
+    Scene.prototype.enableGeometryBufferRenderer = function (
+        ratio: number | { width: number; height: number } = 1,
+        depthFormat = Constants.TEXTUREFORMAT_DEPTH16,
+        textureTypesAndFormats?: { [key: number]: { textureType: number; textureFormat: number } }
+    ): Nullable<GeometryBufferRenderer> {
+        if (this._geometryBufferRenderer) {
+            return this._geometryBufferRenderer;
+        }
+
+        this._geometryBufferRenderer = new GeometryBufferRenderer(this, ratio, depthFormat, textureTypesAndFormats);
+        if (!this._geometryBufferRenderer.isSupported) {
+            this._geometryBufferRenderer = null;
+        }
+
+        return this._geometryBufferRenderer;
+    };
+
+    Scene.prototype.disableGeometryBufferRenderer = function (): void {
+        if (!this._geometryBufferRenderer) {
+            return;
+        }
+
+        this._geometryBufferRenderer.dispose();
+        this._geometryBufferRenderer = null;
+    };
+
+    GeometryBufferRenderer._SceneComponentInitialization = (scene: Scene) => {
+        // Register the G Buffer component to the scene.
+        let component = scene._getComponent(SceneComponentConstants.NAME_GEOMETRYBUFFERRENDERER) as GeometryBufferRendererSceneComponent;
+        if (!component) {
+            component = new GeometryBufferRendererSceneComponent(scene);
+            scene._addComponent(component);
+        }
+    };
 }

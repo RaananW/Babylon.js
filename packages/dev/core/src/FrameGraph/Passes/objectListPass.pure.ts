@@ -4,6 +4,8 @@ import { FrameGraphPass } from "./pass";
 /**
  * Object list pass used to generate a list of objects.
  */
+
+export * from "./objectListPass.types";
 export class FrameGraphObjectListPass extends FrameGraphPass<FrameGraphContext> {
     protected readonly _engine: AbstractEngine;
     protected _objectList: FrameGraphObjectList;
@@ -43,4 +45,19 @@ export class FrameGraphObjectListPass extends FrameGraphPass<FrameGraphContext> 
  */
 export function FrameGraphObjectListPassIsObjectListPass(pass: IFrameGraphPass): pass is FrameGraphObjectListPass {
     return (pass as FrameGraphObjectListPass).setObjectList !== undefined;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for objectListPass.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerObjectListPass(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    FrameGraphObjectListPass.IsObjectListPass = FrameGraphObjectListPassIsObjectListPass;
 }

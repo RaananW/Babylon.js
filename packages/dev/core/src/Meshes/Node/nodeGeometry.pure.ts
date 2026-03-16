@@ -27,6 +27,8 @@ declare let BABYLON: any;
 /**
  * Interface used to configure the node geometry editor
  */
+
+export * from "./nodeGeometry.types";
 export interface INodeGeometryEditorOptions {
     /** Define the URL to load node editor script from */
     editorURL?: string;
@@ -723,4 +725,21 @@ export function NodeGeometryParseFromSnippetAsync(snippetId: string, nodeGeometr
         request.open("GET", NodeGeometry.SnippetUrl + "/" + snippetId.replace(/#/g, "/"));
         request.send();
     });
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for nodeGeometry.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerNodeGeometry(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    NodeGeometry.CreateDefault = NodeGeometryCreateDefault;
+    NodeGeometry.Parse = NodeGeometryParse;
+    NodeGeometry.ParseFromSnippetAsync = NodeGeometryParseFromSnippetAsync;
 }

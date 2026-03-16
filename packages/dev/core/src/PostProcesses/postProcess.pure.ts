@@ -1,12 +1,14 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./postProcess.types";
+
 import type { Nullable } from "../types";
 import { SmartArray } from "../Misc/smartArray";
 import type { Observer } from "../Misc/observable";
 import { Observable } from "../Misc/observable";
 import { Vector2 } from "../Maths/math.vector.pure";
 import type { Camera } from "../Cameras/camera";
-import type { Effect } from "../Materials/effect";
+import { Effect } from "../Materials/effect";
 import { Constants } from "../Engines/constants";
 import type { RenderTargetCreationOptions } from "../Materials/Textures/textureCreationOptions";
 import type { IInspectable } from "../Misc/iInspectable";
@@ -22,11 +24,12 @@ import type { InternalTexture } from "../Materials/Textures/internalTexture";
 import type { Animation } from "../Animations/animation";
 import type { PrePassRenderer } from "../Rendering/prePassRenderer";
 import type { PrePassEffectConfiguration } from "../Rendering/prePassEffectConfiguration";
-import type { AbstractEngine } from "../Engines/abstractEngine";
+import { AbstractEngine } from "../Engines/abstractEngine";
 import { GetExponentOfTwo } from "../Misc/tools.functions";
 import type { IAssetContainer } from "core/IAssetContainer";
 import type { EffectWrapperCustomShaderCodeProcessing, EffectWrapperCreationOptions } from "../Materials/effectRenderer";
 import { EffectWrapper } from "../Materials/effectRenderer.pure";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * Options for the PostProcess constructor
@@ -1211,4 +1214,55 @@ export class PostProcess {
             rootUrl
         );
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for postProcess.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    AbstractEngine.prototype.setTextureFromPostProcess = function (channel: number, postProcess: Nullable<PostProcess>, name: string): void {
+        let postProcessInput = null;
+        if (postProcess) {
+            if (postProcess._forcedOutputTexture) {
+                postProcessInput = postProcess._forcedOutputTexture;
+            } else if (postProcess._textures.data[postProcess._currentRenderTextureInd]) {
+                postProcessInput = postProcess._textures.data[postProcess._currentRenderTextureInd];
+            }
+        }
+
+        this._bindTexture(channel, postProcessInput?.texture ?? null, name);
+    };
+
+    AbstractEngine.prototype.setTextureFromPostProcessOutput = function (channel: number, postProcess: Nullable<PostProcess>, name: string): void {
+        this._bindTexture(channel, postProcess?._outputTexture?.texture ?? null, name);
+    };
+
+    /**
+     * Sets a texture to be the input of the specified post process. (To use the output, pass in the next post process in the pipeline)
+     * @param channel Name of the sampler variable.
+     * @param postProcess Post process to get the input texture from.
+     */
+    Effect.prototype.setTextureFromPostProcess = function (channel: string, postProcess: Nullable<PostProcess>): void {
+        this._engine.setTextureFromPostProcess(this._samplers[channel], postProcess, channel);
+    };
+
+    /**
+     * (Warning! setTextureFromPostProcessOutput may be desired instead)
+     * Sets the input texture of the passed in post process to be input of this effect. (To use the output of the passed in post process use setTextureFromPostProcessOutput)
+     * @param channel Name of the sampler variable.
+     * @param postProcess Post process to get the output texture from.
+     */
+    Effect.prototype.setTextureFromPostProcessOutput = function (channel: string, postProcess: Nullable<PostProcess>): void {
+        this._engine.setTextureFromPostProcessOutput(this._samplers[channel], postProcess, channel);
+    };
+
+    RegisterClass("BABYLON.PostProcess", PostProcess);
 }

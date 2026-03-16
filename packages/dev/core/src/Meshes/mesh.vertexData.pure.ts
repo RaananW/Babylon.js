@@ -1,5 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./mesh.vertexData.types";
+
 import type { Nullable, FloatArray, IndicesArray, DeepImmutable } from "../types";
 import type { Matrix, Vector2 } from "../Maths/math.vector";
 import { Vector3, Vector4, TmpVectors } from "../Maths/math.vector.pure";
@@ -2446,4 +2448,63 @@ export function VertexDataImportVertexData(parsedVertexData: any, geometry: Geom
     const vertexData = VertexDataParse(parsedVertexData);
 
     geometry.setAllVerticesData(vertexData, parsedVertexData.updatable);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for mesh.vertexData.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerMeshVertexData(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VertexData.CreateRibbon = VertexDataCreateRibbon;
+
+    VertexData.CreateBox = VertexDataCreateBox;
+
+    VertexData.CreateTiledBox = VertexDataCreateTiledBox;
+
+    VertexData.CreateTiledPlane = VertexDataCreateTiledPlane;
+
+    VertexData.CreateSphere = VertexDataCreateSphere;
+
+    VertexData.CreateCylinder = VertexDataCreateCylinder;
+
+    VertexData.CreateTorus = VertexDataCreateTorus;
+
+    VertexData.CreateLineSystem = VertexDataCreateLineSystem;
+
+    VertexData.CreateDashedLines = VertexDataCreateDashedLines;
+
+    VertexData.CreateGround = VertexDataCreateGround;
+
+    VertexData.CreateTiledGround = VertexDataCreateTiledGround;
+
+    VertexData.CreateGroundFromHeightMap = VertexDataCreateGroundFromHeightMap;
+
+    VertexData.CreatePlane = VertexDataCreatePlane;
+
+    VertexData.CreateDisc = VertexDataCreateDisc;
+
+    VertexData.CreatePolygon = VertexDataCreatePolygon;
+
+    VertexData.CreateIcoSphere = VertexDataCreateIcoSphere;
+
+    VertexData.CreatePolyhedron = VertexDataCreatePolyhedron;
+
+    VertexData.CreateCapsule = VertexDataCreateCapsule;
+
+    VertexData.CreateTorusKnot = VertexDataCreateTorusKnot;
+
+    VertexData.ComputeNormals = VertexDataComputeNormals;
+
+    VertexData._ComputeSides = VertexData_ComputeSides;
+
+    VertexData.Parse = VertexDataParse;
+
+    VertexData.ImportVertexData = VertexDataImportVertexData;
 }

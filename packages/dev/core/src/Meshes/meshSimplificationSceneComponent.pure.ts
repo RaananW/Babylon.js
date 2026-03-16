@@ -1,8 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "../scene.pure";
+export * from "./meshSimplificationSceneComponent.types";
+
+import { Scene } from "../scene.pure";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
+import { SimplificationQueue, SimplificationType } from "./meshSimplification";
+import type { ISimplificationSettings } from "./meshSimplification";
+import { Mesh } from "./mesh";
 
 /**
  * Defines the simplification queue scene component responsible to help scheduling the various simplification task
@@ -54,4 +59,52 @@ export class SimplicationQueueSceneComponent implements ISceneComponent {
             this.scene._simplificationQueue.executeNext();
         }
     }
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for meshSimplificationSceneComponent.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerMeshSimplificationSceneComponent(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Object.defineProperty(Scene.prototype, "simplificationQueue", {
+        get: function (this: Scene) {
+            if (!this._simplificationQueue) {
+                this._simplificationQueue = new SimplificationQueue();
+                let component = this._getComponent(SceneComponentConstants.NAME_SIMPLIFICATIONQUEUE) as SimplicationQueueSceneComponent;
+                if (!component) {
+                    component = new SimplicationQueueSceneComponent(this);
+                    this._addComponent(component);
+                }
+            }
+            return this._simplificationQueue;
+        },
+        set: function (this: Scene, value: SimplificationQueue) {
+            this._simplificationQueue = value;
+        },
+        enumerable: true,
+        configurable: true,
+    });
+
+    Mesh.prototype.simplify = function (
+        settings: Array<ISimplificationSettings>,
+        parallelProcessing: boolean = true,
+        simplificationType: SimplificationType = SimplificationType.QUADRATIC,
+        successCallback?: (mesh?: Mesh, submeshIndex?: number) => void
+    ): Mesh {
+        this.getScene().simplificationQueue.addTask({
+            settings: settings,
+            parallelProcessing: parallelProcessing,
+            mesh: this,
+            simplificationType: simplificationType,
+            successCallback: successCallback,
+        });
+        return this;
+    };
 }

@@ -1,5 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./buffer.types";
+
 import type { Nullable, DataArray, FloatArray } from "../types";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { DataBuffer } from "./dataBuffer";
@@ -947,4 +949,23 @@ export function VertexBufferGetFloatData(
     forceCopy?: boolean
 ): FloatArray {
     return GetFloatData(data, size, type, byteOffset, byteStride, normalized, totalVertices, forceCopy);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for buffer.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerBuffer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VertexBuffer.DeduceStride = VertexBufferDeduceStride;
+    VertexBuffer.GetDataType = VertexBufferGetDataType;
+    VertexBuffer.GetTypeByteLength = VertexBufferGetTypeByteLength;
+    VertexBuffer.ForEach = VertexBufferForEach;
+    VertexBuffer.GetFloatData = VertexBufferGetFloatData;
 }

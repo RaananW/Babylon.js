@@ -3,6 +3,8 @@ let ImmediateQueue: Array<() => void> = [];
 /**
  * Class used to provide helper for timing
  */
+
+export * from "./timingTools.types";
 export class TimingTools {}
 
 function RunWithCondition(condition: () => boolean, onSuccess: () => void, onError?: (e?: any, isTimeout?: boolean) => void) {
@@ -69,4 +71,19 @@ export function TimingToolsSetImmediate(action: () => void) {
         }, 1);
     }
     ImmediateQueue.push(action);
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for timingTools.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerTimingTools(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    TimingTools.SetImmediate = TimingToolsSetImmediate;
 }

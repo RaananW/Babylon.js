@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
+export * from "./khronosTextureContainer2.types";
 import type { InternalTexture } from "../Materials/Textures/internalTexture";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { Constants } from "../Engines/constants";
@@ -520,4 +522,19 @@ export function KhronosTextureContainer2IsValid(data: ArrayBufferView): boolean 
     }
 
     return false;
+}
+
+let _registered = false;
+
+/**
+ * Register side effects for khronosTextureContainer2.
+ * Safe to call multiple times; only the first call has an effect.
+ */
+export function registerKhronosTextureContainer2(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    KhronosTextureContainer2.IsValid = KhronosTextureContainer2IsValid;
 }
