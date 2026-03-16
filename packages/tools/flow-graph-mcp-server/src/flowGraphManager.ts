@@ -122,9 +122,13 @@ function getDefaultValue(typeName: string): unknown {
 let _idCounter = 0;
 function generateUniqueId(): string {
     _idCounter++;
-    // Format like a UUID-ish string
     const hex = _idCounter.toString(16).padStart(8, "0");
-    return `fg-${hex}-${Date.now().toString(16)}`;
+    return `fg-${hex}`;
+}
+
+/** Reset the internal unique-ID counter (useful for deterministic tests). */
+export function resetUniqueIdCounter(): void {
+    _idCounter = 0;
 }
 
 // ─── In-memory block representation ──────────────────────────────────────

@@ -5,7 +5,7 @@
  * validates the JSON structure, and exercises core operations.
  */
 
-import { FlowGraphManager } from "../../src/flowGraphManager";
+import { FlowGraphManager, resetUniqueIdCounter } from "../../src/flowGraphManager";
 import { FlowGraphBlockRegistry } from "../../src/blockRegistry";
 
 // ─── Test Helpers ─────────────────────────────────────────────────────────
@@ -45,6 +45,10 @@ function validateCoordinatorJSON(json: string, label: string): any {
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe("Flow Graph MCP Server – FlowGraphManager Validation", () => {
+    beforeEach(() => {
+        resetUniqueIdCounter();
+    });
+
     // ── Test 1: Basic lifecycle ─────────────────────────────────────────
 
     it("supports create, list, delete lifecycle", () => {

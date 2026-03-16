@@ -6,7 +6,7 @@
  * Verifies classNames, connection shapes, config keys, and context layout.
  */
 
-import { FlowGraphManager } from "../../src/flowGraphManager";
+import { FlowGraphManager, resetUniqueIdCounter } from "../../src/flowGraphManager";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -33,6 +33,10 @@ function expectValidConnection(conn: any, type: 0 | 1): void {
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe("Flow Graph MCP Server – Parse-Ready Validation", () => {
+    beforeEach(() => {
+        resetUniqueIdCounter();
+    });
+
     // ── Test 1: Coordinator envelope ─────────────────────────────────────
 
     it("coordinator JSON has _flowGraphs array and dispatchEventsSynchronously flag", () => {

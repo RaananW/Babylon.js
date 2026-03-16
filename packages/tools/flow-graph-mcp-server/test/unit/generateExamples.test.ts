@@ -5,7 +5,7 @@
  * and validates the coordinator-level JSON structure.
  */
 
-import { FlowGraphManager } from "../../src/flowGraphManager";
+import { FlowGraphManager, resetUniqueIdCounter } from "../../src/flowGraphManager";
 
 // ─── helpers ──────────────────────────────────────────────────────────────
 
@@ -31,6 +31,10 @@ function validateCoordinator(json: string): any {
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe("Flow Graph MCP Server – Example Flow Graphs", () => {
+    beforeEach(() => {
+        resetUniqueIdCounter();
+    });
+
     // ── Example 1: Click → Console Log ───────────────────────────────────
     // Scenario: When a mesh is picked, log "Clicked!" to the console.
 
