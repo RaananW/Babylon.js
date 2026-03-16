@@ -9,6 +9,7 @@
         "babylonjs-node-render-graph": "dist/index.js"
     },
     "scripts": {
+        "clean": "rimraf dist",
         "build": "rollup -c",
         "start": "node dist/index.js",
         "dev": "tsc --watch"
