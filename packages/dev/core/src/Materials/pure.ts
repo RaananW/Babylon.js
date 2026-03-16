@@ -1,5 +1,5 @@
 /** Pure barrel — re-exports only side-effect-free modules */
-
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 export * from "./Background/pure";
 export * from "./colorCurves.pure";
 export * from "./iEffectFallbacks";
@@ -28,6 +28,7 @@ export * from "./shadowDepthWrapper";
 export * from "./drawWrapper.functions";
 export * from "./drawWrapper";
 export * from "./materialPluginBase.pure";
+export * from "./materialPluginManager.pure";
 export * from "./materialPluginEvent";
 export * from "./material.detailMapConfiguration";
 export * from "./material.decalMapConfiguration.pure";

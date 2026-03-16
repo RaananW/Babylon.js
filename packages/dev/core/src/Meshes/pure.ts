@@ -1,10 +1,11 @@
 /** Pure barrel — re-exports only side-effect-free modules */
-
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 export * from "./abstractMesh.pure";
 export * from "./abstractMesh.decalMap.pure";
 export * from "./abstractMesh.hotSpot";
 export * from "./Compression/pure";
 export * from "./csg.pure";
+export * from "./meshUVSpaceRenderer.pure";
 export * from "./geometry";
 export * from "./groundMesh.pure";
 export * from "./goldbergMesh.pure";
@@ -38,4 +39,5 @@ export * from "./thinInstanceMesh.pure";
 export * from "./thinInstanceMesh.pure";
 export * from "./Node/pure";
 export * from "./GaussianSplatting/gaussianSplattingMesh.pure";
+export * from "./GaussianSplatting/pure";
 export * from "./GreasedLine/pure";

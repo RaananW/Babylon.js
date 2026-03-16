@@ -1,5 +1,5 @@
 /** Pure barrel — re-exports only side-effect-free modules */
-
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 export * from "./baseParticleSystem.pure";
 export * from "./EmitterTypes/pure";
 export * from "./webgl2ParticleSystem.pure";
@@ -20,3 +20,4 @@ export * from "./subEmitter";
 export * from "./attractor";
 export * from "./flowMap";
 export * from "./Node/pure";
+export * from "./thinParticleSystem.pure";

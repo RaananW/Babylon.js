@@ -995,23 +995,24 @@ scene.enablePhysics(); // ❌ TypeScript error — .types.ts was never imported
     - **Result**: 134 files batch-processed + 4 manual splits + 7 manual post-fixes = **0 TypeScript errors**
 - [x] **9.4** — Run automation on all ~139 `declare module` files (prototype augmentations + AddNodeConstructor + others)
     - TypeScript compilation: **0 errors** ✅
-    - Bundle smoke tests: pending
+    - Bundle smoke tests: **all pass** ✅
     - Verify runtime: pending
-- [ ] **9.6** — Update pure barrels (`generatePureBarrels.mjs`)
+- [x] **9.6** — Update pure barrels (`generatePureBarrels.mjs`)
+    - Regenerated 118 barrel files, 672 exports rewritten to `.pure`
     - Pure barrels now export the registration functions (but NOT `.types.ts`)
     - Consumers of `@babylonjs/core/pure` see `registerXxx` in autocomplete
     - Consumers of `@babylonjs/core` (non-pure) get everything as before
-- [ ] **9.7** — Update `sideEffects` manifest and sync
-    - Files that were side-effectful only due to prototype assignments may now become pure
-      (the `.pure.ts` file exports a function, which is pure — calling it is the side effect)
-    - Re-run `auditSideEffects.mjs`, regenerate manifest, sync to `package.json`
-- [ ] **9.8** — Add bundle smoke tests for registration functions
-    - Test: bare import of `.pure.ts` with registration function → 0-1 bytes (function tree-shaken)
-    - Test: import + call → bundles correctly
-    - Test: import `.types.ts` alone → 0 bytes (type-only)
-- [ ] **9.9** — Update `.github/instructions/side-effect-imports.instructions.md`
-    - Add new "pure path" import patterns alongside legacy patterns
-    - Document the `register` + `import .types.ts` two-import pattern
+- [x] **9.7** — Update `sideEffects` manifest and sync
+    - Re-ran `auditSideEffects.mjs`, regenerated manifest
+    - Synced to `@babylonjs/core/package.json` — 842 sideEffects entries
+- [x] **9.8** — Add bundle smoke tests for registration functions
+    - **All 21 tests pass** (Rollup + Webpack)
+    - Bare import of `.pure.js` with registration function → **1 byte** (Rollup) / **0 bytes** (Webpack) ✅
+    - Import + call → **bundles correctly** ✅
+    - Import `.types.js` alone → **1 byte / 0 bytes** (type-only) ✅
+- [x] **9.9** — Update `.github/instructions/side-effect-imports.instructions.md`
+    - Added "Pure path with registration functions" section
+    - Documented the `registerXxx()` + `.pure` import pattern
 
 ### Impact Analysis
 

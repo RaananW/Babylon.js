@@ -162,6 +162,37 @@ const TEST_CASES = [
         maxBundleSizeBytes: Infinity,
         description: "Named import of free function through pure barrel should bundle only that function",
     },
+    // ── Phase 9: registration function tests ────────────────────────────────
+    {
+        name: "registration-pure-bare",
+        entryCode: `import "${CORE_DIST}/Culling/ray.pure.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of .pure.js with registration function — function should be tree-shaken",
+    },
+    {
+        name: "registration-pure-named-call",
+        entryCode: `import { registerRay } from "${CORE_DIST}/Culling/ray.pure.js";\nregisterRay();\n`,
+        maxBundleSizeBytes: Infinity,
+        description: "Import + call of registration function should bundle correctly (sanity check)",
+    },
+    {
+        name: "registration-types-only",
+        entryCode: `import "${CORE_DIST}/Culling/ray.types.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of .types.js should produce near-empty bundle (types only)",
+    },
+    {
+        name: "registration-engine-pure-bare",
+        entryCode: `import "${CORE_DIST}/Rendering/depthRendererSceneComponent.pure.js";\n`,
+        maxBundleSizeBytes: 500,
+        description: "Bare import of scene component .pure.js — registration function should be tree-shaken",
+    },
+    {
+        name: "registration-engine-pure-named-call",
+        entryCode: `import { registerDepthRendererSceneComponent } from "${CORE_DIST}/Rendering/depthRendererSceneComponent.pure.js";\nregisterDepthRendererSceneComponent();\n`,
+        maxBundleSizeBytes: Infinity,
+        description: "Import + call of scene component registration function should bundle correctly",
+    },
 ];
 
 // ---------------------------------------------------------------------------

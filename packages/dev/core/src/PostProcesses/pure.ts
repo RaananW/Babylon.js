@@ -1,5 +1,5 @@
 /** Pure barrel — re-exports only side-effect-free modules */
-
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 export * from "./anaglyphPostProcess.pure";
 export * from "./blackAndWhitePostProcess.pure";
 export * from "./bloomEffect";

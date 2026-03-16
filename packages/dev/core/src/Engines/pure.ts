@@ -1,10 +1,11 @@
 /** Pure barrel — re-exports only side-effect-free modules */
-
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 export * from "./constants";
 export * from "./engineCapabilities";
 export * from "./instancingAttributeInfo";
 export * from "./abstractEngine";
 export * from "./thinEngine";
+export * from "./thinNativeEngine.pure";
 export * from "./engine.pure";
 export * from "./engineStore";
 export * from "./nullEngine.pure";
