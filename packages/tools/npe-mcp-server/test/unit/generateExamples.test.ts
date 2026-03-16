@@ -1,5 +1,5 @@
 /**
- * NPE MCP Server – Example Particle System Generator
+ * Node Particle MCP Server – Example Particle System Generator
  *
  * Builds several reference Node Particle System Set graphs via the
  * ParticleGraphManager API, validates them, and writes them to the examples/
@@ -347,7 +347,7 @@ function buildMultiSystemParticles(): string {
 //  Jest Test Wrapper
 // ═══════════════════════════════════════════════════════════════════════════
 
-describe("NPE MCP Server – Example Generation", () => {
+describe("Node Particle MCP Server – Example Generation", () => {
     it("generates BasicParticles example", () => {
         const json = buildBasicParticles();
         const parsed = JSON.parse(json);

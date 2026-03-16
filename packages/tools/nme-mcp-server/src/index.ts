@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-console */
 /**
- * NME MCP Server
+ * Node Material MCP Server (babylonjs-node-material)
  * ──────────────
  * A Model Context Protocol server that exposes tools for building Babylon.js
  * Node Materials programmatically.  An AI agent (or any MCP client) can:
@@ -34,7 +34,7 @@ const manager = new MaterialGraphManager();
 // ─── MCP Server ───────────────────────────────────────────────────────────
 const server = new McpServer(
     {
-        name: "babylonjs-nme",
+        name: "babylonjs-node-material",
         version: "1.0.0",
     },
     {

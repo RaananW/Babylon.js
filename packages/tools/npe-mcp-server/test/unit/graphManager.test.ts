@@ -1,5 +1,5 @@
 /**
- * NPE MCP Server – Graph Manager Validation Tests
+ * Node Particle MCP Server – Graph Manager Validation Tests
  *
  * Creates particle system graphs via ParticleGraphManager, exports them to JSON,
  * validates the JSON structure, and exercises core operations.
@@ -46,7 +46,7 @@ function validateParticleJSON(json: string, label: string): any {
 //  Tests
 // ═══════════════════════════════════════════════════════════════════════════
 
-describe("NPE MCP Server – Graph Manager Validation", () => {
+describe("Node Particle MCP Server – Graph Manager Validation", () => {
     // ── Test 1: Simple particle system ──────────────────────────────────
 
     it("creates and exports a simple particle system with valid JSON", () => {

@@ -1,5 +1,5 @@
 /**
- * NGE MCP Server – Graph Manager Validation Tests
+ * Node Geometry MCP Server – Graph Manager Validation Tests
  *
  * Creates geometry graphs via GeometryGraphManager, exports them to JSON,
  * validates the JSON structure, and exercises core operations.
@@ -52,7 +52,7 @@ function validateGeometryJSON(json: string, label: string): any {
 //  Tests
 // ═══════════════════════════════════════════════════════════════════════════
 
-describe("NGE MCP Server – Graph Manager Validation", () => {
+describe("Node Geometry MCP Server – Graph Manager Validation", () => {
     // ── Test 1: Simple box geometry ─────────────────────────────────────
 
     it("creates and exports a simple box geometry with valid JSON", () => {

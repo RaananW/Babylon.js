@@ -6,7 +6,7 @@
     "type": "module",
     "main": "dist/index.js",
     "bin": {
-        "babylonjs-nge": "dist/index.js"
+        "babylonjs-node-geometry": "dist/index.js"
     },
     "scripts": {
         "build": "tsc",

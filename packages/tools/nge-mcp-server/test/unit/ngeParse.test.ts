@@ -1,7 +1,7 @@
 /**
- * NGE MCP Server – Babylon.js Parse Validation
+ * Node Geometry MCP Server – Babylon.js Parse Validation
  *
- * Tests that JSON produced by the NGE MCP server can be parsed by Babylon.js's
+ * Tests that JSON produced by the Node Geometry MCP server can be parsed by Babylon.js's
  * NodeGeometry.parseSerializedObject() without errors. This proves the JSON
  * structure is valid and all block types are recognized by Babylon.js.
  *
@@ -24,7 +24,7 @@ function readExampleJson(filename: string): string {
     return fs.readFileSync(path.join(EXAMPLES_DIR, filename), "utf-8");
 }
 
-describe("NGE MCP Server – Babylon.js Parse", () => {
+describe("Node Geometry MCP Server – Babylon.js Parse", () => {
     const exampleFiles = ["SimpleBox.json", "ScatteredInstances.json", "NoiseTerrain.json", "BooleanCSG.json", "MathPipeline.json"];
 
     for (const file of exampleFiles) {

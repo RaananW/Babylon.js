@@ -13,7 +13,7 @@
  *   • Create cameras (ArcRotate, Free, Follow, etc.)
  *   • Create lights (Hemispheric, Point, Directional, Spot)
  *   • Create & assign materials (Standard, PBR, Node Material)
- *   • Import NME JSON as materials (from the NME MCP server)
+ *   • Import NME JSON as materials (from the Node Material MCP server)
  *   • Build scene hierarchy (parent/child relationships)
  *   • Define animations & animation groups
  *   • Add physics bodies
@@ -21,7 +21,7 @@
  *   • Configure environment (skybox, fog, HDR textures)
  *   • Validate and export the complete scene as JSON
  *
- * This server is designed to work alongside the NME MCP server (materials)
+ * This server is designed to work alongside the Node Material MCP server (materials)
  * and Flow Graph MCP server (behaviors) as an orchestration layer.
  *
  * Transport: stdio
@@ -98,7 +98,7 @@ const server = new McpServer(
         instructions: [
             "You build complete Babylon.js 3D scenes. Workflow: create_scene → add camera (set isActive) → add lights → add meshes/models → create & assign materials → validate_scene → start_preview or export_scene_code.",
             "For shadows: use DirectionalLight/SpotLight with shadowEnabled, set castsShadows on casters and receiveShadows on receivers.",
-            "For materials from the NME MCP, geometry from the NGE MCP, render pipelines from the NRG MCP, behaviors from the Flow Graph MCP, or UI from the GUI MCP: prefer file-based handoff (outputFile on the producer, *File param here) to keep large JSON out of the context window.",
+            "For materials from the Node Material MCP, geometry from the Node Geometry MCP, render pipelines from the Node Render Graph MCP, behaviors from the Flow Graph MCP, or UI from the GUI MCP: prefer file-based handoff (outputFile on the producer, *File param here) to keep large JSON out of the context window.",
             "Always validate before exporting. Use start_preview to see results in a browser.",
         ].join(" "),
     }
@@ -151,11 +151,11 @@ server.registerResource("scene-overview", "scene://overview", {}, async (uri) =>
                 "latest scene state — just refresh the browser after making changes. No need to write files to disk.",
                 "",
                 "## Integration with other MCP servers",
-                "- **NME MCP server**: Export NME JSON → import here via `add_material` with type NodeMaterial",
+                "- **Node Material MCP server**: Export NME JSON → import here via `add_material` with type NodeMaterial",
                 "- **Flow Graph MCP server**: Export coordinator JSON → attach here via `attach_flow_graph`",
                 "- **GUI MCP server**: Export GUI JSON → attach here via `attach_gui` (auto-included in code exports)",
-                "- **NRG MCP server** (babylonjs-nrg): Build a custom render pipeline → export JSON → attach here via `attach_node_render_graph`",
-                "- **NGE MCP server** (babylonjs-nge): Design procedural geometry → export JSON → add as a mesh via `add_node_geometry_mesh`",
+                "- **Node Render Graph MCP server** (babylonjs-node-render-graph): Build a custom render pipeline → export JSON → attach here via `attach_node_render_graph`",
+                "- **Node Geometry MCP server** (babylonjs-node-geometry): Design procedural geometry → export JSON → add as a mesh via `add_node_geometry_mesh`",
                 "",
                 "### File-based handoff (recommended for large payloads)",
                 "To avoid passing large JSON through the conversation context, use file-based handoff:",
@@ -305,8 +305,8 @@ server.registerPrompt("create-character-scene", { description: "Create a scene w
                     "7. add_mesh 'fireSphere' type 'Sphere' options {diameter: 0.5}, transform {position: [0.5, 1.5, 0]}",
                     "8. (After model loads, parent the sphere to the character's hand bone)",
                     "",
-                    "## Step 5: Create fire material using NME MCP server",
-                    "9. Use the NME MCP server to create a fire node material",
+                    "## Step 5: Create fire material using Node Material MCP server",
+                    "9. Use the Node Material MCP server to create a fire node material",
                     "10. Export the NME JSON and import it here:",
                     "    add_material 'fireMat' type 'NodeMaterial' nmeJson='<the exported NME JSON>'",
                     "11. assign_material meshId='fireSphere' materialId='fireMat'",
@@ -989,7 +989,7 @@ server.registerTool(
     {
         description:
             "Create a material in the scene. Supports StandardMaterial, PBRMaterial, and NodeMaterial (NME JSON). " +
-            "For NodeMaterial, pass the exported NME JSON from the NME MCP server (inline or via file path). " +
+            "For NodeMaterial, pass the exported NME JSON from the Node Material MCP server (inline or via file path). " +
             "Common material properties (albedoColor, diffuseColor, metallic, roughness, etc.) can be passed at top level as shortcuts for properties.{key}.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
@@ -1027,7 +1027,7 @@ server.registerTool(
             metallic: z.number().optional().describe("Shorthand for properties.metallic (PBRMaterial) — 0 to 1"),
             roughness: z.number().optional().describe("Shorthand for properties.roughness (PBRMaterial) — 0 to 1"),
             alpha: z.number().optional().describe("Shorthand for properties.alpha — 0 (transparent) to 1 (opaque)"),
-            nmeJson: z.string().optional().describe("For NodeMaterial: the full NME JSON string exported from the NME MCP server"),
+            nmeJson: z.string().optional().describe("For NodeMaterial: the full NME JSON string exported from the Node Material MCP server"),
             nmeJsonFile: z
                 .string()
                 .optional()
@@ -1109,7 +1109,7 @@ server.registerTool(
                         type: "text",
                         text:
                             `Error: NodeMaterial requires at least one of: nmeJson (inline JSON string), nmeJsonFile (path to exported NME JSON file), or snippetId. ` +
-                            `Use the NME MCP server's export_material_json tool to export the material to a file, then pass the file path via nmeJsonFile.`,
+                            `Use the Node Material MCP server's export_material_json tool to export the material to a file, then pass the file path via nmeJsonFile.`,
                     },
                 ],
                 isError: true,
@@ -1124,7 +1124,7 @@ server.registerTool(
                     content: [
                         {
                             type: "text",
-                            text: `Error: nmeJson must be a valid JSON string. The provided value is not valid JSON. Use the NME MCP server's export_material_json tool to get properly formatted JSON.`,
+                            text: `Error: nmeJson must be a valid JSON string. The provided value is not valid JSON. Use the Node Material MCP server's export_material_json tool to get properly formatted JSON.`,
                         },
                     ],
                     isError: true,
@@ -2705,14 +2705,14 @@ server.registerTool(
     "attach_node_render_graph",
     {
         description:
-            "Attach a Node Render Graph JSON (from the NRG MCP server's export_graph_json) to the scene. " +
+            "Attach a Node Render Graph JSON (from the Node Render Graph MCP server's export_graph_json) to the scene. " +
             "Once attached, the exported code will call NodeRenderGraph.ParseAsync() + buildAsync() to apply the " +
             "custom render pipeline. Only one render graph can be attached at a time; re-calling this " +
             "tool replaces the previous one. " +
             "Provide either the inline nrgJson string OR a nrgJsonFile path (not both).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to attach the render graph to"),
-            nrgJson: z.string().optional().describe("The NRG JSON string (from the NRG MCP server's export_graph_json tool)"),
+            nrgJson: z.string().optional().describe("The NRG JSON string (from the Node Render Graph MCP server's export_graph_json tool)"),
             nrgJsonFile: z.string().optional().describe("Absolute path to a file containing the NRG JSON (alternative to inline nrgJson)"),
         },
     },
@@ -2774,14 +2774,14 @@ server.registerTool(
     "add_node_geometry_mesh",
     {
         description:
-            "Add a procedural mesh to the scene using a Node Geometry JSON (from the NGE MCP server's export_geometry_json). " +
+            "Add a procedural mesh to the scene using a Node Geometry JSON (from the Node Geometry MCP server's export_geometry_json). " +
             "The exported code will call NodeGeometry.Parse() + build() + createMesh() to create the mesh at runtime. " +
             "If a mesh with the same name already exists on this scene, it is replaced. " +
             "Provide either the inline ngeJson string OR a ngeJsonFile path (not both).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to add the mesh to"),
             meshName: z.string().describe("Name to give the created mesh"),
-            ngeJson: z.string().optional().describe("The NGE JSON string (from the NGE MCP server's export_geometry_json tool)"),
+            ngeJson: z.string().optional().describe("The NGE JSON string (from the Node Geometry MCP server's export_geometry_json tool)"),
             ngeJsonFile: z.string().optional().describe("Absolute path to a file containing the NGE JSON (alternative to inline ngeJson)"),
         },
     },

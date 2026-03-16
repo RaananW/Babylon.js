@@ -1,7 +1,7 @@
 /**
- * NPE MCP Server – Babylon.js Parse Validation
+ * Node Particle MCP Server – Babylon.js Parse Validation
  *
- * Tests that JSON produced by the NPE MCP server can be parsed by Babylon.js's
+ * Tests that JSON produced by the Node Particle MCP server can be parsed by Babylon.js's
  * NodeParticleSystemSet.parseSerializedObject() without errors. This proves the JSON
  * structure is valid and all block types are recognized by Babylon.js.
  *
@@ -24,7 +24,7 @@ function readExampleJson(filename: string): string {
     return fs.readFileSync(path.join(EXAMPLES_DIR, filename), "utf-8");
 }
 
-describe("NPE MCP Server – Babylon.js Parse", () => {
+describe("Node Particle MCP Server – Babylon.js Parse", () => {
     const exampleFiles = ["BasicParticles.json", "ColoredParticles.json", "ConeFountain.json", "MathParticles.json", "MultiSystemParticles.json"];
 
     for (const file of exampleFiles) {

@@ -1,5 +1,5 @@
 /**
- * NME MCP Server – Output Validation Tests
+ * Node Material MCP Server – Output Validation Tests
  *
  * Creates materials via MaterialGraphManager, exports them to JSON, validates
  * the JSON structure, and round-trips sample materials.
@@ -70,7 +70,7 @@ function validateMaterialJSON(json: string, label: string): object | null {
 
 // ─── Test 1: Create a simple color material ───────────────────────────────
 
-describe("NME MCP Server – Graph Manager Validation", () => {
+describe("Node Material MCP Server – Graph Manager Validation", () => {
     it("creates and exports a simple color material with valid JSON", () => {
         const mgr = new MaterialGraphManager();
         mgr.createMaterial("simpleColor");

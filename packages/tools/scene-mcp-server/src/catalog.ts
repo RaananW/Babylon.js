@@ -353,7 +353,7 @@ export const MaterialPresets: Record<string, IMaterialPresetInfo> = {
         description: "A material created from a Node Material Editor JSON. Use import_nme_material to load NME JSON.",
         className: "NodeMaterial",
         options: {
-            nmeJson: { type: "string", description: "The NME JSON string (exported from the NME MCP server)" },
+            nmeJson: { type: "string", description: "The NME JSON string (exported from the Node Material MCP server)" },
             snippetId: { type: "string", description: "Snippet ID from the Babylon.js Snippet Server" },
         },
     },

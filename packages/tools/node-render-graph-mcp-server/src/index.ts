@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-console */
 /**
- * Node Render Graph MCP Server  (babylonjs-nrg)
+ * Node Render Graph MCP Server  (babylonjs-node-render-graph)
  * ───────────────────────────────────────────────
  * A Model Context Protocol server that lets AI agents build Babylon.js
  * Node Render Graph (NRG / NRGE) pipelines programmatically.
@@ -21,7 +21,7 @@
  * ──────────────────────────
  * This server generates JSON that can be attached to a Babylon.js scene via the
  * Scene MCP server's `attach_node_render_graph` tool.  Typical workflow:
- *   1. NRG MCP → build & export graph JSON
+ *   1. Node Render Graph MCP → build & export graph JSON
  *   2. Scene MCP → `attach_node_render_graph { sceneName, nrgJson }`
  *
  * Transport: stdio  (standard MCP transport for local tool servers)
@@ -42,7 +42,7 @@ const manager = new RenderGraphManager();
 // ─── MCP Server ──────────────────────────────────────────────────────────
 const server = new McpServer(
     {
-        name: "babylonjs-nrg",
+        name: "babylonjs-node-render-graph",
         version: "1.0.0",
     },
     {
@@ -885,4 +885,4 @@ server.registerTool(
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
-console.error("babylonjs-nrg MCP server running on stdio");
+console.error("babylonjs-node-render-graph MCP server running on stdio");

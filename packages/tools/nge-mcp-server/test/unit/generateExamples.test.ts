@@ -1,5 +1,5 @@
 /**
- * NGE MCP Server – Example Geometry Generator
+ * Node Geometry MCP Server – Example Geometry Generator
  *
  * Builds several reference Node Geometry graphs via the GeometryGraphManager API,
  * validates them, and writes them to the examples/ directory.
@@ -247,7 +247,7 @@ function buildMathPipeline(): string {
 //  Jest Test Wrapper
 // ═══════════════════════════════════════════════════════════════════════════
 
-describe("NGE MCP Server – Example Generation", () => {
+describe("Node Geometry MCP Server – Example Generation", () => {
     it("generates SimpleBox example", () => {
         const json = buildSimpleBox();
         const parsed = JSON.parse(json);

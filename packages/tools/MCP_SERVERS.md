@@ -13,17 +13,17 @@
 
 ## MCP Servers
 
-| #   | Server                         | Directory                       | Status | Description                                                                                                                                                                                                                                     |
-| --- | ------------------------------ | ------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **NME (Node Material Editor)** | `nme-mcp-server/`               | ✅     | Create and edit Node Materials via the node graph. Export NME JSON for use in the Scene MCP.                                                                                                                                                    |
-| 2   | **Flow Graph**                 | `flow-graph-mcp-server/`        | ✅     | Build visual scripting Flow Graphs. Export coordinator JSON for use in the Scene MCP.                                                                                                                                                           |
-| 3   | **Scene**                      | `scene-mcp-server/`             | ✅     | Orchestrator — full 3D scene assembly: meshes, cameras, lights, materials, models, animations, physics (bodies + constraints), audio, particles, post-processing, glow/highlight layers, flow graphs. Exports runnable TypeScript code or JSON. |
-| 4   | **NGE (Node Geometry Editor)** | `nge-mcp-server/`               | ✅     | Create procedural geometry via the Node Geometry graph system. 17 tools. Mirrors NME pattern — add geometry nodes, connect ports, set parameters, validate, export NGE JSON.                                                                    |
-| 5   | **Node Render Graph**          | `node-render-graph-mcp-server/` | ✅     | Build custom render pipelines via the Node Render Graph (NRGE). 17 tools. Add Input/Output/renderer/post-process/layer blocks, wire ports, set properties, validate, export NRG JSON. Scene MCP consumes output via `attach_node_render_graph`. |
-| 6   | **Node Particles**             | `node-particle-mcp-server/`     | ❌     | Create GPU particle systems via the Node Particle graph editor.                                                                                                                                                                                 |
-| 7   | **GUI**                        | `gui-mcp-server/`               | ✅     | Build 2D UI layouts using the Babylon.js GUI system (AdvancedDynamicTexture, controls, layout). 22 tools. Standalone — not part of the Scene MCP.                                                                                               |
-| 8   | **Smart Filters**              | `smart-filters-mcp-server/`     | ❌     | Create post-processing smart filter graphs for the Smart Filters system.                                                                                                                                                                        |
-| 9   | **glTF**                       | `gltf-mcp-server/`              | ❌     | Read, analyze, and modify glTF/glb assets using Babylon.js loaders and serializers. Inspect structure, edit nodes/meshes/materials/animations, add or modify extensions, validate, and re-export.                                               |
+| #   | Server                | Directory                       | Status | Description                                                                                                                                                                                                                                     |
+| --- | --------------------- | ------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Node Material**     | `nme-mcp-server/`               | ✅     | Create and edit Node Materials via the node graph. Export NME JSON for use in the Scene MCP.                                                                                                                                                    |
+| 2   | **Flow Graph**        | `flow-graph-mcp-server/`        | ✅     | Build visual scripting Flow Graphs. Export coordinator JSON for use in the Scene MCP.                                                                                                                                                           |
+| 3   | **Scene**             | `scene-mcp-server/`             | ✅     | Orchestrator — full 3D scene assembly: meshes, cameras, lights, materials, models, animations, physics (bodies + constraints), audio, particles, post-processing, glow/highlight layers, flow graphs. Exports runnable TypeScript code or JSON. |
+| 4   | **Node Geometry**     | `nge-mcp-server/`               | ✅     | Create procedural geometry via the Node Geometry graph system. 17 tools. Mirrors Node Material pattern — add geometry nodes, connect ports, set parameters, validate, export NGE JSON.                                                          |
+| 5   | **Node Render Graph** | `node-render-graph-mcp-server/` | ✅     | Build custom render pipelines via the Node Render Graph. 17 tools. Add Input/Output/renderer/post-process/layer blocks, wire ports, set properties, validate, export NRG JSON. Scene MCP consumes output via `attach_node_render_graph`.        |
+| 6   | **Node Particles**    | `node-particle-mcp-server/`     | ❌     | Create GPU particle systems via the Node Particle graph editor.                                                                                                                                                                                 |
+| 7   | **GUI**               | `gui-mcp-server/`               | ✅     | Build 2D UI layouts using the Babylon.js GUI system (AdvancedDynamicTexture, controls, layout). 22 tools. Standalone — not part of the Scene MCP.                                                                                               |
+| 8   | **Smart Filters**     | `smart-filters-mcp-server/`     | ❌     | Create post-processing smart filter graphs for the Smart Filters system.                                                                                                                                                                        |
+| 9   | **glTF**              | `gltf-mcp-server/`              | ❌     | Read, analyze, and modify glTF/glb assets using Babylon.js loaders and serializers. Inspect structure, edit nodes/meshes/materials/animations, add or modify extensions, validate, and re-export.                                               |
 
 ## Architecture
 
@@ -34,9 +34,9 @@
 │  post-process, glow, highlight, environment          │
 │                                                      │
 │  Consumes output from:                               │
-│    ├── NME MCP ───────────→ NME JSON (materials)     │
+│    ├── Node Material MCP ───→ NME JSON (materials)     │
 │    ├── Flow Graph MCP ─────→ Coordinator JSON (logic)│
-│    ├── NGE MCP ────────────→ NGE JSON (geometry)     │
+│    ├── Node Geometry MCP ───→ NGE JSON (geometry)     │
 │    ├── Node Render Graph ──→ NRG JSON (render pipe)  │
 │    ├── Node Particles ─────→ JSON (GPU particles)    │
 │    └── GUI MCP ────────────→ GUI JSON (2D UI overlay)│
@@ -57,8 +57,8 @@ All export tools accept an optional **`outputFile`** parameter. All import/attac
 
 ```
 ┌──────────────┐     file path only     ┌──────────────┐
-│  NME MCP     │ ── outputFile ──────→  │  Scene MCP   │
-│  export_     │    /tmp/bjs/mat.json   │  add_material│
+│ Node Material  │ ── outputFile ──────→  │  Scene MCP   │
+│ MCP            │    /tmp/bjs/mat.json   │  add_material│
 │  material_   │                        │  (nmeJsonFile)│
 │  json        │                        │              │
 └──────────────┘                        └──────────────┘
@@ -136,7 +136,7 @@ When this lands, the workflow becomes:
 
 ```
 LLM: "attach this material to the scene"
-  → Scene MCP (server-to-server): calls NME MCP's export_material_json
+  → Scene MCP (server-to-server): calls Node Material MCP's export_material_json
   → Scene MCP: receives JSON directly, stores it internally
   → Scene MCP: returns confirmation to LLM
 ```
@@ -154,14 +154,14 @@ The LLM never sees the JSON at all. This is the **best possible solution** becau
 
 ### Implemented
 
-- **NME MCP**: Full node graph builder — add blocks, connect ports, set properties, validate, export JSON. The Scene MCP can import NME JSON via `add_material` with `type: NodeMaterial`.
+- **Node Material MCP**: Full node graph builder — add blocks, connect ports, set properties, validate, export JSON. The Scene MCP can import NME JSON via `add_material` with `type: NodeMaterial`.
 - **Flow Graph MCP**: Event nodes, logic nodes, variable management. The Scene MCP consumes coordinator JSON via `attach_flow_graph`.
 - **Scene MCP**: 60+ tools covering scene lifecycle, environment, cameras, lights, materials, textures, meshes, transform nodes, hierarchy, models, animations, animation groups, physics bodies, physics constraints, audio (V2), classic/GPU particles, render pipeline (bloom, DOF, FXAA, etc.), glow layers, highlight layers, flow graph attachment, node render graph attachment, query/describe, validation, import/export (JSON + runnable code).
-- **Node Render Graph MCP** (`babylonjs-nrg`): 17 tools for building custom render pipelines via the NRGE block graph. Blocks include: InputBlock (texture, camera, objectList, shadowLight, …), OutputBlock, ClearBlock, CopyTextureBlock, ObjectRendererBlock, GeometryRendererBlock, ShadowGeneratorBlock, CsmShadowGeneratorBlock, CullObjectsBlock, 15+ post-process blocks (Bloom, Blur, FXAA, Sharpen, ChromaticAberration, Grain, BlackAndWhite, Tonemap, DOF, SSR, SSAO2, TAA, MotionBlur, ImageProcessing, ColorCorrection, …), GlowLayerBlock, HighlightLayerBlock, SelectionOutlineLayerBlock, and 6 utility blocks. Exports NRGE-compatible JSON; Scene MCP consumes it via `attach_node_render_graph`.
+- **Node Render Graph MCP** (`babylonjs-node-render-graph`): 17 tools for building custom render pipelines via the NRGE block graph. Blocks include: InputBlock (texture, camera, objectList, shadowLight, …), OutputBlock, ClearBlock, CopyTextureBlock, ObjectRendererBlock, GeometryRendererBlock, ShadowGeneratorBlock, CsmShadowGeneratorBlock, CullObjectsBlock, 15+ post-process blocks (Bloom, Blur, FXAA, Sharpen, ChromaticAberration, Grain, BlackAndWhite, Tonemap, DOF, SSR, SSAO2, TAA, MotionBlur, ImageProcessing, ColorCorrection, …), GlowLayerBlock, HighlightLayerBlock, SelectionOutlineLayerBlock, and 6 utility blocks. Exports NRGE-compatible JSON; Scene MCP consumes it via `attach_node_render_graph`.
 
 ### To Implement
 
-- **NGE MCP**: Should mirror the NME MCP pattern — add geometry nodes, connect ports, set parameters, validate, export NGE JSON. The Scene MCP would consume NG JSON to create procedural meshes.
+- **Node Geometry MCP**: Should mirror the Node Material MCP pattern — add geometry nodes, connect ports, set parameters, validate, export NGE JSON. The Scene MCP would consume NG JSON to create procedural meshes.
 - **Node Particles MCP**: Node-graph builder for GPU particle systems. Output consumed by Scene MCP as an alternative to the classic particle system tools.
 - **GUI MCP**: _(see below)_
 - **Smart Filters MCP**: Smart filter graph builder — block catalog, connection system, export filter JSON.

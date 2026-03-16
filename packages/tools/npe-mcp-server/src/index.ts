@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-console */
 /**
- * NPE MCP Server
+ * Node Particle MCP Server (babylonjs-node-particle)
  * ──────────────
  * A Model Context Protocol server that exposes tools for building Babylon.js
  * Node Particle System Sets programmatically.  An AI agent (or any MCP client) can:
@@ -34,7 +34,7 @@ const manager = new ParticleGraphManager();
 // ─── MCP Server ───────────────────────────────────────────────────────────
 const server = new McpServer(
     {
-        name: "babylonjs-npe",
+        name: "babylonjs-node-particle",
         version: "1.0.0",
     },
     {

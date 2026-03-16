@@ -6,7 +6,7 @@
     "type": "module",
     "main": "dist/index.js",
     "bin": {
-        "babylonjs-nme": "dist/index.js"
+        "babylonjs-node-material": "dist/index.js"
     },
     "scripts": {
         "build": "tsc",

@@ -1829,12 +1829,12 @@ export interface ICodeGeneratorOptions {
      */
     guiJson?: unknown;
     /**
-     * Optional Node Render Graph JSON descriptor (from the NRG MCP server).
+     * Optional Node Render Graph JSON descriptor (from the Node Render Graph MCP server).
      * When provided, NodeRenderGraph.Parse() + buildAsync() code will be generated.
      */
     nodeRenderGraphJson?: unknown;
     /**
-     * Optional list of Node Geometry meshes (from the NGE MCP server).
+     * Optional list of Node Geometry meshes (from the Node Geometry MCP server).
      * Each entry generates NodeGeometry.Parse() + build() + createMesh() code.
      */
     nodeGeometryMeshes?: Array<{ name: string; ngeJson: unknown }>;

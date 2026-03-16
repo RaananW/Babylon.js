@@ -1,7 +1,7 @@
 /**
- * NME MCP Server – Babylon.js Parse Validation
+ * Node Material MCP Server – Babylon.js Parse Validation
  *
- * Tests that JSON produced by the NME MCP server can be parsed by Babylon.js's
+ * Tests that JSON produced by the Node Material MCP server can be parsed by Babylon.js's
  * NodeMaterial.Parse() without errors. This is the definitive end-to-end test:
  * if Parse() + build() succeeds, the material is valid for the NME editor.
  */
@@ -25,7 +25,7 @@ function readNmeJson(relativePath: string): string {
     return fs.readFileSync(fullPath, "utf-8");
 }
 
-describe("NME MCP Server – Babylon.js Parse", () => {
+describe("Node Material MCP Server – Babylon.js Parse", () => {
     let engine: NullEngine;
     let scene: Scene;
 

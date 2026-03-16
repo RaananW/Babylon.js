@@ -6,7 +6,7 @@
     "type": "module",
     "main": "dist/index.js",
     "bin": {
-        "babylonjs-npe": "dist/index.js"
+        "babylonjs-node-particle": "dist/index.js"
     },
     "scripts": {
         "build": "tsc",

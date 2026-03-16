@@ -6,7 +6,7 @@
     "type": "module",
     "main": "dist/index.js",
     "bin": {
-        "babylonjs-nrg": "dist/index.js"
+        "babylonjs-node-render-graph": "dist/index.js"
     },
     "scripts": {
         "build": "tsc",

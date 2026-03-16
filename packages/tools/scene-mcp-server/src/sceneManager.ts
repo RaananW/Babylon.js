@@ -707,12 +707,12 @@ export interface ISerializedScene {
     /** GUI descriptor JSON (from the GUI MCP server). Stored here so the scene is the single source of truth. */
     guiJson?: unknown;
     /**
-     * Node Render Graph JSON (from the NRG MCP server).
+     * Node Render Graph JSON (from the Node Render Graph MCP server).
      * When present, the code generator emits NodeRenderGraph.Parse() + buildAsync() calls.
      */
     nodeRenderGraphJson?: unknown;
     /**
-     * Node Geometry meshes (from the NGE MCP server).
+     * Node Geometry meshes (from the Node Geometry MCP server).
      * Each entry's ngeJson is used to emit NodeGeometry.Parse() + build() + createMesh() calls.
      */
     nodeGeometryMeshes?: Array<{ name: string; ngeJson: unknown }>;
@@ -2721,7 +2721,7 @@ export class SceneManager {
 
     /**
      * Attach a Node Render Graph JSON descriptor to a scene.
-     * The JSON must be NRGE-compatible (from the NRG MCP server's export_graph_json tool).
+     * The JSON must be NRGE-compatible (from the Node Render Graph MCP server's export_graph_json tool).
      * @param sceneName The scene to attach the NRG to
      * @param nrgJson The NRG descriptor JSON
      * @returns "OK" or an error message
@@ -2764,7 +2764,7 @@ export class SceneManager {
      * The ngeJson must have customType === "BABYLON.NodeGeometry".
      * @param sceneName The scene to add the mesh to
      * @param meshName The name to give the created mesh
-     * @param ngeJson The NGE descriptor JSON (from the NGE MCP server's export_geometry_json)
+     * @param ngeJson The NGE descriptor JSON (from the Node Geometry MCP server's export_geometry_json)
      * @returns "OK" or an error message
      */
     addNodeGeometryMesh(sceneName: string, meshName: string, ngeJson: unknown): string {

@@ -1,6 +1,6 @@
 {
     "servers": {
-        "babylonjs-nme": {
+        "babylonjs-node-material": {
             "command": "node",
             "args": ["./packages/tools/nme-mcp-server/dist/index.js"]
         },
@@ -16,15 +16,15 @@
             "command": "node",
             "args": ["./packages/tools/gui-mcp-server/dist/index.js"]
         },
-        "babylonjs-nge": {
+        "babylonjs-node-geometry": {
             "command": "node",
             "args": ["./packages/tools/nge-mcp-server/dist/index.js"]
         },
-        "babylonjs-render-graph": {
+        "babylonjs-node-render-graph": {
             "command": "node",
             "args": ["./packages/tools/node-render-graph-mcp-server/dist/index.js"]
         },
-        "babylonjs-npe": {
+        "babylonjs-node-particle": {
             "command": "node",
             "args": ["./packages/tools/npe-mcp-server/dist/index.js"]
         }

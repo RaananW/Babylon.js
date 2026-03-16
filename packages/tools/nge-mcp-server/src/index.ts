@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-console */
 /**
- * NGE MCP Server
+ * Node Geometry MCP Server (babylonjs-node-geometry)
  * ──────────────
  * A Model Context Protocol server that exposes tools for building Babylon.js
  * Node Geometries programmatically.  An AI agent (or any MCP client) can:
@@ -34,7 +34,7 @@ const manager = new GeometryGraphManager();
 // ─── MCP Server ───────────────────────────────────────────────────────────
 const server = new McpServer(
     {
-        name: "babylonjs-nge",
+        name: "babylonjs-node-geometry",
         version: "1.0.0",
     },
     {
