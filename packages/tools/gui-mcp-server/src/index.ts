@@ -29,6 +29,8 @@ import { dirname } from "node:path";
 
 import { ControlRegistry, BaseControlProperties, GetControlCatalogSummary, GetControlTypeDetails } from "./catalog.js";
 import { GuiManager } from "./guiManager.js";
+import { loadSnippet } from "@tools/snippet-loader";
+import type { DataSnippetResult } from "@tools/snippet-loader";
 
 // ─── Singleton manager ────────────────────────────────────────────────────
 const manager = new GuiManager();
@@ -852,6 +854,51 @@ server.registerTool(
         }
         const desc = manager.describeTexture(guiName);
         return { content: [{ type: "text", text: `Imported successfully.\n\n${desc}` }] };
+    }
+);
+
+server.registerTool(
+    "import_from_snippet",
+    {
+        description:
+            "Import a GUI layout from the Babylon.js Snippet Server by its snippet ID. " +
+            "The snippet is fetched, validated as a gui type, and loaded into memory for editing. " +
+            'Snippet IDs look like "ABC123" or "ABC123#2" (with revision).',
+        inputSchema: {
+            guiName: z.string().describe("Name to give the imported GUI in memory"),
+            snippetId: z.string().describe('Snippet ID from the Babylon.js Snippet Server (e.g. "ABC123" or "ABC123#2")'),
+        },
+    },
+    async ({ guiName, snippetId }) => {
+        try {
+            const snippetResult = await loadSnippet(snippetId);
+            if (snippetResult.type === "unknown") {
+                return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
+            }
+            if (snippetResult.type !== "gui") {
+                return {
+                    content: [{ type: "text", text: `Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "gui".` }],
+                    isError: true,
+                };
+            }
+            const dataResult = snippetResult as DataSnippetResult;
+            const jsonStr = JSON.stringify(dataResult.data);
+            const result = manager.importJSON(guiName, jsonStr);
+            if (result !== "OK") {
+                return { content: [{ type: "text", text: `Error importing snippet data: ${result}` }], isError: true };
+            }
+            const desc = manager.describeTexture(guiName);
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: `Imported snippet "${snippetId}" as "${guiName}" successfully.\n\n${desc}`,
+                    },
+                ],
+            };
+        } catch (e) {
+            return { content: [{ type: "text", text: `Error fetching snippet "${snippetId}": ${(e as Error).message}` }], isError: true };
+        }
     }
 );
 

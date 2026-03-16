@@ -27,6 +27,8 @@ import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { MaterialGraphManager } from "./materialGraph.js";
+import { loadSnippet } from "@tools/snippet-loader";
+import type { DataSnippetResult } from "@tools/snippet-loader";
 
 // ─── Singleton graph manager ──────────────────────────────────────────────
 const manager = new MaterialGraphManager();
@@ -675,6 +677,51 @@ server.registerTool(
         }
         const desc = manager.describeMaterial(materialName);
         return { content: [{ type: "text", text: `Imported successfully.\n\n${desc}` }] };
+    }
+);
+
+server.registerTool(
+    "import_from_snippet",
+    {
+        description:
+            "Import a Node Material from the Babylon.js Snippet Server by its snippet ID. " +
+            "The snippet is fetched, validated as a nodeMaterial type, and loaded into memory for editing. " +
+            'Snippet IDs look like "ABC123" or "ABC123#2" (with revision).',
+        inputSchema: {
+            materialName: z.string().describe("Name to give the imported material in memory"),
+            snippetId: z.string().describe('Snippet ID from the Babylon.js Snippet Server (e.g. "ABC123" or "ABC123#2")'),
+        },
+    },
+    async ({ materialName, snippetId }) => {
+        try {
+            const snippetResult = await loadSnippet(snippetId);
+            if (snippetResult.type === "unknown") {
+                return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
+            }
+            if (snippetResult.type !== "nodeMaterial") {
+                return {
+                    content: [{ type: "text", text: `Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "nodeMaterial".` }],
+                    isError: true,
+                };
+            }
+            const dataResult = snippetResult as DataSnippetResult;
+            const jsonStr = JSON.stringify(dataResult.data);
+            const result = manager.importJSON(materialName, jsonStr);
+            if (result !== "OK") {
+                return { content: [{ type: "text", text: `Error importing snippet data: ${result}` }], isError: true };
+            }
+            const desc = manager.describeMaterial(materialName);
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: `Imported snippet "${snippetId}" as "${materialName}" successfully.\n\n${desc}`,
+                    },
+                ],
+            };
+        } catch (e) {
+            return { content: [{ type: "text", text: `Error fetching snippet "${snippetId}": ${(e as Error).message}` }], isError: true };
+        }
     }
 );
 

@@ -15,6 +15,7 @@
     },
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.12.1",
+        "@tools/snippet-loader": "1.0.0",
         "zod": "^4.3.6"
     },
     "devDependencies": {

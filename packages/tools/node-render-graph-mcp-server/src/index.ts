@@ -35,6 +35,8 @@ import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { RenderGraphManager } from "./renderGraph.js";
+import { loadSnippet } from "@tools/snippet-loader";
+import type { DataSnippetResult } from "@tools/snippet-loader";
 
 // ─── Singleton graph manager ─────────────────────────────────────────────
 const manager = new RenderGraphManager();
@@ -847,6 +849,53 @@ server.registerTool(
             };
         } catch (e) {
             return { content: [{ type: "text", text: `Error: ${(e as Error).message}` }], isError: true };
+        }
+    }
+);
+
+server.registerTool(
+    "import_from_snippet",
+    {
+        description:
+            "Import a Node Render Graph from the Babylon.js Snippet Server by its snippet ID. " +
+            "The snippet is fetched, validated as a nodeRenderGraph type, and loaded into memory for editing. " +
+            'Snippet IDs look like "ABC123" or "ABC123#2" (with revision).',
+        inputSchema: {
+            graphName: z.string().describe("Name to assign to the imported graph in memory"),
+            snippetId: z.string().describe('Snippet ID from the Babylon.js Snippet Server (e.g. "ABC123" or "ABC123#2")'),
+            overwrite: z.boolean().optional().describe("If true, replace any existing graph with the same name. Default: false."),
+        },
+    },
+    async ({ graphName, snippetId, overwrite }) => {
+        try {
+            const snippetResult = await loadSnippet(snippetId);
+            if (snippetResult.type === "unknown") {
+                return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
+            }
+            if (snippetResult.type !== "nodeRenderGraph") {
+                return {
+                    content: [{ type: "text", text: `Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "nodeRenderGraph".` }],
+                    isError: true,
+                };
+            }
+            const dataResult = snippetResult as DataSnippetResult;
+            const jsonStr = JSON.stringify(dataResult.data);
+            const graph = manager.importJson(graphName, jsonStr, overwrite ?? false);
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: [
+                            `Imported snippet "${snippetId}" as render graph "${graphName}" with ${graph.blocks.length} blocks.`,
+                            `outputNodeId: ${graph.outputNodeId ?? "(not set)"}`,
+                            "",
+                            "Call describe_graph to inspect the imported structure.",
+                        ].join("\n"),
+                    },
+                ],
+            };
+        } catch (e) {
+            return { content: [{ type: "text", text: `Error fetching snippet "${snippetId}": ${(e as Error).message}` }], isError: true };
         }
     }
 );

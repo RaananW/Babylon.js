@@ -27,6 +27,8 @@ import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { GeometryGraphManager } from "./geometryGraph.js";
+import { loadSnippet } from "@tools/snippet-loader";
+import type { DataSnippetResult } from "@tools/snippet-loader";
 
 // ─── Singleton graph manager ──────────────────────────────────────────────
 const manager = new GeometryGraphManager();
@@ -794,6 +796,51 @@ server.registerTool(
         }
         const desc = manager.describeGeometry(geometryName);
         return { content: [{ type: "text", text: `Imported successfully.\n\n${desc}` }] };
+    }
+);
+
+server.registerTool(
+    "import_from_snippet",
+    {
+        description:
+            "Import a Node Geometry from the Babylon.js Snippet Server by its snippet ID. " +
+            "The snippet is fetched, validated as a nodeGeometry type, and loaded into memory for editing. " +
+            'Snippet IDs look like "ABC123" or "ABC123#2" (with revision).',
+        inputSchema: {
+            geometryName: z.string().describe("Name to give the imported geometry in memory"),
+            snippetId: z.string().describe('Snippet ID from the Babylon.js Snippet Server (e.g. "ABC123" or "ABC123#2")'),
+        },
+    },
+    async ({ geometryName, snippetId }) => {
+        try {
+            const snippetResult = await loadSnippet(snippetId);
+            if (snippetResult.type === "unknown") {
+                return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
+            }
+            if (snippetResult.type !== "nodeGeometry") {
+                return {
+                    content: [{ type: "text", text: `Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "nodeGeometry".` }],
+                    isError: true,
+                };
+            }
+            const dataResult = snippetResult as DataSnippetResult;
+            const jsonStr = JSON.stringify(dataResult.data);
+            const result = manager.importJSON(geometryName, jsonStr);
+            if (result !== "OK") {
+                return { content: [{ type: "text", text: `Error importing snippet data: ${result}` }], isError: true };
+            }
+            const desc = manager.describeGeometry(geometryName);
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: `Imported snippet "${snippetId}" as "${geometryName}" successfully.\n\n${desc}`,
+                    },
+                ],
+            };
+        } catch (e) {
+            return { content: [{ type: "text", text: `Error fetching snippet "${snippetId}": ${(e as Error).message}` }], isError: true };
+        }
     }
 );
 
