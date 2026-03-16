@@ -6,13 +6,27 @@
  * Version: 1.0.0
  */
 
-import { ArcRotateCamera, Color3, Color4, Engine, HavokPlugin, HemisphericLight, MeshBuilder, Physics6DoFConstraint, PhysicsBody, PhysicsConstraintAxis, PhysicsMotionType, PhysicsShapeBox, PhysicsShapeSphere, Scene, Vector3 } from "@babylonjs/core";
+import {
+    ArcRotateCamera,
+    Color3,
+    Color4,
+    Engine,
+    HavokPlugin,
+    HemisphericLight,
+    MeshBuilder,
+    Physics6DoFConstraint,
+    PhysicsBody,
+    PhysicsConstraintAxis,
+    PhysicsMotionType,
+    PhysicsShapeBox,
+    PhysicsShapeSphere,
+    Scene,
+    Vector3,
+} from "@babylonjs/core";
 import HavokPhysics from "@babylonjs/havok";
 
-
-
 async function createScene() {
-    const canvas = document.getElementById("renderCanvas") ;
+    const canvas = document.getElementById("renderCanvas");
     const engine = new Engine(canvas, true, { stencil: true });
 
     const scene = new Scene(engine);
@@ -76,19 +90,23 @@ async function createScene() {
 
     // ─── Physics Constraints ──────────────────────────────────────────────────
     // Physics Constraint: hinge1 (Hinge)
-    const hinge1 = new Physics6DoFConstraint({
-        pivotA: new Vector3(0.5, 0, 0),
-        pivotB: new Vector3(-0.5, 0, 0),
-        axisA: new Vector3(0, 1, 0),
-        axisB: new Vector3(0, 1, 0),
-        limits: [
-            { axis: PhysicsConstraintAxis.LINEAR_X, minLimit: 0, maxLimit: 0 },
-            { axis: PhysicsConstraintAxis.LINEAR_Y, minLimit: 0, maxLimit: 0 },
-            { axis: PhysicsConstraintAxis.LINEAR_Z, minLimit: 0, maxLimit: 0 },
-            { axis: PhysicsConstraintAxis.ANGULAR_Y, minLimit: 0, maxLimit: 0 },
-            { axis: PhysicsConstraintAxis.ANGULAR_Z, minLimit: 0, maxLimit: 0 },
-        ],
-    }, box1Body, sphere1Body);
+    const hinge1 = new Physics6DoFConstraint(
+        {
+            pivotA: new Vector3(0.5, 0, 0),
+            pivotB: new Vector3(-0.5, 0, 0),
+            axisA: new Vector3(0, 1, 0),
+            axisB: new Vector3(0, 1, 0),
+            limits: [
+                { axis: PhysicsConstraintAxis.LINEAR_X, minLimit: 0, maxLimit: 0 },
+                { axis: PhysicsConstraintAxis.LINEAR_Y, minLimit: 0, maxLimit: 0 },
+                { axis: PhysicsConstraintAxis.LINEAR_Z, minLimit: 0, maxLimit: 0 },
+                { axis: PhysicsConstraintAxis.ANGULAR_Y, minLimit: 0, maxLimit: 0 },
+                { axis: PhysicsConstraintAxis.ANGULAR_Z, minLimit: 0, maxLimit: 0 },
+            ],
+        },
+        box1Body,
+        sphere1Body
+    );
     box1Body.addConstraint(sphere1Body, hinge1);
 
     // ─── Render Loop ──────────────────────────────────────────────────────────
@@ -101,4 +119,6 @@ async function createScene() {
     });
 }
 
-createScene().catch(function(e) { console.error("Scene init error:", e); });
+createScene().catch(function (e) {
+    console.error("Scene init error:", e);
+});

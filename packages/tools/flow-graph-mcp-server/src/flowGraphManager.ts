@@ -1031,6 +1031,8 @@ export class FlowGraphManager {
      * This handles LLM-generated config keys that don't match the engine's expected names
      * (e.g. "variableName" → "variable", "eventName" → "eventId").
      * Mutates the config object in place.
+     * @param config configuration
+     * @param typeInfo
      */
     private _normalizeConfigAliases(config: Record<string, unknown> | undefined, typeInfo: IFlowGraphBlockTypeInfo): void {
         // Explicit alias map: maps common LLM-generated config key names to their canonical engine names

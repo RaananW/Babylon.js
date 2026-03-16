@@ -636,7 +636,7 @@ export class RenderGraphManager {
         try {
             parsed = JSON.parse(json) as ISerializedRenderGraph;
         } catch (e) {
-            throw new Error(`Invalid JSON: ${(e as Error).message}`);
+            throw new Error(`Invalid JSON: ${(e as Error).message}`, { cause: e });
         }
 
         if (!parsed.blocks || !Array.isArray(parsed.blocks)) {
