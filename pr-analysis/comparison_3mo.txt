@@ -1,0 +1,59 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║           PR ACTIVITY COMPARISON: Last 3 Months vs Prior Period              ║
+║           Recent: Dec 15 2025 → Mar 14 2026  |  Prior: Mar 2019 → Dec 2025  ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  OVERALL SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                               Recent(3mo)   Prior(~69mo)  Change/mo
+  Total PRs                           666          11912           
+  PRs/month                         222.0          172.6        28%
+  Merged                              605          11220
+  Merge rate                          90%            94%
+  Unique contributors                  55            626
+
+  Additions/month                  676576         523606
+  Deletions/month                  145639         315492
+  Files changed/month                2883           2735
+  Median merge time                  0.1d           0.1d
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PER REPOSITORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Babylon.js
+  ──────────
+                               Recent(3mo)   Prior(~69mo)  Change/mo
+  PRs                                 526           9652           
+  PRs/month                         175.3          139.8        25%
+  Merged                              473           9168
+  Additions/mo                     658806         490258
+  Deletions/mo                     140903         293326
+  Unique contributors                  50            471
+
+  BabylonNative
+  ─────────────
+                               Recent(3mo)   Prior(~69mo)  Change/mo
+  PRs                                  44           1010           
+  PRs/month                          14.6           14.6         0%
+  Merged                               36            852
+  Additions/mo                      13371          29474
+  Deletions/mo                       2045          19183
+  Unique contributors                   8             48
+
+  Documentation
+  ─────────────
+                               Recent(3mo)   Prior(~69mo)  Change/mo
+  PRs                                  96           1250           
+  PRs/month                          32.0           18.1        76%
+  Merged                               96           1200
+  Additions/mo                       4399           3873
+  Deletions/mo                       2690           2983
+  Unique contributors                  21            235
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PER CONTRIBUTOR (sorted by recent activity)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

@@ -1,0 +1,153 @@
+==============================================================================
+  LINES OF CODE COMPARISON: Jan 1 - Mar 14 2026 vs Mar 2019 - Dec 2025
+==============================================================================
+  R = Recent (Jan-Mar 2026, ~2.5 months)  P = Prior (~69 months)
+  All figures are MONTHLY RATES for fair comparison.
+
+------------------------------------------------------------------------------
+  PER CONTRIBUTOR — monthly rates, sorted by recent total lines touched
+------------------------------------------------------------------------------
+
+  Contributor               R +/mo    P +/mo    R -/mo    P -/mo   R net/mo   P net/mo   R tot/mo   P tot/mo
+  ---------------------- --------- --------- --------- --------- ---------- ---------- ---------- ----------
+  sebavan                    40.4K     89.5K     51.9K       89K     -11431        464      92.3K     178.5K
+  ryantrem                     14K      4.3K     12.7K      3.7K       1.4K        576      26.7K         8K
+  RaananW                     5.1K     19.5K     10.6K    101.8K      -5478     -82291      15.7K     121.3K
+  georginahalpern             7.1K       177      1.5K        74       5.6K        103       8.6K        251
+  bghgary                     6.5K     11.8K        1K      1.9K       5.5K       9.9K       7.5K      13.7K
+  VicenteCartas               3.7K       185      1.5K        49       2.2K        136       5.2K        234
+  Popov72                     2.3K      2.5K       667       865       1.7K       1.6K         3K       3.3K
+  CedricGuillemet             1.2K      2.8K       728      1.6K        495       1.2K         2K       4.3K
+  pandaGaume                  1.5K        25         0         6       1.5K         19       1.5K         31
+  MiiBond                     1.1K       451       209        92        924        359       1.3K        544
+  deltakosh                    975     83.7K       270     63.9K        705      19.8K       1.2K     147.7K
+  AmoebaChant                  910       384        91        38        820        346         1K        422
+  kircher1                     795       151       118        54        677         97        914        205
+  spsDrop                      439         2        36         0        403          1        476          2
+  SergioRZMasson               388       146        80        93        308         54        468        239
+  alexchuber                   341       229       106        65        236        164        447        294
+  aknshr                       375         0        41         0        334          0        416          0
+  marns                        314         2        69         0        245          1        384          2
+  bkaradzic-microsoft          227         0       148         0         79          0        375          0
+  eliemichel                   218         0        19         0        199          0        238          0
+  noname0310                   160        55        19        14        141         41        178         69
+  yuripourre                   143        43        10         4        133         39        153         48
+  PirateJC                     138        67         0        37        138         30        138        104
+  matthargett                   60         0        30         0         30          0         91          0
+  sgottschlich                  82         0         1         0         82          0         83          0
+  wiiskii                       61         0        10         0         51          0         72          0
+  docEdub                       33       344        37       147         -4        198         70        491
+  raymondyfei                   42         0        10         0         32          0         53          0
+  ricardovg4                    12         1        12         0          0          1         24          1
+  BarthPaleologue               20         4         0         0         19          4         20          5
+  HasKha                        13         0         3         0         10          0         16          0
+  Jeggery                       12         0         0         0         12          0         13          0
+  bgaborg                        3         0         1         0          2          0          4          0
+  thomlucc                       3         3         0         1          3          2          3          3
+  wmurphyrd                      2         0         2         0          0          0          3          0
+  simonedevit                    1         7         1         1         -0          6          2          9
+  bkargerooom                    2         0         0         0          2          0          2          0
+  mahahahad                      1         0         1         0          0          0          2          0
+  petermart                      1         0         0         0          1          0          2          0
+  regnaio                        1         0         0         0          0          0          1          0
+  barroij                        0        11         0         6          0          4          1         17
+  jneufferrpm                    0         0         0         0          0          0          1          0
+
+  +/mo = additions/month  -/mo = deletions/month
+  net/mo = (adds-dels)/month  tot/mo = (adds+dels)/month
+
+------------------------------------------------------------------------------
+  PER CONTRIBUTOR — average lines per PR (recent vs prior)
+------------------------------------------------------------------------------
+
+  Contributor             R PRs  P PRs   R avg+   P avg+   R avg-   P avg-  R avg.tot  P avg.tot
+  ---------------------- ------ ------ -------- -------- -------- -------- ---------- ----------
+  sebavan                    26   1294     3.9K     4.8K       5K     4.7K       8.9K       9.5K
+  ryantrem                   72    365      488      810      441      702        928       1.5K
+  RaananW                    17   1218      754     1.1K     1.6K     5.8K       2.3K       6.9K
+  georginahalpern            71    100      251      122       52       51        303        173
+  bghgary                    22    460      736     1.8K      114      281        850       2.1K
+  VicenteCartas              64     70      144      183       58       48        202        231
+  Popov72                    97   1461       60      117       17       41         77        158
+  CedricGuillemet            24    652      127      292       76      165        203        457
+  pandaGaume                  2      8     1.9K      216        0       52       1.9K        267
+  MiiBond                     5     76      567      410      105       84        671        494
+  deltakosh                  22   1625      111     3.6K       31     2.7K        142       6.3K
+  AmoebaChant                10     75      228      354       23       35        250        389
+  kircher1                   18     52      110      200       16       72        127        272
+  spsDrop                     7      2      157       54       13        9        170         63
+  SergioRZMasson              6     63      162      160       33      102        195        262
+  alexchuber                 10    139       85      114       26       32        112        146
+  aknshr                      2      0      469        0       52        0        521          0
+  marns                       5      3      157       44       35       11        192         54
+  bkaradzic-microsoft         4      0      142        0       93        0        234          0
+  eliemichel                  4      0      137        0       12        0        149          0
+  noname0310                  4     31      100      122       12       30        112        153
+  yuripourre                  2     11      179      273       13       28        191        301
+  PirateJC                    1     94      346       49        0       27        346         76
+  matthargett                 2      0       76        0       38        0        114          0
+  sgottschlich                1      0      206        0        2        0        208          0
+  wiiskii                     1      1      153        1       26        1        179          2
+  docEdub                     9    156        9      152       10       65         19        217
+  raymondyfei                 1      0      106        0       26        0        132          0
+  ricardovg4                  1      7       30        9       30        2         60         11
+  BarthPaleologue             2      8       25       38        1        3         25         41
+  HasKha                      1      0       32        0        8        0         40          0
+  Jeggery                     3      0       10        0        0        0         11          0
+  bgaborg                     1      0        8        0        3        0         11          0
+  thomlucc                    1     13        8       15        0        4          8         18
+  wmurphyrd                   2      2        2        9        2        1          4         10
+  simonedevit                 1      9        2       56        3        9          5         65
+  bkargerooom                 1      0        4        0        0        0          4          0
+  mahahahad                   1      0        2        0        2        0          4          0
+  petermart                   1      0        3        0        1        0          4          0
+  regnaio                     2      2        1        1        1        1          2          2
+  barroij                     1     14        1       53        1       31          2         85
+  jneufferrpm                 1      0        1        0        1        0          2          0
+
+  avg = average per PR. Large avg.tot may indicate bulk/generated changes.
+
+------------------------------------------------------------------------------
+  PER REPOSITORY — lines of code monthly rates
+------------------------------------------------------------------------------
+
+  Babylon.js
+  ----------
+                                  Recent/mo     Prior/mo     Change
+  Additions                          112.5K       213.7K       -47%
+  Deletions                            112K       268.3K       -58%
+  Net (adds - dels)                     465       -54595
+  Total (adds + dels)                224.4K         482K       -53%
+  Avg lines/PR                         1.3K         3.6K
+  PRs                                   432         9.2K
+
+  BabylonNative
+  -------------
+                                  Recent/mo     Prior/mo     Change
+  Additions                            7.6K        27.1K       -72%
+  Deletions                            1.8K        18.7K       -91%
+  Net (adds - dels)                    5.8K         8.3K
+  Total (adds + dels)                  9.4K        45.8K       -80%
+  Avg lines/PR                          670         3.7K
+  PRs                                    35          853
+
+  Documentation
+  -------------
+                                  Recent/mo     Prior/mo     Change
+  Additions                            5.1K         2.3K       126%
+  Deletions                            3.1K         1.4K       116%
+  Net (adds - dels)                      2K          827
+  Total (adds + dels)                  8.3K         3.7K       122%
+  Avg lines/PR                          246          211
+  PRs                                    84         1.2K
+
+------------------------------------------------------------------------------
+  OVERALL TOTALS
+------------------------------------------------------------------------------
+
+                                  Recent/mo     Prior/mo     Change
+  Additions                          125.2K         243K       -48%
+  Deletions                          116.9K       288.5K       -59%
+  Net growth (adds-dels)               8.3K       -45463
+  Total churn (adds+dels)            242.1K       531.6K       -54%
+  Avg lines/PR                         1.1K         3.3K

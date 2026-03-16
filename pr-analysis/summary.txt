@@ -1,0 +1,120 @@
+SUMMARY REPORT
+═══════════════════════════════════════════════════════════
+
+OVERALL
+  Total PRs:       12578
+  Total repos:     3
+  Date range:      2019-03-14T09:42:30Z → 2026-03-14T12:49:09Z
+
+BY STATE
+  Merged:          11825
+  Closed:          735
+  Open:            18
+
+CODE CHANGES (all PRs)
+  Total additions: 38158559
+  Total deletions: 22205920
+  Total files:     197379
+
+PER-REPO BREAKDOWN
+  Babylon.js:
+    PRs: 10178  |  Merged: 9641  |  Closed: 524  |  Open: 13
+    Additions: 35804265  |  Deletions: 20662218  |  Files changed: 178102
+  BabylonNative:
+    PRs: 1054  |  Merged: 888  |  Closed: 161  |  Open: 5
+    Additions: 2073819  |  Deletions: 1329795  |  Files changed: 8628
+  Documentation:
+    PRs: 1346  |  Merged: 1296  |  Closed: 50  |  Open: 0
+    Additions: 280475  |  Deletions: 213907  |  Files changed: 10649
+
+TOP 20 CONTRIBUTORS (by PR count)
+  deltakosh: 1667 PRs
+  Popov72: 1586 PRs
+  sebavan: 1338 PRs
+  RaananW: 1282 PRs
+  CedricGuillemet: 767 PRs
+  bghgary: 516 PRs
+  ryantrem: 456 PRs
+  carolhmj: 421 PRs
+  docEdub: 180 PRs
+  georginahalpern: 180 PRs
+  PolygonalSun: 173 PRs
+  msDestiny14: 170 PRs
+  alexchuber: 155 PRs
+  VicenteCartas: 140 PRs
+  syntheticmagus: 127 PRs
+  RolandCsibrei: 121 PRs
+  MackeyK24: 117 PRs
+  darraghjburke: 115 PRs
+  PirateJC: 97 PRs
+  AmoebaChant: 93 PRs
+
+REVIEW DECISIONS
+  APPROVED: 8481
+  REVIEW_REQUIRED: 2688
+  : 1286
+  CHANGES_REQUESTED: 123
+
+YEARLY BREAKDOWN
+  2019: 1132 total (1078 merged, 54 closed, 0 open)
+  2020: 2170 total (2063 merged, 107 closed, 0 open)
+  2021: 2140 total (2036 merged, 104 closed, 0 open)
+  2022: 1814 total (1706 merged, 108 closed, 0 open)
+  2023: 1426 total (1319 merged, 107 closed, 0 open)
+  2024: 1471 total (1377 merged, 94 closed, 0 open)
+  2025: 1815 total (1695 merged, 117 closed, 3 open)
+  2026: 610 total (551 merged, 44 closed, 15 open)
+
+MONTHLY PR CREATION (last 24 months, for trend analysis)
+  2024-04: 115
+  2024-05: 123
+  2024-06: 105
+  2024-07: 109
+  2024-08: 158
+  2024-09: 148
+  2024-10: 113
+  2024-11: 152
+  2024-12: 113
+  2025-01: 122
+  2025-02: 131
+  2025-03: 230
+  2025-04: 152
+  2025-05: 169
+  2025-06: 144
+  2025-07: 122
+  2025-08: 153
+  2025-09: 135
+  2025-10: 194
+  2025-11: 156
+  2025-12: 107
+  2026-01: 220
+  2026-02: 255
+  2026-03: 135
+
+MERGE TIME DISTRIBUTION (merged PRs only)
+  Median:  0.1 days
+  P90:     3 days
+  P99:     27.8 days
+  Max:     467.5 days
+  < 1 day: 9435 PRs
+  1-7 d:   1866 PRs
+  7-30 d:  421 PRs
+  30+ d:   103 PRs
+
+PR SIZE DISTRIBUTION (by total lines changed = additions + deletions)
+  XS (1-10 lines):     3745
+  S  (11-100 lines):   4396
+  M  (101-500 lines):  2149
+  L  (501-1000 lines): 683
+  XL (1000+ lines):    1537
+
+DAY-OF-WEEK DISTRIBUTION (PR creation)
+  Sun: 366  Mon: 2202  Tue: 2447  Wed: 2397  Thu: 2495  Fri: 2131  Sat: 540
+
+HOUR-OF-DAY DISTRIBUTION (PR creation, UTC)
+  00h: 580  01h: 354  02h: 200  03h: 141
+  04h: 121  05h: 134  06h: 110  07h: 144
+  08h: 237  09h: 383  10h: 433  11h: 425
+  12h: 469  13h: 585  14h: 637  15h: 876
+  16h: 1040  17h: 1049  18h: 861  19h: 735
+  20h: 798  21h: 860  22h: 724  23h: 682
