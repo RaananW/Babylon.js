@@ -4,6 +4,7 @@ import type { NodeRenderGraphConnectionPoint, Scene, FrameGraph, IComputeShaderP
 import { NodeRenderGraphBlockConnectionPointTypes } from "../Types/nodeRenderGraphTypes";
 import { NodeRenderGraphBlock } from "../nodeRenderGraphBlock";
 import { FrameGraphComputeShaderTask } from "../../Tasks/Misc/computeShaderTask";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to execute a compute shader in the frame graph
@@ -97,4 +98,15 @@ export class NodeRenderGraphComputeShaderBlock extends NodeRenderGraphBlock {
     public get output(): NodeRenderGraphConnectionPoint {
         return this._outputs[0];
     }
+}
+
+
+let _registered = false;
+export function registerComputeShaderBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphComputeShaderBlock", NodeRenderGraphComputeShaderBlock);
 }

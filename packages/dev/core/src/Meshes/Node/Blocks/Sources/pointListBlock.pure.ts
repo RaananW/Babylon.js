@@ -6,6 +6,7 @@ import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnect
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
 import { Vector3 } from "core/Maths/math.vector.pure";
 import { VertexData } from "core/Meshes/mesh.vertexData.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Defines a block used to generate a geometry data from a list of points
@@ -91,4 +92,15 @@ export class PointListBlock extends NodeGeometryBlock {
             return Vector3.FromArray(point);
         });
     }
+}
+
+
+let _registered = false;
+export function registerPointListBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.PointListBlock", PointListBlock);
 }

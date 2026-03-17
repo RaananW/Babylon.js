@@ -8,6 +8,7 @@ import { FlowGraphExecutionBlockWithOutSignal } from "../../../flowGraphExecutio
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphInteger } from "../../../CustomTypes/flowGraphInteger.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Configuration for the DoN block.
@@ -66,4 +67,15 @@ export class FlowGraphDoNBlock extends FlowGraphExecutionBlockWithOutSignal {
     public override getClassName(): string {
         return FlowGraphBlockNames.DoN;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphDoNBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.DoN, FlowGraphDoNBlock);
 }

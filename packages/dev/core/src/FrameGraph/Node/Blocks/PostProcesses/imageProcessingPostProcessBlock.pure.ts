@@ -8,6 +8,7 @@ import { ImageProcessingConfiguration } from "core/Materials/imageProcessingConf
 import type { Color4 } from "../../../../Maths/math.color.pure";
 import { Color4FromArray } from "../../../../Maths/math.color.pure";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the image processing post process
@@ -257,4 +258,15 @@ export class NodeRenderGraphImageProcessingPostProcessBlock extends NodeRenderGr
         this.ditheringEnabled = serializationObject.ditheringEnabled;
         this.ditheringIntensity = serializationObject.ditheringIntensity;
     }
+}
+
+
+let _registered = false;
+export function registerImageProcessingPostProcessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphImageProcessingPostProcessBlock", NodeRenderGraphImageProcessingPostProcessBlock);
 }

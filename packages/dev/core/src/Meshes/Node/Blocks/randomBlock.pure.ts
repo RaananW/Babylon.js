@@ -9,6 +9,7 @@ import { Vector2, Vector3, Vector4 } from "../../../Maths/math.vector.pure";
 import type { Nullable } from "../../../types";
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
 import { NodeGeometryContextualSources } from "../Enums/nodeGeometryContextualSources";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Locks supported by the random block
@@ -208,4 +209,15 @@ export class RandomBlock extends NodeGeometryBlock {
 
         this.lockMode = serializationObject.lockMode;
     }
+}
+
+
+let _registered = false;
+export function registerRandomBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.RandomBlock", RandomBlock);
 }

@@ -7,6 +7,7 @@ import type { FlowGraphSignalConnection } from "../../../flowGraphSignalConnecti
 import { FlowGraphExecutionBlockWithOutSignal } from "../../../flowGraphExecutionBlockWithOutSignal";
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * A block that counts the number of times it has been called.
@@ -48,4 +49,15 @@ export class FlowGraphCallCounterBlock extends FlowGraphExecutionBlockWithOutSig
     public override getClassName(): string {
         return FlowGraphBlockNames.CallCounter;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphCounterBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.CallCounter, FlowGraphCallCounterBlock);
 }

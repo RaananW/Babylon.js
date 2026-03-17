@@ -10,6 +10,7 @@ import { Constants } from "../../Engines/constants";
 import type { ExternalTexture } from "./externalTexture";
 import type { WebGPUEngine } from "core/Engines";
 import { serialize } from "core/Misc/decorators";
+import { RegisterClass } from "core/Misc/typeStore";
 
 function RemoveSource(video: HTMLVideoElement): void {
     // Remove any <source> elements, etc.
@@ -654,4 +655,30 @@ export function VideoTextureCreateFromWebCam(
         .catch(function (err) {
             Logger.Error(err.name);
         });
+}
+
+
+let _registered = false;
+export function registerVideoTexture(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Texture._CreateVideoTexture = (
+        name: Nullable<string>,
+        src: string | string[] | HTMLVideoElement,
+        scene: Nullable<Scene>,
+        generateMipMaps = false,
+        invertY = false,
+        samplingMode: number = Texture.TRILINEAR_SAMPLINGMODE,
+        settings: Partial<VideoTextureSettings> = {},
+        onError?: Nullable<(message?: string, exception?: any) => void>,
+        format: number = Constants.TEXTUREFORMAT_RGBA
+    ) => {
+        return new VideoTexture(name, src, scene, generateMipMaps, invertY, samplingMode, settings, onError, format);
+    };
+
+    // Some exporters relies on Tools.Instantiate
+    RegisterClass("BABYLON.VideoTexture", VideoTexture);
 }

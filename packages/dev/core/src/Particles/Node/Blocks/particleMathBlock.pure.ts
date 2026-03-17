@@ -8,6 +8,7 @@ import type { NodeParticleConnectionPoint } from "../nodeParticleBlockConnection
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
 import type { NodeParticleBuildState } from "../nodeParticleBuildState";
 import { Color4 } from "core/Maths/math.color.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Operations supported by the Math block
@@ -352,4 +353,15 @@ export class ParticleMathBlock extends NodeParticleBlock {
 
         this.operation = serializationObject.operation;
     }
+}
+
+
+let _registered = false;
+export function registerParticleMathBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ParticleMathBlock", ParticleMathBlock);
 }

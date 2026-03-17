@@ -6,6 +6,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { FrameGraphCircleOfConfusionTask } from "core/FrameGraph/Tasks/PostProcesses/circleOfConfusionTask";
 import { ThinCircleOfConfusionPostProcess } from "core/PostProcesses/thinCircleOfConfusionPostProcess";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the circle of confusion post process
@@ -148,4 +149,15 @@ export class NodeRenderGraphCircleOfConfusionPostProcessBlock extends NodeRender
         this.focalLength = serializationObject.focalLength;
         this.depthSamplingMode = serializationObject.depthSamplingMode;
     }
+}
+
+
+let _registered = false;
+export function registerCircleOfConfusionPostProcessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphCircleOfConfusionPostProcessBlock", NodeRenderGraphCircleOfConfusionPostProcessBlock);
 }

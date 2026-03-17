@@ -4,7 +4,5 @@
  */
 export * from "./teleportOutBlock.pure";
 
-import { TeleportOutBlock } from "./teleportOutBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.TeleportOutBlock", TeleportOutBlock);
+import { registerMeshesNodeBlocksTeleportTeleportOutBlock } from "./teleportOutBlock.pure";
+registerMeshesNodeBlocksTeleportTeleportOutBlock();

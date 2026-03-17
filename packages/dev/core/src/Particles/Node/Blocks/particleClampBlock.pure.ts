@@ -6,6 +6,7 @@ import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBloc
 import type { NodeParticleConnectionPoint } from "../nodeParticleBlockConnectionPoint";
 import type { NodeParticleBuildState } from "../nodeParticleBuildState";
 import { Color4 } from "../../../Maths/math.color.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to clamp a float
@@ -132,4 +133,15 @@ export class ParticleClampBlock extends NodeParticleBlock {
         this.minimum = serializationObject.minimum;
         this.maximum = serializationObject.maximum;
     }
+}
+
+
+let _registered = false;
+export function registerParticleClampBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ParticleClampBlock", ParticleClampBlock);
 }

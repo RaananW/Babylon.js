@@ -4,7 +4,5 @@
  */
 export * from "./taaRenderingPipeline.pure";
 
-import { TAARenderingPipeline } from "./taaRenderingPipeline.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.TAARenderingPipeline", TAARenderingPipeline);
+import { registerTaaRenderingPipeline } from "./taaRenderingPipeline.pure";
+registerTaaRenderingPipeline();

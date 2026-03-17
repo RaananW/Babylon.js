@@ -4,7 +4,5 @@
  */
 export * from "./colorGradingTexture.pure";
 
-import { ColorGradingTexture } from "./colorGradingTexture.pure";
-import { RegisterClass } from "../../Misc/typeStore";
-
-RegisterClass("BABYLON.ColorGradingTexture", ColorGradingTexture);
+import { registerColorGradingTexture } from "./colorGradingTexture.pure";
+registerColorGradingTexture();

@@ -2,7 +2,9 @@
 
 import { FreeCamera } from "./freeCamera.pure";
 import type { Scene } from "../scene";
-import type { Vector3 } from "../Maths/math.vector.pure";
+import { Node } from "../node";
+import { Vector3 } from "../Maths/math.vector.pure";
+
 
 /**
  * This represents a free type of camera. It can be useful in First Person Shooter game for instance.
@@ -32,4 +34,17 @@ export class VirtualJoysticksCamera extends FreeCamera {
     public override getClassName(): string {
         return "VirtualJoysticksCamera";
     }
+}
+
+
+let _registered = false;
+export function registerVirtualJoysticksCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("VirtualJoysticksCamera", (name, scene) => {
+        return () => new VirtualJoysticksCamera(name, Vector3.Zero(), scene);
+    });
 }

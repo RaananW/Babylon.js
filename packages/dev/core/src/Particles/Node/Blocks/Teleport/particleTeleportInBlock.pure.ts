@@ -4,6 +4,7 @@ import type { ParticleTeleportOutBlock } from "./particleTeleportOutBlock";
 import { NodeParticleBlock } from "../../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
 import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Defines a block used to teleport a value to an endpoint
@@ -115,4 +116,15 @@ export class ParticleTeleportInBlock extends NodeParticleBlock {
             };
         }
     }
+}
+
+
+let _registered = false;
+export function registerParticleTeleportInBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ParticleTeleportInBlock", ParticleTeleportInBlock);
 }

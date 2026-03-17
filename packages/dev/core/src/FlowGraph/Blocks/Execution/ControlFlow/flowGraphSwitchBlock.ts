@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphSwitchBlock.pure";
 
-import { FlowGraphSwitchBlock } from "./flowGraphSwitchBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.Switch, FlowGraphSwitchBlock);
+import { registerFlowGraphSwitchBlock } from "./flowGraphSwitchBlock.pure";
+registerFlowGraphSwitchBlock();

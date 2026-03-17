@@ -6,6 +6,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryC
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
 import { GeometryInputBlock } from "../geometryInputBlock.pure";
 import { Matrix, Vector3 } from "../../../../Maths/math.vector.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to get a scaling matrix
@@ -61,4 +62,15 @@ export class ScalingBlock extends NodeGeometryBlock {
             return Matrix.Scaling(value.x, value.y, value.z);
         };
     }
+}
+
+
+let _registered = false;
+export function registerScalingBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ScalingBlock", ScalingBlock);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./backgroundMaterial.pure";
 
-import { BackgroundMaterial } from "./backgroundMaterial.pure";
-import { RegisterClass } from "../../Misc/typeStore";
-
-RegisterClass("BABYLON.BackgroundMaterial", BackgroundMaterial);
+import { registerBackgroundMaterial } from "./backgroundMaterial.pure";
+registerBackgroundMaterial();

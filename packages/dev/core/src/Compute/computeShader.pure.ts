@@ -23,6 +23,7 @@ import { WebGPUPerfCounter } from "core/Engines/WebGPU/webgpuPerfCounter";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import { _RetryWithInterval } from "core/Misc/timingTools.pure";
 import type { InternalTexture } from "core/Materials/Textures/internalTexture";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * Defines the options associated with the creation of a compute shader.
@@ -542,4 +543,15 @@ export class ComputeShader {
     protected static _BufferIsDataBuffer(buffer: UniformBuffer | StorageBuffer | DataBuffer): buffer is DataBuffer {
         return (buffer as DataBuffer).underlyingResource !== undefined;
     }
+}
+
+
+let _registered = false;
+export function registerComputeShader(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ComputeShader", ComputeShader);
 }

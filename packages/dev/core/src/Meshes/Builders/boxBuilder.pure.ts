@@ -273,3 +273,25 @@ export const BoxBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateBox,
 };
+
+
+let _registered = false;
+export function registerBoxBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // Side effects
+    VertexData.CreateBox = CreateBoxVertexData;
+
+    Mesh.CreateBox = (name: string, size: number, scene: Nullable<Scene> = null, updatable?: boolean, sideOrientation?: number): Mesh => {
+        const options = {
+            size,
+            sideOrientation,
+            updatable,
+        };
+
+        return CreateBox(name, options, scene);
+    };
+}

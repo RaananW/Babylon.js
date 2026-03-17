@@ -5,6 +5,7 @@ import { NodeParticleBlock } from "../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
 import type { NodeParticleConnectionPoint } from "../nodeParticleBlockConnectionPoint";
 import { Color4 } from "core/Maths/math.color.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to lerp between 2 values
@@ -104,4 +105,15 @@ export class ParticleLerpBlock extends NodeParticleBlock {
             return 0;
         };
     }
+}
+
+
+let _registered = false;
+export function registerParticleLerpBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ParticleLerpBlock", ParticleLerpBlock);
 }

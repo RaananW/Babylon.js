@@ -22,6 +22,7 @@ import type { Scene } from "../scene";
 import type { Nullable } from "../types";
 import type { AudioEngine } from "./audioEngine";
 import type { ISoundOptions } from "./Interfaces/ISoundOptions";
+import { RegisterClass } from "../Misc/typeStore";
 
 const TmpRampOptions: IAudioParameterRampOptions = {
     duration: 0,
@@ -1070,3 +1071,14 @@ export class Sound {
 }
 
 // Register Class Name
+
+
+let _registered = false;
+export function registerSound(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.Sound", Sound);
+}

@@ -11,6 +11,7 @@ import type { AbstractEngine } from "core/Engines/abstractEngine";
 import type { ThinTonemapPostProcessOptions, TonemappingOperator } from "./thinTonemapPostProcess";
 import { ThinTonemapPostProcess } from "./thinTonemapPostProcess";
 import type { Scene } from "../scene";
+import { RegisterClass } from "../Misc/typeStore";
 
 export type ToneMapPostProcessOptions = ThinTonemapPostProcessOptions & PostProcessOptions;
 
@@ -114,4 +115,15 @@ export class TonemapPostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerTonemapPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.TonemapPostProcess", TonemapPostProcess);
 }

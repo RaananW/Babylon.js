@@ -4,7 +4,5 @@
  */
 export * from "./subSurfaceBlock.pure";
 
-import { SubSurfaceBlock } from "./subSurfaceBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SubSurfaceBlock", SubSurfaceBlock);
+import { registerSubSurfaceBlock } from "./subSurfaceBlock.pure";
+registerSubSurfaceBlock();

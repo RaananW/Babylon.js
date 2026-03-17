@@ -10,6 +10,7 @@ import type { FlowGraphSignalConnection } from "../../../flowGraphSignalConnecti
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import type { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger";
 import { getNumericValue } from "core/FlowGraph/utils";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * This block cancels a delay that was previously scheduled.
@@ -43,4 +44,15 @@ export class FlowGraphCancelDelayBlock extends FlowGraphExecutionBlockWithOutSig
     public override getClassName(): string {
         return FlowGraphBlockNames.CancelDelay;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphCancelDelayBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.CancelDelay, FlowGraphCancelDelayBlock);
 }

@@ -8,6 +8,7 @@ import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnect
 import type { Immutable } from "../../../../types";
 import type { FragmentOutputBlock } from "../Fragment/fragmentOutputBlock";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to output the vertex position
@@ -78,4 +79,15 @@ export class VertexOutputBlock extends NodeMaterialBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerVertexOutputBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.VertexOutputBlock", VertexOutputBlock);
 }

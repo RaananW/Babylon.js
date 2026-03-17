@@ -10,6 +10,7 @@ import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnection
 import { NodeMaterialConnectionPointDirection } from "../nodeMaterialBlockConnectionPoint";
 import { ImageSourceBlock } from "./Dual/imageSourceBlock.pure";
 import { NodeMaterialConnectionPointCustomObject } from "../nodeMaterialConnectionPointCustomObject";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Custom block created from user-defined json
@@ -210,4 +211,15 @@ export class CustomBlock extends NodeMaterialBlock {
 
         return null;
     }
+}
+
+
+let _registered = false;
+export function registerCustomBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.CustomBlock", CustomBlock);
 }

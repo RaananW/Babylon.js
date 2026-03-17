@@ -4,7 +4,5 @@
  */
 export * from "./derivativeBlock.pure";
 
-import { DerivativeBlock } from "./derivativeBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.DerivativeBlock", DerivativeBlock);
+import { registerDerivativeBlock } from "./derivativeBlock.pure";
+registerDerivativeBlock();

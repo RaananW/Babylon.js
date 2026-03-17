@@ -4,7 +4,5 @@
  */
 export * from "./gaussianSplattingBlock.pure";
 
-import { GaussianSplattingBlock } from "./gaussianSplattingBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GaussianSplattingBlock", GaussianSplattingBlock);
+import { registerGaussianSplattingBlock } from "./gaussianSplattingBlock.pure";
+registerGaussianSplattingBlock();

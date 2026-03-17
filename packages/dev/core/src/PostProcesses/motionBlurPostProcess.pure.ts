@@ -16,6 +16,7 @@ import { SerializationHelperParse } from "../Misc/decorators.serialization.pure"
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Scene } from "../scene";
 import { ThinMotionBlurPostProcess } from "./thinMotionBlurPostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * The Motion Blur Post Process which blurs an image based on the objects velocity in scene.
@@ -319,4 +320,15 @@ export class MotionBlurPostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerMotionBlurPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.MotionBlurPostProcess", MotionBlurPostProcess);
 }

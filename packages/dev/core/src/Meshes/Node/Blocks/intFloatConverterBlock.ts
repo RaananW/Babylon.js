@@ -4,7 +4,5 @@
  */
 export * from "./intFloatConverterBlock.pure";
 
-import { IntFloatConverterBlock } from "./intFloatConverterBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.IntFloatConverterBlock", IntFloatConverterBlock);
+import { registerIntFloatConverterBlock } from "./intFloatConverterBlock.pure";
+registerIntFloatConverterBlock();

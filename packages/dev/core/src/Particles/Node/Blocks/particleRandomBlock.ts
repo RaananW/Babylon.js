@@ -4,7 +4,5 @@
  */
 export * from "./particleRandomBlock.pure";
 
-import { ParticleRandomBlock } from "./particleRandomBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleRandomBlock", ParticleRandomBlock);
+import { registerParticleRandomBlock } from "./particleRandomBlock.pure";
+registerParticleRandomBlock();

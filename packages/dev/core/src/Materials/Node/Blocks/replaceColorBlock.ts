@@ -4,7 +4,5 @@
  */
 export * from "./replaceColorBlock.pure";
 
-import { ReplaceColorBlock } from "./replaceColorBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ReplaceColorBlock", ReplaceColorBlock);
+import { registerReplaceColorBlock } from "./replaceColorBlock.pure";
+registerReplaceColorBlock();

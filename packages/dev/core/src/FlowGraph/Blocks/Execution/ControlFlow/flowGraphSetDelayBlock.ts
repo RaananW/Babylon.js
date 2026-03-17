@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphSetDelayBlock.pure";
 
-import { FlowGraphSetDelayBlock } from "./flowGraphSetDelayBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.SetDelay, FlowGraphSetDelayBlock);
+import { registerFlowGraphSetDelayBlock } from "./flowGraphSetDelayBlock.pure";
+registerFlowGraphSetDelayBlock();

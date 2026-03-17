@@ -4,7 +4,5 @@
  */
 export * from "./particleRampGradientBlock.pure";
 
-import { ParticleRampGradientBlock } from "./particleRampGradientBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleRampGradientBlock", ParticleRampGradientBlock);
+import { registerParticleRampGradientBlock } from "./particleRampGradientBlock.pure";
+registerParticleRampGradientBlock();

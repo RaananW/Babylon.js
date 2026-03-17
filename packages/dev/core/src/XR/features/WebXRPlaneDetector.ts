@@ -4,14 +4,5 @@
  */
 export * from "./WebXRPlaneDetector.pure";
 
-import { WebXRPlaneDetector } from "./WebXRPlaneDetector.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-//register the plugin
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRPlaneDetector.Name,
-    (xrSessionManager, options) => {
-        return () => new WebXRPlaneDetector(xrSessionManager, options);
-    },
-    WebXRPlaneDetector.Version
-);
+import { registerWebXRPlaneDetector } from "./WebXRPlaneDetector.pure";
+registerWebXRPlaneDetector();

@@ -4,7 +4,5 @@
  */
 export * from "./rotationZBlock.pure";
 
-import { RotationZBlock } from "./rotationZBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.RotationZBlock", RotationZBlock);
+import { registerRotationZBlock } from "./rotationZBlock.pure";
+registerRotationZBlock();

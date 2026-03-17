@@ -9,6 +9,7 @@ import { InputBlock } from "./Input/inputBlock.pure";
 import { MorphTargetsBlock } from "./Vertex/morphTargetsBlock.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
 import type { Scene } from "core/scene";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 export const enum MeshAttributeExistsBlockTypes {
     None,
@@ -228,4 +229,15 @@ export class MeshAttributeExistsBlock extends NodeMaterialBlock {
 
         return codeString;
     }
+}
+
+
+let _registered = false;
+export function registerMeshAttributeExistsBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.MeshAttributeExistsBlock", MeshAttributeExistsBlock);
 }

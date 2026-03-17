@@ -2,7 +2,9 @@
 
 import { UniversalCamera } from "./universalCamera.pure";
 import type { Scene } from "../scene";
-import type { Vector3 } from "../Maths/math.vector.pure";
+import { Node } from "../node";
+import { Vector3 } from "../Maths/math.vector.pure";
+
 
 /**
  * This represents a FPS type of camera. This is only here for back compat purpose.
@@ -30,4 +32,17 @@ export class GamepadCamera extends UniversalCamera {
     public override getClassName(): string {
         return "GamepadCamera";
     }
+}
+
+
+let _registered = false;
+export function registerGamepadCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("GamepadCamera", (name, scene) => {
+        return () => new GamepadCamera(name, Vector3.Zero(), scene);
+    });
 }

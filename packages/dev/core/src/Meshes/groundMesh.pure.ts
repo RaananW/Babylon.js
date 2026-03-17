@@ -324,3 +324,16 @@ export class GroundMesh extends Mesh {
         return result;
     }
 }
+
+
+let _registered = false;
+export function registerGroundMesh(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Mesh._GroundMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
+        return GroundMesh.Parse(parsedMesh, scene);
+    };
+}

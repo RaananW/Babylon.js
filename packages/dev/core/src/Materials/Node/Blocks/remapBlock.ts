@@ -4,7 +4,5 @@
  */
 export * from "./remapBlock.pure";
 
-import { RemapBlock } from "./remapBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.RemapBlock", RemapBlock);
+import { registerRemapBlock } from "./remapBlock.pure";
+registerRemapBlock();

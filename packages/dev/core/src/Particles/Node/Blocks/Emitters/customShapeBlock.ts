@@ -4,7 +4,5 @@
  */
 export * from "./customShapeBlock.pure";
 
-import { CustomShapeBlock } from "./customShapeBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.CustomShapeBlock", CustomShapeBlock);
+import { registerCustomShapeBlock } from "./customShapeBlock.pure";
+registerCustomShapeBlock();

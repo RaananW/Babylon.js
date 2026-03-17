@@ -6,6 +6,7 @@ import { NodeRenderGraphBlockConnectionPointTypes } from "../../Types/nodeRender
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { FrameGraphGeometryRendererTask } from "../../../Tasks/Rendering/geometryRendererTask";
 import { Constants } from "core/Engines/constants";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that render geometry of objects to a multi render target
@@ -581,4 +582,15 @@ export class NodeRenderGraphGeometryRendererBlock extends NodeRenderGraphBaseObj
         this.linearVelocityFormat = serializationObject.linearVelocityFormat;
         this.linearVelocityType = serializationObject.linearVelocityType;
     }
+}
+
+
+let _registered = false;
+export function registerGeometryRendererBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphGeometryRendererBlock", NodeRenderGraphGeometryRendererBlock);
 }

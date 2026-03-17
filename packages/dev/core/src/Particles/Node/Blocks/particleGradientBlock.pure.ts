@@ -8,6 +8,7 @@ import type { Nullable } from "core/types";
 import { Lerp } from "core/Maths/math.scalar.functions";
 import { Vector2, Vector3 } from "core/Maths/math.vector.pure";
 import { Color4Lerp } from "../../../Maths/math.color.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to define a list of gradient entries
@@ -184,4 +185,15 @@ export class ParticleGradientBlock extends NodeParticleBlock {
             }
         }
     }
+}
+
+
+let _registered = false;
+export function registerParticleGradientBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ParticleGradientBlock", ParticleGradientBlock);
 }

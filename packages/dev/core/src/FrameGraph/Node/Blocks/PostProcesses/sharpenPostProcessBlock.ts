@@ -4,7 +4,5 @@
  */
 export * from "./sharpenPostProcessBlock.pure";
 
-import { NodeRenderGraphSharpenPostProcessBlock } from "./sharpenPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphSharpenPostProcessBlock", NodeRenderGraphSharpenPostProcessBlock);
+import { registerSharpenPostProcessBlock } from "./sharpenPostProcessBlock.pure";
+registerSharpenPostProcessBlock();

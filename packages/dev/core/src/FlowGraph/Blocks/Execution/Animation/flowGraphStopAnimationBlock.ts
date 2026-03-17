@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphStopAnimationBlock.pure";
 
-import { FlowGraphStopAnimationBlock } from "./flowGraphStopAnimationBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.StopAnimation, FlowGraphStopAnimationBlock);
+import { registerFlowGraphStopAnimationBlock } from "./flowGraphStopAnimationBlock.pure";
+registerFlowGraphStopAnimationBlock();

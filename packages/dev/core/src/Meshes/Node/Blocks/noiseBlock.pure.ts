@@ -6,6 +6,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConn
 import { Vector3 } from "../../../Maths/math.vector.pure";
 import { Clamp } from "../../../Maths/math.scalar.functions";
 import { NodeGeometryContextualSources } from "../Enums/nodeGeometryContextualSources";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to get a noise value
@@ -211,4 +212,15 @@ export class NoiseBlock extends NodeGeometryBlock {
             return this.noise(octaves, roughness, position, offset, scale);
         };
     }
+}
+
+
+let _registered = false;
+export function registerNoiseBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NoiseBlock", NoiseBlock);
 }

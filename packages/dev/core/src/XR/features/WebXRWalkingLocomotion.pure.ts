@@ -10,6 +10,7 @@ import type { WebXRCamera } from "../webXRCamera";
 import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 class CircleBuffer {
     private _samples: Array<Vector2> = [];
@@ -474,4 +475,23 @@ export class WebXRWalkingLocomotion extends WebXRAbstractFeature {
         }
         this.locomotionTarget.position.addInPlace(this._movement);
     }
+}
+
+
+let _registered = false;
+export function registerWebXRWalkingLocomotion(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    //register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRWalkingLocomotion.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRWalkingLocomotion(xrSessionManager, options);
+        },
+        WebXRWalkingLocomotion.Version,
+        false
+    );
 }

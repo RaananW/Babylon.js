@@ -1,3 +1,4 @@
+import { RegisterNativeTypeAsync } from "../../Engines/thinNativeEngine";
 /** This file must only contain pure code and pure imports */
 
 /** @internal */
@@ -112,4 +113,16 @@ export class NativeXRFrame implements XRFrame {
         throw new Error("This function is not available in Babylon Native");
         // return this._nativeImpl.getDepthInformation(view);
     }
+}
+
+
+let _registered = false;
+export function registerNativeXRFrame(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    RegisterNativeTypeAsync("NativeXRFrame", NativeXRFrame);
 }

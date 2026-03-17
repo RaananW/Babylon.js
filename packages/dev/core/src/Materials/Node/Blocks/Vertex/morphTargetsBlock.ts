@@ -4,7 +4,5 @@
  */
 export * from "./morphTargetsBlock.pure";
 
-import { MorphTargetsBlock } from "./morphTargetsBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MorphTargetsBlock", MorphTargetsBlock);
+import { registerMorphTargetsBlock } from "./morphTargetsBlock.pure";
+registerMorphTargetsBlock();

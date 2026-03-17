@@ -4,6 +4,7 @@ import type { Scene, FrameGraph } from "core/index";
 import { FrameGraphPassCubeTask, FrameGraphPassTask } from "core/FrameGraph/Tasks/PostProcesses/passTask";
 import { ThinPassCubePostProcess, ThinPassPostProcess } from "core/PostProcesses/thinPassPostProcess";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "././baseWithPropertiesPostProcessBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the pass post process
@@ -75,4 +76,17 @@ export class NodeRenderGraphPassCubePostProcessBlock extends NodeRenderGraphBase
     public override getClassName() {
         return "NodeRenderGraphPassCubePostProcessBlock";
     }
+}
+
+
+let _registered = false;
+export function registerPassPostProcessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphPassPostProcessBlock", NodeRenderGraphPassPostProcessBlock);
+
+    RegisterClass("BABYLON.NodeRenderGraphPassCubePostProcessBlock", NodeRenderGraphPassCubePostProcessBlock);
 }

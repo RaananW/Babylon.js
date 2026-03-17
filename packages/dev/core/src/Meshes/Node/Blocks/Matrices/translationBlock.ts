@@ -4,7 +4,5 @@
  */
 export * from "./translationBlock.pure";
 
-import { TranslationBlock } from "./translationBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.TranslationBlock", TranslationBlock);
+import { registerTranslationBlock } from "./translationBlock.pure";
+registerTranslationBlock();

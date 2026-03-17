@@ -8,6 +8,7 @@ import type { INodeGeometryExecutionContext } from "../../Interfaces/nodeGeometr
 import type { VertexData } from "../../../mesh.vertexData";
 import type { Vector3, Vector4 } from "../../../../Maths/math.vector";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to set colors for a geometry
@@ -183,4 +184,15 @@ export class SetColorsBlock extends NodeGeometryBlock implements INodeGeometryEx
             this.evaluateContext = serializationObject.evaluateContext;
         }
     }
+}
+
+
+let _registered = false;
+export function registerSetColorsBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SetColorsBlock", SetColorsBlock);
 }

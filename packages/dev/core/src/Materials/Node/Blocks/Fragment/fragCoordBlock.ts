@@ -4,7 +4,5 @@
  */
 export * from "./fragCoordBlock.pure";
 
-import { FragCoordBlock } from "./fragCoordBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.FragCoordBlock", FragCoordBlock);
+import { registerFragCoordBlock } from "./fragCoordBlock.pure";
+registerFragCoordBlock();

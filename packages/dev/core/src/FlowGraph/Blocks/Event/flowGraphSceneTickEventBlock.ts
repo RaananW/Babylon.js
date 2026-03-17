@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphSceneTickEventBlock.pure";
 
-import { FlowGraphSceneTickEventBlock } from "./flowGraphSceneTickEventBlock.pure";
-import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.SceneTickEvent, FlowGraphSceneTickEventBlock);
+import { registerFlowGraphSceneTickEventBlock } from "./flowGraphSceneTickEventBlock.pure";
+registerFlowGraphSceneTickEventBlock();

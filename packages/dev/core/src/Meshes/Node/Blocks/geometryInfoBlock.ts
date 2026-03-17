@@ -4,7 +4,5 @@
  */
 export * from "./geometryInfoBlock.pure";
 
-import { GeometryInfoBlock } from "./geometryInfoBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryInfoBlock", GeometryInfoBlock);
+import { registerGeometryInfoBlock } from "./geometryInfoBlock.pure";
+registerGeometryInfoBlock();

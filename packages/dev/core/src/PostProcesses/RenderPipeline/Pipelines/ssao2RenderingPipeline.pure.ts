@@ -22,6 +22,7 @@ import { ThinSSAO2PostProcess } from "../../thinSSAO2PostProcess";
 import type { ISize } from "../../../Maths/math.size";
 import { ThinSSAO2BlurPostProcess } from "../../thinSSAO2BlurPostProcess";
 import { ThinSSAO2CombinePostProcess } from "../../thinSSAO2CombinePostProcess";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -617,4 +618,15 @@ export class SSAO2RenderingPipeline extends PostProcessRenderPipeline {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerSsao2RenderingPipeline(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SSAO2RenderingPipeline", SSAO2RenderingPipeline);
 }

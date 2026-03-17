@@ -4,6 +4,7 @@ import type { Scene, FrameGraph } from "core/index";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { FrameGraphBloomTask } from "../../../Tasks/PostProcesses/bloomTask";
 import { NodeRenderGraphBasePostProcessBlock } from "./basePostProcessBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the bloom post process
@@ -135,4 +136,15 @@ export class NodeRenderGraphBloomPostProcessBlock extends NodeRenderGraphBasePos
         this.weight = serializationObject.weight;
         this.kernel = serializationObject.kernel;
     }
+}
+
+
+let _registered = false;
+export function registerBloomPostProcessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphBloomPostProcessBlock", NodeRenderGraphBloomPostProcessBlock);
 }

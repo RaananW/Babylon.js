@@ -4,7 +4,5 @@
  */
 export * from "./geometryRendererBlock.pure";
 
-import { NodeRenderGraphGeometryRendererBlock } from "./geometryRendererBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphGeometryRendererBlock", NodeRenderGraphGeometryRendererBlock);
+import { registerGeometryRendererBlock } from "./geometryRendererBlock.pure";
+registerGeometryRendererBlock();

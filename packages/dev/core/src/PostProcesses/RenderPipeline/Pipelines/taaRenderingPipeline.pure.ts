@@ -15,6 +15,7 @@ import type { RenderTargetWrapper } from "core/Engines/renderTargetWrapper";
 import { ThinTAAPostProcess } from "core/PostProcesses/thinTAAPostProcess";
 import type { PrePassEffectConfiguration } from "core/Rendering/prePassEffectConfiguration";
 import { Logger } from "core/Misc/logger";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -433,4 +434,15 @@ export class TAARenderingPipeline extends PostProcessRenderPipeline {
     public static Parse(source: any, scene: Scene, rootUrl: string): TAARenderingPipeline {
         return SerializationHelperParse(() => new TAARenderingPipeline(source._name, scene, source._ratio), source, scene, rootUrl);
     }
+}
+
+
+let _registered = false;
+export function registerTaaRenderingPipeline(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.TAARenderingPipeline", TAARenderingPipeline);
 }

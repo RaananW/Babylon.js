@@ -4,7 +4,5 @@
  */
 export * from "./screenSpaceReflectionPostProcess.pure";
 
-import { ScreenSpaceReflectionPostProcess } from "./screenSpaceReflectionPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.ScreenSpaceReflectionPostProcess", ScreenSpaceReflectionPostProcess);
+import { registerScreenSpaceReflectionPostProcess } from "./screenSpaceReflectionPostProcess.pure";
+registerScreenSpaceReflectionPostProcess();

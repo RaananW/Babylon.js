@@ -171,3 +171,27 @@ export const SphereBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateSphere,
 };
+
+
+let _registered = false;
+export function registerSphereBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VertexData.CreateSphere = CreateSphereVertexData;
+
+    Mesh.CreateSphere = (name: string, segments: number, diameter: number, scene?: Scene, updatable?: boolean, sideOrientation?: number): Mesh => {
+        const options = {
+            segments: segments,
+            diameterX: diameter,
+            diameterY: diameter,
+            diameterZ: diameter,
+            sideOrientation: sideOrientation,
+            updatable: updatable,
+        };
+
+        return CreateSphere(name, options, scene);
+    };
+}

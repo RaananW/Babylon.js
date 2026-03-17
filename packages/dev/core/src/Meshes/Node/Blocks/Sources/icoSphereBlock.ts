@@ -4,7 +4,5 @@
  */
 export * from "./icoSphereBlock.pure";
 
-import { IcoSphereBlock } from "./icoSphereBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.IcoSphereBlock", IcoSphereBlock);
+import { registerIcoSphereBlock } from "./icoSphereBlock.pure";
+registerIcoSphereBlock();

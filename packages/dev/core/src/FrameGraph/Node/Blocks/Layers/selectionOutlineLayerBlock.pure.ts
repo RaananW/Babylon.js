@@ -10,6 +10,7 @@ import { NodeRenderGraphConnectionPointCustomObject } from "../../nodeRenderGrap
 import { NodeRenderGraphBaseObjectRendererBlock } from "../Rendering/baseObjectRendererBlock";
 import type { Color3 } from "core/Maths/math.color.pure";
 import { Color3FromArray } from "../../../../Maths/math.color.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the selection outline layer
@@ -263,4 +264,15 @@ export class NodeRenderGraphSelectionOutlineLayerBlock extends NodeRenderGraphBl
         this.occlusionStrength = serializationObject.occlusionStrength;
         this.occlusionThreshold = serializationObject.occlusionThreshold;
     }
+}
+
+
+let _registered = false;
+export function registerSelectionOutlineLayerBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphSelectionOutlineLayerBlock", NodeRenderGraphSelectionOutlineLayerBlock);
 }

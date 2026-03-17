@@ -4,7 +4,5 @@
  */
 export * from "./shadowGeneratorBlock.pure";
 
-import { NodeRenderGraphShadowGeneratorBlock } from "./shadowGeneratorBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphShadowGeneratorBlock", NodeRenderGraphShadowGeneratorBlock);
+import { registerShadowGeneratorBlock } from "./shadowGeneratorBlock.pure";
+registerShadowGeneratorBlock();

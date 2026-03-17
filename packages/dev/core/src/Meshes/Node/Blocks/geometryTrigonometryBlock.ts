@@ -4,7 +4,5 @@
  */
 export * from "./geometryTrigonometryBlock.pure";
 
-import { GeometryTrigonometryBlock } from "./geometryTrigonometryBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryTrigonometryBlock", GeometryTrigonometryBlock);
+import { registerGeometryTrigonometryBlock } from "./geometryTrigonometryBlock.pure";
+registerGeometryTrigonometryBlock();

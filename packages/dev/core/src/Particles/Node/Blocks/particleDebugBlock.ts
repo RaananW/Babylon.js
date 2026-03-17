@@ -4,7 +4,5 @@
  */
 export * from "./particleDebugBlock.pure";
 
-import { ParticleDebugBlock } from "./particleDebugBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleDebugBlock", ParticleDebugBlock);
+import { registerParticleDebugBlock } from "./particleDebugBlock.pure";
+registerParticleDebugBlock();

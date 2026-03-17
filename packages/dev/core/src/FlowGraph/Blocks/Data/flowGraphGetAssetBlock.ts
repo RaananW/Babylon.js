@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphGetAssetBlock.pure";
 
-import { FlowGraphGetAssetBlock } from "./flowGraphGetAssetBlock.pure";
-import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.GetAsset, FlowGraphGetAssetBlock);
+import { registerFlowGraphGetAssetBlock } from "./flowGraphGetAssetBlock.pure";
+registerFlowGraphGetAssetBlock();

@@ -4,7 +4,5 @@
  */
 export * from "./ssao2RenderingPipeline.pure";
 
-import { SSAO2RenderingPipeline } from "./ssao2RenderingPipeline.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SSAO2RenderingPipeline", SSAO2RenderingPipeline);
+import { registerSsao2RenderingPipeline } from "./ssao2RenderingPipeline.pure";
+registerSsao2RenderingPipeline();

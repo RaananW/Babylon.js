@@ -4,6 +4,7 @@ import { Vector2, Vector3, Vector4 } from "core/Maths/math.vector.pure";
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to compute arc tangent of 2 values
@@ -91,4 +92,15 @@ export class GeometryArcTan2Block extends NodeGeometryBlock {
             return 0;
         };
     }
+}
+
+
+let _registered = false;
+export function registerGeometryArcTan2Block(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GeometryArcTan2Block", GeometryArcTan2Block);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./flowGraphSignalConnection.pure";
 
-import { FlowGraphSignalConnection } from "./flowGraphSignalConnection.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("FlowGraphSignalConnection", FlowGraphSignalConnection);
+import { registerFlowGraphSignalConnection } from "./flowGraphSignalConnection.pure";
+registerFlowGraphSignalConnection();

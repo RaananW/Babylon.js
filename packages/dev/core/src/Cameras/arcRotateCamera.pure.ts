@@ -21,6 +21,8 @@ import { Epsilon } from "../Maths/math.constants";
 import { ToolsBackCompatCameraNoPreventDefault } from "../Misc/tools.pure";
 import type { Collider } from "../Collisions/collider";
 import type { TransformNode } from "core/Meshes/transformNode";
+import { Node } from "../node";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * Computes the alpha angle based on the source position and the target position.
@@ -1587,4 +1589,20 @@ export class ArcRotateCamera extends TargetCamera {
     public override getClassName(): string {
         return "ArcRotateCamera";
     }
+}
+
+
+let _registered = false;
+export function registerArcRotateCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("ArcRotateCamera", (name, scene) => {
+        return () => new ArcRotateCamera(name, 0, 0, 1.0, Vector3.Zero(), scene);
+    });
+
+    // Register Class Name
+    RegisterClass("BABYLON.ArcRotateCamera", ArcRotateCamera);
 }

@@ -4,14 +4,5 @@
  */
 export * from "./WebXRAnchorSystem.pure";
 
-import { WebXRAnchorSystem } from "./WebXRAnchorSystem.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-// register the plugin
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRAnchorSystem.Name,
-    (xrSessionManager, options) => {
-        return () => new WebXRAnchorSystem(xrSessionManager, options);
-    },
-    WebXRAnchorSystem.Version
-);
+import { registerWebXRAnchorSystem } from "./WebXRAnchorSystem.pure";
+registerWebXRAnchorSystem();

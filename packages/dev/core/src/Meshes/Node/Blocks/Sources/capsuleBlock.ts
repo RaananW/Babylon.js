@@ -4,7 +4,5 @@
  */
 export * from "./capsuleBlock.pure";
 
-import { CapsuleBlock } from "./capsuleBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.CapsuleBlock", CapsuleBlock);
+import { registerCapsuleBlock } from "./capsuleBlock.pure";
+registerCapsuleBlock();

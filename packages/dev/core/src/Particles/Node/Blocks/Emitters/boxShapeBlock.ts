@@ -4,7 +4,5 @@
  */
 export * from "./boxShapeBlock.pure";
 
-import { BoxShapeBlock } from "./boxShapeBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.BoxShapeBlock", BoxShapeBlock);
+import { registerBoxShapeBlock } from "./boxShapeBlock.pure";
+registerBoxShapeBlock();

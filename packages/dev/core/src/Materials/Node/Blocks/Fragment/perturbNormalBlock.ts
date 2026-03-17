@@ -4,7 +4,5 @@
  */
 export * from "./perturbNormalBlock.pure";
 
-import { PerturbNormalBlock } from "./perturbNormalBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.PerturbNormalBlock", PerturbNormalBlock);
+import { registerPerturbNormalBlock } from "./perturbNormalBlock.pure";
+registerPerturbNormalBlock();

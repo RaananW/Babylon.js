@@ -4,7 +4,5 @@
  */
 export * from "./meshBlock.pure";
 
-import { MeshBlock } from "./meshBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MeshBlock", MeshBlock);
+import { registerMeshBlock } from "./meshBlock.pure";
+registerMeshBlock();

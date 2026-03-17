@@ -4,7 +4,5 @@
  */
 export * from "./screenSpaceCurvaturePostProcess.pure";
 
-import { ScreenSpaceCurvaturePostProcess } from "./screenSpaceCurvaturePostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.ScreenSpaceCurvaturePostProcess", ScreenSpaceCurvaturePostProcess);
+import { registerScreenSpaceCurvaturePostProcess } from "./screenSpaceCurvaturePostProcess.pure";
+registerScreenSpaceCurvaturePostProcess();

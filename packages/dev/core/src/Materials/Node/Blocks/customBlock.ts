@@ -4,7 +4,5 @@
  */
 export * from "./customBlock.pure";
 
-import { CustomBlock } from "./customBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.CustomBlock", CustomBlock);
+import { registerCustomBlock } from "./customBlock.pure";
+registerCustomBlock();

@@ -10,6 +10,7 @@ import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
 import { ReflectionTextureBaseBlock } from "./reflectionTextureBaseBlock.pure";
 import type { NodeMaterialBlock } from "../../nodeMaterialBlock";
 import { Logger } from "core/Misc/logger";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to read a reflection texture from a sampler
@@ -208,4 +209,15 @@ export class ReflectionTextureBlock extends ReflectionTextureBaseBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerReflectionTextureBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ReflectionTextureBlock", ReflectionTextureBlock);
 }

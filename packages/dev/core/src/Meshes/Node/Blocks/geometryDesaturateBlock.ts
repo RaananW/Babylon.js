@@ -4,7 +4,5 @@
  */
 export * from "./geometryDesaturateBlock.pure";
 
-import { GeometryDesaturateBlock } from "./geometryDesaturateBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryDesaturateBlock", GeometryDesaturateBlock);
+import { registerGeometryDesaturateBlock } from "./geometryDesaturateBlock.pure";
+registerGeometryDesaturateBlock();

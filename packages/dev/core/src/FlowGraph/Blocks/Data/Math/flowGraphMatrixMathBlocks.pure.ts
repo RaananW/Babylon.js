@@ -19,6 +19,7 @@ import { FlowGraphUnaryOperationBlock } from "../flowGraphUnaryOperationBlock";
 import type { FlowGraphMatrix2D } from "core/FlowGraph/CustomTypes/flowGraphMatrix";
 import { FlowGraphBinaryOperationBlock } from "../flowGraphBinaryOperationBlock";
 import type { FlowGraphMatrix } from "core/FlowGraph/utils";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Configuration for the matrix blocks.
@@ -227,4 +228,25 @@ export class FlowGraphMatrixComposeBlock extends FlowGraphBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.MatrixCompose;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphMatrixMathBlocks(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.Transpose, FlowGraphTransposeBlock);
+
+    RegisterClass(FlowGraphBlockNames.Determinant, FlowGraphDeterminantBlock);
+
+    RegisterClass(FlowGraphBlockNames.InvertMatrix, FlowGraphInvertMatrixBlock);
+
+    RegisterClass(FlowGraphBlockNames.MatrixMultiplication, FlowGraphMatrixMultiplicationBlock);
+
+    RegisterClass(FlowGraphBlockNames.MatrixDecompose, FlowGraphMatrixDecomposeBlock);
+
+    RegisterClass(FlowGraphBlockNames.MatrixCompose, FlowGraphMatrixComposeBlock);
 }

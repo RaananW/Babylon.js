@@ -4,15 +4,5 @@
  */
 export * from "./WebXRHandTracking.pure";
 
-import { WebXRHandTracking } from "./WebXRHandTracking.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-//register the plugin
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRHandTracking.Name,
-    (xrSessionManager, options) => {
-        return () => new WebXRHandTracking(xrSessionManager, options);
-    },
-    WebXRHandTracking.Version,
-    false
-);
+import { registerWebXRHandTracking } from "./WebXRHandTracking.pure";
+registerWebXRHandTracking();

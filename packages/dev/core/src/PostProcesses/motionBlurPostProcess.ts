@@ -4,7 +4,5 @@
  */
 export * from "./motionBlurPostProcess.pure";
 
-import { MotionBlurPostProcess } from "./motionBlurPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.MotionBlurPostProcess", MotionBlurPostProcess);
+import { registerMotionBlurPostProcess } from "./motionBlurPostProcess.pure";
+registerMotionBlurPostProcess();

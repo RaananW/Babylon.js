@@ -12,6 +12,7 @@ import type { Mesh } from "../../../../Meshes/mesh";
 import type { Scene } from "../../../../scene";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to add image processing support to fragment shader
@@ -255,4 +256,15 @@ export class ImageProcessingBlock extends NodeMaterialBlock {
 
         this.convertInputToLinearSpace = serializationObject.convertInputToLinearSpace ?? true;
     }
+}
+
+
+let _registered = false;
+export function registerImageProcessingBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ImageProcessingBlock", ImageProcessingBlock);
 }

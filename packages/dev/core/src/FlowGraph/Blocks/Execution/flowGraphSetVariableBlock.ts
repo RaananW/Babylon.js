@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphSetVariableBlock.pure";
 
-import { FlowGraphSetVariableBlock } from "./flowGraphSetVariableBlock.pure";
-import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.SetVariable, FlowGraphSetVariableBlock);
+import { registerFlowGraphSetVariableBlock } from "./flowGraphSetVariableBlock.pure";
+registerFlowGraphSetVariableBlock();

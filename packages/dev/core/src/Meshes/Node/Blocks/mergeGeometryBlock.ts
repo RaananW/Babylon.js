@@ -4,7 +4,5 @@
  */
 export * from "./mergeGeometryBlock.pure";
 
-import { MergeGeometryBlock } from "./mergeGeometryBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MergeGeometryBlock", MergeGeometryBlock);
+import { registerMergeGeometryBlock } from "./mergeGeometryBlock.pure";
+registerMergeGeometryBlock();

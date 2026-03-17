@@ -4,7 +4,5 @@
  */
 export * from "./booleanGeometryBlock.pure";
 
-import { BooleanGeometryBlock } from "./booleanGeometryBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.BooleanGeometryBlock", BooleanGeometryBlock);
+import { registerBooleanGeometryBlock } from "./booleanGeometryBlock.pure";
+registerBooleanGeometryBlock();

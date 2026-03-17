@@ -50,6 +50,7 @@ import {
 import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 import { ShaderLanguage } from "../shaderLanguage";
 import { ImageProcessingMixin } from "../imageProcessing";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -1149,4 +1150,15 @@ export class BackgroundMaterial extends BackgroundMaterialBase {
     public static override Parse(source: any, scene: Scene, rootUrl: string): BackgroundMaterial {
         return SerializationHelperParse(() => new BackgroundMaterial(source.name, scene), source, scene, rootUrl);
     }
+}
+
+
+let _registered = false;
+export function registerBackgroundMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.BackgroundMaterial", BackgroundMaterial);
 }

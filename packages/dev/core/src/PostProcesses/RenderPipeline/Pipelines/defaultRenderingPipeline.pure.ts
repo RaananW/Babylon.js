@@ -27,6 +27,7 @@ import { BloomEffect } from "../../../PostProcesses/bloomEffect";
 import { EngineStore } from "../../../Engines/engineStore";
 import type { Animation } from "../../../Animations/animation";
 import { ToolsSetImmediate } from "../../../Misc/tools.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -865,4 +866,15 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
     public static Parse(source: any, scene: Scene, rootUrl: string): DefaultRenderingPipeline {
         return SerializationHelperParse(() => new DefaultRenderingPipeline(source._name, source._name._hdr, scene), source, scene, rootUrl);
     }
+}
+
+
+let _registered = false;
+export function registerDefaultRenderingPipeline(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.DefaultRenderingPipeline", DefaultRenderingPipeline);
 }

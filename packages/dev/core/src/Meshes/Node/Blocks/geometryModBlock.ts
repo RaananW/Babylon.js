@@ -4,7 +4,5 @@
  */
 export * from "./geometryModBlock.pure";
 
-import { GeometryModBlock } from "./geometryModBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryModBlock", GeometryModBlock);
+import { registerGeometryModBlock } from "./geometryModBlock.pure";
+registerGeometryModBlock();

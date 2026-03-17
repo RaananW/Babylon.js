@@ -4,7 +4,5 @@
  */
 export * from "./grainPostProcess.pure";
 
-import { GrainPostProcess } from "./grainPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.GrainPostProcess", GrainPostProcess);
+import { registerGrainPostProcess } from "./grainPostProcess.pure";
+registerGrainPostProcess();

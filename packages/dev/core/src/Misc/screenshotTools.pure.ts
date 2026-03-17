@@ -1014,3 +1014,22 @@ export const ScreenshotTools = {
  * Once we build native modules those need to be exported.
  * @internal
  */
+
+
+let _registered = false;
+export function registerScreenshotTools(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    const initSideEffects = () => {
+        // References the dependencies.
+        Tools.CreateScreenshot = CreateScreenshot;
+        Tools.CreateScreenshotAsync = CreateScreenshotAsync;
+        Tools.CreateScreenshotUsingRenderTarget = CreateScreenshotUsingRenderTarget;
+        Tools.CreateScreenshotUsingRenderTargetAsync = CreateScreenshotUsingRenderTargetAsync;
+    };
+
+    initSideEffects();
+}

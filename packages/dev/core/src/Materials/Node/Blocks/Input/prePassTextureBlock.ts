@@ -4,7 +4,5 @@
  */
 export * from "./prePassTextureBlock.pure";
 
-import { PrePassTextureBlock } from "./prePassTextureBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.PrePassTextureBlock", PrePassTextureBlock);
+import { registerPrePassTextureBlock } from "./prePassTextureBlock.pure";
+registerPrePassTextureBlock();

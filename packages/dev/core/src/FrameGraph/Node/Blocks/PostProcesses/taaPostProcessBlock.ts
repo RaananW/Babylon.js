@@ -4,7 +4,5 @@
  */
 export * from "./taaPostProcessBlock.pure";
 
-import { NodeRenderGraphTAAPostProcessBlock } from "./taaPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphTAAPostProcessBlock", NodeRenderGraphTAAPostProcessBlock);
+import { registerTaaPostProcessBlock } from "./taaPostProcessBlock.pure";
+registerTaaPostProcessBlock();

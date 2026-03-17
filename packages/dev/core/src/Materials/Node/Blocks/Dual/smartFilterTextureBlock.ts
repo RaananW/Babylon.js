@@ -4,7 +4,5 @@
  */
 export * from "./smartFilterTextureBlock.pure";
 
-import { SmartFilterTextureBlock } from "./smartFilterTextureBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.SmartFilterTextureBlock", SmartFilterTextureBlock);
+import { registerSmartFilterTextureBlock } from "./smartFilterTextureBlock.pure";
+registerSmartFilterTextureBlock();

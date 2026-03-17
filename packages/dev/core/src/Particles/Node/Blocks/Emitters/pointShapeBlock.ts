@@ -4,7 +4,5 @@
  */
 export * from "./pointShapeBlock.pure";
 
-import { PointShapeBlock } from "./pointShapeBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.PointShapeBlock", PointShapeBlock);
+import { registerPointShapeBlock } from "./pointShapeBlock.pure";
+registerPointShapeBlock();

@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphConstantBlock.pure";
 
-import { FlowGraphConstantBlock } from "./flowGraphConstantBlock.pure";
-import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.Constant, FlowGraphConstantBlock);
+import { registerFlowGraphConstantBlock } from "./flowGraphConstantBlock.pure";
+registerFlowGraphConstantBlock();

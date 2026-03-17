@@ -4,7 +4,5 @@
  */
 export * from "./blackAndWhitePostProcess.pure";
 
-import { BlackAndWhitePostProcess } from "./blackAndWhitePostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.BlackAndWhitePostProcess", BlackAndWhitePostProcess);
+import { registerBlackAndWhitePostProcess } from "./blackAndWhitePostProcess.pure";
+registerBlackAndWhitePostProcess();

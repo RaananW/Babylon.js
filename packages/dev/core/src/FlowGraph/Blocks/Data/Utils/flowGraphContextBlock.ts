@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphContextBlock.pure";
 
-import { FlowGraphContextBlock } from "./flowGraphContextBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.Context, FlowGraphContextBlock);
+import { registerFlowGraphContextBlock } from "./flowGraphContextBlock.pure";
+registerFlowGraphContextBlock();

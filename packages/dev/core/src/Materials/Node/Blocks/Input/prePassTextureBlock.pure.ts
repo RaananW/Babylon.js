@@ -11,6 +11,7 @@ import type { NodeMaterial } from "../../nodeMaterial";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { Constants } from "../../../../Engines/constants";
 import { ImageSourceBlock } from "../Dual/imageSourceBlock.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to read from prepass textures
@@ -289,4 +290,15 @@ export class PrePassTextureBlock extends NodeMaterialBlock {
             effect.setTexture(this._worldNormalSamplerName, sceneRT.textures[prePassRenderer.getIndex(Constants.PREPASS_WORLD_NORMAL_TEXTURE_TYPE)]);
         }
     }
+}
+
+
+let _registered = false;
+export function registerPrePassTextureBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.PrePassTextureBlock", PrePassTextureBlock);
 }

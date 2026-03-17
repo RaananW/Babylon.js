@@ -3,8 +3,10 @@
 import { Camera } from "../../Cameras/camera";
 import { ArcRotateCamera } from "../../Cameras/arcRotateCamera.pure";
 import type { Scene } from "../../scene";
-import type { Vector3 } from "../../Maths/math.vector.pure";
+
 import { _SetStereoscopicAnaglyphRigMode } from "../RigModes/stereoscopicAnaglyphRigMode";
+import { Node } from "../../node";
+import { Vector3 } from "../../Maths/math.vector.pure";
 
 /**
  * Camera used to simulate anaglyphic rendering (based on ArcRotateCamera)
@@ -36,4 +38,17 @@ export class AnaglyphArcRotateCamera extends ArcRotateCamera {
     }
 
     protected override _setRigMode = () => _SetStereoscopicAnaglyphRigMode(this);
+}
+
+
+let _registered = false;
+export function registerAnaglyphArcRotateCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("AnaglyphArcRotateCamera", (name, scene, options) => {
+        return () => new AnaglyphArcRotateCamera(name, 0, 0, 1.0, Vector3.Zero(), options.interaxial_distance, scene);
+    });
 }

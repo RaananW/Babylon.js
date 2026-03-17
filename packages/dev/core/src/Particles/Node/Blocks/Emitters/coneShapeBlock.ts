@@ -4,7 +4,5 @@
  */
 export * from "./coneShapeBlock.pure";
 
-import { ConeShapeBlock } from "./coneShapeBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.ConeShapeBlock", ConeShapeBlock);
+import { registerConeShapeBlock } from "./coneShapeBlock.pure";
+registerConeShapeBlock();

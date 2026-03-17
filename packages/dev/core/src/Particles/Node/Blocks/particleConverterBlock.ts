@@ -4,7 +4,5 @@
  */
 export * from "./particleConverterBlock.pure";
 
-import { ParticleConverterBlock } from "./particleConverterBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleConverterBlock", ParticleConverterBlock);
+import { registerParticleConverterBlock } from "./particleConverterBlock.pure";
+registerParticleConverterBlock();

@@ -4,7 +4,5 @@
  */
 export * from "./flowGraphDataConnection.pure";
 
-import { FlowGraphDataConnection } from "./flowGraphDataConnection.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("FlowGraphDataConnection", FlowGraphDataConnection);
+import { registerFlowGraphDataConnection } from "./flowGraphDataConnection.pure";
+registerFlowGraphDataConnection();

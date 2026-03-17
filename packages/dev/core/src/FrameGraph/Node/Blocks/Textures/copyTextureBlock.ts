@@ -4,7 +4,5 @@
  */
 export * from "./copyTextureBlock.pure";
 
-import { NodeRenderGraphCopyTextureBlock } from "./copyTextureBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphCopyTextureBlock", NodeRenderGraphCopyTextureBlock);
+import { registerCopyTextureBlock } from "./copyTextureBlock.pure";
+registerCopyTextureBlock();

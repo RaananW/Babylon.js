@@ -4,15 +4,5 @@
  */
 export * from "./WebXRLightEstimation.pure";
 
-import { WebXRLightEstimation } from "./WebXRLightEstimation.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-// register the plugin
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRLightEstimation.Name,
-    (xrSessionManager, options) => {
-        return () => new WebXRLightEstimation(xrSessionManager, options);
-    },
-    WebXRLightEstimation.Version,
-    false
-);
+import { registerWebXRLightEstimation } from "./WebXRLightEstimation.pure";
+registerWebXRLightEstimation();

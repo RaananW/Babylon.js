@@ -4,7 +4,5 @@
  */
 export * from "./gaussianSplattingMaterial.pure";
 
-import { GaussianSplattingMaterial } from "./gaussianSplattingMaterial.pure";
-import { RegisterClass } from "../../Misc/typeStore";
-
-RegisterClass("BABYLON.GaussianSplattingMaterial", GaussianSplattingMaterial);
+import { registerGaussianSplattingMaterial } from "./gaussianSplattingMaterial.pure";
+registerGaussianSplattingMaterial();

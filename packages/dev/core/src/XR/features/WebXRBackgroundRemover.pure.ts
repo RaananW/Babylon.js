@@ -5,6 +5,7 @@ import type { WebXRSessionManager } from "../webXRSessionManager";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";
 import { Observable } from "../../Misc/observable";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * Options interface for the background remover plugin
@@ -135,4 +136,23 @@ export class WebXRBackgroundRemover extends WebXRAbstractFeature {
 
         this.onBackgroundStateChangedObservable.notifyObservers(newState);
     }
+}
+
+
+let _registered = false;
+export function registerWebXRBackgroundRemover(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    //register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRBackgroundRemover.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRBackgroundRemover(xrSessionManager, options);
+        },
+        WebXRBackgroundRemover.Version,
+        true
+    );
 }

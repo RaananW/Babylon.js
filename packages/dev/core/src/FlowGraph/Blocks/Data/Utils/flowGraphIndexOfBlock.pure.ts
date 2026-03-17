@@ -7,6 +7,7 @@ import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnec
 import { RichTypeAny, RichTypeFlowGraphInteger } from "core/FlowGraph/flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pure";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * This block takes an object as input and an array and returns the index of the object in the array.
@@ -62,4 +63,15 @@ export class FlowGraphIndexOfBlock<T = any> extends FlowGraphBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.IndexOf;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphIndexOfBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.IndexOf, FlowGraphIndexOfBlock);
 }

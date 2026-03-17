@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphBranchBlock.pure";
 
-import { FlowGraphBranchBlock } from "./flowGraphBranchBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.Branch, FlowGraphBranchBlock);
+import { registerFlowGraphBranchBlock } from "./flowGraphBranchBlock.pure";
+registerFlowGraphBranchBlock();

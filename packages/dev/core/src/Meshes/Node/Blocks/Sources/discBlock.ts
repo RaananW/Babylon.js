@@ -4,7 +4,5 @@
  */
 export * from "./discBlock.pure";
 
-import { DiscBlock } from "./discBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.DiscBlock", DiscBlock);
+import { registerDiscBlock } from "./discBlock.pure";
+registerDiscBlock();

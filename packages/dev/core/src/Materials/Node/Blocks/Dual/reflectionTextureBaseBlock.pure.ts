@@ -21,6 +21,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import type { SubMesh } from "../../../..//Meshes/subMesh";
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Base block used to read a reflection texture from a sampler
@@ -636,4 +637,15 @@ export abstract class ReflectionTextureBaseBlock extends NodeMaterialBlock {
 
         this._setTarget();
     }
+}
+
+
+let _registered = false;
+export function registerReflectionTextureBaseBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ReflectionTextureBaseBlock", ReflectionTextureBaseBlock);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./depthOfFieldBlurPostProcess.pure";
 
-import { DepthOfFieldBlurPostProcess } from "./depthOfFieldBlurPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.DepthOfFieldBlurPostProcess", DepthOfFieldBlurPostProcess);
+import { registerDepthOfFieldBlurPostProcess } from "./depthOfFieldBlurPostProcess.pure";
+registerDepthOfFieldBlurPostProcess();

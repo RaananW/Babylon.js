@@ -4,9 +4,5 @@
  */
 export * from "./collisionCoordinator.pure";
 
-import { DefaultCollisionCoordinator } from "./collisionCoordinator.pure";
-import { Scene } from "../scene";
-
-Scene.CollisionCoordinatorFactory = () => {
-    return new DefaultCollisionCoordinator();
-};
+import { registerCollisionCoordinator } from "./collisionCoordinator.pure";
+registerCollisionCoordinator();

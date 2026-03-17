@@ -3,7 +3,8 @@
 import type { InternalTexture } from "../Materials/Textures/internalTexture";
 import { Engine } from "./engine.pure";
 import type { ThinNativeEngineOptions } from "./thinNativeEngine.pure";
-import type { ThinNativeEngine } from "./thinNativeEngine.pure";
+import { ThinNativeEngine } from "./thinNativeEngine.pure";
+
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -55,3 +56,25 @@ export interface NativeEngine extends Omit<ThinNativeEngine, keyof Engine> {}
  * @internal
  * Applies the functionality of one or more base constructors to a derived constructor.
  */
+
+
+let _registered = false;
+export function registerNativeEngine(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    function applyMixins(derivedCtor: any, constructors: any[]) {
+        constructors.forEach((baseCtor) => {
+            Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
+                if (name !== "constructor") {
+                    derivedCtor.prototype[name] = baseCtor.prototype[name];
+                }
+            });
+        });
+    }
+
+    // Apply the ThinNativeEngine mixins to the NativeEngine.
+    applyMixins(NativeEngine, [ThinNativeEngine]);
+}

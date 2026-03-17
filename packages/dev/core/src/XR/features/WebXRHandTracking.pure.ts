@@ -31,6 +31,7 @@ import type { WebXRCompositionLayerWrapper } from "./Layers/WebXRCompositionLaye
 import { Tools } from "core/Misc/tools.pure";
 import type { WebXRCamera } from "../webXRCamera";
 import type { Node } from "../../node";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 declare const XRHand: XRHand;
 
@@ -1094,4 +1095,23 @@ export class WebXRHandTracking extends WebXRAbstractFeature {
             }
         }
     }
+}
+
+
+let _registered = false;
+export function registerWebXRHandTracking(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    //register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRHandTracking.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRHandTracking(xrSessionManager, options);
+        },
+        WebXRHandTracking.Version,
+        false
+    );
 }

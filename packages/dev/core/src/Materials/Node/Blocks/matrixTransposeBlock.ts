@@ -4,7 +4,5 @@
  */
 export * from "./matrixTransposeBlock.pure";
 
-import { MatrixTransposeBlock } from "./matrixTransposeBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MatrixTransposeBlock", MatrixTransposeBlock);
+import { registerMatrixTransposeBlock } from "./matrixTransposeBlock.pure";
+registerMatrixTransposeBlock();

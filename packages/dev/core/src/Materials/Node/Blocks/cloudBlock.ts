@@ -4,7 +4,5 @@
  */
 export * from "./cloudBlock.pure";
 
-import { CloudBlock } from "./cloudBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.CloudBlock", CloudBlock);
+import { registerCloudBlock } from "./cloudBlock.pure";
+registerCloudBlock();

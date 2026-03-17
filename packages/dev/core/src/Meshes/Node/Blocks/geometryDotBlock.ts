@@ -4,7 +4,5 @@
  */
 export * from "./geometryDotBlock.pure";
 
-import { GeometryDotBlock } from "./geometryDotBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryDotBlock", GeometryDotBlock);
+import { registerGeometryDotBlock } from "./geometryDotBlock.pure";
+registerGeometryDotBlock();

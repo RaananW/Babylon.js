@@ -4,7 +4,5 @@
  */
 export * from "./rotate2dBlock.pure";
 
-import { Rotate2dBlock } from "./rotate2dBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.Rotate2dBlock", Rotate2dBlock);
+import { registerRotate2dBlock } from "./rotate2dBlock.pure";
+registerRotate2dBlock();

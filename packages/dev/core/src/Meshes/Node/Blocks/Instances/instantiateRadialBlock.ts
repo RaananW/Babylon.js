@@ -4,7 +4,5 @@
  */
 export * from "./instantiateRadialBlock.pure";
 
-import { InstantiateRadialBlock } from "./instantiateRadialBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.InstantiateRadialBlock", InstantiateRadialBlock);
+import { registerInstantiateRadialBlock } from "./instantiateRadialBlock.pure";
+registerInstantiateRadialBlock();

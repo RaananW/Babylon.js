@@ -8,6 +8,7 @@ import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnec
 import { RichTypeFlowGraphInteger } from "core/FlowGraph/flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Configuration for the wait all block.
@@ -120,4 +121,15 @@ export class FlowGraphWaitAllBlock extends FlowGraphExecutionBlockWithOutSignal 
         super.serialize(serializationObject);
         serializationObject.config.inputFlows = this.config.inputSignalCount;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphWaitAllBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.WaitAll, FlowGraphWaitAllBlock);
 }

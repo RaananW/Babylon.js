@@ -8,6 +8,7 @@ import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to fetch a color from texture data
@@ -228,4 +229,15 @@ export class GeometryTextureFetchBlock extends NodeGeometryBlock {
             this.interpolation = serializationObject.interpolation;
         }
     }
+}
+
+
+let _registered = false;
+export function registerGeometryTextureFetchBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GeometryTextureFetchBlock", GeometryTextureFetchBlock);
 }

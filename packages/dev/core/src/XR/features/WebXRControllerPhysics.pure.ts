@@ -14,6 +14,7 @@ import type { Nullable } from "../../types";
 import { PhysicsAggregate } from "../../Physics/v2/physicsAggregate";
 import type { PhysicsBody } from "../../Physics/v2/physicsBody";
 import { PhysicsMotionType, PhysicsShapeType } from "../../Physics/v2/IPhysicsEnginePlugin";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * Options for the controller physics feature
@@ -682,4 +683,23 @@ export class WebXRControllerPhysics extends WebXRAbstractFeature {
         // remove from the map
         delete this._controllers[xrControllerUniqueId];
     }
+}
+
+
+let _registered = false;
+export function registerWebXRControllerPhysics(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    //register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRControllerPhysics.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRControllerPhysics(xrSessionManager, options);
+        },
+        WebXRControllerPhysics.Version,
+        true
+    );
 }

@@ -42,6 +42,7 @@ import {
     PrepareUniformsAndSamplersForLight,
 } from "../../../materialHelper.functions";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 const MapOutputToVariable: { [name: string]: [string, string] } = {
     ambientClr: ["finalAmbient", ""],
@@ -1648,4 +1649,15 @@ export class PBRMetallicRoughnessBlock extends NodeMaterialBlock {
 
         this._setTarget();
     }
+}
+
+
+let _registered = false;
+export function registerPbrMetallicRoughnessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.PBRMetallicRoughnessBlock", PBRMetallicRoughnessBlock);
 }

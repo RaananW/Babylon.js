@@ -12,6 +12,7 @@ import { GetClass } from "../../Misc/typeStore";
 import type { AbstractEngine } from "../../Engines/abstractEngine";
 import { Observable } from "../../Misc/observable";
 import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /**
  * Defines the available options when creating a cube texture
@@ -583,4 +584,18 @@ export class CubeTexture extends BaseTexture {
 
         return newCubeTexture;
     }
+}
+
+
+let _registered = false;
+export function registerCubeTexture(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Texture._CubeTextureParser = CubeTexture.Parse;
+
+    // Some exporters relies on Tools.Instantiate
+    RegisterClass("BABYLON.CubeTexture", CubeTexture);
 }

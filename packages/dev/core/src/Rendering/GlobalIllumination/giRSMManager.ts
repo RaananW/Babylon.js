@@ -4,7 +4,5 @@
  */
 export * from "./giRSMManager.pure";
 
-import { GIRSMRenderPluginMaterial } from "./giRSMManager.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(`BABYLON.GIRSMRenderPluginMaterial`, GIRSMRenderPluginMaterial);
+import { registerGiRSMManager } from "./giRSMManager.pure";
+registerGiRSMManager();

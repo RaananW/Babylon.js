@@ -4,7 +4,5 @@
  */
 export * from "./TBNBlock.pure";
 
-import { TBNBlock } from "./TBNBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.TBNBlock", TBNBlock);
+import { registerTBNBlock } from "./TBNBlock.pure";
+registerTBNBlock();

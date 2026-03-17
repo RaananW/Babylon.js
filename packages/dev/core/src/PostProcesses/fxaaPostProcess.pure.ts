@@ -11,6 +11,7 @@ import { Constants } from "../Engines/constants";
 import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import { ThinFXAAPostProcess } from "./thinFXAAPostProcess";
 import type { Scene } from "../scene";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * Fxaa post process
@@ -77,4 +78,15 @@ export class FxaaPostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerFxaaPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.FxaaPostProcess", FxaaPostProcess);
 }

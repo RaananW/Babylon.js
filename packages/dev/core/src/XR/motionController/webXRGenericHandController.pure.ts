@@ -4,6 +4,7 @@ import type { IMotionControllerLayoutMap, IMinimalMotionControllerObject, Motion
 import { WebXRAbstractMotionController } from "./webXRAbstractMotionController";
 import type { Scene } from "../../scene";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";
+import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -129,3 +130,17 @@ const GenericHandSelectGraspProfile: IMotionControllerLayoutMap = {
         assetPath: "none.glb",
     },
 };
+
+
+let _registered = false;
+export function registerWebXRGenericHandController(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // register the profiles
+    WebXRMotionControllerManager.RegisterController("generic-hand-select-grasp", (xrInput: XRInputSource, scene: Scene) => {
+        return new WebXRGenericHandController(scene, <any>xrInput.gamepad, xrInput.handedness);
+    });
+}

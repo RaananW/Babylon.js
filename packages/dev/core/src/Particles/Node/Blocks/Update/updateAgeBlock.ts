@@ -4,7 +4,5 @@
  */
 export * from "./updateAgeBlock.pure";
 
-import { UpdateAgeBlock } from "./updateAgeBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.UpdateAgeBlock", UpdateAgeBlock);
+import { registerUpdateAgeBlock } from "./updateAgeBlock.pure";
+registerUpdateAgeBlock();

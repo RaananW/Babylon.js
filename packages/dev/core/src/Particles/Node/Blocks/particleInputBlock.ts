@@ -4,7 +4,5 @@
  */
 export * from "./particleInputBlock.pure";
 
-import { ParticleInputBlock } from "./particleInputBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleInputBlock", ParticleInputBlock);
+import { registerParticleInputBlock } from "./particleInputBlock.pure";
+registerParticleInputBlock();

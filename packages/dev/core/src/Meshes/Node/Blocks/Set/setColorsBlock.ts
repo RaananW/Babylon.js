@@ -4,7 +4,5 @@
  */
 export * from "./setColorsBlock.pure";
 
-import { SetColorsBlock } from "./setColorsBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SetColorsBlock", SetColorsBlock);
+import { registerSetColorsBlock } from "./setColorsBlock.pure";
+registerSetColorsBlock();

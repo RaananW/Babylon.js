@@ -17,6 +17,7 @@ import type { AbstractMesh } from "../../Meshes/abstractMesh";
 import type { Material } from "../../Materials/material";
 import type { Observer } from "../../Misc/observable";
 import type { ThinEngine } from "../../Engines/thinEngine";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * Used for Space Warp render process
@@ -345,4 +346,23 @@ export class WebXRSpaceWarp extends WebXRAbstractFeature {
         this._renderTargetTexture = this._renderTargetTexture || this.spaceWarpRTTProvider!.getRenderTargetTextureForView(view);
         this.spaceWarpRTTProvider!.accessMotionVector(view);
     }
+}
+
+
+let _registered = false;
+export function registerWebXRSpaceWarp(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    //register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRSpaceWarp.Name,
+        (xrSessionManager) => {
+            return () => new WebXRSpaceWarp(xrSessionManager);
+        },
+        WebXRSpaceWarp.Version,
+        false
+    );
 }

@@ -5,6 +5,7 @@ import { Color4 } from "../Maths/math.color.pure";
 import type { Effect } from "../Materials/effect";
 import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../Misc/decorators.serialization.pure";
 import { PrepareUniformsForColorCurves } from "./colorCurves.functions";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
 
 /**
  * The color grading curves provide additional color adjustment that is applied after any color grading transform (3D LUT).
@@ -559,4 +560,16 @@ export class ColorCurves {
     public static Parse(source: any): ColorCurves {
         return SerializationHelperParse(() => new ColorCurves(), source, null, null);
     }
+}
+
+
+let _registered = false;
+export function registerColorCurves(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // References the dependencies.
+    SerializationHelper._ColorCurvesParser = ColorCurves.Parse;
 }

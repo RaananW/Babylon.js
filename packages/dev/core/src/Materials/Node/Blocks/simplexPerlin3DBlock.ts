@@ -4,7 +4,5 @@
  */
 export * from "./simplexPerlin3DBlock.pure";
 
-import { SimplexPerlin3DBlock } from "./simplexPerlin3DBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SimplexPerlin3DBlock", SimplexPerlin3DBlock);
+import { registerSimplexPerlin3DBlock } from "./simplexPerlin3DBlock.pure";
+registerSimplexPerlin3DBlock();

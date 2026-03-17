@@ -4,7 +4,5 @@
  */
 export * from "./fresnelBlock.pure";
 
-import { FresnelBlock } from "./fresnelBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.FresnelBlock", FresnelBlock);
+import { registerFresnelBlock } from "./fresnelBlock.pure";
+registerFresnelBlock();

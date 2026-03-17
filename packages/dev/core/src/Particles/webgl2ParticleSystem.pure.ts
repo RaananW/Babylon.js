@@ -11,6 +11,7 @@ import type { DataBuffer } from "../Buffers/dataBuffer";
 import { UniformBufferEffectCommonAccessor } from "../Materials/uniformBufferEffectCommonAccessor";
 import { Constants } from "../Engines/constants";
 import type { Engine } from "../Engines/engine";
+import { RegisterClass } from "../Misc/typeStore";
 
 /** @internal */
 export class WebGL2ParticleSystem implements IGPUParticleSystemPlatform {
@@ -315,4 +316,15 @@ export class WebGL2ParticleSystem implements IGPUParticleSystemPlatform {
 
         return vao;
     }
+}
+
+
+let _registered = false;
+export function registerWebgl2ParticleSystem(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.WebGL2ParticleSystem", WebGL2ParticleSystem);
 }

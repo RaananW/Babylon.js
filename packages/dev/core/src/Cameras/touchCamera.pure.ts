@@ -4,7 +4,9 @@ import { FreeCamera } from "./freeCamera.pure";
 import type { FreeCameraTouchInput } from "../Cameras/Inputs/freeCameraTouchInput";
 import type { FreeCameraMouseInput } from "../Cameras/Inputs/freeCameraMouseInput";
 import type { Scene } from "../scene";
-import type { Vector3 } from "../Maths/math.vector.pure";
+import { Node } from "../node";
+import { Vector3 } from "../Maths/math.vector.pure";
+
 
 /**
  * This represents a FPS type of camera controlled by touch.
@@ -88,4 +90,17 @@ export class TouchCamera extends FreeCamera {
             touch.allowMouse = !mouse;
         }
     }
+}
+
+
+let _registered = false;
+export function registerTouchCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("TouchCamera", (name, scene) => {
+        return () => new TouchCamera(name, Vector3.Zero(), scene);
+    });
 }

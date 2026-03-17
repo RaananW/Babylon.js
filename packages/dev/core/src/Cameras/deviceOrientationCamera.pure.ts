@@ -2,10 +2,12 @@
 
 import { FreeCamera } from "./freeCamera.pure";
 import type { Scene } from "../scene";
-import type { Vector3 } from "../Maths/math.vector.pure";
+
 import { Quaternion } from "../Maths/math.vector.pure";
 import { Axis } from "../Maths/math.axis";
 import type { Nullable } from "../types";
+import { Node } from "../node";
+import { Vector3 } from "../Maths/math.vector.pure";
 
 // We're mainly based on the logic defined into the FreeCamera code
 /**
@@ -122,4 +124,17 @@ export class DeviceOrientationCamera extends FreeCamera {
         //force rotation update
         this._initialQuaternion.multiplyToRef(this.rotationQuaternion, this.rotationQuaternion);
     }
+}
+
+
+let _registered = false;
+export function registerDeviceOrientationCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("DeviceOrientationCamera", (name, scene) => {
+        return () => new DeviceOrientationCamera(name, Vector3.Zero(), scene);
+    });
 }

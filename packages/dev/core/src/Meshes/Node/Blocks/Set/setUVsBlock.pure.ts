@@ -8,6 +8,7 @@ import type { INodeGeometryExecutionContext } from "../../Interfaces/nodeGeometr
 import type { VertexData } from "../../../mesh.vertexData";
 import type { Vector2 } from "../../../../Maths/math.vector";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to set texture coordinates for a geometry
@@ -207,4 +208,15 @@ export class SetUVsBlock extends NodeGeometryBlock implements INodeGeometryExecu
             this.evaluateContext = serializationObject.evaluateContext;
         }
     }
+}
+
+
+let _registered = false;
+export function registerSetUVsBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SetUVsBlock", SetUVsBlock);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./reflectiveShadowMap.pure";
 
-import { RSMCreatePluginMaterial } from "./reflectiveShadowMap.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(`BABYLON.RSMCreatePluginMaterial`, RSMCreatePluginMaterial);
+import { registerReflectiveShadowMap } from "./reflectiveShadowMap.pure";
+registerReflectiveShadowMap();

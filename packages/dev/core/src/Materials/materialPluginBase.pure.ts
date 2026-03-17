@@ -18,6 +18,7 @@ import type { BaseTexture } from "./Textures/baseTexture";
 import type { RenderTargetTexture } from "./Textures/renderTargetTexture";
 import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../Misc/decorators.serialization.pure";
 import { ShaderLanguage } from "./shaderLanguage";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * Base class for material plugins.
@@ -321,3 +322,14 @@ export class MaterialPluginBase {
 }
 
 // Register Class Name
+
+
+let _registered = false;
+export function registerMaterialPluginBase(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.MaterialPluginBase", MaterialPluginBase);
+}

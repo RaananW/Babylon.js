@@ -4,7 +4,5 @@
  */
 export * from "./mathBlock.pure";
 
-import { MathBlock } from "./mathBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MathBlock", MathBlock);
+import { registerMathBlock } from "./mathBlock.pure";
+registerMathBlock();

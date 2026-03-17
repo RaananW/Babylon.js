@@ -13,6 +13,8 @@ import { Texture } from "../Materials/Textures/texture.pure";
 import type { ProceduralTexture } from "../Materials/Textures/Procedurals/proceduralTexture";
 import type { Camera } from "../Cameras/camera";
 import { Constants } from "core/Engines/constants";
+import { Node } from "../node";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * A spot light is defined by a position, a direction, an angle, and an exponent.
@@ -517,4 +519,20 @@ export class SpotLight extends ShadowLight {
         defines["PROJECTEDLIGHTTEXTURE" + lightIndex] = this.projectionTexture && this.projectionTexture.isReady() ? true : false;
         defines["IESLIGHTTEXTURE" + lightIndex] = this._iesProfileTexture && this._iesProfileTexture.isReady() ? true : false;
     }
+}
+
+
+let _registered = false;
+export function registerSpotLight(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("Light_Type_2", (name, scene) => {
+        return () => new SpotLight(name, Vector3.Zero(), Vector3.Zero(), 0, 0, scene);
+    });
+
+    // Register Class Name
+    RegisterClass("BABYLON.SpotLight", SpotLight);
 }

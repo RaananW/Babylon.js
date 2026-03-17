@@ -6,6 +6,7 @@ import { Observable } from "../Misc/observable";
 import type { Nullable } from "../types";
 import type { Analyser } from "./analyser";
 import type { IAudioEngine } from "./Interfaces/IAudioEngine";
+import { AbstractEngine } from "../Engines/abstractEngine";
 
 /**
  * This represents the default audio engine used in babylon.
@@ -267,4 +268,22 @@ export class AudioEngine implements IAudioEngine {
 
         this.onAudioUnlockedObservable.notifyObservers(this);
     }
+}
+
+
+let _registered = false;
+export function registerAudioEngine(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // Sets the default audio engine to Babylon.js
+    AbstractEngine.AudioEngineFactory = (
+        hostElement: Nullable<HTMLElement>,
+        audioContext: Nullable<AudioContext>,
+        audioDestination: Nullable<AudioDestinationNode | MediaStreamAudioDestinationNode>
+    ) => {
+        return new AudioEngine(hostElement, audioContext, audioDestination);
+    };
 }

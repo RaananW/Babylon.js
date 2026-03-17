@@ -4,7 +4,5 @@
  */
 export * from "./particleFloatToIntBlock.pure";
 
-import { ParticleFloatToIntBlock } from "./particleFloatToIntBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleFloatToIntBlock", ParticleFloatToIntBlock);
+import { registerParticleFloatToIntBlock } from "./particleFloatToIntBlock.pure";
+registerParticleFloatToIntBlock();

@@ -320,3 +320,21 @@ export const DumpTools = {
  * Once we build native modules those need to be exported.
  * @internal
  */
+
+
+let _registered = false;
+export function registerDumpTools(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    const InitSideEffects = () => {
+        // References the dependencies.
+        Tools.DumpData = DumpData;
+        Tools.DumpDataAsync = DumpDataAsync;
+        Tools.DumpFramebuffer = DumpFramebuffer;
+    };
+
+    InitSideEffects();
+}

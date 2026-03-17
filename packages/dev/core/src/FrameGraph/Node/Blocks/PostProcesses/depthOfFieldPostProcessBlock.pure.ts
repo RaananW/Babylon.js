@@ -6,6 +6,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { FrameGraphDepthOfFieldTask } from "../../../Tasks/PostProcesses/depthOfFieldTask";
 import { ThinDepthOfFieldEffectBlurLevel } from "core/PostProcesses/thinDepthOfFieldEffect";
 import { NodeRenderGraphBasePostProcessBlock } from "./basePostProcessBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the depth of field post process
@@ -197,4 +198,15 @@ export class NodeRenderGraphDepthOfFieldPostProcessBlock extends NodeRenderGraph
         this.focalLength = serializationObject.focalLength;
         this.depthSamplingMode = serializationObject.depthSamplingMode;
     }
+}
+
+
+let _registered = false;
+export function registerDepthOfFieldPostProcessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphDepthOfFieldPostProcessBlock", NodeRenderGraphDepthOfFieldPostProcessBlock);
 }

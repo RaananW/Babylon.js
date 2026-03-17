@@ -4,7 +4,5 @@
  */
 export * from "./geometryTextureBlock.pure";
 
-import { GeometryTextureBlock } from "./geometryTextureBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryTextureBlock", GeometryTextureBlock);
+import { registerGeometryTextureBlock } from "./geometryTextureBlock.pure";
+registerGeometryTextureBlock();

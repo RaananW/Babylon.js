@@ -9,6 +9,7 @@ import type { Particle } from "core/Particles/particle";
 import { _ConnectAtTheEnd } from "core/Particles/Queue/executionQueue";
 import { Vector3 } from "../../../../Maths/math.vector.pure";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to align the angle of a particle to its direction
@@ -110,4 +111,15 @@ export class AlignAngleBlock extends NodeParticleBlock {
             this.alignment = serializationObject.alignment;
         }
     }
+}
+
+
+let _registered = false;
+export function registerAlignAngleBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.AlignAngleBlock", AlignAngleBlock);
 }

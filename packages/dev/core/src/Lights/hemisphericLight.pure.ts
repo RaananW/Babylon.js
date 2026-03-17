@@ -8,6 +8,8 @@ import { Color3 } from "../Maths/math.color.pure";
 import type { Effect } from "../Materials/effect";
 import { Light } from "./light";
 import type { IShadowGenerator } from "./Shadows/shadowGenerator";
+import { Node } from "../node";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * The HemisphericLight simulates the ambient environment light,
@@ -126,4 +128,20 @@ export class HemisphericLight extends Light {
     public prepareLightSpecificDefines(defines: any, lightIndex: number): void {
         defines["HEMILIGHT" + lightIndex] = true;
     }
+}
+
+
+let _registered = false;
+export function registerHemisphericLight(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("Light_Type_3", (name, scene) => {
+        return () => new HemisphericLight(name, Vector3.Zero(), scene);
+    });
+
+    // Register Class Name
+    RegisterClass("BABYLON.HemisphericLight", HemisphericLight);
 }

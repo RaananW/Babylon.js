@@ -6,6 +6,7 @@ import type { Color3 } from "../Maths/math.color.pure";
 import { Color3FromArray, Color3Black, Color3White } from "../Maths/math.color.pure";
 import { Constants } from "../Engines/constants";
 import { AbstractEngine } from "core/Engines/abstractEngine";
+import { SerializationHelper } from "../Misc/decorators.serialization";
 
 /**
  * Options to be used when creating a FresnelParameters.
@@ -181,4 +182,16 @@ export class FresnelParameters {
             power: parsedFresnelParameters.power || 1.0,
         });
     }
+}
+
+
+let _registered = false;
+export function registerFresnelParameters(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // References the dependencies.
+    SerializationHelper._FresnelParametersParser = FresnelParameters.Parse;
 }

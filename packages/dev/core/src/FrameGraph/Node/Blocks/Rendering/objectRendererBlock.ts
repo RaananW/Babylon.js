@@ -4,7 +4,5 @@
  */
 export * from "./objectRendererBlock.pure";
 
-import { NodeRenderGraphObjectRendererBlock } from "./objectRendererBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphObjectRendererBlock", NodeRenderGraphObjectRendererBlock);
+import { registerObjectRendererBlock } from "./objectRendererBlock.pure";
+registerObjectRendererBlock();

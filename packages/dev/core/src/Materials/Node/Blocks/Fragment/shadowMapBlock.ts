@@ -4,7 +4,5 @@
  */
 export * from "./shadowMapBlock.pure";
 
-import { ShadowMapBlock } from "./shadowMapBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ShadowMapBlock", ShadowMapBlock);
+import { registerShadowMapBlock } from "./shadowMapBlock.pure";
+registerShadowMapBlock();

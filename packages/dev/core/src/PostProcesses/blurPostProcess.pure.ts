@@ -13,6 +13,7 @@ import { SerializationHelperParse } from "../Misc/decorators.serialization.pure"
 import type { Scene } from "../scene";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import { ThinBlurPostProcess } from "./thinBlurPostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * The Blur Post Process which blurs an image based on a kernel and direction.
@@ -168,4 +169,15 @@ export class BlurPostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerBlurPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.BlurPostProcess", BlurPostProcess);
 }

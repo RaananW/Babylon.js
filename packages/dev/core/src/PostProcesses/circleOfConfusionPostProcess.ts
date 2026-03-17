@@ -4,7 +4,5 @@
  */
 export * from "./circleOfConfusionPostProcess.pure";
 
-import { CircleOfConfusionPostProcess } from "./circleOfConfusionPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.CircleOfConfusionPostProcess", CircleOfConfusionPostProcess);
+import { registerCircleOfConfusionPostProcess } from "./circleOfConfusionPostProcess.pure";
+registerCircleOfConfusionPostProcess();

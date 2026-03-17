@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphIndexOfBlock.pure";
 
-import { FlowGraphIndexOfBlock } from "./flowGraphIndexOfBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.IndexOf, FlowGraphIndexOfBlock);
+import { registerFlowGraphIndexOfBlock } from "./flowGraphIndexOfBlock.pure";
+registerFlowGraphIndexOfBlock();

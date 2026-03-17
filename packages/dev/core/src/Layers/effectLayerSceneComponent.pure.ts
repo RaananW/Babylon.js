@@ -9,6 +9,9 @@ import type { ISceneSerializableComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
 import { EngineStore } from "../Engines/engineStore";
 import type { IAssetContainer } from "core/IAssetContainer";
+import { EffectLayer } from "./effectLayer";
+import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
+import type { AssetContainer } from "../assetContainer";
 
 /**
  * Defines the layer scene component responsible to manage any effect layers
@@ -222,4 +225,35 @@ export class EffectLayerSceneComponent implements ISceneSerializableComponent {
             this._draw(index);
         }
     }
+}
+
+
+let _registered = false;
+export function registerEffectLayerSceneComponent(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // Adds the parser to the scene parsers.
+    AddParser(SceneComponentConstants.NAME_EFFECTLAYER, (parsedData: any, scene: Scene, container: AssetContainer, rootUrl: string) => {
+        if (parsedData.effectLayers) {
+            if (!container.effectLayers) {
+                container.effectLayers = [] as EffectLayer[];
+            }
+
+            for (let index = 0; index < parsedData.effectLayers.length; index++) {
+                const effectLayer = EffectLayer.Parse(parsedData.effectLayers[index], scene, rootUrl);
+                container.effectLayers.push(effectLayer);
+            }
+        }
+    });
+
+    EffectLayer._SceneComponentInitialization = (scene: Scene) => {
+        let component = scene._getComponent(SceneComponentConstants.NAME_EFFECTLAYER) as EffectLayerSceneComponent;
+        if (!component) {
+            component = new EffectLayerSceneComponent(scene);
+            scene._addComponent(component);
+        }
+    };
 }

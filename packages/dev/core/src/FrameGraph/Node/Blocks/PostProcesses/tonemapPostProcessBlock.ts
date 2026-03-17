@@ -4,7 +4,5 @@
  */
 export * from "./tonemapPostProcessBlock.pure";
 
-import { NodeRenderGraphTonemapPostProcessBlock } from "./tonemapPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphTonemapPostProcessBlock", NodeRenderGraphTonemapPostProcessBlock);
+import { registerTonemapPostProcessBlock } from "./tonemapPostProcessBlock.pure";
+registerTonemapPostProcessBlock();

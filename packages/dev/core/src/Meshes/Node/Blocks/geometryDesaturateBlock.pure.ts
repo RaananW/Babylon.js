@@ -4,6 +4,7 @@ import { Vector3 } from "core/Maths/math.vector.pure";
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to desaturate a color
@@ -70,4 +71,15 @@ export class GeometryDesaturateBlock extends NodeGeometryBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerGeometryDesaturateBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GeometryDesaturateBlock", GeometryDesaturateBlock);
 }

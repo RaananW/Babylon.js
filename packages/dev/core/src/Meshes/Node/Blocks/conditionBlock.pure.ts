@@ -8,6 +8,7 @@ import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorat
 import { WithinEpsilon } from "../../../Maths/math.scalar.functions";
 import { GeometryInputBlock } from "./geometryInputBlock.pure";
 import type { NodeGeometry } from "../nodeGeometry";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Conditions supported by the condition block
@@ -227,4 +228,15 @@ export class ConditionBlock extends NodeGeometryBlock {
             this.epsilon = serializationObject.epsilon;
         }
     }
+}
+
+
+let _registered = false;
+export function registerConditionBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ConditionBlock", ConditionBlock);
 }

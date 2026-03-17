@@ -6,6 +6,7 @@ import { FlowGraphBlock } from "../../flowGraphBlock";
 import type { FlowGraphDataConnection } from "../../flowGraphDataConnection";
 import { RichTypeAny } from "../../flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * The configuration of the FlowGraphGetVariableBlock.
@@ -65,4 +66,15 @@ export class FlowGraphGetVariableBlock<T> extends FlowGraphBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.GetVariable;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphGetVariableBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.GetVariable, FlowGraphGetVariableBlock);
 }

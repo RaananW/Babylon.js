@@ -5,6 +5,7 @@ import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnect
 import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryConnectionPointTypes";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
 import { Matrix } from "../../../../Maths/math.vector.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to get a rotation matrix on X Axis
@@ -50,4 +51,15 @@ export class RotationXBlock extends NodeGeometryBlock {
             return Matrix.RotationX(this.angle.getConnectedValue(state));
         };
     }
+}
+
+
+let _registered = false;
+export function registerRotationXBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.RotationXBlock", RotationXBlock);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./worleyNoise3DBlock.pure";
 
-import { WorleyNoise3DBlock } from "./worleyNoise3DBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.WorleyNoise3DBlock", WorleyNoise3DBlock);
+import { registerWorleyNoise3DBlock } from "./worleyNoise3DBlock.pure";
+registerWorleyNoise3DBlock();

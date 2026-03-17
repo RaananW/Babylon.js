@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphEasingBlock.pure";
 
-import { FlowGraphEasingBlock } from "./flowGraphEasingBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.Easing, FlowGraphEasingBlock);
+import { registerFlowGraphEasingBlock } from "./flowGraphEasingBlock.pure";
+registerFlowGraphEasingBlock();

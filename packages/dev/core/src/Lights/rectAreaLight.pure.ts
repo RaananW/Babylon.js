@@ -10,6 +10,8 @@ import type { Nullable } from "core/types";
 import type { BaseTexture } from "core/Materials/Textures/baseTexture";
 import type { Texture } from "core/Materials/Textures/texture";
 import { Constants } from "core/Engines/constants";
+import { Node } from "core/node";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * A rectangular area light defined by an unique point in world space, a width and a height.
@@ -212,4 +214,20 @@ export class RectAreaLight extends AreaLight {
         super.prepareLightSpecificDefines(defines, lightIndex);
         defines["RECTAREALIGHTEMISSIONTEXTURE" + lightIndex] = this._emissionTextureTexture && this._emissionTextureTexture.isReady() ? true : false;
     }
+}
+
+
+let _registered = false;
+export function registerRectAreaLight(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("Light_Type_4", (name, scene) => {
+        return () => new RectAreaLight(name, Vector3.Zero(), 1, 1, scene);
+    });
+
+    // Register Class Name
+    RegisterClass("BABYLON.RectAreaLight", RectAreaLight);
 }

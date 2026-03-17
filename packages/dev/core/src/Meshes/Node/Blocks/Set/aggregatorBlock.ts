@@ -4,7 +4,5 @@
  */
 export * from "./aggregatorBlock.pure";
 
-import { AggregatorBlock } from "./aggregatorBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.AggregatorBlock", AggregatorBlock);
+import { registerAggregatorBlock } from "./aggregatorBlock.pure";
+registerAggregatorBlock();

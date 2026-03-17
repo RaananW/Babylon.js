@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphForLoopBlock.pure";
 
-import { FlowGraphForLoopBlock } from "./flowGraphForLoopBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.ForLoop, FlowGraphForLoopBlock);
+import { registerFlowGraphForLoopBlock } from "./flowGraphForLoopBlock.pure";
+registerFlowGraphForLoopBlock();

@@ -5,6 +5,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConn
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
 import type { NodeGeometryBuildState } from "../nodeGeometryBuildState";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to create a Vector2/3/4 out of individual or partial inputs
@@ -295,4 +296,15 @@ export class VectorConverterBlock extends NodeGeometryBlock {
         zOutput._storedFunction = (state) => getData(state).z;
         wOutput._storedFunction = (state) => getData(state).w;
     }
+}
+
+
+let _registered = false;
+export function registerVectorConverterBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.VectorConverterBlock", VectorConverterBlock);
 }

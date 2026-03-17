@@ -4,7 +4,5 @@
  */
 export * from "./pannerBlock.pure";
 
-import { PannerBlock } from "./pannerBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.PannerBlock", PannerBlock);
+import { registerPannerBlock } from "./pannerBlock.pure";
+registerPannerBlock();

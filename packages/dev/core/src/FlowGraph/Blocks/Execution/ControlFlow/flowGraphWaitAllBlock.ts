@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphWaitAllBlock.pure";
 
-import { FlowGraphWaitAllBlock } from "./flowGraphWaitAllBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.WaitAll, FlowGraphWaitAllBlock);
+import { registerFlowGraphWaitAllBlock } from "./flowGraphWaitAllBlock.pure";
+registerFlowGraphWaitAllBlock();

@@ -4,7 +4,5 @@
  */
 export * from "./convolutionPostProcess.pure";
 
-import { ConvolutionPostProcess } from "./convolutionPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.ConvolutionPostProcess", ConvolutionPostProcess);
+import { registerConvolutionPostProcess } from "./convolutionPostProcess.pure";
+registerConvolutionPostProcess();

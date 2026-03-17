@@ -4,7 +4,5 @@
  */
 export * from "./planeBlock.pure";
 
-import { PlaneBlock } from "./planeBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.PlaneBlock", PlaneBlock);
+import { registerPlaneBlock } from "./planeBlock.pure";
+registerPlaneBlock();

@@ -13,6 +13,7 @@ import { Logger } from "core/Misc/logger";
 import { expandToProperty, serialize, serializeAsColor3 } from "core/Misc/decorators";
 import type { AbstractMesh } from "core/Meshes/abstractMesh";
 import { ShaderLanguage } from "./shaderLanguage";
+import { RegisterClass } from "../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -801,4 +802,15 @@ export class MeshDebugPluginMaterial extends MaterialPluginBase {
 
         return rollback;
     }
+}
+
+
+let _registered = false;
+export function registerMeshDebugPluginMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.MeshDebugPluginMaterial", MeshDebugPluginMaterial);
 }

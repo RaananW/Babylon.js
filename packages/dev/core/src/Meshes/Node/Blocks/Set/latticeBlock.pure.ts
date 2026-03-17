@@ -10,6 +10,7 @@ import { Vector3 } from "../../../../Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
 import { Lattice } from "core/Meshes/lattice";
 import { extractMinAndMax } from "core/Maths/math.functions";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to apply Lattice on geometry
@@ -226,4 +227,15 @@ export class LatticeBlock extends NodeGeometryBlock implements INodeGeometryExec
             this.resolutionZ = serializationObject.resolutionZ;
         }
     }
+}
+
+
+let _registered = false;
+export function registerLatticeBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.LatticeBlock", LatticeBlock);
 }

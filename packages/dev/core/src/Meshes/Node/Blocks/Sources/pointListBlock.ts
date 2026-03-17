@@ -4,7 +4,5 @@
  */
 export * from "./pointListBlock.pure";
 
-import { PointListBlock } from "./pointListBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.PointListBlock", PointListBlock);
+import { registerPointListBlock } from "./pointListBlock.pure";
+registerPointListBlock();

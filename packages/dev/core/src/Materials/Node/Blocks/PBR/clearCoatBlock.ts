@@ -4,7 +4,5 @@
  */
 export * from "./clearCoatBlock.pure";
 
-import { ClearCoatBlock } from "./clearCoatBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ClearCoatBlock", ClearCoatBlock);
+import { registerClearCoatBlock } from "./clearCoatBlock.pure";
+registerClearCoatBlock();

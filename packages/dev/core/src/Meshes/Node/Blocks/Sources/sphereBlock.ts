@@ -4,7 +4,5 @@
  */
 export * from "./sphereBlock.pure";
 
-import { SphereBlock } from "./sphereBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SphereBlock", SphereBlock);
+import { registerSphereBlock } from "./sphereBlock.pure";
+registerSphereBlock();

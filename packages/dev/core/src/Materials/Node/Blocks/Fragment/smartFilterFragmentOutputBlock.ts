@@ -4,7 +4,5 @@
  */
 export * from "./smartFilterFragmentOutputBlock.pure";
 
-import { SmartFilterFragmentOutputBlock } from "./smartFilterFragmentOutputBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.SmartFilterFragmentOutputBlock", SmartFilterFragmentOutputBlock);
+import { registerSmartFilterFragmentOutputBlock } from "./smartFilterFragmentOutputBlock.pure";
+registerSmartFilterFragmentOutputBlock();

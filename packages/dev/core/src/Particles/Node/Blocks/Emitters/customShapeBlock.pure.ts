@@ -10,6 +10,7 @@ import { EmptyGeneratorFunc } from "core/Particles/EmitterTypes/customParticleEm
 import { NodeParticleBlock } from "core/Particles/Node/nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "core/Particles/Node/Enums/nodeParticleBlockConnectionPointTypes";
 import { _CreateLocalPositionData } from "./emitters.functions";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /** Function that generates particle position/direction data */
 type ParticleGeneratorFunction = (index: number, particle: Nullable<Particle>, outPosition: Vector3) => void;
@@ -117,4 +118,15 @@ export class CustomShapeBlock extends NodeParticleBlock implements IShapeBlock {
 
         this.output._storedValue = system;
     }
+}
+
+
+let _registered = false;
+export function registerCustomShapeBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.CustomShapeBlock", CustomShapeBlock);
 }

@@ -4,14 +4,5 @@
  */
 export * from "./WebXREyeTracking.pure";
 
-import { WebXREyeTracking } from "./WebXREyeTracking.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXREyeTracking.Name,
-    (xrSessionManager) => {
-        return () => new WebXREyeTracking(xrSessionManager);
-    },
-    WebXREyeTracking.Version,
-    false
-);
+import { registerWebXREyeTracking } from "./WebXREyeTracking.pure";
+registerWebXREyeTracking();

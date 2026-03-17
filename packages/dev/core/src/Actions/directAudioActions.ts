@@ -4,9 +4,5 @@
  */
 export * from "./directAudioActions.pure";
 
-import { PlaySoundAction, StopSoundAction } from "./directAudioActions.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.PlaySoundAction", PlaySoundAction);
-
-RegisterClass("BABYLON.StopSoundAction", StopSoundAction);
+import { registerDirectAudioActions } from "./directAudioActions.pure";
+registerDirectAudioActions();

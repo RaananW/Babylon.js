@@ -4,9 +4,5 @@
  */
 export * from "./passPostProcessBlock.pure";
 
-import { NodeRenderGraphPassCubePostProcessBlock, NodeRenderGraphPassPostProcessBlock } from "./passPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphPassPostProcessBlock", NodeRenderGraphPassPostProcessBlock);
-
-RegisterClass("BABYLON.NodeRenderGraphPassCubePostProcessBlock", NodeRenderGraphPassCubePostProcessBlock);
+import { registerPassPostProcessBlock } from "./passPostProcessBlock.pure";
+registerPassPostProcessBlock();

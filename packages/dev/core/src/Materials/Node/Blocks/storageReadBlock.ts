@@ -4,7 +4,5 @@
  */
 export * from "./storageReadBlock.pure";
 
-import { StorageReadBlock } from "./storageReadBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.StorageReadBlock", StorageReadBlock);
+import { registerStorageReadBlock } from "./storageReadBlock.pure";
+registerStorageReadBlock();

@@ -8,6 +8,7 @@ import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnection
 import { InputBlock } from "./Input/inputBlock.pure";
 import type { NodeMaterial } from "../nodeMaterial";
 import { ViewDirectionBlock } from "./viewDirectionBlock.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to compute fresnel value
@@ -108,4 +109,15 @@ export class FresnelBlock extends NodeMaterialBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerFresnelBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.FresnelBlock", FresnelBlock);
 }

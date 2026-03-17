@@ -4,7 +4,5 @@
  */
 export * from "./webgl2ParticleSystem.pure";
 
-import { WebGL2ParticleSystem } from "./webgl2ParticleSystem.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.WebGL2ParticleSystem", WebGL2ParticleSystem);
+import { registerWebgl2ParticleSystem } from "./webgl2ParticleSystem.pure";
+registerWebgl2ParticleSystem();

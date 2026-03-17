@@ -12,6 +12,7 @@ import type { Dimension, Tensor, TensorLike, TensorStatic } from "./tensor";
 import type { IVector2Like, IVector3Like, IVector4Like, IQuaternionLike, IMatrixLike, IPlaneLike, IVector3LikeInternal } from "./math.like";
 import { Clamp, Lerp, NormalizeRadians, RandomRange, WithinEpsilon } from "./math.scalar.functions";
 import { CopyMatrixToArray, InvertMatrixToArray, MatrixManagement, MultiplyMatricesToArray } from "./ThinMaths/thinMath.matrix.functions";
+import { RegisterClass } from "../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -8854,3 +8855,45 @@ export class TmpVectors {
 }
 
 const mtxConvertNDCToHalfZRange = /*#__PURE__*/ Matrix.FromValues(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1);
+
+
+let _registered = false;
+export function registerMathVector(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    /*#__PURE__*/ Object.defineProperties(Vector2.prototype, {
+        dimension: { value: [2] },
+        rank: { value: 1 },
+    });
+
+    /*#__PURE__*/ Object.defineProperties(Vector3.prototype, {
+        dimension: { value: [3] },
+        rank: { value: 1 },
+    });
+
+    /*#__PURE__*/ Object.defineProperties(Vector4.prototype, {
+        dimension: { value: [4] },
+        rank: { value: 1 },
+    });
+
+    /*#__PURE__*/ Object.defineProperties(Quaternion.prototype, {
+        dimension: { value: [4] },
+        rank: { value: 1 },
+    });
+
+    /*#__PURE__*/ Object.defineProperties(Matrix.prototype, {
+        dimension: { value: [4, 4] },
+        rank: { value: 2 },
+    });
+
+    RegisterClass("BABYLON.Vector2", Vector2);
+
+    RegisterClass("BABYLON.Vector3", Vector3);
+
+    RegisterClass("BABYLON.Vector4", Vector4);
+
+    RegisterClass("BABYLON.Matrix", Matrix);
+}

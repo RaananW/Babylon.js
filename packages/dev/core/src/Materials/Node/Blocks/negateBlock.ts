@@ -4,7 +4,5 @@
  */
 export * from "./negateBlock.pure";
 
-import { NegateBlock } from "./negateBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NegateBlock", NegateBlock);
+import { registerNegateBlock } from "./negateBlock.pure";
+registerNegateBlock();

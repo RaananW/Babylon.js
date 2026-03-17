@@ -4,7 +4,5 @@
  */
 export * from "./crossBlock.pure";
 
-import { CrossBlock } from "./crossBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.CrossBlock", CrossBlock);
+import { registerCrossBlock } from "./crossBlock.pure";
+registerCrossBlock();

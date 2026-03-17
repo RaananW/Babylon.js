@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphFlipFlopBlock.pure";
 
-import { FlowGraphFlipFlopBlock } from "./flowGraphFlipFlopBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.FlipFlop, FlowGraphFlipFlopBlock);
+import { registerFlowGraphFlipFlopBlock } from "./flowGraphFlipFlopBlock.pure";
+registerFlowGraphFlipFlopBlock();

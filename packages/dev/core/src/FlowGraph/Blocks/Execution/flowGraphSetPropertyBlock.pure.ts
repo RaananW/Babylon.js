@@ -7,6 +7,7 @@ import { FlowGraphExecutionBlockWithOutSignal } from "core/FlowGraph/flowGraphEx
 import { RichTypeAny } from "core/FlowGraph/flowGraphRichTypes.pure";
 import type { FlowGraphSignalConnection } from "core/FlowGraph/flowGraphSignalConnection";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  *
@@ -124,4 +125,15 @@ export class FlowGraphSetPropertyBlock<P extends any, O extends FlowGraphAssetTy
     public override getClassName(): string {
         return FlowGraphBlockNames.SetProperty;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphSetPropertyBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.SetProperty, FlowGraphSetPropertyBlock);
 }

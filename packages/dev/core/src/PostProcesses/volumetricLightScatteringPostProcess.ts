@@ -4,7 +4,5 @@
  */
 export * from "./volumetricLightScatteringPostProcess.pure";
 
-import { VolumetricLightScatteringPostProcess } from "./volumetricLightScatteringPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.VolumetricLightScatteringPostProcess", VolumetricLightScatteringPostProcess);
+import { registerVolumetricLightScatteringPostProcess } from "./volumetricLightScatteringPostProcess.pure";
+registerVolumetricLightScatteringPostProcess();

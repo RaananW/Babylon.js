@@ -6,6 +6,7 @@ import type { AbstractMesh } from "../../Meshes/abstractMesh";
 import type { Scene } from "../../scene";
 import { Mesh } from "../../Meshes/mesh.pure";
 import { Quaternion } from "../../Maths/math.vector.pure";
+import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -279,3 +280,21 @@ const OculusTouchLayouts: IMotionControllerLayoutMap = {
         assetPath: "right.glb",
     },
 };
+
+
+let _registered = false;
+export function registerWebXROculusTouchMotionController(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // register the profile
+    WebXRMotionControllerManager.RegisterController("oculus-touch", (xrInput: XRInputSource, scene: Scene) => {
+        return new WebXROculusTouchMotionController(scene, <any>xrInput.gamepad, xrInput.handedness);
+    });
+
+    WebXRMotionControllerManager.RegisterController("oculus-touch-legacy", (xrInput: XRInputSource, scene: Scene) => {
+        return new WebXROculusTouchMotionController(scene, <any>xrInput.gamepad, xrInput.handedness, true);
+    });
+}

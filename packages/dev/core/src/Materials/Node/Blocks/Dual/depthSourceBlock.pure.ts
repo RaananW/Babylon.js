@@ -5,6 +5,7 @@ import { ImageSourceBlock } from "./imageSourceBlock.pure";
 import type { Nullable } from "../../../../types";
 import type { Texture } from "../../../Textures/texture";
 import type { NodeMaterial } from "../../nodeMaterial";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to provide an depth texture for a TextureBlock
@@ -70,4 +71,15 @@ export class DepthSourceBlock extends ImageSourceBlock {
     public override serialize(): any {
         return super.serialize(true);
     }
+}
+
+
+let _registered = false;
+export function registerDepthSourceBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.DepthSourceBlock", DepthSourceBlock);
 }

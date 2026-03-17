@@ -8,6 +8,7 @@ import { Mesh } from "../../Meshes/mesh.pure";
 import { Quaternion } from "../../Maths/math.vector.pure";
 import { SceneLoader } from "../../Loading/sceneLoader";
 import { Logger } from "../../Misc/logger";
+import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -511,3 +512,17 @@ const MixedRealityProfile: IMotionControllerLayoutMap = {
         assetPath: "right.glb",
     },
 };
+
+
+let _registered = false;
+export function registerWebXRMicrosoftMixedRealityController(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // register the profile
+    WebXRMotionControllerManager.RegisterController("windows-mixed-reality", (xrInput: XRInputSource, scene: Scene) => {
+        return new WebXRMicrosoftMixedRealityController(scene, <any>xrInput.gamepad, xrInput.handedness);
+    });
+}

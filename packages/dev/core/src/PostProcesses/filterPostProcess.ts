@@ -4,7 +4,5 @@
  */
 export * from "./filterPostProcess.pure";
 
-import { FilterPostProcess } from "./filterPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.FilterPostProcess", FilterPostProcess);
+import { registerFilterPostProcess } from "./filterPostProcess.pure";
+registerFilterPostProcess();

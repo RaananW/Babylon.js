@@ -4,7 +4,5 @@
  */
 export * from "./modBlock.pure";
 
-import { ModBlock } from "./modBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ModBlock", ModBlock);
+import { registerModBlock } from "./modBlock.pure";
+registerModBlock();

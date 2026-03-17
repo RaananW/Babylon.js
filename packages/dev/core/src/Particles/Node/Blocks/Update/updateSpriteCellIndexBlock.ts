@@ -4,7 +4,5 @@
  */
 export * from "./updateSpriteCellIndexBlock.pure";
 
-import { UpdateSpriteCellIndexBlock } from "./updateSpriteCellIndexBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.UpdateSpriteCellIndexBlock", UpdateSpriteCellIndexBlock);
+import { registerUpdateSpriteCellIndexBlock } from "./updateSpriteCellIndexBlock.pure";
+registerUpdateSpriteCellIndexBlock();

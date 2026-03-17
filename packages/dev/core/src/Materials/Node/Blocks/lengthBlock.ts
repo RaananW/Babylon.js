@@ -4,7 +4,5 @@
  */
 export * from "./lengthBlock.pure";
 
-import { LengthBlock } from "./lengthBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.LengthBlock", LengthBlock);
+import { registerLengthBlock } from "./lengthBlock.pure";
+registerLengthBlock();

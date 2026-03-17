@@ -4,7 +4,5 @@
  */
 export * from "./setTangentsBlock.pure";
 
-import { SetTangentsBlock } from "./setTangentsBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SetTangentsBlock", SetTangentsBlock);
+import { registerSetTangentsBlock } from "./setTangentsBlock.pure";
+registerSetTangentsBlock();

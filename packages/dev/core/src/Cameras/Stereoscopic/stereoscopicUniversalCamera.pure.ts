@@ -3,8 +3,10 @@
 import { Camera } from "../../Cameras/camera";
 import { UniversalCamera } from "../../Cameras/universalCamera.pure";
 import type { Scene } from "../../scene";
-import type { Vector3 } from "../../Maths/math.vector.pure";
+
 import { _SetStereoscopicRigMode } from "../RigModes/stereoscopicRigMode";
+import { Node } from "../../node";
+import { Vector3 } from "../../Maths/math.vector.pure";
 
 /**
  * Camera used to simulate stereoscopic rendering (based on UniversalCamera)
@@ -37,4 +39,17 @@ export class StereoscopicUniversalCamera extends UniversalCamera {
     }
 
     protected override _setRigMode = () => _SetStereoscopicRigMode(this);
+}
+
+
+let _registered = false;
+export function registerStereoscopicUniversalCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("StereoscopicFreeCamera", (name, scene, options) => {
+        return () => new StereoscopicUniversalCamera(name, Vector3.Zero(), options.interaxial_distance, options.isStereoscopicSideBySide, scene);
+    });
 }

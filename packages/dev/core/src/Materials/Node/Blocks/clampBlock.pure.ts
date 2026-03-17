@@ -8,6 +8,7 @@ import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import type { Scene } from "../../../scene";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../Decorators/nodeDecorator";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to clamp a float
@@ -102,4 +103,15 @@ export class ClampBlock extends NodeMaterialBlock {
         this.minimum = serializationObject.minimum;
         this.maximum = serializationObject.maximum;
     }
+}
+
+
+let _registered = false;
+export function registerClampBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ClampBlock", ClampBlock);
 }

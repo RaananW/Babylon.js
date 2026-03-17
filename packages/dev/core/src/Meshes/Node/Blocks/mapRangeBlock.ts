@@ -4,7 +4,5 @@
  */
 export * from "./mapRangeBlock.pure";
 
-import { MapRangeBlock } from "./mapRangeBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MapRangeBlock", MapRangeBlock);
+import { registerMapRangeBlock } from "./mapRangeBlock.pure";
+registerMapRangeBlock();

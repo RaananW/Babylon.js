@@ -6,6 +6,7 @@ import type { Scene } from "../../scene";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";
 import { Mesh } from "../../Meshes/mesh.pure";
 import { Quaternion } from "../../Maths/math.vector.pure";
+import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -232,3 +233,17 @@ const HTCViveLayout: IMotionControllerLayoutMap = {
         assetPath: "none.glb",
     },
 };
+
+
+let _registered = false;
+export function registerWebXRHTCViveMotionController(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // register the profile
+    WebXRMotionControllerManager.RegisterController("htc-vive", (xrInput: XRInputSource, scene: Scene) => {
+        return new WebXRHTCViveMotionController(scene, <any>xrInput.gamepad, xrInput.handedness);
+    });
+}

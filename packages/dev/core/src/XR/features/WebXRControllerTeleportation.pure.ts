@@ -32,6 +32,7 @@ import { UtilityLayerRenderer } from "../../Rendering/utilityLayerRenderer";
 import { PointerEventTypes } from "../../Events/pointerEvents";
 import { setAndStartTimer } from "../../Misc/timer";
 import type { LinesMesh } from "../../Meshes/linesMesh";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * The options container for the teleportation module
@@ -1115,4 +1116,22 @@ export class WebXRMotionControllerTeleportation extends WebXRAbstractFeature {
             this.onAfterCameraTeleport.notifyObservers(this._options.xrInput.xrCamera.position);
         }
     }
+}
+
+
+let _registered = false;
+export function registerWebXRControllerTeleportation(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRMotionControllerTeleportation.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRMotionControllerTeleportation(xrSessionManager, options);
+        },
+        WebXRMotionControllerTeleportation.Version,
+        true
+    );
 }

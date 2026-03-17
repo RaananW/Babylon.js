@@ -4,7 +4,5 @@
  */
 export * from "./geometryCrossBlock.pure";
 
-import { GeometryCrossBlock } from "./geometryCrossBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryCrossBlock", GeometryCrossBlock);
+import { registerGeometryCrossBlock } from "./geometryCrossBlock.pure";
+registerGeometryCrossBlock();

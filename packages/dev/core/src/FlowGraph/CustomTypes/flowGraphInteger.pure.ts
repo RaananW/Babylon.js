@@ -1,3 +1,4 @@
+import { RegisterClass } from "../../Misc/typeStore";
 /** This file must only contain pure code and pure imports */
 
 /**
@@ -95,4 +96,15 @@ export class FlowGraphInteger {
     public toString(): string {
         return this.value.toString();
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphInteger(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("FlowGraphInteger", FlowGraphInteger);
 }

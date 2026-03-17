@@ -4,7 +4,5 @@
  */
 export * from "./depthOfFieldPostProcessBlock.pure";
 
-import { NodeRenderGraphDepthOfFieldPostProcessBlock } from "./depthOfFieldPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphDepthOfFieldPostProcessBlock", NodeRenderGraphDepthOfFieldPostProcessBlock);
+import { registerDepthOfFieldPostProcessBlock } from "./depthOfFieldPostProcessBlock.pure";
+registerDepthOfFieldPostProcessBlock();

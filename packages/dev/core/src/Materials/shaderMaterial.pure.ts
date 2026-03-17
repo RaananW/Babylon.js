@@ -36,6 +36,7 @@ import type { IColor3Like, IColor4Like, IVector2Like, IVector3Like, IVector4Like
 import type { InternalTexture } from "./Textures/internalTexture";
 import { PrepareVertexPullingUniforms, BindVertexPullingUniforms } from "./vertexPullingHelper.functions";
 import type { IVertexPullingMetadata } from "./vertexPullingHelper.functions";
+import { RegisterClass } from "../Misc/typeStore";
 
 const OnCreatedEffectParameters = { effect: null as unknown as Effect, subMesh: null as unknown as Nullable<SubMesh> };
 
@@ -1938,4 +1939,15 @@ export class ShaderMaterial extends PushMaterial {
      * @returns a promise that will resolve to the new ShaderMaterial
      */
     public static CreateFromSnippetAsync = ShaderMaterial.ParseFromSnippetAsync;
+}
+
+
+let _registered = false;
+export function registerShaderMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ShaderMaterial", ShaderMaterial);
 }

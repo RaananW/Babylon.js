@@ -9,6 +9,7 @@ import type { Vector4 } from "../../../../Maths/math.vector";
 import { CreateCylinderVertexData } from "core/Meshes/Builders/cylinderBuilder.pure";
 import type { Color4 } from "../../../../Maths/math.color";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Defines a block used to generate cylinder geometry data
@@ -193,4 +194,15 @@ export class CylinderBlock extends NodeGeometryBlock {
 
         this.evaluateContext = serializationObject.evaluateContext;
     }
+}
+
+
+let _registered = false;
+export function registerCylinderBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.CylinderBlock", CylinderBlock);
 }

@@ -24,6 +24,7 @@ import type { Nullable } from "../types";
 import { BindBonesParameters, BindMorphTargetParameters, PrepareDefinesAndAttributesForMorphTargets, PushAttributesForInstances } from "../Materials/materialHelper.functions";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { EffectFallbacks } from "core/Materials/effectFallbacks";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  *  Inspired by https://developer.nvidia.com/gpugems/gpugems3/part-ii-light-and-shadows/chapter-13-volumetric-light-scattering-post-process
@@ -644,4 +645,15 @@ export class VolumetricLightScatteringPostProcess extends PostProcess {
 
         return mesh;
     }
+}
+
+
+let _registered = false;
+export function registerVolumetricLightScatteringPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.VolumetricLightScatteringPostProcess", VolumetricLightScatteringPostProcess);
 }

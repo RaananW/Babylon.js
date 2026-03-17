@@ -9,6 +9,7 @@ import type { RichType } from "../../flowGraphRichTypes";
 import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { FlowGraphCoordinator } from "core/FlowGraph/flowGraphCoordinator";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Parameters used to create a FlowGraphReceiveCustomEventBlock.
@@ -87,4 +88,15 @@ export class FlowGraphReceiveCustomEventBlock extends FlowGraphEventBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.ReceiveCustomEvent;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphReceiveCustomEventBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.ReceiveCustomEvent, FlowGraphReceiveCustomEventBlock);
 }

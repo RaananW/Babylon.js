@@ -4,7 +4,5 @@
  */
 export * from "./basicSpriteUpdateBlock.pure";
 
-import { BasicSpriteUpdateBlock } from "./basicSpriteUpdateBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.BasicSpriteUpdateBlock", BasicSpriteUpdateBlock);
+import { registerBasicSpriteUpdateBlock } from "./basicSpriteUpdateBlock.pure";
+registerBasicSpriteUpdateBlock();

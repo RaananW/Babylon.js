@@ -11,6 +11,7 @@ import type { UniformBuffer } from "core/Materials/uniformBuffer";
 import { expandToProperty, serialize } from "core/Misc/decorators";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { OpenPBRMaterial } from "core/Materials/PBR/openpbrMaterial.pure";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * @internal
@@ -270,4 +271,15 @@ export class IBLShadowsPluginMaterial extends MaterialPluginBase {
 
         return shaderType === "vertex" ? null : frag;
     }
+}
+
+
+let _registered = false;
+export function registerIblShadowsPluginMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(`BABYLON.IBLShadowsPluginMaterial`, IBLShadowsPluginMaterial);
 }

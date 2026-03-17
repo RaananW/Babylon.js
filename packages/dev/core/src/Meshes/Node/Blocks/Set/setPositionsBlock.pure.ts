@@ -9,6 +9,7 @@ import type { VertexData } from "../../../../Meshes/mesh.vertexData";
 import type { Vector3 } from "../../../../Maths/math.vector";
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
 import type { FloatArray } from "core/types";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to set positions for a geometry
@@ -262,4 +263,15 @@ export class SetPositionsBlock extends NodeGeometryBlock implements INodeGeometr
             this.evaluateContext = serializationObject.evaluateContext;
         }
     }
+}
+
+
+let _registered = false;
+export function registerSetPositionsBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SetPositionsBlock", SetPositionsBlock);
 }

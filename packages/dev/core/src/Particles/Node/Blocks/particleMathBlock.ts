@@ -4,7 +4,5 @@
  */
 export * from "./particleMathBlock.pure";
 
-import { ParticleMathBlock } from "./particleMathBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleMathBlock", ParticleMathBlock);
+import { registerParticleMathBlock } from "./particleMathBlock.pure";
+registerParticleMathBlock();

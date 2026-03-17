@@ -8,6 +8,7 @@ import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { AnimationGroup } from "core/Animations/animationGroup.pure";
 import type { Animation } from "core/Animations/animation";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * @experimental
@@ -231,4 +232,15 @@ export class FlowGraphPlayAnimationBlock extends FlowGraphAsyncExecutionBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.PlayAnimation;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphPlayAnimationBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.PlayAnimation, FlowGraphPlayAnimationBlock);
 }

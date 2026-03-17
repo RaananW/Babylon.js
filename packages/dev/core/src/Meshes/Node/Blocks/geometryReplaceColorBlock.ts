@@ -4,7 +4,5 @@
  */
 export * from "./geometryReplaceColorBlock.pure";
 
-import { GeometryReplaceColorBlock } from "./geometryReplaceColorBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryReplaceColorBlock", GeometryReplaceColorBlock);
+import { registerGeometryReplaceColorBlock } from "./geometryReplaceColorBlock.pure";
+registerGeometryReplaceColorBlock();

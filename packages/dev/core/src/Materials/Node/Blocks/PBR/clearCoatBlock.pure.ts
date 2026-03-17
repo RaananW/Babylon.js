@@ -20,6 +20,7 @@ import { PBRClearCoatConfiguration } from "../../../PBR/pbrClearCoatConfiguratio
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { TBNBlock } from "../Fragment/TBNBlock.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to implement the clear coat module of the PBR material
@@ -455,4 +456,15 @@ export class ClearCoatBlock extends NodeMaterialBlock {
 
         this.remapF0OnInterfaceChange = serializationObject.remapF0OnInterfaceChange ?? true;
     }
+}
+
+
+let _registered = false;
+export function registerClearCoatBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ClearCoatBlock", ClearCoatBlock);
 }

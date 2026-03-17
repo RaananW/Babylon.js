@@ -12,6 +12,7 @@ import type { FreeCameraKeyboardMoveInput } from "../Cameras/Inputs/freeCameraKe
 import { ToolsBackCompatCameraNoPreventDefault } from "../Misc/tools.pure";
 import type { Collider } from "../Collisions/collider";
 import { AbstractEngine } from "core/Engines/abstractEngine";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * This represents a free type of camera. It can be useful in First Person Shooter game for instance.
@@ -456,3 +457,14 @@ export class FreeCamera extends TargetCamera {
 }
 
 // Register Class Name
+
+
+let _registered = false;
+export function registerFreeCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.FreeCamera", FreeCamera);
+}

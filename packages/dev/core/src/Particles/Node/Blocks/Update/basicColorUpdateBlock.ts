@@ -4,7 +4,5 @@
  */
 export * from "./basicColorUpdateBlock.pure";
 
-import { BasicColorUpdateBlock } from "./basicColorUpdateBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.BasicColorUpdateBlock", BasicColorUpdateBlock);
+import { registerBasicColorUpdateBlock } from "./basicColorUpdateBlock.pure";
+registerBasicColorUpdateBlock();

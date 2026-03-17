@@ -4,6 +4,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConn
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
 import { VertexDataComputeNormals } from "../../mesh.vertexData.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to recompute normals for a geometry
@@ -62,4 +63,15 @@ export class ComputeNormalsBlock extends NodeGeometryBlock {
             return vertexData;
         };
     }
+}
+
+
+let _registered = false;
+export function registerComputeNormalsBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ComputeNormalsBlock", ComputeNormalsBlock);
 }

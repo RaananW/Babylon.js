@@ -4,7 +4,5 @@
  */
 export * from "./triPlanarBlock.pure";
 
-import { TriPlanarBlock } from "./triPlanarBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.TriPlanarBlock", TriPlanarBlock);
+import { registerTriPlanarBlock } from "./triPlanarBlock.pure";
+registerTriPlanarBlock();

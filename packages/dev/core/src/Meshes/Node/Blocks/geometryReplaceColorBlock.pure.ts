@@ -3,6 +3,7 @@
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to replace a color by another one
@@ -98,4 +99,15 @@ export class GeometryReplaceColorBlock extends NodeGeometryBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerGeometryReplaceColorBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GeometryReplaceColorBlock", GeometryReplaceColorBlock);
 }

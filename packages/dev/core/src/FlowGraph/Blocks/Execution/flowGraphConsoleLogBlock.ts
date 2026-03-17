@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphConsoleLogBlock.pure";
 
-import { FlowGraphConsoleLogBlock } from "./flowGraphConsoleLogBlock.pure";
-import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.ConsoleLog, FlowGraphConsoleLogBlock);
+import { registerFlowGraphConsoleLogBlock } from "./flowGraphConsoleLogBlock.pure";
+registerFlowGraphConsoleLogBlock();

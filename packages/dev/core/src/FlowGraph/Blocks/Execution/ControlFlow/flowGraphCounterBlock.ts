@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphCounterBlock.pure";
 
-import { FlowGraphCallCounterBlock } from "./flowGraphCounterBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.CallCounter, FlowGraphCallCounterBlock);
+import { registerFlowGraphCounterBlock } from "./flowGraphCounterBlock.pure";
+registerFlowGraphCounterBlock();

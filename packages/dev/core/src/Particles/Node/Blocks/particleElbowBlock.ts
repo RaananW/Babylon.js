@@ -4,7 +4,5 @@
  */
 export * from "./particleElbowBlock.pure";
 
-import { ParticleElbowBlock } from "./particleElbowBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleElbowBlock", ParticleElbowBlock);
+import { registerParticleElbowBlock } from "./particleElbowBlock.pure";
+registerParticleElbowBlock();

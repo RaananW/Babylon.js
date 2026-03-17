@@ -4,7 +4,5 @@
  */
 export * from "./powBlock.pure";
 
-import { PowBlock } from "./powBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.PowBlock", PowBlock);
+import { registerPowBlock } from "./powBlock.pure";
+registerPowBlock();

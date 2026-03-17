@@ -10,6 +10,7 @@ import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleB
 import { NodeParticleBlock } from "../../nodeParticleBlock";
 import { _ConnectAtTheEnd } from "core/Particles/Queue/executionQueue";
 import { FlowMap } from "core/Particles/flowMap";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to update particle position based on a flow map
@@ -107,4 +108,15 @@ export class UpdateFlowMapBlock extends NodeParticleBlock {
 
         this.output._storedValue = system;
     }
+}
+
+
+let _registered = false;
+export function registerUpdateFlowMapBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.UpdateFlowMapBlock", UpdateFlowMapBlock);
 }

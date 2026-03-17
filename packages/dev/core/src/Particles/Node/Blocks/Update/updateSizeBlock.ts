@@ -4,7 +4,5 @@
  */
 export * from "./updateSizeBlock.pure";
 
-import { UpdateSizeBlock } from "./updateSizeBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.UpdateSizeBlock", UpdateSizeBlock);
+import { registerUpdateSizeBlock } from "./updateSizeBlock.pure";
+registerUpdateSizeBlock();

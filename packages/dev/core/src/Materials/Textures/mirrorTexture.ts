@@ -4,10 +4,5 @@
  */
 export * from "./mirrorTexture.pure";
 
-import { MirrorTexture } from "./mirrorTexture.pure";
-import type { Scene } from "../../scene";
-import { Texture } from "../../Materials/Textures/texture";
-
-Texture._CreateMirror = (name: string, renderTargetSize: number, scene: Scene, generateMipMaps: boolean): MirrorTexture => {
-    return new MirrorTexture(name, renderTargetSize, scene, generateMipMaps);
-};
+import { registerMirrorTexture } from "./mirrorTexture.pure";
+registerMirrorTexture();

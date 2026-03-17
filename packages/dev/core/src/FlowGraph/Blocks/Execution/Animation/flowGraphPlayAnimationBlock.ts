@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphPlayAnimationBlock.pure";
 
-import { FlowGraphPlayAnimationBlock } from "./flowGraphPlayAnimationBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.PlayAnimation, FlowGraphPlayAnimationBlock);
+import { registerFlowGraphPlayAnimationBlock } from "./flowGraphPlayAnimationBlock.pure";
+registerFlowGraphPlayAnimationBlock();

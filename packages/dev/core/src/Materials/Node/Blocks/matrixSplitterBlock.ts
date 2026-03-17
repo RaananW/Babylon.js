@@ -4,7 +4,5 @@
  */
 export * from "./matrixSplitterBlock.pure";
 
-import { MatrixSplitterBlock } from "./matrixSplitterBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MatrixSplitterBlock", MatrixSplitterBlock);
+import { registerMatrixSplitterBlock } from "./matrixSplitterBlock.pure";
+registerMatrixSplitterBlock();

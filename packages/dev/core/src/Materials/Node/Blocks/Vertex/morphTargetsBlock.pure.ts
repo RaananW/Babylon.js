@@ -13,6 +13,7 @@ import { VertexBuffer } from "../../../../Buffers/buffer.pure";
 import { InputBlock } from "../Input/inputBlock.pure";
 import { BindMorphTargetParameters, PrepareDefinesForMorphTargets } from "../../../materialHelper.functions";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to add morph targets support to vertex shader
@@ -529,4 +530,15 @@ export class MorphTargetsBlock extends NodeMaterialBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerMorphTargetsBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.MorphTargetsBlock", MorphTargetsBlock);
 }

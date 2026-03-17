@@ -12,6 +12,7 @@ import { Matrix, Quaternion, Vector3 } from "../../Maths/math.vector.pure";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import type { MotionControllerComponentType } from "../motionController/webXRAbstractMotionController";
 import { ToolsError } from "../../Misc/tools.pure";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * The options container for the controller movement module
@@ -592,4 +593,22 @@ export class WebXRControllerMovement extends WebXRAbstractFeature {
         // remove from the map
         delete this._controllers[xrControllerUniqueId];
     }
+}
+
+
+let _registered = false;
+export function registerWebXRControllerMovement(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRControllerMovement.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRControllerMovement(xrSessionManager, options);
+        },
+        WebXRControllerMovement.Version,
+        true
+    );
 }

@@ -4,7 +4,5 @@
  */
 export * from "./utilityLayerRendererBlock.pure";
 
-import { NodeRenderGraphUtilityLayerRendererBlock } from "./utilityLayerRendererBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphUtilityLayerRendererBlock", NodeRenderGraphUtilityLayerRendererBlock);
+import { registerUtilityLayerRendererBlock } from "./utilityLayerRendererBlock.pure";
+registerUtilityLayerRendererBlock();

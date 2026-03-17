@@ -124,3 +124,26 @@ export const TorusBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateTorus,
 };
+
+
+let _registered = false;
+export function registerTorusBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VertexData.CreateTorus = CreateTorusVertexData;
+
+    Mesh.CreateTorus = (name: string, diameter: number, thickness: number, tessellation: number, scene?: Scene, updatable?: boolean, sideOrientation?: number): Mesh => {
+        const options = {
+            diameter,
+            thickness,
+            tessellation,
+            sideOrientation,
+            updatable,
+        };
+
+        return CreateTorus(name, options, scene);
+    };
+}

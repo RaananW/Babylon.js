@@ -3,6 +3,7 @@
 import type { NativeData } from "./nativeDataStream";
 import { NativeDataStream } from "./nativeDataStream";
 import type { INative } from "./nativeInterfaces";
+import { ThinNativeEngine } from "../thinNativeEngine";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 declare const _native: INative;
@@ -54,4 +55,21 @@ export class ValidatedNativeDataStream extends NativeDataStream {
         super.writeUint32(_native.NativeDataStream.VALIDATION_BOOLEAN);
         super.writeBoolean(value);
     }
+}
+
+
+let _registered = false;
+export function registerValidatedNativeDataStream(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    ThinNativeEngine._createNativeDataStream = function () {
+        if (_native.NativeDataStream.VALIDATION_ENABLED) {
+            return new ValidatedNativeDataStream();
+        } else {
+            return new NativeDataStream();
+        }
+    };
 }

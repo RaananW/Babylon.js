@@ -414,13 +414,17 @@ Phase 0 (Audit tooling)  ← DONE
                                             └─> Phase 9 (callable registration functions)
                                                   ├─> 9.1 (pilot: physics)
                                                   ├─> 9.2 (pilot: engine extension)
-                                                  ├─> 9.3 (automation script)
+                                                  ├─> 9.3 (automation script: declare module files)
                                                   ├─> 9.4 (prototype augmentations ×84)
                                                   ├─> 9.5 (AddNodeConstructor ×25)
                                                   ├─> 9.6 (update pure barrels)
                                                   ├─> 9.7 (update sideEffects manifest)
                                                   ├─> 9.8 (bundle smoke tests)
-                                                  └─> 9.9 (update instructions)
+                                                  ├─> 9.9 (update instructions)
+                                                  ├─> 9.10 (Phase 9b: ALL remaining side effects)
+                                                  ├─> 9.11 (fix pilot files + materialHelper.functions)
+                                                  ├─> 9.12 (regenerate barrels/manifest)
+                                                  └─> 9.13 (bundle smoke tests)
                                             └─> Phase 8 (tree-shakeable shader includes)  ← IN PROGRESS
                                                   ├─> 8.1 (new build templates)
                                                   ├─> 8.2 (flatten transitive includes)
@@ -938,10 +942,15 @@ concern. **Alternative**: keep `RegisterClass` calls in the non-pure file as tod
 augmentations and `AddNodeConstructor` calls get the registration function pattern, since those
 are the ones that block tree-shaking of classes like `Engine` and `Scene`.
 
-**Decision**: Phase 9 targets **only prototype augmentation files (~84 files, 344 assignments)**
-and **`AddNodeConstructor` files (~25 files)** — the side effects that actually block useful
-code from being tree-shaken. `RegisterClass` splits are already handled by Phase 2 and don't
-need callable functions (they're simple file-level isolation).
+**Decision (Phase 9a)**: Phase 9a targeted **prototype augmentation files (~84 files, 344 assignments)**
+and **`AddNodeConstructor` files (~25 files)** — the side effects that most visibly block
+code from being tree-shaken.
+
+**Decision (Phase 9b)**: Phase 9b expanded scope to **ALL remaining side effects** — RegisterClass (~403),
+static assignments (~39), AddParser (~10), WebXR features/controllers (~26), factory assignments, and
+other patterns (~53). This ensures pure users can import from `.pure` without ANY implicit side effects.
+The `scripts/treeshaking/wrapRemainingEffects.mjs` v2 automation handles path normalization,
+import-type→value upgrades, name collision resolution, and skips files with exported declarations.
 
 #### Consumer Experience
 
@@ -965,13 +974,18 @@ scene.enablePhysics(); // ❌ TypeScript error — .types.ts was never imported
 
 ### Scope
 
-| Category                    | Files | Side Effects | In Scope?                        |
-| --------------------------- | ----- | ------------ | -------------------------------- |
-| Prototype augmentations     | ~84   | 344          | ✅ Yes                           |
-| `AddNodeConstructor` calls  | ~25   | 26           | ✅ Yes                           |
-| `RegisterClass`-only        | ~406  | 535          | ❌ No (already split in Phase 2) |
-| Shader store writes         | ~331  | 331          | ❌ No (Phase 8)                  |
-| Static property assignments | ~59   | 66           | ❌ No (Phase 4)                  |
+| Category                    | Files | Side Effects | Phase 9a     | Phase 9b        |
+| --------------------------- | ----- | ------------ | ------------ | --------------- |
+| Prototype augmentations     | ~84   | 344          | ✅ 9.1–9.4   |                 |
+| `AddNodeConstructor` calls  | ~25   | 26           | ✅ 9.4       |                 |
+| `RegisterClass`-only        | ~403  | 535          |              | ✅ 9.10         |
+| Static property assignments | ~39   | 66           |              | ✅ 9.10         |
+| `AddParser` calls           | ~10   | 10           |              | ✅ 9.10         |
+| WebXR features/controllers  | ~26   | 26           |              | ✅ 9.10         |
+| Factory / other patterns    | ~53   | varies       |              | ✅ 9.10         |
+| Pilot files (manual)        | 3     | varies       |              | ✅ 9.11         |
+| materialHelper.functions    | 1     | 0 (pure)     |              | ✅ 9.11 (moved) |
+| Shader store writes         | ~331  | 331          | ❌ (Phase 8) | ❌ (Phase 8)    |
 
 ### Implementation Steps
 
@@ -1014,6 +1028,38 @@ scene.enablePhysics(); // ❌ TypeScript error — .types.ts was never imported
     - Added "Pure path with registration functions" section
     - Documented the `registerXxx()` + `.pure` import pattern
 
+### Phase 9b — ALL Remaining Side Effects (Steps 9.10–9.13)
+
+Expanded scope from prototype augmentations only to ALL side effects, so that pure users
+can import from `.pure` without any implicit side effects.
+
+- [x] **9.10** — Automation script v2: `scripts/treeshaking/wrapRemainingEffects.mjs`
+    - Full audit found **~548 files** with unwrapped side effects across 7 categories
+    - Script categorizes thin `.ts` wrappers: exports, imports, bare imports, self-imports, code
+    - Handles multi-line import joining (`joinMultiLineStatements()`)
+    - **Path normalization**: strips `.pure` suffix when comparing import paths to avoid duplicate identifiers
+    - **Type→value upgrade**: when `.pure.ts` has `import type { X }` but code needs `X` as value,
+      upgrades the existing type import instead of adding a duplicate
+    - **Name collision detection**: two-pass approach — first collects all register names, then adds
+      directory qualifiers for duplicates (12 collisions resolved)
+    - **Export declaration detection**: skips files with `export function/class` (not side effects)
+    - Duplicate declaration checking: prevents duplicate `const`/`let` in `.pure.ts`
+    - **Result**: 508 files processed, 0 extended existing, 508 created new register functions
+    - TypeScript compilation: **0 errors** ✅
+- [x] **9.11** — Handle 4 manual files
+    - 3 pilot files (`engine.multiRender` ×2, `joinedPhysicsEngineComponent`): stripped `declare module`
+      blocks (already in `.types.ts`), then re-ran script to wrap prototype assignments
+    - `materialHelper.functions.ts`: moved 37 exported function definitions + constants (1566 lines)
+      to `.pure.ts` as top-level exports (no side effects — purely function definitions)
+    - TypeScript compilation: **0 errors** ✅
+- [x] **9.12** — Regenerate pure barrels + sideEffects manifest
+    - `generatePureBarrels.mjs`: 144 barrel files, 115 subdir rewrites, 312 impure exports skipped
+    - `auditSideEffects.mjs` + `syncSideEffects.mjs`: 842 sideEffects entries in package.json
+- [x] **9.13** — Bundle smoke tests
+    - **All 21 tests pass** (42 individual PASS results: Rollup + Webpack)
+    - Registration functions tree-shake correctly from `.pure` imports
+    - Import + call pattern bundles correctly
+
 ### Impact Analysis
 
 | Metric                                                | Before | After    |
@@ -1021,8 +1067,13 @@ scene.enablePhysics(); // ❌ TypeScript error — .types.ts was never imported
 | Files requiring bare side-effect imports              | ~109   | **~0**   |
 | Prototype augmentations behind callable function      | 0      | **~344** |
 | `AddNodeConstructor` behind callable function         | 0      | **~26**  |
+| `RegisterClass` behind callable function (9b)         | 0      | **~403** |
+| Static assignments behind callable function (9b)      | 0      | **~39**  |
+| AddParser behind callable function (9b)               | 0      | **~10**  |
+| WebXR features/controllers behind callable fn (9b)    | 0      | **~26**  |
+| Other side effects behind callable function (9b)      | 0      | **~53**  |
+| Total registration functions (9a + 9b)                | 0      | **~620** |
 | New `.types.ts` files                                 | 0      | **~91**  |
-| Registration functions discoverable via `register`    | 0      | **~109** |
 | `Engine` class tree-shakeable (without augmentations) | No     | **Yes**  |
 | `Scene` class tree-shakeable (without augmentations)  | No     | **Yes**  |
 

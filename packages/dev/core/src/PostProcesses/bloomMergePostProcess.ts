@@ -4,7 +4,5 @@
  */
 export * from "./bloomMergePostProcess.pure";
 
-import { BloomMergePostProcess } from "./bloomMergePostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.BloomMergePostProcess", BloomMergePostProcess);
+import { registerBloomMergePostProcess } from "./bloomMergePostProcess.pure";
+registerBloomMergePostProcess();

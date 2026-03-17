@@ -44,6 +44,7 @@ import type { Geometry } from "./geometry";
 import { nativeOverride } from "../Misc/decorators";
 import { AbstractEngine } from "core/Engines/abstractEngine";
 import { VertexDataComputeNormals } from "./mesh.vertexData.pure";
+import { RegisterClass } from "../Misc/typeStore";
 
 function ApplyMorph(data: FloatArray, kind: string, morphTargetManager: MorphTargetManager): void {
     let getTargetData: Nullable<(target: MorphTarget) => Nullable<FloatArray>>;
@@ -2831,4 +2832,15 @@ export abstract class AbstractMesh extends TransformNode implements IDisposable,
     public getConnectedParticleSystems(): IParticleSystem[] {
         return this._scene.particleSystems.filter((particleSystem) => particleSystem.emitter === this);
     }
+}
+
+
+let _registered = false;
+export function registerAbstractMesh(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.AbstractMesh", AbstractMesh);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./geometryStepBlock.pure";
 
-import { GeometryStepBlock } from "./geometryStepBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryStepBlock", GeometryStepBlock);
+import { registerGeometryStepBlock } from "./geometryStepBlock.pure";
+registerGeometryStepBlock();

@@ -4,7 +4,5 @@
  */
 export * from "./bloomPostProcessBlock.pure";
 
-import { NodeRenderGraphBloomPostProcessBlock } from "./bloomPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphBloomPostProcessBlock", NodeRenderGraphBloomPostProcessBlock);
+import { registerBloomPostProcessBlock } from "./bloomPostProcessBlock.pure";
+registerBloomPostProcessBlock();

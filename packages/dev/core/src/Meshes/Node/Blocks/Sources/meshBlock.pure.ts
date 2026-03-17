@@ -8,6 +8,7 @@ import { VertexData } from "../../../../Meshes/mesh.vertexData.pure";
 import type { Nullable } from "../../../../types";
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
 import { VertexDataParse } from "../../../mesh.vertexData.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Defines a block used to generate a user defined mesh geometry data
@@ -136,4 +137,15 @@ export class MeshBlock extends NodeGeometryBlock {
         this.serializedCachedData = !!serializationObject.serializedCachedData;
         this.reverseWindingOrder = serializationObject.reverseWindingOrder;
     }
+}
+
+
+let _registered = false;
+export function registerMeshBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.MeshBlock", MeshBlock);
 }

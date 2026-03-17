@@ -4,11 +4,5 @@
  */
 export * from "./condition.pure";
 
-import { PredicateCondition, StateCondition, ValueCondition } from "./condition.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.ValueCondition", ValueCondition);
-
-RegisterClass("BABYLON.PredicateCondition", PredicateCondition);
-
-RegisterClass("BABYLON.StateCondition", StateCondition);
+import { registerCondition } from "./condition.pure";
+registerCondition();

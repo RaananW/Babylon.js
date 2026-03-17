@@ -4,7 +4,5 @@
  */
 export * from "./geometryCollectionBlock.pure";
 
-import { GeometryCollectionBlock } from "./geometryCollectionBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryCollectionBlock", GeometryCollectionBlock);
+import { registerGeometryCollectionBlock } from "./geometryCollectionBlock.pure";
+registerGeometryCollectionBlock();

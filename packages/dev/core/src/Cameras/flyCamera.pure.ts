@@ -13,6 +13,7 @@ import type { FlyCameraKeyboardInput } from "../Cameras/Inputs/flyCameraKeyboard
 import { ToolsBackCompatCameraNoPreventDefault } from "../Misc/tools.pure";
 import type { Collider } from "../Collisions/collider";
 import { AbstractEngine } from "core/Engines/abstractEngine";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * This is a flying camera, designed for 3D movement and rotation in all directions,
@@ -453,3 +454,14 @@ export class FlyCamera extends TargetCamera {
 }
 
 // Register Class Name
+
+
+let _registered = false;
+export function registerFlyCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.FlyCamera", FlyCamera);
+}

@@ -4,7 +4,5 @@
  */
 export * from "./geometryPosterizeBlock.pure";
 
-import { GeometryPosterizeBlock } from "./geometryPosterizeBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryPosterizeBlock", GeometryPosterizeBlock);
+import { registerGeometryPosterizeBlock } from "./geometryPosterizeBlock.pure";
+registerGeometryPosterizeBlock();

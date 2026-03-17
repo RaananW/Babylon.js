@@ -4,7 +4,5 @@
  */
 export * from "./loopBlock.pure";
 
-import { LoopBlock } from "./loopBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.LoopBlock", LoopBlock);
+import { registerLoopBlock } from "./loopBlock.pure";
+registerLoopBlock();

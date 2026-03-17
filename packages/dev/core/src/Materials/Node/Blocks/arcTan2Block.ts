@@ -4,7 +4,5 @@
  */
 export * from "./arcTan2Block.pure";
 
-import { ArcTan2Block } from "./arcTan2Block.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ArcTan2Block", ArcTan2Block);
+import { registerArcTan2Block } from "./arcTan2Block.pure";
+registerArcTan2Block();

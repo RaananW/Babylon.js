@@ -12,6 +12,7 @@ import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnec
 import { RichTypeAny, RichTypeNumber, RichTypeVector3 } from "core/FlowGraph/flowGraphRichTypes.pure";
 import type { Vector3 } from "core/Maths/math.vector";
 import { FlowGraphEventType } from "core/FlowGraph/flowGraphEventType";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Configuration for the mesh pick event block.
@@ -132,4 +133,15 @@ export class FlowGraphMeshPickEventBlock extends FlowGraphEventBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.MeshPickEvent;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphMeshPickEventBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.MeshPickEvent, FlowGraphMeshPickEventBlock);
 }

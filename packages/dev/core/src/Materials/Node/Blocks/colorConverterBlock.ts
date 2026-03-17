@@ -4,7 +4,5 @@
  */
 export * from "./colorConverterBlock.pure";
 
-import { ColorConverterBlock } from "./colorConverterBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ColorConverterBlock", ColorConverterBlock);
+import { registerColorConverterBlock } from "./colorConverterBlock.pure";
+registerColorConverterBlock();

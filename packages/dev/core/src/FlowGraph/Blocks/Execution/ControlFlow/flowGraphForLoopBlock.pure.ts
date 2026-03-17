@@ -10,6 +10,7 @@ import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import type { FlowGraphNumber } from "core/FlowGraph/utils";
 import { getNumericValue } from "core/FlowGraph/utils";
 import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Configuration for the For Loop block.
@@ -107,4 +108,15 @@ export class FlowGraphForLoopBlock extends FlowGraphExecutionBlockWithOutSignal 
     public override getClassName(): string {
         return FlowGraphBlockNames.ForLoop;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphForLoopBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.ForLoop, FlowGraphForLoopBlock);
 }

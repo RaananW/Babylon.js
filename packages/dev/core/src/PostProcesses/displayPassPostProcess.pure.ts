@@ -7,6 +7,7 @@ import { PostProcess } from "./postProcess.pure";
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Scene } from "../scene";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * DisplayPassPostProcess which produces an output the same as it's input
@@ -64,4 +65,15 @@ export class DisplayPassPostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerDisplayPassPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.DisplayPassPostProcess", DisplayPassPostProcess);
 }

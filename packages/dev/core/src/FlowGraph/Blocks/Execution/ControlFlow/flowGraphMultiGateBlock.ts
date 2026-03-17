@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphMultiGateBlock.pure";
 
-import { FlowGraphMultiGateBlock } from "./flowGraphMultiGateBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.MultiGate, FlowGraphMultiGateBlock);
+import { registerFlowGraphMultiGateBlock } from "./flowGraphMultiGateBlock.pure";
+registerFlowGraphMultiGateBlock();

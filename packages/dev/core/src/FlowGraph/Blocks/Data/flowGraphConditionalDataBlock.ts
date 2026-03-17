@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphConditionalDataBlock.pure";
 
-import { FlowGraphConditionalDataBlock } from "./flowGraphConditionalDataBlock.pure";
-import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.Conditional, FlowGraphConditionalDataBlock);
+import { registerFlowGraphConditionalDataBlock } from "./flowGraphConditionalDataBlock.pure";
+registerFlowGraphConditionalDataBlock();

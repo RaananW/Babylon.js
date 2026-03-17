@@ -4,11 +4,5 @@
  */
 export * from "./webXRGenericHandController.pure";
 
-import { WebXRGenericHandController } from "./webXRGenericHandController.pure";
-import type { Scene } from "../../scene";
-import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
-
-// register the profiles
-WebXRMotionControllerManager.RegisterController("generic-hand-select-grasp", (xrInput: XRInputSource, scene: Scene) => {
-    return new WebXRGenericHandController(scene, <any>xrInput.gamepad, xrInput.handedness);
-});
+import { registerWebXRGenericHandController } from "./webXRGenericHandController.pure";
+registerWebXRGenericHandController();

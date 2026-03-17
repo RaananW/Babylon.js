@@ -4,6 +4,7 @@ import type { IMotionControllerLayoutMap, IMinimalMotionControllerObject, Motion
 import { WebXRAbstractMotionController } from "./webXRAbstractMotionController";
 import type { Scene } from "../../scene";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";
+import { WebXRMotionControllerManager } from "./webXRMotionControllerManager";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -256,3 +257,17 @@ const OculusHandProfile: IMotionControllerLayoutMap = {
         assetPath: "none.glb",
     },
 };
+
+
+let _registered = false;
+export function registerWebXROculusHandController(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // register the profiles
+    WebXRMotionControllerManager.RegisterController("oculus-hand", (xrInput: XRInputSource, scene: Scene) => {
+        return new WebXROculusHandController(scene, <any>xrInput.gamepad, xrInput.handedness);
+    });
+}

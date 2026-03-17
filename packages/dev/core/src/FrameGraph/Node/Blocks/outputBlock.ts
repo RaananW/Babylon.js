@@ -4,7 +4,5 @@
  */
 export * from "./outputBlock.pure";
 
-import { NodeRenderGraphOutputBlock } from "./outputBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphOutputBlock", NodeRenderGraphOutputBlock);
+import { registerOutputBlock } from "./outputBlock.pure";
+registerOutputBlock();

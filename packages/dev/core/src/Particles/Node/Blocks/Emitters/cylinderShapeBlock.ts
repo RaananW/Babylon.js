@@ -4,7 +4,5 @@
  */
 export * from "./cylinderShapeBlock.pure";
 
-import { CylinderShapeBlock } from "./cylinderShapeBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.CylinderShapeBlock", CylinderShapeBlock);
+import { registerCylinderShapeBlock } from "./cylinderShapeBlock.pure";
+registerCylinderShapeBlock();

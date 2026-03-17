@@ -5,11 +5,13 @@ import { Constants } from "../Engines/constants";
 import type { Camera } from "../Cameras/camera";
 import type { PostProcessOptions } from "./postProcess";
 import { PostProcess } from "./postProcess.pure";
-import type { AbstractEngine } from "../Engines/abstractEngine";
+
 import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Scene } from "../scene";
 import { ThinPassCubePostProcess, ThinPassPostProcess } from "./thinPassPostProcess";
 import { serialize } from "core/Misc/decorators";
+import { RegisterClass } from "../Misc/typeStore";
+import { AbstractEngine } from "../Engines/abstractEngine";
 
 /**
  * PassPostProcess which produces an output the same as it's input
@@ -173,4 +175,19 @@ export class PassCubePostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerPassPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.PassPostProcess", PassPostProcess);
+
+    AbstractEngine._RescalePostProcessFactory = (engine: AbstractEngine) => {
+        return new PassPostProcess("rescale", 1, null, Constants.TEXTURE_BILINEAR_SAMPLINGMODE, engine, false, Constants.TEXTURETYPE_UNSIGNED_BYTE);
+    };
 }

@@ -10,6 +10,7 @@ import type { ThinParticleSystem } from "core/Particles/thinParticleSystem";
 import { Color4 } from "core/Maths/math.color.pure";
 import { Vector2 } from "core/Maths/math.vector.pure";
 import { PointParticleEmitter } from "core/Particles/EmitterTypes/pointParticleEmitter";
+import { RegisterClass } from "core/Misc/typeStore";
 
 const ColorDiff = /*#__PURE__*/ new Color4();
 
@@ -160,4 +161,15 @@ export class CreateParticleBlock extends NodeParticleBlock {
 
         this.particle._storedValue = system;
     }
+}
+
+
+let _registered = false;
+export function registerCreateParticleBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.CreateParticleBlock", CreateParticleBlock);
 }

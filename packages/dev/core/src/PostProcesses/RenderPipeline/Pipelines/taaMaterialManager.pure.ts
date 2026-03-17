@@ -9,6 +9,7 @@ import type { UniformBuffer } from "core/Materials/uniformBuffer";
 import { Vector2 } from "core/Maths/math.vector.pure";
 import type { Scene } from "core/scene";
 import type { Nullable } from "core/types";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 class TAAJitterMaterialDefines extends MaterialDefines {
     TAA_JITTER = false;
@@ -185,4 +186,15 @@ export class TAAMaterialManager {
         plugin.manager = this;
         return plugin;
     }
+}
+
+
+let _registered = false;
+export function registerTaaMaterialManager(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(`BABYLON.TAAJitterMaterialPlugin`, TAAJitterMaterialPlugin);
 }

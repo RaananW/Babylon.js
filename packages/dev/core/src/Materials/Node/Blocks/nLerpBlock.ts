@@ -4,7 +4,5 @@
  */
 export * from "./nLerpBlock.pure";
 
-import { NLerpBlock } from "./nLerpBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NLerpBlock", NLerpBlock);
+import { registerNLerpBlock } from "./nLerpBlock.pure";
+registerNLerpBlock();

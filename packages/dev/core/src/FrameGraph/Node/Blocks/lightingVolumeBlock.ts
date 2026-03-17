@@ -4,7 +4,5 @@
  */
 export * from "./lightingVolumeBlock.pure";
 
-import { NodeRenderGraphLightingVolumeBlock } from "./lightingVolumeBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphLightingVolumeBlock", NodeRenderGraphLightingVolumeBlock);
+import { registerLightingVolumeBlock } from "./lightingVolumeBlock.pure";
+registerLightingVolumeBlock();

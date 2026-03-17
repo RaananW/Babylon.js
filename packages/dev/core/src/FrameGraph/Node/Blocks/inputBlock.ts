@@ -4,7 +4,5 @@
  */
 export * from "./inputBlock.pure";
 
-import { NodeRenderGraphInputBlock } from "./inputBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphInputBlock", NodeRenderGraphInputBlock);
+import { registerFrameGraphNodeBlocksInputBlock } from "./inputBlock.pure";
+registerFrameGraphNodeBlocksInputBlock();

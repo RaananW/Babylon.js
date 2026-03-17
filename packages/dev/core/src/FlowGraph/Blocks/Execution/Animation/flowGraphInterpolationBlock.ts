@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphInterpolationBlock.pure";
 
-import { FlowGraphInterpolationBlock } from "./flowGraphInterpolationBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.ValueInterpolation, FlowGraphInterpolationBlock);
+import { registerFlowGraphInterpolationBlock } from "./flowGraphInterpolationBlock.pure";
+registerFlowGraphInterpolationBlock();

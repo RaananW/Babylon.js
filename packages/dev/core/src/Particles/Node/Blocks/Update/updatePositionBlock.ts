@@ -4,7 +4,5 @@
  */
 export * from "./updatePositionBlock.pure";
 
-import { UpdatePositionBlock } from "./updatePositionBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.UpdatePositionBlock", UpdatePositionBlock);
+import { registerUpdatePositionBlock } from "./updatePositionBlock.pure";
+registerUpdatePositionBlock();

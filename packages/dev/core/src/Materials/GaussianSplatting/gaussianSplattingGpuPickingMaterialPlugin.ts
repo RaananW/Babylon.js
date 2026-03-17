@@ -4,7 +4,5 @@
  */
 export * from "./gaussianSplattingGpuPickingMaterialPlugin.pure";
 
-import { GaussianSplattingGpuPickingMaterialPlugin } from "./gaussianSplattingGpuPickingMaterialPlugin.pure";
-import { RegisterClass } from "../../Misc/typeStore";
-
-RegisterClass("BABYLON.GaussianSplattingGpuPickingMaterialPlugin", GaussianSplattingGpuPickingMaterialPlugin);
+import { registerGaussianSplattingGpuPickingMaterialPlugin } from "./gaussianSplattingGpuPickingMaterialPlugin.pure";
+registerGaussianSplattingGpuPickingMaterialPlugin();

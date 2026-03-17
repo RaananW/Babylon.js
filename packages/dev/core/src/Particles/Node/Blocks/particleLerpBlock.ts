@@ -4,7 +4,5 @@
  */
 export * from "./particleLerpBlock.pure";
 
-import { ParticleLerpBlock } from "./particleLerpBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleLerpBlock", ParticleLerpBlock);
+import { registerParticleLerpBlock } from "./particleLerpBlock.pure";
+registerParticleLerpBlock();

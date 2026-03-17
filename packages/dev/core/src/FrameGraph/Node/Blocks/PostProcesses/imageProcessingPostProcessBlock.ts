@@ -4,7 +4,5 @@
  */
 export * from "./imageProcessingPostProcessBlock.pure";
 
-import { NodeRenderGraphImageProcessingPostProcessBlock } from "./imageProcessingPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphImageProcessingPostProcessBlock", NodeRenderGraphImageProcessingPostProcessBlock);
+import { registerImageProcessingPostProcessBlock } from "./imageProcessingPostProcessBlock.pure";
+registerImageProcessingPostProcessBlock();

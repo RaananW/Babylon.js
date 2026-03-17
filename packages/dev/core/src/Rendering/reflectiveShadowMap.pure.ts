@@ -19,6 +19,7 @@ import { Light } from "core/Lights/light";
 import type { DirectionalLight } from "core/Lights/directionalLight";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import type { Nullable } from "core/types";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Reflective Shadow Maps were first described in http://www.klayge.org/material/3_12/GI/rsm.pdf by Carsten Dachsbacher and Marc Stamminger
@@ -529,4 +530,15 @@ export class RSMCreatePluginMaterial extends MaterialPluginBase {
             `,
         };
     }
+}
+
+
+let _registered = false;
+export function registerReflectiveShadowMap(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(`BABYLON.RSMCreatePluginMaterial`, RSMCreatePluginMaterial);
 }

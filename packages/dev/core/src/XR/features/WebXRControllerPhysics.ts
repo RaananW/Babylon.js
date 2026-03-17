@@ -4,15 +4,5 @@
  */
 export * from "./WebXRControllerPhysics.pure";
 
-import { WebXRControllerPhysics } from "./WebXRControllerPhysics.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-//register the plugin
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRControllerPhysics.Name,
-    (xrSessionManager, options) => {
-        return () => new WebXRControllerPhysics(xrSessionManager, options);
-    },
-    WebXRControllerPhysics.Version,
-    true
-);
+import { registerWebXRControllerPhysics } from "./WebXRControllerPhysics.pure";
+registerWebXRControllerPhysics();

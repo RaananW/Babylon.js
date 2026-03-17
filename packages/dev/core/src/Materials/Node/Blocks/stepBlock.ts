@@ -4,7 +4,5 @@
  */
 export * from "./stepBlock.pure";
 
-import { StepBlock } from "./stepBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.StepBlock", StepBlock);
+import { registerStepBlock } from "./stepBlock.pure";
+registerStepBlock();

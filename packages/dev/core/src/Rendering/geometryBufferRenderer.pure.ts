@@ -22,6 +22,7 @@ import { BindClipPlane, PrepareStringDefinesForClipPlanes } from "../Materials/c
 import { BindMorphTargetParameters, BindSceneUniformBuffer, PrepareDefinesAndAttributesForMorphTargets, PushAttributesForInstances } from "../Materials/materialHelper.functions";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import type { OpenPBRMaterial } from "../Materials/PBR/openpbrMaterial";
+import { AddClipPlaneUniforms } from "../Materials/clipPlaneMaterialHelper";
 
 /** @internal */
 interface ISavedTransformationMatrix {
@@ -1392,4 +1393,15 @@ export class GeometryBufferRenderer {
 
         return target;
     }
+}
+
+
+let _registered = false;
+export function registerGeometryBufferRenderer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    AddClipPlaneUniforms(Uniforms);
 }

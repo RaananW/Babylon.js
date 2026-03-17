@@ -4,7 +4,5 @@
  */
 export * from "./iridescenceBlock.pure";
 
-import { IridescenceBlock } from "./iridescenceBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.IridescenceBlock", IridescenceBlock);
+import { registerIridescenceBlock } from "./iridescenceBlock.pure";
+registerIridescenceBlock();

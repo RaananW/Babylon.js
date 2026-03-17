@@ -4,7 +4,5 @@
  */
 export * from "./imageSourceBlock.pure";
 
-import { ImageSourceBlock } from "./imageSourceBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ImageSourceBlock", ImageSourceBlock);
+import { registerImageSourceBlock } from "./imageSourceBlock.pure";
+registerImageSourceBlock();

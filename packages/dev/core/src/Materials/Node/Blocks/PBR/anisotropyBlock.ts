@@ -4,7 +4,5 @@
  */
 export * from "./anisotropyBlock.pure";
 
-import { AnisotropyBlock } from "./anisotropyBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.AnisotropyBlock", AnisotropyBlock);
+import { registerAnisotropyBlock } from "./anisotropyBlock.pure";
+registerAnisotropyBlock();

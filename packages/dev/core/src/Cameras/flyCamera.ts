@@ -4,7 +4,5 @@
  */
 export * from "./flyCamera.pure";
 
-import { FlyCamera } from "./flyCamera.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.FlyCamera", FlyCamera);
+import { registerFlyCamera } from "./flyCamera.pure";
+registerFlyCamera();

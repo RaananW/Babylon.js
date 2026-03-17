@@ -20,6 +20,7 @@ import { ThinSSRRenderingPipeline } from "./thinSSRRenderingPipeline";
 import { ThinSSRPostProcess } from "core/PostProcesses/thinSSRPostProcess";
 import { ThinSSRBlurPostProcess } from "core/PostProcesses/thinSSRBlurPostProcess";
 import { ThinSSRBlurCombinerPostProcess } from "core/PostProcesses/thinSSRBlurCombinerPostProcess";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -1035,4 +1036,15 @@ export class SSRRenderingPipeline extends PostProcessRenderPipeline {
     public static Parse(source: any, scene: Scene, rootUrl: string): SSRRenderingPipeline {
         return SerializationHelperParse(() => new SSRRenderingPipeline(source._name, scene, source._ratio), source, scene, rootUrl);
     }
+}
+
+
+let _registered = false;
+export function registerSsrRenderingPipeline(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SSRRenderingPipeline", SSRRenderingPipeline);
 }

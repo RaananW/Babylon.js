@@ -4,7 +4,5 @@
  */
 export * from "./geometryInterceptorBlock.pure";
 
-import { GeometryInterceptorBlock } from "./geometryInterceptorBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryInterceptorBlock", GeometryInterceptorBlock);
+import { registerGeometryInterceptorBlock } from "./geometryInterceptorBlock.pure";
+registerGeometryInterceptorBlock();

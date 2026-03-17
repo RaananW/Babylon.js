@@ -12,6 +12,7 @@ import type { Mesh } from "../../../../Meshes/mesh";
 import type { Effect } from "../../../effect";
 import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to implement the anisotropy module of the PBR material
@@ -245,4 +246,15 @@ export class AnisotropyBlock extends NodeMaterialBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerAnisotropyBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.AnisotropyBlock", AnisotropyBlock);
 }

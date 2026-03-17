@@ -4,7 +4,5 @@
  */
 export * from "./voronoiNoiseBlock.pure";
 
-import { VoronoiNoiseBlock } from "./voronoiNoiseBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.VoronoiNoiseBlock", VoronoiNoiseBlock);
+import { registerVoronoiNoiseBlock } from "./voronoiNoiseBlock.pure";
+registerVoronoiNoiseBlock();

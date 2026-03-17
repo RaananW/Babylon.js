@@ -10,6 +10,7 @@ import { CSG2, InitializeCSG2Async, IsCSG2Ready } from "core/Meshes/csg2";
 import type { Nullable } from "core/types";
 import type { CSG } from "core/Meshes/csg.pure";
 import { CSGFromVertexData } from "../../csg.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Operations supported by the boolean block
@@ -218,4 +219,15 @@ export class BooleanGeometryBlock extends NodeGeometryBlock {
 
         this.useOldCSGEngine = !!serializationObject.useOldCSGEngine;
     }
+}
+
+
+let _registered = false;
+export function registerBooleanGeometryBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.BooleanGeometryBlock", BooleanGeometryBlock);
 }

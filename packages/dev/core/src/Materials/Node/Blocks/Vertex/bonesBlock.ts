@@ -4,7 +4,5 @@
  */
 export * from "./bonesBlock.pure";
 
-import { BonesBlock } from "./bonesBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.BonesBlock", BonesBlock);
+import { registerBonesBlock } from "./bonesBlock.pure";
+registerBonesBlock();

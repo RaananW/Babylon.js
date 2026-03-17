@@ -4,20 +4,5 @@
  */
 export * from "./physicsImpostor.pure";
 
-import type { IPhysicsEnabledObject } from "./physicsImpostor.pure";
-import { PhysicsImpostor } from "./physicsImpostor.pure";
-import type { Scene } from "../../scene";
-import { Mesh } from "../../Meshes/mesh";
-
-Mesh._PhysicsImpostorParser = function (scene: Scene, physicObject: IPhysicsEnabledObject, jsonObject: any): PhysicsImpostor {
-    return new PhysicsImpostor(
-        physicObject,
-        jsonObject.physicsImpostor,
-        {
-            mass: jsonObject.physicsMass,
-            friction: jsonObject.physicsFriction,
-            restitution: jsonObject.physicsRestitution,
-        },
-        scene
-    );
-};
+import { registerPhysicsImpostor } from "./physicsImpostor.pure";
+registerPhysicsImpostor();

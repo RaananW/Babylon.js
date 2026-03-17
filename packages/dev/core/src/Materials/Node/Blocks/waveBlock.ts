@@ -4,7 +4,5 @@
  */
 export * from "./waveBlock.pure";
 
-import { WaveBlock } from "./waveBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.WaveBlock", WaveBlock);
+import { registerWaveBlock } from "./waveBlock.pure";
+registerWaveBlock();

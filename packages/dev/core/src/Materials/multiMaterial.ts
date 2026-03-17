@@ -4,7 +4,5 @@
  */
 export * from "./multiMaterial.pure";
 
-import { MultiMaterial } from "./multiMaterial.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.MultiMaterial", MultiMaterial);
+import { registerMultiMaterial } from "./multiMaterial.pure";
+registerMultiMaterial();

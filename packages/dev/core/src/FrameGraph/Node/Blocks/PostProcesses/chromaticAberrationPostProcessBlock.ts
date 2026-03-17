@@ -4,7 +4,5 @@
  */
 export * from "./chromaticAberrationPostProcessBlock.pure";
 
-import { NodeRenderGraphChromaticAberrationPostProcessBlock } from "./chromaticAberrationPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphChromaticAberrationPostProcessBlock", NodeRenderGraphChromaticAberrationPostProcessBlock);
+import { registerChromaticAberrationPostProcessBlock } from "./chromaticAberrationPostProcessBlock.pure";
+registerChromaticAberrationPostProcessBlock();

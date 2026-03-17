@@ -1,11 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable } from "../types";
-import type { Scene } from "../scene.pure";
+
 import { Vector3 } from "../Maths/math.vector.pure";
 import { Collider } from "./collider";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { AbstractEngine } from "core/Engines/abstractEngine";
+import { Scene } from "../scene.pure";
 
 /** @internal */
 export interface ICollisionCoordinator {
@@ -118,4 +119,17 @@ export class DefaultCollisionCoordinator implements ICollisionCoordinator {
         collider._retry++;
         this._collideWithWorld(position, velocity, collider, maximumRetry, finalPosition, slideOnCollide, excludedMesh);
     }
+}
+
+
+let _registered = false;
+export function registerCollisionCoordinator(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Scene.CollisionCoordinatorFactory = () => {
+        return new DefaultCollisionCoordinator();
+    };
 }

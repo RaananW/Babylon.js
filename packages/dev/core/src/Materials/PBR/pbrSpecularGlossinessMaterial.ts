@@ -4,7 +4,5 @@
  */
 export * from "./pbrSpecularGlossinessMaterial.pure";
 
-import { PBRSpecularGlossinessMaterial } from "./pbrSpecularGlossinessMaterial.pure";
-import { RegisterClass } from "../../Misc/typeStore";
-
-RegisterClass("BABYLON.PBRSpecularGlossinessMaterial", PBRSpecularGlossinessMaterial);
+import { registerPbrSpecularGlossinessMaterial } from "./pbrSpecularGlossinessMaterial.pure";
+registerPbrSpecularGlossinessMaterial();

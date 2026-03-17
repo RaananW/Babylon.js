@@ -1282,3 +1282,14 @@ export class ParticleSystem extends ThinParticleSystem {
         return result;
     }
 }
+
+
+let _registered = false;
+export function registerParticleSystem(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    SubEmitter._ParseParticleSystem = ParticleSystem.Parse;
+}

@@ -4,7 +4,5 @@
  */
 export * from "./blurPostProcessBlock.pure";
 
-import { NodeRenderGraphBlurPostProcessBlock } from "./blurPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphBlurPostProcessBlock", NodeRenderGraphBlurPostProcessBlock);
+import { registerBlurPostProcessBlock } from "./blurPostProcessBlock.pure";
+registerBlurPostProcessBlock();

@@ -4,7 +4,5 @@
  */
 export * from "./gaussianSplattingSolidColorMaterialPlugin.pure";
 
-import { GaussianSplattingSolidColorMaterialPlugin } from "./gaussianSplattingSolidColorMaterialPlugin.pure";
-import { RegisterClass } from "../../Misc/typeStore";
-
-RegisterClass("BABYLON.GaussianSplattingSolidColorMaterialPlugin", GaussianSplattingSolidColorMaterialPlugin);
+import { registerGaussianSplattingSolidColorMaterialPlugin } from "./gaussianSplattingSolidColorMaterialPlugin.pure";
+registerGaussianSplattingSolidColorMaterialPlugin();

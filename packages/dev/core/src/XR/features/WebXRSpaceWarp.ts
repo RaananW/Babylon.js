@@ -4,15 +4,5 @@
  */
 export * from "./WebXRSpaceWarp.pure";
 
-import { WebXRSpaceWarp } from "./WebXRSpaceWarp.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-//register the plugin
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRSpaceWarp.Name,
-    (xrSessionManager) => {
-        return () => new WebXRSpaceWarp(xrSessionManager);
-    },
-    WebXRSpaceWarp.Version,
-    false
-);
+import { registerWebXRSpaceWarp } from "./WebXRSpaceWarp.pure";
+registerWebXRSpaceWarp();

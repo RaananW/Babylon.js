@@ -5,6 +5,7 @@ import type { WebXRSessionManager } from "../webXRSessionManager";
 import { Observable } from "../../Misc/observable";
 import { Vector3 } from "../../Maths/math.vector.pure";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * A babylon interface for a "WebXR" feature point.
@@ -161,4 +162,22 @@ export class WebXRFeaturePointSystem extends WebXRAbstractFeature {
 
         this._enabled = true;
     }
+}
+
+
+let _registered = false;
+export function registerWebXRFeaturePointSystem(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRFeaturePointSystem.Name,
+        (xrSessionManager) => {
+            return () => new WebXRFeaturePointSystem(xrSessionManager);
+        },
+        WebXRFeaturePointSystem.Version
+    );
 }

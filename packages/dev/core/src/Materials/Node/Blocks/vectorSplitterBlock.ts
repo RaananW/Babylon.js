@@ -4,7 +4,5 @@
  */
 export * from "./vectorSplitterBlock.pure";
 
-import { VectorSplitterBlock } from "./vectorSplitterBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.VectorSplitterBlock", VectorSplitterBlock);
+import { registerVectorSplitterBlock } from "./vectorSplitterBlock.pure";
+registerVectorSplitterBlock();

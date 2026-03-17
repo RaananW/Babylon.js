@@ -4,7 +4,5 @@
  */
 export * from "./normalizeVectorBlock.pure";
 
-import { NormalizeVectorBlock } from "./normalizeVectorBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NormalizeVectorBlock", NormalizeVectorBlock);
+import { registerNormalizeVectorBlock } from "./normalizeVectorBlock.pure";
+registerNormalizeVectorBlock();

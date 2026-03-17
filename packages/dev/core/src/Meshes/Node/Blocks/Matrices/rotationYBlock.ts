@@ -4,7 +4,5 @@
  */
 export * from "./rotationYBlock.pure";
 
-import { RotationYBlock } from "./rotationYBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.RotationYBlock", RotationYBlock);
+import { registerRotationYBlock } from "./rotationYBlock.pure";
+registerRotationYBlock();

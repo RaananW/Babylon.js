@@ -18,6 +18,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { Logger } from "../../../../Misc/logger";
 import { BindLight, BindLights, PrepareDefinesForLight, PrepareDefinesForLights, PrepareUniformsAndSamplersForLight } from "../../../materialHelper.functions";
 import { ShaderLanguage } from "../../../../Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to add light in the fragment shader
@@ -539,4 +540,15 @@ export class LightBlock extends NodeMaterialBlock {
 
         this._setTarget();
     }
+}
+
+
+let _registered = false;
+export function registerLightBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.LightBlock", LightBlock);
 }

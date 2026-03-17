@@ -4,7 +4,5 @@
  */
 export * from "./instantiateLinearBlock.pure";
 
-import { InstantiateLinearBlock } from "./instantiateLinearBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.InstantiateLinearBlock", InstantiateLinearBlock);
+import { registerInstantiateLinearBlock } from "./instantiateLinearBlock.pure";
+registerInstantiateLinearBlock();

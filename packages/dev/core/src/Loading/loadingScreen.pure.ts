@@ -1,9 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
 import type { Nullable } from "../types";
-import type { AbstractEngine } from "../Engines/abstractEngine";
+
 import { EngineStore } from "../Engines/engineStore";
 import type { Observer } from "../Misc/observable";
+import { AbstractEngine } from "../Engines/abstractEngine";
 
 /**
  * Interface used to present a loading screen while loading a scene
@@ -342,5 +343,18 @@ export class DefaultLoadingScreen implements ILoadingScreen {
                 this._loadingDivToRenderingCanvasMap.set(loadingDiv, [canvas, currentCanvasRect]);
             }
         });
+    };
+}
+
+
+let _registered = false;
+export function registerLoadingScreen(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    AbstractEngine.DefaultLoadingScreenFactory = (canvas: HTMLCanvasElement) => {
+        return new DefaultLoadingScreen(canvas);
     };
 }

@@ -4,7 +4,5 @@
  */
 export * from "./instantiateOnVolumeBlock.pure";
 
-import { InstantiateOnVolumeBlock } from "./instantiateOnVolumeBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.InstantiateOnVolumeBlock", InstantiateOnVolumeBlock);
+import { registerInstantiateOnVolumeBlock } from "./instantiateOnVolumeBlock.pure";
+registerInstantiateOnVolumeBlock();

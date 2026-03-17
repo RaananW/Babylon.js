@@ -4,7 +4,5 @@
  */
 export * from "./updateFlowMapBlock.pure";
 
-import { UpdateFlowMapBlock } from "./updateFlowMapBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.UpdateFlowMapBlock", UpdateFlowMapBlock);
+import { registerUpdateFlowMapBlock } from "./updateFlowMapBlock.pure";
+registerUpdateFlowMapBlock();

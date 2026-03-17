@@ -4,7 +4,5 @@
  */
 export * from "./selectionOutlineLayerBlock.pure";
 
-import { NodeRenderGraphSelectionOutlineLayerBlock } from "./selectionOutlineLayerBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphSelectionOutlineLayerBlock", NodeRenderGraphSelectionOutlineLayerBlock);
+import { registerSelectionOutlineLayerBlock } from "./selectionOutlineLayerBlock.pure";
+registerSelectionOutlineLayerBlock();

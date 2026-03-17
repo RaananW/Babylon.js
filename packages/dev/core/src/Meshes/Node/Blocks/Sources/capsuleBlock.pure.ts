@@ -8,6 +8,7 @@ import { GeometryInputBlock } from "../geometryInputBlock.pure";
 import type { Vector3 } from "../../../../Maths/math.vector";
 import { CreateCapsuleVertexData } from "core/Meshes/Builders/capsuleBuilder.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Defines a block used to generate capsule geometry data
@@ -151,4 +152,15 @@ export class CapsuleBlock extends NodeGeometryBlock {
 
         this.evaluateContext = serializationObject.evaluateContext;
     }
+}
+
+
+let _registered = false;
+export function registerCapsuleBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.CapsuleBlock", CapsuleBlock);
 }

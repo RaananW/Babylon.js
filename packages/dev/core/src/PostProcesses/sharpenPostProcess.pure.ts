@@ -11,6 +11,7 @@ import { SerializationHelperParse } from "../Misc/decorators.serialization.pure"
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Scene } from "../scene";
 import { ThinSharpenPostProcess } from "./thinSharpenPostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * The SharpenPostProcess applies a sharpen kernel to every pixel
@@ -116,4 +117,15 @@ export class SharpenPostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerSharpenPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SharpenPostProcess", SharpenPostProcess);
 }

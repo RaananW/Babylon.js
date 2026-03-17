@@ -4,7 +4,5 @@
  */
 export * from "./fogBlock.pure";
 
-import { FogBlock } from "./fogBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.FogBlock", FogBlock);
+import { registerFogBlock } from "./fogBlock.pure";
+registerFogBlock();

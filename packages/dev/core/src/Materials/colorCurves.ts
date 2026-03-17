@@ -4,8 +4,5 @@
  */
 export * from "./colorCurves.pure";
 
-import { ColorCurves } from "./colorCurves.pure";
-import { SerializationHelper } from "../Misc/decorators.serialization";
-
-// References the dependencies.
-SerializationHelper._ColorCurvesParser = ColorCurves.Parse;
+import { registerColorCurves } from "./colorCurves.pure";
+registerColorCurves();

@@ -3,6 +3,7 @@
 import { Action } from "./action.pure";
 import type { Condition } from "./condition";
 import type { Sound } from "../Audio/sound";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * This defines an action helpful to play a defined sound on a triggered action.
@@ -92,4 +93,17 @@ export class StopSoundAction extends Action {
             parent
         );
     }
+}
+
+
+let _registered = false;
+export function registerDirectAudioActions(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.PlaySoundAction", PlaySoundAction);
+
+    RegisterClass("BABYLON.StopSoundAction", StopSoundAction);
 }

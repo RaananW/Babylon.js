@@ -14,6 +14,7 @@ import { ScreenSpaceReflectionsConfiguration } from "../Rendering/screenSpaceRef
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Scene } from "../scene";
 import { Logger } from "core/Misc/logger";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * The ScreenSpaceReflectionPostProcess performs realtime reflections using only and only the available informations on the screen (positions and normals).
@@ -302,4 +303,15 @@ export class ScreenSpaceReflectionPostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerScreenSpaceReflectionPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ScreenSpaceReflectionPostProcess", ScreenSpaceReflectionPostProcess);
 }

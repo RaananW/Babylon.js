@@ -4,7 +4,5 @@
  */
 export * from "./blackAndWhitePostProcessBlock.pure";
 
-import { NodeRenderGraphBlackAndWhitePostProcessBlock } from "./blackAndWhitePostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphBlackAndWhitePostProcessBlock", NodeRenderGraphBlackAndWhitePostProcessBlock);
+import { registerBlackAndWhitePostProcessBlock } from "./blackAndWhitePostProcessBlock.pure";
+registerBlackAndWhitePostProcessBlock();

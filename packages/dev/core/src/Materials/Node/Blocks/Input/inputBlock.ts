@@ -4,7 +4,5 @@
  */
 export * from "./inputBlock.pure";
 
-import { InputBlock } from "./inputBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.InputBlock", InputBlock);
+import { registerMaterialsNodeBlocksInputInputBlock } from "./inputBlock.pure";
+registerMaterialsNodeBlocksInputInputBlock();

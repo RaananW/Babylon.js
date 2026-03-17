@@ -19,6 +19,7 @@ import { CubeTexture } from "../../../Textures/cubeTexture.pure";
 import { Texture } from "../../../Textures/texture.pure";
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to implement the refraction part of the sub surface module of the PBR material
@@ -435,4 +436,15 @@ export class RefractionBlock extends NodeMaterialBlock {
         this.invertRefractionY = serializationObject.invertRefractionY;
         this.useThicknessAsDepth = !!serializationObject.useThicknessAsDepth;
     }
+}
+
+
+let _registered = false;
+export function registerRefractionBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.RefractionBlock", RefractionBlock);
 }

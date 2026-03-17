@@ -24,6 +24,8 @@ import { RegisterMaterialPlugin, UnregisterMaterialPlugin } from "core/Materials
 import type { Camera } from "core/Cameras/camera";
 import { Matrix } from "core/Maths/math.vector.pure";
 import type { Engine } from "core/Engines/engine";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
+import { RegisterClass } from "../../Misc/typeStore";
 
 export type WebXRDepthUsage = "cpu" | "gpu";
 export type WebXRDepthDataFormat = "ushort" | "float" | "luminance-alpha";
@@ -704,4 +706,24 @@ export class WebXRDepthSensing extends WebXRAbstractFeature {
 
         return internalTexture;
     }
+}
+
+
+let _registered = false;
+export function registerWebXRDepthSensing(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(`BABYLON.DepthSensingMaterialPlugin`, WebXRDepthSensingMaterialPlugin);
+
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRDepthSensing.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRDepthSensing(xrSessionManager, options);
+        },
+        WebXRDepthSensing.Version,
+        false
+    );
 }

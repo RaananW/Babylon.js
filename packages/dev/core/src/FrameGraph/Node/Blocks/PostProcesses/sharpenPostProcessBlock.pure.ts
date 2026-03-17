@@ -5,6 +5,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { FrameGraphSharpenTask } from "core/FrameGraph/Tasks/PostProcesses/sharpenTask";
 import { ThinSharpenPostProcess } from "core/PostProcesses/thinSharpenPostProcess";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the sharpen post process
@@ -80,4 +81,15 @@ export class NodeRenderGraphSharpenPostProcessBlock extends NodeRenderGraphBaseW
         this.colorAmount = serializationObject.colorAmount;
         this.edgeAmount = serializationObject.edgeAmount;
     }
+}
+
+
+let _registered = false;
+export function registerSharpenPostProcessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphSharpenPostProcessBlock", NodeRenderGraphSharpenPostProcessBlock);
 }

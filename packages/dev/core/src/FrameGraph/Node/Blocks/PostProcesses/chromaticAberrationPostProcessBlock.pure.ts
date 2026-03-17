@@ -6,6 +6,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { FrameGraphChromaticAberrationTask } from "core/FrameGraph/Tasks/PostProcesses/chromaticAberrationTask";
 import { ThinChromaticAberrationPostProcess } from "core/PostProcesses/thinChromaticAberrationPostProcess";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the chromatic aberration post process
@@ -94,4 +95,15 @@ export class NodeRenderGraphChromaticAberrationPostProcessBlock extends NodeRend
         this.radialIntensity = serializationObject.radialIntensity;
         this.direction = Vector2.FromArray(serializationObject.direction);
     }
+}
+
+
+let _registered = false;
+export function registerChromaticAberrationPostProcessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphChromaticAberrationPostProcessBlock", NodeRenderGraphChromaticAberrationPostProcessBlock);
 }

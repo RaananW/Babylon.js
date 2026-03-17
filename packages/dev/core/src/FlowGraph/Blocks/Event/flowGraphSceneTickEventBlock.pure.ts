@@ -6,6 +6,7 @@ import { RichTypeNumber } from "core/FlowGraph/flowGraphRichTypes.pure";
 import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { FlowGraphEventType } from "core/FlowGraph/flowGraphEventType";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Payload for the scene tick event.
@@ -76,4 +77,15 @@ export class FlowGraphSceneTickEventBlock extends FlowGraphEventBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.SceneTickEvent;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphSceneTickEventBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.SceneTickEvent, FlowGraphSceneTickEventBlock);
 }

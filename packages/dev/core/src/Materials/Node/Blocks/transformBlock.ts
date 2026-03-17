@@ -4,7 +4,5 @@
  */
 export * from "./transformBlock.pure";
 
-import { TransformBlock } from "./transformBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.TransformBlock", TransformBlock);
+import { registerTransformBlock } from "./transformBlock.pure";
+registerTransformBlock();

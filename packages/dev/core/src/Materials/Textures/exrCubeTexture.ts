@@ -4,7 +4,5 @@
  */
 export * from "./exrCubeTexture.pure";
 
-import { EXRCubeTexture } from "./exrCubeTexture.pure";
-import { RegisterClass } from "../../Misc/typeStore";
-
-RegisterClass("BABYLON.EXRCubeTexture", EXRCubeTexture);
+import { registerExrCubeTexture } from "./exrCubeTexture.pure";
+registerExrCubeTexture();

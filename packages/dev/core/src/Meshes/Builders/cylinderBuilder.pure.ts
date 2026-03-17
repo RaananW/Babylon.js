@@ -4,10 +4,11 @@ import { Vector4, Vector3, Vector2 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
 import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
-import type { Scene } from "../../scene.pure";
+
 import type { Nullable } from "../../types";
 import { Axis } from "../../Maths/math.axis";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
+import { Scene } from "../../scene.pure";
 
 /**
  * Creates the VertexData for a cylinder, cone or prism
@@ -370,3 +371,47 @@ export const CylinderBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateCylinder,
 };
+
+
+let _registered = false;
+export function registerCylinderBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VertexData.CreateCylinder = CreateCylinderVertexData;
+
+    Mesh.CreateCylinder = (
+        name: string,
+        height: number,
+        diameterTop: number,
+        diameterBottom: number,
+        tessellation: number,
+        subdivisions: any,
+        scene?: Scene,
+        updatable?: any,
+        sideOrientation?: number
+    ): Mesh => {
+        if (scene === undefined || !(scene instanceof Scene)) {
+            if (scene !== undefined) {
+                sideOrientation = updatable || Mesh.DEFAULTSIDE;
+                updatable = scene;
+            }
+            scene = <Scene>subdivisions;
+            subdivisions = 1;
+        }
+
+        const options = {
+            height,
+            diameterTop,
+            diameterBottom,
+            tessellation,
+            subdivisions,
+            sideOrientation,
+            updatable,
+        };
+
+        return CreateCylinder(name, options, scene);
+    };
+}

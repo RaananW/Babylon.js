@@ -4,7 +4,5 @@
  */
 export * from "./randomBlock.pure";
 
-import { RandomBlock } from "./randomBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.RandomBlock", RandomBlock);
+import { registerRandomBlock } from "./randomBlock.pure";
+registerRandomBlock();

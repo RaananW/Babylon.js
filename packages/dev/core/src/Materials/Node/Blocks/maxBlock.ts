@@ -4,7 +4,5 @@
  */
 export * from "./maxBlock.pure";
 
-import { MaxBlock } from "./maxBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MaxBlock", MaxBlock);
+import { registerMaxBlock } from "./maxBlock.pure";
+registerMaxBlock();

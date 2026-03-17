@@ -4,7 +4,5 @@
  */
 export * from "./screenSpaceCurvaturePostProcessBlock.pure";
 
-import { NodeRenderGraphScreenSpaceCurvaturePostProcessBlock } from "./screenSpaceCurvaturePostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphScreenSpaceCurvaturePostProcessBlock", NodeRenderGraphScreenSpaceCurvaturePostProcessBlock);
+import { registerScreenSpaceCurvaturePostProcessBlock } from "./screenSpaceCurvaturePostProcessBlock.pure";
+registerScreenSpaceCurvaturePostProcessBlock();

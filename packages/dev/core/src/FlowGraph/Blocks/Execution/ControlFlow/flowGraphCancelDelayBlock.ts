@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphCancelDelayBlock.pure";
 
-import { FlowGraphCancelDelayBlock } from "./flowGraphCancelDelayBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.CancelDelay, FlowGraphCancelDelayBlock);
+import { registerFlowGraphCancelDelayBlock } from "./flowGraphCancelDelayBlock.pure";
+registerFlowGraphCancelDelayBlock();

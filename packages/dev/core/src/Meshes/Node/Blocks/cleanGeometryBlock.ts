@@ -4,7 +4,5 @@
  */
 export * from "./cleanGeometryBlock.pure";
 
-import { CleanGeometryBlock } from "./cleanGeometryBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.CleanGeometryBlock", CleanGeometryBlock);
+import { registerCleanGeometryBlock } from "./cleanGeometryBlock.pure";
+registerCleanGeometryBlock();

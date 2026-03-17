@@ -9,6 +9,7 @@ import type { AbstractEngine } from "../Engines/abstractEngine";
 import { Constants } from "../Engines/constants";
 import { serialize } from "../Misc/decorators";
 import { ThinExtractHighlightsPostProcess } from "./thinExtractHighlightsPostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * The extract highlights post process sets all pixels to black except pixels above the specified luminance threshold. Used as the first step for a bloom effect.
@@ -86,4 +87,15 @@ export class ExtractHighlightsPostProcess extends PostProcess {
             }
         });
     }
+}
+
+
+let _registered = false;
+export function registerExtractHighlightsPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ExtractHighlightsPostProcess", ExtractHighlightsPostProcess);
 }

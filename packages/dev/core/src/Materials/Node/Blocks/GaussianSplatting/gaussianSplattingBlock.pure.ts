@@ -10,6 +10,7 @@ import type { GaussianSplattingMesh } from "core/Meshes/GaussianSplatting/gaussi
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import type { AbstractMesh } from "core/Meshes/abstractMesh";
 import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used for the Gaussian Splatting
@@ -185,4 +186,15 @@ export class GaussianSplattingBlock extends NodeMaterialBlock {
         state.compilationString += `${state._declareOutput(output)} = gaussianSplatting(${input}.xy, ${splatPosition.associatedVariableName}, ${splatScaleParameter}, covA, covB, ${world.associatedVariableName}, ${view.associatedVariableName}, ${projection.associatedVariableName}${uniforms});\n`;
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerGaussianSplattingBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GaussianSplattingBlock", GaussianSplattingBlock);
 }

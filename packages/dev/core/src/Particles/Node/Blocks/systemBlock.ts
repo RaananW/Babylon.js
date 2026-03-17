@@ -4,7 +4,5 @@
  */
 export * from "./systemBlock.pure";
 
-import { SystemBlock } from "./systemBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.SystemBlock", SystemBlock);
+import { registerSystemBlock } from "./systemBlock.pure";
+registerSystemBlock();

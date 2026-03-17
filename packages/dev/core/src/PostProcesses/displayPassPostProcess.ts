@@ -4,7 +4,5 @@
  */
 export * from "./displayPassPostProcess.pure";
 
-import { DisplayPassPostProcess } from "./displayPassPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.DisplayPassPostProcess", DisplayPassPostProcess);
+import { registerDisplayPassPostProcess } from "./displayPassPostProcess.pure";
+registerDisplayPassPostProcess();

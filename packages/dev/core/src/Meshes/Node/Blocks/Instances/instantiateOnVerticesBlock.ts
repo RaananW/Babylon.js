@@ -4,7 +4,5 @@
  */
 export * from "./instantiateOnVerticesBlock.pure";
 
-import { InstantiateOnVerticesBlock } from "./instantiateOnVerticesBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.InstantiateOnVerticesBlock", InstantiateOnVerticesBlock);
+import { registerInstantiateOnVerticesBlock } from "./instantiateOnVerticesBlock.pure";
+registerInstantiateOnVerticesBlock();

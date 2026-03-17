@@ -4,7 +4,5 @@
  */
 export * from "./geometryOutputBlock.pure";
 
-import { GeometryOutputBlock } from "./geometryOutputBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryOutputBlock", GeometryOutputBlock);
+import { registerGeometryOutputBlock } from "./geometryOutputBlock.pure";
+registerGeometryOutputBlock();

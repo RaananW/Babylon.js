@@ -4,7 +4,5 @@
  */
 export * from "./instancesBlock.pure";
 
-import { InstancesBlock } from "./instancesBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.InstancesBlock", InstancesBlock);
+import { registerInstancesBlock } from "./instancesBlock.pure";
+registerInstancesBlock();

@@ -4,7 +4,5 @@
  */
 export * from "./refractionPostProcess.pure";
 
-import { RefractionPostProcess } from "./refractionPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.RefractionPostProcess", RefractionPostProcess);
+import { registerRefractionPostProcess } from "./refractionPostProcess.pure";
+registerRefractionPostProcess();

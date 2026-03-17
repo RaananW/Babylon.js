@@ -4,7 +4,5 @@
  */
 export * from "./ssrPostProcessBlock.pure";
 
-import { NodeRenderGraphSSRPostProcessBlock } from "./ssrPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphSSRPostProcessBlock", NodeRenderGraphSSRPostProcessBlock);
+import { registerSsrPostProcessBlock } from "./ssrPostProcessBlock.pure";
+registerSsrPostProcessBlock();

@@ -7,6 +7,8 @@ import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { Light } from "./light";
 import { ShadowLight } from "./shadowLight";
 import type { Effect } from "../Materials/effect";
+import { Node } from "../node";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * A point light is a light defined by an unique point in world space.
@@ -218,4 +220,20 @@ export class PointLight extends ShadowLight {
     public prepareLightSpecificDefines(defines: any, lightIndex: number): void {
         defines["POINTLIGHT" + lightIndex] = true;
     }
+}
+
+
+let _registered = false;
+export function registerPointLight(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("Light_Type_0", (name, scene) => {
+        return () => new PointLight(name, Vector3.Zero(), scene);
+    });
+
+    // Register Class Name
+    RegisterClass("BABYLON.PointLight", PointLight);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./materialPluginBase.pure";
 
-import { MaterialPluginBase } from "./materialPluginBase.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.MaterialPluginBase", MaterialPluginBase);
+import { registerMaterialPluginBase } from "./materialPluginBase.pure";
+registerMaterialPluginBase();

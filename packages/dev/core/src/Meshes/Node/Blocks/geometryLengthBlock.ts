@@ -4,7 +4,5 @@
  */
 export * from "./geometryLengthBlock.pure";
 
-import { GeometryLengthBlock } from "./geometryLengthBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryLengthBlock", GeometryLengthBlock);
+import { registerGeometryLengthBlock } from "./geometryLengthBlock.pure";
+registerGeometryLengthBlock();

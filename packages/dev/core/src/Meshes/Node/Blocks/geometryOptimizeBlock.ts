@@ -4,7 +4,5 @@
  */
 export * from "./geometryOptimizeBlock.pure";
 
-import { GeometryOptimizeBlock } from "./geometryOptimizeBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryOptimizeBlock", GeometryOptimizeBlock);
+import { registerGeometryOptimizeBlock } from "./geometryOptimizeBlock.pure";
+registerGeometryOptimizeBlock();

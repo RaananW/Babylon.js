@@ -4,7 +4,5 @@
  */
 export * from "./pbrMaterial.pure";
 
-import { PBRMaterial } from "./pbrMaterial.pure";
-import { RegisterClass } from "../../Misc/typeStore";
-
-RegisterClass("BABYLON.PBRMaterial", PBRMaterial);
+import { registerPbrMaterial } from "./pbrMaterial.pure";
+registerPbrMaterial();

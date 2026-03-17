@@ -13,6 +13,7 @@ import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
 import { InputBlock } from "../Input/inputBlock.pure";
 import { GetFogState } from "core/Materials/materialHelper.functions";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to add support for scene fog
@@ -224,4 +225,15 @@ export class FogBlock extends NodeMaterialBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerFogBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.FogBlock", FogBlock);
 }

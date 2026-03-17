@@ -5,6 +5,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryC
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import type { TeleportOutBlock } from "./teleportOutBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Defines a block used to teleport a value to an endpoint
@@ -150,4 +151,15 @@ export class TeleportInBlock extends NodeGeometryBlock {
             };
         }
     }
+}
+
+
+let _registered = false;
+export function registerMeshesNodeBlocksTeleportTeleportInBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.TeleportInBlock", TeleportInBlock);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./minBlock.pure";
 
-import { MinBlock } from "./minBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MinBlock", MinBlock);
+import { registerMinBlock } from "./minBlock.pure";
+registerMinBlock();

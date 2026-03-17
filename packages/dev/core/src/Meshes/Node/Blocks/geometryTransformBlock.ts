@@ -4,7 +4,5 @@
  */
 export * from "./geometryTransformBlock.pure";
 
-import { GeometryTransformBlock } from "./geometryTransformBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryTransformBlock", GeometryTransformBlock);
+import { registerGeometryTransformBlock } from "./geometryTransformBlock.pure";
+registerGeometryTransformBlock();

@@ -4,6 +4,7 @@ import type { NodeRenderGraphConnectionPoint, Scene, FrameGraph, NodeRenderGraph
 import { NodeRenderGraphBlock } from "../nodeRenderGraphBlock";
 import { NodeRenderGraphBlockConnectionPointTypes } from "../Types/nodeRenderGraphTypes";
 import { FrameGraphCopyToBackbufferColorTask } from "../../Tasks/Texture/copyToBackbufferColorTask";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to generate the final graph
@@ -61,4 +62,15 @@ export class NodeRenderGraphOutputBlock extends NodeRenderGraphBlock {
             this._frameGraphTask.sourceTexture = textureConnectedPoint.value as FrameGraphTextureHandle;
         }
     }
+}
+
+
+let _registered = false;
+export function registerOutputBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphOutputBlock", NodeRenderGraphOutputBlock);
 }

@@ -7,6 +7,7 @@ import type { Color4 } from "../../../../Maths/math.color.pure";
 import { Color4FromArray } from "../../../../Maths/math.color.pure";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { FrameGraphClearTextureTask } from "../../../Tasks/Texture/clearTextureTask";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to clear a texture
@@ -172,4 +173,15 @@ export class NodeRenderGraphClearBlock extends NodeRenderGraphBlock {
         this.clearDepth = serializationObject.clearDepth;
         this.clearStencil = serializationObject.clearStencil;
     }
+}
+
+
+let _registered = false;
+export function registerClearBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphClearBlock", NodeRenderGraphClearBlock);
 }

@@ -7,6 +7,7 @@ import type { AbstractEngine } from "../../Engines/abstractEngine";
 import { PanoramaToCubeMapTools } from "../../Misc/HighDynamicRange/panoramaToCubemap";
 import type { CubeMapInfo } from "../../Misc/HighDynamicRange/panoramaToCubemap";
 import { ReadExrDataAsync } from "./Loaders/exrTextureLoader";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /**
  * This represents a texture coming from an EXR input.
@@ -112,4 +113,15 @@ export class EXRCubeTexture extends EnvCubeTexture {
         this._Parse(parsedTexture, texture);
         return texture;
     }
+}
+
+
+let _registered = false;
+export function registerExrCubeTexture(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.EXRCubeTexture", EXRCubeTexture);
 }

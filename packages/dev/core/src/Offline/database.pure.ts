@@ -6,6 +6,7 @@ import { Logger } from "../Misc/logger";
 import { GetTGAHeader } from "../Misc/tga";
 import type { IOfflineProvider } from "./IOfflineProvider";
 import { WebRequest } from "../Misc/webRequest";
+import { AbstractEngine } from "core/Engines/abstractEngine";
 
 /**
  * Class used to enable access to IndexedDB
@@ -747,4 +748,18 @@ export class Database implements IOfflineProvider {
 
         return false;
     }
+}
+
+
+let _registered = false;
+export function registerDatabase(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // Sets the default offline provider to Babylon.js
+    AbstractEngine.OfflineProviderFactory = (urlToScene: string, callbackManifestChecked: (checked: boolean) => any, disableManifestCheck = false) => {
+        return new Database(urlToScene, callbackManifestChecked, disableManifestCheck);
+    };
 }

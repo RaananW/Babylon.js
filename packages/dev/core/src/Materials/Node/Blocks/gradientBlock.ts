@@ -4,7 +4,5 @@
  */
 export * from "./gradientBlock.pure";
 
-import { GradientBlock } from "./gradientBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GradientBlock", GradientBlock);
+import { registerGradientBlock } from "./gradientBlock.pure";
+registerGradientBlock();

@@ -9,6 +9,7 @@ import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnec
 import { RichTypeAny, RichTypeNumber, RichTypeVector2 } from "core/FlowGraph/flowGraphRichTypes.pure";
 import type { Vector2 } from "core/Maths/math.vector";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * An easing block that generates a BezierCurveEase easingFunction object based on the data provided.
@@ -76,4 +77,15 @@ export class FlowGraphBezierCurveEasingBlock extends FlowGraphBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.BezierCurveEasing;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphBezierCurveEasingBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.BezierCurveEasing, FlowGraphBezierCurveEasingBlock);
 }

@@ -20,6 +20,7 @@ import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConne
 import { EngineStore } from "../../../../Engines/engineStore";
 import type { PrePassTextureBlock } from "../Input/prePassTextureBlock";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to read a texture from a sampler
@@ -768,4 +769,15 @@ export class TextureBlock extends NodeMaterialBlock {
             }
         }
     }
+}
+
+
+let _registered = false;
+export function registerTextureBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.TextureBlock", TextureBlock);
 }

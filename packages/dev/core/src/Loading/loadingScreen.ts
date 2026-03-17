@@ -4,9 +4,5 @@
  */
 export * from "./loadingScreen.pure";
 
-import { DefaultLoadingScreen } from "./loadingScreen.pure";
-import { AbstractEngine } from "../Engines/abstractEngine";
-
-AbstractEngine.DefaultLoadingScreenFactory = (canvas: HTMLCanvasElement) => {
-    return new DefaultLoadingScreen(canvas);
-};
+import { registerLoadingScreen } from "./loadingScreen.pure";
+registerLoadingScreen();

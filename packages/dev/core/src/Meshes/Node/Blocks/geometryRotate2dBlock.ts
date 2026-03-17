@@ -4,7 +4,5 @@
  */
 export * from "./geometryRotate2dBlock.pure";
 
-import { GeometryRotate2dBlock } from "./geometryRotate2dBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryRotate2dBlock", GeometryRotate2dBlock);
+import { registerGeometryRotate2dBlock } from "./geometryRotate2dBlock.pure";
+registerGeometryRotate2dBlock();

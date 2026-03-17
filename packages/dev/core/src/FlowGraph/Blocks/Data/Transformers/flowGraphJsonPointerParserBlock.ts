@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphJsonPointerParserBlock.pure";
 
-import { FlowGraphJsonPointerParserBlock } from "./flowGraphJsonPointerParserBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.JsonPointerParser, FlowGraphJsonPointerParserBlock);
+import { registerFlowGraphJsonPointerParserBlock } from "./flowGraphJsonPointerParserBlock.pure";
+registerFlowGraphJsonPointerParserBlock();

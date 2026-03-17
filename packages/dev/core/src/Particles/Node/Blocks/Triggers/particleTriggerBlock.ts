@@ -4,7 +4,5 @@
  */
 export * from "./particleTriggerBlock.pure";
 
-import { ParticleTriggerBlock } from "./particleTriggerBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleTriggerBlock", ParticleTriggerBlock);
+import { registerParticleTriggerBlock } from "./particleTriggerBlock.pure";
+registerParticleTriggerBlock();

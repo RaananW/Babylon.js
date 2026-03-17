@@ -11,6 +11,7 @@ import type { BaseTexture } from "../../../Textures/baseTexture";
 import type { Nullable } from "../../../../types";
 import { Texture } from "../../../Textures/texture.pure";
 import type { Scene } from "../../../../scene";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Base block used for the particle texture
@@ -239,4 +240,15 @@ export class ParticleTextureBlock extends NodeMaterialBlock {
             this.texture = Texture.Parse(serializationObject.texture, scene, rootUrl) as Texture;
         }
     }
+}
+
+
+let _registered = false;
+export function registerParticleTextureBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ParticleTextureBlock", ParticleTextureBlock);
 }

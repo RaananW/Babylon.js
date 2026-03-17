@@ -4,10 +4,5 @@
  */
 export * from "./linesMesh.pure";
 
-import { LinesMesh } from "./linesMesh.pure";
-import type { Scene } from "../scene";
-import { Mesh } from "../Meshes/mesh";
-
-Mesh._LinesMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
-    return LinesMesh.Parse(parsedMesh, scene);
-};
+import { registerLinesMesh } from "./linesMesh.pure";
+registerLinesMesh();

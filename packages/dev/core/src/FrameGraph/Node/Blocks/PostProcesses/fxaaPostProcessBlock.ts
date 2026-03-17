@@ -4,7 +4,5 @@
  */
 export * from "./fxaaPostProcessBlock.pure";
 
-import { NodeRenderGraphFXAAPostProcessBlock } from "./fxaaPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphFXAAPostProcessBlock", NodeRenderGraphFXAAPostProcessBlock);
+import { registerFxaaPostProcessBlock } from "./fxaaPostProcessBlock.pure";
+registerFxaaPostProcessBlock();

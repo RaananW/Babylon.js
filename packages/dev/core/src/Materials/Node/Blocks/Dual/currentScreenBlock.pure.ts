@@ -13,6 +13,7 @@ import type { Scene } from "../../../../scene";
 import type { InputBlock } from "../Input/inputBlock";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { Constants } from "core/Engines/constants";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Base block used as input for post process
@@ -348,4 +349,15 @@ export class CurrentScreenBlock extends NodeMaterialBlock {
             this.texture = Texture.Parse(serializationObject.texture, scene, rootUrl) as Texture;
         }
     }
+}
+
+
+let _registered = false;
+export function registerCurrentScreenBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.CurrentScreenBlock", CurrentScreenBlock);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./multiplyBlock.pure";
 
-import { MultiplyBlock } from "./multiplyBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MultiplyBlock", MultiplyBlock);
+import { registerMultiplyBlock } from "./multiplyBlock.pure";
+registerMultiplyBlock();

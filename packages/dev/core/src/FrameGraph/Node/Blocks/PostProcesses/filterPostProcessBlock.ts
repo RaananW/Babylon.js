@@ -4,7 +4,5 @@
  */
 export * from "./filterPostProcessBlock.pure";
 
-import { NodeRenderGraphFilterPostProcessBlock } from "./filterPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphFilterPostProcessBlock", NodeRenderGraphFilterPostProcessBlock);
+import { registerFilterPostProcessBlock } from "./filterPostProcessBlock.pure";
+registerFilterPostProcessBlock();

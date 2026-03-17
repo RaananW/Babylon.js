@@ -3,8 +3,10 @@
 import { Camera } from "../../Cameras/camera";
 import { GamepadCamera } from "../../Cameras/gamepadCamera.pure";
 import type { Scene } from "../../scene";
-import type { Vector3 } from "../../Maths/math.vector.pure";
+
 import { _SetStereoscopicRigMode } from "../RigModes/stereoscopicRigMode";
+import { Node } from "../../node";
+import { Vector3 } from "../../Maths/math.vector.pure";
 
 /**
  * Camera used to simulate stereoscopic rendering (based on GamepadCamera)
@@ -37,4 +39,17 @@ export class StereoscopicGamepadCamera extends GamepadCamera {
     }
 
     protected override _setRigMode = () => _SetStereoscopicRigMode(this);
+}
+
+
+let _registered = false;
+export function registerStereoscopicGamepadCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("StereoscopicGamepadCamera", (name, scene, options) => {
+        return () => new StereoscopicGamepadCamera(name, Vector3.Zero(), options.interaxial_distance, options.isStereoscopicSideBySide, scene);
+    });
 }

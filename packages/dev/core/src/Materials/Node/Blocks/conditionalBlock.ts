@@ -4,7 +4,5 @@
  */
 export * from "./conditionalBlock.pure";
 
-import { ConditionalBlock } from "./conditionalBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ConditionalBlock", ConditionalBlock);
+import { registerConditionalBlock } from "./conditionalBlock.pure";
+registerConditionalBlock();

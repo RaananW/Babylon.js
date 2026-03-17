@@ -13,6 +13,7 @@ import { BaseParticleSystem } from "core/Particles/baseParticleSystem.pure";
 import { NodeParticleBlock } from "core/Particles/Node/nodeParticleBlock";
 import { _TriggerSubEmitter } from "core/Particles/Node/Blocks/Triggers/triggerTools";
 import { NodeParticleBlockConnectionPointTypes } from "core/Particles/Node/Enums/nodeParticleBlockConnectionPointTypes";
+import { RegisterClass } from "core/Misc/typeStore";
 
 type CustomShader = {
     shaderPath: { fragmentElement: string };
@@ -385,4 +386,15 @@ export class SystemBlock extends NodeParticleBlock {
             this.customShader = serializationObject.customShader;
         }
     }
+}
+
+
+let _registered = false;
+export function registerSystemBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SystemBlock", SystemBlock);
 }

@@ -7,6 +7,7 @@ import { VertexDataMaterialInfo } from "../../../../Meshes/mesh.vertexData.pure"
 import type { VertexData } from "../../../../Meshes/mesh.vertexData";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to affect a material ID to a geometry
@@ -120,4 +121,15 @@ export class SetMaterialIDBlock extends NodeGeometryBlock {
             this.evaluateContext = serializationObject.evaluateContext;
         }
     }
+}
+
+
+let _registered = false;
+export function registerSetMaterialIDBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SetMaterialIDBlock", SetMaterialIDBlock);
 }

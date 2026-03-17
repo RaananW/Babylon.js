@@ -365,3 +365,30 @@ export const BasisTools = {
      */
     LoadTextureFromTranscodeResult,
 };
+
+
+let _registered = false;
+export function registerBasis(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Object.defineProperty(BasisTools, "JSModuleURL", {
+        get: function (this: null) {
+            return BasisToolsOptions.JSModuleURL;
+        },
+        set: function (this: null, value: string) {
+            BasisToolsOptions.JSModuleURL = value;
+        },
+    });
+
+    Object.defineProperty(BasisTools, "WasmModuleURL", {
+        get: function (this: null) {
+            return BasisToolsOptions.WasmModuleURL;
+        },
+        set: function (this: null, value: string) {
+            BasisToolsOptions.WasmModuleURL = value;
+        },
+    });
+}

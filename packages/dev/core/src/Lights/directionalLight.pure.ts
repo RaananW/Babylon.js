@@ -10,6 +10,8 @@ import { ShadowLight } from "./shadowLight";
 import type { Effect } from "../Materials/effect";
 import type { Nullable } from "../types";
 import { Constants } from "core/Engines/constants";
+import { Node } from "../node";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * A directional light is defined by a direction (what a surprise!).
@@ -345,4 +347,20 @@ export class DirectionalLight extends ShadowLight {
     public prepareLightSpecificDefines(defines: any, lightIndex: number): void {
         defines["DIRLIGHT" + lightIndex] = true;
     }
+}
+
+
+let _registered = false;
+export function registerDirectionalLight(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("Light_Type_1", (name, scene) => {
+        return () => new DirectionalLight(name, Vector3.Zero(), scene);
+    });
+
+    // Register Class Name
+    RegisterClass("BABYLON.DirectionalLight", DirectionalLight);
 }

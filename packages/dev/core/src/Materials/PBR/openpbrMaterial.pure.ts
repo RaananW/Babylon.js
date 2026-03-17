@@ -66,6 +66,7 @@ import type { RenderTargetTexture } from "../Textures/renderTargetTexture";
 import type { IAnimatable } from "../../Animations/animatable.interface";
 import { Tools } from "../../Misc/tools.pure";
 import type { UniformBuffer } from "../../Materials/uniformBuffer";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -3431,4 +3432,15 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
         // External config
         this._callbackPluginEventPrepareDefines(this._eventInfo);
     }
+}
+
+
+let _registered = false;
+export function registerOpenpbrMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.OpenPBRMaterial", OpenPBRMaterial);
 }

@@ -25,6 +25,7 @@ import type { WebGPURenderTargetWrapper } from "core/Engines/WebGPU/webgpuRender
 import { expandToProperty, serialize } from "core/Misc/decorators";
 import { MaterialDefines } from "core/Materials/materialDefines";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Reflective Shadow Maps were first described in http://www.klayge.org/material/3_12/GI/rsm.pdf by Carsten Dachsbacher and Marc Stamminger
@@ -1047,4 +1048,15 @@ export class GIRSMRenderPluginMaterial extends MaterialPluginBase {
 
         return shaderType === "vertex" ? null : frag;
     }
+}
+
+
+let _registered = false;
+export function registerGiRSMManager(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(`BABYLON.GIRSMRenderPluginMaterial`, GIRSMRenderPluginMaterial);
 }

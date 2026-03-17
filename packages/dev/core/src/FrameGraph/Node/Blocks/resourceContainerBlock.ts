@@ -4,7 +4,5 @@
  */
 export * from "./resourceContainerBlock.pure";
 
-import { NodeRenderGraphResourceContainerBlock } from "./resourceContainerBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphResourceContainerBlock", NodeRenderGraphResourceContainerBlock);
+import { registerResourceContainerBlock } from "./resourceContainerBlock.pure";
+registerResourceContainerBlock();

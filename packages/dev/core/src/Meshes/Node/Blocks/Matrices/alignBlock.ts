@@ -4,7 +4,5 @@
  */
 export * from "./alignBlock.pure";
 
-import { AlignBlock } from "./alignBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.AlignBlock", AlignBlock);
+import { registerAlignBlock } from "./alignBlock.pure";
+registerAlignBlock();

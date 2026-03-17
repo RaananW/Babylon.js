@@ -4,7 +4,5 @@
  */
 export * from "./setPositionsBlock.pure";
 
-import { SetPositionsBlock } from "./setPositionsBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SetPositionsBlock", SetPositionsBlock);
+import { registerSetPositionsBlock } from "./setPositionsBlock.pure";
+registerSetPositionsBlock();

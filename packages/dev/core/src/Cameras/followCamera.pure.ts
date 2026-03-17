@@ -8,6 +8,8 @@ import type { Scene } from "../scene";
 import { TmpVectors, Vector3 } from "../Maths/math.vector.pure";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { FollowCameraInputsManager } from "./followCameraInputsManager";
+import { Node } from "../node";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * A follow camera takes a mesh as a target and follows it as it moves. Both a free camera version followCamera and
@@ -299,4 +301,26 @@ export class ArcFollowCamera extends TargetCamera {
     public override getClassName(): string {
         return "ArcFollowCamera";
     }
+}
+
+
+let _registered = false;
+export function registerFollowCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("FollowCamera", (name, scene) => {
+        return () => new FollowCamera(name, Vector3.Zero(), scene);
+    });
+
+    Node.AddNodeConstructor("ArcFollowCamera", (name, scene) => {
+        return () => new ArcFollowCamera(name, 0, 0, 1.0, null, scene);
+    });
+
+    // Register Class Name
+    RegisterClass("BABYLON.FollowCamera", FollowCamera);
+
+    RegisterClass("BABYLON.ArcFollowCamera", ArcFollowCamera);
 }

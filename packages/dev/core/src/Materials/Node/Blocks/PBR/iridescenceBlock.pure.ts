@@ -13,6 +13,7 @@ import type { Scene } from "../../../../scene";
 import type { Nullable } from "../../../../types";
 import { PBRIridescenceConfiguration } from "../../../../Materials/PBR/pbrIridescenceConfiguration";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to implement the iridescence module of the PBR material
@@ -178,4 +179,15 @@ export class IridescenceBlock extends NodeMaterialBlock {
     public override _deserialize(serializationObject: any, scene: Scene, rootUrl: string) {
         super._deserialize(serializationObject, scene, rootUrl);
     }
+}
+
+
+let _registered = false;
+export function registerIridescenceBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.IridescenceBlock", IridescenceBlock);
 }

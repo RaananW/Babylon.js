@@ -97,3 +97,24 @@ export const LatheBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateLathe,
 };
+
+
+let _registered = false;
+export function registerLatheBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Mesh.CreateLathe = (name: string, shape: Vector3[], radius: number, tessellation: number, scene: Scene, updatable?: boolean, sideOrientation?: number): Mesh => {
+        const options = {
+            shape: shape,
+            radius: radius,
+            tessellation: tessellation,
+            sideOrientation: sideOrientation,
+            updatable: updatable,
+        };
+
+        return CreateLathe(name, options, scene);
+    };
+}

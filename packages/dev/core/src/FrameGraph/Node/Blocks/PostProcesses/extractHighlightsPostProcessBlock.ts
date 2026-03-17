@@ -4,7 +4,5 @@
  */
 export * from "./extractHighlightsPostProcessBlock.pure";
 
-import { NodeRenderGraphExtractHighlightsPostProcessBlock } from "./extractHighlightsPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphExtractHighlightsPostProcessBlock", NodeRenderGraphExtractHighlightsPostProcessBlock);
+import { registerExtractHighlightsPostProcessBlock } from "./extractHighlightsPostProcessBlock.pure";
+registerExtractHighlightsPostProcessBlock();

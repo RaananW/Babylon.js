@@ -4,7 +4,5 @@
  */
 export * from "./elbowBlock.pure";
 
-import { ElbowBlock } from "./elbowBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ElbowBlock", ElbowBlock);
+import { registerMaterialsNodeBlocksElbowBlock } from "./elbowBlock.pure";
+registerMaterialsNodeBlocksElbowBlock();

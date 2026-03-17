@@ -7,6 +7,7 @@ import type { FlowGraphSignalConnection } from "../../../flowGraphSignalConnecti
 import { FlowGraphExecutionBlockWithOutSignal } from "../../../flowGraphExecutionBlockWithOutSignal";
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * A block that throttles the execution of its output flow.
@@ -75,4 +76,15 @@ export class FlowGraphThrottleBlock extends FlowGraphExecutionBlockWithOutSignal
     public override getClassName(): string {
         return FlowGraphBlockNames.Throttle;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphThrottleBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.Throttle, FlowGraphThrottleBlock);
 }

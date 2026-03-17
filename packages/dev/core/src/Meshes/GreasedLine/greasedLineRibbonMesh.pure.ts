@@ -2,7 +2,7 @@
 
 import type { Scene } from "../../scene";
 import { Quaternion, TmpVectors, Vector3 } from "../../Maths/math.vector.pure";
-import type { Mesh } from "../mesh.pure";
+
 import { Buffer } from "../../Buffers/buffer.pure";
 import type { Nullable } from "../../types";
 import type { Node } from "../../node";
@@ -11,6 +11,7 @@ import { GreasedLineToolsConvertPoints, GreasedLineToolsToVector3Array } from ".
 import type { GreasedLineMeshOptions, GreasedLineRibbonOptions } from "./greasedLineBaseMesh";
 import { GreasedLineBaseMesh, GreasedLineRibbonAutoDirectionMode, GreasedLineRibbonFacesMode, GreasedLineRibbonPointsMode } from "./greasedLineBaseMesh";
 import type { VertexData } from "../mesh.vertexData";
+import { Mesh } from "../mesh.pure";
 
 /**
  * GreasedLineRibbonMesh
@@ -565,4 +566,17 @@ export class GreasedLineRibbonMesh extends GreasedLineBaseMesh {
 
         return vertexData;
     }
+}
+
+
+let _registered = false;
+export function registerGreasedLineRibbonMesh(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Mesh._GreasedLineRibbonMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
+        return GreasedLineRibbonMesh.Parse(parsedMesh, scene);
+    };
 }

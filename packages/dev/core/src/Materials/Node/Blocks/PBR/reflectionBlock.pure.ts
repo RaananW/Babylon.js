@@ -18,6 +18,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import type { Scene } from "../../../../scene";
 import { Logger } from "core/Misc/logger";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to implement the reflection module of the PBR material
@@ -541,4 +542,15 @@ export class ReflectionBlock extends ReflectionTextureBaseBlock {
             this.texture.gammaSpace = serializationObject.gammaSpace;
         }
     }
+}
+
+
+let _registered = false;
+export function registerReflectionBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ReflectionBlock", ReflectionBlock);
 }

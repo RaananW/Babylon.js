@@ -28,6 +28,7 @@ import {
     PrepareUniformsAndSamplersList,
 } from "../materialHelper.functions";
 import { ShaderLanguage } from "../shaderLanguage";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /**
  * Computes the maximum number of Gaussian Splatting compound parts supported by the given engine.
@@ -703,4 +704,15 @@ export class GaussianSplattingMaterial extends PushMaterial {
 
         return material;
     }
+}
+
+
+let _registered = false;
+export function registerGaussianSplattingMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GaussianSplattingMaterial", GaussianSplattingMaterial);
 }

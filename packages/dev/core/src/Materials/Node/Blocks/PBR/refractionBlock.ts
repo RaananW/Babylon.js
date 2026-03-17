@@ -4,7 +4,5 @@
  */
 export * from "./refractionBlock.pure";
 
-import { RefractionBlock } from "./refractionBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.RefractionBlock", RefractionBlock);
+import { registerRefractionBlock } from "./refractionBlock.pure";
+registerRefractionBlock();

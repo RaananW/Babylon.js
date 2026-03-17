@@ -9,6 +9,7 @@ import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import type { FlowGraphNumber } from "core/FlowGraph/utils";
 import { getNumericValue, isNumeric } from "core/FlowGraph/utils";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Configuration for a switch block.
@@ -116,4 +117,15 @@ export class FlowGraphSwitchBlock<T extends FlowGraphNumber> extends FlowGraphEx
         super.serialize(serializationObject);
         serializationObject.cases = this.config.cases;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphSwitchBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.Switch, FlowGraphSwitchBlock);
 }

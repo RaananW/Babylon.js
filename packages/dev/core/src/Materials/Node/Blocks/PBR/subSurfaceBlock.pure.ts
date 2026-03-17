@@ -15,6 +15,7 @@ import { RefractionBlock } from "./refractionBlock.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { PBRSubSurfaceConfiguration } from "core/Materials/PBR/pbrSubSurfaceConfiguration";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to implement the sub surface module of the PBR material
@@ -309,4 +310,15 @@ export class SubSurfaceBlock extends NodeMaterialBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerSubSurfaceBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SubSurfaceBlock", SubSurfaceBlock);
 }

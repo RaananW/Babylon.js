@@ -4,7 +4,5 @@
  */
 export * from "./particleConditionBlock.pure";
 
-import { ParticleConditionBlock } from "./particleConditionBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleConditionBlock", ParticleConditionBlock);
+import { registerParticleConditionBlock } from "./particleConditionBlock.pure";
+registerParticleConditionBlock();

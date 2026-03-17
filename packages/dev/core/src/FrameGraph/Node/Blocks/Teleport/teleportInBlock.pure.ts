@@ -3,6 +3,7 @@
 import type { NodeRenderGraphConnectionPoint, Scene, Nullable, FrameGraph, NodeRenderGraphTeleportOutBlock } from "core/index";
 import { NodeRenderGraphBlockConnectionPointTypes } from "../../Types/nodeRenderGraphTypes";
 import { NodeRenderGraphBlock } from "../../nodeRenderGraphBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Defines a block used to teleport a value to an endpoint
@@ -155,4 +156,15 @@ export class NodeRenderGraphTeleportInBlock extends NodeRenderGraphBlock {
 
         this._endpoints = [];
     }
+}
+
+
+let _registered = false;
+export function registerFrameGraphNodeBlocksTeleportTeleportInBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphTeleportInBlock", NodeRenderGraphTeleportInBlock);
 }

@@ -24,6 +24,7 @@ import { DrawWrapper } from "../../drawWrapper";
 import type { RenderTargetWrapper } from "../../../Engines/renderTargetWrapper";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import type { ThinTexture } from "core/Materials/Textures/thinTexture";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Options to create a procedural texture
@@ -853,4 +854,15 @@ export class ProceduralTexture extends Texture {
 
         super.dispose();
     }
+}
+
+
+let _registered = false;
+export function registerProceduralTexture(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ProceduralTexture", ProceduralTexture);
 }

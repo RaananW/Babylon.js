@@ -4,7 +4,5 @@
  */
 export * from "./vertexOutputBlock.pure";
 
-import { VertexOutputBlock } from "./vertexOutputBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.VertexOutputBlock", VertexOutputBlock);
+import { registerVertexOutputBlock } from "./vertexOutputBlock.pure";
+registerVertexOutputBlock();

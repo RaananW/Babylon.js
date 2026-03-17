@@ -4,7 +4,5 @@
  */
 export * from "./extractHighlightsPostProcess.pure";
 
-import { ExtractHighlightsPostProcess } from "./extractHighlightsPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.ExtractHighlightsPostProcess", ExtractHighlightsPostProcess);
+import { registerExtractHighlightsPostProcess } from "./extractHighlightsPostProcess.pure";
+registerExtractHighlightsPostProcess();

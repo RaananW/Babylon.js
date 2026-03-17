@@ -19,6 +19,7 @@ import type { NodeMaterial } from "../../nodeMaterial";
 import { PrecisionDate } from "../../../../Misc/precisionDate";
 import { ShaderLanguage } from "../../../../Materials/shaderLanguage";
 import { Color3White } from "../../../../Maths/math.color.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -959,4 +960,15 @@ export class InputBlock extends NodeMaterialBlock {
             }
         }
     }
+}
+
+
+let _registered = false;
+export function registerMaterialsNodeBlocksInputInputBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.InputBlock", InputBlock);
 }

@@ -4,10 +4,5 @@
  */
 export * from "./stereoscopicGamepadCamera.pure";
 
-import { StereoscopicGamepadCamera } from "./stereoscopicGamepadCamera.pure";
-import { Vector3 } from "../../Maths/math.vector";
-import { Node } from "../../node";
-
-Node.AddNodeConstructor("StereoscopicGamepadCamera", (name, scene, options) => {
-    return () => new StereoscopicGamepadCamera(name, Vector3.Zero(), options.interaxial_distance, options.isStereoscopicSideBySide, scene);
-});
+import { registerStereoscopicGamepadCamera } from "./stereoscopicGamepadCamera.pure";
+registerStereoscopicGamepadCamera();

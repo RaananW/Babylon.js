@@ -4,7 +4,5 @@
  */
 export * from "./prePassOutputBlock.pure";
 
-import { PrePassOutputBlock } from "./prePassOutputBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.PrePassOutputBlock", PrePassOutputBlock);
+import { registerPrePassOutputBlock } from "./prePassOutputBlock.pure";
+registerPrePassOutputBlock();

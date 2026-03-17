@@ -4,7 +4,5 @@
  */
 export * from "./scalingBlock.pure";
 
-import { ScalingBlock } from "./scalingBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ScalingBlock", ScalingBlock);
+import { registerScalingBlock } from "./scalingBlock.pure";
+registerScalingBlock();

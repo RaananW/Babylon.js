@@ -3,7 +3,7 @@
 import type { Scene } from "../../scene";
 import type { Matrix } from "../../Maths/math.vector";
 import { Vector3 } from "../../Maths/math.vector.pure";
-import type { Mesh } from "../mesh.pure";
+
 import type { Ray, TrianglePickingPredicate } from "../../Culling/ray";
 import { Buffer, VertexBuffer } from "../../Buffers/buffer.pure";
 import { PickingInfo } from "../../Collisions/pickingInfo";
@@ -14,6 +14,7 @@ import { GreasedLineToolsConvertPoints, GreasedLineToolsGetLineLengthArray } fro
 import type { GreasedLineMeshOptions } from "./greasedLineBaseMesh";
 import { GreasedLineBaseMesh } from "./greasedLineBaseMesh";
 import type { VertexData } from "../mesh.vertexData";
+import { Mesh } from "../mesh.pure";
 
 /**
  * GreasedLineMesh
@@ -394,4 +395,17 @@ export class GreasedLineMesh extends GreasedLineBaseMesh {
 
         return vertexData;
     }
+}
+
+
+let _registered = false;
+export function registerGreasedLineMesh(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Mesh._GreasedLineMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
+        return GreasedLineMesh.Parse(parsedMesh, scene);
+    };
 }

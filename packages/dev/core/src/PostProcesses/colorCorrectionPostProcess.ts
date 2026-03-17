@@ -4,7 +4,5 @@
  */
 export * from "./colorCorrectionPostProcess.pure";
 
-import { ColorCorrectionPostProcess } from "./colorCorrectionPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.ColorCorrectionPostProcess", ColorCorrectionPostProcess);
+import { registerColorCorrectionPostProcess } from "./colorCorrectionPostProcess.pure";
+registerColorCorrectionPostProcess();

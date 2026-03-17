@@ -4,7 +4,5 @@
  */
 export * from "./ambientOcclusionBlock.pure";
 
-import { AmbientOcclusionBlock } from "./ambientOcclusionBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.AmbientOcclusionBlock", AmbientOcclusionBlock);
+import { registerAmbientOcclusionBlock } from "./ambientOcclusionBlock.pure";
+registerAmbientOcclusionBlock();

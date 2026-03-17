@@ -12,6 +12,7 @@ import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pure";
 import type { FlowGraphNumber } from "core/FlowGraph/utils";
 import { getNumericValue } from "core/FlowGraph/utils";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Configuration for the get asset block.
@@ -83,4 +84,15 @@ export class FlowGraphGetAssetBlock<T extends FlowGraphAssetType> extends FlowGr
     public override getClassName(): string {
         return FlowGraphBlockNames.GetAsset;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphGetAssetBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.GetAsset, FlowGraphGetAssetBlock);
 }

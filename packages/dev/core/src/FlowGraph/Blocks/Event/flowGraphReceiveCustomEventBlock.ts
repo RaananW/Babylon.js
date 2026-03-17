@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphReceiveCustomEventBlock.pure";
 
-import { FlowGraphReceiveCustomEventBlock } from "./flowGraphReceiveCustomEventBlock.pure";
-import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.ReceiveCustomEvent, FlowGraphReceiveCustomEventBlock);
+import { registerFlowGraphReceiveCustomEventBlock } from "./flowGraphReceiveCustomEventBlock.pure";
+registerFlowGraphReceiveCustomEventBlock();

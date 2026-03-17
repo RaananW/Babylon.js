@@ -4,7 +4,5 @@
  */
 export * from "./vectorMergerBlock.pure";
 
-import { VectorMergerBlock } from "./vectorMergerBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.VectorMergerBlock", VectorMergerBlock);
+import { registerVectorMergerBlock } from "./vectorMergerBlock.pure";
+registerVectorMergerBlock();

@@ -23,6 +23,7 @@ import { Constants } from "../../../Engines/constants";
 import { MotionBlurPostProcess } from "../../motionBlurPostProcess.pure";
 import { ScreenSpaceReflectionPostProcess } from "../../screenSpaceReflectionPostProcess.pure";
 import type { Animation } from "../../../Animations/animation";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -1682,4 +1683,15 @@ export class StandardRenderingPipeline extends PostProcessRenderPipeline impleme
      * Luminance steps
      */
     public static LuminanceSteps: number = 6;
+}
+
+
+let _registered = false;
+export function registerStandardRenderingPipeline(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.StandardRenderingPipeline", StandardRenderingPipeline);
 }

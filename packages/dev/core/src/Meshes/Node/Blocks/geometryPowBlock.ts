@@ -4,7 +4,5 @@
  */
 export * from "./geometryPowBlock.pure";
 
-import { GeometryPowBlock } from "./geometryPowBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryPowBlock", GeometryPowBlock);
+import { registerGeometryPowBlock } from "./geometryPowBlock.pure";
+registerGeometryPowBlock();

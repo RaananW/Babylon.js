@@ -3,8 +3,10 @@
 import { Camera } from "../../Cameras/camera";
 import { FreeCamera } from "../../Cameras/freeCamera.pure";
 import type { Scene } from "../../scene";
-import type { Vector3 } from "../../Maths/math.vector.pure";
+
 import { _SetStereoscopicAnaglyphRigMode } from "../RigModes/stereoscopicAnaglyphRigMode";
+import { Node } from "../../node";
+import { Vector3 } from "../../Maths/math.vector.pure";
 
 /**
  * Camera used to simulate anaglyphic rendering (based on FreeCamera)
@@ -33,4 +35,17 @@ export class AnaglyphFreeCamera extends FreeCamera {
     }
 
     protected override _setRigMode = () => _SetStereoscopicAnaglyphRigMode(this);
+}
+
+
+let _registered = false;
+export function registerAnaglyphFreeCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("AnaglyphFreeCamera", (name, scene, options) => {
+        return () => new AnaglyphFreeCamera(name, Vector3.Zero(), options.interaxial_distance, scene);
+    });
 }

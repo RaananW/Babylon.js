@@ -4,7 +4,5 @@
  */
 export * from "./depthSourceBlock.pure";
 
-import { DepthSourceBlock } from "./depthSourceBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.DepthSourceBlock", DepthSourceBlock);
+import { registerDepthSourceBlock } from "./depthSourceBlock.pure";
+registerDepthSourceBlock();

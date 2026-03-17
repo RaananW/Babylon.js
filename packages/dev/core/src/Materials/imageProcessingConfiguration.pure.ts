@@ -11,6 +11,8 @@ import { Mix } from "../Misc/tools.functions";
 import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../Misc/decorators.serialization.pure";
 import type { IImageProcessingConfigurationDefines } from "./imageProcessingConfiguration.defines";
 import { PrepareSamplersForImageProcessing, PrepareUniformsForImageProcessing } from "./imageProcessingConfiguration.functions";
+import { SerializationHelper } from "../Misc/decorators.serialization.pure";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * This groups together the common properties used for image processing either in direct forward pass
@@ -651,4 +653,19 @@ export class ImageProcessingConfiguration {
     public static get VIGNETTEMODE_OPAQUE(): number {
         return this._VIGNETTEMODE_OPAQUE;
     }
+}
+
+
+let _registered = false;
+export function registerImageProcessingConfiguration(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // References the dependencies.
+    SerializationHelper._ImageProcessingConfigurationParser = ImageProcessingConfiguration.Parse;
+
+    // Register Class Name
+    RegisterClass("BABYLON.ImageProcessingConfiguration", ImageProcessingConfiguration);
 }

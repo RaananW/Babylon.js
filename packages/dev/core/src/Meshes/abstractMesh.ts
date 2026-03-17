@@ -4,7 +4,5 @@
  */
 export * from "./abstractMesh.pure";
 
-import { AbstractMesh } from "./abstractMesh.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.AbstractMesh", AbstractMesh);
+import { registerAbstractMesh } from "./abstractMesh.pure";
+registerAbstractMesh();

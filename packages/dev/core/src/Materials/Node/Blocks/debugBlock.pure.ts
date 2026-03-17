@@ -8,6 +8,7 @@ import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import type { Scene } from "core/scene";
 import { editableInPropertyPage, PropertyTypeForEdition } from "core/Decorators/nodeDecorator";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to render intermediate debug values
@@ -133,4 +134,15 @@ export class NodeMaterialDebugBlock extends NodeMaterialBlock {
         this.renderAlpha = serializationObject.renderAlpha;
         this._forcedActive = serializationObject._forcedActive;
     }
+}
+
+
+let _registered = false;
+export function registerMaterialsNodeBlocksDebugBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeMaterialDebugBlock", NodeMaterialDebugBlock);
 }

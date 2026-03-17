@@ -4,7 +4,5 @@
  */
 export * from "./computeShader.pure";
 
-import { ComputeShader } from "./computeShader.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.ComputeShader", ComputeShader);
+import { registerComputeShader } from "./computeShader.pure";
+registerComputeShader();

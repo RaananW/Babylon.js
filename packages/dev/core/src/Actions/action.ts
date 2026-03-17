@@ -4,7 +4,5 @@
  */
 export * from "./action.pure";
 
-import { Action } from "./action.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.Action", Action);
+import { registerAction } from "./action.pure";
+registerAction();

@@ -9,6 +9,7 @@ import { SerializationHelperParse } from "../Misc/decorators.serialization.pure"
 import type { Nullable } from "../types";
 import type { Scene } from "../scene";
 import { ThinColorCorrectionPostProcess } from "./thinColorCorrectionPostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  *
@@ -92,4 +93,15 @@ export class ColorCorrectionPostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerColorCorrectionPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ColorCorrectionPostProcess", ColorCorrectionPostProcess);
 }

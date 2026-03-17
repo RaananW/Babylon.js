@@ -4,7 +4,5 @@
  */
 export * from "./geometryEaseBlock.pure";
 
-import { GeometryEaseBlock } from "./geometryEaseBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryEaseBlock", GeometryEaseBlock);
+import { registerGeometryEaseBlock } from "./geometryEaseBlock.pure";
+registerGeometryEaseBlock();

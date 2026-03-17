@@ -9,6 +9,7 @@ import { Texture } from "core/Materials/Textures/texture.pure";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "../nodeParticleBlock";
 import { TextureTools } from "core/Misc/textureTools";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Interface used to define texture data
@@ -343,4 +344,15 @@ export class ParticleTextureSourceBlock extends NodeParticleBlock {
             targetTexture.wAng = sourceTexture.wAng;
         }
     }
+}
+
+
+let _registered = false;
+export function registerParticleSourceTextureBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ParticleTextureSourceBlock", ParticleTextureSourceBlock);
 }

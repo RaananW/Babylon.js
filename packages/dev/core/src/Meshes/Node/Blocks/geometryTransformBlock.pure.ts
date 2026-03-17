@@ -7,6 +7,7 @@ import { Matrix, Vector2, Vector3, Vector4 } from "../../../Maths/math.vector.pu
 import type { VertexData } from "../../../Meshes/mesh.vertexData";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
 import type { NodeGeometryBuildState } from "../nodeGeometryBuildState";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to apply a transform to a vector / geometry
@@ -192,4 +193,15 @@ export class GeometryTransformBlock extends NodeGeometryBlock {
             this.evaluateContext = serializationObject.evaluateContext;
         }
     }
+}
+
+
+let _registered = false;
+export function registerGeometryTransformBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GeometryTransformBlock", GeometryTransformBlock);
 }

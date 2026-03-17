@@ -350,3 +350,16 @@ export class InstancedLinesMesh extends InstancedMesh {
         return "InstancedLinesMesh";
     }
 }
+
+
+let _registered = false;
+export function registerLinesMesh(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Mesh._LinesMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
+        return LinesMesh.Parse(parsedMesh, scene);
+    };
+}

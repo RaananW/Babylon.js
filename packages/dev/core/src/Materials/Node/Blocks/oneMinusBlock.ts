@@ -4,9 +4,5 @@
  */
 export * from "./oneMinusBlock.pure";
 
-import { OneMinusBlock } from "./oneMinusBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.OneMinusBlock", OneMinusBlock);
-
-RegisterClass("BABYLON.OppositeBlock", OneMinusBlock);
+import { registerOneMinusBlock } from "./oneMinusBlock.pure";
+registerOneMinusBlock();

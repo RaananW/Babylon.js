@@ -4,14 +4,5 @@
  */
 export * from "./WebXRRawCameraAccess.pure";
 
-import { WebXRRawCameraAccess } from "./WebXRRawCameraAccess.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRRawCameraAccess.Name,
-    (xrSessionManager, options) => {
-        return () => new WebXRRawCameraAccess(xrSessionManager, options);
-    },
-    WebXRRawCameraAccess.Version,
-    false
-);
+import { registerWebXRRawCameraAccess } from "./WebXRRawCameraAccess.pure";
+registerWebXRRawCameraAccess();

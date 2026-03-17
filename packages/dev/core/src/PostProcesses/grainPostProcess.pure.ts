@@ -10,6 +10,7 @@ import { serialize } from "../Misc/decorators";
 import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Scene } from "../scene";
 import { ThinGrainPostProcess } from "./thinGrainPostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * The GrainPostProcess adds noise to the image at mid luminance levels
@@ -108,4 +109,15 @@ export class GrainPostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerGrainPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GrainPostProcess", GrainPostProcess);
 }

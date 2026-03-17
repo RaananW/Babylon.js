@@ -8,6 +8,7 @@ import type { FlowGraphSignalConnection } from "../../../flowGraphSignalConnecti
 import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Configuration for the multi gate block.
@@ -135,4 +136,15 @@ export class FlowGraphMultiGateBlock extends FlowGraphExecutionBlock {
         serializationObject.config.loop = this.config.isLoop;
         serializationObject.config.startIndex = this.config.startIndex;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphMultiGateBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.MultiGate, FlowGraphMultiGateBlock);
 }

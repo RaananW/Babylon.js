@@ -4,7 +4,5 @@
  */
 export * from "./noiseProceduralTexture.pure";
 
-import { NoiseProceduralTexture } from "./noiseProceduralTexture.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NoiseProceduralTexture", NoiseProceduralTexture);
+import { registerNoiseProceduralTexture } from "./noiseProceduralTexture.pure";
+registerNoiseProceduralTexture();

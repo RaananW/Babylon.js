@@ -7,6 +7,7 @@ import type { InternalTexture } from "../../Materials/Textures/internalTexture";
 import { BaseTexture } from "../../Materials/Textures/baseTexture.pure";
 import { Constants } from "../../Engines/constants";
 import type { AbstractEngine } from "../../Engines/abstractEngine";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /**
  * This represents a color grading texture. This acts as a lookup table LUT, useful during post process
@@ -310,4 +311,15 @@ export class ColorGradingTexture extends BaseTexture {
 
         return serializationObject;
     }
+}
+
+
+let _registered = false;
+export function registerColorGradingTexture(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ColorGradingTexture", ColorGradingTexture);
 }

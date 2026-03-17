@@ -14,6 +14,7 @@ import { InputBlock } from "../Input/inputBlock.pure";
 import type { EffectFallbacks } from "../../../effectFallbacks";
 import { BindBonesParameters, PrepareDefinesForBones } from "../../../materialHelper.functions";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to add support for vertex skinning (bones)
@@ -233,4 +234,15 @@ export class BonesBlock extends NodeMaterialBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerBonesBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.BonesBlock", BonesBlock);
 }

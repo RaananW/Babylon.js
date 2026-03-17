@@ -4,7 +4,5 @@
  */
 export * from "./geometryNLerpBlock.pure";
 
-import { GeometryNLerpBlock } from "./geometryNLerpBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryNLerpBlock", GeometryNLerpBlock);
+import { registerGeometryNLerpBlock } from "./geometryNLerpBlock.pure";
+registerGeometryNLerpBlock();

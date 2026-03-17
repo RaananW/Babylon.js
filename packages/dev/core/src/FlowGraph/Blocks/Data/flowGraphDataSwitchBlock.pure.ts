@@ -8,6 +8,7 @@ import { RichTypeAny } from "core/FlowGraph/flowGraphRichTypes.pure";
 import type { FlowGraphNumber } from "core/FlowGraph/utils";
 import { getNumericValue, isNumeric } from "core/FlowGraph/utils";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  *
@@ -95,4 +96,15 @@ export class FlowGraphDataSwitchBlock<T> extends FlowGraphBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.DataSwitch;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphDataSwitchBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.DataSwitch, FlowGraphDataSwitchBlock);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./cullObjectsBlock.pure";
 
-import { NodeRenderGraphCullObjectsBlock } from "./cullObjectsBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphCullObjectsBlock", NodeRenderGraphCullObjectsBlock);
+import { registerCullObjectsBlock } from "./cullObjectsBlock.pure";
+registerCullObjectsBlock();

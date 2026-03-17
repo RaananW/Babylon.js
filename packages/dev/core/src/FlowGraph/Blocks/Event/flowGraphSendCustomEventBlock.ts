@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphSendCustomEventBlock.pure";
 
-import { FlowGraphSendCustomEventBlock } from "./flowGraphSendCustomEventBlock.pure";
-import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.ReceiveCustomEvent, FlowGraphSendCustomEventBlock);
+import { registerFlowGraphSendCustomEventBlock } from "./flowGraphSendCustomEventBlock.pure";
+registerFlowGraphSendCustomEventBlock();

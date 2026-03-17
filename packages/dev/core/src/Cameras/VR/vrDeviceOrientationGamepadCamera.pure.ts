@@ -3,8 +3,10 @@
 import { VRDeviceOrientationFreeCamera } from "./vrDeviceOrientationFreeCamera.pure";
 import { VRCameraMetrics } from "./vrCameraMetrics";
 import type { Scene } from "../../scene";
-import type { Vector3 } from "../../Maths/math.vector.pure";
+
 import { _SetVrRigMode } from "../RigModes/vrRigMode";
+import { Node } from "../../node";
+import { Vector3 } from "../../Maths/math.vector.pure";
 
 /**
  * Camera used to simulate VR rendering (based on VRDeviceOrientationFreeCamera)
@@ -34,4 +36,17 @@ export class VRDeviceOrientationGamepadCamera extends VRDeviceOrientationFreeCam
     }
 
     protected override _setRigMode = (rigParams: any) => _SetVrRigMode(this, rigParams);
+}
+
+
+let _registered = false;
+export function registerVrDeviceOrientationGamepadCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("VRDeviceOrientationGamepadCamera", (name, scene) => {
+        return () => new VRDeviceOrientationGamepadCamera(name, Vector3.Zero(), scene);
+    });
 }

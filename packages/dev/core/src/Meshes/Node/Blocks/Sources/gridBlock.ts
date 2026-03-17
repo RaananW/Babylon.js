@@ -4,7 +4,5 @@
  */
 export * from "./gridBlock.pure";
 
-import { GridBlock } from "./gridBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GridBlock", GridBlock);
+import { registerGridBlock } from "./gridBlock.pure";
+registerGridBlock();

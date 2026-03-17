@@ -8,6 +8,7 @@ import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import type { Scene } from "../../../scene";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../Decorators/nodeDecorator";
 import { ShaderLanguage } from "../../../Materials/shaderLanguage";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * block used to Generate a Worley Noise 3D Noise Pattern
@@ -303,4 +304,15 @@ export class WorleyNoise3DBlock extends NodeMaterialBlock {
 
         this.manhattanDistance = serializationObject.manhattanDistance;
     }
+}
+
+
+let _registered = false;
+export function registerWorleyNoise3DBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.WorleyNoise3DBlock", WorleyNoise3DBlock);
 }

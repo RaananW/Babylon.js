@@ -4,7 +4,5 @@
  */
 export * from "./updateScaleBlock.pure";
 
-import { UpdateScaleBlock } from "./updateScaleBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.UpdateScaleBlock", UpdateScaleBlock);
+import { registerUpdateScaleBlock } from "./updateScaleBlock.pure";
+registerUpdateScaleBlock();

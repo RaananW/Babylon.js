@@ -14,6 +14,7 @@ import type { EasingFunction } from "core/Animations/easing";
 import { Vector3, Vector4 } from "core/Maths/math.vector.pure";
 import { Color3, Color4 } from "core/Maths/math.color.pure";
 import { FlowGraphCachedOperationBlock } from "../flowGraphCachedOperationBlock";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Configuration for the JSON pointer parser block.
@@ -192,4 +193,15 @@ function FromColor(value: Color3 | Color4): Vector3 | Vector4 {
         return new Vector4(value.r, value.g, value.b, value.a);
     }
     throw new Error("Invalid color type");
+}
+
+
+let _registered = false;
+export function registerFlowGraphJsonPointerParserBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.JsonPointerParser, FlowGraphJsonPointerParserBlock);
 }

@@ -18,6 +18,7 @@ import { TBNBlock } from "./TBNBlock.pure";
 import { ShaderLanguage } from "../../../../Materials/shaderLanguage";
 import { Constants } from "../../../../Engines/constants";
 import type { Nullable } from "../../../../types";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to perturb normals based on a normal map
@@ -498,4 +499,15 @@ export class PerturbNormalBlock extends NodeMaterialBlock {
         this.parallaxScale._isInactive = this.useParallaxOcclusion;
         this.parallaxHeight._isInactive = this.useParallaxOcclusion;
     }
+}
+
+
+let _registered = false;
+export function registerPerturbNormalBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.PerturbNormalBlock", PerturbNormalBlock);
 }

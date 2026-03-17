@@ -12,6 +12,7 @@ import { serialize } from "../Misc/decorators";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import type { ThinCircleOfConfusionPostProcessOptions } from "./thinCircleOfConfusionPostProcess";
 import { ThinCircleOfConfusionPostProcess } from "./thinCircleOfConfusionPostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 export type CircleOfConfusionPostProcessOptions = ThinCircleOfConfusionPostProcessOptions & PostProcessOptions;
 
@@ -139,4 +140,15 @@ export class CircleOfConfusionPostProcess extends PostProcess {
     public set depthTexture(value: RenderTargetTexture) {
         this._depthTexture = value;
     }
+}
+
+
+let _registered = false;
+export function registerCircleOfConfusionPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.CircleOfConfusionPostProcess", CircleOfConfusionPostProcess);
 }

@@ -5,6 +5,7 @@ import type { Nullable } from "../../types";
 import { WebXRFeatureName } from "../webXRFeaturesManager";
 import type { WebXRSessionManager } from "../webXRSessionManager";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * Options for DOM Overlay feature
@@ -164,4 +165,23 @@ export class WebXRDomOverlay extends WebXRAbstractFeature {
             },
         };
     }
+}
+
+
+let _registered = false;
+export function registerWebXRDOMOverlay(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    //register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRDomOverlay.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRDomOverlay(xrSessionManager, options);
+        },
+        WebXRDomOverlay.Version,
+        false
+    );
 }

@@ -558,3 +558,23 @@ export const DecalBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateDecal,
 };
+
+
+let _registered = false;
+export function registerDecalBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Mesh.CreateDecal = (name: string, sourceMesh: AbstractMesh, position: Vector3, normal: Vector3, size: Vector3, angle: number): Mesh => {
+        const options = {
+            position,
+            normal,
+            size,
+            angle,
+        };
+
+        return CreateDecal(name, sourceMesh, options);
+    };
+}

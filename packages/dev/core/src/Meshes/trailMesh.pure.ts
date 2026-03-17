@@ -307,3 +307,16 @@ export class TrailMesh extends Mesh {
         return new TrailMesh(parsedMesh.name, generator, scene, options);
     }
 }
+
+
+let _registered = false;
+export function registerTrailMesh(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Mesh._TrailMeshParser = (parsedMesh: any, scene: Scene) => {
+        return TrailMesh.Parse(parsedMesh, scene);
+    };
+}

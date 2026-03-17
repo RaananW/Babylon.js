@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphSequenceBlock.pure";
 
-import { FlowGraphSequenceBlock } from "./flowGraphSequenceBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.Sequence, FlowGraphSequenceBlock);
+import { registerFlowGraphSequenceBlock } from "./flowGraphSequenceBlock.pure";
+registerFlowGraphSequenceBlock();

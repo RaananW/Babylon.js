@@ -7,6 +7,7 @@ import type { SubMesh } from "../Meshes/subMesh";
 import type { BaseTexture } from "../Materials/Textures/baseTexture";
 import { Material } from "../Materials/material";
 import { Tags, TagsGetTags, TagsAddTagsTo } from "../Misc/tags.pure";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * A multi-material is used to apply different materials to different parts of the same object without the need of
@@ -270,4 +271,15 @@ export class MultiMaterial extends Material {
 
         return multiMaterial;
     }
+}
+
+
+let _registered = false;
+export function registerMultiMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.MultiMaterial", MultiMaterial);
 }

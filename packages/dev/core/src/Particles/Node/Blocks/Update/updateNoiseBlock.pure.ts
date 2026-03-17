@@ -12,6 +12,7 @@ import { TmpVectors, Vector3 } from "core/Maths/math.vector.pure";
 import { NodeParticleBlock } from "core/Particles/Node/nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "core/Particles/Node/Enums/nodeParticleBlockConnectionPointTypes";
 import { _ConnectAtTheEnd } from "core/Particles/Queue/executionQueue";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Block used to update particle position based on a noise texture
@@ -170,4 +171,15 @@ export class UpdateNoiseBlock extends NodeParticleBlock {
 
         this.output._storedValue = system;
     }
+}
+
+
+let _registered = false;
+export function registerUpdateNoiseBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.UpdateNoiseBlock", UpdateNoiseBlock);
 }

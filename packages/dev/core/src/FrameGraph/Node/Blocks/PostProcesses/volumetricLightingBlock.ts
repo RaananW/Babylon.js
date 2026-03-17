@@ -4,7 +4,5 @@
  */
 export * from "./volumetricLightingBlock.pure";
 
-import { NodeRenderGraphVolumetricLightingBlock } from "./volumetricLightingBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphVolumetricLightingBlock", NodeRenderGraphVolumetricLightingBlock);
+import { registerVolumetricLightingBlock } from "./volumetricLightingBlock.pure";
+registerVolumetricLightingBlock();

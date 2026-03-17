@@ -6,6 +6,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { FrameGraphMotionBlurTask } from "core/FrameGraph/Tasks/PostProcesses/motionBlurTask";
 import { ThinMotionBlurPostProcess } from "core/PostProcesses/thinMotionBlurPostProcess";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the motion blur post process
@@ -118,4 +119,15 @@ export class NodeRenderGraphMotionBlurPostProcessBlock extends NodeRenderGraphBa
         this.motionBlurSamples = serializationObject.motionBlurSamples;
         this.isObjectBased = serializationObject.isObjectBased;
     }
+}
+
+
+let _registered = false;
+export function registerMotionBlurPostProcessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphMotionBlurPostProcessBlock", NodeRenderGraphMotionBlurPostProcessBlock);
 }

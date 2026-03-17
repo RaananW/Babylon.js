@@ -4,7 +4,5 @@
  */
 export * from "./screenSpaceBlock.pure";
 
-import { ScreenSpaceBlock } from "./screenSpaceBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ScreenSpaceBlock", ScreenSpaceBlock);
+import { registerScreenSpaceBlock } from "./screenSpaceBlock.pure";
+registerScreenSpaceBlock();

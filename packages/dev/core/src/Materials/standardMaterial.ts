@@ -4,12 +4,5 @@
  */
 export * from "./standardMaterial.pure";
 
-import { StandardMaterial } from "./standardMaterial.pure";
-import { Scene } from "../scene";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.StandardMaterial", StandardMaterial);
-
-Scene.DefaultMaterialFactory = (scene: Scene) => {
-    return new StandardMaterial("default material", scene);
-};
+import { registerStandardMaterial } from "./standardMaterial.pure";
+registerStandardMaterial();

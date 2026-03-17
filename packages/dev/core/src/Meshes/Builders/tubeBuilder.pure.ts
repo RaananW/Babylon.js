@@ -191,3 +191,38 @@ export const TubeBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateTube,
 };
+
+
+let _registered = false;
+export function registerTubeBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Mesh.CreateTube = (
+        name: string,
+        path: Vector3[],
+        radius: number,
+        tessellation: number,
+        radiusFunction: { (i: number, distance: number): number },
+        cap: number,
+        scene: Scene,
+        updatable?: boolean,
+        sideOrientation?: number,
+        instance?: Mesh
+    ): Mesh => {
+        const options = {
+            path: path,
+            radius: radius,
+            tessellation: tessellation,
+            radiusFunction: radiusFunction,
+            arc: 1,
+            cap: cap,
+            updatable: updatable,
+            sideOrientation: sideOrientation,
+            instance: instance,
+        };
+        return CreateTube(name, options, scene);
+    };
+}

@@ -6,6 +6,7 @@ import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import type { TeleportInBlock } from "./teleportInBlock";
 import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Defines a block used to receive a value from a teleport entry point
@@ -132,4 +133,15 @@ export class TeleportOutBlock extends NodeGeometryBlock {
 
         this._tempEntryPointUniqueId = serializationObject.entryPoint;
     }
+}
+
+
+let _registered = false;
+export function registerMeshesNodeBlocksTeleportTeleportOutBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.TeleportOutBlock", TeleportOutBlock);
 }

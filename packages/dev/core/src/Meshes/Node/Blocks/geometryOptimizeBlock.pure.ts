@@ -10,6 +10,7 @@ import { VertexData } from "../../../Meshes/mesh.vertexData.pure";
 import { WithinEpsilon } from "../../../Maths/math.scalar.functions";
 import { Epsilon } from "../../../Maths/math.constants";
 import type { INodeGeometryExecutionContext } from "../Interfaces/nodeGeometryExecutionContext";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to extract unique positions from a geometry
@@ -242,4 +243,15 @@ export class GeometryOptimizeBlock extends NodeGeometryBlock implements INodeGeo
         this.epsilon = serializationObject.epsilon;
         this.optimizeFaces = serializationObject.optimizeFaces;
     }
+}
+
+
+let _registered = false;
+export function registerGeometryOptimizeBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GeometryOptimizeBlock", GeometryOptimizeBlock);
 }

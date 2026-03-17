@@ -4,7 +4,5 @@
  */
 export * from "./setupSpriteSheetBlock.pure";
 
-import { SetupSpriteSheetBlock } from "./setupSpriteSheetBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SetupSpriteSheetBlock", SetupSpriteSheetBlock);
+import { registerSetupSpriteSheetBlock } from "./setupSpriteSheetBlock.pure";
+registerSetupSpriteSheetBlock();

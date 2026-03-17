@@ -14,6 +14,7 @@ import type { PhysicsEngine as PhysicsEngineV1 } from "./physicsEngine";
 import type { PhysicsJointData } from "./physicsJoint";
 import { PhysicsJoint } from "./physicsJoint";
 import { Space } from "../../Maths/math.axis";
+import { Mesh } from "../../Meshes/mesh";
 
 /**
  * The interface for the physics imposter parameters
@@ -1293,4 +1294,26 @@ export class PhysicsImpostor {
      * Softbody-Imposter type
      */
     public static SoftbodyImpostor = 103;
+}
+
+
+let _registered = false;
+export function registerPhysicsImpostor(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Mesh._PhysicsImpostorParser = function (scene: Scene, physicObject: IPhysicsEnabledObject, jsonObject: any): PhysicsImpostor {
+        return new PhysicsImpostor(
+            physicObject,
+            jsonObject.physicsImpostor,
+            {
+                mass: jsonObject.physicsMass,
+                friction: jsonObject.physicsFriction,
+                restitution: jsonObject.physicsRestitution,
+            },
+            scene
+        );
+    };
 }

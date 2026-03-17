@@ -4,7 +4,5 @@
  */
 export * from "./noiseBlock.pure";
 
-import { NoiseBlock } from "./noiseBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NoiseBlock", NoiseBlock);
+import { registerNoiseBlock } from "./noiseBlock.pure";
+registerNoiseBlock();

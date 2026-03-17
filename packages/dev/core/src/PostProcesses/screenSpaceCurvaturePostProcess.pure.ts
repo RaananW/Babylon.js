@@ -14,6 +14,7 @@ import { SerializationHelperParse } from "../Misc/decorators.serialization.pure"
 import type { AbstractEngine } from "../Engines/abstractEngine";
 import type { Scene } from "../scene";
 import { ThinScreenSpaceCurvaturePostProcess } from "./thinScreenSpaceCurvaturePostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * The Screen Space curvature effect can help highlighting ridge and valley of a model.
@@ -148,4 +149,15 @@ export class ScreenSpaceCurvaturePostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerScreenSpaceCurvaturePostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ScreenSpaceCurvaturePostProcess", ScreenSpaceCurvaturePostProcess);
 }

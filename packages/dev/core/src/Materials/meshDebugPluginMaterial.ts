@@ -4,7 +4,5 @@
  */
 export * from "./meshDebugPluginMaterial.pure";
 
-import { MeshDebugPluginMaterial } from "./meshDebugPluginMaterial.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.MeshDebugPluginMaterial", MeshDebugPluginMaterial);
+import { registerMeshDebugPluginMaterial } from "./meshDebugPluginMaterial.pure";
+registerMeshDebugPluginMaterial();

@@ -4,7 +4,5 @@
  */
 export * from "./nullBlock.pure";
 
-import { NullBlock } from "./nullBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NullBlock", NullBlock);
+import { registerNullBlock } from "./nullBlock.pure";
+registerNullBlock();

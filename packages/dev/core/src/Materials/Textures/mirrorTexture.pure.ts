@@ -352,3 +352,16 @@ export class MirrorTexture extends RenderTargetTexture {
         this._sceneUBO?.dispose();
     }
 }
+
+
+let _registered = false;
+export function registerMirrorTexture(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Texture._CreateMirror = (name: string, renderTargetSize: number, scene: Scene, generateMipMaps: boolean): MirrorTexture => {
+        return new MirrorTexture(name, renderTargetSize, scene, generateMipMaps);
+    };
+}

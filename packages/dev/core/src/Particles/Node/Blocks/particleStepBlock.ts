@@ -4,7 +4,5 @@
  */
 export * from "./particleStepBlock.pure";
 
-import { ParticleStepBlock } from "./particleStepBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleStepBlock", ParticleStepBlock);
+import { registerParticleStepBlock } from "./particleStepBlock.pure";
+registerParticleStepBlock();

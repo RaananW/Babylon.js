@@ -4,7 +4,5 @@
  */
 export * from "./geometryDistanceBlock.pure";
 
-import { GeometryDistanceBlock } from "./geometryDistanceBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryDistanceBlock", GeometryDistanceBlock);
+import { registerGeometryDistanceBlock } from "./geometryDistanceBlock.pure";
+registerGeometryDistanceBlock();

@@ -7,6 +7,7 @@ import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnection
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import type { Scene } from "../../../scene";
 import { editableInPropertyPage, PropertyTypeForEdition } from "core/Decorators/nodeDecorator";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Operations supported by the Trigonometry block
@@ -240,4 +241,15 @@ export class TrigonometryBlock extends NodeMaterialBlock {
             super._dumpPropertiesCode() + `${this._codeVariableName}.operation = BABYLON.TrigonometryBlockOperations.${TrigonometryBlockOperations[this.operation]};\n`;
         return codeString;
     }
+}
+
+
+let _registered = false;
+export function registerTrigonometryBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.TrigonometryBlock", TrigonometryBlock);
 }

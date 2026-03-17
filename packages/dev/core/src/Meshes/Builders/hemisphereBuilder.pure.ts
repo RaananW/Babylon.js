@@ -38,3 +38,29 @@ export const HemisphereBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateHemisphere,
 };
+
+
+let _registered = false;
+export function registerHemisphereBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    /**
+     * Creates a hemispheric light
+     * @param name
+     * @param segments
+     * @param diameter
+     * @param scene
+     * @returns the mesh
+     */
+    Mesh.CreateHemisphere = (name: string, segments: number, diameter: number, scene?: Scene): Mesh => {
+        const options = {
+            segments: segments,
+            diameter: diameter,
+        };
+
+        return CreateHemisphere(name, options, scene);
+    };
+}

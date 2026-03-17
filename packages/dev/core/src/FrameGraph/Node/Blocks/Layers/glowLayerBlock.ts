@@ -4,7 +4,5 @@
  */
 export * from "./glowLayerBlock.pure";
 
-import { NodeRenderGraphGlowLayerBlock } from "./glowLayerBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphGlowLayerBlock", NodeRenderGraphGlowLayerBlock);
+import { registerGlowLayerBlock } from "./glowLayerBlock.pure";
+registerGlowLayerBlock();

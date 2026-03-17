@@ -4,7 +4,5 @@
  */
 export * from "./subdivideBlock.pure";
 
-import { SubdivideBlock } from "./subdivideBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SubdivideBlock", SubdivideBlock);
+import { registerSubdivideBlock } from "./subdivideBlock.pure";
+registerSubdivideBlock();

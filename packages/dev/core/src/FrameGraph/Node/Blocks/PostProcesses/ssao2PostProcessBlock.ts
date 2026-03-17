@@ -4,7 +4,5 @@
  */
 export * from "./ssao2PostProcessBlock.pure";
 
-import { NodeRenderGraphSSAO2PostProcessBlock } from "./ssao2PostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphSSAO2PostProcessBlock", NodeRenderGraphSSAO2PostProcessBlock);
+import { registerSsao2PostProcessBlock } from "./ssao2PostProcessBlock.pure";
+registerSsao2PostProcessBlock();

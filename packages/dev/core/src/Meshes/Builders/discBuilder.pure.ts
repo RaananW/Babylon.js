@@ -115,3 +115,25 @@ export const DiscBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateDisc,
 };
+
+
+let _registered = false;
+export function registerDiscBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VertexData.CreateDisc = CreateDiscVertexData;
+
+    Mesh.CreateDisc = (name: string, radius: number, tessellation: number, scene: Nullable<Scene> = null, updatable?: boolean, sideOrientation?: number): Mesh => {
+        const options = {
+            radius,
+            tessellation,
+            sideOrientation,
+            updatable,
+        };
+
+        return CreateDisc(name, options, scene);
+    };
+}

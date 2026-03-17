@@ -8,6 +8,7 @@ import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
 import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
 import { RichTypeAny, RichTypeNumber } from "core/FlowGraph/flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * The type of the easing function.
@@ -124,4 +125,15 @@ export class FlowGraphEasingBlock extends FlowGraphBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.Easing;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphEasingBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.Easing, FlowGraphEasingBlock);
 }

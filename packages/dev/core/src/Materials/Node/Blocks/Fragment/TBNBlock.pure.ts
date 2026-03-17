@@ -12,6 +12,7 @@ import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
 import { InputBlock } from "../Input/inputBlock.pure";
 import type { AbstractMesh } from "../../../../Meshes/abstractMesh";
 import { ShaderLanguage } from "../../../../Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to implement TBN matrix
@@ -236,4 +237,15 @@ export class TBNBlock extends NodeMaterialBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerTBNBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.TBNBlock", TBNBlock);
 }

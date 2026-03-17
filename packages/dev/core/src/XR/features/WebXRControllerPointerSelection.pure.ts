@@ -25,6 +25,7 @@ import type { Node } from "../../node";
 import { Viewport } from "../../Maths/math.viewport";
 import type { Mesh } from "../../Meshes/mesh";
 import { ToolsWarn } from "../../Misc/tools.pure";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * Options interface for the pointer selection module
@@ -930,4 +931,23 @@ export class WebXRControllerPointerSelection extends WebXRAbstractFeature {
         // here due to a typo
         return this.laserPointerDefaultColor;
     }
+}
+
+
+let _registered = false;
+export function registerWebXRControllerPointerSelection(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    //register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRControllerPointerSelection.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRControllerPointerSelection(xrSessionManager, options);
+        },
+        WebXRControllerPointerSelection.Version,
+        true
+    );
 }

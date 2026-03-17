@@ -4,7 +4,5 @@
  */
 export * from "./posterizeBlock.pure";
 
-import { PosterizeBlock } from "./posterizeBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.PosterizeBlock", PosterizeBlock);
+import { registerPosterizeBlock } from "./posterizeBlock.pure";
+registerPosterizeBlock();

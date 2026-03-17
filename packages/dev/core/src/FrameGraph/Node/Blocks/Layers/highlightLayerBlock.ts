@@ -4,7 +4,5 @@
  */
 export * from "./highlightLayerBlock.pure";
 
-import { NodeRenderGraphHighlightLayerBlock } from "./highlightLayerBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphHighlightLayerBlock", NodeRenderGraphHighlightLayerBlock);
+import { registerHighlightLayerBlock } from "./highlightLayerBlock.pure";
+registerHighlightLayerBlock();

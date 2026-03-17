@@ -19,6 +19,7 @@ import { InterpolatingBehavior } from "../Behaviors/Cameras/interpolatingBehavio
 import type { Collider } from "../Collisions/collider";
 import type { EasingFunction } from "../Animations/easing";
 import type { Animation } from "../Animations/animation";
+import { RegisterClass } from "../Misc/typeStore";
 
 export type GeospatialCameraOptions = {
     /**
@@ -712,4 +713,15 @@ export function ComputeYawPitchFromLookAtToRef(
     result.x = Math.atan2(sinYaw, cosYaw);
     result.y = pitch;
     return result;
+}
+
+
+let _registered = false;
+export function registerGeospatialCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GeospatialCamera", GeospatialCamera);
 }

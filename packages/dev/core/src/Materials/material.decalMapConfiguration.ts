@@ -4,7 +4,5 @@
  */
 export * from "./material.decalMapConfiguration.pure";
 
-import { DecalMapConfiguration } from "./material.decalMapConfiguration.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.DecalMapConfiguration", DecalMapConfiguration);
+import { registerMaterialDecalMapConfiguration } from "./material.decalMapConfiguration.pure";
+registerMaterialDecalMapConfiguration();

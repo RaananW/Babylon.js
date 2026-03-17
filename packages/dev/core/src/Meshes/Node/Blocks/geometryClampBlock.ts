@@ -4,7 +4,5 @@
  */
 export * from "./geometryClampBlock.pure";
 
-import { GeometryClampBlock } from "./geometryClampBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryClampBlock", GeometryClampBlock);
+import { registerGeometryClampBlock } from "./geometryClampBlock.pure";
+registerGeometryClampBlock();

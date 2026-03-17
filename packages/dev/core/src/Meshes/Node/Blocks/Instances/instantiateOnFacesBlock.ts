@@ -4,7 +4,5 @@
  */
 export * from "./instantiateOnFacesBlock.pure";
 
-import { InstantiateOnFacesBlock } from "./instantiateOnFacesBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.InstantiateOnFacesBlock", InstantiateOnFacesBlock);
+import { registerInstantiateOnFacesBlock } from "./instantiateOnFacesBlock.pure";
+registerInstantiateOnFacesBlock();

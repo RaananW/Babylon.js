@@ -4,7 +4,5 @@
  */
 export * from "./frontFacingBlock.pure";
 
-import { FrontFacingBlock } from "./frontFacingBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.FrontFacingBlock", FrontFacingBlock);
+import { registerFrontFacingBlock } from "./frontFacingBlock.pure";
+registerFrontFacingBlock();

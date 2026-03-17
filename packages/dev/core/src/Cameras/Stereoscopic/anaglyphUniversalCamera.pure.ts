@@ -3,8 +3,10 @@
 import { Camera } from "../../Cameras/camera";
 import { UniversalCamera } from "../../Cameras/universalCamera.pure";
 import type { Scene } from "../../scene";
-import type { Vector3 } from "../../Maths/math.vector.pure";
+
 import { _SetStereoscopicAnaglyphRigMode } from "../RigModes/stereoscopicAnaglyphRigMode";
+import { Node } from "../../node";
+import { Vector3 } from "../../Maths/math.vector.pure";
 
 /**
  * Camera used to simulate anaglyphic rendering (based on UniversalCamera)
@@ -33,4 +35,17 @@ export class AnaglyphUniversalCamera extends UniversalCamera {
     }
 
     protected override _setRigMode = () => _SetStereoscopicAnaglyphRigMode(this);
+}
+
+
+let _registered = false;
+export function registerAnaglyphUniversalCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("AnaglyphUniversalCamera", (name, scene, options) => {
+        return () => new AnaglyphUniversalCamera(name, Vector3.Zero(), options.interaxial_distance, scene);
+    });
 }

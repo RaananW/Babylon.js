@@ -4,7 +4,5 @@
  */
 export * from "./boundingBlock.pure";
 
-import { BoundingBlock } from "./boundingBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.BoundingBlock", BoundingBlock);
+import { registerBoundingBlock } from "./boundingBlock.pure";
+registerBoundingBlock();

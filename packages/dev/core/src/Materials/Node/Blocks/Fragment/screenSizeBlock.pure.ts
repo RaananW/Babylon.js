@@ -8,6 +8,7 @@ import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import type { Effect } from "../../../effect";
 import type { Scene } from "../../../../scene";
 import { ShaderLanguage } from "../../../../Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to get the screen sizes
@@ -107,4 +108,15 @@ export class ScreenSizeBlock extends NodeMaterialBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerScreenSizeBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ScreenSizeBlock", ScreenSizeBlock);
 }

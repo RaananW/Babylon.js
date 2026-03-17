@@ -4,7 +4,5 @@
  */
 export * from "./csmShadowGeneratorBlock.pure";
 
-import { NodeRenderGraphCascadedShadowGeneratorBlock } from "./csmShadowGeneratorBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphCascadedShadowGeneratorBlock", NodeRenderGraphCascadedShadowGeneratorBlock);
+import { registerCsmShadowGeneratorBlock } from "./csmShadowGeneratorBlock.pure";
+registerCsmShadowGeneratorBlock();

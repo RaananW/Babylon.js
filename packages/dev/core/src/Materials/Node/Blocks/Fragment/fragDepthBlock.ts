@@ -4,7 +4,5 @@
  */
 export * from "./fragDepthBlock.pure";
 
-import { FragDepthBlock } from "./fragDepthBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.FragDepthBlock", FragDepthBlock);
+import { registerFragDepthBlock } from "./fragDepthBlock.pure";
+registerFragDepthBlock();

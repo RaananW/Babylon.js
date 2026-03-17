@@ -6,6 +6,7 @@ import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
 import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
 import { RichTypeAny, RichTypeString } from "core/FlowGraph/flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * A flow graph block that takes a function name, an object and an optional context as inputs and calls the function on the object.
@@ -58,4 +59,15 @@ export class FlowGraphFunctionReferenceBlock extends FlowGraphBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.FunctionReference;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphFunctionReferenceBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.FunctionReference, FlowGraphFunctionReferenceBlock);
 }

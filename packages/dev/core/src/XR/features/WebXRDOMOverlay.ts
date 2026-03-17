@@ -4,15 +4,5 @@
  */
 export * from "./WebXRDOMOverlay.pure";
 
-import { WebXRDomOverlay } from "./WebXRDOMOverlay.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-//register the plugin
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRDomOverlay.Name,
-    (xrSessionManager, options) => {
-        return () => new WebXRDomOverlay(xrSessionManager, options);
-    },
-    WebXRDomOverlay.Version,
-    false
-);
+import { registerWebXRDOMOverlay } from "./WebXRDOMOverlay.pure";
+registerWebXRDOMOverlay();

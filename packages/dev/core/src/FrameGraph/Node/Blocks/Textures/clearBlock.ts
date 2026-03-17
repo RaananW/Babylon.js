@@ -4,7 +4,5 @@
  */
 export * from "./clearBlock.pure";
 
-import { NodeRenderGraphClearBlock } from "./clearBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphClearBlock", NodeRenderGraphClearBlock);
+import { registerClearBlock } from "./clearBlock.pure";
+registerClearBlock();

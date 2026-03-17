@@ -6,6 +6,7 @@ import { NodeParticleBlock } from "../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
 import { Vector3 } from "../../../Maths/math.vector.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Operations supported by the Vector Math block
@@ -127,4 +128,15 @@ export class ParticleVectorMathBlock extends NodeParticleBlock {
 
         this.operation = serializationObject.operation;
     }
+}
+
+
+let _registered = false;
+export function registerParticleVectorMathBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ParticleVectorMathBlock", ParticleVectorMathBlock);
 }

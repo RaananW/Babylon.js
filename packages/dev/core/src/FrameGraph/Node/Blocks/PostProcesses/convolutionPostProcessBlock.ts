@@ -4,7 +4,5 @@
  */
 export * from "./convolutionPostProcessBlock.pure";
 
-import { NodeRenderGraphConvolutionPostProcessBlock } from "./convolutionPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphConvolutionPostProcessBlock", NodeRenderGraphConvolutionPostProcessBlock);
+import { registerConvolutionPostProcessBlock } from "./convolutionPostProcessBlock.pure";
+registerConvolutionPostProcessBlock();

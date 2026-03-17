@@ -289,3 +289,26 @@ export const CapsuleBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateCapsule,
 };
+
+
+let _registered = false;
+export function registerCapsuleBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    /**
+     * Creates a capsule or a pill mesh
+     * @param name defines the name of the mesh.
+     * @param options the constructors options used to shape the mesh.
+     * @param scene defines the scene the mesh is scoped to.
+     * @returns the capsule mesh
+     * @see https://doc.babylonjs.com/how_to/capsule_shape
+     */
+    Mesh.CreateCapsule = (name: string, options: ICreateCapsuleOptions, scene?: Nullable<Scene>): Mesh => {
+        return CreateCapsule(name, options, scene);
+    };
+
+    VertexData.CreateCapsule = CreateCapsuleVertexData;
+}

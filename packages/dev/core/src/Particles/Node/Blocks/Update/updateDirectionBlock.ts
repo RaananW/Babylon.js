@@ -4,7 +4,5 @@
  */
 export * from "./updateDirectionBlock.pure";
 
-import { UpdateDirectionBlock } from "./updateDirectionBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.UpdateDirectionBlock", UpdateDirectionBlock);
+import { registerUpdateDirectionBlock } from "./updateDirectionBlock.pure";
+registerUpdateDirectionBlock();

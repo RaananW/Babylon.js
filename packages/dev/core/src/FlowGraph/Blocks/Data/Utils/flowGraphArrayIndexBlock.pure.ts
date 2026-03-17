@@ -10,6 +10,7 @@ import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pu
 import type { FlowGraphNumber } from "core/FlowGraph/utils";
 import { getNumericValue } from "core/FlowGraph/utils";
 import type { Nullable } from "core/types";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * This simple Util block takes an array as input and selects a single element from it.
@@ -66,4 +67,15 @@ export class FlowGraphArrayIndexBlock<T = any> extends FlowGraphBlock {
     public override getClassName(): string {
         return FlowGraphBlockNames.ArrayIndex;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphArrayIndexBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.ArrayIndex, FlowGraphArrayIndexBlock);
 }

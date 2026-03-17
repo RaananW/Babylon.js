@@ -8,6 +8,7 @@ import { Quaternion, Matrix, Vector3, Vector2, TmpVectors } from "../Maths/math.
 import { Epsilon } from "../Maths/math.constants";
 import { Axis } from "../Maths/math.axis";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
+import { Node } from "../node";
 
 // Temporary cache variables to avoid allocations.
 const TmpMatrix = /*#__PURE__*/ Matrix.Zero();
@@ -593,4 +594,17 @@ export class TargetCamera extends Camera {
     public override getClassName(): string {
         return "TargetCamera";
     }
+}
+
+
+let _registered = false;
+export function registerTargetCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("TargetCamera", (name, scene) => {
+        return () => new TargetCamera(name, Vector3.Zero(), scene);
+    });
 }

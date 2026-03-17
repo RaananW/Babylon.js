@@ -4,7 +4,5 @@
  */
 export * from "./screenSizeBlock.pure";
 
-import { ScreenSizeBlock } from "./screenSizeBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ScreenSizeBlock", ScreenSizeBlock);
+import { registerScreenSizeBlock } from "./screenSizeBlock.pure";
+registerScreenSizeBlock();

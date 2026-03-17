@@ -8,6 +8,7 @@ import { Vector2, Vector3, Vector4 } from "../../../Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
 import type { EasingFunction } from "core/Animations/easing";
 import { BackEase, CircleEase, CubicEase, ElasticEase, ExponentialEase, QuadraticEase, QuarticEase, QuinticEase, SineEase } from "core/Animations/easing";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Types of easing function supported by the Ease block
@@ -340,4 +341,15 @@ export class GeometryEaseBlock extends NodeGeometryBlock {
         const codeString = super._dumpPropertiesCode() + `${this._codeVariableName}.type = BABYLON.GeometryEaseBlockTypes.${GeometryEaseBlockTypes[this.type]};\n`;
         return codeString;
     }
+}
+
+
+let _registered = false;
+export function registerGeometryEaseBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GeometryEaseBlock", GeometryEaseBlock);
 }

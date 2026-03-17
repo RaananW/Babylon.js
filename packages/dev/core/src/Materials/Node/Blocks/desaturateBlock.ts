@@ -4,7 +4,5 @@
  */
 export * from "./desaturateBlock.pure";
 
-import { DesaturateBlock } from "./desaturateBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.DesaturateBlock", DesaturateBlock);
+import { registerDesaturateBlock } from "./desaturateBlock.pure";
+registerDesaturateBlock();

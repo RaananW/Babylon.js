@@ -4,7 +4,5 @@
  */
 export * from "./freeCamera.pure";
 
-import { FreeCamera } from "./freeCamera.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.FreeCamera", FreeCamera);
+import { registerFreeCamera } from "./freeCamera.pure";
+registerFreeCamera();

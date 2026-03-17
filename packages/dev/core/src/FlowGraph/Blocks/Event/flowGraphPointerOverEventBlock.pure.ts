@@ -9,6 +9,7 @@ import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnec
 import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
 import { RichTypeAny, RichTypeNumber } from "core/FlowGraph/flowGraphRichTypes.pure";
 import { _IsDescendantOf } from "core/FlowGraph/utils";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Configuration for the pointer over event block.
@@ -97,4 +98,15 @@ export class FlowGraphPointerOverEventBlock extends FlowGraphEventBlock {
     public override getClassName() {
         return FlowGraphBlockNames.PointerOverEvent;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphPointerOverEventBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.PointerOverEvent, FlowGraphPointerOverEventBlock);
 }

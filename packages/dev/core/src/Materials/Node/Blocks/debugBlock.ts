@@ -4,7 +4,5 @@
  */
 export * from "./debugBlock.pure";
 
-import { NodeMaterialDebugBlock } from "./debugBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeMaterialDebugBlock", NodeMaterialDebugBlock);
+import { registerMaterialsNodeBlocksDebugBlock } from "./debugBlock.pure";
+registerMaterialsNodeBlocksDebugBlock();

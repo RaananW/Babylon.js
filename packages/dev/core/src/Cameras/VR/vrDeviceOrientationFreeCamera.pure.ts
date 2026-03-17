@@ -4,8 +4,10 @@ import { Camera } from "../../Cameras/camera";
 import { DeviceOrientationCamera } from "../../Cameras/deviceOrientationCamera.pure";
 import { VRCameraMetrics } from "./vrCameraMetrics";
 import type { Scene } from "../../scene";
-import type { Vector3 } from "../../Maths/math.vector.pure";
+
 import { _SetVrRigMode } from "../RigModes/vrRigMode";
+import { Node } from "../../node";
+import { Vector3 } from "../../Maths/math.vector.pure";
 
 /**
  * Camera used to simulate VR rendering (based on FreeCamera)
@@ -36,4 +38,17 @@ export class VRDeviceOrientationFreeCamera extends DeviceOrientationCamera {
     }
 
     protected override _setRigMode = (rigParams: any) => _SetVrRigMode(this, rigParams);
+}
+
+
+let _registered = false;
+export function registerVrDeviceOrientationFreeCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("VRDeviceOrientationFreeCamera", (name, scene) => {
+        return () => new VRDeviceOrientationFreeCamera(name, Vector3.Zero(), scene);
+    });
 }

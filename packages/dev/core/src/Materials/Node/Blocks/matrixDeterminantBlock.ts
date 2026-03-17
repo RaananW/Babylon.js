@@ -4,7 +4,5 @@
  */
 export * from "./matrixDeterminantBlock.pure";
 
-import { MatrixDeterminantBlock } from "./matrixDeterminantBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MatrixDeterminantBlock", MatrixDeterminantBlock);
+import { registerMatrixDeterminantBlock } from "./matrixDeterminantBlock.pure";
+registerMatrixDeterminantBlock();

@@ -4,10 +4,5 @@
  */
 export * from "./greasedLineMesh.pure";
 
-import { GreasedLineMesh } from "./greasedLineMesh.pure";
-import type { Scene } from "../../scene";
-import { Mesh } from "../mesh";
-
-Mesh._GreasedLineMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
-    return GreasedLineMesh.Parse(parsedMesh, scene);
-};
+import { registerGreasedLineMesh } from "./greasedLineMesh.pure";
+registerGreasedLineMesh();

@@ -103,6 +103,7 @@ import { _RetryWithInterval } from "./Misc/timingTools.pure";
 import type { ObjectRenderer } from "./Rendering/objectRenderer";
 import type { BoundingBoxRenderer } from "./Rendering/boundingBoxRenderer";
 import type { BoundingBox } from "./Culling/boundingBox";
+import { RegisterClass } from "./Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -6728,3 +6729,14 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
 }
 
 // Register Class Name
+
+
+let _registered = false;
+export function registerScene(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.Scene", Scene);
+}

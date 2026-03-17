@@ -4,7 +4,5 @@
  */
 export * from "./splatReaderBlock.pure";
 
-import { SplatReaderBlock } from "./splatReaderBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SplatReaderBlock", SplatReaderBlock);
+import { registerSplatReaderBlock } from "./splatReaderBlock.pure";
+registerSplatReaderBlock();

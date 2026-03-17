@@ -4,7 +4,5 @@
  */
 export * from "./particleClampBlock.pure";
 
-import { ParticleClampBlock } from "./particleClampBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleClampBlock", ParticleClampBlock);
+import { registerParticleClampBlock } from "./particleClampBlock.pure";
+registerParticleClampBlock();

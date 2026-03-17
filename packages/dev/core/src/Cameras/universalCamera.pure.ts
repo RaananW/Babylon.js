@@ -3,7 +3,10 @@
 import { TouchCamera } from "./touchCamera.pure";
 import type { FreeCameraGamepadInput } from "../Cameras/Inputs/freeCameraGamepadInput";
 import type { Scene } from "../scene";
-import type { Vector3 } from "../Maths/math.vector.pure";
+import { Node } from "../node";
+import { Camera } from "./camera";
+import { Vector3 } from "../Maths/math.vector.pure";
+
 
 /**
  * The Universal Camera is the one to choose for first person shooter type games, and works with all the keyboard, mouse, touch and gamepads. This replaces the earlier Free Camera,
@@ -71,4 +74,22 @@ export class UniversalCamera extends TouchCamera {
     public override getClassName(): string {
         return "UniversalCamera";
     }
+}
+
+
+let _registered = false;
+export function registerUniversalCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("FreeCamera", (name, scene) => {
+        // Forcing to use the Universal camera
+        return () => new UniversalCamera(name, Vector3.Zero(), scene);
+    });
+
+    Camera._CreateDefaultParsedCamera = (name: string, scene: Scene) => {
+        return new UniversalCamera(name, Vector3.Zero(), scene);
+    };
 }

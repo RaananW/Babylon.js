@@ -4,7 +4,5 @@
  */
 export * from "./shaderMaterial.pure";
 
-import { ShaderMaterial } from "./shaderMaterial.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.ShaderMaterial", ShaderMaterial);
+import { registerShaderMaterial } from "./shaderMaterial.pure";
+registerShaderMaterial();

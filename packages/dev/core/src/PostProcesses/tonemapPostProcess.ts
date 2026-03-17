@@ -4,7 +4,5 @@
  */
 export * from "./tonemapPostProcess.pure";
 
-import { TonemapPostProcess } from "./tonemapPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.TonemapPostProcess", TonemapPostProcess);
+import { registerTonemapPostProcess } from "./tonemapPostProcess.pure";
+registerTonemapPostProcess();

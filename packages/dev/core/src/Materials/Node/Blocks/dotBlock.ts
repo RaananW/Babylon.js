@@ -4,7 +4,5 @@
  */
 export * from "./dotBlock.pure";
 
-import { DotBlock } from "./dotBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.DotBlock", DotBlock);
+import { registerDotBlock } from "./dotBlock.pure";
+registerDotBlock();

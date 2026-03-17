@@ -4,7 +4,5 @@
  */
 export * from "./biPlanarBlock.pure";
 
-import { BiPlanarBlock } from "./biPlanarBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.BiPlanarBlock", BiPlanarBlock);
+import { registerBiPlanarBlock } from "./biPlanarBlock.pure";
+registerBiPlanarBlock();

@@ -4,10 +4,5 @@
  */
 export * from "./database.pure";
 
-import { Database } from "./database.pure";
-import { AbstractEngine } from "core/Engines/abstractEngine";
-
-// Sets the default offline provider to Babylon.js
-AbstractEngine.OfflineProviderFactory = (urlToScene: string, callbackManifestChecked: (checked: boolean) => any, disableManifestCheck = false) => {
-    return new Database(urlToScene, callbackManifestChecked, disableManifestCheck);
-};
+import { registerDatabase } from "./database.pure";
+registerDatabase();

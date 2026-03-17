@@ -4,7 +4,5 @@
  */
 export * from "./updateAngleBlock.pure";
 
-import { UpdateAngleBlock } from "./updateAngleBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.UpdateAngleBlock", UpdateAngleBlock);
+import { registerUpdateAngleBlock } from "./updateAngleBlock.pure";
+registerUpdateAngleBlock();

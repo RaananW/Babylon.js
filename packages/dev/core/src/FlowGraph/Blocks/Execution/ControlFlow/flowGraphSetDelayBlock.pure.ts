@@ -10,6 +10,7 @@ import { AdvancedTimer } from "../../../../Misc/timer";
 import { Logger } from "../../../../Misc/logger";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pure";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Block that sets a delay in seconds before activating the output signal.
@@ -128,4 +129,15 @@ export class FlowGraphSetDelayBlock extends FlowGraphAsyncExecutionBlock {
         }
         context._setGlobalContextVariable("pendingDelays", globalTimers);
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphSetDelayBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.SetDelay, FlowGraphSetDelayBlock);
 }

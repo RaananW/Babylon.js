@@ -4,7 +4,5 @@
  */
 export * from "./baseParticleSystem.pure";
 
-import { BaseParticleSystem } from "./baseParticleSystem.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.BaseParticleSystem", BaseParticleSystem);
+import { registerBaseParticleSystem } from "./baseParticleSystem.pure";
+registerBaseParticleSystem();

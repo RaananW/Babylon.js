@@ -4,6 +4,7 @@ import { Vector2, Vector3, Vector4 } from "core/Maths/math.vector.pure";
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to compute value of one parameter modulo another
@@ -92,4 +93,15 @@ export class GeometryModBlock extends NodeGeometryBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerGeometryModBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GeometryModBlock", GeometryModBlock);
 }

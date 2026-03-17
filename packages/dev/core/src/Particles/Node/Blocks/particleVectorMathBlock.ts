@@ -4,7 +4,5 @@
  */
 export * from "./particleVectorMathBlock.pure";
 
-import { ParticleVectorMathBlock } from "./particleVectorMathBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleVectorMathBlock", ParticleVectorMathBlock);
+import { registerParticleVectorMathBlock } from "./particleVectorMathBlock.pure";
+registerParticleVectorMathBlock();

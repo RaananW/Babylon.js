@@ -15,6 +15,7 @@ import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnect
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { ImageSourceBlock } from "./imageSourceBlock.pure";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Base block used for creating Smart Filter shader blocks for the SFE framework.
@@ -168,4 +169,15 @@ export class SmartFilterTextureBlock extends CurrentScreenBlock {
         super._deserialize(serializationObject, scene, rootUrl);
         this.isMainInput = serializationObject.isMainInput;
     }
+}
+
+
+let _registered = false;
+export function registerSmartFilterTextureBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SmartFilterTextureBlock", SmartFilterTextureBlock);
 }

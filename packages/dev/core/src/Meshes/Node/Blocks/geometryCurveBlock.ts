@@ -4,7 +4,5 @@
  */
 export * from "./geometryCurveBlock.pure";
 
-import { GeometryCurveBlock } from "./geometryCurveBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryCurveBlock", GeometryCurveBlock);
+import { registerGeometryCurveBlock } from "./geometryCurveBlock.pure";
+registerGeometryCurveBlock();

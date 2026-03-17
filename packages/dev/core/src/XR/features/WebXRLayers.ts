@@ -4,15 +4,5 @@
  */
 export * from "./WebXRLayers.pure";
 
-import { WebXRLayers } from "./WebXRLayers.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-//register the plugin
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRLayers.Name,
-    (xrSessionManager, options) => {
-        return () => new WebXRLayers(xrSessionManager, options);
-    },
-    WebXRLayers.Version,
-    false
-);
+import { registerWebXRLayers } from "./WebXRLayers.pure";
+registerWebXRLayers();

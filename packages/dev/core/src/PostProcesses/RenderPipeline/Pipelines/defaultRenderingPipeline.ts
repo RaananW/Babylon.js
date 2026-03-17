@@ -4,7 +4,5 @@
  */
 export * from "./defaultRenderingPipeline.pure";
 
-import { DefaultRenderingPipeline } from "./defaultRenderingPipeline.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.DefaultRenderingPipeline", DefaultRenderingPipeline);
+import { registerDefaultRenderingPipeline } from "./defaultRenderingPipeline.pure";
+registerDefaultRenderingPipeline();

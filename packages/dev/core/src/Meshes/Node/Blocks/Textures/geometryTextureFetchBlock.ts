@@ -4,7 +4,5 @@
  */
 export * from "./geometryTextureFetchBlock.pure";
 
-import { GeometryTextureFetchBlock } from "./geometryTextureFetchBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryTextureFetchBlock", GeometryTextureFetchBlock);
+import { registerGeometryTextureFetchBlock } from "./geometryTextureFetchBlock.pure";
+registerGeometryTextureFetchBlock();

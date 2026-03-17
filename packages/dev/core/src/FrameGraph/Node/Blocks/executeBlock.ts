@@ -4,7 +4,5 @@
  */
 export * from "./executeBlock.pure";
 
-import { NodeRenderGraphExecuteBlock } from "./executeBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphExecuteBlock", NodeRenderGraphExecuteBlock);
+import { registerExecuteBlock } from "./executeBlock.pure";
+registerExecuteBlock();

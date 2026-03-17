@@ -4,7 +4,5 @@
  */
 export * from "./colorCorrectionPostProcessBlock.pure";
 
-import { NodeRenderGraphColorCorrectionPostProcessBlock } from "./colorCorrectionPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphColorCorrectionPostProcessBlock", NodeRenderGraphColorCorrectionPostProcessBlock);
+import { registerColorCorrectionPostProcessBlock } from "./colorCorrectionPostProcessBlock.pure";
+registerColorCorrectionPostProcessBlock();

@@ -5,6 +5,7 @@ import type { Scene } from "../../../scene";
 import { EngineStore } from "../../../Engines/engineStore";
 import type { Texture } from "../../../Materials/Textures/texture";
 import { ProceduralTexture } from "./proceduralTexture.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Class used to generate noise procedural textures
@@ -133,4 +134,15 @@ export class NoiseProceduralTexture extends ProceduralTexture {
 
         return texture;
     }
+}
+
+
+let _registered = false;
+export function registerNoiseProceduralTexture(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NoiseProceduralTexture", NoiseProceduralTexture);
 }

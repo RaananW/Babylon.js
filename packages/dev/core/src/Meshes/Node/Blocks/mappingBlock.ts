@@ -4,7 +4,5 @@
  */
 export * from "./mappingBlock.pure";
 
-import { MappingBlock } from "./mappingBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MappingBlock", MappingBlock);
+import { registerMappingBlock } from "./mappingBlock.pure";
+registerMappingBlock();

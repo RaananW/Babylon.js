@@ -4,7 +4,5 @@
  */
 export * from "./geometryArcTan2Block.pure";
 
-import { GeometryArcTan2Block } from "./geometryArcTan2Block.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryArcTan2Block", GeometryArcTan2Block);
+import { registerGeometryArcTan2Block } from "./geometryArcTan2Block.pure";
+registerGeometryArcTan2Block();

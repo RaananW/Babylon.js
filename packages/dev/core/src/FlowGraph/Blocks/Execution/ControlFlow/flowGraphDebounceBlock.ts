@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphDebounceBlock.pure";
 
-import { FlowGraphDebounceBlock } from "./flowGraphDebounceBlock.pure";
-import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.Debounce, FlowGraphDebounceBlock);
+import { registerFlowGraphDebounceBlock } from "./flowGraphDebounceBlock.pure";
+registerFlowGraphDebounceBlock();

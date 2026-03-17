@@ -4,7 +4,5 @@
  */
 export * from "./scene.pure";
 
-import { Scene } from "./scene.pure";
-import { RegisterClass } from "./Misc/typeStore";
-
-RegisterClass("BABYLON.Scene", Scene);
+import { registerScene } from "./scene.pure";
+registerScene();

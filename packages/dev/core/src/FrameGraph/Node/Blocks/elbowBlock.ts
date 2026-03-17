@@ -4,7 +4,5 @@
  */
 export * from "./elbowBlock.pure";
 
-import { NodeRenderGraphElbowBlock } from "./elbowBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphElbowBlock", NodeRenderGraphElbowBlock);
+import { registerFrameGraphNodeBlocksElbowBlock } from "./elbowBlock.pure";
+registerFrameGraphNodeBlocksElbowBlock();

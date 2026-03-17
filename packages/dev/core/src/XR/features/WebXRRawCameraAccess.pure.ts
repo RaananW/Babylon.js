@@ -9,6 +9,7 @@ import { WebGLHardwareTexture } from "../../Engines/WebGL/webGLHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { BaseTexture } from "../../Materials/Textures/baseTexture.pure";
 import type { ThinEngine } from "../../Engines";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * Options for raw camera access
@@ -213,4 +214,22 @@ export class WebXRRawCameraAccess extends WebXRAbstractFeature {
             this.onTexturesUpdatedObservable.notifyObservers(this.texturesData);
         }
     }
+}
+
+
+let _registered = false;
+export function registerWebXRRawCameraAccess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRRawCameraAccess.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRRawCameraAccess(xrSessionManager, options);
+        },
+        WebXRRawCameraAccess.Version,
+        false
+    );
 }

@@ -4,7 +4,5 @@
  */
 export * from "./matrixBuilderBlock.pure";
 
-import { MatrixBuilderBlock } from "./matrixBuilderBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MatrixBuilder", MatrixBuilderBlock);
+import { registerMatrixBuilderBlock } from "./matrixBuilderBlock.pure";
+registerMatrixBuilderBlock();

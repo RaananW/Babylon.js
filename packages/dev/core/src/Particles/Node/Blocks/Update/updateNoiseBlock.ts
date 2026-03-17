@@ -4,7 +4,5 @@
  */
 export * from "./updateNoiseBlock.pure";
 
-import { UpdateNoiseBlock } from "./updateNoiseBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.UpdateNoiseBlock", UpdateNoiseBlock);
+import { registerUpdateNoiseBlock } from "./updateNoiseBlock.pure";
+registerUpdateNoiseBlock();

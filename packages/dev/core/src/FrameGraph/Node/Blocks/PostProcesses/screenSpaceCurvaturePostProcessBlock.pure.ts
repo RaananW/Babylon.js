@@ -6,6 +6,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { FrameGraphScreenSpaceCurvatureTask } from "core/FrameGraph/Tasks/PostProcesses/screenSpaceCurvatureTask";
 import { ThinScreenSpaceCurvaturePostProcess } from "core/PostProcesses/thinScreenSpaceCurvaturePostProcess";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the screen space curvature post process
@@ -96,4 +97,15 @@ export class NodeRenderGraphScreenSpaceCurvaturePostProcessBlock extends NodeRen
         this.ridge = serializationObject.ridge;
         this.valley = serializationObject.valley;
     }
+}
+
+
+let _registered = false;
+export function registerScreenSpaceCurvaturePostProcessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphScreenSpaceCurvaturePostProcessBlock", NodeRenderGraphScreenSpaceCurvaturePostProcessBlock);
 }

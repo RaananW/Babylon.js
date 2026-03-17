@@ -26,6 +26,7 @@ import {
 import { GetCustomCode as getCustomCodeGLSL } from "./greasedLinePluginMaterialShadersGLSL";
 import { GetCustomCode as getCustomCodeWGSL } from "./greasedLinePluginMaterialShadersWGSL";
 import type { GreasedLineBaseMesh } from "../../Meshes";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /**
  * @internal
@@ -655,4 +656,15 @@ export class GreasedLinePluginMaterial extends MaterialPluginBase implements IGr
     private _isGLSL(shaderLanguage: ShaderLanguage) {
         return shaderLanguage === ShaderLanguage.GLSL || this._forceGLSL;
     }
+}
+
+
+let _registered = false;
+export function registerGreasedLinePluginMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(`BABYLON.${GreasedLinePluginMaterial.GREASED_LINE_MATERIAL_NAME}`, GreasedLinePluginMaterial);
 }

@@ -9,6 +9,7 @@ import type { BaseTexture } from "../../Materials/Textures/baseTexture";
 import { PBRBaseMaterial } from "./pbrBaseMaterial.pure";
 import { Material } from "../material";
 import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /**
  * The Physically based material of BJS.
@@ -746,4 +747,15 @@ export class PBRMaterial extends PBRBaseMaterial {
 
         return material;
     }
+}
+
+
+let _registered = false;
+export function registerPbrMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.PBRMaterial", PBRMaterial);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./sheenBlock.pure";
 
-import { SheenBlock } from "./sheenBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SheenBlock", SheenBlock);
+import { registerSheenBlock } from "./sheenBlock.pure";
+registerSheenBlock();

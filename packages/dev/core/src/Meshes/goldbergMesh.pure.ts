@@ -298,3 +298,16 @@ export class GoldbergMesh extends Mesh {
         return goldberg;
     }
 }
+
+
+let _registered = false;
+export function registerGoldbergMesh(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Mesh._GoldbergMeshParser = (parsedMesh: any, scene: Scene): GoldbergMesh => {
+        return GoldbergMesh.Parse(parsedMesh, scene);
+    };
+}

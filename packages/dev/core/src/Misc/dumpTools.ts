@@ -4,14 +4,5 @@
  */
 export * from "./dumpTools.pure";
 
-import { DumpData, DumpDataAsync, DumpFramebuffer } from "./dumpTools.pure";
-import { Tools } from "./tools";
-
-const InitSideEffects = () => {
-    // References the dependencies.
-    Tools.DumpData = DumpData;
-    Tools.DumpDataAsync = DumpDataAsync;
-    Tools.DumpFramebuffer = DumpFramebuffer;
-};
-
-InitSideEffects();
+import { registerDumpTools } from "./dumpTools.pure";
+registerDumpTools();

@@ -4,7 +4,5 @@
  */
 export * from "./matrixComposeBlock.pure";
 
-import { MatrixComposeBlock } from "./matrixComposeBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MatrixComposeBlock", MatrixComposeBlock);
+import { registerMatrixComposeBlock } from "./matrixComposeBlock.pure";
+registerMatrixComposeBlock();

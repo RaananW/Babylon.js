@@ -3,6 +3,7 @@
 import type { NodeRenderGraphConnectionPoint, Scene, FrameGraph, NodeRenderGraphBuildState } from "core/index";
 import { NodeRenderGraphBlockConnectionPointTypes } from "../Types/nodeRenderGraphTypes";
 import { NodeRenderGraphBlock } from "../nodeRenderGraphBlock";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used as a pass through
@@ -53,4 +54,15 @@ export class NodeRenderGraphElbowBlock extends NodeRenderGraphBlock {
 
         this._propagateInputValueToOutput(input, output);
     }
+}
+
+
+let _registered = false;
+export function registerFrameGraphNodeBlocksElbowBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphElbowBlock", NodeRenderGraphElbowBlock);
 }

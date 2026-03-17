@@ -620,3 +620,33 @@ export const PolyhedronBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreatePolyhedron,
 };
+
+
+let _registered = false;
+export function registerPolyhedronBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VertexData.CreatePolyhedron = CreatePolyhedronVertexData;
+
+    Mesh.CreatePolyhedron = (
+        name: string,
+        options: {
+            type?: number;
+            size?: number;
+            sizeX?: number;
+            sizeY?: number;
+            sizeZ?: number;
+            custom?: any;
+            faceUV?: Vector4[];
+            faceColors?: Color4[];
+            updatable?: boolean;
+            sideOrientation?: number;
+        },
+        scene: Scene
+    ): Mesh => {
+        return CreatePolyhedron(name, options, scene);
+    };
+}

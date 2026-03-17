@@ -4,7 +4,5 @@
  */
 export * from "./particleVectorLengthBlock.pure";
 
-import { ParticleVectorLengthBlock } from "./particleVectorLengthBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleVectorLengthBlock", ParticleVectorLengthBlock);
+import { registerParticleVectorLengthBlock } from "./particleVectorLengthBlock.pure";
+registerParticleVectorLengthBlock();

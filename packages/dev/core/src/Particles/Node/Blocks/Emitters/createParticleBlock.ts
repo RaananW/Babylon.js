@@ -4,7 +4,5 @@
  */
 export * from "./createParticleBlock.pure";
 
-import { CreateParticleBlock } from "./createParticleBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.CreateParticleBlock", CreateParticleBlock);
+import { registerCreateParticleBlock } from "./createParticleBlock.pure";
+registerCreateParticleBlock();

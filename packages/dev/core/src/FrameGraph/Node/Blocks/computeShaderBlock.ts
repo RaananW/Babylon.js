@@ -4,7 +4,5 @@
  */
 export * from "./computeShaderBlock.pure";
 
-import { NodeRenderGraphComputeShaderBlock } from "./computeShaderBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphComputeShaderBlock", NodeRenderGraphComputeShaderBlock);
+import { registerComputeShaderBlock } from "./computeShaderBlock.pure";
+registerComputeShaderBlock();

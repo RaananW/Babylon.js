@@ -11,6 +11,7 @@ import { getRichTypeByAnimationType, getRichTypeByFlowGraphType, RichTypeAny, Ri
 import type { Animation } from "core/Animations/animation.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { AnimationCreateAnimation } from "../../../../Animations/animation.pure";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Configuration for the interpolation block.
@@ -182,3 +183,14 @@ export class FlowGraphInterpolationBlock<T> extends FlowGraphBlock {
 }
 
 // #L54P2C
+
+
+let _registered = false;
+export function registerFlowGraphInterpolationBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.ValueInterpolation, FlowGraphInterpolationBlock);
+}

@@ -13,6 +13,7 @@ import type { Effect } from "../../../effect";
 import type { NodeMaterial } from "../../nodeMaterial";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { Constants } from "core/Engines/constants";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to retrieve the depth (zbuffer) of the scene
@@ -304,4 +305,15 @@ export class SceneDepthBlock extends NodeMaterialBlock {
         this.storeCameraSpaceZ = !!serializationObject.storeCameraSpaceZ;
         this.force32itsFloat = serializationObject.force32itsFloat;
     }
+}
+
+
+let _registered = false;
+export function registerSceneDepthBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SceneDepthBlock", SceneDepthBlock);
 }

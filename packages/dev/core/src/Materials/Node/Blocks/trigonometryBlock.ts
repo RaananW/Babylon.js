@@ -4,7 +4,5 @@
  */
 export * from "./trigonometryBlock.pure";
 
-import { TrigonometryBlock } from "./trigonometryBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.TrigonometryBlock", TrigonometryBlock);
+import { registerTrigonometryBlock } from "./trigonometryBlock.pure";
+registerTrigonometryBlock();

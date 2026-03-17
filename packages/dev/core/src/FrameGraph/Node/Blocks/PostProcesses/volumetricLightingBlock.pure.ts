@@ -17,6 +17,7 @@ import { NodeRenderGraphBlockConnectionPointTypes } from "../../Types/nodeRender
 import { Vector3 } from "core/Maths/math.vector.pure";
 import type { Color3 } from "core/Maths/math.color.pure";
 import { Color3FromArray } from "../../../../Maths/math.color.pure";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the volumetric lighting post process
@@ -222,4 +223,15 @@ export class NodeRenderGraphVolumetricLightingBlock extends NodeRenderGraphBlock
         this.extinction = Vector3.FromArray(serializationObject.extinction);
         this.lightPower = Color3FromArray(serializationObject.lightPower);
     }
+}
+
+
+let _registered = false;
+export function registerVolumetricLightingBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphVolumetricLightingBlock", NodeRenderGraphVolumetricLightingBlock);
 }

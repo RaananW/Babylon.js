@@ -4,7 +4,5 @@
  */
 export * from "./grainPostProcessBlock.pure";
 
-import { NodeRenderGraphGrainPostProcessBlock } from "./grainPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphGrainPostProcessBlock", NodeRenderGraphGrainPostProcessBlock);
+import { registerGrainPostProcessBlock } from "./grainPostProcessBlock.pure";
+registerGrainPostProcessBlock();

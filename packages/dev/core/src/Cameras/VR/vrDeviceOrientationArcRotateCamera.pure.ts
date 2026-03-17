@@ -4,8 +4,10 @@ import { Camera } from "../../Cameras/camera";
 import { ArcRotateCamera } from "../../Cameras/arcRotateCamera.pure";
 import { VRCameraMetrics } from "./vrCameraMetrics";
 import type { Scene } from "../../scene";
-import type { Vector3 } from "../../Maths/math.vector.pure";
+
 import { _SetVrRigMode } from "../RigModes/vrRigMode";
+import { Node } from "../../node";
+import { Vector3 } from "../../Maths/math.vector.pure";
 
 /**
  * Camera used to simulate VR rendering (based on ArcRotateCamera)
@@ -50,4 +52,17 @@ export class VRDeviceOrientationArcRotateCamera extends ArcRotateCamera {
     }
 
     protected override _setRigMode = (rigParams: any) => _SetVrRigMode(this, rigParams);
+}
+
+
+let _registered = false;
+export function registerVrDeviceOrientationArcRotateCamera(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("VRDeviceOrientationArcRotateCamera", (name, scene) => {
+        return () => new VRDeviceOrientationArcRotateCamera(name, 0, 0, 1.0, Vector3.Zero(), scene);
+    });
 }

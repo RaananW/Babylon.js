@@ -4,7 +4,5 @@
  */
 export * from "./teleportOutBlock.pure";
 
-import { NodeRenderGraphTeleportOutBlock } from "./teleportOutBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphTeleportOutBlock", NodeRenderGraphTeleportOutBlock);
+import { registerFrameGraphNodeBlocksTeleportTeleportOutBlock } from "./teleportOutBlock.pure";
+registerFrameGraphNodeBlocksTeleportTeleportOutBlock();

@@ -15,6 +15,7 @@ import { PointLight } from "../../../../Lights/pointLight.pure";
 import type { ShadowGenerator } from "../../../../Lights/Shadows/shadowGenerator";
 import type { ShadowLight } from "../../../../Lights";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to get data information from a light
@@ -267,4 +268,15 @@ export class LightInformationBlock extends NodeMaterialBlock {
             this.light = scene.getLightById(serializationObject.lightId);
         }
     }
+}
+
+
+let _registered = false;
+export function registerLightInformationBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.LightInformationBlock", LightInformationBlock);
 }

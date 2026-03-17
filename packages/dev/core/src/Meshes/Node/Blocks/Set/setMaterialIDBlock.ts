@@ -4,7 +4,5 @@
  */
 export * from "./setMaterialIDBlock.pure";
 
-import { SetMaterialIDBlock } from "./setMaterialIDBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SetMaterialIDBlock", SetMaterialIDBlock);
+import { registerSetMaterialIDBlock } from "./setMaterialIDBlock.pure";
+registerSetMaterialIDBlock();

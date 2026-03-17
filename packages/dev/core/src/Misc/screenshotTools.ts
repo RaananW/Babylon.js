@@ -4,15 +4,5 @@
  */
 export * from "./screenshotTools.pure";
 
-import { CreateScreenshot, CreateScreenshotAsync, CreateScreenshotUsingRenderTarget, CreateScreenshotUsingRenderTargetAsync } from "./screenshotTools.pure";
-import { Tools } from "./tools";
-
-const initSideEffects = () => {
-    // References the dependencies.
-    Tools.CreateScreenshot = CreateScreenshot;
-    Tools.CreateScreenshotAsync = CreateScreenshotAsync;
-    Tools.CreateScreenshotUsingRenderTarget = CreateScreenshotUsingRenderTarget;
-    Tools.CreateScreenshotUsingRenderTargetAsync = CreateScreenshotUsingRenderTargetAsync;
-};
-
-initSideEffects();
+import { registerScreenshotTools } from "./screenshotTools.pure";
+registerScreenshotTools();

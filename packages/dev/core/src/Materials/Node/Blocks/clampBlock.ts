@@ -4,7 +4,5 @@
  */
 export * from "./clampBlock.pure";
 
-import { ClampBlock } from "./clampBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ClampBlock", ClampBlock);
+import { registerClampBlock } from "./clampBlock.pure";
+registerClampBlock();

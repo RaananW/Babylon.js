@@ -9,6 +9,7 @@ import type { Camera } from "../Cameras/camera";
 import { Constants } from "../Engines/constants";
 import { serialize } from "../Misc/decorators";
 import { ThinBloomMergePostProcess } from "./thinBloomMergePostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * The BloomMergePostProcess merges blurred images with the original based on the values of the circle of confusion.
@@ -91,4 +92,15 @@ export class BloomMergePostProcess extends PostProcess {
             this.updateEffect();
         }
     }
+}
+
+
+let _registered = false;
+export function registerBloomMergePostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.BloomMergePostProcess", BloomMergePostProcess);
 }

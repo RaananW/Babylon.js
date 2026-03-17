@@ -18,6 +18,7 @@ import { NodeMaterialConnectionPointCustomObject } from "../nodeMaterialConnecti
 import { EngineStore } from "../../../Engines/engineStore";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../Decorators/nodeDecorator";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to read a texture with triplanar mapping (see "boxmap" in https://iquilezles.org/articles/biplanar/)
@@ -614,4 +615,15 @@ export class TriPlanarBlock extends NodeMaterialBlock {
             this.texture = Texture.Parse(serializationObject.texture, scene, rootUrl) as Texture;
         }
     }
+}
+
+
+let _registered = false;
+export function registerTriPlanarBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.TriPlanarBlock", TriPlanarBlock);
 }

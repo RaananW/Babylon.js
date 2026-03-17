@@ -4,7 +4,5 @@
  */
 export * from "./particleNumberMathBlock.pure";
 
-import { ParticleNumberMathBlock } from "./particleNumberMathBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleNumberMathBlock", ParticleNumberMathBlock);
+import { registerParticleNumberMathBlock } from "./particleNumberMathBlock.pure";
+registerParticleNumberMathBlock();

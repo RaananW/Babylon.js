@@ -4,7 +4,5 @@
  */
 export * from "./circleOfConfusionPostProcessBlock.pure";
 
-import { NodeRenderGraphCircleOfConfusionPostProcessBlock } from "./circleOfConfusionPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphCircleOfConfusionPostProcessBlock", NodeRenderGraphCircleOfConfusionPostProcessBlock);
+import { registerCircleOfConfusionPostProcessBlock } from "./circleOfConfusionPostProcessBlock.pure";
+registerCircleOfConfusionPostProcessBlock();

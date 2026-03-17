@@ -4,6 +4,7 @@ import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { Vector2, Vector3, Vector4 } from "core/Maths/math.vector.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to lerp between 2 values
@@ -101,4 +102,15 @@ export class GeometryLerpBlock extends NodeGeometryBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerGeometryLerpBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GeometryLerpBlock", GeometryLerpBlock);
 }

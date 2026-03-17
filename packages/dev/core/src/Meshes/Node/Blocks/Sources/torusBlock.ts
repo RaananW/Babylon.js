@@ -4,7 +4,5 @@
  */
 export * from "./torusBlock.pure";
 
-import { TorusBlock } from "./torusBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.TorusBlock", TorusBlock);
+import { registerTorusBlock } from "./torusBlock.pure";
+registerTorusBlock();

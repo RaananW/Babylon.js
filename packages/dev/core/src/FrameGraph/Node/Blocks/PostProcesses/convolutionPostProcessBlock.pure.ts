@@ -5,6 +5,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { FrameGraphConvolutionTask } from "../../../Tasks/PostProcesses/convolutionTask";
 import { ThinConvolutionPostProcess } from "../../../../PostProcesses/thinConvolutionPostProcess";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the convolution post process
@@ -121,4 +122,15 @@ export class NodeRenderGraphConvolutionPostProcessBlock extends NodeRenderGraphB
     public override getClassName() {
         return "NodeRenderGraphConvolutionPostProcessBlock";
     }
+}
+
+
+let _registered = false;
+export function registerConvolutionPostProcessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphConvolutionPostProcessBlock", NodeRenderGraphConvolutionPostProcessBlock);
 }

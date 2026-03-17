@@ -7,6 +7,7 @@ import { NodeGeometryBlock } from "../../nodeGeometryBlock";
 import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
 import type { Texture } from "core/Materials/Textures/texture";
 import { TextureTools } from "core/Misc/textureTools";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to load texture data
@@ -222,4 +223,15 @@ export class GeometryTextureBlock extends NodeGeometryBlock {
             this.serializedCachedData = !!serializationObject.serializedCachedData;
         }
     }
+}
+
+
+let _registered = false;
+export function registerGeometryTextureBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GeometryTextureBlock", GeometryTextureBlock);
 }

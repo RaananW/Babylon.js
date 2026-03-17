@@ -4,7 +4,5 @@
  */
 export * from "./particleTeleportInBlock.pure";
 
-import { ParticleTeleportInBlock } from "./particleTeleportInBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleTeleportInBlock", ParticleTeleportInBlock);
+import { registerParticleTeleportInBlock } from "./particleTeleportInBlock.pure";
+registerParticleTeleportInBlock();

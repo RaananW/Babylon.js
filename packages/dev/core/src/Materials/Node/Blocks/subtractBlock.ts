@@ -4,7 +4,5 @@
  */
 export * from "./subtractBlock.pure";
 
-import { SubtractBlock } from "./subtractBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SubtractBlock", SubtractBlock);
+import { registerSubtractBlock } from "./subtractBlock.pure";
+registerSubtractBlock();

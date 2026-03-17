@@ -4,7 +4,5 @@
  */
 export * from "./distanceBlock.pure";
 
-import { DistanceBlock } from "./distanceBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.DistanceBlock", DistanceBlock);
+import { registerDistanceBlock } from "./distanceBlock.pure";
+registerDistanceBlock();

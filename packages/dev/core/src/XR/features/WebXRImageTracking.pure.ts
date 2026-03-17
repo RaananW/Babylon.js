@@ -8,6 +8,7 @@ import { Matrix } from "../../Maths/math.vector.pure";
 import type { Nullable } from "../../types";
 import { ToolsError } from "../../Misc/tools.pure";
 import type { Engine } from "../../Engines/engine";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * Options interface for the background remover plugin
@@ -290,4 +291,23 @@ export class WebXRImageTracking extends WebXRAbstractFeature {
 
         this._trackableScoreStatus = imageScores.length > 0 ? ImageTrackingScoreStatus.Received : ImageTrackingScoreStatus.NotReceived;
     }
+}
+
+
+let _registered = false;
+export function registerWebXRImageTracking(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    //register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRImageTracking.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRImageTracking(xrSessionManager, options);
+        },
+        WebXRImageTracking.Version,
+        false
+    );
 }

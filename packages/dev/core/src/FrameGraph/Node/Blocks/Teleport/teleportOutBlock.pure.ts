@@ -3,6 +3,7 @@
 import type { NodeRenderGraphConnectionPoint, Scene, Nullable, FrameGraph, NodeRenderGraphTeleportInBlock, NodeRenderGraphBuildState } from "core/index";
 import { NodeRenderGraphBlockConnectionPointTypes } from "../../Types/nodeRenderGraphTypes";
 import { NodeRenderGraphBlock } from "../../nodeRenderGraphBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Defines a block used to receive a value from a teleport entry point
@@ -128,4 +129,15 @@ export class NodeRenderGraphTeleportOutBlock extends NodeRenderGraphBlock {
 
         this._tempEntryPointUniqueId = serializationObject.entryPoint;
     }
+}
+
+
+let _registered = false;
+export function registerFrameGraphNodeBlocksTeleportTeleportOutBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphTeleportOutBlock", NodeRenderGraphTeleportOutBlock);
 }

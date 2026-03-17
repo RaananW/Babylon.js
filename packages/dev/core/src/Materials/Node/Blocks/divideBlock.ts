@@ -4,7 +4,5 @@
  */
 export * from "./divideBlock.pure";
 
-import { DivideBlock } from "./divideBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.DivideBlock", DivideBlock);
+import { registerDivideBlock } from "./divideBlock.pure";
+registerDivideBlock();

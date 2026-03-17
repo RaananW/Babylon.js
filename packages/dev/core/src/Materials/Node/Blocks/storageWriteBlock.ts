@@ -4,7 +4,5 @@
  */
 export * from "./storageWriteBlock.pure";
 
-import { StorageWriteBlock } from "./storageWriteBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.StorageWriteBlock", StorageWriteBlock);
+import { registerStorageWriteBlock } from "./storageWriteBlock.pure";
+registerStorageWriteBlock();

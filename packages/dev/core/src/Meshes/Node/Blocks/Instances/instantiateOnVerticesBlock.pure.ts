@@ -11,6 +11,7 @@ import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Deco
 import { Epsilon } from "../../../../Maths/math.constants";
 import type { Nullable } from "../../../../types";
 import type { INodeGeometryInstancingContext } from "../../Interfaces/nodeGeometryInstancingContext";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to instance geometry on every vertex of a geometry
@@ -294,4 +295,15 @@ export class InstantiateOnVerticesBlock extends NodeGeometryBlock implements INo
             this.evaluateContext = serializationObject.evaluateContext;
         }
     }
+}
+
+
+let _registered = false;
+export function registerInstantiateOnVerticesBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.InstantiateOnVerticesBlock", InstantiateOnVerticesBlock);
 }

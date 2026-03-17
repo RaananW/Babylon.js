@@ -4,7 +4,5 @@
  */
 export * from "./chromaticAberrationPostProcess.pure";
 
-import { ChromaticAberrationPostProcess } from "./chromaticAberrationPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.ChromaticAberrationPostProcess", ChromaticAberrationPostProcess);
+import { registerChromaticAberrationPostProcess } from "./chromaticAberrationPostProcess.pure";
+registerChromaticAberrationPostProcess();

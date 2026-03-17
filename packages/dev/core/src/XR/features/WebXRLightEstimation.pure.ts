@@ -17,6 +17,7 @@ import { SphericalHarmonics, SphericalPolynomial } from "../../Maths/sphericalPo
 import { LightConstants } from "../../Lights/lightConstants";
 import { HDRFiltering } from "core/Materials/Textures/Filtering/hdrFiltering";
 import type { ThinEngine } from "core/Engines";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * Options for Light Estimation feature
@@ -409,4 +410,23 @@ export class WebXRLightEstimation extends WebXRAbstractFeature {
             }
         }
     }
+}
+
+
+let _registered = false;
+export function registerWebXRLightEstimation(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRLightEstimation.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRLightEstimation(xrSessionManager, options);
+        },
+        WebXRLightEstimation.Version,
+        false
+    );
 }

@@ -8,6 +8,7 @@ import type { AnimationGroup } from "core/Animations/animationGroup";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { Logger } from "core/Misc/logger";
 import { FlowGraphAsyncExecutionBlock } from "core/FlowGraph/flowGraphAsyncExecutionBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * @experimental
@@ -129,4 +130,15 @@ export class FlowGraphStopAnimationBlock extends FlowGraphAsyncExecutionBlock {
             // no-op for now. Probably no need to log anything here.
         }
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphStopAnimationBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.StopAnimation, FlowGraphStopAnimationBlock);
 }

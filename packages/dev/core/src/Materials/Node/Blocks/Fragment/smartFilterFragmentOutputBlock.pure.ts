@@ -6,6 +6,7 @@ import { NodeMaterialModes } from "../../Enums/nodeMaterialModes";
 import { InputBlock } from "../Input/inputBlock.pure";
 import { ScreenSizeBlock } from "../Fragment/screenSizeBlock.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /** @internal */
 export const SfeModeDefine = "USE_SFE_FRAMEWORK";
@@ -116,4 +117,15 @@ export class SmartFilterFragmentOutputBlock extends FragmentOutputBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerSmartFilterFragmentOutputBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SmartFilterFragmentOutputBlock", SmartFilterFragmentOutputBlock);
 }

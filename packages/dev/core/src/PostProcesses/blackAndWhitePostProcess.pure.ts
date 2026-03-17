@@ -9,6 +9,7 @@ import { SerializationHelperParse } from "../Misc/decorators.serialization.pure"
 import type { Nullable } from "../types";
 import type { Scene } from "../scene";
 import { ThinBlackAndWhitePostProcess } from "./thinBlackAndWhitePostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * Post process used to render in black and white
@@ -83,4 +84,15 @@ export class BlackAndWhitePostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerBlackAndWhitePostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.BlackAndWhitePostProcess", BlackAndWhitePostProcess);
 }

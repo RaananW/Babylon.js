@@ -4,7 +4,5 @@
  */
 export * from "./vectorConverterBlock.pure";
 
-import { VectorConverterBlock } from "./vectorConverterBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.VectorConverterBlock", VectorConverterBlock);
+import { registerVectorConverterBlock } from "./vectorConverterBlock.pure";
+registerVectorConverterBlock();

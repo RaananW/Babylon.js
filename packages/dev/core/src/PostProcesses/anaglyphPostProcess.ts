@@ -4,7 +4,5 @@
  */
 export * from "./anaglyphPostProcess.pure";
 
-import { AnaglyphPostProcess } from "./anaglyphPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.AnaglyphPostProcess", AnaglyphPostProcess);
+import { registerAnaglyphPostProcess } from "./anaglyphPostProcess.pure";
+registerAnaglyphPostProcess();

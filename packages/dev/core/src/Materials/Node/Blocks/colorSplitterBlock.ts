@@ -4,7 +4,5 @@
  */
 export * from "./colorSplitterBlock.pure";
 
-import { ColorSplitterBlock } from "./colorSplitterBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ColorSplitterBlock", ColorSplitterBlock);
+import { registerColorSplitterBlock } from "./colorSplitterBlock.pure";
+registerColorSplitterBlock();

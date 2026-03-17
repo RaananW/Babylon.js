@@ -8,6 +8,7 @@ import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
 import { FlowGraphExecutionBlockWithOutSignal } from "../../../flowGraphExecutionBlockWithOutSignal";
 import { Logger } from "core/Misc/logger";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Configuration for the while loop block.
@@ -81,4 +82,15 @@ export class FlowGraphWhileLoopBlock extends FlowGraphExecutionBlockWithOutSigna
     public override getClassName(): string {
         return FlowGraphBlockNames.WhileLoop;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphWhileLoopBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.WhileLoop, FlowGraphWhileLoopBlock);
 }

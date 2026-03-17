@@ -9,6 +9,7 @@ import type { Scene } from "../../../scene";
 import { editableInPropertyPage, PropertyTypeForEdition } from "core/Decorators/nodeDecorator";
 import type { NodeMaterial } from "../nodeMaterial";
 import { InputBlock } from "./Input/inputBlock.pure";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Operations supported by the ConditionalBlock block
@@ -235,4 +236,15 @@ export class ConditionalBlock extends NodeMaterialBlock {
             super._dumpPropertiesCode() + `${this._codeVariableName}.condition = BABYLON.ConditionalBlockConditions.${ConditionalBlockConditions[this.condition]};\n`;
         return codeString;
     }
+}
+
+
+let _registered = false;
+export function registerConditionalBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ConditionalBlock", ConditionalBlock);
 }

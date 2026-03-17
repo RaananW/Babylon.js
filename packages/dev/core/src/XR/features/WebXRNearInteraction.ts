@@ -4,15 +4,5 @@
  */
 export * from "./WebXRNearInteraction.pure";
 
-import { WebXRNearInteraction } from "./WebXRNearInteraction.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-//Register the plugin
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRNearInteraction.Name,
-    (xrSessionManager, options) => {
-        return () => new WebXRNearInteraction(xrSessionManager, options);
-    },
-    WebXRNearInteraction.Version,
-    true
-);
+import { registerWebXRNearInteraction } from "./WebXRNearInteraction.pure";
+registerWebXRNearInteraction();

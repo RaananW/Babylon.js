@@ -4,7 +4,5 @@
  */
 export * from "./reciprocalBlock.pure";
 
-import { ReciprocalBlock } from "./reciprocalBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ReciprocalBlock", ReciprocalBlock);
+import { registerReciprocalBlock } from "./reciprocalBlock.pure";
+registerReciprocalBlock();

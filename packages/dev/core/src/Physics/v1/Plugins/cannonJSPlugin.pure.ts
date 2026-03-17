@@ -13,6 +13,7 @@ import { PhysicsJoint } from "../physicsJoint";
 import { PhysicsRaycastResult } from "../../physicsRaycastResult";
 import type { TransformNode } from "../../../Meshes/transformNode";
 import { Epsilon } from "../../../Maths/math.constants";
+import { PhysicsEngine } from "../physicsEngine";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -803,4 +804,17 @@ export class CannonJSPlugin implements IPhysicsEnginePlugin {
             result.setHitDistance(this._cannonRaycastResult.distance);
         }
     }
+}
+
+
+let _registered = false;
+export function registerCannonJSPlugin(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    PhysicsEngine.DefaultPluginFactory = () => {
+        return new CannonJSPlugin();
+    };
 }

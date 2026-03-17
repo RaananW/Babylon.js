@@ -6,6 +6,7 @@ import { EnvCubeTexture } from "./envCubeTexture.pure";
 import { GetCubeMapTextureData } from "../../Misc/HighDynamicRange/hdr";
 import type { AbstractEngine } from "../../Engines/abstractEngine";
 import type { CubeMapInfo } from "../../Misc/HighDynamicRange/panoramaToCubemap";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /**
  * This represents a texture coming from an HDR input.
@@ -108,4 +109,15 @@ export class HDRCubeTexture extends EnvCubeTexture {
         this._Parse(parsedTexture, texture);
         return texture;
     }
+}
+
+
+let _registered = false;
+export function registerHdrCubeTexture(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.HDRCubeTexture", HDRCubeTexture);
 }

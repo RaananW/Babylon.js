@@ -4,7 +4,5 @@
  */
 export * from "./proceduralTexture.pure";
 
-import { ProceduralTexture } from "./proceduralTexture.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ProceduralTexture", ProceduralTexture);
+import { registerProceduralTexture } from "./proceduralTexture.pure";
+registerProceduralTexture();

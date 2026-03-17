@@ -7,6 +7,7 @@ import { Observable } from "../../Misc/observable";
 import { Vector3, TmpVectors } from "../../Maths/math.vector.pure";
 import { Ray } from "../../Culling/ray.pure";
 import type { Nullable } from "../../types";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * The WebXR Eye Tracking feature grabs eye data from the device and provides it in an easy-access format.
@@ -132,4 +133,22 @@ export class WebXREyeTracking extends WebXRAbstractFeature {
             this._xrSessionManager.session.addEventListener("eyetrackingend", this._eyeTrackingEndListener);
         }
     }
+}
+
+
+let _registered = false;
+export function registerWebXREyeTracking(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXREyeTracking.Name,
+        (xrSessionManager) => {
+            return () => new WebXREyeTracking(xrSessionManager);
+        },
+        WebXREyeTracking.Version,
+        false
+    );
 }

@@ -4,7 +4,5 @@
  */
 export * from "./pbrMetallicRoughnessBlock.pure";
 
-import { PBRMetallicRoughnessBlock } from "./pbrMetallicRoughnessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.PBRMetallicRoughnessBlock", PBRMetallicRoughnessBlock);
+import { registerPbrMetallicRoughnessBlock } from "./pbrMetallicRoughnessBlock.pure";
+registerPbrMetallicRoughnessBlock();

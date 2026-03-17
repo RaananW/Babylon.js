@@ -4,7 +4,5 @@
  */
 export * from "./hdrCubeTexture.pure";
 
-import { HDRCubeTexture } from "./hdrCubeTexture.pure";
-import { RegisterClass } from "../../Misc/typeStore";
-
-RegisterClass("BABYLON.HDRCubeTexture", HDRCubeTexture);
+import { registerHdrCubeTexture } from "./hdrCubeTexture.pure";
+registerHdrCubeTexture();

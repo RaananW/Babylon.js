@@ -4,10 +4,5 @@
  */
 export * from "./anaglyphUniversalCamera.pure";
 
-import { AnaglyphUniversalCamera } from "./anaglyphUniversalCamera.pure";
-import { Vector3 } from "../../Maths/math.vector";
-import { Node } from "../../node";
-
-Node.AddNodeConstructor("AnaglyphUniversalCamera", (name, scene, options) => {
-    return () => new AnaglyphUniversalCamera(name, Vector3.Zero(), options.interaxial_distance, scene);
-});
+import { registerAnaglyphUniversalCamera } from "./anaglyphUniversalCamera.pure";
+registerAnaglyphUniversalCamera();

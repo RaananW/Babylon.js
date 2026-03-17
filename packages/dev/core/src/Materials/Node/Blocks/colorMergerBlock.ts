@@ -4,7 +4,5 @@
  */
 export * from "./colorMergerBlock.pure";
 
-import { ColorMergerBlock } from "./colorMergerBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ColorMergerBlock", ColorMergerBlock);
+import { registerColorMergerBlock } from "./colorMergerBlock.pure";
+registerColorMergerBlock();

@@ -4,7 +4,5 @@
  */
 export * from "./addBlock.pure";
 
-import { AddBlock } from "./addBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.AddBlock", AddBlock);
+import { registerAddBlock } from "./addBlock.pure";
+registerAddBlock();

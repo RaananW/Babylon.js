@@ -8,6 +8,7 @@ import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import type { IWebXRLegacyHitTestOptions, IWebXRLegacyHitResult, IWebXRHitTestFeature } from "./WebXRHitTestLegacy";
 import { ToolsWarn } from "../../Misc/tools.pure";
 import type { Nullable } from "../../types";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * Options used for hit testing (version 2)
@@ -274,4 +275,23 @@ export class WebXRHitTest extends WebXRAbstractFeature implements IWebXRHitTestF
 
         this.onHitTestResultObservable.notifyObservers(results);
     }
+}
+
+
+let _registered = false;
+export function registerWebXRHitTest(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    //register the plugin versions
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRHitTest.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRHitTest(xrSessionManager, options);
+        },
+        WebXRHitTest.Version,
+        false
+    );
 }

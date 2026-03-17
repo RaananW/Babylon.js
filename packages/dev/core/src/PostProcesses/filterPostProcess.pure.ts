@@ -10,6 +10,7 @@ import { serializeAsMatrix } from "../Misc/decorators";
 import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import type { Scene } from "../scene";
 import { ThinFilterPostProcess } from "./thinFilterPostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * Applies a kernel filter to the image
@@ -93,4 +94,15 @@ export class FilterPostProcess extends PostProcess {
             rootUrl
         );
     }
+}
+
+
+let _registered = false;
+export function registerFilterPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.FilterPostProcess", FilterPostProcess);
 }

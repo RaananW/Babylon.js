@@ -116,3 +116,26 @@ export const PlaneBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreatePlane,
 };
+
+
+let _registered = false;
+export function registerPlaneBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VertexData.CreatePlane = CreatePlaneVertexData;
+
+    Mesh.CreatePlane = (name: string, size: number, scene: Scene, updatable?: boolean, sideOrientation?: number): Mesh => {
+        const options = {
+            size,
+            width: size,
+            height: size,
+            sideOrientation,
+            updatable,
+        };
+
+        return CreatePlane(name, options, scene);
+    };
+}

@@ -14,6 +14,7 @@ import { TmpVectors, Vector3, Vector4 } from "core/Maths/math.vector.pure";
 import { RandomRange } from "core/Maths/math.scalar.functions";
 import { _CreateLocalPositionData } from "./emitters.functions";
 import { VertexDataParse } from "../../../../Meshes/mesh.vertexData.pure";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Defines a block used to generate particle shape from mesh geometry data
@@ -288,4 +289,15 @@ export class MeshShapeBlock extends NodeParticleBlock implements IShapeBlock {
         this.useMeshColorForColor = !!serializationObject.useMeshColorForColor;
         this.worldSpace = !!serializationObject.worldSpace;
     }
+}
+
+
+let _registered = false;
+export function registerMeshShapeBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.MeshShapeBlock", MeshShapeBlock);
 }

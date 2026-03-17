@@ -4,7 +4,5 @@
  */
 export * from "./latticeBlock.pure";
 
-import { LatticeBlock } from "./latticeBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.LatticeBlock", LatticeBlock);
+import { registerLatticeBlock } from "./latticeBlock.pure";
+registerLatticeBlock();

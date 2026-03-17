@@ -4,7 +4,5 @@
  */
 export * from "./particleSourceTextureBlock.pure";
 
-import { ParticleTextureSourceBlock } from "./particleSourceTextureBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleTextureSourceBlock", ParticleTextureSourceBlock);
+import { registerParticleSourceTextureBlock } from "./particleSourceTextureBlock.pure";
+registerParticleSourceTextureBlock();

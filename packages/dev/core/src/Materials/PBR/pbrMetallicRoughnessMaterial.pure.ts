@@ -7,6 +7,7 @@ import type { Color3 } from "../../Maths/math.color";
 import type { BaseTexture } from "../../Materials/Textures/baseTexture";
 import { PBRBaseSimpleMaterial } from "./pbrBaseSimpleMaterial";
 import type { Nullable } from "../../types";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /**
  * The PBR material of BJS following the metal roughness convention.
@@ -158,4 +159,15 @@ export class PBRMetallicRoughnessMaterial extends PBRBaseSimpleMaterial {
         }
         return material;
     }
+}
+
+
+let _registered = false;
+export function registerPbrMetallicRoughnessMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.PBRMetallicRoughnessMaterial", PBRMetallicRoughnessMaterial);
 }

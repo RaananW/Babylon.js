@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphMeshPickEventBlock.pure";
 
-import { FlowGraphMeshPickEventBlock } from "./flowGraphMeshPickEventBlock.pure";
-import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.MeshPickEvent, FlowGraphMeshPickEventBlock);
+import { registerFlowGraphMeshPickEventBlock } from "./flowGraphMeshPickEventBlock.pure";
+registerFlowGraphMeshPickEventBlock();

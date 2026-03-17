@@ -4,7 +4,5 @@
  */
 export * from "./updateAttractorBlock.pure";
 
-import { UpdateAttractorBlock } from "./updateAttractorBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.UpdateAttractorBlock", UpdateAttractorBlock);
+import { registerUpdateAttractorBlock } from "./updateAttractorBlock.pure";
+registerUpdateAttractorBlock();

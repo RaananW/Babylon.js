@@ -10,6 +10,7 @@ import type { Mesh } from "core/Meshes/mesh";
 import type { Effect } from "core/Materials/effect";
 import type { NodeMaterial } from "../../nodeMaterial";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used for Reading components of the Gaussian Splatting
@@ -132,4 +133,15 @@ export class SplatReaderBlock extends NodeMaterialBlock {
 
         return this;
     }
+}
+
+
+let _registered = false;
+export function registerSplatReaderBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SplatReaderBlock", SplatReaderBlock);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./imageProcessingBlock.pure";
 
-import { ImageProcessingBlock } from "./imageProcessingBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ImageProcessingBlock", ImageProcessingBlock);
+import { registerImageProcessingBlock } from "./imageProcessingBlock.pure";
+registerImageProcessingBlock();

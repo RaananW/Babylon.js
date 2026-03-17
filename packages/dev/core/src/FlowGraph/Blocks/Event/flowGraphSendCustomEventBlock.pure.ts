@@ -5,6 +5,7 @@ import { FlowGraphExecutionBlockWithOutSignal } from "../../flowGraphExecutionBl
 import type { FlowGraphContext } from "../../flowGraphContext";
 import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Parameters used to create a FlowGraphSendCustomEventBlock.
@@ -58,4 +59,15 @@ export class FlowGraphSendCustomEventBlock extends FlowGraphExecutionBlockWithOu
     public override getClassName(): string {
         return FlowGraphBlockNames.ReceiveCustomEvent;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphSendCustomEventBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.ReceiveCustomEvent, FlowGraphSendCustomEventBlock);
 }

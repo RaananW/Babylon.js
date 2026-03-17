@@ -13,6 +13,7 @@ import { Constants } from "../Engines/constants";
 import { UniformBufferEffectCommonAccessor } from "../Materials/uniformBufferEffectCommonAccessor";
 import type { ComputeBindingMapping } from "../Engines/Extensions/engine.computeShader";
 import type { Effect } from "../Materials/effect";
+import { RegisterClass } from "../Misc/typeStore";
 
 /** @internal */
 export class ComputeShaderParticleSystem implements IGPUParticleSystemPlatform {
@@ -212,4 +213,15 @@ export class ComputeShaderParticleSystem implements IGPUParticleSystemPlatform {
     public releaseVertexBuffers(): void {
         this._renderVertexBuffers.length = 0;
     }
+}
+
+
+let _registered = false;
+export function registerComputeShaderParticleSystem(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ComputeShaderParticleSystem", ComputeShaderParticleSystem);
 }

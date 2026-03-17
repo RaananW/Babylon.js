@@ -25,6 +25,8 @@ import { LightConstants } from "../lightConstants";
 import type { PointLight } from "../pointLight";
 import type { SpotLight } from "../spotLight";
 import type { RenderTargetWrapper } from "../../Engines/renderTargetWrapper";
+import { RegisterClass } from "core/Misc/typeStore";
+import { Node } from "core/node";
 
 const DefaultDepthSlices = 16;
 
@@ -588,4 +590,20 @@ export class ClusteredLightContainer extends Light {
         this._updateBatches();
         return this._proxyMesh.isReady(true, true);
     }
+}
+
+
+let _registered = false;
+export function registerClusteredLightContainer(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    Node.AddNodeConstructor("Light_Type_5", (name, scene) => {
+        return () => new ClusteredLightContainer(name, [], scene);
+    });
+
+    // Register Class Name
+    RegisterClass("BABYLON.ClusteredLightContainer", ClusteredLightContainer);
 }

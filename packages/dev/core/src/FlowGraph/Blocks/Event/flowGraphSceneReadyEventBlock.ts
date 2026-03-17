@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphSceneReadyEventBlock.pure";
 
-import { FlowGraphSceneReadyEventBlock } from "./flowGraphSceneReadyEventBlock.pure";
-import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.SceneReadyEvent, FlowGraphSceneReadyEventBlock);
+import { registerFlowGraphSceneReadyEventBlock } from "./flowGraphSceneReadyEventBlock.pure";
+registerFlowGraphSceneReadyEventBlock();

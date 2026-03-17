@@ -4,7 +4,5 @@
  */
 export * from "./interpolateValueAction.pure";
 
-import { InterpolateValueAction } from "./interpolateValueAction.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.InterpolateValueAction", InterpolateValueAction);
+import { registerInterpolateValueAction } from "./interpolateValueAction.pure";
+registerInterpolateValueAction();

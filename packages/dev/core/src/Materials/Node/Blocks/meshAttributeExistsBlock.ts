@@ -4,7 +4,5 @@
  */
 export * from "./meshAttributeExistsBlock.pure";
 
-import { MeshAttributeExistsBlock } from "./meshAttributeExistsBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.MeshAttributeExistsBlock", MeshAttributeExistsBlock);
+import { registerMeshAttributeExistsBlock } from "./meshAttributeExistsBlock.pure";
+registerMeshAttributeExistsBlock();

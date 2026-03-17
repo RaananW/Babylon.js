@@ -4,6 +4,7 @@ import type { NodeRenderGraphConnectionPoint, Scene, FrameGraph, FrameGraphConte
 import { NodeRenderGraphBlockConnectionPointTypes } from "../Types/nodeRenderGraphTypes";
 import { NodeRenderGraphBlock } from "../nodeRenderGraphBlock";
 import { FrameGraphExecuteTask } from "../../Tasks/Misc/executeTask";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Block used to execute a custom function in the frame graph
@@ -72,4 +73,15 @@ export class NodeRenderGraphExecuteBlock extends NodeRenderGraphBlock {
     public get output(): NodeRenderGraphConnectionPoint {
         return this._outputs[0];
     }
+}
+
+
+let _registered = false;
+export function registerExecuteBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphExecuteBlock", NodeRenderGraphExecuteBlock);
 }

@@ -7,6 +7,7 @@ import type { BaseTexture } from "../../Materials/Textures/baseTexture";
 import { PBRBaseSimpleMaterial } from "./pbrBaseSimpleMaterial";
 import type { Nullable } from "../../types";
 import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /**
  * The PBR material of BJS following the specular glossiness convention.
@@ -155,4 +156,15 @@ export class PBRSpecularGlossinessMaterial extends PBRBaseSimpleMaterial {
         }
         return material;
     }
+}
+
+
+let _registered = false;
+export function registerPbrSpecularGlossinessMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.PBRSpecularGlossinessMaterial", PBRSpecularGlossinessMaterial);
 }

@@ -12,6 +12,7 @@ import { MaterialPluginBase } from "../materialPluginBase.pure";
 import { ShaderLanguage } from "../shaderLanguage";
 import { GetGaussianSplattingMaxPartCount } from "./gaussianSplattingMaterial.pure";
 import type { GaussianSplattingMaterial } from "./gaussianSplattingMaterial";
+import { RegisterClass } from "../../Misc/typeStore";
 
 /**
  * Plugin for GaussianSplattingMaterial that replaces per-splat colors with a
@@ -210,4 +211,15 @@ if (uniforms.solidColorEnabled > 0.5) {
 
         effect.setArray3("partColors", colorArray);
     }
+}
+
+
+let _registered = false;
+export function registerGaussianSplattingSolidColorMaterialPlugin(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.GaussianSplattingSolidColorMaterialPlugin", GaussianSplattingSolidColorMaterialPlugin);
 }

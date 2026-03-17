@@ -9,6 +9,7 @@ import { Observable } from "../../Misc/observable";
 import { Mesh } from "../../Meshes/mesh.pure";
 import { VertexBuffer } from "core/Buffers/buffer.pure";
 import { Logger } from "core/Misc/logger";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * Options used in the mesh detector module
@@ -305,4 +306,22 @@ export class WebXRMeshDetector extends WebXRAbstractFeature {
 
         return <IWebXRVertexData>mesh;
     }
+}
+
+
+let _registered = false;
+export function registerWebXRMeshDetector(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRMeshDetector.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRMeshDetector(xrSessionManager, options);
+        },
+        WebXRMeshDetector.Version,
+        false
+    );
 }

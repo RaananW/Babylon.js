@@ -4,7 +4,5 @@
  */
 export * from "./sceneDepthBlock.pure";
 
-import { SceneDepthBlock } from "./sceneDepthBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SceneDepthBlock", SceneDepthBlock);
+import { registerSceneDepthBlock } from "./sceneDepthBlock.pure";
+registerSceneDepthBlock();

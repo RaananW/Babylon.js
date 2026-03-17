@@ -13,6 +13,7 @@ import type { UniformBuffer } from "./uniformBuffer";
 import type { PBRBaseMaterial } from "./PBR/pbrBaseMaterial";
 import type { StandardMaterial } from "./standardMaterial";
 import { BindTextureMatrix, PrepareDefinesForMergedUV } from "./materialHelper.functions";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * @internal
@@ -157,4 +158,15 @@ export class DecalMapConfiguration extends MaterialPluginBase {
             ],
         };
     }
+}
+
+
+let _registered = false;
+export function registerMaterialDecalMapConfiguration(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.DecalMapConfiguration", DecalMapConfiguration);
 }

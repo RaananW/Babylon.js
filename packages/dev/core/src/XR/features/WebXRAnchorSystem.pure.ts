@@ -7,6 +7,7 @@ import { Matrix, Vector3, Quaternion } from "../../Maths/math.vector.pure";
 import type { TransformNode } from "../../Meshes/transformNode";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import type { IWebXRHitResult } from "./WebXRHitTest";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**
  * Configuration options of the anchor system
@@ -424,4 +425,22 @@ export class WebXRAnchorSystem extends WebXRAbstractFeature {
             throw new Error("Anchors are not enabled in your browser");
         }
     }
+}
+
+
+let _registered = false;
+export function registerWebXRAnchorSystem(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRAnchorSystem.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRAnchorSystem(xrSessionManager, options);
+        },
+        WebXRAnchorSystem.Version
+    );
 }

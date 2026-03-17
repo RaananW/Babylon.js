@@ -4,7 +4,5 @@
  */
 export * from "./clipPlanesBlock.pure";
 
-import { ClipPlanesBlock } from "./clipPlanesBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ClipPlanesBlock", ClipPlanesBlock);
+import { registerClipPlanesBlock } from "./clipPlanesBlock.pure";
+registerClipPlanesBlock();

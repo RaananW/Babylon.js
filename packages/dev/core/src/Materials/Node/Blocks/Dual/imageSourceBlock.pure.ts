@@ -15,6 +15,7 @@ import type { Scene } from "../../../../scene";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { EngineStore } from "../../../../Engines/engineStore";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block used to provide an image for a TextureBlock
@@ -220,4 +221,15 @@ export class ImageSourceBlock extends NodeMaterialBlock {
             }
         }
     }
+}
+
+
+let _registered = false;
+export function registerImageSourceBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ImageSourceBlock", ImageSourceBlock);
 }

@@ -4,7 +4,5 @@
  */
 export * from "./fxaaPostProcess.pure";
 
-import { FxaaPostProcess } from "./fxaaPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.FxaaPostProcess", FxaaPostProcess);
+import { registerFxaaPostProcess } from "./fxaaPostProcess.pure";
+registerFxaaPostProcess();

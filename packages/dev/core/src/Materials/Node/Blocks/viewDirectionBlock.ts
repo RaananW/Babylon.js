@@ -4,7 +4,5 @@
  */
 export * from "./viewDirectionBlock.pure";
 
-import { ViewDirectionBlock } from "./viewDirectionBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ViewDirectionBlock", ViewDirectionBlock);
+import { registerViewDirectionBlock } from "./viewDirectionBlock.pure";
+registerViewDirectionBlock();

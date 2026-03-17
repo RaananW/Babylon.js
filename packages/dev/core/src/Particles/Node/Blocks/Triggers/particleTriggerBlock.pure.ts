@@ -11,6 +11,7 @@ import type { SystemBlock } from "../systemBlock";
 import { editableInPropertyPage, PropertyTypeForEdition } from "core/Decorators/nodeDecorator";
 import { _TriggerSubEmitter } from "./triggerTools";
 import type { Nullable } from "core/types";
+import { RegisterClass } from "core/Misc/typeStore";
 
 /**
  * Block used to trigger a particle system based on a condition.
@@ -156,4 +157,15 @@ export class ParticleTriggerBlock extends NodeParticleBlock {
         super.dispose();
         this._triggerCount = 0;
     }
+}
+
+
+let _registered = false;
+export function registerParticleTriggerBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.ParticleTriggerBlock", ParticleTriggerBlock);
 }

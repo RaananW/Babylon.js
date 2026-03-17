@@ -4,7 +4,5 @@
  */
 export * from "./curveBlock.pure";
 
-import { CurveBlock } from "./curveBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.CurveBlock", CurveBlock);
+import { registerCurveBlock } from "./curveBlock.pure";
+registerCurveBlock();

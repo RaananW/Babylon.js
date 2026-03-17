@@ -4,7 +4,5 @@
  */
 export * from "./reflectionTextureBaseBlock.pure";
 
-import { ReflectionTextureBaseBlock } from "./reflectionTextureBaseBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ReflectionTextureBaseBlock", ReflectionTextureBaseBlock);
+import { registerReflectionTextureBaseBlock } from "./reflectionTextureBaseBlock.pure";
+registerReflectionTextureBaseBlock();

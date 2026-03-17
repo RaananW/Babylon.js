@@ -23,6 +23,8 @@ import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetT
 import type { Scene } from "../../scene";
 import type { VideoTexture, VideoTextureSettings } from "./videoTexture";
 import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
+import { RegisterClass } from "../../Misc/typeStore";
+import { SerializationHelper } from "../../Misc/decorators.serialization.pure";
 
 /**
  * Defines the available options when creating a texture
@@ -1241,4 +1243,18 @@ export class Texture extends BaseTexture {
             forcedExtension
         );
     }
+}
+
+
+let _registered = false;
+export function registerTexture(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // References the dependencies.
+    RegisterClass("BABYLON.Texture", Texture);
+
+    SerializationHelper._TextureParser = Texture.Parse;
 }

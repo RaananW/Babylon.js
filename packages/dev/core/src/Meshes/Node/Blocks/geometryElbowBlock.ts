@@ -4,7 +4,5 @@
  */
 export * from "./geometryElbowBlock.pure";
 
-import { GeometryElbowBlock } from "./geometryElbowBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.GeometryElbowBlock", GeometryElbowBlock);
+import { registerGeometryElbowBlock } from "./geometryElbowBlock.pure";
+registerGeometryElbowBlock();

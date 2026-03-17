@@ -4,7 +4,5 @@
  */
 export * from "./particleLocalVariableBlock.pure";
 
-import { ParticleLocalVariableBlock } from "./particleLocalVariableBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleLocalVariableBlock", ParticleLocalVariableBlock);
+import { registerParticleLocalVariableBlock } from "./particleLocalVariableBlock.pure";
+registerParticleLocalVariableBlock();

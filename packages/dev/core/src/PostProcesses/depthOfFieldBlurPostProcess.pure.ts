@@ -11,6 +11,7 @@ import type { Scene } from "../scene";
 import { Constants } from "../Engines/constants";
 import type { AbstractEngine } from "core/Engines/abstractEngine";
 import { ThinDepthOfFieldBlurPostProcess } from "./thinDepthOfFieldBlurPostProcess";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * The DepthOfFieldBlurPostProcess applied a blur in a give direction.
@@ -88,4 +89,15 @@ export class DepthOfFieldBlurPostProcess extends BlurPostProcess {
             effect.setTextureFromPostProcessOutput("circleOfConfusionSampler", circleOfConfusion);
         });
     }
+}
+
+
+let _registered = false;
+export function registerDepthOfFieldBlurPostProcess(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.DepthOfFieldBlurPostProcess", DepthOfFieldBlurPostProcess);
 }

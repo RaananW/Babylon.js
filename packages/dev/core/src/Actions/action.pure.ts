@@ -14,6 +14,7 @@ import type { Mesh } from "../Meshes/mesh";
 import type { Light } from "../Lights/light";
 import type { Camera } from "../Cameras/camera";
 import type { Node } from "../node";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * Interface used to define Action
@@ -326,4 +327,15 @@ export class Action implements IAction {
             value: (<Scene>target)._isScene ? "Scene" : (<Node>target).name,
         };
     };
+}
+
+
+let _registered = false;
+export function registerAction(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.Action", Action);
 }

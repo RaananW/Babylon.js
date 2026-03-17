@@ -4,7 +4,5 @@
  */
 export * from "./particleTrigonometryBlock.pure";
 
-import { ParticleTrigonometryBlock } from "./particleTrigonometryBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ParticleTrigonometryBlock", ParticleTrigonometryBlock);
+import { registerParticleTrigonometryBlock } from "./particleTrigonometryBlock.pure";
+registerParticleTrigonometryBlock();

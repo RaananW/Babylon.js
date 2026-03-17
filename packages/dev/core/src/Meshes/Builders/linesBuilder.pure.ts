@@ -10,6 +10,7 @@ import type { Scene } from "../../scene";
 import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { Logger } from "../../Misc/logger";
 import type { Material } from "../../Materials/material";
+import { Mesh } from "../mesh.pure";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -303,3 +304,46 @@ export const LinesBuilder = {
     CreateLineSystem,
     CreateLines,
 };
+
+
+let _registered = false;
+export function registerLinesBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VertexData.CreateLineSystem = CreateLineSystemVertexData;
+
+    VertexData.CreateDashedLines = CreateDashedLinesVertexData;
+
+    Mesh.CreateLines = (name: string, points: Vector3[], scene: Nullable<Scene> = null, updatable: boolean = false, instance: Nullable<LinesMesh> = null): LinesMesh => {
+        const options = {
+            points,
+            updatable,
+            instance,
+        };
+        return CreateLines(name, options, scene);
+    };
+
+    Mesh.CreateDashedLines = (
+        name: string,
+        points: Vector3[],
+        dashSize: number,
+        gapSize: number,
+        dashNb: number,
+        scene: Nullable<Scene> = null,
+        updatable?: boolean,
+        instance?: LinesMesh
+    ): LinesMesh => {
+        const options = {
+            points,
+            dashSize,
+            gapSize,
+            dashNb,
+            updatable,
+            instance,
+        };
+        return CreateDashedLines(name, options, scene);
+    };
+}

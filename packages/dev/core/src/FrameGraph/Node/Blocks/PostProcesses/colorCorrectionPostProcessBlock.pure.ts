@@ -5,6 +5,7 @@ import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Deco
 import { FrameGraphColorCorrectionTask } from "../../../Tasks/PostProcesses/colorCorrectionTask";
 import { ThinColorCorrectionPostProcess } from "../../../../PostProcesses/thinColorCorrectionPostProcess";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Block that implements the color correction post process
@@ -69,4 +70,15 @@ export class NodeRenderGraphColorCorrectionPostProcessBlock extends NodeRenderGr
     public override getClassName() {
         return "NodeRenderGraphColorCorrectionPostProcessBlock";
     }
+}
+
+
+let _registered = false;
+export function registerColorCorrectionPostProcessBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.NodeRenderGraphColorCorrectionPostProcessBlock", NodeRenderGraphColorCorrectionPostProcessBlock);
 }

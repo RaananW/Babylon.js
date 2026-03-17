@@ -4,8 +4,5 @@
  */
 export * from "./flowGraphGetPropertyBlock.pure";
 
-import { FlowGraphGetPropertyBlock } from "./flowGraphGetPropertyBlock.pure";
-import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass(FlowGraphBlockNames.GetProperty, FlowGraphGetPropertyBlock);
+import { registerFlowGraphGetPropertyBlock } from "./flowGraphGetPropertyBlock.pure";
+registerFlowGraphGetPropertyBlock();

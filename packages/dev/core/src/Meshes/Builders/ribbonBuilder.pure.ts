@@ -441,3 +441,40 @@ export const RibbonBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateRibbon,
 };
+
+
+let _registered = false;
+export function registerRibbonBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VertexData.CreateRibbon = CreateRibbonVertexData;
+
+    Mesh.CreateRibbon = (
+        name: string,
+        pathArray: Vector3[][],
+        closeArray: boolean = false,
+        closePath: boolean,
+        offset: number,
+        scene?: Scene,
+        updatable: boolean = false,
+        sideOrientation?: number,
+        instance?: Mesh
+    ) => {
+        return CreateRibbon(
+            name,
+            {
+                pathArray: pathArray,
+                closeArray: closeArray,
+                closePath: closePath,
+                offset: offset,
+                updatable: updatable,
+                sideOrientation: sideOrientation,
+                instance: instance,
+            },
+            scene
+        );
+    };
+}

@@ -176,3 +176,40 @@ export const TorusKnotBuilder = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     CreateTorusKnot,
 };
+
+
+let _registered = false;
+export function registerTorusKnotBuilder(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    VertexData.CreateTorusKnot = CreateTorusKnotVertexData;
+
+    Mesh.CreateTorusKnot = (
+        name: string,
+        radius: number,
+        tube: number,
+        radialSegments: number,
+        tubularSegments: number,
+        p: number,
+        q: number,
+        scene?: Scene,
+        updatable?: boolean,
+        sideOrientation?: number
+    ): Mesh => {
+        const options = {
+            radius,
+            tube,
+            radialSegments,
+            tubularSegments,
+            p,
+            q,
+            sideOrientation,
+            updatable,
+        };
+
+        return CreateTorusKnot(name, options, scene);
+    };
+}

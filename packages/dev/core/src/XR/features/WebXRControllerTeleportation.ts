@@ -4,14 +4,5 @@
  */
 export * from "./WebXRControllerTeleportation.pure";
 
-import { WebXRMotionControllerTeleportation } from "./WebXRControllerTeleportation.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRMotionControllerTeleportation.Name,
-    (xrSessionManager, options) => {
-        return () => new WebXRMotionControllerTeleportation(xrSessionManager, options);
-    },
-    WebXRMotionControllerTeleportation.Version,
-    true
-);
+import { registerWebXRControllerTeleportation } from "./WebXRControllerTeleportation.pure";
+registerWebXRControllerTeleportation();

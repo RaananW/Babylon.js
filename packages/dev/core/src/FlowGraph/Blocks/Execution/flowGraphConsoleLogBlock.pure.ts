@@ -7,6 +7,7 @@ import { RichTypeAny } from "../../flowGraphRichTypes.pure";
 import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
 import { Logger } from "core/Misc/logger";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
+import { RegisterClass } from "../../../Misc/typeStore";
 
 /**
  * Configuration for the console log block.
@@ -98,4 +99,15 @@ export class FlowGraphConsoleLogBlock extends FlowGraphExecutionBlockWithOutSign
         }
         return matches;
     }
+}
+
+
+let _registered = false;
+export function registerFlowGraphConsoleLogBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass(FlowGraphBlockNames.ConsoleLog, FlowGraphConsoleLogBlock);
 }

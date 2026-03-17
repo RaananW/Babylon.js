@@ -6,6 +6,9 @@ import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetT
 import type { ISceneSerializableComponent } from "../../sceneComponent";
 import { SceneComponentConstants } from "../../sceneComponent";
 import type { IAssetContainer } from "core/IAssetContainer";
+import { ShadowGenerator } from "./shadowGenerator";
+import { CascadedShadowGenerator } from "./cascadedShadowGenerator";
+import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
 
 /**
  * Defines the shadow generator component responsible to manage any shadow generators
@@ -119,4 +122,37 @@ export class ShadowGeneratorSceneComponent implements ISceneSerializableComponen
             }
         }
     }
+}
+
+
+let _registered = false;
+export function registerShadowGeneratorSceneComponent(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // Adds the parser to the scene parsers.
+    AddParser(SceneComponentConstants.NAME_SHADOWGENERATOR, (parsedData: any, scene: Scene) => {
+        // Shadows
+        if (parsedData.shadowGenerators !== undefined && parsedData.shadowGenerators !== null) {
+            for (let index = 0, cache = parsedData.shadowGenerators.length; index < cache; index++) {
+                const parsedShadowGenerator = parsedData.shadowGenerators[index];
+                if (parsedShadowGenerator.className === CascadedShadowGenerator.CLASSNAME) {
+                    CascadedShadowGenerator.Parse(parsedShadowGenerator, scene);
+                } else {
+                    ShadowGenerator.Parse(parsedShadowGenerator, scene);
+                }
+                // SG would be available on their associated lights
+            }
+        }
+    });
+
+    ShadowGenerator._SceneComponentInitialization = (scene: Scene) => {
+        let component = scene._getComponent(SceneComponentConstants.NAME_SHADOWGENERATOR);
+        if (!component) {
+            component = new ShadowGeneratorSceneComponent(scene);
+            scene._addComponent(component);
+        }
+    };
 }

@@ -12,6 +12,7 @@ import type { Effect } from "../../../effect";
 import type { Mesh } from "../../../../Meshes/mesh";
 import { BindLogDepth } from "../../../materialHelper.functions.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**
  * Color spaces supported by the fragment output block
@@ -312,4 +313,15 @@ export class FragmentOutputBlock extends NodeMaterialBlock {
         this.convertToLinearSpace = !!serializationObject.convertToLinearSpace;
         this.useLogarithmicDepth = serializationObject.useLogarithmicDepth ?? false;
     }
+}
+
+
+let _registered = false;
+export function registerFragmentOutputBlock(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.FragmentOutputBlock", FragmentOutputBlock);
 }

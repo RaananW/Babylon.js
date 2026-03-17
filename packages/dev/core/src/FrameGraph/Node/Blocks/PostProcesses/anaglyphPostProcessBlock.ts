@@ -4,7 +4,5 @@
  */
 export * from "./anaglyphPostProcessBlock.pure";
 
-import { NodeRenderGraphAnaglyphPostProcessBlock } from "./anaglyphPostProcessBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphAnaglyphPostProcessBlock", NodeRenderGraphAnaglyphPostProcessBlock);
+import { registerAnaglyphPostProcessBlock } from "./anaglyphPostProcessBlock.pure";
+registerAnaglyphPostProcessBlock();

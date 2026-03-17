@@ -4,7 +4,5 @@
  */
 export * from "./currentScreenBlock.pure";
 
-import { CurrentScreenBlock } from "./currentScreenBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.CurrentScreenBlock", CurrentScreenBlock);
+import { registerCurrentScreenBlock } from "./currentScreenBlock.pure";
+registerCurrentScreenBlock();

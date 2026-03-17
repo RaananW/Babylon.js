@@ -86,5 +86,4 @@ export * from "./Blocks/geometryInterceptorBlock.pure";
 export * from "./Blocks/geometryEaseBlock.pure";
 export * from "./Blocks/Set/aggregatorBlock.pure";
 export * from "./Blocks/subdivideBlock.pure";
-export * from "./Blocks/extrudeGeometryBlock";
 export * from "./Blocks/pure";

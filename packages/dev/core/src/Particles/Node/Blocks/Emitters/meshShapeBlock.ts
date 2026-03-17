@@ -4,7 +4,5 @@
  */
 export * from "./meshShapeBlock.pure";
 
-import { MeshShapeBlock } from "./meshShapeBlock.pure";
-import { RegisterClass } from "core/Misc/typeStore";
-
-RegisterClass("BABYLON.MeshShapeBlock", MeshShapeBlock);
+import { registerMeshShapeBlock } from "./meshShapeBlock.pure";
+registerMeshShapeBlock();

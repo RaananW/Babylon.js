@@ -60,6 +60,7 @@ import { ShaderLanguage } from "./shaderLanguage";
 import { MaterialHelperGeometryRendering } from "./materialHelper.geometryrendering";
 import { UVDefinesMixin } from "./uv.defines";
 import { ImageProcessingMixin } from "./imageProcessing";
+import { RegisterClass } from "../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -2403,4 +2404,19 @@ export class StandardMaterial extends StandardMaterialBase {
     public static set FresnelEnabled(value: boolean) {
         MaterialFlags.FresnelEnabled = value;
     }
+}
+
+
+let _registered = false;
+export function registerStandardMaterial(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.StandardMaterial", StandardMaterial);
+
+    Scene.DefaultMaterialFactory = (scene: Scene) => {
+        return new StandardMaterial("default material", scene);
+    };
 }

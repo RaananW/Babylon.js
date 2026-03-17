@@ -4,7 +4,5 @@
  */
 export * from "./geospatialCamera.pure";
 
-import { GeospatialCamera } from "./geospatialCamera.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.GeospatialCamera", GeospatialCamera);
+import { registerGeospatialCamera } from "./geospatialCamera.pure";
+registerGeospatialCamera();

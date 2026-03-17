@@ -4,14 +4,5 @@
  */
 export * from "./WebXRControllerMovement.pure";
 
-import { WebXRControllerMovement } from "./WebXRControllerMovement.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRControllerMovement.Name,
-    (xrSessionManager, options) => {
-        return () => new WebXRControllerMovement(xrSessionManager, options);
-    },
-    WebXRControllerMovement.Version,
-    true
-);
+import { registerWebXRControllerMovement } from "./WebXRControllerMovement.pure";
+registerWebXRControllerMovement();

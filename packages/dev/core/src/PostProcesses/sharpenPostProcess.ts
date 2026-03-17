@@ -4,7 +4,5 @@
  */
 export * from "./sharpenPostProcess.pure";
 
-import { SharpenPostProcess } from "./sharpenPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.SharpenPostProcess", SharpenPostProcess);
+import { registerSharpenPostProcess } from "./sharpenPostProcess.pure";
+registerSharpenPostProcess();

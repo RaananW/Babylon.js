@@ -6,6 +6,7 @@ import { ToolsLoadFileAsync } from "../../Misc/tools.pure";
 import { WebXRProfiledMotionController } from "./webXRProfiledMotionController";
 import type { Nullable } from "../../types";
 import type { AbstractMesh } from "../../Meshes/abstractMesh";
+import { WebXRGenericTriggerMotionController } from "./webXRGenericMotionController";
 
 /**
  * A construction function type to create a new controller based on an xrInput object
@@ -270,4 +271,21 @@ export class WebXRMotionControllerManager {
 
         throw new Error(`no controller requested was found in the available controllers list`);
     }
+}
+
+
+let _registered = false;
+export function registerWebXRMotionControllerManager(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    // register the generic profile(s) here so we will at least have them
+    WebXRMotionControllerManager.RegisterController(WebXRGenericTriggerMotionController.ProfileId, (xrInput: XRInputSource, scene: Scene) => {
+        return new WebXRGenericTriggerMotionController(scene, <any>xrInput.gamepad, xrInput.handedness);
+    });
+
+    // register fallbacks
+    WebXRMotionControllerManager.DefaultFallbacks();
 }

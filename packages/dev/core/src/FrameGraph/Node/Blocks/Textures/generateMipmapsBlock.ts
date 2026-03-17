@@ -4,7 +4,5 @@
  */
 export * from "./generateMipmapsBlock.pure";
 
-import { NodeRenderGraphGenerateMipmapsBlock } from "./generateMipmapsBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NodeRenderGraphGenerateMipmapsBlock", NodeRenderGraphGenerateMipmapsBlock);
+import { registerGenerateMipmapsBlock } from "./generateMipmapsBlock.pure";
+registerGenerateMipmapsBlock();

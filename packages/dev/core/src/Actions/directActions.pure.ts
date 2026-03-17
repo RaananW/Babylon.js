@@ -6,6 +6,7 @@ import { Action } from "./action.pure";
 import type { Condition } from "./condition";
 import { Constants } from "../Engines/constants";
 import type { ActionEvent } from "./actionEvent";
+import { RegisterClass } from "../Misc/typeStore";
 
 /**
  * This defines an action responsible to toggle a boolean once triggered.
@@ -566,4 +567,35 @@ export class SetParentAction extends Action {
             parent
         );
     }
+}
+
+
+let _registered = false;
+export function registerDirectActions(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    RegisterClass("BABYLON.SetParentAction", SetParentAction);
+
+    RegisterClass("BABYLON.ExecuteCodeAction", ExecuteCodeAction);
+
+    RegisterClass("BABYLON.DoNothingAction", DoNothingAction);
+
+    RegisterClass("BABYLON.StopAnimationAction", StopAnimationAction);
+
+    RegisterClass("BABYLON.PlayAnimationAction", PlayAnimationAction);
+
+    RegisterClass("BABYLON.IncrementValueAction", IncrementValueAction);
+
+    RegisterClass("BABYLON.SetValueAction", SetValueAction);
+
+    RegisterClass("BABYLON.SetStateAction", SetStateAction);
+
+    RegisterClass("BABYLON.SetParentAction", SetParentAction);
+
+    RegisterClass("BABYLON.SwitchBooleanAction", SwitchBooleanAction);
+
+    RegisterClass("BABYLON.CombineAction", CombineAction);
 }

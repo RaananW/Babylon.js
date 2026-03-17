@@ -4,7 +4,5 @@
  */
 export * from "./normalBlendBlock.pure";
 
-import { NormalBlendBlock } from "./normalBlendBlock.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.NormalBlendBlock", NormalBlendBlock);
+import { registerNormalBlendBlock } from "./normalBlendBlock.pure";
+registerNormalBlendBlock();

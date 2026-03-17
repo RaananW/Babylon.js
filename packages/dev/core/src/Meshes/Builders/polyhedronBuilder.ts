@@ -4,30 +4,5 @@
  */
 export * from "./polyhedronBuilder.pure";
 
-import { CreatePolyhedron, CreatePolyhedronVertexData } from "./polyhedronBuilder.pure";
-import type { Scene } from "../../scene";
-import type { Vector4 } from "../../Maths/math.vector";
-import type { Color4 } from "../../Maths/math.color";
-import { Mesh } from "../mesh";
-import { VertexData } from "../mesh.vertexData";
-
-VertexData.CreatePolyhedron = CreatePolyhedronVertexData;
-
-Mesh.CreatePolyhedron = (
-    name: string,
-    options: {
-        type?: number;
-        size?: number;
-        sizeX?: number;
-        sizeY?: number;
-        sizeZ?: number;
-        custom?: any;
-        faceUV?: Vector4[];
-        faceColors?: Color4[];
-        updatable?: boolean;
-        sideOrientation?: number;
-    },
-    scene: Scene
-): Mesh => {
-    return CreatePolyhedron(name, options, scene);
-};
+import { registerPolyhedronBuilder } from "./polyhedronBuilder.pure";
+registerPolyhedronBuilder();

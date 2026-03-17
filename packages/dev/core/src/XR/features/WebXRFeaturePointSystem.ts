@@ -4,14 +4,5 @@
  */
 export * from "./WebXRFeaturePointSystem.pure";
 
-import { WebXRFeaturePointSystem } from "./WebXRFeaturePointSystem.pure";
-import { WebXRFeaturesManager } from "../webXRFeaturesManager";
-
-// register the plugin
-WebXRFeaturesManager.AddWebXRFeature(
-    WebXRFeaturePointSystem.Name,
-    (xrSessionManager) => {
-        return () => new WebXRFeaturePointSystem(xrSessionManager);
-    },
-    WebXRFeaturePointSystem.Version
-);
+import { registerWebXRFeaturePointSystem } from "./WebXRFeaturePointSystem.pure";
+registerWebXRFeaturePointSystem();

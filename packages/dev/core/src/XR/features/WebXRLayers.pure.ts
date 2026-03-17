@@ -12,6 +12,7 @@ import type { DynamicTexture } from "../../Materials/Textures/dynamicTexture";
 import { Color4 } from "../../Maths/math.color.pure";
 import type { LensFlareSystem } from "../../LensFlares/lensFlareSystem";
 import type { ThinEngine } from "../../Engines";
+import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 const DefaultXRWebGLLayerInit: XRWebGLLayerInit = {};
 
@@ -373,4 +374,23 @@ export class WebXRLayers extends WebXRAbstractFeature {
             }
         }
     }
+}
+
+
+let _registered = false;
+export function registerWebXRLayers(): void {
+    if (_registered) {
+        return;
+    }
+    _registered = true;
+
+    //register the plugin
+    WebXRFeaturesManager.AddWebXRFeature(
+        WebXRLayers.Name,
+        (xrSessionManager, options) => {
+            return () => new WebXRLayers(xrSessionManager, options);
+        },
+        WebXRLayers.Version,
+        false
+    );
 }

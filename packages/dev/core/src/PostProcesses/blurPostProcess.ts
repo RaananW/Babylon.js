@@ -4,7 +4,5 @@
  */
 export * from "./blurPostProcess.pure";
 
-import { BlurPostProcess } from "./blurPostProcess.pure";
-import { RegisterClass } from "../Misc/typeStore";
-
-RegisterClass("BABYLON.BlurPostProcess", BlurPostProcess);
+import { registerBlurPostProcess } from "./blurPostProcess.pure";
+registerBlurPostProcess();

@@ -4,7 +4,5 @@
  */
 export * from "./textureBlock.pure";
 
-import { TextureBlock } from "./textureBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.TextureBlock", TextureBlock);
+import { registerTextureBlock } from "./textureBlock.pure";
+registerTextureBlock();

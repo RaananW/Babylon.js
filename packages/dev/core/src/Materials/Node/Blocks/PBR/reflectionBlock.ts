@@ -4,7 +4,5 @@
  */
 export * from "./reflectionBlock.pure";
 
-import { ReflectionBlock } from "./reflectionBlock.pure";
-import { RegisterClass } from "../../../../Misc/typeStore";
-
-RegisterClass("BABYLON.ReflectionBlock", ReflectionBlock);
+import { registerReflectionBlock } from "./reflectionBlock.pure";
+registerReflectionBlock();

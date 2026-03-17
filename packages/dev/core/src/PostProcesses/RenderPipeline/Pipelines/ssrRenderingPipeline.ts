@@ -4,7 +4,5 @@
  */
 export * from "./ssrRenderingPipeline.pure";
 
-import { SSRRenderingPipeline } from "./ssrRenderingPipeline.pure";
-import { RegisterClass } from "../../../Misc/typeStore";
-
-RegisterClass("BABYLON.SSRRenderingPipeline", SSRRenderingPipeline);
+import { registerSsrRenderingPipeline } from "./ssrRenderingPipeline.pure";
+registerSsrRenderingPipeline();
