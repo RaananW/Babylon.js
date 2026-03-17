@@ -1,8 +1,10 @@
+import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import { SceneManager } from "../../src/sceneManager";
 
 const EXAMPLES_DIR = path.resolve(__dirname, "../../examples");
+const REPO_ROOT = path.resolve(__dirname, "../../../..");
 
 function getId(result: string | { id: string }): string {
     if (typeof result === "string") throw new Error(`Expected {id}, got error: ${result}`);
@@ -31,6 +33,10 @@ function validateProjectFiles(files: Record<string, string>): void {
 describe("Scene MCP Server – Example Generation", () => {
     beforeAll(() => {
         fs.mkdirSync(EXAMPLES_DIR, { recursive: true });
+    });
+
+    afterAll(() => {
+        execSync(`npx prettier --write "${EXAMPLES_DIR}/**/src/**/*.ts"`, { cwd: REPO_ROOT, stdio: "ignore" });
     });
 
     // ── Example 1: Basic Scene (UMD code) ────────────────────────────────

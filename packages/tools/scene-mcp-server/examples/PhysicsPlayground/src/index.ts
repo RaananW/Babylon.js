@@ -25,8 +25,12 @@ import {
 } from "@babylonjs/core";
 import HavokPhysics from "@babylonjs/havok";
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 async function createScene() {
-    const canvas = document.getElementById("renderCanvas");
+    const canvas = document.querySelector<HTMLCanvasElement>("#renderCanvas");
+    if (!canvas) {
+        throw new Error("Canvas element '#renderCanvas' not found");
+    }
     const engine = new Engine(canvas, true, { stencil: true });
 
     const scene = new Scene(engine);
@@ -96,18 +100,17 @@ async function createScene() {
             pivotB: new Vector3(-0.5, 0, 0),
             axisA: new Vector3(0, 1, 0),
             axisB: new Vector3(0, 1, 0),
-            limits: [
-                { axis: PhysicsConstraintAxis.LINEAR_X, minLimit: 0, maxLimit: 0 },
-                { axis: PhysicsConstraintAxis.LINEAR_Y, minLimit: 0, maxLimit: 0 },
-                { axis: PhysicsConstraintAxis.LINEAR_Z, minLimit: 0, maxLimit: 0 },
-                { axis: PhysicsConstraintAxis.ANGULAR_Y, minLimit: 0, maxLimit: 0 },
-                { axis: PhysicsConstraintAxis.ANGULAR_Z, minLimit: 0, maxLimit: 0 },
-            ],
         },
-        box1Body,
-        sphere1Body
+        [
+            { axis: PhysicsConstraintAxis.LINEAR_X, minLimit: 0, maxLimit: 0 },
+            { axis: PhysicsConstraintAxis.LINEAR_Y, minLimit: 0, maxLimit: 0 },
+            { axis: PhysicsConstraintAxis.LINEAR_Z, minLimit: 0, maxLimit: 0 },
+            { axis: PhysicsConstraintAxis.ANGULAR_Y, minLimit: 0, maxLimit: 0 },
+            { axis: PhysicsConstraintAxis.ANGULAR_Z, minLimit: 0, maxLimit: 0 },
+        ],
+        scene
     );
-    box1Body.addConstraint(sphere1Body, hinge1);
+    box1PhysicsBody.addConstraint(sphere1PhysicsBody, hinge1);
 
     // ─── Render Loop ──────────────────────────────────────────────────────────
     engine.runRenderLoop(() => {
@@ -119,6 +122,8 @@ async function createScene() {
     });
 }
 
+// eslint-disable-next-line github/no-then
 createScene().catch(function (e) {
+    // eslint-disable-next-line no-console
     console.error("Scene init error:", e);
 });

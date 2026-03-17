@@ -10,8 +10,10 @@ import { Animation, AnimationGroup, ArcRotateCamera, Color3, Color4, Directional
 
 
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 async function createScene() {
-    const canvas = document.getElementById("renderCanvas") ;
+    const canvas = document.querySelector<HTMLCanvasElement>("#renderCanvas");
+    if (!canvas) { throw new Error("Canvas element '#renderCanvas' not found"); }
     const engine = new Engine(canvas, true, { stencil: true });
 
     const scene = new Scene(engine);
@@ -84,4 +86,8 @@ async function createScene() {
     });
 }
 
-createScene().catch(function(e) { console.error("Scene init error:", e); });
+// eslint-disable-next-line github/no-then
+createScene().catch(function (e) {
+    // eslint-disable-next-line no-console
+    console.error("Scene init error:", e);
+});

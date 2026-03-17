@@ -80,6 +80,105 @@ function varName(name: string): string {
     return name.replace(/[^a-zA-Z0-9_$]/g, "_").replace(/^(\d)/, "_$1");
 }
 
+// ── Unique variable name registry ─────────────────────────────────────────────
+// Per-generation maps ensuring JS variable names are unique across all object
+// types (e.g. a light and a sound both named "ambient" won't collide).
+let _objVarMap: WeakMap<object, string> | null = null;
+let _meshVarByName: Map<string, string> | null = null;
+
+/** Look up the unique JS variable name for a scene object (by reference).
+ * @param obj - The scene object to look up
+ * @returns The unique JS variable name for the object
+ */
+function V(obj: object): string {
+    return _objVarMap?.get(obj) ?? varName((obj as Record<string, string>).name ?? "");
+}
+
+/**
+ * Look up the unique JS variable name for a mesh by its name string.
+ * Used where only the mesh name string is available (particle emitters,
+ * integration references, etc.).
+ * @param meshName - The mesh's name string
+ * @returns The unique JS variable name for the mesh
+ */
+function meshV(meshName: string): string {
+    return _meshVarByName?.get(meshName) ?? varName(meshName);
+}
+
+/**
+ * Pre-compute unique JS variable names for all scene objects, registering them
+ * in declaration order.  When two objects of different types share a sanitised
+ * base name (e.g. light "ambient" and sound "ambient"), the first one keeps the
+ * base name and subsequent ones get a numeric suffix (_2, _3, …).
+ * @param scene - The serialized scene to build variable names for
+ */
+function buildAndActivateVarNames(scene: ISerializedScene): void {
+    const used = new Set<string>();
+    const objMap = new WeakMap<object, string>();
+    const meshMap = new Map<string, string>();
+
+    function assign(obj: object, name: string): string {
+        const base = varName(name);
+        let candidate = base;
+        let n = 1;
+        while (used.has(candidate)) {
+            n++;
+            candidate = `${base}_${n}`;
+        }
+        used.add(candidate);
+        objMap.set(obj, candidate);
+        return candidate;
+    }
+
+    // Registration order must match code-generation order
+    for (const o of scene.cameras ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.lights ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.materials ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.transformNodes ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.meshes ?? []) {
+        const v = assign(o, o.name);
+        meshMap.set(o.name, v);
+    }
+    for (const o of scene.models ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.animations ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.animationGroups ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.sounds ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.flowGraphs ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.particleSystems ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.physicsConstraints ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.glowLayers ?? []) {
+        assign(o, o.name);
+    }
+    for (const o of scene.highlightLayers ?? []) {
+        assign(o, o.name);
+    }
+
+    _objVarMap = objMap;
+    _meshVarByName = meshMap;
+}
+
 function sanitizeStringLiteral(s: string): string {
     return s.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n");
 }
@@ -338,7 +437,7 @@ function generatePhysicsInit(env: ISerializedEnvironment, sceneVar: string): str
 
 function generateCamera(cam: ISerializedCamera, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(cam.name);
+    const v = V(cam);
     const props = cam.properties;
 
     switch (cam.type) {
@@ -411,7 +510,7 @@ function generateCamera(cam: ISerializedCamera, sceneVar: string): string {
 
 function generateLight(light: ISerializedLight, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(light.name);
+    const v = V(light);
     const props = light.properties;
 
     switch (light.type) {
@@ -550,7 +649,7 @@ function generateLight(light: ISerializedLight, sceneVar: string): string {
 
 function generateMaterial(mat: ISerializedMaterial, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(mat.name);
+    const v = V(mat);
 
     if (mat.type === "NodeMaterial") {
         // NodeMaterial — either from NME JSON or snippet
@@ -619,7 +718,7 @@ function generateTransformCode(v: string, transform: ITransform): string {
 
 function generateTransformNode(node: ISerializedTransformNode, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(node.name);
+    const v = V(node);
     lines.push(`const ${v} = new BABYLON.TransformNode("${sanitizeStringLiteral(node.name)}", ${sceneVar});`);
     const transformCode = generateTransformCode(v, node.transform);
     if (transformCode) {
@@ -630,7 +729,7 @@ function generateTransformNode(node: ISerializedTransformNode, sceneVar: string)
 
 function generateMesh(mesh: ISerializedMesh, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(mesh.name);
+    const v = V(mesh);
     const pType = mesh.primitiveType ?? "Box";
 
     // Construct options object literal
@@ -668,7 +767,7 @@ function generateMesh(mesh: ISerializedMesh, sceneVar: string): string {
 
 function generateModel(model: ISerializedModel, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(model.name);
+    const v = V(model);
     const rootUrl = model.rootUrl ?? "";
     const fileName = model.fileName ?? model.url;
 
@@ -697,7 +796,7 @@ function generateModel(model: ISerializedModel, sceneVar: string): string {
 
 function generateAnimation(anim: ISerializedAnimation, _sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(anim.name);
+    const v = V(anim);
     const dataType = ANIM_DATA_TYPE_NAMES[anim.dataType] ?? `${anim.dataType}`;
     const loopMode = ANIM_LOOP_MODE_NAMES[anim.loopMode] ?? `${anim.loopMode}`;
 
@@ -737,7 +836,7 @@ function generateAnimation(anim: ISerializedAnimation, _sceneVar: string): strin
 
 function generateAnimationGroup(ag: ISerializedAnimationGroup, scene: ISerializedScene, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(ag.name);
+    const v = V(ag);
 
     lines.push(`const ${v} = new BABYLON.AnimationGroup("${sanitizeStringLiteral(ag.name)}", ${sceneVar});`);
 
@@ -745,13 +844,13 @@ function generateAnimationGroup(ag: ISerializedAnimationGroup, scene: ISerialize
     for (const animId of ag.animationIds) {
         const anim = scene.animations.find((a) => a.id === animId);
         if (anim) {
-            const animVar = varName(anim.name);
+            const animVar = V(anim);
             const targetVar = varName(anim.targetId);
             // Try to find the target by name first, then by id
             const targetNode =
                 scene.meshes.find((m) => m.id === anim.targetId || m.name === anim.targetId) ??
                 scene.transformNodes.find((n) => n.id === anim.targetId || n.name === anim.targetId);
-            const resolvedTargetVar = targetNode ? varName(targetNode.name) : targetVar;
+            const resolvedTargetVar = targetNode ? V(targetNode) : targetVar;
             lines.push(`${v}.addTargetedAnimation(${animVar}, ${resolvedTargetVar});`);
         }
     }
@@ -777,7 +876,7 @@ function generatePhysicsBody(meshName: string, mesh: ISerializedMesh, enableColl
         return "";
     }
     const lines: string[] = [];
-    const v = varName(meshName);
+    const v = V(mesh);
     const p = mesh.physics;
     const bodyTypeStr = PHYSICS_BODY_TYPE_NAMES[p.bodyType] ?? `${p.bodyType}`;
 
@@ -964,7 +1063,7 @@ function _fixupConfigDefaults(coordinatorJson: any): void {
 
 function generateFlowGraph(fg: ISerializedFlowGraphRef, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(fg.name);
+    const v = V(fg);
 
     lines.push(`// Flow Graph: ${fg.name}`);
 
@@ -1067,32 +1166,48 @@ function generateNodeGeometryMesh(meshName: string, ngeJson: unknown, sceneVar: 
     return lines.join("\n");
 }
 
-function generateSound(snd: ISerializedSound, sceneVar: string): string {
+function generateSound(snd: ISerializedSound, _sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(snd.name);
+    const v = V(snd);
+
+    // A variable is needed if spatial config or mesh attachment uses it after creation
+    const needsVar = snd.spatialEnabled || !!snd.attachedMeshId;
+    const decl = needsVar ? `const ${v} = ` : `void `;
 
     const factory = snd.soundType === "streaming" ? "CreateStreamingSoundAsync" : "CreateSoundAsync";
     lines.push(`// Sound: ${snd.name}`);
-    lines.push(`const ${v} = await BABYLON.${factory}("${sanitizeStringLiteral(snd.name)}", "${sanitizeStringLiteral(snd.url)}", ${sceneVar}.audioEngine!, {`);
+
+    // Build options object (may be empty)
+    const optLines: string[] = [];
     if (snd.autoplay !== undefined) {
-        lines.push(`    autoplay: ${snd.autoplay},`);
+        optLines.push(`    autoplay: ${snd.autoplay},`);
     }
     if (snd.loop !== undefined) {
-        lines.push(`    loop: ${snd.loop},`);
+        optLines.push(`    loop: ${snd.loop},`);
     }
     if (snd.volume !== undefined) {
-        lines.push(`    volume: ${snd.volume},`);
+        optLines.push(`    volume: ${snd.volume},`);
     }
     if (snd.playbackRate !== undefined) {
-        lines.push(`    playbackRate: ${snd.playbackRate},`);
+        optLines.push(`    playbackRate: ${snd.playbackRate},`);
     }
     if (snd.startOffset !== undefined) {
-        lines.push(`    startOffset: ${snd.startOffset},`);
+        optLines.push(`    startOffset: ${snd.startOffset},`);
     }
     if (snd.maxInstances !== undefined) {
-        lines.push(`    maxInstances: ${snd.maxInstances},`);
+        optLines.push(`    maxInstances: ${snd.maxInstances},`);
     }
-    lines.push(`});`);
+
+    // Correct signature: CreateSoundAsync(name, source, options, engine)
+    if (optLines.length > 0) {
+        lines.push(`${decl}await BABYLON.${factory}("${sanitizeStringLiteral(snd.name)}", "${sanitizeStringLiteral(snd.url)}", {`);
+        for (const ol of optLines) {
+            lines.push(ol);
+        }
+        lines.push(`}, audioEngine);`);
+    } else {
+        lines.push(`${decl}await BABYLON.${factory}("${sanitizeStringLiteral(snd.name)}", "${sanitizeStringLiteral(snd.url)}", {}, audioEngine);`);
+    }
 
     if (snd.spatialEnabled) {
         lines.push(`${v}.spatial = {`);
@@ -1122,12 +1237,12 @@ function generateSoundAttachment(snd: ISerializedSound, scene: ISerializedScene)
     if (!mesh) {
         return "";
     }
-    return `${varName(snd.name)}.spatial?.attach(${varName(mesh.name)});`;
+    return `${V(snd)}.spatial?.attach(${V(mesh)});`;
 }
 
 function generateParticleSystem(ps: ISerializedParticleSystem, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(ps.name);
+    const v = V(ps);
 
     const ctor = ps.isGpu ? "GPUParticleSystem" : "ParticleSystem";
     const capacityArg = ps.isGpu ? `{ capacity: ${ps.capacity} }` : String(ps.capacity);
@@ -1136,7 +1251,7 @@ function generateParticleSystem(ps: ISerializedParticleSystem, sceneVar: string)
 
     // Emitter
     if (typeof ps.emitter === "string") {
-        lines.push(`${v}.emitter = ${varName(ps.emitter)}; // mesh reference`);
+        lines.push(`${v}.emitter = ${meshV(ps.emitter)}; // mesh reference`);
     } else if (ps.emitter && typeof ps.emitter === "object" && "x" in ps.emitter) {
         lines.push(`${v}.emitter = ${vec3(ps.emitter as IVector3)};`);
     }
@@ -1226,9 +1341,9 @@ function generateParticleSystem(ps: ISerializedParticleSystem, sceneVar: string)
     return lines.join("\n");
 }
 
-function generatePhysicsConstraint(constraint: ISerializedPhysicsConstraint, scene: ISerializedScene): string {
+function generatePhysicsConstraint(constraint: ISerializedPhysicsConstraint, scene: ISerializedScene, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(constraint.name);
+    const v = V(constraint);
 
     const parentMesh = scene.meshes.find((m) => m.id === constraint.parentMeshId || m.name === constraint.parentMeshId);
     const childMesh = scene.meshes.find((m) => m.id === constraint.childMeshId || m.name === constraint.childMeshId);
@@ -1236,8 +1351,8 @@ function generatePhysicsConstraint(constraint: ISerializedPhysicsConstraint, sce
         return `// Skipping constraint "${constraint.name}" — mesh not found`;
     }
 
-    const parentVar = varName(parentMesh.name);
-    const childVar = varName(childMesh.name);
+    const parentVar = V(parentMesh);
+    const childVar = V(childMesh);
 
     lines.push(`// Physics Constraint: ${constraint.name} (${constraint.constraintType})`);
 
@@ -1247,19 +1362,21 @@ function generatePhysicsConstraint(constraint: ISerializedPhysicsConstraint, sce
     const axisA = constraint.axisA ? vec3(constraint.axisA) : "new BABYLON.Vector3(0, 1, 0)";
     const axisB = constraint.axisB ? vec3(constraint.axisB) : "new BABYLON.Vector3(0, 1, 0)";
 
-    lines.push(`const ${v} = new BABYLON.Physics6DoFConstraint({`);
-    lines.push(`    pivotA: ${pivotA},`);
-    lines.push(`    pivotB: ${pivotB},`);
-    lines.push(`    axisA: ${axisA},`);
-    lines.push(`    axisB: ${axisB},`);
+    lines.push(`const ${v} = new BABYLON.Physics6DoFConstraint(`);
+    lines.push(`    {`);
+    lines.push(`        pivotA: ${pivotA},`);
+    lines.push(`        pivotB: ${pivotB},`);
+    lines.push(`        axisA: ${axisA},`);
+    lines.push(`        axisB: ${axisB},`);
+    lines.push(`    },`);
 
-    // Limits based on constraint type
+    // Limits based on constraint type (second argument to Physics6DoFConstraint)
     switch (constraint.constraintType) {
         case "BallAndSocket":
-            lines.push(`    limits: [],  // BallAndSocket: free rotation around pivot`);
+            lines.push(`    [],  // BallAndSocket: free rotation around pivot`);
             break;
         case "Hinge":
-            lines.push(`    limits: [`);
+            lines.push(`    [`);
             lines.push(`        { axis: BABYLON.PhysicsConstraintAxis.LINEAR_X, minLimit: 0, maxLimit: 0 },`);
             lines.push(`        { axis: BABYLON.PhysicsConstraintAxis.LINEAR_Y, minLimit: 0, maxLimit: 0 },`);
             lines.push(`        { axis: BABYLON.PhysicsConstraintAxis.LINEAR_Z, minLimit: 0, maxLimit: 0 },`);
@@ -1271,7 +1388,7 @@ function generatePhysicsConstraint(constraint: ISerializedPhysicsConstraint, sce
             lines.push(`    ],`);
             break;
         case "Slider":
-            lines.push(`    limits: [`);
+            lines.push(`    [`);
             lines.push(`        { axis: BABYLON.PhysicsConstraintAxis.LINEAR_Y, minLimit: 0, maxLimit: 0 },`);
             lines.push(`        { axis: BABYLON.PhysicsConstraintAxis.LINEAR_Z, minLimit: 0, maxLimit: 0 },`);
             if (constraint.minLimit !== undefined || constraint.maxLimit !== undefined) {
@@ -1280,7 +1397,7 @@ function generatePhysicsConstraint(constraint: ISerializedPhysicsConstraint, sce
             lines.push(`    ],`);
             break;
         case "Lock":
-            lines.push(`    limits: [`);
+            lines.push(`    [`);
             lines.push(`        { axis: BABYLON.PhysicsConstraintAxis.LINEAR_X, minLimit: 0, maxLimit: 0 },`);
             lines.push(`        { axis: BABYLON.PhysicsConstraintAxis.LINEAR_Y, minLimit: 0, maxLimit: 0 },`);
             lines.push(`        { axis: BABYLON.PhysicsConstraintAxis.LINEAR_Z, minLimit: 0, maxLimit: 0 },`);
@@ -1291,26 +1408,27 @@ function generatePhysicsConstraint(constraint: ISerializedPhysicsConstraint, sce
             break;
         case "Distance":
             if (constraint.maxDistance !== undefined) {
-                lines.push(`    limits: [`);
+                lines.push(`    [`);
                 lines.push(`        { axis: BABYLON.PhysicsConstraintAxis.LINEAR_DISTANCE, minLimit: 0, maxLimit: ${constraint.maxDistance} },`);
                 lines.push(`    ],`);
             } else {
-                lines.push(`    limits: [],`);
+                lines.push(`    [],`);
             }
             break;
         case "Spring":
-            lines.push(`    limits: [`);
+            lines.push(`    [`);
             if (constraint.stiffness !== undefined) {
                 lines.push(`        { axis: BABYLON.PhysicsConstraintAxis.LINEAR_X, stiffness: ${constraint.stiffness}, damping: ${constraint.damping ?? 0} },`);
             }
             lines.push(`    ],`);
             break;
         default:
-            lines.push(`    limits: [],`);
+            lines.push(`    [],`);
     }
 
-    lines.push(`}, ${parentVar}Body, ${childVar}Body);`);
-    lines.push(`${parentVar}Body.addConstraint(${childVar}Body, ${v});`);
+    lines.push(`    ${sceneVar}`); // third argument: scene
+    lines.push(`);`);
+    lines.push(`${parentVar}PhysicsBody.addConstraint(${childVar}PhysicsBody, ${v});`);
 
     return lines.join("\n");
 }
@@ -1360,7 +1478,7 @@ function generateRenderPipeline(rp: ISerializedRenderPipeline, sceneVar: string)
 
 function generateGlowLayer(glow: ISerializedGlowLayer, scene: ISerializedScene, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(glow.name);
+    const v = V(glow);
 
     lines.push(`// Glow Layer: ${glow.name}`);
     lines.push(`const ${v} = new BABYLON.GlowLayer("${sanitizeStringLiteral(glow.name)}", ${sceneVar});`);
@@ -1374,13 +1492,13 @@ function generateGlowLayer(glow: ISerializedGlowLayer, scene: ISerializedScene, 
     for (const meshId of glow.includedOnlyMeshIds ?? []) {
         const mesh = scene.meshes.find((m) => m.id === meshId || m.name === meshId);
         if (mesh) {
-            lines.push(`${v}.addIncludedOnlyMesh(${varName(mesh.name)});`);
+            lines.push(`${v}.addIncludedOnlyMesh(${V(mesh)});`);
         }
     }
     for (const meshId of glow.excludedMeshIds ?? []) {
         const mesh = scene.meshes.find((m) => m.id === meshId || m.name === meshId);
         if (mesh) {
-            lines.push(`${v}.addExcludedMesh(${varName(mesh.name)});`);
+            lines.push(`${v}.addExcludedMesh(${V(mesh)});`);
         }
     }
 
@@ -1389,7 +1507,7 @@ function generateGlowLayer(glow: ISerializedGlowLayer, scene: ISerializedScene, 
 
 function generateHighlightLayer(hl: ISerializedHighlightLayer, scene: ISerializedScene, sceneVar: string): string {
     const lines: string[] = [];
-    const v = varName(hl.name);
+    const v = V(hl);
 
     lines.push(`// Highlight Layer: ${hl.name}`);
     const optsStr: string[] = [];
@@ -1414,7 +1532,7 @@ function generateHighlightLayer(hl: ISerializedHighlightLayer, scene: ISerialize
         if (mesh) {
             const color = col3(entry.color);
             const emissive = entry.glowEmissiveOnly ? `, ${entry.glowEmissiveOnly}` : "";
-            lines.push(`${v}.addMesh(${varName(mesh.name)}, ${color}${emissive});`);
+            lines.push(`${v}.addMesh(${V(mesh)}, ${color}${emissive});`);
         }
     }
 
@@ -1921,7 +2039,7 @@ function generateIntegrations(integrations: ISerializedIntegration[], scene: ISe
     lines.push(`// ─── Integrations (runtime bridges) ───────────────────────────────────────`);
 
     // Determine the FlowGraph coordinator variable name (first one)
-    const fgCoordVar = scene.flowGraphs.length > 0 ? `${varName(scene.flowGraphs[0].name)}Coordinator` : null;
+    const fgCoordVar = scene.flowGraphs.length > 0 ? `${V(scene.flowGraphs[0])}Coordinator` : null;
 
     // Helper: resolve a GUI control name to the JS variable name used in generated code.
     // If the name was emitted by generateGUI, use that variable. Otherwise, emit a
@@ -1956,8 +2074,8 @@ function generateIntegrations(integrations: ISerializedIntegration[], scene: ISe
         lines.push(`    const bodyA = event.collider;`);
         lines.push(`    const bodyB = event.collidedAgainst;`);
         for (const c of collisions) {
-            const srcBody = `${varName(c.sourceBody)}PhysicsBody`;
-            const tgtBody = `${varName(c.targetBody)}PhysicsBody`;
+            const srcBody = `${meshV(c.sourceBody)}PhysicsBody`;
+            const tgtBody = `${meshV(c.targetBody)}PhysicsBody`;
             lines.push(`    if ((bodyA === ${srcBody} && bodyB === ${tgtBody}) || (bodyB === ${srcBody} && bodyA === ${tgtBody})) {`);
             if (fgCoordVar) {
                 lines.push(
@@ -1990,7 +2108,7 @@ function generateIntegrations(integrations: ISerializedIntegration[], scene: ISe
         lines.push(`    const _fgCtx = ${fgCoordVar}.flowGraphs[0]?.getContext(0);`);
         lines.push(`    if (!_fgCtx) return;`);
         for (const v of varToProps) {
-            const meshVar = varName(v.meshName);
+            const meshVar = meshV(v.meshName);
             const tmpVar = `_${varName(v.variableName)}`;
             lines.push(`    const ${tmpVar} = _fgCtx.getVariable("${v.variableName}");`);
             if (v.valueType === "Color3") {
@@ -2062,7 +2180,7 @@ function generateIntegrations(integrations: ISerializedIntegration[], scene: ISe
         lines.push(`// Physics position reset on "${pr.triggerButtonName}" click`);
         lines.push(`${btnVar}.onPointerUpObservable.add(() => {`);
         for (const r of pr.resets) {
-            const meshVar = varName(r.meshName);
+            const meshVar = meshV(r.meshName);
             lines.push(`    ${meshVar}PhysicsBody.disablePreStep = false;`);
             lines.push(`    ${meshVar}.position.copyFromFloats(${r.position.x}, ${r.position.y}, ${r.position.z});`);
             lines.push(`    ${meshVar}PhysicsBody.setLinearVelocity(BABYLON.Vector3.Zero());`);
@@ -2071,7 +2189,7 @@ function generateIntegrations(integrations: ISerializedIntegration[], scene: ISe
         // Re-enable preStep after one frame so physics takes over again
         lines.push(`    ${sceneVar}.onAfterRenderObservable.addOnce(() => {`);
         for (const r of pr.resets) {
-            lines.push(`        ${varName(r.meshName)}PhysicsBody.disablePreStep = true;`);
+            lines.push(`        ${meshV(r.meshName)}PhysicsBody.disablePreStep = true;`);
         }
         lines.push(`    });`);
         // Optionally reset collision counter
@@ -2087,7 +2205,7 @@ function generateIntegrations(integrations: ISerializedIntegration[], scene: ISe
     const impulses = integrations.filter((i): i is IPhysicsImpulseIntegration => i.type === "physicsImpulse");
     for (const imp of impulses) {
         const btnVar = resolveGuiVar(imp.triggerButtonName);
-        const meshVar = varName(imp.meshName);
+        const meshVar = meshV(imp.meshName);
         lines.push(``);
         lines.push(`// Physics impulse: "${imp.triggerButtonName}" → throw "${imp.meshName}" from camera`);
         lines.push(`${btnVar}.onPointerUpObservable.add(() => {`);
@@ -2120,6 +2238,7 @@ function generateIntegrations(integrations: ISerializedIntegration[], scene: ISe
  * @returns The generated code string
  */
 export function generateSceneCode(scene: ISerializedScene, options?: ICodeGeneratorOptions): string {
+    buildAndActivateVarNames(scene);
     const opts: Required<ICodeGeneratorOptions> = {
         wrapInFunction: options?.wrapInFunction ?? true,
         functionName: options?.functionName ?? "createScene",
@@ -2145,7 +2264,8 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
     const bodyParts: string[] = [];
 
     if (opts.includeEngineSetup) {
-        bodyParts.push(`const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;`);
+        bodyParts.push(`const canvas = document.querySelector<HTMLCanvasElement>("#renderCanvas");`);
+        bodyParts.push(`if (!canvas) { throw new Error("Canvas element '#renderCanvas' not found"); }`);
         bodyParts.push(`const engine = new BABYLON.Engine(canvas, true, { stencil: true });`);
         bodyParts.push(``);
     }
@@ -2173,7 +2293,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         if (scene.activeCameraId) {
             const activeCam = scene.cameras.find((c) => c.id === scene.activeCameraId);
             if (activeCam) {
-                bodyParts.push(`${S}.activeCamera = ${varName(activeCam.name)};`);
+                bodyParts.push(`${S}.activeCamera = ${V(activeCam)};`);
                 bodyParts.push(``);
             }
         }
@@ -2232,7 +2352,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
                 scene.meshes.find((m) => m.id === mesh.parentId || m.name === mesh.parentId) ??
                 scene.transformNodes.find((n) => n.id === mesh.parentId || n.name === mesh.parentId);
             if (parentNode) {
-                parentRelationships.push(`${varName(mesh.name)}.parent = ${varName(parentNode.name)};`);
+                parentRelationships.push(`${V(mesh)}.parent = ${V(parentNode)};`);
             }
         }
     }
@@ -2241,7 +2361,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
             const parentNode =
                 scene.meshes.find((m) => m.id === tn.parentId || m.name === tn.parentId) ?? scene.transformNodes.find((n) => n.id === tn.parentId || n.name === tn.parentId);
             if (parentNode) {
-                parentRelationships.push(`${varName(tn.name)}.parent = ${varName(parentNode.name)};`);
+                parentRelationships.push(`${V(tn)}.parent = ${V(parentNode)};`);
             }
         }
     }
@@ -2251,7 +2371,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
                 scene.meshes.find((m) => m.id === model.parentId || m.name === model.parentId) ??
                 scene.transformNodes.find((n) => n.id === model.parentId || n.name === model.parentId);
             if (parentNode) {
-                parentRelationships.push(`${varName(model.name)}.parent = ${varName(parentNode.name)};`);
+                parentRelationships.push(`${V(model)}.parent = ${V(parentNode)};`);
             }
         }
     }
@@ -2267,7 +2387,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         if (mesh.materialId) {
             const mat = scene.materials.find((m) => m.id === mesh.materialId || m.name === mesh.materialId);
             if (mat) {
-                materialAssignments.push(`${varName(mesh.name)}.material = ${varName(mat.name)};`);
+                materialAssignments.push(`${V(mesh)}.material = ${V(mat)};`);
             }
         }
     }
@@ -2279,9 +2399,8 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
                 const mat = scene.materials.find((m) => m.id === matId || m.name === matId);
                 if (mat) {
                     materialAssignments.push(`// Material override for model "${model.name}"`);
-                    materialAssignments.push(
-                        `${varName(model.name)}Result.meshes.find(m => m.name === "${sanitizeStringLiteral(meshName)}")?.forEach?.(m => m.material = ${varName(mat.name)});`
-                    );
+                    // prettier-ignore
+                    materialAssignments.push(`${V(model)}Result.meshes.find(m => m.name === "${sanitizeStringLiteral(meshName)}")?.forEach?.(m => m.material = ${V(mat)});`);
                 }
             }
         }
@@ -2297,10 +2416,10 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
     const shadowCasters: string[] = [];
     for (const light of scene.lights) {
         if (light.properties.shadowEnabled) {
-            const lightVar = varName(light.name);
+            const lightVar = V(light);
             for (const mesh of scene.meshes) {
                 if (mesh.castsShadows) {
-                    shadowCasters.push(`${lightVar}ShadowGen.addShadowCaster(${varName(mesh.name)});`);
+                    shadowCasters.push(`${lightVar}ShadowGen.addShadowCaster(${V(mesh)});`);
                 }
             }
         }
@@ -2317,7 +2436,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
             const targetName = cam.properties.lockedTarget as string;
             const targetNode = scene.meshes.find((m) => m.id === targetName || m.name === targetName) ?? scene.models.find((m) => m.id === targetName || m.name === targetName);
             if (targetNode) {
-                bodyParts.push(`${varName(cam.name)}.lockedTarget = ${varName(targetNode.name)};`);
+                bodyParts.push(`${V(cam)}.lockedTarget = ${V(targetNode)};`);
             }
         }
     }
@@ -2337,7 +2456,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
                 scene.meshes.find((m) => m.id === anim.targetId || m.name === anim.targetId) ??
                 scene.transformNodes.find((n) => n.id === anim.targetId || n.name === anim.targetId);
             if (target) {
-                bodyParts.push(`${varName(target.name)}.animations.push(${varName(anim.name)});`);
+                bodyParts.push(`${V(target)}.animations.push(${V(anim)});`);
             }
         }
         bodyParts.push(``);
@@ -2366,7 +2485,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
     if ((scene.physicsConstraints ?? []).length > 0) {
         bodyParts.push(`// ─── Physics Constraints ──────────────────────────────────────────────────`);
         for (const constraint of scene.physicsConstraints) {
-            bodyParts.push(generatePhysicsConstraint(constraint, scene));
+            bodyParts.push(generatePhysicsConstraint(constraint, scene, S));
             bodyParts.push(``);
         }
     }
@@ -2374,6 +2493,8 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
     // ── Sounds (Audio V2) ─────────────────────────────────────────────────
     if ((scene.sounds ?? []).length > 0) {
         bodyParts.push(`// ─── Sounds (Audio V2) ────────────────────────────────────────────────────`);
+        bodyParts.push(`const audioEngine = await BABYLON.CreateAudioEngineAsync();`);
+        bodyParts.push(``);
         for (const snd of scene.sounds) {
             bodyParts.push(generateSound(snd, S));
             bodyParts.push(``);
@@ -2493,12 +2614,17 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
     const body = bodyParts.join("\n");
 
     if (opts.wrapInFunction) {
+        sections.push(`// eslint-disable-next-line @typescript-eslint/naming-convention`);
         sections.push(`async function ${opts.functionName}() {`);
         sections.push(indent(body, 1));
         sections.push(`}`);
         sections.push(``);
         if (opts.includeRenderLoop) {
-            sections.push(`${opts.functionName}().catch(function(e) { console.error("Scene init error:", e); });`);
+            sections.push(`// eslint-disable-next-line github/no-then`);
+            sections.push(`${opts.functionName}().catch(function (e) {`);
+            sections.push(`    // eslint-disable-next-line no-console`);
+            sections.push(`    console.error("Scene init error:", e);`);
+            sections.push(`});`);
         }
     } else {
         sections.push(body);
@@ -2628,6 +2754,7 @@ export interface ISnippetOptions {
  * @returns The generated code snippet string
  */
 export function generateSnippet(scene: ISerializedScene, options: ISnippetOptions): string {
+    buildAndActivateVarNames(scene);
     const format = options.format ?? "umd";
     const S = options.sceneVarName ?? "scene";
     const objectIds = new Set(options.objectIds ?? []);
@@ -2846,18 +2973,17 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
 
     /**
      * Mark a variable as created by this snippet
-     * @param name The original object name (ID or name) to mark as created
+     * @param v The already-resolved unique variable name (as returned by V())
      */
-    function markCreated(name: string): void {
-        createdVars.add(varName(name));
+    function markCreated(v: string): void {
+        createdVars.add(v);
     }
 
     /**
      * Track a reference — if we don't create it, we assume it exists
-     * @param name The original object name (ID or name) being referenced
+     * @param v The already-resolved unique variable name (as returned by V())
      */
-    function trackRef(name: string): void {
-        const v = varName(name);
+    function trackRef(v: string): void {
         if (!createdVars.has(v)) {
             assumedVars.add(v);
         }
@@ -2878,7 +3004,7 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
         parts.push(`// ─── Lights ───────────────────────────────────────────────────────────────`);
         for (const light of lightsToEmit) {
             parts.push(generateLight(light, S));
-            markCreated(light.name);
+            markCreated(V(light));
             parts.push(``);
         }
     }
@@ -2889,7 +3015,7 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
         parts.push(`// ─── Materials ────────────────────────────────────────────────────────────`);
         for (const mat of matsToEmit) {
             parts.push(generateMaterial(mat, S));
-            markCreated(mat.name);
+            markCreated(V(mat));
             parts.push(``);
         }
     }
@@ -2900,7 +3026,7 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
         parts.push(`// ─── Transform Nodes ──────────────────────────────────────────────────────`);
         for (const tn of tnsToEmit) {
             parts.push(generateTransformNode(tn, S));
-            markCreated(tn.name);
+            markCreated(V(tn));
             parts.push(``);
         }
     }
@@ -2911,7 +3037,7 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
         parts.push(`// ─── Meshes ───────────────────────────────────────────────────────────────`);
         for (const mesh of meshesToEmit) {
             parts.push(generateMesh(mesh, S));
-            markCreated(mesh.name);
+            markCreated(V(mesh));
             parts.push(``);
         }
     }
@@ -2922,10 +3048,10 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
         if (mesh.materialId) {
             const mat = scene.materials.find((m) => m.id === mesh.materialId || m.name === mesh.materialId);
             if (mat) {
-                if (!createdVars.has(varName(mat.name))) {
-                    trackRef(mat.name);
+                if (!createdVars.has(V(mat))) {
+                    trackRef(V(mat));
                 }
-                matAssignments.push(`${varName(mesh.name)}.material = ${varName(mat.name)};`);
+                matAssignments.push(`${V(mesh)}.material = ${V(mat)};`);
             }
         }
     }
@@ -2939,20 +3065,20 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
     const shadowParts: string[] = [];
     for (const light of scene.lights) {
         if (light.properties.shadowEnabled) {
-            const lightVar = varName(light.name);
+            const lightVar = V(light);
             // If we didn't create this light, we need to reference it + its shadow generator
             if (!createdVars.has(lightVar)) {
-                trackRef(light.name);
+                trackRef(lightVar);
                 // Also track the shadow generator variable
                 assumedVars.add(`${lightVar}ShadowGen`);
             }
             for (const mesh of scene.meshes) {
                 if (mesh.castsShadows) {
-                    const meshVar = varName(mesh.name);
-                    if (!createdVars.has(meshVar)) {
-                        trackRef(mesh.name);
+                    const mv = V(mesh);
+                    if (!createdVars.has(mv)) {
+                        trackRef(mv);
                     }
-                    shadowParts.push(`${lightVar}ShadowGen.addShadowCaster(${meshVar});`);
+                    shadowParts.push(`${lightVar}ShadowGen.addShadowCaster(${mv});`);
                 }
             }
         }
@@ -2960,15 +3086,15 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
     // receiveShadows for included meshes
     for (const mesh of meshesToEmit) {
         if (mesh.receiveShadows) {
-            shadowParts.push(`${varName(mesh.name)}.receiveShadows = true;`);
+            shadowParts.push(`${V(mesh)}.receiveShadows = true;`);
         }
     }
     // Also check non-emitted meshes if shadows category is selected
     if (categories.has("shadows")) {
         for (const mesh of scene.meshes) {
             if (mesh.receiveShadows && !includedMeshes.has(mesh.id) && !includedMeshes.has(mesh.name)) {
-                trackRef(mesh.name);
-                shadowParts.push(`${varName(mesh.name)}.receiveShadows = true;`);
+                trackRef(V(mesh));
+                shadowParts.push(`${V(mesh)}.receiveShadows = true;`);
             }
         }
     }
@@ -2984,7 +3110,7 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
         parts.push(`// ─── Animations ───────────────────────────────────────────────────────────`);
         for (const anim of animsToEmit) {
             parts.push(generateAnimation(anim, S));
-            markCreated(anim.name);
+            markCreated(V(anim));
             parts.push(``);
         }
         // Attach animations to targets
@@ -2994,10 +3120,10 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
                 scene.meshes.find((m) => m.id === anim.targetId || m.name === anim.targetId) ??
                 scene.transformNodes.find((n) => n.id === anim.targetId || n.name === anim.targetId);
             if (target) {
-                if (!createdVars.has(varName(target.name))) {
-                    trackRef(target.name);
+                if (!createdVars.has(V(target))) {
+                    trackRef(V(target));
                 }
-                parts.push(`${varName(target.name)}.animations.push(${varName(anim.name)});`);
+                parts.push(`${V(target)}.animations.push(${V(anim)});`);
             }
         }
         parts.push(``);
@@ -3009,7 +3135,7 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
         parts.push(`// ─── Animation Groups ─────────────────────────────────────────────────────`);
         for (const ag of agsToEmit) {
             parts.push(generateAnimationGroup(ag, scene, S));
-            markCreated(ag.name);
+            markCreated(V(ag));
             parts.push(``);
         }
     }
@@ -3032,14 +3158,14 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
             // Track mesh references
             const parentMesh = scene.meshes.find((m) => m.id === constraint.parentMeshId || m.name === constraint.parentMeshId);
             const childMesh = scene.meshes.find((m) => m.id === constraint.childMeshId || m.name === constraint.childMeshId);
-            if (parentMesh && !createdVars.has(varName(parentMesh.name))) {
-                trackRef(parentMesh.name);
+            if (parentMesh && !createdVars.has(V(parentMesh))) {
+                trackRef(V(parentMesh));
             }
-            if (childMesh && !createdVars.has(varName(childMesh.name))) {
-                trackRef(childMesh.name);
+            if (childMesh && !createdVars.has(V(childMesh))) {
+                trackRef(V(childMesh));
             }
-            parts.push(generatePhysicsConstraint(constraint, scene));
-            markCreated(constraint.name);
+            parts.push(generatePhysicsConstraint(constraint, scene, S));
+            markCreated(V(constraint));
             parts.push(``);
         }
     }
@@ -3048,9 +3174,11 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
     const soundsToEmit = (scene.sounds ?? []).filter((s) => includedSounds.has(s.id) || includedSounds.has(s.name));
     if (soundsToEmit.length > 0) {
         parts.push(`// ─── Sounds ───────────────────────────────────────────────────────────────`);
+        parts.push(`const audioEngine = await BABYLON.CreateAudioEngineAsync();`);
+        parts.push(``);
         for (const snd of soundsToEmit) {
             parts.push(generateSound(snd, S));
-            markCreated(snd.name);
+            markCreated(V(snd));
             parts.push(``);
         }
     }
@@ -3061,7 +3189,7 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
         parts.push(`// ─── Particle Systems ─────────────────────────────────────────────────────`);
         for (const ps of particlesToEmit) {
             parts.push(generateParticleSystem(ps, S));
-            markCreated(ps.name);
+            markCreated(V(ps));
             parts.push(``);
         }
     }
@@ -3080,12 +3208,12 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
             // Track referenced meshes
             for (const meshId of [...(glow.includedOnlyMeshIds ?? []), ...(glow.excludedMeshIds ?? [])]) {
                 const mesh = scene.meshes.find((m) => m.id === meshId || m.name === meshId);
-                if (mesh && !createdVars.has(varName(mesh.name))) {
-                    trackRef(mesh.name);
+                if (mesh && !createdVars.has(V(mesh))) {
+                    trackRef(V(mesh));
                 }
             }
             parts.push(generateGlowLayer(glow, scene, S));
-            markCreated(glow.name);
+            markCreated(V(glow));
             parts.push(``);
         }
     }
@@ -3097,12 +3225,12 @@ export function generateSnippet(scene: ISerializedScene, options: ISnippetOption
         for (const hl of hlsToEmit) {
             for (const entry of hl.meshes) {
                 const mesh = scene.meshes.find((m) => m.id === entry.meshId || m.name === entry.meshId);
-                if (mesh && !createdVars.has(varName(mesh.name))) {
-                    trackRef(mesh.name);
+                if (mesh && !createdVars.has(V(mesh))) {
+                    trackRef(V(mesh));
                 }
             }
             parts.push(generateHighlightLayer(hl, scene, S));
-            markCreated(hl.name);
+            markCreated(V(hl));
             parts.push(``);
         }
     }

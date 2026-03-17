@@ -6,14 +6,38 @@
  * Version: 1.0.0
  */
 
-import { Animation, ArcRotateCamera, Color3, Color4, CreateSoundAsync, DefaultRenderingPipeline, DirectionalLight, Engine, GlowLayer, HavokPlugin, HemisphericLight, HighlightLayer, MeshBuilder, PBRMaterial, PhysicsBody, PhysicsMotionType, PhysicsShapeBox, Scene, StandardMaterial, Vector3 } from "@babylonjs/core";
+import {
+    Animation,
+    ArcRotateCamera,
+    Color3,
+    Color4,
+    CreateAudioEngineAsync,
+    CreateSoundAsync,
+    DefaultRenderingPipeline,
+    DirectionalLight,
+    Engine,
+    GlowLayer,
+    HavokPlugin,
+    HemisphericLight,
+    HighlightLayer,
+    MeshBuilder,
+    PBRMaterial,
+    PhysicsBody,
+    PhysicsMotionType,
+    PhysicsShapeBox,
+    Scene,
+    StandardMaterial,
+    Vector3,
+} from "@babylonjs/core";
 import HavokPhysics from "@babylonjs/havok";
 import "@babylonjs/core/Audio/v2";
 
-
-
+// eslint-disable-next-line @typescript-eslint/naming-convention
 async function createScene() {
-    const canvas = document.getElementById("renderCanvas") ;
+    const canvas = document.querySelector<HTMLCanvasElement>("#renderCanvas");
+    if (!canvas) {
+        throw new Error("Canvas element '#renderCanvas' not found");
+    }
     const engine = new Engine(canvas, true, { stencil: true });
 
     const scene = new Scene(engine);
@@ -97,12 +121,19 @@ async function createScene() {
     floorPhysicsBody.shape = floorPhysicsShape;
 
     // ─── Sounds (Audio V2) ────────────────────────────────────────────────────
+    const audioEngine = await CreateAudioEngineAsync();
+
     // Sound: ambient
-    const ambient = await CreateSoundAsync("ambient", "sounds/ambient.mp3", scene.audioEngine!, {
-        autoplay: true,
-        loop: true,
-        volume: 0.5,
-    });
+    void (await CreateSoundAsync(
+        "ambient",
+        "sounds/ambient.mp3",
+        {
+            autoplay: true,
+            loop: true,
+            volume: 0.5,
+        },
+        audioEngine
+    ));
 
     // ─── Render Pipeline (Post-Processing) ────────────────────────────────────
     const defaultPipeline = new DefaultRenderingPipeline("defaultPipeline", true, scene, [scene.activeCamera!]);
@@ -133,4 +164,8 @@ async function createScene() {
     });
 }
 
-createScene().catch(function(e) { console.error("Scene init error:", e); });
+// eslint-disable-next-line github/no-then
+createScene().catch(function (e) {
+    // eslint-disable-next-line no-console
+    console.error("Scene init error:", e);
+});
