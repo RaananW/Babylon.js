@@ -22,7 +22,7 @@ import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 
 import { PlaygroundManager } from "./playgroundManager.js";
-import { LoadSnippet } from "@tools/snippet-loader";
+import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
 import type { IPlaygroundSnippetResult } from "@tools/snippet-loader";
 import { startSessionServer, createSession, notifySessionUpdate, getSessionUrl, getSessionForPlayground, closeSessionForPlayground } from "./sessionServer.js";
 
@@ -510,6 +510,47 @@ server.registerTool(
             return { content: [{ type: "text", text: `No active session for "${playgroundName}".` }] };
         }
         return { content: [{ type: "text", text: `Closed session for "${playgroundName}".` }] };
+    }
+);
+
+// ── Snippet server ──────────────────────────────────────────────────────
+
+server.registerTool(
+    "save_snippet",
+    {
+        description:
+            "Save the playground code to the Babylon.js Snippet Server and return the snippet ID and version. " +
+            "The snippet can later be loaded in the Playground via its snippet ID, or fetched with load_snippet. " +
+            "To create a new revision of an existing snippet, pass the previous snippetId.",
+        inputSchema: {
+            playgroundName: z.string().describe("Name of the playground to save"),
+            snippetId: z.string().optional().describe('Optional existing snippet ID to create a new revision of (e.g. "ABC123" or "ABC123#1")'),
+            name: z.string().optional().describe("Optional human-readable title for the snippet"),
+            description: z.string().optional().describe("Optional description"),
+            tags: z.string().optional().describe("Optional comma-separated tags"),
+        },
+    },
+    async ({ playgroundName, snippetId, name, description, tags }) => {
+        const doc = manager.getPlayground(playgroundName);
+        if (!doc) {
+            return { content: [{ type: "text", text: `Playground "${playgroundName}" not found.` }], isError: true };
+        }
+        try {
+            const result = await SaveSnippet(
+                { type: "playground", code: doc.code, language: doc.language, engine: "WebGL2" },
+                { snippetId, metadata: { name: name ?? doc.title, description: description ?? doc.description, tags: tags ?? doc.tags } }
+            );
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: `Saved playground "${playgroundName}" to snippet server.\n\nSnippet ID: ${result.id}\nVersion: ${result.version}\nFull ID: ${result.snippetId}\n\nOpen in Playground: https://playground.babylonjs.com/#${result.snippetId}`,
+                    },
+                ],
+            };
+        } catch (e) {
+            return { content: [{ type: "text", text: `Error saving snippet: ${(e as Error).message}` }], isError: true };
+        }
     }
 );
 

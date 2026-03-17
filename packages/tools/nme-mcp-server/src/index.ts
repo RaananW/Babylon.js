@@ -27,18 +27,9 @@ import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { MaterialGraphManager } from "./materialGraph.js";
-import { loadSnippet } from "@tools/snippet-loader";
-import type { DataSnippetResult } from "@tools/snippet-loader";
-import {
-    startSessionServer,
-    createSession,
-    notifyMaterialUpdate,
-    getSessionUrl,
-    getSessionForMaterial,
-    closeSession,
-    closeSessionForMaterial,
-    stopSessionServer,
-} from "./sessionServer.js";
+import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
+import type { IDataSnippetResult } from "@tools/snippet-loader";
+import { startSessionServer, createSession, notifyMaterialUpdate, getSessionUrl, getSessionForMaterial, closeSessionForMaterial, stopSessionServer } from "./sessionServer.js";
 
 // ─── Singleton graph manager ──────────────────────────────────────────────
 const manager = new MaterialGraphManager();
@@ -811,7 +802,7 @@ server.registerTool(
     },
     async ({ materialName, snippetId }) => {
         try {
-            const snippetResult = await loadSnippet(snippetId);
+            const snippetResult = await LoadSnippet(snippetId);
             if (snippetResult.type === "unknown") {
                 return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
             }
@@ -821,7 +812,7 @@ server.registerTool(
                     isError: true,
                 };
             }
-            const dataResult = snippetResult as DataSnippetResult;
+            const dataResult = snippetResult as IDataSnippetResult;
             const jsonStr = JSON.stringify(dataResult.data);
             const result = manager.importJSON(materialName, jsonStr);
             if (result !== "OK") {
@@ -962,6 +953,44 @@ server.registerTool(
         }
         _notifyIfSession(materialName);
         return { content: [{ type: "text", text: `Connections:\n${results.join("\n")}` }], isError: hasError };
+    }
+);
+
+// ── Snippet server ──────────────────────────────────────────────────────
+
+server.registerTool(
+    "save_snippet",
+    {
+        description:
+            "Save the material to the Babylon.js Snippet Server and return the snippet ID and version. " +
+            "The snippet can later be loaded in the Node Material Editor via its snippet ID, or fetched with import_from_snippet. " +
+            "To create a new revision of an existing snippet, pass the previous snippetId.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material to save"),
+            snippetId: z.string().optional().describe('Optional existing snippet ID to create a new revision of (e.g. "ABC123" or "ABC123#1")'),
+            name: z.string().optional().describe("Optional human-readable title for the snippet"),
+            description: z.string().optional().describe("Optional description"),
+            tags: z.string().optional().describe("Optional comma-separated tags"),
+        },
+    },
+    async ({ materialName, snippetId, name, description, tags }) => {
+        const json = manager.exportJSON(materialName);
+        if (!json) {
+            return { content: [{ type: "text", text: `Material "${materialName}" not found.` }], isError: true };
+        }
+        try {
+            const result = await SaveSnippet({ type: "nodeMaterial", data: JSON.parse(json) }, { snippetId, metadata: { name, description, tags } });
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: `Saved material "${materialName}" to snippet server.\n\nSnippet ID: ${result.id}\nVersion: ${result.version}\nFull ID: ${result.snippetId}\n\nLoad in NME editor: https://nme.babylonjs.com/#${result.snippetId}`,
+                    },
+                ],
+            };
+        } catch (e) {
+            return { content: [{ type: "text", text: `Error saving snippet: ${(e as Error).message}` }], isError: true };
+        }
     }
 );
 

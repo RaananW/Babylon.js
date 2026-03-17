@@ -27,8 +27,8 @@ import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { ParticleGraphManager } from "./particleGraph.js";
-import { loadSnippet } from "@tools/snippet-loader";
-import type { DataSnippetResult } from "@tools/snippet-loader";
+import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
+import type { IDataSnippetResult } from "@tools/snippet-loader";
 
 // ─── Singleton graph manager ──────────────────────────────────────────────
 const manager = new ParticleGraphManager();
@@ -815,7 +815,7 @@ server.registerTool(
     },
     async ({ particleSystemName, snippetId }) => {
         try {
-            const snippetResult = await loadSnippet(snippetId);
+            const snippetResult = await LoadSnippet(snippetId);
             if (snippetResult.type === "unknown") {
                 return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
             }
@@ -825,7 +825,7 @@ server.registerTool(
                     isError: true,
                 };
             }
-            const dataResult = snippetResult as DataSnippetResult;
+            const dataResult = snippetResult as IDataSnippetResult;
             const jsonStr = JSON.stringify(dataResult.data);
             const result = manager.importJSON(particleSystemName, jsonStr);
             if (result !== "OK") {
@@ -871,6 +871,44 @@ server.registerTool(
                 },
             ],
         };
+    }
+);
+
+// ── Snippet server ──────────────────────────────────────────────────────
+
+server.registerTool(
+    "save_snippet",
+    {
+        description:
+            "Save the particle system to the Babylon.js Snippet Server and return the snippet ID and version. " +
+            "The snippet can later be loaded in the Node Particle Editor via its snippet ID, or fetched with import_from_snippet. " +
+            "To create a new revision of an existing snippet, pass the previous snippetId.",
+        inputSchema: {
+            particleSystemName: z.string().describe("Name of the particle system to save"),
+            snippetId: z.string().optional().describe('Optional existing snippet ID to create a new revision of (e.g. "ABC123" or "ABC123#1")'),
+            name: z.string().optional().describe("Optional human-readable title for the snippet"),
+            description: z.string().optional().describe("Optional description"),
+            tags: z.string().optional().describe("Optional comma-separated tags"),
+        },
+    },
+    async ({ particleSystemName, snippetId, name, description, tags }) => {
+        const json = manager.exportJSON(particleSystemName);
+        if (!json) {
+            return { content: [{ type: "text", text: `Particle system "${particleSystemName}" not found.` }], isError: true };
+        }
+        try {
+            const result = await SaveSnippet({ type: "nodeParticle", data: JSON.parse(json) }, { snippetId, metadata: { name, description, tags } });
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: `Saved particle system "${particleSystemName}" to snippet server.\n\nSnippet ID: ${result.id}\nVersion: ${result.version}\nFull ID: ${result.snippetId}\n\nLoad in NPE editor: https://npe.babylonjs.com/#${result.snippetId}`,
+                    },
+                ],
+            };
+        } catch (e) {
+            return { content: [{ type: "text", text: `Error saving snippet: ${(e as Error).message}` }], isError: true };
+        }
     }
 );
 

@@ -27,8 +27,8 @@ import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { GeometryGraphManager } from "./geometryGraph.js";
-import { loadSnippet } from "@tools/snippet-loader";
-import type { DataSnippetResult } from "@tools/snippet-loader";
+import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
+import type { IDataSnippetResult } from "@tools/snippet-loader";
 
 // ─── Singleton graph manager ──────────────────────────────────────────────
 const manager = new GeometryGraphManager();
@@ -813,7 +813,7 @@ server.registerTool(
     },
     async ({ geometryName, snippetId }) => {
         try {
-            const snippetResult = await loadSnippet(snippetId);
+            const snippetResult = await LoadSnippet(snippetId);
             if (snippetResult.type === "unknown") {
                 return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
             }
@@ -823,7 +823,7 @@ server.registerTool(
                     isError: true,
                 };
             }
-            const dataResult = snippetResult as DataSnippetResult;
+            const dataResult = snippetResult as IDataSnippetResult;
             const jsonStr = JSON.stringify(dataResult.data);
             const result = manager.importJSON(geometryName, jsonStr);
             if (result !== "OK") {
@@ -869,6 +869,44 @@ server.registerTool(
                 },
             ],
         };
+    }
+);
+
+// ── Snippet server ──────────────────────────────────────────────────────
+
+server.registerTool(
+    "save_snippet",
+    {
+        description:
+            "Save the geometry to the Babylon.js Snippet Server and return the snippet ID and version. " +
+            "The snippet can later be loaded in the Node Geometry Editor via its snippet ID, or fetched with import_from_snippet. " +
+            "To create a new revision of an existing snippet, pass the previous snippetId.",
+        inputSchema: {
+            geometryName: z.string().describe("Name of the geometry to save"),
+            snippetId: z.string().optional().describe('Optional existing snippet ID to create a new revision of (e.g. "ABC123" or "ABC123#1")'),
+            name: z.string().optional().describe("Optional human-readable title for the snippet"),
+            description: z.string().optional().describe("Optional description"),
+            tags: z.string().optional().describe("Optional comma-separated tags"),
+        },
+    },
+    async ({ geometryName, snippetId, name, description, tags }) => {
+        const json = manager.exportJSON(geometryName);
+        if (!json) {
+            return { content: [{ type: "text", text: `Geometry "${geometryName}" not found.` }], isError: true };
+        }
+        try {
+            const result = await SaveSnippet({ type: "nodeGeometry", data: JSON.parse(json) }, { snippetId, metadata: { name, description, tags } });
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: `Saved geometry "${geometryName}" to snippet server.\n\nSnippet ID: ${result.id}\nVersion: ${result.version}\nFull ID: ${result.snippetId}\n\nLoad in NGE editor: https://nge.babylonjs.com/#${result.snippetId}`,
+                    },
+                ],
+            };
+        } catch (e) {
+            return { content: [{ type: "text", text: `Error saving snippet: ${(e as Error).message}` }], isError: true };
+        }
     }
 );
 
