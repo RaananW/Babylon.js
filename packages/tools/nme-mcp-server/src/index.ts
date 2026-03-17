@@ -29,9 +29,30 @@ import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./bl
 import { MaterialGraphManager } from "./materialGraph.js";
 import { loadSnippet } from "@tools/snippet-loader";
 import type { DataSnippetResult } from "@tools/snippet-loader";
+import {
+    startSessionServer,
+    createSession,
+    notifyMaterialUpdate,
+    getSessionUrl,
+    getSessionForMaterial,
+    closeSession,
+    closeSessionForMaterial,
+    stopSessionServer,
+} from "./sessionServer.js";
 
 // ─── Singleton graph manager ──────────────────────────────────────────────
 const manager = new MaterialGraphManager();
+
+/**
+ * Notify SSE subscribers if a session exists for the given material.
+ * @param materialName - The material name to check for active sessions.
+ */
+function _notifyIfSession(materialName: string): void {
+    const sid = getSessionForMaterial(materialName);
+    if (sid) {
+        notifyMaterialUpdate(sid);
+    }
+}
 
 // ─── MCP Server ───────────────────────────────────────────────────────────
 const server = new McpServer(
@@ -301,11 +322,17 @@ server.registerTool(
     },
     async ({ name, mode, comment }) => {
         manager.createMaterial(name, mode, comment);
+
+        // Auto-create a live session for this material
+        const port = await startSessionServer(manager);
+        const sessionId = createSession(name);
+        const sessionUrl = getSessionUrl(sessionId, port);
+
         return {
             content: [
                 {
                     type: "text",
-                    text: `Created material "${name}" (mode: ${mode}). Now add blocks with add_block, connect them with connect_blocks, then export with export_material_json.`,
+                    text: `Created material "${name}" (mode: ${mode}). Now add blocks with add_block, connect them with connect_blocks, then export with export_material_json.\n\nMCP Session URL: ${sessionUrl}\nPaste this URL in the Node Material Editor's "Connect to MCP Session" panel to see live updates.`,
                 },
             ],
         };
@@ -313,14 +340,88 @@ server.registerTool(
 );
 
 server.registerTool(
+    "get_session_url",
+    {
+        description: "Get or create a live-session URL for a material. The URL can be pasted into the Node Material Editor's 'Connect to MCP Session' panel.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material"),
+        },
+    },
+    async ({ materialName }) => {
+        // Verify material exists
+        const materials = manager.listMaterials();
+        if (!materials.includes(materialName)) {
+            return { content: [{ type: "text", text: `Material "${materialName}" not found.` }], isError: true };
+        }
+        const port = await startSessionServer(manager);
+        const sessionId = createSession(materialName);
+        const sessionUrl = getSessionUrl(sessionId, port);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: `MCP Session URL: ${sessionUrl}\nPaste this URL in the Node Material Editor's "Connect to MCP Session" panel to see live updates.`,
+                },
+            ],
+        };
+    }
+);
+
+server.registerTool(
+    "start_session",
+    {
+        description:
+            "Start a live session for an existing material. Returns a URL that can be pasted into the Node Material Editor. If a session already exists for this material, returns the existing URL.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material"),
+        },
+    },
+    async ({ materialName }) => {
+        const materials = manager.listMaterials();
+        if (!materials.includes(materialName)) {
+            return { content: [{ type: "text", text: `Material "${materialName}" not found.` }], isError: true };
+        }
+        const port = await startSessionServer(manager);
+        const sessionId = createSession(materialName);
+        const sessionUrl = getSessionUrl(sessionId, port);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: `MCP Session URL: ${sessionUrl}\nPaste this URL in the Node Material Editor's "Connect to MCP Session" panel to see live updates.`,
+                },
+            ],
+        };
+    }
+);
+
+server.registerTool(
+    "close_session",
+    {
+        description: "Close a live session for a material. Disconnects all SSE subscribers in the editor and removes the session. The material itself is NOT deleted.",
+        inputSchema: {
+            materialName: z.string().describe("Name of the material whose session to close"),
+        },
+    },
+    async ({ materialName }) => {
+        const closed = closeSessionForMaterial(materialName);
+        if (!closed) {
+            return { content: [{ type: "text", text: `No active session for "${materialName}".` }] };
+        }
+        return { content: [{ type: "text", text: `Session for "${materialName}" closed. The editor will disconnect.` }] };
+    }
+);
+
+server.registerTool(
     "delete_material",
     {
-        description: "Delete a material graph from memory.",
+        description: "Delete a material graph from memory. Also closes any active session for it.",
         inputSchema: {
             name: z.string().describe("Name of the material to delete"),
         },
     },
     async ({ name }) => {
+        closeSessionForMaterial(name);
         const ok = manager.deleteMaterial(name);
         return {
             content: [{ type: "text", text: ok ? `Deleted "${name}".` : `Material "${name}" not found.` }],
@@ -328,8 +429,11 @@ server.registerTool(
     }
 );
 
-server.registerTool("clear_all", { description: "Remove all material graphs from memory, resetting the server to a clean state." }, async () => {
+server.registerTool("clear_all", { description: "Remove all material graphs from memory, resetting the server to a clean state. Also closes all active sessions." }, async () => {
     const names = manager.listMaterials();
+    for (const n of names) {
+        closeSessionForMaterial(n);
+    }
     manager.clearAll();
     return {
         content: [{ type: "text", text: names.length > 0 ? `Cleared ${names.length} material(s): ${names.join(", ")}` : "Nothing to clear — memory was already empty." }],
@@ -383,6 +487,7 @@ server.registerTool(
         if (result.warnings) {
             lines.push("", "Warnings:", ...result.warnings);
         }
+        _notifyIfSession(materialName);
         return {
             content: [
                 {
@@ -405,6 +510,9 @@ server.registerTool(
     },
     async ({ materialName, blockId }) => {
         const result = manager.removeBlock(materialName, blockId);
+        if (result === "OK") {
+            _notifyIfSession(materialName);
+        }
         return {
             content: [{ type: "text", text: result === "OK" ? `Removed block ${blockId}.` : `Error: ${result}` }],
             isError: result !== "OK",
@@ -426,6 +534,9 @@ server.registerTool(
     },
     async ({ materialName, blockId, properties }) => {
         const result = manager.setBlockProperties(materialName, blockId, properties as Record<string, unknown>);
+        if (result === "OK") {
+            _notifyIfSession(materialName);
+        }
         return {
             content: [{ type: "text", text: result === "OK" ? `Updated block ${blockId}.` : `Error: ${result}` }],
             isError: result !== "OK",
@@ -450,6 +561,9 @@ server.registerTool(
     async ({ materialName, sourceBlockId, outputName, targetBlockId, inputName }) => {
         const result = manager.connectBlocks(materialName, sourceBlockId, outputName, targetBlockId, inputName);
         const isOk = result.startsWith("OK");
+        if (isOk) {
+            _notifyIfSession(materialName);
+        }
         return {
             content: [
                 {
@@ -476,6 +590,9 @@ server.registerTool(
     },
     async ({ materialName, blockId, inputName }) => {
         const result = manager.disconnectInput(materialName, blockId, inputName);
+        if (result === "OK") {
+            _notifyIfSession(materialName);
+        }
         return {
             content: [{ type: "text", text: result === "OK" ? `Disconnected [${blockId}].${inputName}` : `Error: ${result}` }],
             isError: result !== "OK",
@@ -805,6 +922,7 @@ server.registerTool(
                 results.push(line);
             }
         }
+        _notifyIfSession(materialName);
         return { content: [{ type: "text", text: `Added blocks:\n${results.join("\n")}` }] };
     }
 );
@@ -842,6 +960,7 @@ server.registerTool(
                 results.push(`Error ([${conn.sourceBlockId}].${conn.outputName} → [${conn.targetBlockId}].${conn.inputName}): ${result}`);
             }
         }
+        _notifyIfSession(materialName);
         return { content: [{ type: "text", text: `Connections:\n${results.join("\n")}` }], isError: hasError };
     }
 );
@@ -862,3 +981,11 @@ try {
     console.error("Fatal error:", err);
     process.exit(1);
 }
+
+// Graceful shutdown — stop the session server so the port is released immediately
+const _shutdown = () => {
+    void stopSessionServer();
+    process.exit(0);
+};
+process.on("SIGINT", _shutdown);
+process.on("SIGTERM", _shutdown);
