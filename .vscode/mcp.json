@@ -27,6 +27,10 @@
         "babylonjs-node-particle": {
             "command": "node",
             "args": ["./packages/tools/npe-mcp-server/dist/index.js"]
+        },
+        "babylonjs-playground": {
+            "command": "node",
+            "args": ["./packages/tools/playground-mcp-server/dist/index.js"]
         }
     }
 }

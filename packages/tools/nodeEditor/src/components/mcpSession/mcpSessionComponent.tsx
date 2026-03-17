@@ -55,14 +55,16 @@ export const McpSessionComponent: React.FC<IMcpSessionComponentProps> = ({ globa
         }
 
         try {
-            // 1. Fetch current material JSON
-            const res = await fetch(`${sessionUrl}/material`);
-            if (!res.ok) {
-                globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`MCP Session: Failed to fetch material (${res.status})`, true));
-                return;
+            // 1. Push current NME material to the MCP session so the agent starts with what the user has
+            if (globalState.nodeMaterial) {
+                const json = SerializationTools.Serialize(globalState.nodeMaterial, globalState);
+                await fetch(`${sessionUrl}/material`, {
+                    method: "POST",
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    headers: { "Content-Type": "application/json" },
+                    body: json,
+                });
             }
-            const json = await res.json();
-            loadMaterialFromJson(json);
 
             // 2. Open SSE connection
             const es = new EventSource(`${sessionUrl}/events`);

@@ -1939,8 +1939,10 @@ export interface ICodeGeneratorOptions {
      * Output format.
      * - "umd" (default): Uses `BABYLON.*` globals, suitable for CDN `<script>` tags.
      * - "es6": Uses ES module imports from `@babylonjs/*` packages.
+     * - "playground": UMD style wrapped as `export const createScene = function () { ... };`
+     *   with no engine setup or render loop, ready for the Babylon.js Playground.
      */
-    format?: "umd" | "es6";
+    format?: "umd" | "es6" | "playground";
     /**
      * Optional GUI JSON descriptor (from the GUI MCP server).
      * When provided, GUI construction code will be generated.
@@ -2239,13 +2241,14 @@ function generateIntegrations(integrations: ISerializedIntegration[], scene: ISe
  */
 export function generateSceneCode(scene: ISerializedScene, options?: ICodeGeneratorOptions): string {
     buildAndActivateVarNames(scene);
+    const isPlayground = options?.format === "playground";
     const opts: Required<ICodeGeneratorOptions> = {
         wrapInFunction: options?.wrapInFunction ?? true,
         functionName: options?.functionName ?? "createScene",
-        includeHtmlBoilerplate: options?.includeHtmlBoilerplate ?? false,
+        includeHtmlBoilerplate: isPlayground ? false : (options?.includeHtmlBoilerplate ?? false),
         sceneVarName: options?.sceneVarName ?? "scene",
-        includeEngineSetup: options?.includeEngineSetup ?? true,
-        includeRenderLoop: options?.includeRenderLoop ?? true,
+        includeEngineSetup: isPlayground ? false : (options?.includeEngineSetup ?? true),
+        includeRenderLoop: isPlayground ? false : (options?.includeRenderLoop ?? true),
         format: options?.format ?? "umd",
         guiJson: options?.guiJson ?? null,
         nodeRenderGraphJson: options?.nodeRenderGraphJson ?? null,
@@ -2567,7 +2570,8 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
     // ── Inspector v2 ──────────────────────────────────────────────────────
     const hasInspector = !!scene.inspector?.enabled;
     if (hasInspector) {
-        bodyParts.push(generateInspector(scene.inspector!, S, opts.format));
+        const inspectorFormat = opts.format === "playground" ? "umd" : opts.format;
+        bodyParts.push(generateInspector(scene.inspector!, S, inspectorFormat));
         bodyParts.push(``);
     }
 
@@ -2614,17 +2618,24 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
     const body = bodyParts.join("\n");
 
     if (opts.wrapInFunction) {
-        sections.push(`// eslint-disable-next-line @typescript-eslint/naming-convention`);
-        sections.push(`async function ${opts.functionName}() {`);
-        sections.push(indent(body, 1));
-        sections.push(`}`);
-        sections.push(``);
-        if (opts.includeRenderLoop) {
-            sections.push(`// eslint-disable-next-line github/no-then`);
-            sections.push(`${opts.functionName}().catch(function (e) {`);
-            sections.push(`    // eslint-disable-next-line no-console`);
-            sections.push(`    console.error("Scene init error:", e);`);
-            sections.push(`});`);
+        if (opts.format === "playground") {
+            // Playground format: exported const, no async (engine/canvas are globals)
+            sections.push(`export const ${opts.functionName} = function () {`);
+            sections.push(indent(body, 1));
+            sections.push(`};`);
+        } else {
+            sections.push(`// eslint-disable-next-line @typescript-eslint/naming-convention`);
+            sections.push(`async function ${opts.functionName}() {`);
+            sections.push(indent(body, 1));
+            sections.push(`}`);
+            sections.push(``);
+            if (opts.includeRenderLoop) {
+                sections.push(`// eslint-disable-next-line github/no-then`);
+                sections.push(`${opts.functionName}().catch(function (e) {`);
+                sections.push(`    // eslint-disable-next-line no-console`);
+                sections.push(`    console.error("Scene init error:", e);`);
+                sections.push(`});`);
+            }
         }
     } else {
         sections.push(body);

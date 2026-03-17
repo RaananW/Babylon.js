@@ -24,6 +24,7 @@
 | 7   | **GUI**               | `gui-mcp-server/`               | ✅     | Build 2D UI layouts using the Babylon.js GUI system (AdvancedDynamicTexture, controls, layout). 22 tools. Standalone — not part of the Scene MCP.                                                                                               |
 | 8   | **Smart Filters**     | `smart-filters-mcp-server/`     | ❌     | Create post-processing smart filter graphs for the Smart Filters system.                                                                                                                                                                        |
 | 9   | **glTF**              | `gltf-mcp-server/`              | ❌     | Read, analyze, and modify glTF/glb assets using Babylon.js loaders and serializers. Inspect structure, edit nodes/meshes/materials/animations, add or modify extensions, validate, and re-export.                                               |
+| 10  | **Playground**        | `playground-mcp-server/`        | ✅     | AI-driven code editing for Babylon.js Playgrounds. Create, read, modify, and push playground code. Live session bridge via SSE for real-time sync with the Playground editor.                                                                   |
 
 ## Architecture
 

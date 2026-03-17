@@ -18,6 +18,7 @@ import { ExamplesComponent } from "./components/examplesComponent";
 import { QRCodeComponent } from "./components/qrCodeComponent";
 import { SplitContainer } from "shared-ui-components/split/splitContainer";
 import { Splitter } from "shared-ui-components/split/splitter";
+import { McpSessionComponent } from "./components/mcpSession/mcpSessionComponent";
 
 import "./scss/main.scss";
 import { ControlledSize, SplitDirection } from "shared-ui-components/split/splitContext";
@@ -236,6 +237,7 @@ export class Playground extends React.Component<
                     onCancel={this._cancelEngineSwitchDialog}
                     onConfirm={this._confirmEngineSwitchDialog}
                 />
+                <McpSessionComponent globalState={this._globalState} />
             </div>
         );
     }

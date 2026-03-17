@@ -3022,7 +3022,13 @@ server.registerTool(
                 .describe("Include full HTML page boilerplate (canvas, script tags, CDN links) for a standalone page. Only applies to UMD format."),
             includeEngineSetup: z.boolean().default(true).describe("Include canvas and Engine creation code"),
             includeRenderLoop: z.boolean().default(true).describe("Include the render loop and resize handler"),
-            format: z.enum(["umd", "es6"]).default("umd").describe("Output format: 'umd' for CDN/global BABYLON.* style, 'es6' for ES module imports from @babylonjs/*"),
+            format: z
+                .enum(["umd", "es6", "playground"])
+                .default("umd")
+                .describe(
+                    "Output format: 'umd' for CDN/global BABYLON.* style, 'es6' for ES module imports from @babylonjs/*, " +
+                        "'playground' for Babylon.js Playground format (export const createScene, no engine setup or render loop)"
+                ),
             guiJson: z.string().optional().describe("Optional GUI JSON override. If omitted, the GUI attached via attach_gui is used automatically."),
             enableCollisionCallbacks: z.boolean().default(false).describe("Enable collision callbacks on all physics bodies (needed for collision-driven behaviors)"),
             outputFile: z
