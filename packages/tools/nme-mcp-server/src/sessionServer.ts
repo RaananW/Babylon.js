@@ -362,6 +362,16 @@ function _handleSSE(sessionId: string, res: http.ServerResponse): void {
     // Send an initial comment so the client knows the connection is alive
     res.write(": connected\n\n");
 
+    // Immediately push the current material state so the editor loads it on connect
+    const materialName = _sessions.get(sessionId);
+    if (materialName && _manager) {
+        const json = _manager.exportJSON(materialName);
+        if (json) {
+            const compact = JSON.stringify(JSON.parse(json));
+            res.write(`data: ${compact}\n\n`);
+        }
+    }
+
     // Remove client on disconnect
     res.on("close", () => {
         clients.delete(res);
