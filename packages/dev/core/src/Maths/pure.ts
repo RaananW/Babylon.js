@@ -20,3 +20,4 @@ export * from "./math.path.pure";
 export * from "./math.plane.pure";
 export * from "./math.size.pure";
 export * from "./math.vector.pure";
+export * from "./math.viewport";
