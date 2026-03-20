@@ -48,65 +48,68 @@ export const McpSessionComponent: React.FC<IMcpSessionComponentProps> = ({ globa
         [globalState]
     );
 
-    const handleConnect = useCallback(async () => {
-        const sessionUrl = url.replace(/\/$/, ""); // trim trailing slash
-        if (!sessionUrl) {
-            return;
-        }
-
-        try {
-            // 1. Push current NME material to the MCP session so the agent starts with what the user has
-            if (globalState.nodeMaterial) {
-                const json = SerializationTools.Serialize(globalState.nodeMaterial, globalState);
-                await fetch(`${sessionUrl}/material`, {
-                    method: "POST",
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                    headers: { "Content-Type": "application/json" },
-                    body: json,
-                });
+    const handleConnect = useCallback(
+        async (pushOnConnect: boolean = false) => {
+            const sessionUrl = url.replace(/\/$/, ""); // trim trailing slash
+            if (!sessionUrl) {
+                return;
             }
 
-            // 2. Open SSE connection
-            const es = new EventSource(`${sessionUrl}/events`);
-            eventSourceRef.current = es;
-
-            es.onmessage = (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    loadMaterialFromJson(data);
-                } catch {
-                    // Ignore parse errors from keepalive comments
+            try {
+                // Optionally push current NME material to the MCP session so the agent starts with what the user has
+                if (pushOnConnect && globalState.nodeMaterial) {
+                    const json = SerializationTools.Serialize(globalState.nodeMaterial, globalState);
+                    await fetch(`${sessionUrl}/material`, {
+                        method: "POST",
+                        // eslint-disable-next-line @typescript-eslint/naming-convention
+                        headers: { "Content-Type": "application/json" },
+                        body: json,
+                    });
                 }
-            };
 
-            // Listen for explicit session-closed event from the MCP server
-            es.addEventListener("session-closed", (event) => {
-                const info = JSON.parse((event as MessageEvent).data);
-                globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`MCP Session ended: ${info.reason}`, false));
-                setConnected(false);
-                globalState.mcpSessionConnected = false;
-                globalState.onMcpSessionStateChangedObservable.notifyObservers(false);
-                es.close();
-                eventSourceRef.current = null;
-            });
+                // Open SSE connection
+                const es = new EventSource(`${sessionUrl}/events`);
+                eventSourceRef.current = es;
 
-            es.onerror = () => {
-                setConnected(false);
-                globalState.mcpSessionConnected = false;
-                globalState.onMcpSessionStateChangedObservable.notifyObservers(false);
-                es.close();
-                eventSourceRef.current = null;
-            };
+                es.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        loadMaterialFromJson(data);
+                    } catch {
+                        // Ignore parse errors from keepalive comments
+                    }
+                };
 
-            // 3. Update state
-            globalState.mcpSessionUrl = sessionUrl;
-            globalState.mcpSessionConnected = true;
-            globalState.onMcpSessionStateChangedObservable.notifyObservers(true);
-            setConnected(true);
-        } catch (err) {
-            globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`MCP Session: Connection failed — ${err}`, true));
-        }
-    }, [url, globalState, loadMaterialFromJson]);
+                // Listen for explicit session-closed event from the MCP server
+                es.addEventListener("session-closed", (event) => {
+                    const info = JSON.parse((event as MessageEvent).data);
+                    globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`MCP Session ended: ${info.reason}`, false));
+                    setConnected(false);
+                    globalState.mcpSessionConnected = false;
+                    globalState.onMcpSessionStateChangedObservable.notifyObservers(false);
+                    es.close();
+                    eventSourceRef.current = null;
+                });
+
+                es.onerror = () => {
+                    setConnected(false);
+                    globalState.mcpSessionConnected = false;
+                    globalState.onMcpSessionStateChangedObservable.notifyObservers(false);
+                    es.close();
+                    eventSourceRef.current = null;
+                };
+
+                // Update state
+                globalState.mcpSessionUrl = sessionUrl;
+                globalState.mcpSessionConnected = true;
+                globalState.onMcpSessionStateChangedObservable.notifyObservers(true);
+                setConnected(true);
+            } catch (err) {
+                globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`MCP Session: Connection failed — ${err}`, true));
+            }
+        },
+        [url, globalState, loadMaterialFromJson]
+    );
 
     const handleDisconnect = useCallback(() => {
         if (eventSourceRef.current) {
@@ -151,12 +154,20 @@ export const McpSessionComponent: React.FC<IMcpSessionComponentProps> = ({ globa
             />
             <TextLineComponent label="Status" value={connected ? "Connected" : "Disconnected"} color={connected ? "#4caf50" : "#888"} />
             {!connected ? (
-                <ButtonLineComponent
-                    label="Connect"
-                    onClick={() => {
-                        void handleConnect();
-                    }}
-                />
+                <>
+                    <ButtonLineComponent
+                        label="Connect"
+                        onClick={() => {
+                            void handleConnect(false);
+                        }}
+                    />
+                    <ButtonLineComponent
+                        label="Connect & Push"
+                        onClick={() => {
+                            void handleConnect(true);
+                        }}
+                    />
+                </>
             ) : (
                 <>
                     <ButtonLineComponent label="Disconnect" onClick={handleDisconnect} />
