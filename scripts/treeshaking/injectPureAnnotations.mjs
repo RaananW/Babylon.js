@@ -11,18 +11,26 @@
  * /*#__PURE__*‍/ before call-expressions in top-level statements that don't
  * already have the annotation.
  *
- * Patterns matched (at column 0, i.e. hoisted static field assignments):
+ * Patterns matched:
+ *
+ * 1. Static field initializers (at column 0, hoisted by tsc):
  *   ClassName.field = new Ctor(...)
  *   ClassName.field = Ctor.Method(...)
  *   ClassName.field = FunctionName(...)
+ *
+ * 2. __decorate calls (at column 0, from experimentalDecorators):
+ *   __decorate([
+ *       serialize()
+ *   ], ClassName.prototype, "prop", void 0);
  *
  * Usage:
  *   node scripts/treeshaking/injectPureAnnotations.mjs [--dry-run] [--verbose]
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
-import { resolve, relative } from "node:path";
+import { resolve, relative, dirname } from "node:path";
 import { execSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { globSync } from "glob";
 
 const args = process.argv.slice(2);
@@ -30,7 +38,8 @@ const dryRun = args.includes("--dry-run");
 const verbose = args.includes("--verbose");
 const writtenFiles = [];
 
-const distDir = resolve("packages/dev/core/dist");
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const distDir = resolve(__dirname, "../../packages/dev/core/dist");
 
 // Find all .pure.js files in dist/
 const pureFiles = globSync("**/*.pure.js", { cwd: distDir, absolute: true });
@@ -58,6 +67,20 @@ if (pureFiles.length === 0) {
  */
 const STATIC_FIELD_RHS = /^(\w+\.\w+\s*=\s*)(?!\/\*#__PURE__\*\/\s*)(new\s+\w+|[A-Z]\w*\.\w+\(|[A-Z]\w*\()/gm;
 
+/**
+ * Matches top-level __decorate([ calls that don't already have a PURE annotation.
+ *
+ * TypeScript's experimentalDecorators compiles @serialize() etc. to:
+ *   __decorate([
+ *       serialize()
+ *   ], ClassName.prototype, "prop", void 0);
+ *
+ * These are top-level calls that bundlers treat as side effects.
+ * Adding /*#__PURE__*‍/ tells the bundler the call is safe to remove
+ * if the decorated class is unused.
+ */
+const DECORATE_CALL = /^(?!\/\*#__PURE__\*\/\s*)(__decorate\()/gm;
+
 let totalAnnotations = 0;
 let totalFiles = 0;
 
@@ -66,9 +89,16 @@ for (const filePath of pureFiles) {
     let patched = original;
     let fileAnnotations = 0;
 
+    // 1. Annotate static field initializers with call expressions
     patched = patched.replace(STATIC_FIELD_RHS, (match, lhs, rhs) => {
         fileAnnotations++;
         return `${lhs}/*#__PURE__*/ ${rhs}`;
+    });
+
+    // 2. Annotate __decorate calls
+    patched = patched.replace(DECORATE_CALL, (match, call) => {
+        fileAnnotations++;
+        return `/*#__PURE__*/ ${call}`;
     });
 
     if (fileAnnotations > 0) {

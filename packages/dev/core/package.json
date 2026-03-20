@@ -19,7 +19,7 @@
         "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
         "precompile": "npm run compile:assets",
         "compile": "npm run compile:source",
-        "compile:source": "tsc -b tsconfig.build.json",
+        "compile:source": "tsc -b tsconfig.build.json && node ../../scripts/treeshaking/injectPureAnnotations.mjs",
         "compile:assets": "build-tools -c process-assets --isCore",
         "watch:assets": "build-tools -c process-assets --isCore --watch",
         "watch:source": "tsc -b tsconfig.build.json -w",
@@ -27,6 +27,9 @@
     },
     "sideEffects": [
         "**/*",
+        "!**/*.pure.*",
+        "!**/pure.ts",
+        "!**/pure.js",
         "!src/Maths/ThinMaths/**"
     ],
     "devDependencies": {

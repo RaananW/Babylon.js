@@ -430,6 +430,11 @@ Phase 0 (Audit tooling)  ← DONE
                                                   ├─> 8.2 (flatten transitive includes)
                                                   ├─> 8.3 (regenerate all shader .ts files)
                                                   └─> 8.4 (verify + update sideEffects)
+                                            └─> Phase 10 (__decorate pure annotations)  ← DONE
+                                                  ├─> 10.1 (extend injectPureAnnotations.mjs)
+                                                  ├─> 10.2 (integrate into build pipeline)
+                                                  ├─> 10.3 (verify bundle smoke tests)
+                                                  └─> 10.4 (viewer validation with pure barrel)
 ```
 
 ## Phase 7 — Fix Pure Barrel Integrity
@@ -1087,21 +1092,203 @@ can import from `.pure` without any implicit side effects.
 | Consumers forget to call registration function  | Runtime crash is the same as forgetting bare import today |
 | Large PR size (~109 files × 3)                  | Process by directory (Engines/, Physics/, etc.)           |
 
+## Phase 10 — Annotate `__decorate` Calls as Pure
+
+### Problem Statement
+
+After completing Phase 9 (wrapping all side effects in callable registration functions), a **viewer
+package validation test** revealed that importing values through the `core/pure` barrel instead of
+deep `.pure` paths caused a **58% bundle size increase** (3.8 MB → 6.0 MB minified).
+
+Root cause analysis identified three blockers preventing Rollup from tree-shaking the pure barrel:
+
+1. **`__decorate` calls** — TypeScript's `experimentalDecorators` compiles `@serialize()` etc. to
+   top-level `__decorate([serialize()], ClassName.prototype, "prop", void 0)` calls. These are
+   genuine function invocations at module scope that Rollup correctly treats as side effects.
+   **1,220 calls across 181 `.pure.js` files.**
+
+2. **Static property assignments** — `Scene.FOGMODE_NONE = Constants.FOGMODE_NONE;` etc.
+   **538 assignments across 112 files.** These are plain assignments (not calls) but still
+   considered side effects by bundlers if the class they assign to is unused.
+
+3. **`sideEffects: ["**/\*"]`** in core's `package.json` — however, Rollup's TypeScript plugin
+alias (`core`→`@dev/core/dist`) bypasses `node_modules`resolution, so the`sideEffects`
+   field is **not consulted by Rollup**. This is only relevant for Webpack consumers.
+
+### Missing Pure Barrel Entries
+
+During the viewer validation, two missing exports from pure barrels were discovered:
+
+- **`Maths/pure.ts`**: Missing `export * from "./math.viewport"` — `MathViewport` needed by viewer
+- **`Misc/pure.ts`**: Missing `export * from "./arrayTools"` — `ArrayTools` needed by viewer
+
+Both entries have been added to their respective `pure.ts` barrel files.
+
+### Viewer Validation Test
+
+The viewer package (`packages/tools/viewer`) was migrated as a real-world validation of the pure
+import system. All viewer source files were modified:
+
+- **Type imports** → `core/pure` (top-level pure barrel)
+- **Value imports** → individual `.pure` deep paths (e.g., `core/Cameras/arcRotateCamera.pure`)
+- **15 register function calls** added at module level
+- **Dynamic imports** rewritten to use `.pure` with register calls
+- **Engine dynamic imports** kept non-pure (thin wrappers loading many extensions)
+
+**Results with deep `.pure` imports**:
+
+- TypeScript compilation: **0 errors** ✅
+- Vite dev server: **works, viewer renders correctly** ✅
+- Public viewer bundle (`npm run build -w @babylonjs/viewer`):
+    - Non-minified: 8.7 MB total JS
+    - **Minified: 3.8 MB total JS** (main chunk 3.9 MB non-min, WebGPU 609K, glTF 264K)
+
+**Results with `core/pure` barrel imports** (before Phase 10 fix):
+
+- **Minified: 6.0 MB total JS** (+58% vs deep imports)
+- Cause: `export *` chains force Rollup to traverse all files, where `__decorate` calls
+  prevent unused-class elimination
+
+### Solution: `/*#__PURE__*/` Annotations on `__decorate` Calls
+
+Three options were evaluated:
+
+| Option         | Approach                                                      | Source Changes     | Risk                             |
+| -------------- | ------------------------------------------------------------- | ------------------ | -------------------------------- |
+| **A** (chosen) | Post-build `/*#__PURE__*/` injection                          | 0                  | Low — recognized by all bundlers |
+| B              | Move decorators into `registerXxx()` functions                | ~1,220 sites       | High — semantic change           |
+| C              | Switch to TC39 decorators (`"experimentalDecorators": false`) | tsconfig + runtime | High — different semantics       |
+
+**Option A** was chosen: extend the existing `scripts/treeshaking/injectPureAnnotations.mjs`
+post-build script to also annotate `__decorate(` calls in `.pure.js` files.
+
+### Implementation
+
+- [x] **10.1** — Extend `injectPureAnnotations.mjs` with `__decorate` pattern
+    - New regex: `/^(?!\/\*#__PURE__\*\/\s*)(__decorate\()/gm`
+    - Matches `__decorate(` at column 0 (top-level), skips already-annotated calls
+    - Transforms: `__decorate([` → `/*#__PURE__*/ __decorate([`
+    - Idempotent (safe to run multiple times)
+    - **Result**: 1,093 annotations injected across 193 files (687 `.pure.js` scanned)
+        - Includes both `__decorate` calls and static field initializers (Phase 1 pattern)
+- [x] **10.2** — Integrate into build pipeline
+    - Updated `packages/dev/core/package.json` `compile:source` script:
+      `"tsc -b tsconfig.build.json && node ../../scripts/treeshaking/injectPureAnnotations.mjs"`
+    - Script uses `import.meta.url` to resolve `dist/` path regardless of CWD
+- [x] **10.3** — Verify bundle smoke tests
+    - **All 21 tests pass** (42 individual PASS results: Rollup + Webpack) ✅
+- [x] **10.4** — Re-test viewer with `core/pure` barrel imports for values
+    - Switched all viewer value imports from deep `.pure` paths to single `import { ... } from "core/pure"`
+    - TypeScript compilation: **0 errors** ✅
+    - **Result: 5,277,335 bytes (5.0 MB) minified** — down from 6.0 MB (pre-Phase 10) but still
+      +32% vs. deep imports (3.99 MB baseline)
+    - The `__PURE__` annotations saved ~1.0 MB, but remaining bloat comes from:
+        - **Static property assignments** (e.g., `Scene.FOGMODE_NONE = Constants.FOGMODE_NONE;`) —
+          538 across 112 files. These are top-level assignments, not calls, so `/*#__PURE__*/` does
+          not apply. Rollup treats them as side effects because writing to a class property could
+          have observable effects if the class has setter traps.
+        - **Chunk merging**: `export *` barrel chains force Rollup to pull in transitive modules
+          that share dependencies with lazy chunks (WebGPU engine, glTF loader), collapsing them
+          into the main chunk (245K WebGPU + 100K glTF chunks disappeared into main).
+    - **Conclusion**: Deep `.pure` imports are no longer needed — see Phase 10.5 which solves
+      the barrel overhead via a Rollup `load` hook plugin. The pure barrel now produces smaller
+      bundles than deep imports.
+    - Viewer reverted to deep `.pure` imports (best bundle size)
+- [x] **10.5** — Rollup `load` hook to mark pure modules as side-effect-free
+    - **Problem**: `@rollup/plugin-typescript` does not participate in Rollup's `moduleSideEffects`
+      system. Neither `treeshake.moduleSideEffects` callbacks nor `resolveId` overrides had any
+      effect — the callback IS invoked but the module info shows `hasModuleSideEffects=undefined`
+      for all 852 pure modules, meaning the tree-shaker ignores it.
+    - **Solution**: A custom Rollup plugin using the `load` hook that intercepts `.pure.` and
+      `.functions.` modules before the TypeScript plugin. The `load` hook reads the file and
+      returns `{ code, moduleSideEffects: false }`, which Rollup honors for tree-shaking.
+    - **Plugin** (`markPureModules`): Added to `rollup.config.dist.esm.mjs`, placed BEFORE the
+      TypeScript plugin in the plugins array (first plugin wins for `load`).
+    - **Results**:
+        - `core/pure` barrel imports: **3,989,625 bytes (3.80 MB) minified** — down from 5.0 MB
+        - Deep `.pure` imports baseline: **3,992,238 bytes (3.99 MB) minified**
+        - **Pure barrel is now 5% SMALLER than deep imports** (more aggressive chunk deduplication)
+        - Chunk count reduced from 375 → 340 (better code splitting, no duplication)
+        - All 21 bundle smoke tests pass ✅
+    - **Approaches that FAILED** (for the record):
+        - `treeshake.moduleSideEffects` callback — called but ignored by Rollup internals
+        - `resolveId` with `order: "post"` — caused 10 MB duplication
+        - `transform` with `order: "post"` returning `{ moduleSideEffects: false }` — caused 14 MB duplication
+        - `treeshake.moduleSideEffects: false` globally — collapsed bundle to 334 bytes (empty)
+    - **Why `load` works**: The `load` hook is the canonical way to provide module content to
+      Rollup. When a plugin returns `{ code, moduleSideEffects: false }` from `load`, Rollup
+      stores this flag on the module and uses it during tree-shaking. Unlike `resolveId` or
+      `transform` overrides, `load` is the earliest point where module content and metadata
+      are established, so it doesn't conflict with other plugins' resolution or transform chains.
+    - **Viewer source files updated**: All value imports now use `core/pure` barrel instead of
+      deep paths (viewer.ts, viewerElement.ts, viewerFactory.ts).
+
+### Technical Details
+
+The `/*#__PURE__*/` annotation is a standard convention recognized by Rollup, Webpack, esbuild,
+and other bundlers. When placed before a function call, it tells the bundler:
+
+> "This call has no side effects. If its return value is unused, the call can be removed."
+
+For `__decorate`, the return value is always discarded (it decorates in-place via
+`Object.defineProperty`). The decorator functions (`serialize()`, `serializeAs*()`, etc.) only
+store metadata via `GetDirectStore(target)` — they write to the class prototype's metadata,
+which is only meaningful if the class is actually used. If the class is tree-shaken away,
+the decoration metadata is dead code too.
+
+**Why this is safe**: If a bundler removes the decorated class, the `__decorate` calls on that
+class's prototype become unreachable dead code. The `/*#__PURE__*/` annotation simply tells
+the bundler it's safe to recognize this and remove them together.
+
+### Would TC39 Decorators Eliminate the Need for `/*#__PURE__*/`?
+
+**No.** Tested with TypeScript 5.9 and Rollup 4.59 across three compilation targets:
+
+| Target                                             | Compiled Form                                                                   | Tree-shakes without annotation?                                 |
+| -------------------------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `es2021` (current, `experimentalDecorators: true`) | External `__decorate(...)` after class                                          | No — need `/*#__PURE__*/` on each `__decorate` call             |
+| `es2022` (TC39 decorators)                         | IIFE `(() => { ... })()` wrapping class, `__esDecorate(...)` inside `static {}` | No — need `/*#__PURE__*/` on the IIFE                           |
+| `esnext` (TC39 native syntax)                      | `@decorator()` syntax preserved in output                                       | No — Rollup treats `@decorator()` as potentially side-effectful |
+
+The fundamental issue is that **Rollup cannot prove decorator calls are side-effect-free**,
+regardless of compilation target. The `/*#__PURE__*/` annotation is the only way to signal
+to the bundler that these calls are safe to remove when the class is unused.
+
+**What TC39 decorators DO improve**: Decorator calls move inside the class (via `static {}`
+block or native syntax) instead of being separate top-level statements. This means only ONE
+`/*#__PURE__*/` annotation is needed per class (on the wrapping IIFE) instead of one per
+decorated property.
+
+**Migration scope if pursued**: 225 files, 1,489 decorator usages in `@dev/core`. Decorator
+function signatures change significantly: legacy `(target, propertyKey) =>` becomes TC39
+`(_target, context: ClassFieldDecoratorContext) =>`. The `expandToProperty` decorator (which
+uses `Object.defineProperty(target, ...)`) would need substantial rework since TC39 field
+decorators cannot modify the class prototype directly. The tsconfig already contains a note:
+`"target": "es2021", // esnext has an issue with class generation and our decoders. TODO -
+avoid using decorators until in standard"`.
+
+**Conclusion**: The current `/*#__PURE__*/` injection approach already solves the tree-shaking
+problem completely. Migrating to TC39 decorators is worthwhile for standards compliance but
+would NOT eliminate the need for pure annotations.
+
+---
+
 ## Risk Mitigation
 
-| Risk                            | Mitigation                                               |
-| ------------------------------- | -------------------------------------------------------- |
-| Breaking existing imports       | `FILE.ts` always re-exports `FILE.pure.ts`               |
-| Circular dependencies           | Audit detects cycles; `import/no-cycle` already enabled  |
-| Prototype augmentation in pure  | ESLint rule (6.1) + bundle tests (6.2)                   |
-| Massive PRs                     | One PR per subdirectory (Phase 2.2 priority order)       |
-| Shader files in pure            | Blocked by glob pattern in ESLint rule                   |
-| Bare imports in pure barrel     | Phase 7.1 splits + 7.4 audit detection                   |
-| Pure importing non-pure         | Phase 7.2 rewrites + 7.2c ESLint enforcement             |
-| External bundler can't optimize | Phase 7.3 `exports` field with `sideEffects: false`      |
-| Shader include not registered   | Build flattens transitive deps; ProcessIncludes fallback |
-| Custom shader missing include   | Users switch to named import + manual registration       |
-| Nested includes not registered  | Build-time transitive closure ensures all deps imported  |
+| Risk                            | Mitigation                                                       |
+| ------------------------------- | ---------------------------------------------------------------- |
+| Breaking existing imports       | `FILE.ts` always re-exports `FILE.pure.ts`                       |
+| Circular dependencies           | Audit detects cycles; `import/no-cycle` already enabled          |
+| Prototype augmentation in pure  | ESLint rule (6.1) + bundle tests (6.2)                           |
+| Massive PRs                     | One PR per subdirectory (Phase 2.2 priority order)               |
+| Shader files in pure            | Blocked by glob pattern in ESLint rule                           |
+| Bare imports in pure barrel     | Phase 7.1 splits + 7.4 audit detection                           |
+| Pure importing non-pure         | Phase 7.2 rewrites + 7.2c ESLint enforcement                     |
+| External bundler can't optimize | Phase 7.3 `exports` field with `sideEffects: false`              |
+| Shader include not registered   | Build flattens transitive deps; ProcessIncludes fallback         |
+| Custom shader missing include   | Users switch to named import + manual registration               |
+| Nested includes not registered  | Build-time transitive closure ensures all deps imported          |
+| `__decorate` annotation wrong   | Only in `.pure.js` at column 0; idempotent; all smoke tests pass |
 
 ---
 
