@@ -1,5 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
+export * from "./joinedPhysicsEngineComponent.types";
+
 import { Observable } from "../Misc/observable";
 import type { ISceneComponent } from "../sceneComponent";
 import { SceneComponentConstants } from "../sceneComponent";
@@ -13,7 +15,6 @@ import type { IPhysicsEngine } from "./IPhysicsEngine";
 import type { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin";
 import type { IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin";
 import { Scene } from "../scene.pure";
-
 
 /**
  * Defines the physics engine scene component responsible to manage a physics engine
@@ -73,7 +74,6 @@ export class PhysicsEngineSceneComponent implements ISceneComponent {
         }
     }
 }
-
 
 let _registered = false;
 export function registerJoinedPhysicsEngineComponent(): void {
