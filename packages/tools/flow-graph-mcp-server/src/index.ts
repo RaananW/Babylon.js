@@ -23,8 +23,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
-import { dirname } from "node:path";
+import { ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 
 import { FlowGraphBlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { FlowGraphManager } from "./flowGraphManager.js";
@@ -831,8 +830,7 @@ server.registerTool(
         }
         if (outputFile) {
             try {
-                mkdirSync(dirname(outputFile), { recursive: true });
-                writeFileSync(outputFile, json, "utf-8");
+                WriteTextFileEnsuringDirectory(outputFile, json);
                 return { content: [{ type: "text", text: `Flow Graph JSON written to: ${outputFile}` }] };
             } catch (e) {
                 return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
@@ -855,16 +853,17 @@ server.registerTool(
         },
     },
     async ({ graphName, json, jsonFile }) => {
-        let jsonStr = json;
-        if (!jsonStr && jsonFile) {
-            try {
-                jsonStr = readFileSync(jsonFile, "utf-8");
-            } catch (e) {
-                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
-            }
-        }
-        if (!jsonStr) {
-            return { content: [{ type: "text", text: "Either json or jsonFile must be provided." }], isError: true };
+        let jsonStr: string;
+        try {
+            jsonStr = ResolveInlineOrFileText({
+                inlineText: json,
+                filePath: jsonFile,
+                inlineLabel: "json",
+                fileLabel: "jsonFile",
+                fileDescription: "Flow Graph JSON file",
+            }).text;
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         const result = manager.importJSON(graphName, jsonStr);
         if (result !== "OK") {

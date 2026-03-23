@@ -30,8 +30,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import { join } from "node:path";
 
 import {
     MeshPrimitives,
@@ -1094,11 +1094,17 @@ server.registerTool(
         const resolvedProperties = Object.keys(mergedProperties).length > 0 ? mergedProperties : (properties as Record<string, unknown>);
 
         let resolvedNmeJson = nmeJson;
-        if (!resolvedNmeJson && nmeJsonFile) {
+        if (resolvedNmeJson || nmeJsonFile) {
             try {
-                resolvedNmeJson = readFileSync(nmeJsonFile, "utf-8");
+                resolvedNmeJson = ResolveInlineOrFileText({
+                    inlineText: nmeJson,
+                    filePath: nmeJsonFile,
+                    inlineLabel: "nmeJson",
+                    fileLabel: "nmeJsonFile",
+                    fileDescription: "NME JSON file",
+                }).text;
             } catch (e) {
-                return { content: [{ type: "text", text: `Error reading NME JSON file: ${(e as Error).message}` }], isError: true };
+                return { content: [{ type: "text", text: (e as Error).message }], isError: true };
             }
         }
         // Validate that NodeMaterial has at least one source for its definition
@@ -1838,17 +1844,17 @@ server.registerTool(
     },
     async ({ sceneName, name, coordinatorJson, coordinatorJsonFile, flowGraphJsonFile, flowGraphJson, scopeNodeIds }) => {
         const resolvedName = name ?? "flowGraph";
-        let resolvedJson = coordinatorJson ?? flowGraphJson;
-        const resolvedFile = coordinatorJsonFile ?? flowGraphJsonFile;
-        if (!resolvedJson && resolvedFile) {
-            try {
-                resolvedJson = readFileSync(resolvedFile, "utf-8");
-            } catch (e) {
-                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
-            }
-        }
-        if (!resolvedJson) {
-            return { content: [{ type: "text", text: "Either coordinatorJson or coordinatorJsonFile must be provided." }], isError: true };
+        let resolvedJson: string;
+        try {
+            resolvedJson = ResolveInlineOrFileText({
+                inlineText: coordinatorJson ?? flowGraphJson,
+                filePath: coordinatorJsonFile ?? flowGraphJsonFile,
+                inlineLabel: "coordinatorJson",
+                fileLabel: "coordinatorJsonFile",
+                fileDescription: "Flow Graph coordinator JSON file",
+            }).text;
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         // Validate that resolvedJson is valid JSON before passing to scene manager
         try {
@@ -2639,16 +2645,17 @@ server.registerTool(
         },
     },
     async ({ sceneName, guiJson, guiJsonFile }) => {
-        let jsonStr = guiJson;
-        if (!jsonStr && guiJsonFile) {
-            try {
-                jsonStr = readFileSync(guiJsonFile, "utf-8");
-            } catch (e) {
-                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
-            }
-        }
-        if (!jsonStr) {
-            return { content: [{ type: "text", text: "Either guiJson or guiJsonFile must be provided." }], isError: true };
+        let jsonStr: string;
+        try {
+            jsonStr = ResolveInlineOrFileText({
+                inlineText: guiJson,
+                filePath: guiJsonFile,
+                inlineLabel: "guiJson",
+                fileLabel: "guiJsonFile",
+                fileDescription: "GUI JSON file",
+            }).text;
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         let parsed: unknown;
         try {
@@ -2717,16 +2724,17 @@ server.registerTool(
         },
     },
     async ({ sceneName, nrgJson, nrgJsonFile }) => {
-        let jsonStr = nrgJson;
-        if (!jsonStr && nrgJsonFile) {
-            try {
-                jsonStr = readFileSync(nrgJsonFile, "utf-8");
-            } catch (e) {
-                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
-            }
-        }
-        if (!jsonStr) {
-            return { content: [{ type: "text", text: "Either nrgJson or nrgJsonFile must be provided." }], isError: true };
+        let jsonStr: string;
+        try {
+            jsonStr = ResolveInlineOrFileText({
+                inlineText: nrgJson,
+                filePath: nrgJsonFile,
+                inlineLabel: "nrgJson",
+                fileLabel: "nrgJsonFile",
+                fileDescription: "NRG JSON file",
+            }).text;
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         let parsed: unknown;
         try {
@@ -2786,16 +2794,17 @@ server.registerTool(
         },
     },
     async ({ sceneName, meshName, ngeJson, ngeJsonFile }) => {
-        let jsonStr = ngeJson;
-        if (!jsonStr && ngeJsonFile) {
-            try {
-                jsonStr = readFileSync(ngeJsonFile, "utf-8");
-            } catch (e) {
-                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
-            }
-        }
-        if (!jsonStr) {
-            return { content: [{ type: "text", text: "Either ngeJson or ngeJsonFile must be provided." }], isError: true };
+        let jsonStr: string;
+        try {
+            jsonStr = ResolveInlineOrFileText({
+                inlineText: ngeJson,
+                filePath: ngeJsonFile,
+                inlineLabel: "ngeJson",
+                fileLabel: "ngeJsonFile",
+                fileDescription: "NGE JSON file",
+            }).text;
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         let parsed: unknown;
         try {
@@ -3061,8 +3070,7 @@ server.registerTool(
         }
         if (outputFile) {
             try {
-                mkdirSync(dirname(outputFile), { recursive: true });
-                writeFileSync(outputFile, code, "utf-8");
+                WriteTextFileEnsuringDirectory(outputFile, code);
                 return { content: [{ type: "text", text: `Scene code written to: ${outputFile}` }] };
             } catch (e) {
                 return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
@@ -3112,8 +3120,7 @@ server.registerTool(
             try {
                 for (const [filePath, content] of Object.entries(files)) {
                     const fullPath = join(outputDir, filePath);
-                    mkdirSync(dirname(fullPath), { recursive: true });
-                    writeFileSync(fullPath, content, "utf-8");
+                    WriteTextFileEnsuringDirectory(fullPath, content);
                 }
                 const fileList = Object.keys(files)
                     .map((f) => `  • ${f}`)
@@ -3156,8 +3163,7 @@ server.registerTool(
         }
         if (outputFile) {
             try {
-                mkdirSync(dirname(outputFile), { recursive: true });
-                writeFileSync(outputFile, json, "utf-8");
+                WriteTextFileEnsuringDirectory(outputFile, json);
                 return { content: [{ type: "text", text: `Scene JSON written to: ${outputFile}` }] };
             } catch (e) {
                 return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
@@ -3178,16 +3184,17 @@ server.registerTool(
         },
     },
     async ({ sceneName, json, jsonFile }) => {
-        let jsonStr = json;
-        if (!jsonStr && jsonFile) {
-            try {
-                jsonStr = readFileSync(jsonFile, "utf-8");
-            } catch (e) {
-                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
-            }
-        }
-        if (!jsonStr) {
-            return { content: [{ type: "text", text: "Either json or jsonFile must be provided." }], isError: true };
+        let jsonStr: string;
+        try {
+            jsonStr = ResolveInlineOrFileText({
+                inlineText: json,
+                filePath: jsonFile,
+                inlineLabel: "json",
+                fileLabel: "jsonFile",
+                fileDescription: "scene descriptor JSON file",
+            }).text;
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         const result = manager.importJSON(sceneName, jsonStr);
         if (result !== "OK") {
