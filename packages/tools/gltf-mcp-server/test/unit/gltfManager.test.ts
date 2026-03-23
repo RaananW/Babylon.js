@@ -829,3 +829,178 @@ describe("GltfManager — File paths", () => {
         }
     });
 });
+
+/* ================================================================== */
+/*  GLB Import                                                         */
+/* ================================================================== */
+
+describe("GltfManager — GLB Import", () => {
+    it("imports a GLB buffer produced by exportGlb", () => {
+        const mgr = createManagerWithDoc("src");
+        mgr.addNode("src", "TestNode");
+
+        const glb = mgr.exportGlb("src")!;
+        expect(glb).toBeTruthy();
+
+        const result = mgr.importGlb("imported", glb);
+        expect(result).toContain("Loaded GLB");
+        expect(result).toContain("imported");
+
+        const doc = mgr._getDocumentForTest("imported")!;
+        expect(doc.nodes![0].name).toBe("TestNode");
+    });
+
+    it("rejects duplicate name", () => {
+        const mgr = createManagerWithDoc("doc");
+        const glb = mgr.exportGlb("doc")!;
+        expect(mgr.importGlb("doc", glb)).toContain("Error");
+    });
+
+    it("rejects too-small buffer", () => {
+        const mgr = new GltfManager();
+        expect(mgr.importGlb("x", Buffer.alloc(5))).toContain("Error");
+    });
+
+    it("rejects wrong magic", () => {
+        const mgr = new GltfManager();
+        const buf = Buffer.alloc(20);
+        buf.writeUInt32LE(0xdeadbeef, 0); // wrong magic
+        expect(mgr.importGlb("x", buf)).toContain("Error");
+    });
+
+    it("rejects unsupported version", () => {
+        const mgr = new GltfManager();
+        const buf = Buffer.alloc(20);
+        buf.writeUInt32LE(0x46546c67, 0); // magic
+        buf.writeUInt32LE(1, 4); // version 1
+        buf.writeUInt32LE(20, 8); // length
+        buf.writeUInt32LE(0, 12); // chunk length
+        buf.writeUInt32LE(0x4e4f534a, 16); // JSON type
+        expect(mgr.importGlb("x", buf)).toContain("Error");
+    });
+
+    it("rejects non-JSON first chunk", () => {
+        const mgr = new GltfManager();
+        const buf = Buffer.alloc(20);
+        buf.writeUInt32LE(0x46546c67, 0); // magic
+        buf.writeUInt32LE(2, 4); // version 2
+        buf.writeUInt32LE(20, 8); // length
+        buf.writeUInt32LE(0, 12); // chunk length 0
+        buf.writeUInt32LE(0x004e4942, 16); // BIN type (not JSON)
+        expect(mgr.importGlb("x", buf)).toContain("Error");
+    });
+
+    it("round-trips through GLB export and import", () => {
+        const mgr = new GltfManager();
+        mgr.loadGltf("orig", SAMPLE_GLTF);
+
+        const glb = mgr.exportGlb("orig")!;
+        mgr.importGlb("roundtrip", glb);
+
+        const orig = mgr._getDocumentForTest("orig")!;
+        const rt = mgr._getDocumentForTest("roundtrip")!;
+        expect(rt.nodes!.length).toBe(orig.nodes!.length);
+        expect(rt.meshes!.length).toBe(orig.meshes!.length);
+        expect(rt.materials!.length).toBe(orig.materials!.length);
+    });
+});
+
+/* ================================================================== */
+/*  Index Compaction                                                   */
+/* ================================================================== */
+
+describe("GltfManager — Index Compaction", () => {
+    it("returns no-op when no null slots exist", () => {
+        const mgr = createManagerWithDoc("doc");
+        mgr.addNode("doc", "A");
+        mgr.addNode("doc", "B");
+        expect(mgr.compactIndices("doc")).toContain("already compact");
+    });
+
+    it("compacts nodes after removal and remaps scene roots", () => {
+        const mgr = createManagerWithDoc("doc");
+        mgr.addScene("doc", "S");
+        // add 3 nodes to the default scene (scene 0)
+        mgr.addNode("doc", "Keep0", 0);
+        mgr.addNode("doc", "Remove", 0);
+        mgr.addNode("doc", "Keep1", 0);
+
+        // Remove middle node (index 1)
+        mgr.removeNode("doc", 1);
+
+        const doc = mgr._getDocumentForTest("doc")!;
+        expect(doc.nodes![1]).toBeNull();
+
+        const result = mgr.compactIndices("doc");
+        expect(result).toContain("Compacted");
+        expect(result).toContain("nodes");
+
+        // After compaction, nodes should be [Keep0, Keep1]
+        expect(doc.nodes!.length).toBe(2);
+        expect(doc.nodes![0].name).toBe("Keep0");
+        expect(doc.nodes![1].name).toBe("Keep1");
+    });
+
+    it("compacts materials after removal and remaps mesh primitive material refs", () => {
+        const mgr = createManagerWithDoc("doc");
+        mgr.addMaterial("doc", "Mat0");
+        mgr.addMaterial("doc", "MatToRemove");
+        mgr.addMaterial("doc", "Mat2");
+
+        mgr.addMesh("doc", "TestMesh");
+        mgr.setPrimitiveMaterial("doc", 0, 0, 2); // primitive 0 references material 2
+
+        mgr.removeMaterial("doc", 1); // remove MatToRemove
+
+        const result = mgr.compactIndices("doc");
+        expect(result).toContain("Compacted");
+
+        const doc = mgr._getDocumentForTest("doc")!;
+        expect(doc.materials!.length).toBe(2);
+        expect(doc.materials![0].name).toBe("Mat0");
+        expect(doc.materials![1].name).toBe("Mat2");
+        // Primitive material ref was 2, after compaction should be 1
+        expect(doc.meshes![0].primitives[0].material).toBe(1);
+    });
+
+    it("compacts meshes after removal and remaps node mesh refs", () => {
+        const mgr = createManagerWithDoc("doc");
+        mgr.addMesh("doc", "Mesh0");
+        mgr.addMesh("doc", "MeshRemove");
+        mgr.addMesh("doc", "Mesh2");
+        mgr.addNode("doc", "NodeWithMesh");
+        mgr.assignMeshToNode("doc", 0, 2); // node 0 → mesh 2
+
+        mgr.removeMesh("doc", 1); // remove MeshRemove
+
+        mgr.compactIndices("doc");
+
+        const doc = mgr._getDocumentForTest("doc")!;
+        expect(doc.meshes!.length).toBe(2);
+        expect(doc.nodes![0].mesh).toBe(1); // was 2, now 1
+    });
+
+    it("compacts textures and remaps material texture refs", () => {
+        const mgr = createManagerWithDoc("doc");
+        mgr.addImageReference("doc", "img.png", "image/png");
+        mgr.addTexture("doc", 0);
+        mgr.addTexture("doc", 0); // tex 1
+        mgr.addTexture("doc", 0); // tex 2
+
+        mgr.addMaterial("doc", "Mat");
+        mgr.setMaterialTexture("doc", 0, "baseColorTexture", 2); // mat 0 → tex 2
+
+        mgr.removeTexture("doc", 1); // remove tex 1
+
+        mgr.compactIndices("doc");
+
+        const doc = mgr._getDocumentForTest("doc")!;
+        expect(doc.textures!.length).toBe(2);
+        expect(doc.materials![0].pbrMetallicRoughness!.baseColorTexture!.index).toBe(1); // was 2, now 1
+    });
+
+    it("returns error for non-existent document", () => {
+        const mgr = new GltfManager();
+        expect(mgr.compactIndices("none")).toContain("Error");
+    });
+});

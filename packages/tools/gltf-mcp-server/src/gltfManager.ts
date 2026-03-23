@@ -1770,6 +1770,96 @@ export class GltfManager {
         return glb;
     }
 
+    importGlb(name: string, buffer: Buffer): string {
+        if (this._documents.has(name)) {
+            return `Error: A document named "${name}" already exists.`;
+        }
+
+        if (buffer.length < 12) {
+            return "Error: Buffer too small to be a valid GLB file.";
+        }
+
+        const magic = buffer.readUInt32LE(0);
+        if (magic !== 0x46546c67) {
+            return "Error: Invalid GLB magic number.";
+        }
+
+        const version = buffer.readUInt32LE(4);
+        if (version !== 2) {
+            return `Error: Unsupported GLB version ${version}. Only version 2 is supported.`;
+        }
+
+        const totalLength = buffer.readUInt32LE(8);
+        if (buffer.length < totalLength) {
+            return `Error: Buffer length (${buffer.length}) is less than declared total length (${totalLength}).`;
+        }
+
+        if (buffer.length < 20) {
+            return "Error: GLB file too small to contain a JSON chunk header.";
+        }
+
+        const chunkLength = buffer.readUInt32LE(12);
+        const chunkType = buffer.readUInt32LE(16);
+
+        if (chunkType !== 0x4e4f534a) {
+            return "Error: First GLB chunk is not JSON.";
+        }
+
+        if (buffer.length < 20 + chunkLength) {
+            return "Error: GLB buffer too small for declared JSON chunk length.";
+        }
+
+        const jsonString = buffer
+            .subarray(20, 20 + chunkLength)
+            .toString("utf-8")
+            .trim();
+
+        let parsed: unknown;
+        try {
+            parsed = JSON.parse(jsonString);
+        } catch {
+            return "Error: Failed to parse JSON chunk from GLB.";
+        }
+
+        const doc = parsed as IGltfDocument;
+        if (!doc.asset?.version) {
+            return "Error: GLB JSON chunk is missing required asset.version field.";
+        }
+
+        this._documents.set(name, doc);
+        return `Loaded GLB as "${name}". Asset version: ${doc.asset.version}.`;
+    }
+
+    /* ================ Index compaction ========================== */
+
+    compactIndices(name: string): string {
+        const doc = this._getDoc(name);
+        if (typeof doc === "string") {
+            return doc;
+        }
+
+        let totalRemoved = 0;
+        const messages: string[] = [];
+
+        // Compact each array type that supports nullification
+        totalRemoved += this._compactArray(doc, "nodes", messages);
+        totalRemoved += this._compactArray(doc, "meshes", messages);
+        totalRemoved += this._compactArray(doc, "materials", messages);
+        totalRemoved += this._compactArray(doc, "textures", messages);
+        totalRemoved += this._compactArray(doc, "images", messages);
+        totalRemoved += this._compactArray(doc, "samplers", messages);
+        totalRemoved += this._compactArray(doc, "animations", messages);
+        totalRemoved += this._compactArray(doc, "skins", messages);
+        totalRemoved += this._compactArray(doc, "accessors", messages);
+        totalRemoved += this._compactArray(doc, "cameras", messages);
+
+        if (totalRemoved === 0) {
+            return "No null slots found. Document indices are already compact.";
+        }
+
+        return `Compacted ${totalRemoved} null slot(s).\n${messages.join("\n")}`;
+    }
+
     /* ================ Search / discovery ======================== */
 
     findNodes(name: string, query: string, exact: boolean = false): string {
@@ -1992,6 +2082,207 @@ export class GltfManager {
             if (indices.length > 1) {
                 issues.push({ severity: "warning", message: `Duplicate ${label} name "${itemName}" at indices [${indices.join(", ")}].`, path: `${label}s` });
             }
+        }
+    }
+
+    private _compactArray(doc: IGltfDocument, key: string, messages: string[]): number {
+        const arr = (doc as unknown as Record<string, unknown>)[key] as (unknown | null)[] | undefined;
+        if (!arr) {
+            return 0;
+        }
+
+        const nullIndices: number[] = [];
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] === null) {
+                nullIndices.push(i);
+            }
+        }
+        if (nullIndices.length === 0) {
+            return 0;
+        }
+
+        // Build old→new index map
+        const remap = new Map<number, number>();
+        let newIndex = 0;
+        for (let old = 0; old < arr.length; old++) {
+            if (arr[old] !== null) {
+                remap.set(old, newIndex);
+                newIndex++;
+            }
+        }
+
+        // Remove null entries from the array
+        (doc as unknown as Record<string, unknown>)[key] = arr.filter((item) => item !== null);
+
+        // Remap references throughout the document
+        this._remapReferences(doc, key, remap);
+
+        messages.push(`${key}: removed ${nullIndices.length} null slot(s), remapped ${remap.size} indices.`);
+        return nullIndices.length;
+    }
+
+    private _remapReferences(doc: IGltfDocument, key: string, remap: Map<number, number>): void {
+        const remapIndex = (old: number | undefined): number | undefined => {
+            if (old === undefined) {
+                return undefined;
+            }
+            return remap.get(old);
+        };
+
+        switch (key) {
+            case "nodes":
+                // Scene roots
+                for (const scene of ArrayOrEmpty(doc.scenes)) {
+                    if (scene?.nodes) {
+                        scene.nodes = scene.nodes.map((n) => remap.get(n)!).filter((n) => n !== undefined);
+                    }
+                }
+                // Node children
+                for (const node of ArrayOrEmpty(doc.nodes)) {
+                    if (node?.children) {
+                        node.children = node.children.map((c) => remap.get(c)!).filter((c) => c !== undefined);
+                        if (node.children.length === 0) {
+                            delete node.children;
+                        }
+                    }
+                    // Skin joints reference nodes
+                }
+                // Animation channel targets
+                for (const anim of ArrayOrEmpty(doc.animations)) {
+                    if (anim?.channels) {
+                        for (const ch of anim.channels) {
+                            if (ch.target?.node !== undefined) {
+                                ch.target.node = remapIndex(ch.target.node) ?? ch.target.node;
+                            }
+                        }
+                    }
+                }
+                // Skins
+                for (const skin of ArrayOrEmpty(doc.skins)) {
+                    if (skin) {
+                        if (skin.skeleton !== undefined) {
+                            skin.skeleton = remapIndex(skin.skeleton) ?? skin.skeleton;
+                        }
+                        if (skin.joints) {
+                            skin.joints = skin.joints.map((j) => remap.get(j) ?? j);
+                        }
+                    }
+                }
+                break;
+
+            case "meshes":
+                for (const node of ArrayOrEmpty(doc.nodes)) {
+                    if (node?.mesh !== undefined) {
+                        node.mesh = remapIndex(node.mesh) ?? node.mesh;
+                    }
+                }
+                break;
+
+            case "materials":
+                for (const mesh of ArrayOrEmpty(doc.meshes)) {
+                    if (mesh?.primitives) {
+                        for (const prim of mesh.primitives) {
+                            if (prim.material !== undefined) {
+                                prim.material = remapIndex(prim.material) ?? prim.material;
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case "textures":
+                for (const mat of ArrayOrEmpty(doc.materials)) {
+                    if (mat?.pbrMetallicRoughness) {
+                        const pbr = mat.pbrMetallicRoughness;
+                        if (pbr.baseColorTexture?.index !== undefined) {
+                            pbr.baseColorTexture.index = remapIndex(pbr.baseColorTexture.index) ?? pbr.baseColorTexture.index;
+                        }
+                        if (pbr.metallicRoughnessTexture?.index !== undefined) {
+                            pbr.metallicRoughnessTexture.index = remapIndex(pbr.metallicRoughnessTexture.index) ?? pbr.metallicRoughnessTexture.index;
+                        }
+                    }
+                    if (mat?.normalTexture?.index !== undefined) {
+                        mat.normalTexture.index = remapIndex(mat.normalTexture.index) ?? mat.normalTexture.index;
+                    }
+                    if (mat?.occlusionTexture?.index !== undefined) {
+                        mat.occlusionTexture.index = remapIndex(mat.occlusionTexture.index) ?? mat.occlusionTexture.index;
+                    }
+                    if (mat?.emissiveTexture?.index !== undefined) {
+                        mat.emissiveTexture.index = remapIndex(mat.emissiveTexture.index) ?? mat.emissiveTexture.index;
+                    }
+                }
+                break;
+
+            case "images":
+                for (const tex of ArrayOrEmpty(doc.textures)) {
+                    if (tex?.source !== undefined) {
+                        tex.source = remapIndex(tex.source) ?? tex.source;
+                    }
+                }
+                break;
+
+            case "samplers":
+                for (const tex of ArrayOrEmpty(doc.textures)) {
+                    if (tex?.sampler !== undefined) {
+                        tex.sampler = remapIndex(tex.sampler) ?? tex.sampler;
+                    }
+                }
+                break;
+
+            case "accessors":
+                // Animation samplers reference accessors
+                for (const anim of ArrayOrEmpty(doc.animations)) {
+                    if (anim?.samplers) {
+                        for (const s of anim.samplers) {
+                            if (s.input !== undefined) {
+                                s.input = remapIndex(s.input) ?? s.input;
+                            }
+                            if (s.output !== undefined) {
+                                s.output = remapIndex(s.output) ?? s.output;
+                            }
+                        }
+                    }
+                }
+                // Mesh primitives reference accessors
+                for (const mesh of ArrayOrEmpty(doc.meshes)) {
+                    if (mesh?.primitives) {
+                        for (const prim of mesh.primitives) {
+                            if (prim.indices !== undefined) {
+                                prim.indices = remapIndex(prim.indices) ?? prim.indices;
+                            }
+                            for (const attrKey of Object.keys(prim.attributes)) {
+                                prim.attributes[attrKey] = remapIndex(prim.attributes[attrKey]) ?? prim.attributes[attrKey];
+                            }
+                        }
+                    }
+                }
+                // Skins reference accessors for inverseBindMatrices
+                for (const skin of ArrayOrEmpty(doc.skins)) {
+                    if (skin?.inverseBindMatrices !== undefined) {
+                        skin.inverseBindMatrices = remapIndex(skin.inverseBindMatrices) ?? skin.inverseBindMatrices;
+                    }
+                }
+                break;
+
+            case "cameras":
+                for (const node of ArrayOrEmpty(doc.nodes)) {
+                    if (node?.camera !== undefined) {
+                        node.camera = remapIndex(node.camera) ?? node.camera;
+                    }
+                }
+                break;
+
+            case "skins":
+                for (const node of ArrayOrEmpty(doc.nodes)) {
+                    if (node?.skin !== undefined) {
+                        node.skin = remapIndex(node.skin) ?? node.skin;
+                    }
+                }
+                break;
+
+            case "animations":
+                // Animations are not referenced by index from other places
+                break;
         }
     }
 }

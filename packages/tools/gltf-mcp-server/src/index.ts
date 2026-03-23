@@ -68,16 +68,16 @@ const ExtensionTargetSchema = z.enum(["root", "scene", "node", "mesh", "material
 /*  1. Lifecycle tools                                                 */
 /* ================================================================== */
 
-server.registerTool(
+Server.registerTool(
     "create_gltf",
     {
         description: "Create a new minimal valid glTF 2.0 document in memory.",
         inputSchema: { name: NameSchema },
     },
-    async ({ name }) => CreateTextResponse(manager.createGltf(name))
+    async ({ name }) => CreateTextResponse(Manager.createGltf(name))
 );
 
-server.registerTool(
+Server.registerTool(
     "load_gltf",
     {
         description: "Load a glTF JSON document into memory from inline JSON or a file path.",
@@ -93,36 +93,36 @@ server.registerTool(
             jsonFile,
             fileDescription: "glTF file",
             importJson: (text) => {
-                manager.loadGltf(name, text);
+                Manager.loadGltf(name, text);
                 return name;
             },
-            createSuccessText: () => manager.describeGltf(name),
+            createSuccessText: () => Manager.describeGltf(name),
         });
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "list_gltfs",
     {
         description: "List all glTF documents currently in memory.",
         inputSchema: {},
     },
-    async () => CreateTextResponse(manager.listGltfs())
+    async () => CreateTextResponse(Manager.listGltfs())
 );
 
-server.registerTool(
+Server.registerTool(
     "delete_gltf",
     {
         description: "Delete a glTF document from memory.",
         inputSchema: { name: NameSchema },
     },
     async ({ name }) => {
-        const result = manager.deleteGltf(name);
+        const result = Manager.deleteGltf(name);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "clone_gltf",
     {
         description: "Deep-clone a glTF document under a new name.",
@@ -132,7 +132,7 @@ server.registerTool(
         },
     },
     async ({ sourceName, newName }) => {
-        const result = manager.cloneGltf(sourceName, newName);
+        const result = Manager.cloneGltf(sourceName, newName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
@@ -141,220 +141,220 @@ server.registerTool(
 /*  2. Inspection tools                                                */
 /* ================================================================== */
 
-server.registerTool(
+Server.registerTool(
     "describe_gltf",
     {
         description: "Summarize a glTF document: asset metadata, counts, extensions, and structural warnings.",
         inputSchema: { name: NameSchema },
     },
     async ({ name }) => {
-        const result = manager.describeGltf(name);
+        const result = Manager.describeGltf(name);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_scene",
     {
         description: "Describe a scene by index: root nodes, active status, extensions.",
         inputSchema: { name: NameSchema, sceneIndex: SceneIndexSchema },
     },
     async ({ name, sceneIndex }) => {
-        const result = manager.describeScene(name, sceneIndex);
+        const result = Manager.describeScene(name, sceneIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_node",
     {
         description: "Describe a node: parent, children, mesh, transform, extensions.",
         inputSchema: { name: NameSchema, nodeIndex: NodeIndexSchema },
     },
     async ({ name, nodeIndex }) => {
-        const result = manager.describeNode(name, nodeIndex);
+        const result = Manager.describeNode(name, nodeIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_mesh",
     {
         description: "Describe a mesh: primitives, attributes, material assignments.",
         inputSchema: { name: NameSchema, meshIndex: MeshIndexSchema },
     },
     async ({ name, meshIndex }) => {
-        const result = manager.describeMesh(name, meshIndex);
+        const result = Manager.describeMesh(name, meshIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_material",
     {
         description: "Describe a material: PBR properties, textures, alpha mode, extensions.",
         inputSchema: { name: NameSchema, materialIndex: MaterialIndexSchema },
     },
     async ({ name, materialIndex }) => {
-        const result = manager.describeMaterial(name, materialIndex);
+        const result = Manager.describeMaterial(name, materialIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_animation",
     {
         description: "Describe an animation: channels, samplers, target nodes and paths.",
         inputSchema: { name: NameSchema, animationIndex: AnimIndexSchema },
     },
     async ({ name, animationIndex }) => {
-        const result = manager.describeAnimation(name, animationIndex);
+        const result = Manager.describeAnimation(name, animationIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_skin",
     {
         description: "Describe a skin: joints, skeleton root, inverse bind matrices.",
         inputSchema: { name: NameSchema, skinIndex: SkinIndexSchema },
     },
     async ({ name, skinIndex }) => {
-        const result = manager.describeSkin(name, skinIndex);
+        const result = Manager.describeSkin(name, skinIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_texture",
     {
         description: "Describe a texture: source image, sampler, image details.",
         inputSchema: { name: NameSchema, textureIndex: TextureIndexSchema },
     },
     async ({ name, textureIndex }) => {
-        const result = manager.describeTexture(name, textureIndex);
+        const result = Manager.describeTexture(name, textureIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_image",
     {
         description: "Describe an image: URI, MIME type, buffer view reference.",
         inputSchema: { name: NameSchema, imageIndex: ImageIndexSchema },
     },
     async ({ name, imageIndex }) => {
-        const result = manager.describeImage(name, imageIndex);
+        const result = Manager.describeImage(name, imageIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_accessor",
     {
         description: "Describe an accessor: type, component type, count, min/max.",
         inputSchema: { name: NameSchema, accessorIndex: AccessorIndexSchema },
     },
     async ({ name, accessorIndex }) => {
-        const result = manager.describeAccessor(name, accessorIndex);
+        const result = Manager.describeAccessor(name, accessorIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_sampler",
     {
         description: "Describe a sampler: mag/min filter, wrap modes.",
         inputSchema: { name: NameSchema, samplerIndex: SamplerIndexSchema },
     },
     async ({ name, samplerIndex }) => {
-        const result = manager.describeSampler(name, samplerIndex);
+        const result = Manager.describeSampler(name, samplerIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
 /* ---------------------- List tools ------------------------------ */
 
-server.registerTool(
+Server.registerTool(
     "list_scenes",
     {
         description: "List all scenes with names, node counts, and active status.",
         inputSchema: { name: NameSchema },
     },
     async ({ name }) => {
-        const result = manager.listScenes(name);
+        const result = Manager.listScenes(name);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "list_nodes",
     {
         description: "List all nodes with names, mesh references, and children.",
         inputSchema: { name: NameSchema },
     },
     async ({ name }) => {
-        const result = manager.listNodes(name);
+        const result = Manager.listNodes(name);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "list_meshes",
     {
         description: "List all meshes with names and primitive counts.",
         inputSchema: { name: NameSchema },
     },
     async ({ name }) => {
-        const result = manager.listMeshes(name);
+        const result = Manager.listMeshes(name);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "list_materials",
     {
         description: "List all materials with names and key PBR properties.",
         inputSchema: { name: NameSchema },
     },
     async ({ name }) => {
-        const result = manager.listMaterials(name);
+        const result = Manager.listMaterials(name);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "list_animations",
     {
         description: "List all animations with names, channel counts, and sampler counts.",
         inputSchema: { name: NameSchema },
     },
     async ({ name }) => {
-        const result = manager.listAnimations(name);
+        const result = Manager.listAnimations(name);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "list_textures",
     {
         description: "List all textures with source image and sampler references.",
         inputSchema: { name: NameSchema },
     },
     async ({ name }) => {
-        const result = manager.listTextures(name);
+        const result = Manager.listTextures(name);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "list_extensions",
     {
         description: "List extensionsUsed and extensionsRequired for a document.",
         inputSchema: { name: NameSchema },
     },
     async ({ name }) => {
-        const result = manager.listExtensions(name);
+        const result = Manager.listExtensions(name);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
@@ -363,7 +363,7 @@ server.registerTool(
 /*  3. Node and scene editing tools                                    */
 /* ================================================================== */
 
-server.registerTool(
+Server.registerTool(
     "add_scene",
     {
         description: "Add a new empty scene to the document.",
@@ -373,36 +373,36 @@ server.registerTool(
         },
     },
     async ({ name, sceneName }) => {
-        const result = manager.addScene(name, sceneName);
+        const result = Manager.addScene(name, sceneName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "rename_scene",
     {
         description: "Rename a scene by index.",
         inputSchema: { name: NameSchema, sceneIndex: SceneIndexSchema, newName: z.string().describe("New scene name.") },
     },
     async ({ name, sceneIndex, newName }) => {
-        const result = manager.renameScene(name, sceneIndex, newName);
+        const result = Manager.renameScene(name, sceneIndex, newName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "set_active_scene",
     {
         description: "Set the active (default) scene index.",
         inputSchema: { name: NameSchema, sceneIndex: SceneIndexSchema },
     },
     async ({ name, sceneIndex }) => {
-        const result = manager.setActiveScene(name, sceneIndex);
+        const result = Manager.setActiveScene(name, sceneIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "add_node",
     {
         description: "Add a new node. Optionally parent it under another node or add to a scene root.",
@@ -414,24 +414,24 @@ server.registerTool(
         },
     },
     async ({ name, nodeName, parentNodeIndex, sceneIndex }) => {
-        const result = manager.addNode(name, nodeName, parentNodeIndex, sceneIndex);
+        const result = Manager.addNode(name, nodeName, parentNodeIndex, sceneIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "rename_node",
     {
         description: "Rename a node by index.",
         inputSchema: { name: NameSchema, nodeIndex: NodeIndexSchema, newName: z.string().describe("New node name.") },
     },
     async ({ name, nodeIndex, newName }) => {
-        const result = manager.renameNode(name, nodeIndex, newName);
+        const result = Manager.renameNode(name, nodeIndex, newName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "set_node_transform",
     {
         description: "Set TRS transform on a node. Clears matrix if present.",
@@ -444,12 +444,12 @@ server.registerTool(
         },
     },
     async ({ name, nodeIndex, translation, rotation, scale }) => {
-        const result = manager.setNodeTransform(name, nodeIndex, translation, rotation, scale);
+        const result = Manager.setNodeTransform(name, nodeIndex, translation, rotation, scale);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "set_node_matrix",
     {
         description: "Set a 4x4 column-major matrix on a node. Clears TRS if present.",
@@ -460,24 +460,24 @@ server.registerTool(
         },
     },
     async ({ name, nodeIndex, matrix }) => {
-        const result = manager.setNodeMatrix(name, nodeIndex, matrix);
+        const result = Manager.setNodeMatrix(name, nodeIndex, matrix);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "clear_node_transform",
     {
         description: "Remove all transform properties (TRS and matrix) from a node.",
         inputSchema: { name: NameSchema, nodeIndex: NodeIndexSchema },
     },
     async ({ name, nodeIndex }) => {
-        const result = manager.clearNodeTransform(name, nodeIndex);
+        const result = Manager.clearNodeTransform(name, nodeIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "reparent_node",
     {
         description: "Move a node under a new parent node, or to the scene root. Prevents cycles.",
@@ -489,24 +489,24 @@ server.registerTool(
         },
     },
     async ({ name, nodeIndex, newParentIndex, sceneIndex }) => {
-        const result = manager.reparentNode(name, nodeIndex, newParentIndex, sceneIndex);
+        const result = Manager.reparentNode(name, nodeIndex, newParentIndex, sceneIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_node",
     {
         description: "Remove a node (nullifies slot to preserve indices).",
         inputSchema: { name: NameSchema, nodeIndex: NodeIndexSchema },
     },
     async ({ name, nodeIndex }) => {
-        const result = manager.removeNode(name, nodeIndex);
+        const result = Manager.removeNode(name, nodeIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "add_child_node",
     {
         description: "Add a new child node under a given parent node.",
@@ -517,7 +517,7 @@ server.registerTool(
         },
     },
     async ({ name, parentIndex, childName }) => {
-        const result = manager.addChildNode(name, parentIndex, childName);
+        const result = Manager.addChildNode(name, parentIndex, childName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
@@ -526,7 +526,7 @@ server.registerTool(
 /*  4. Mesh and primitive editing tools                                */
 /* ================================================================== */
 
-server.registerTool(
+Server.registerTool(
     "add_mesh",
     {
         description: "Add a new mesh with one empty primitive.",
@@ -536,60 +536,60 @@ server.registerTool(
         },
     },
     async ({ name, meshName }) => {
-        const result = manager.addMesh(name, meshName);
+        const result = Manager.addMesh(name, meshName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_mesh",
     {
         description: "Remove a mesh and clear node references to it.",
         inputSchema: { name: NameSchema, meshIndex: MeshIndexSchema },
     },
     async ({ name, meshIndex }) => {
-        const result = manager.removeMesh(name, meshIndex);
+        const result = Manager.removeMesh(name, meshIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "assign_mesh_to_node",
     {
         description: "Assign a mesh to a node.",
         inputSchema: { name: NameSchema, nodeIndex: NodeIndexSchema, meshIndex: MeshIndexSchema },
     },
     async ({ name, nodeIndex, meshIndex }) => {
-        const result = manager.assignMeshToNode(name, nodeIndex, meshIndex);
+        const result = Manager.assignMeshToNode(name, nodeIndex, meshIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "unassign_mesh_from_node",
     {
         description: "Remove the mesh assignment from a node.",
         inputSchema: { name: NameSchema, nodeIndex: NodeIndexSchema },
     },
     async ({ name, nodeIndex }) => {
-        const result = manager.unassignMeshFromNode(name, nodeIndex);
+        const result = Manager.unassignMeshFromNode(name, nodeIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_mesh_primitives",
     {
         description: "Describe primitives of a mesh: attributes, material, mode.",
         inputSchema: { name: NameSchema, meshIndex: MeshIndexSchema },
     },
     async ({ name, meshIndex }) => {
-        const result = manager.describeMeshPrimitives(name, meshIndex);
+        const result = Manager.describeMeshPrimitives(name, meshIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "set_primitive_material",
     {
         description: "Set the material on a specific mesh primitive.",
@@ -601,12 +601,12 @@ server.registerTool(
         },
     },
     async ({ name, meshIndex, primitiveIndex, materialIndex }) => {
-        const result = manager.setPrimitiveMaterial(name, meshIndex, primitiveIndex, materialIndex);
+        const result = Manager.setPrimitiveMaterial(name, meshIndex, primitiveIndex, materialIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_primitive_material",
     {
         description: "Remove the material assignment from a mesh primitive.",
@@ -617,7 +617,7 @@ server.registerTool(
         },
     },
     async ({ name, meshIndex, primitiveIndex }) => {
-        const result = manager.removePrimitiveMaterial(name, meshIndex, primitiveIndex);
+        const result = Manager.removePrimitiveMaterial(name, meshIndex, primitiveIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
@@ -626,7 +626,7 @@ server.registerTool(
 /*  5. Material editing tools                                          */
 /* ================================================================== */
 
-server.registerTool(
+Server.registerTool(
     "add_material",
     {
         description: "Add a new PBR material with default metallic-roughness properties.",
@@ -636,36 +636,36 @@ server.registerTool(
         },
     },
     async ({ name, materialName }) => {
-        const result = manager.addMaterial(name, materialName);
+        const result = Manager.addMaterial(name, materialName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_material",
     {
         description: "Remove a material and clear primitive references to it.",
         inputSchema: { name: NameSchema, materialIndex: MaterialIndexSchema },
     },
     async ({ name, materialIndex }) => {
-        const result = manager.removeMaterial(name, materialIndex);
+        const result = Manager.removeMaterial(name, materialIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "rename_material",
     {
         description: "Rename a material by index.",
         inputSchema: { name: NameSchema, materialIndex: MaterialIndexSchema, newName: z.string().describe("New material name.") },
     },
     async ({ name, materialIndex, newName }) => {
-        const result = manager.renameMaterial(name, materialIndex, newName);
+        const result = Manager.renameMaterial(name, materialIndex, newName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "set_material_pbr",
     {
         description: "Set PBR metallic-roughness properties on a material.",
@@ -680,12 +680,12 @@ server.registerTool(
         },
     },
     async ({ name, materialIndex, baseColorFactor, metallicFactor, roughnessFactor, baseColorTexture, metallicRoughnessTexture }) => {
-        const result = manager.setMaterialPbr(name, materialIndex, baseColorFactor, metallicFactor, roughnessFactor, baseColorTexture, metallicRoughnessTexture);
+        const result = Manager.setMaterialPbr(name, materialIndex, baseColorFactor, metallicFactor, roughnessFactor, baseColorTexture, metallicRoughnessTexture);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "set_material_alpha_mode",
     {
         description: "Set alpha mode (OPAQUE, MASK, BLEND) and optional cutoff on a material.",
@@ -697,24 +697,24 @@ server.registerTool(
         },
     },
     async ({ name, materialIndex, alphaMode, alphaCutoff }) => {
-        const result = manager.setMaterialAlphaMode(name, materialIndex, alphaMode, alphaCutoff);
+        const result = Manager.setMaterialAlphaMode(name, materialIndex, alphaMode, alphaCutoff);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "set_material_double_sided",
     {
         description: "Set whether a material is double-sided.",
         inputSchema: { name: NameSchema, materialIndex: MaterialIndexSchema, doubleSided: z.boolean().describe("Whether the material is double-sided.") },
     },
     async ({ name, materialIndex, doubleSided }) => {
-        const result = manager.setMaterialDoubleSided(name, materialIndex, doubleSided);
+        const result = Manager.setMaterialDoubleSided(name, materialIndex, doubleSided);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "set_material_emissive",
     {
         description: "Set emissive factor and/or emissive texture on a material.",
@@ -726,12 +726,12 @@ server.registerTool(
         },
     },
     async ({ name, materialIndex, emissiveFactor, emissiveTexture }) => {
-        const result = manager.setMaterialEmissive(name, materialIndex, emissiveFactor, emissiveTexture);
+        const result = Manager.setMaterialEmissive(name, materialIndex, emissiveFactor, emissiveTexture);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "assign_material_to_mesh_primitive",
     {
         description: "Assign a material to a specific mesh primitive (alias for set_primitive_material).",
@@ -743,7 +743,7 @@ server.registerTool(
         },
     },
     async ({ name, meshIndex, primitiveIndex, materialIndex }) => {
-        const result = manager.assignMaterialToMeshPrimitive(name, meshIndex, primitiveIndex, materialIndex);
+        const result = Manager.assignMaterialToMeshPrimitive(name, meshIndex, primitiveIndex, materialIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
@@ -752,7 +752,7 @@ server.registerTool(
 /*  6. Texture / image / sampler tools                                 */
 /* ================================================================== */
 
-server.registerTool(
+Server.registerTool(
     "add_image_reference",
     {
         description: "Add a URI-backed image reference.",
@@ -764,24 +764,24 @@ server.registerTool(
         },
     },
     async ({ name, uri, imageName, mimeType }) => {
-        const result = manager.addImageReference(name, uri, imageName, mimeType);
+        const result = Manager.addImageReference(name, uri, imageName, mimeType);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_image",
     {
         description: "Remove an image and clear texture source references.",
         inputSchema: { name: NameSchema, imageIndex: ImageIndexSchema },
     },
     async ({ name, imageIndex }) => {
-        const result = manager.removeImage(name, imageIndex);
+        const result = Manager.removeImage(name, imageIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "add_texture",
     {
         description: "Add a texture with optional source image and sampler references.",
@@ -793,36 +793,36 @@ server.registerTool(
         },
     },
     async ({ name, sourceImage, sampler, textureName }) => {
-        const result = manager.addTexture(name, sourceImage, sampler, textureName);
+        const result = Manager.addTexture(name, sourceImage, sampler, textureName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_texture",
     {
         description: "Remove a texture by index.",
         inputSchema: { name: NameSchema, textureIndex: TextureIndexSchema },
     },
     async ({ name, textureIndex }) => {
-        const result = manager.removeTexture(name, textureIndex);
+        const result = Manager.removeTexture(name, textureIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "set_texture_sampler",
     {
         description: "Set the sampler on a texture.",
         inputSchema: { name: NameSchema, textureIndex: TextureIndexSchema, samplerIndex: SamplerIndexSchema },
     },
     async ({ name, textureIndex, samplerIndex }) => {
-        const result = manager.setTextureSampler(name, textureIndex, samplerIndex);
+        const result = Manager.setTextureSampler(name, textureIndex, samplerIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "add_sampler",
     {
         description: "Add a texture sampler with optional filter and wrap settings.",
@@ -836,19 +836,19 @@ server.registerTool(
         },
     },
     async ({ name, magFilter, minFilter, wrapS, wrapT, samplerName }) => {
-        const result = manager.addSampler(name, magFilter, minFilter, wrapS, wrapT, samplerName);
+        const result = Manager.addSampler(name, magFilter, minFilter, wrapS, wrapT, samplerName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_sampler",
     {
         description: "Remove a sampler and clear texture references.",
         inputSchema: { name: NameSchema, samplerIndex: SamplerIndexSchema },
     },
     async ({ name, samplerIndex }) => {
-        const result = manager.removeSampler(name, samplerIndex);
+        const result = Manager.removeSampler(name, samplerIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
@@ -857,19 +857,19 @@ server.registerTool(
 /*  7. Animation and skin tools                                        */
 /* ================================================================== */
 
-server.registerTool(
+Server.registerTool(
     "list_animation_channels",
     {
         description: "List all channels of an animation.",
         inputSchema: { name: NameSchema, animationIndex: AnimIndexSchema },
     },
     async ({ name, animationIndex }) => {
-        const result = manager.listAnimationChannels(name, animationIndex);
+        const result = Manager.listAnimationChannels(name, animationIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "describe_animation_channel",
     {
         description: "Describe a specific animation channel: target, sampler, interpolation.",
@@ -880,43 +880,43 @@ server.registerTool(
         },
     },
     async ({ name, animationIndex, channelIndex }) => {
-        const result = manager.describeAnimationChannel(name, animationIndex, channelIndex);
+        const result = Manager.describeAnimationChannel(name, animationIndex, channelIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "rename_animation",
     {
         description: "Rename an animation by index.",
         inputSchema: { name: NameSchema, animationIndex: AnimIndexSchema, newName: z.string().describe("New animation name.") },
     },
     async ({ name, animationIndex, newName }) => {
-        const result = manager.renameAnimation(name, animationIndex, newName);
+        const result = Manager.renameAnimation(name, animationIndex, newName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_animation",
     {
         description: "Remove an animation by index.",
         inputSchema: { name: NameSchema, animationIndex: AnimIndexSchema },
     },
     async ({ name, animationIndex }) => {
-        const result = manager.removeAnimation(name, animationIndex);
+        const result = Manager.removeAnimation(name, animationIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_skin",
     {
         description: "Remove a skin and clear node references.",
         inputSchema: { name: NameSchema, skinIndex: SkinIndexSchema },
     },
     async ({ name, skinIndex }) => {
-        const result = manager.removeSkin(name, skinIndex);
+        const result = Manager.removeSkin(name, skinIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
@@ -925,7 +925,7 @@ server.registerTool(
 /*  8. Extension handling tools                                        */
 /* ================================================================== */
 
-server.registerTool(
+Server.registerTool(
     "get_extension_data",
     {
         description: "Get extension data from a target (root, scene, node, mesh, material, texture, image, animation).",
@@ -937,12 +937,12 @@ server.registerTool(
         },
     },
     async ({ name, extensionName, targetType, targetIndex }) => {
-        const result = manager.getExtensionData(name, extensionName, targetType, targetIndex);
+        const result = Manager.getExtensionData(name, extensionName, targetType, targetIndex);
         return result.startsWith("Error") || result.startsWith("No extension") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "set_extension_data",
     {
         description: "Set extension data on a target. Creates the extensions object if needed.",
@@ -955,12 +955,12 @@ server.registerTool(
         },
     },
     async ({ name, extensionName, data, targetType, targetIndex }) => {
-        const result = manager.setExtensionData(name, extensionName, data, targetType, targetIndex);
+        const result = Manager.setExtensionData(name, extensionName, data, targetType, targetIndex);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_extension_data",
     {
         description: "Remove extension data from a target.",
@@ -972,55 +972,55 @@ server.registerTool(
         },
     },
     async ({ name, extensionName, targetType, targetIndex }) => {
-        const result = manager.removeExtensionData(name, extensionName, targetType, targetIndex);
+        const result = Manager.removeExtensionData(name, extensionName, targetType, targetIndex);
         return result.startsWith("Error") || result.startsWith("No extension") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "add_extension_to_used",
     {
         description: "Add an extension name to extensionsUsed.",
         inputSchema: { name: NameSchema, extensionName: z.string().describe("Extension name.") },
     },
     async ({ name, extensionName }) => {
-        const result = manager.addExtensionToUsed(name, extensionName);
+        const result = Manager.addExtensionToUsed(name, extensionName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "add_extension_to_required",
     {
         description: "Add an extension to extensionsRequired (and extensionsUsed).",
         inputSchema: { name: NameSchema, extensionName: z.string().describe("Extension name.") },
     },
     async ({ name, extensionName }) => {
-        const result = manager.addExtensionToRequired(name, extensionName);
+        const result = Manager.addExtensionToRequired(name, extensionName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_extension_from_used",
     {
         description: "Remove an extension from extensionsUsed (and extensionsRequired).",
         inputSchema: { name: NameSchema, extensionName: z.string().describe("Extension name.") },
     },
     async ({ name, extensionName }) => {
-        const result = manager.removeExtensionFromUsed(name, extensionName);
+        const result = Manager.removeExtensionFromUsed(name, extensionName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "remove_extension_from_required",
     {
         description: "Remove an extension from extensionsRequired only.",
         inputSchema: { name: NameSchema, extensionName: z.string().describe("Extension name.") },
     },
     async ({ name, extensionName }) => {
-        const result = manager.removeExtensionFromRequired(name, extensionName);
+        const result = Manager.removeExtensionFromRequired(name, extensionName);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
@@ -1029,18 +1029,18 @@ server.registerTool(
 /*  9. Validation tools                                                */
 /* ================================================================== */
 
-server.registerTool(
+Server.registerTool(
     "validate_gltf",
     {
         description: "Validate a glTF document for broken references, invalid hierarchy, extension consistency, and structural issues.",
         inputSchema: { name: NameSchema },
     },
     async ({ name }) => {
-        const issues = manager.validateGltf(name);
+        const issues = Manager.validateGltf(name);
         if (issues.length === 1 && issues[0].severity === "error" && issues[0].message.startsWith("Error:")) {
             return CreateErrorResponse(issues[0].message);
         }
-        return CreateTextResponse(manager.summarizeIssues(issues));
+        return CreateTextResponse(Manager.summarizeIssues(issues));
     }
 );
 
@@ -1048,7 +1048,7 @@ server.registerTool(
 /*  10. Import/Export tools                                             */
 /* ================================================================== */
 
-server.registerTool(
+Server.registerTool(
     "export_gltf_json",
     {
         description: "Export a glTF document as JSON text, or write it to a file.",
@@ -1059,7 +1059,7 @@ server.registerTool(
     },
     async ({ name, outputFile }) => {
         return CreateJsonExportResponse({
-            jsonText: manager.exportJson(name),
+            jsonText: Manager.exportJson(name),
             outputFile,
             missingMessage: `No glTF document named "${name}".`,
             fileLabel: "glTF JSON",
@@ -1067,7 +1067,7 @@ server.registerTool(
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "import_gltf_json",
     {
         description: "Import a glTF document from inline JSON or a JSON file.",
@@ -1083,18 +1083,18 @@ server.registerTool(
             jsonFile,
             fileDescription: "glTF file",
             importJson: (text) => {
-                const result = manager.loadGltf(name, text);
+                const result = Manager.loadGltf(name, text);
                 if (result.startsWith("Error")) {
                     throw new Error(result);
                 }
                 return name;
             },
-            createSuccessText: () => `Imported.\n\n${manager.describeGltf(name)}`,
+            createSuccessText: () => `Imported.\n\n${Manager.describeGltf(name)}`,
         });
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "export_glb",
     {
         description: "Export a glTF document as a binary .glb file. Supports JSON-only content (no embedded binary buffers).",
@@ -1104,7 +1104,7 @@ server.registerTool(
         },
     },
     async ({ name, outputFile }) => {
-        const glb = manager.exportGlb(name);
+        const glb = Manager.exportGlb(name);
         if (!glb) {
             return CreateErrorResponse(`No glTF document named "${name}".`);
         }
@@ -1120,7 +1120,46 @@ server.registerTool(
     }
 );
 
-server.registerTool(
+Server.registerTool(
+    "import_glb",
+    {
+        description: "Import a binary .glb file from disk into memory as a glTF document.",
+        inputSchema: {
+            name: NameSchema,
+            filePath: z.string().describe("Absolute path to the .glb file to import."),
+        },
+    },
+    async ({ name, filePath }) => {
+        try {
+            const { readFileSync } = await import("node:fs");
+            const buffer = readFileSync(filePath);
+            const result = Manager.importGlb(name, buffer);
+            if (result.startsWith("Error")) {
+                return CreateErrorResponse(result);
+            }
+            return CreateTextResponse(result);
+        } catch (error) {
+            return CreateErrorResponse(`Error reading GLB file: ${(error as Error).message}`);
+        }
+    }
+);
+
+Server.registerTool(
+    "compact_indices",
+    {
+        description: "Remove null slots from document arrays and remap all cross-references. Use after removing nodes, meshes, materials, etc. to reclaim clean 0-based indices.",
+        inputSchema: { name: NameSchema },
+    },
+    async ({ name }) => {
+        const result = Manager.compactIndices(name);
+        if (result.startsWith("Error")) {
+            return CreateErrorResponse(result);
+        }
+        return CreateTextResponse(result);
+    }
+);
+
+Server.registerTool(
     "save_to_file",
     {
         description: "Save a glTF document to a .gltf JSON file or .glb binary file based on the file extension.",
@@ -1131,7 +1170,7 @@ server.registerTool(
     },
     async ({ name, filePath }) => {
         if (filePath.endsWith(".glb")) {
-            const glb = manager.exportGlb(name);
+            const glb = Manager.exportGlb(name);
             if (!glb) {
                 return CreateErrorResponse(`No glTF document named "${name}".`);
             }
@@ -1145,7 +1184,7 @@ server.registerTool(
                 return CreateErrorResponse(`Error writing file: ${(error as Error).message}`);
             }
         }
-        const json = manager.exportJson(name);
+        const json = Manager.exportJson(name);
         if (!json) {
             return CreateErrorResponse(`No glTF document named "${name}".`);
         }
@@ -1162,7 +1201,7 @@ server.registerTool(
 /*  11. Search/discovery tools                                         */
 /* ================================================================== */
 
-server.registerTool(
+Server.registerTool(
     "find_nodes",
     {
         description: "Search for nodes by name (substring or exact match).",
@@ -1173,12 +1212,12 @@ server.registerTool(
         },
     },
     async ({ name, query, exact }) => {
-        const result = manager.findNodes(name, query, exact);
+        const result = Manager.findNodes(name, query, exact);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "find_materials",
     {
         description: "Search for materials by name (substring or exact match).",
@@ -1189,12 +1228,12 @@ server.registerTool(
         },
     },
     async ({ name, query, exact }) => {
-        const result = manager.findMaterials(name, query, exact);
+        const result = Manager.findMaterials(name, query, exact);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "find_meshes",
     {
         description: "Search for meshes by name (substring or exact match).",
@@ -1205,12 +1244,12 @@ server.registerTool(
         },
     },
     async ({ name, query, exact }) => {
-        const result = manager.findMeshes(name, query, exact);
+        const result = Manager.findMeshes(name, query, exact);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
 
-server.registerTool(
+Server.registerTool(
     "find_extensions",
     {
         description: "Search for extensions referenced anywhere in the document.",
@@ -1220,7 +1259,7 @@ server.registerTool(
         },
     },
     async ({ name, query }) => {
-        const result = manager.findExtensions(name, query);
+        const result = Manager.findExtensions(name, query);
         return result.startsWith("Error") ? CreateErrorResponse(result) : CreateTextResponse(result);
     }
 );
@@ -1229,7 +1268,7 @@ server.registerTool(
 /*  Resources                                                          */
 /* ================================================================== */
 
-server.registerResource("gltf-concepts", "gltf://concepts", { description: "Overview of glTF 2.0 concepts and structure." }, async (uri) => ({
+Server.registerResource("gltf-concepts", "gltf://concepts", { description: "Overview of glTF 2.0 concepts and structure." }, async (uri) => ({
     contents: [
         {
             uri: uri.href,
@@ -1272,7 +1311,7 @@ server.registerResource("gltf-concepts", "gltf://concepts", { description: "Over
 /*  Prompts                                                            */
 /* ================================================================== */
 
-server.registerPrompt("create-scene-with-materials", { description: "Create a glTF scene with nodes and PBR materials step by step." }, () => ({
+Server.registerPrompt("create-scene-with-materials", { description: "Create a glTF scene with nodes and PBR materials step by step." }, () => ({
     messages: [
         {
             role: "user",
@@ -1290,7 +1329,7 @@ server.registerPrompt("create-scene-with-materials", { description: "Create a gl
     ],
 }));
 
-server.registerPrompt("inspect-and-optimize", { description: "Load, inspect, and optimize an existing glTF asset." }, () => ({
+Server.registerPrompt("inspect-and-optimize", { description: "Load, inspect, and optimize an existing glTF asset." }, () => ({
     messages: [
         {
             role: "user",
