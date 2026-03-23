@@ -552,20 +552,14 @@ server.registerTool(
     },
     async ({ name, description }) => {
         manager.createScene(name, description);
-        return {
-            content: [
-                {
-                    type: "text",
-                    text:
-                        `Created scene "${name}". Next steps:\n` +
-                        `1. Add a camera: add_camera\n` +
-                        `2. Add lights: add_light\n` +
-                        `3. Add meshes: add_mesh or load models: add_model\n` +
-                        `4. Create materials: add_material\n` +
-                        `5. Configure environment: set_environment`,
-                },
-            ],
-        };
+        return CreateTextResponse(
+            `Created scene "${name}". Next steps:\n` +
+                `1. Add a camera: add_camera\n` +
+                `2. Add lights: add_light\n` +
+                `3. Add meshes: add_mesh or load models: add_model\n` +
+                `4. Create materials: add_material\n` +
+                `5. Configure environment: set_environment`
+        );
     }
 );
 
@@ -579,30 +573,19 @@ server.registerTool(
     },
     async ({ name }) => {
         const ok = manager.deleteScene(name);
-        return {
-            content: [{ type: "text", text: ok ? `Deleted "${name}".` : `Scene "${name}" not found.` }],
-        };
+        return CreateTextResponse(ok ? `Deleted "${name}".` : `Scene "${name}" not found.`);
     }
 );
 
 server.registerTool("clear_all", { description: "Remove all scenes from memory, resetting the server to a clean state." }, async () => {
     const names = manager.listScenes();
     manager.clearAll();
-    return {
-        content: [{ type: "text", text: names.length > 0 ? `Cleared ${names.length} scene(s): ${names.join(", ")}` : "Nothing to clear — memory was already empty." }],
-    };
+    return CreateTextResponse(names.length > 0 ? `Cleared ${names.length} scene(s): ${names.join(", ")}` : "Nothing to clear — memory was already empty.");
 });
 
 server.registerTool("list_scenes", { description: "List all scenes currently in memory." }, async () => {
     const names = manager.listScenes();
-    return {
-        content: [
-            {
-                type: "text",
-                text: names.length > 0 ? `Scenes in memory:\n${names.map((n) => `  • ${n}`).join("\n")}` : "No scenes in memory.",
-            },
-        ],
-    };
+    return CreateTextResponse(names.length > 0 ? `Scenes in memory:\n${names.map((n) => `  • ${n}`).join("\n")}` : "No scenes in memory.");
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -656,10 +639,7 @@ server.registerTool(
         }
 
         const result = manager.setEnvironment(sceneName, env as Record<string, unknown>);
-        return {
-            content: [{ type: "text", text: result === "OK" ? "Environment updated." : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse("Environment updated.") : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -725,7 +705,7 @@ server.registerTool(
                 ],
             });
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         // Validate camera type
         const validCameraTypes = ["ArcRotateCamera", "FreeCamera", "UniversalCamera", "FollowCamera"];
@@ -735,7 +715,7 @@ server.registerTool(
         }
         const resolvedType = cameraTypeMap[resolvedRawType.toLowerCase()];
         if (!resolvedType) {
-            return { content: [{ type: "text", text: `Error: Invalid camera type "${resolvedRawType}". Valid types: ${validCameraTypes.join(", ")}` }], isError: true };
+            return CreateErrorResponse(`Error: Invalid camera type "${resolvedRawType}". Valid types: ${validCameraTypes.join(", ")}`);
         }
         // Merge convenience aliases into properties (top-level wins)
         const mergedProps: Record<string, unknown> = { ...((optionsAlias as Record<string, unknown>) || {}), ...((properties as Record<string, unknown>) || {}) };
@@ -778,16 +758,9 @@ server.registerTool(
 
         const result = manager.addCamera(sceneName, name, resolvedType, Object.keys(mergedProps).length > 0 ? mergedProps : undefined, isActive);
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Added camera [${result.id}] "${name}" (${resolvedType}).${isActive ? " Set as active camera." : ""}`,
-                },
-            ],
-        };
+        return CreateTextResponse(`Added camera [${result.id}] "${name}" (${resolvedType}).${isActive ? " Set as active camera." : ""}`);
     }
 );
 
@@ -802,10 +775,7 @@ server.registerTool(
     },
     async ({ sceneName, cameraId }) => {
         const result = manager.setActiveCamera(sceneName, cameraId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Active camera set to "${cameraId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Active camera set to "${cameraId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -828,10 +798,7 @@ server.registerTool(
     },
     async ({ sceneName, cameraId, properties }) => {
         const result = manager.configureCameraProperties(sceneName, cameraId, properties as Record<string, unknown>);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Camera "${cameraId}" updated.` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Camera "${cameraId}" updated.`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -892,7 +859,7 @@ server.registerTool(
                 ],
             });
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         // Merge convenience aliases into properties (top-level wins)
         const mergedProps: Record<string, unknown> = { ...((optionsAlias as Record<string, unknown>) || {}), ...((properties as Record<string, unknown>) || {}) };
@@ -929,11 +896,9 @@ server.registerTool(
 
         const result = manager.addLight(sceneName, name, resolvedType, Object.keys(mergedProps).length > 0 ? mergedProps : undefined);
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return {
-            content: [{ type: "text", text: `Added light [${result.id}] "${name}" (${resolvedType}).` }],
-        };
+        return CreateTextResponse(`Added light [${result.id}] "${name}" (${resolvedType}).`);
     }
 );
 
@@ -976,7 +941,7 @@ server.registerTool(
                 ],
             });
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         // Gap 23: Merge convenience aliases into properties
         const mergedProps: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
@@ -1003,10 +968,7 @@ server.registerTool(
         }
 
         const result = manager.configureLightProperties(sceneName, resolvedLightId, mergedProps as Record<string, unknown>);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Light "${resolvedLightId}" updated.` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Light "${resolvedLightId}" updated.`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -1093,10 +1055,7 @@ server.registerTool(
         const type = materialTypeAliases[rawType.toLowerCase()] ?? rawType;
         const validTypes = ["StandardMaterial", "PBRMaterial", "NodeMaterial"];
         if (!validTypes.includes(type)) {
-            return {
-                content: [{ type: "text", text: `Error: Unknown material type "${rawType}". Valid types: ${validTypes.join(", ")} (aliases: PBR, Standard, Node)` }],
-                isError: true,
-            };
+            return CreateErrorResponse(`Error: Unknown material type "${rawType}". Valid types: ${validTypes.join(", ")} (aliases: PBR, Standard, Node)`);
         }
         // Merge top-level convenience material properties into the properties object
         const mergedProperties: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
@@ -1134,7 +1093,7 @@ server.registerTool(
                     fileDescription: "NME JSON file",
                 }).text;
             } catch (e) {
-                return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+                return CreateErrorResponse((e as Error).message);
             }
         }
         // Validate that NodeMaterial has at least one source for its definition
@@ -1150,7 +1109,7 @@ server.registerTool(
                         `Use the Node Material MCP server's export_material_json tool to export the material to a file, then pass the file path via nmeJsonFile.`,
                 });
             } catch (e) {
-                return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+                return CreateErrorResponse((e as Error).message);
             }
         }
         // Validate that NME JSON is actually valid JSON
@@ -1158,20 +1117,14 @@ server.registerTool(
             try {
                 JSON.parse(resolvedNmeJson);
             } catch {
-                return {
-                    content: [
-                        {
-                            type: "text",
-                            text: `Error: nmeJson must be a valid JSON string. The provided value is not valid JSON. Use the Node Material MCP server's export_material_json tool to get properly formatted JSON.`,
-                        },
-                    ],
-                    isError: true,
-                };
+                return CreateErrorResponse(
+                    `Error: nmeJson must be a valid JSON string. The provided value is not valid JSON. Use the Node Material MCP server's export_material_json tool to get properly formatted JSON.`
+                );
             }
         }
         const result = manager.addMaterial(sceneName, name, type, resolvedProperties as Record<string, unknown>, resolvedNmeJson, snippetId);
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
         const extra = type === "NodeMaterial" ? (resolvedNmeJson ? " (NME JSON imported)" : snippetId ? ` (will load snippet ${snippetId})` : "") : "";
         // Warn when Standard/PBR material has no distinguishing color property
@@ -1194,9 +1147,7 @@ server.registerTool(
                 warning += `\nStored properties: { ${summary} }`;
             }
         }
-        return {
-            content: [{ type: "text", text: `Added material [${result.id}] "${name}" (${type})${extra}.${warning}` }],
-        };
+        return CreateTextResponse(`Added material [${result.id}] "${name}" (${type})${extra}.${warning}`);
     }
 );
 
@@ -1211,10 +1162,7 @@ server.registerTool(
     },
     async ({ sceneName, materialId }) => {
         const result = manager.removeMaterial(sceneName, materialId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Removed material "${materialId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Removed material "${materialId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -1262,7 +1210,7 @@ server.registerTool(
                 ],
             });
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         const mergedProperties: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
         if (albedoColor !== undefined && !("albedoColor" in mergedProperties)) {
@@ -1288,16 +1236,16 @@ server.registerTool(
         }
 
         if (Object.keys(mergedProperties).length === 0) {
-            return { content: [{ type: "text", text: "Error: No properties provided to update." }], isError: true };
+            return CreateErrorResponse("Error: No properties provided to update.");
         }
         const result = manager.configureMaterialProperties(sceneName, resolvedMaterialId, mergedProperties);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
         const summary = Object.entries(mergedProperties)
             .map(([k, v]) => `${k}: ${JSON.stringify(v)}`)
             .join(", ");
-        return { content: [{ type: "text", text: `Material "${resolvedMaterialId}" updated: { ${summary} }` }] };
+        return CreateTextResponse(`Material "${resolvedMaterialId}" updated: { ${summary} }`);
     }
 );
 
@@ -1326,11 +1274,9 @@ server.registerTool(
     async ({ sceneName, name, url, ...options }) => {
         const result = manager.addTexture(sceneName, name, url, options);
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return {
-            content: [{ type: "text", text: `Added texture [${result.id}] "${name}" (${url}).` }],
-        };
+        return CreateTextResponse(`Added texture [${result.id}] "${name}" (${url}).`);
     }
 );
 
@@ -1386,7 +1332,7 @@ server.registerTool(
             resolvedMaterialId
         );
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
 
         // Inline physics body
@@ -1416,14 +1362,7 @@ server.registerTool(
             }
         }
 
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Added mesh [${result.id}] "${name}" (${type}).${resolvedMaterialId ? ` Material: ${resolvedMaterialId}.` : ""}${physicsMsg}`,
-                },
-            ],
-        };
+        return CreateTextResponse(`Added mesh [${result.id}] "${name}" (${type}).${resolvedMaterialId ? ` Material: ${resolvedMaterialId}.` : ""}${physicsMsg}`);
     }
 );
 
@@ -1442,10 +1381,7 @@ server.registerTool(
     },
     async ({ sceneName, meshId }) => {
         const result = manager.removeMesh(sceneName, meshId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Removed mesh "${meshId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Removed mesh "${meshId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -1476,10 +1412,7 @@ server.registerTool(
             props.isVisible = visible;
         }
         const result = manager.setMeshProperties(sceneName, meshId, props as Record<string, unknown>);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Mesh "${meshId}" updated.` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Mesh "${meshId}" updated.`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -1515,11 +1448,9 @@ server.registerTool(
         }
         const result = manager.addTransformNode(sceneName, name, Object.keys(mergedTransform).length > 0 ? mergedTransform : undefined, parentId);
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return {
-            content: [{ type: "text", text: `Added transform node [${result.id}] "${name}".` }],
-        };
+        return CreateTextResponse(`Added transform node [${result.id}] "${name}".`);
     }
 );
 
@@ -1555,13 +1486,10 @@ server.registerTool(
                 ],
             });
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         const result = manager.setTransform(sceneName, resolvedNodeId, { position, rotation, rotationQuaternion, scaling } as Record<string, unknown>);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Transform of "${resolvedNodeId}" updated.` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Transform of "${resolvedNodeId}" updated.`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -1577,15 +1505,9 @@ server.registerTool(
     },
     async ({ sceneName, childId, parentId }) => {
         const result = manager.setParent(sceneName, childId, parentId);
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: result === "OK" ? (parentId ? `Set "${childId}" parent to "${parentId}".` : `Un-parented "${childId}".`) : `Error: ${result}`,
-                },
-            ],
-            isError: result !== "OK",
-        };
+        return result === "OK"
+            ? CreateTextResponse(parentId ? `Set "${childId}" parent to "${parentId}".` : `Un-parented "${childId}".`)
+            : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -1601,10 +1523,7 @@ server.registerTool(
     },
     async ({ sceneName, meshId, materialId }) => {
         const result = manager.assignMaterial(sceneName, meshId, materialId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Assigned material "${materialId}" to mesh "${meshId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Assigned material "${materialId}" to mesh "${meshId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -1650,12 +1569,10 @@ server.registerTool(
             pluginExtension,
         });
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
         const anims = animationGroups?.length ? ` Expected animations: ${animationGroups.join(", ")}.` : "";
-        return {
-            content: [{ type: "text", text: `Added model [${result.id}] "${name}" from ${url}.${anims}` }],
-        };
+        return CreateTextResponse(`Added model [${result.id}] "${name}" from ${url}.${anims}`);
     }
 );
 
@@ -1670,10 +1587,7 @@ server.registerTool(
     },
     async ({ sceneName, modelId }) => {
         const result = manager.removeModel(sceneName, modelId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Removed model "${modelId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Removed model "${modelId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -1716,16 +1630,9 @@ server.registerTool(
     async ({ sceneName, name, targetId, property, fps, keys, loopMode, easingFunction, easingMode }) => {
         const result = manager.addAnimation(sceneName, name, targetId, property, fps, keys, loopMode, easingFunction, easingMode);
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Added animation [${result.id}] "${name}" → ${targetId}.${property} (${keys.length} keys, ${fps}fps).`,
-                },
-            ],
-        };
+        return CreateTextResponse(`Added animation [${result.id}] "${name}" → ${targetId}.${property} (${keys.length} keys, ${fps}fps).`);
     }
 );
 
@@ -1747,22 +1654,15 @@ server.registerTool(
     async ({ sceneName, name, animationIds, autoStart, isLooping, speedRatio, from, to }) => {
         const result = manager.createAnimationGroup(sceneName, name, animationIds, { autoStart, isLooping, speedRatio, from, to });
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Created animation group [${result.id}] "${name}" with ${animationIds.length} animation(s).`,
-                },
-            ],
-        };
+        return CreateTextResponse(`Created animation group [${result.id}] "${name}" with ${animationIds.length} animation(s).`);
     }
 );
 
-server.registerTool("list_animatable_properties", { description: "List all commonly animatable properties on Babylon.js scene nodes." }, async () => ({
-    content: [{ type: "text", text: `Animatable properties:\n${GetAnimatablePropertiesSummary()}` }],
-}));
+server.registerTool("list_animatable_properties", { description: "List all commonly animatable properties on Babylon.js scene nodes." }, async () =>
+    CreateTextResponse(`Animatable properties:\n${GetAnimatablePropertiesSummary()}`)
+);
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Tools — Physics
@@ -1841,7 +1741,7 @@ server.registerTool(
                 ],
             });
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         // Gap 21 fix: Normalize bodyType — accept case-insensitive strings and map to numbers
         let resolvedBodyType: string | number = resolvedBodyTypeRaw;
@@ -1872,15 +1772,9 @@ server.registerTool(
             angularDamping,
             isTrigger,
         });
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: result === "OK" ? `Added physics body to "${resolvedMeshId}" (${resolvedShapeType}, ${resolvedBodyType}).` : `Error: ${result}`,
-                },
-            ],
-            isError: result !== "OK",
-        };
+        return result === "OK"
+            ? CreateTextResponse(`Added physics body to "${resolvedMeshId}" (${resolvedShapeType}, ${resolvedBodyType}).`)
+            : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -1917,33 +1811,26 @@ server.registerTool(
                 fileDescription: "Flow Graph coordinator JSON file",
             }).text;
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         // Validate that resolvedJson is valid JSON before passing to scene manager
         try {
             JSON.parse(resolvedJson);
         } catch {
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text:
-                            `Error: coordinatorJson must be a valid JSON string. Received a non-JSON value: "${resolvedJson.substring(0, 100)}...". ` +
-                            `Use the flow graph MCP server's export_graph_json tool to get the full coordinator JSON, then pass that JSON string here.`,
-                    },
-                ],
-                isError: true,
-            };
+            return CreateErrorResponse(
+                `Error: coordinatorJson must be a valid JSON string. Received a non-JSON value: "${resolvedJson.substring(0, 100)}...". ` +
+                    `Use the flow graph MCP server's export_graph_json tool to get the full coordinator JSON, then pass that JSON string here.`
+            );
         }
         const result = manager.attachFlowGraph(sceneName, resolvedName, resolvedJson, scopeNodeIds);
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
         let msg = `Attached flow graph [${result.id}] "${resolvedName}".${scopeNodeIds?.length ? ` Scoped to: ${scopeNodeIds.join(", ")}` : ""}`;
         if (result.warnings && result.warnings.length > 0) {
             msg += `\n⚠ ${result.warnings.join("\n⚠ ")}`;
         }
-        return { content: [{ type: "text", text: msg }] };
+        return CreateTextResponse(msg);
     }
 );
 
@@ -1958,10 +1845,7 @@ server.registerTool(
     },
     async ({ sceneName, flowGraphId }) => {
         const result = manager.removeFlowGraph(sceneName, flowGraphId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Removed flow graph "${flowGraphId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Removed flow graph "${flowGraphId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -1993,9 +1877,9 @@ server.registerTool(
     async ({ sceneName, name, url, soundType, ...opts }) => {
         const result = manager.addSound(sceneName, name, url, soundType, opts);
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return { content: [{ type: "text", text: `Added ${soundType} sound [${result.id}] "${name}".` }] };
+        return CreateTextResponse(`Added ${soundType} sound [${result.id}] "${name}".`);
     }
 );
 
@@ -2010,10 +1894,7 @@ server.registerTool(
     },
     async ({ sceneName, soundId }) => {
         const result = manager.removeSound(sceneName, soundId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Removed sound "${soundId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Removed sound "${soundId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2041,10 +1922,7 @@ server.registerTool(
     },
     async ({ sceneName, soundId, properties }) => {
         const result = manager.configureSoundProperties(sceneName, soundId, properties);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Updated sound "${soundId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Updated sound "${soundId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2060,10 +1938,7 @@ server.registerTool(
     },
     async ({ sceneName, soundId, meshId }) => {
         const result = manager.attachSoundToMesh(sceneName, soundId, meshId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Attached sound "${soundId}" to mesh "${meshId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Attached sound "${soundId}" to mesh "${meshId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2138,10 +2013,10 @@ server.registerTool(
             gravity: gravity as { x: number; y: number; z: number } | undefined,
         });
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
         const gpu = isGpu ? " [GPU]" : "";
-        return { content: [{ type: "text", text: `Added particle system [${result.id}] "${name}" cap=${capacity}${gpu}.` }] };
+        return CreateTextResponse(`Added particle system [${result.id}] "${name}" cap=${capacity}${gpu}.`);
     }
 );
 
@@ -2156,10 +2031,7 @@ server.registerTool(
     },
     async ({ sceneName, particleSystemId }) => {
         const result = manager.removeParticleSystem(sceneName, particleSystemId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Removed particle system "${particleSystemId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Removed particle system "${particleSystemId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2188,10 +2060,7 @@ server.registerTool(
     },
     async ({ sceneName, particleSystemId, properties }) => {
         const result = manager.configureParticleSystem(sceneName, particleSystemId, properties);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Updated particle system "${particleSystemId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Updated particle system "${particleSystemId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2214,10 +2083,9 @@ server.registerTool(
     },
     async ({ sceneName, particleSystemId, gradientType, gradient, value }) => {
         const result = manager.addParticleGradient(sceneName, particleSystemId, gradientType, gradient, value as number | { r: number; g: number; b: number; a?: number });
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Added ${gradientType} gradient at ${gradient} to "${particleSystemId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK"
+            ? CreateTextResponse(`Added ${gradientType} gradient at ${gradient} to "${particleSystemId}".`)
+            : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2257,9 +2125,9 @@ server.registerTool(
             ...opts,
         });
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return { content: [{ type: "text", text: `Added ${constraintType} constraint [${result.id}] "${name}" between "${parentMeshId}" and "${childMeshId}".` }] };
+        return CreateTextResponse(`Added ${constraintType} constraint [${result.id}] "${name}" between "${parentMeshId}" and "${childMeshId}".`);
     }
 );
 
@@ -2276,10 +2144,7 @@ server.registerTool(
     },
     async ({ sceneName, meshId }) => {
         const result = manager.removePhysicsBody(sceneName, meshId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Removed physics body from "${meshId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Removed physics body from "${meshId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2294,10 +2159,7 @@ server.registerTool(
     },
     async ({ sceneName, constraintId }) => {
         const result = manager.removePhysicsConstraint(sceneName, constraintId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Removed constraint "${constraintId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Removed constraint "${constraintId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2327,7 +2189,7 @@ server.registerTool(
     async ({ sceneName, ...props }) => {
         const result = manager.configureRenderPipeline(sceneName, props);
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
         const enabled = [
             props.bloomEnabled && "bloom",
@@ -2337,9 +2199,7 @@ server.registerTool(
             props.chromaticAberrationEnabled && "chromatic",
             props.grainEnabled && "grain",
         ].filter(Boolean);
-        return {
-            content: [{ type: "text", text: `Render pipeline configured.${enabled.length > 0 ? ` Effects: ${enabled.join(", ")}` : ""}` }],
-        };
+        return CreateTextResponse(`Render pipeline configured.${enabled.length > 0 ? ` Effects: ${enabled.join(", ")}` : ""}`);
     }
 );
 
@@ -2361,9 +2221,9 @@ server.registerTool(
     async ({ sceneName, name, intensity, blurKernelSize }) => {
         const result = manager.addGlowLayer(sceneName, name, { intensity, blurKernelSize });
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return { content: [{ type: "text", text: `Added glow layer [${result.id}] "${name}".` }] };
+        return CreateTextResponse(`Added glow layer [${result.id}] "${name}".`);
     }
 );
 
@@ -2380,12 +2240,9 @@ server.registerTool(
     },
     async ({ sceneName, glowLayerId, meshId, mode }) => {
         const result = manager.addMeshToGlowLayer(sceneName, glowLayerId, meshId, mode);
-        return {
-            content: [
-                { type: "text", text: result === "OK" ? `${mode === "include" ? "Included" : "Excluded"} mesh "${meshId}" in glow layer "${glowLayerId}".` : `Error: ${result}` },
-            ],
-            isError: result !== "OK",
-        };
+        return result === "OK"
+            ? CreateTextResponse(`${mode === "include" ? "Included" : "Excluded"} mesh "${meshId}" in glow layer "${glowLayerId}".`)
+            : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2400,10 +2257,7 @@ server.registerTool(
     },
     async ({ sceneName, glowLayerId }) => {
         const result = manager.removeGlowLayer(sceneName, glowLayerId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Removed glow layer "${glowLayerId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Removed glow layer "${glowLayerId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2426,9 +2280,9 @@ server.registerTool(
     async ({ sceneName, name, isStroke, blurHorizontalSize, blurVerticalSize }) => {
         const result = manager.addHighlightLayer(sceneName, name, { isStroke, blurHorizontalSize, blurVerticalSize });
         if (typeof result === "string") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return { content: [{ type: "text", text: `Added highlight layer [${result.id}] "${name}"${isStroke ? " [stroke mode]" : ""}.` }] };
+        return CreateTextResponse(`Added highlight layer [${result.id}] "${name}"${isStroke ? " [stroke mode]" : ""}.`);
     }
 );
 
@@ -2446,10 +2300,9 @@ server.registerTool(
     },
     async ({ sceneName, highlightLayerId, meshId, color, glowEmissiveOnly }) => {
         const result = manager.addMeshToHighlightLayer(sceneName, highlightLayerId, meshId, color, glowEmissiveOnly);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Added mesh "${meshId}" to highlight layer "${highlightLayerId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK"
+            ? CreateTextResponse(`Added mesh "${meshId}" to highlight layer "${highlightLayerId}".`)
+            : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2465,10 +2318,9 @@ server.registerTool(
     },
     async ({ sceneName, highlightLayerId, meshId }) => {
         const result = manager.removeMeshFromHighlightLayer(sceneName, highlightLayerId, meshId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Removed mesh "${meshId}" from highlight layer "${highlightLayerId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK"
+            ? CreateTextResponse(`Removed mesh "${meshId}" from highlight layer "${highlightLayerId}".`)
+            : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2483,10 +2335,7 @@ server.registerTool(
     },
     async ({ sceneName, highlightLayerId }) => {
         const result = manager.removeHighlightLayer(sceneName, highlightLayerId);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Removed highlight layer "${highlightLayerId}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`Removed highlight layer "${highlightLayerId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2813,9 +2662,7 @@ server.registerTool(
     },
     async ({ sceneName }) => {
         const result = manager.detachNodeRenderGraph(sceneName);
-        return result === "OK"
-            ? CreateTextResponse(`Node Render Graph detached from scene "${sceneName}".`)
-            : CreateErrorResponse(`Error: ${result}`);
+        return result === "OK" ? CreateTextResponse(`Node Render Graph detached from scene "${sceneName}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2876,9 +2723,7 @@ server.registerTool(
     },
     async ({ sceneName, meshName }) => {
         const result = manager.removeNodeGeometryMesh(sceneName, meshName);
-        return result === "OK"
-            ? CreateTextResponse(`Node Geometry mesh "${meshName}" removed from scene "${sceneName}".`)
-            : CreateErrorResponse(`Error: ${result}`);
+        return result === "OK" ? CreateTextResponse(`Node Geometry mesh "${meshName}" removed from scene "${sceneName}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -3173,10 +3018,7 @@ server.registerTool(
                 return CreateErrorResponse(`Error writing project files: ${(e as Error).message}`);
             }
         }
-        return CreateTextResponses([
-            `Generated ${Object.keys(files).length} project files:`,
-            ...Object.entries(files).map(([path, content]) => `--- ${path} ---\n${content}`),
-        ]);
+        return CreateTextResponses([`Generated ${Object.keys(files).length} project files:`, ...Object.entries(files).map(([path, content]) => `--- ${path} ---\n${content}`)]);
     }
 );
 
