@@ -117,7 +117,6 @@ export class TonemapPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerTonemapPostProcess(): void {
     if (_registered) {

@@ -559,7 +559,6 @@ export const DecalBuilder = {
     CreateDecal,
 };
 
-
 let _registered = false;
 export function registerDecalBuilder(): void {
     if (_registered) {

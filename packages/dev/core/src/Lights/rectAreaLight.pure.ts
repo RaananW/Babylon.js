@@ -216,7 +216,6 @@ export class RectAreaLight extends AreaLight {
     }
 }
 
-
 let _registered = false;
 export function registerRectAreaLight(): void {
     if (_registered) {

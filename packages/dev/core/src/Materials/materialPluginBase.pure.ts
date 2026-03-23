@@ -323,7 +323,6 @@ export class MaterialPluginBase {
 
 // Register Class Name
 
-
 let _registered = false;
 export function registerMaterialPluginBase(): void {
     if (_registered) {

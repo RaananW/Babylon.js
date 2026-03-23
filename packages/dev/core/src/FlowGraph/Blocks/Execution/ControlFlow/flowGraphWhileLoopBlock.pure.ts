@@ -84,7 +84,6 @@ export class FlowGraphWhileLoopBlock extends FlowGraphExecutionBlockWithOutSigna
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphWhileLoopBlock(): void {
     if (_registered) {

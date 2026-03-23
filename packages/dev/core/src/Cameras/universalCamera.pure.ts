@@ -7,7 +7,6 @@ import { Node } from "../node";
 import { Camera } from "./camera";
 import { Vector3 } from "../Maths/math.vector.pure";
 
-
 /**
  * The Universal Camera is the one to choose for first person shooter type games, and works with all the keyboard, mouse, touch and gamepads. This replaces the earlier Free Camera,
  * which still works and will still be found in many Playgrounds.
@@ -75,7 +74,6 @@ export class UniversalCamera extends TouchCamera {
         return "UniversalCamera";
     }
 }
-
 
 let _registered = false;
 export function registerUniversalCamera(): void {

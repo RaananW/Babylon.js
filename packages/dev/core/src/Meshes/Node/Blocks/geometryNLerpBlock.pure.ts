@@ -114,7 +114,6 @@ export class GeometryNLerpBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerGeometryNLerpBlock(): void {
     if (_registered) {

@@ -1048,7 +1048,6 @@ export const _injectLTSFileTools = (
     });
 };
 
-
 let _registered = false;
 export function registerFileTools(): void {
     if (_registered) {
@@ -1064,5 +1063,16 @@ export function registerFileTools(): void {
 
     initSideEffects();
 
-    _injectLTSFileTools(DecodeBase64UrlToBinary, DecodeBase64UrlToString, FileToolsOptions, IsBase64DataUrl, IsFileURL, LoadFile, LoadImage, ReadFile, RequestFile, SetCorsBehavior);
+    _injectLTSFileTools(
+        DecodeBase64UrlToBinary,
+        DecodeBase64UrlToString,
+        FileToolsOptions,
+        IsBase64DataUrl,
+        IsFileURL,
+        LoadFile,
+        LoadImage,
+        ReadFile,
+        RequestFile,
+        SetCorsBehavior
+    );
 }

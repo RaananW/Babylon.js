@@ -66,7 +66,6 @@ export class MinBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerMinBlock(): void {
     if (_registered) {

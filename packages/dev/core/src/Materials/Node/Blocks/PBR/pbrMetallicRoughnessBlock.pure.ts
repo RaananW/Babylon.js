@@ -1651,7 +1651,6 @@ export class PBRMetallicRoughnessBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerPbrMetallicRoughnessBlock(): void {
     if (_registered) {

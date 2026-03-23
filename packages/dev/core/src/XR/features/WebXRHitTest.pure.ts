@@ -277,7 +277,6 @@ export class WebXRHitTest extends WebXRAbstractFeature implements IWebXRHitTestF
     }
 }
 
-
 let _registered = false;
 export function registerWebXRHitTest(): void {
     if (_registered) {

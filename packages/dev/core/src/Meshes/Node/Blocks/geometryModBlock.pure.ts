@@ -95,7 +95,6 @@ export class GeometryModBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerGeometryModBlock(): void {
     if (_registered) {

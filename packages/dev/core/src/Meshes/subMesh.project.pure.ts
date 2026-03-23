@@ -17,7 +17,14 @@ export function registerSubMeshProject(): void {
     }
     _registered = true;
 
-    SubMesh.prototype._projectOnTrianglesToRef = function (vector: Vector3, positions: Vector3[], indices: IndicesArray, step: number, checkStopper: boolean, ref: Vector3): number {
+    SubMesh.prototype._projectOnTrianglesToRef = function (
+        vector: Vector3,
+        positions: Vector3[],
+        indices: IndicesArray,
+        step: number,
+        checkStopper: boolean,
+        ref: Vector3
+    ): number {
         // Triangles test
         const proj = TmpVectors.Vector3[0];
         const tmp = TmpVectors.Vector3[1];

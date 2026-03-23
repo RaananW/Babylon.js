@@ -110,7 +110,6 @@ export class ScreenSizeBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerScreenSizeBlock(): void {
     if (_registered) {

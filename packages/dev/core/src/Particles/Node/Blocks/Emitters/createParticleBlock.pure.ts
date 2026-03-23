@@ -163,7 +163,6 @@ export class CreateParticleBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerCreateParticleBlock(): void {
     if (_registered) {

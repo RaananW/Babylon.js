@@ -532,7 +532,6 @@ export class RSMCreatePluginMaterial extends MaterialPluginBase {
     }
 }
 
-
 let _registered = false;
 export function registerReflectiveShadowMap(): void {
     if (_registered) {

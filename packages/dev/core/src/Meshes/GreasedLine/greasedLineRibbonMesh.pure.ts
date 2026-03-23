@@ -568,7 +568,6 @@ export class GreasedLineRibbonMesh extends GreasedLineBaseMesh {
     }
 }
 
-
 let _registered = false;
 export function registerGreasedLineRibbonMesh(): void {
     if (_registered) {

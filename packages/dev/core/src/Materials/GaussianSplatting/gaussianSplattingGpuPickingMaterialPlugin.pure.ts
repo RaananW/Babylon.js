@@ -237,7 +237,6 @@ uniform pickingColor: vec3f;
     }
 }
 
-
 let _registered = false;
 export function registerGaussianSplattingGpuPickingMaterialPlugin(): void {
     if (_registered) {

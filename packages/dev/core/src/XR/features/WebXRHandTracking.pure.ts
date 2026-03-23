@@ -1097,7 +1097,6 @@ export class WebXRHandTracking extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRHandTracking(): void {
     if (_registered) {

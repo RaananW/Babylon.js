@@ -63,7 +63,6 @@ export class FlowGraphConditionalDataBlock<T> extends FlowGraphBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphConditionalDataBlock(): void {
     if (_registered) {

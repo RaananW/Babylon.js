@@ -61,7 +61,6 @@ export class FlowGraphFunctionReferenceBlock extends FlowGraphBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphFunctionReferenceBlock(): void {
     if (_registered) {

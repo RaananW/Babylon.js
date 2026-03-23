@@ -12,7 +12,6 @@ import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
 
 export {};
 
-
 let _registered = false;
 export function registerEnginesWebGPUExtensionsEngineMultiRender(): void {
     if (_registered) {

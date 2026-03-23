@@ -412,7 +412,6 @@ export class WebXRLightEstimation extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRLightEstimation(): void {
     if (_registered) {

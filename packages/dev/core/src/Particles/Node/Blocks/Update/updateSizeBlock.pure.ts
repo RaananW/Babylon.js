@@ -87,7 +87,6 @@ export class UpdateSizeBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerUpdateSizeBlock(): void {
     if (_registered) {

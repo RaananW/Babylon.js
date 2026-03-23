@@ -44,7 +44,6 @@ export class StereoscopicArcRotateCamera extends ArcRotateCamera {
     protected override _setRigMode = () => _SetStereoscopicRigMode(this);
 }
 
-
 let _registered = false;
 export function registerStereoscopicArcRotateCamera(): void {
     if (_registered) {

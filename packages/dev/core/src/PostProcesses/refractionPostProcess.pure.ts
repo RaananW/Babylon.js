@@ -148,7 +148,6 @@ export class RefractionPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerRefractionPostProcess(): void {
     if (_registered) {

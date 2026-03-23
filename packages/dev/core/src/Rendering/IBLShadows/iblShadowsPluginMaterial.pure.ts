@@ -273,7 +273,6 @@ export class IBLShadowsPluginMaterial extends MaterialPluginBase {
     }
 }
 
-
 let _registered = false;
 export function registerIblShadowsPluginMaterial(): void {
     if (_registered) {

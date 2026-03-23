@@ -76,7 +76,6 @@ export class SmoothStepBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerSmoothStepBlock(): void {
     if (_registered) {

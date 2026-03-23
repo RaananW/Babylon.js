@@ -69,7 +69,6 @@ export class FlowGraphArrayIndexBlock<T = any> extends FlowGraphBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphArrayIndexBlock(): void {
     if (_registered) {

@@ -38,7 +38,6 @@ export class FlowGraphPauseAnimationBlock extends FlowGraphExecutionBlockWithOut
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphPauseAnimationBlock(): void {
     if (_registered) {

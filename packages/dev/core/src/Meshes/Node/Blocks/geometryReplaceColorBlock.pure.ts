@@ -101,7 +101,6 @@ export class GeometryReplaceColorBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerGeometryReplaceColorBlock(): void {
     if (_registered) {

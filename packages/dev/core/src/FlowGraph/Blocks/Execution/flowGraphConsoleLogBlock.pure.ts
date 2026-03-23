@@ -101,7 +101,6 @@ export class FlowGraphConsoleLogBlock extends FlowGraphExecutionBlockWithOutSign
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphConsoleLogBlock(): void {
     if (_registered) {

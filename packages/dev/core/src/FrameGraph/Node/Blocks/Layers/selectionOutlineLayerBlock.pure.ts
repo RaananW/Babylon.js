@@ -266,7 +266,6 @@ export class NodeRenderGraphSelectionOutlineLayerBlock extends NodeRenderGraphBl
     }
 }
 
-
 let _registered = false;
 export function registerSelectionOutlineLayerBlock(): void {
     if (_registered) {

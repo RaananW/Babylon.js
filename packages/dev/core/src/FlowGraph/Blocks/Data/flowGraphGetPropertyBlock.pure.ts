@@ -96,7 +96,6 @@ export class FlowGraphGetPropertyBlock<P extends any, O extends FlowGraphAssetTy
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphGetPropertyBlock(): void {
     if (_registered) {

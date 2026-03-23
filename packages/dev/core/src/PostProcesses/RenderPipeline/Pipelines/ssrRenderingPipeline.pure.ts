@@ -1038,7 +1038,6 @@ export class SSRRenderingPipeline extends PostProcessRenderPipeline {
     }
 }
 
-
 let _registered = false;
 export function registerSsrRenderingPipeline(): void {
     if (_registered) {

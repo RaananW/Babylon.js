@@ -192,7 +192,6 @@ export class ParticleNumberMathBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerParticleNumberMathBlock(): void {
     if (_registered) {

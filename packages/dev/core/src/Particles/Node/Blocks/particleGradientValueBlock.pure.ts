@@ -92,7 +92,6 @@ export class ParticleGradientValueBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerParticleGradientValueBlock(): void {
     if (_registered) {

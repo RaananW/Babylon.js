@@ -231,7 +231,6 @@ export class GeometryTextureFetchBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerGeometryTextureFetchBlock(): void {
     if (_registered) {

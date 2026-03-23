@@ -274,7 +274,6 @@ export const BoxBuilder = {
     CreateBox,
 };
 
-
 let _registered = false;
 export function registerBoxBuilder(): void {
     if (_registered) {

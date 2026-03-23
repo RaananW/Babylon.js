@@ -171,7 +171,6 @@ export class SmartFilterTextureBlock extends CurrentScreenBlock {
     }
 }
 
-
 let _registered = false;
 export function registerSmartFilterTextureBlock(): void {
     if (_registered) {

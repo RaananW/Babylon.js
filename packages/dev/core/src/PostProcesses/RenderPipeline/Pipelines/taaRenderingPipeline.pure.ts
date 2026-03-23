@@ -436,7 +436,6 @@ export class TAARenderingPipeline extends PostProcessRenderPipeline {
     }
 }
 
-
 let _registered = false;
 export function registerTaaRenderingPipeline(): void {
     if (_registered) {

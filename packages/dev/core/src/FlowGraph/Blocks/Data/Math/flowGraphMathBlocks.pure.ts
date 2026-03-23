@@ -1290,7 +1290,6 @@ export class FlowGraphOneBitsCounterBlock extends FlowGraphUnaryOperationBlock<F
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphMathBlocks(): void {
     if (_registered) {

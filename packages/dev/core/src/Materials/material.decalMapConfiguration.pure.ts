@@ -160,7 +160,6 @@ export class DecalMapConfiguration extends MaterialPluginBase {
     }
 }
 
-
 let _registered = false;
 export function registerMaterialDecalMapConfiguration(): void {
     if (_registered) {

@@ -1015,7 +1015,6 @@ export const ScreenshotTools = {
  * @internal
  */
 
-
 let _registered = false;
 export function registerScreenshotTools(): void {
     if (_registered) {

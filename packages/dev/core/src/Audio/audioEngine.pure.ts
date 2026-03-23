@@ -270,7 +270,6 @@ export class AudioEngine implements IAudioEngine {
     }
 }
 
-
 let _registered = false;
 export function registerAudioEngine(): void {
     if (_registered) {

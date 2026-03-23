@@ -8856,7 +8856,6 @@ export class TmpVectors {
 
 const mtxConvertNDCToHalfZRange = /*#__PURE__*/ Matrix.FromValues(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1);
 
-
 let _registered = false;
 export function registerMathVector(): void {
     if (_registered) {

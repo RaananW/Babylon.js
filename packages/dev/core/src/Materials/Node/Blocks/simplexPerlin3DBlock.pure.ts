@@ -140,7 +140,6 @@ export class SimplexPerlin3DBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerSimplexPerlin3DBlock(): void {
     if (_registered) {

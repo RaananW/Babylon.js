@@ -175,7 +175,6 @@ export class ClipPlanesBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerClipPlanesBlock(): void {
     if (_registered) {

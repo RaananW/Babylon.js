@@ -227,7 +227,6 @@ export class FogBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFogBlock(): void {
     if (_registered) {

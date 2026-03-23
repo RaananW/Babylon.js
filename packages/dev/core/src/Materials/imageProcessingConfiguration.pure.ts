@@ -655,7 +655,6 @@ export class ImageProcessingConfiguration {
     }
 }
 
-
 let _registered = false;
 export function registerImageProcessingConfiguration(): void {
     if (_registered) {

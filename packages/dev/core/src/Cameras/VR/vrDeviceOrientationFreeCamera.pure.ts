@@ -40,7 +40,6 @@ export class VRDeviceOrientationFreeCamera extends DeviceOrientationCamera {
     protected override _setRigMode = (rigParams: any) => _SetVrRigMode(this, rigParams);
 }
 
-
 let _registered = false;
 export function registerVrDeviceOrientationFreeCamera(): void {
     if (_registered) {

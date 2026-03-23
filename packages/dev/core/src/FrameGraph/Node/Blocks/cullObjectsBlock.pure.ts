@@ -92,7 +92,6 @@ export class NodeRenderGraphCullObjectsBlock extends NodeRenderGraphBlock {
     }
 }
 
-
 let _registered = false;
 export function registerCullObjectsBlock(): void {
     if (_registered) {

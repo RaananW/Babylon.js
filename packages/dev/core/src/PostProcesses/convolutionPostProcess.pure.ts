@@ -132,7 +132,6 @@ export class ConvolutionPostProcess extends PostProcess {
     public static GaussianKernel = ThinConvolutionPostProcess.GaussianKernel;
 }
 
-
 let _registered = false;
 export function registerConvolutionPostProcess(): void {
     if (_registered) {

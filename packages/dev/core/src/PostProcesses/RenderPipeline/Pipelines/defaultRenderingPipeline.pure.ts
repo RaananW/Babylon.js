@@ -868,7 +868,6 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
     }
 }
 
-
 let _registered = false;
 export function registerDefaultRenderingPipeline(): void {
     if (_registered) {

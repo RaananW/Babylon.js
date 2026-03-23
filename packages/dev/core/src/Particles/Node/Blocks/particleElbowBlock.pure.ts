@@ -57,7 +57,6 @@ export class ParticleElbowBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerParticleElbowBlock(): void {
     if (_registered) {

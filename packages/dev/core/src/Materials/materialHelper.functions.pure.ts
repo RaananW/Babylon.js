@@ -48,7 +48,6 @@ export function BindLogDepth(defines: any, effect: Effect, scene: Scene): void {
     }
 }
 
-
 // Temps
 const TempFogColor: IColor3Like = { r: 0, g: 0, b: 0 };
 const TmpMorphInfluencers = {

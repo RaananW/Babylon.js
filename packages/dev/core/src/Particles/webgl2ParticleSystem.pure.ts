@@ -318,7 +318,6 @@ export class WebGL2ParticleSystem implements IGPUParticleSystemPlatform {
     }
 }
 
-
 let _registered = false;
 export function registerWebgl2ParticleSystem(): void {
     if (_registered) {

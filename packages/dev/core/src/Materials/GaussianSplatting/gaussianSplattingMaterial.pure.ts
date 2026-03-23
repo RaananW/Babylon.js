@@ -706,7 +706,6 @@ export class GaussianSplattingMaterial extends PushMaterial {
     }
 }
 
-
 let _registered = false;
 export function registerGaussianSplattingMaterial(): void {
     if (_registered) {

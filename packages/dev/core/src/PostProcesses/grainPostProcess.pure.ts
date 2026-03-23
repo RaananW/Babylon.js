@@ -111,7 +111,6 @@ export class GrainPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerGrainPostProcess(): void {
     if (_registered) {

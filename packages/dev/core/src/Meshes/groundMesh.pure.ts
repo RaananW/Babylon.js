@@ -325,7 +325,6 @@ export class GroundMesh extends Mesh {
     }
 }
 
-
 let _registered = false;
 export function registerGroundMesh(): void {
     if (_registered) {

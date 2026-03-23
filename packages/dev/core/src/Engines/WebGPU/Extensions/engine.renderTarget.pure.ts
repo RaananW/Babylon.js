@@ -90,7 +90,11 @@ export function registerWebGPUEngineRenderTarget(): void {
         return rtWrapper;
     };
 
-    ThinWebGPUEngine.prototype._createDepthStencilTexture = function (size: TextureSize, options: DepthTextureCreationOptions, wrapper: WebGPURenderTargetWrapper): InternalTexture {
+    ThinWebGPUEngine.prototype._createDepthStencilTexture = function (
+        size: TextureSize,
+        options: DepthTextureCreationOptions,
+        wrapper: WebGPURenderTargetWrapper
+    ): InternalTexture {
         const internalOptions = {
             bilinearFiltering: false,
             comparisonFunction: 0,

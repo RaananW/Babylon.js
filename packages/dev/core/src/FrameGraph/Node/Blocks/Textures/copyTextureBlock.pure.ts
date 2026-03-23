@@ -163,7 +163,6 @@ export class NodeRenderGraphCopyTextureBlock extends NodeRenderGraphBlock {
     }
 }
 
-
 let _registered = false;
 export function registerCopyTextureBlock(): void {
     if (_registered) {

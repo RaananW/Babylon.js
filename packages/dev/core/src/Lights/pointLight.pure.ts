@@ -222,7 +222,6 @@ export class PointLight extends ShadowLight {
     }
 }
 
-
 let _registered = false;
 export function registerPointLight(): void {
     if (_registered) {

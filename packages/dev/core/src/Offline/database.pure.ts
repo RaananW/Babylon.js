@@ -750,7 +750,6 @@ export class Database implements IOfflineProvider {
     }
 }
 
-
 let _registered = false;
 export function registerDatabase(): void {
     if (_registered) {

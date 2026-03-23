@@ -12,7 +12,6 @@ import type { TextureSize } from "../../Materials/Textures/textureCreationOption
 
 export {};
 
-
 let _registered = false;
 export function registerEnginesExtensionsEngineMultiRender(): void {
     if (_registered) {
@@ -168,7 +167,14 @@ export function registerEnginesExtensionsEngineMultiRender(): void {
         rtWrapper._framebuffer = framebuffer;
         rtWrapper._generateDepthBuffer = generateDepthTexture || generateDepthBuffer;
         rtWrapper._generateStencilBuffer = generateDepthTexture ? useStencilTexture : generateStencilBuffer;
-        rtWrapper._depthStencilBuffer = this._setupFramebufferDepthAttachments(rtWrapper._generateStencilBuffer, rtWrapper._generateDepthBuffer, width, height, 1, depthTextureFormat);
+        rtWrapper._depthStencilBuffer = this._setupFramebufferDepthAttachments(
+            rtWrapper._generateStencilBuffer,
+            rtWrapper._generateDepthBuffer,
+            width,
+            height,
+            1,
+            depthTextureFormat
+        );
         rtWrapper._attachments = attachments;
 
         for (let i = 0; i < textureCount; i++) {

@@ -346,7 +346,6 @@ export class DefaultLoadingScreen implements ILoadingScreen {
     };
 }
 
-
 let _registered = false;
 export function registerLoadingScreen(): void {
     if (_registered) {

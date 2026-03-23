@@ -62,7 +62,6 @@ export class NormalizeVectorBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerNormalizeVectorBlock(): void {
     if (_registered) {

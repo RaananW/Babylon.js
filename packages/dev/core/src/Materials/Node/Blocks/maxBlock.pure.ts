@@ -66,7 +66,6 @@ export class MaxBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerMaxBlock(): void {
     if (_registered) {

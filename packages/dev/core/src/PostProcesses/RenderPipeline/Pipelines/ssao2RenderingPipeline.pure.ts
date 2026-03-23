@@ -620,7 +620,6 @@ export class SSAO2RenderingPipeline extends PostProcessRenderPipeline {
     }
 }
 
-
 let _registered = false;
 export function registerSsao2RenderingPipeline(): void {
     if (_registered) {

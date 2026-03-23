@@ -171,7 +171,6 @@ export class BlurPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerBlurPostProcess(): void {
     if (_registered) {

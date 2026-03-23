@@ -658,7 +658,6 @@ export class GreasedLinePluginMaterial extends MaterialPluginBase implements IGr
     }
 }
 
-
 let _registered = false;
 export function registerGreasedLinePluginMaterial(): void {
     if (_registered) {

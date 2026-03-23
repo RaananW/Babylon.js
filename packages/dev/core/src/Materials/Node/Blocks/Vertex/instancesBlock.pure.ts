@@ -218,7 +218,6 @@ export class InstancesBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerInstancesBlock(): void {
     if (_registered) {

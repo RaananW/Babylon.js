@@ -207,7 +207,6 @@ export class GradientBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerGradientBlock(): void {
     if (_registered) {

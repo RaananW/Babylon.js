@@ -120,7 +120,6 @@ export class CustomShapeBlock extends NodeParticleBlock implements IShapeBlock {
     }
 }
 
-
 let _registered = false;
 export function registerCustomShapeBlock(): void {
     if (_registered) {

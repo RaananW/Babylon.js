@@ -647,7 +647,6 @@ export class VolumetricLightScatteringPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerVolumetricLightScatteringPostProcess(): void {
     if (_registered) {

@@ -308,7 +308,6 @@ export class TrailMesh extends Mesh {
     }
 }
 
-
 let _registered = false;
 export function registerTrailMesh(): void {
     if (_registered) {

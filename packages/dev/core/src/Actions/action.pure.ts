@@ -329,7 +329,6 @@ export class Action implements IAction {
     };
 }
 
-
 let _registered = false;
 export function registerAction(): void {
     if (_registered) {

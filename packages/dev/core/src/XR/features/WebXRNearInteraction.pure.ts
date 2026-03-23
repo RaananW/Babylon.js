@@ -1073,7 +1073,6 @@ export class WebXRNearInteraction extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRNearInteraction(): void {
     if (_registered) {

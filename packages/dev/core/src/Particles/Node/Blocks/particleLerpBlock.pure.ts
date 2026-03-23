@@ -107,7 +107,6 @@ export class ParticleLerpBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerParticleLerpBlock(): void {
     if (_registered) {

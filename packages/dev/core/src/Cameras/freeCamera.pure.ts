@@ -458,7 +458,6 @@ export class FreeCamera extends TargetCamera {
 
 // Register Class Name
 
-
 let _registered = false;
 export function registerFreeCamera(): void {
     if (_registered) {

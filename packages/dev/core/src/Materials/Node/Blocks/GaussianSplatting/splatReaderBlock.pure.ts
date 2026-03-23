@@ -135,7 +135,6 @@ export class SplatReaderBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerSplatReaderBlock(): void {
     if (_registered) {

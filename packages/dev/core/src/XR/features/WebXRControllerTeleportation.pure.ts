@@ -1118,7 +1118,6 @@ export class WebXRMotionControllerTeleportation extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRControllerTeleportation(): void {
     if (_registered) {

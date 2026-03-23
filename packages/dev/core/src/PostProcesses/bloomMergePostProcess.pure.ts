@@ -94,7 +94,6 @@ export class BloomMergePostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerBloomMergePostProcess(): void {
     if (_registered) {

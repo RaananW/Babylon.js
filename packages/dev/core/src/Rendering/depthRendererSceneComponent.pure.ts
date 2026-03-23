@@ -124,7 +124,16 @@ export function registerDepthRendererSceneComponent(): void {
             } else {
                 textureType = Constants.TEXTURETYPE_UNSIGNED_BYTE;
             }
-            this._depthRenderer[camera.id] = new DepthRenderer(this, textureType, camera, storeNonLinearDepth, samplingMode, storeCameraSpaceZ, undefined, existingRenderTargetTexture);
+            this._depthRenderer[camera.id] = new DepthRenderer(
+                this,
+                textureType,
+                camera,
+                storeNonLinearDepth,
+                samplingMode,
+                storeCameraSpaceZ,
+                undefined,
+                existingRenderTargetTexture
+            );
         }
 
         return this._depthRenderer[camera.id];

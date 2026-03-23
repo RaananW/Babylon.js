@@ -180,7 +180,6 @@ export class FlowGraphDataConnection<T> extends FlowGraphConnection<FlowGraphBlo
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphDataConnection(): void {
     if (_registered) {

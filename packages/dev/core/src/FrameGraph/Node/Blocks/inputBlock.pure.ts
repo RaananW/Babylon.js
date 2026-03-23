@@ -317,7 +317,6 @@ export class NodeRenderGraphInputBlock extends NodeRenderGraphBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFrameGraphNodeBlocksInputBlock(): void {
     if (_registered) {

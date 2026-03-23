@@ -95,7 +95,6 @@ export class ColorCorrectionPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerColorCorrectionPostProcess(): void {
     if (_registered) {

@@ -135,7 +135,6 @@ export class WebXREyeTracking extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXREyeTracking(): void {
     if (_registered) {

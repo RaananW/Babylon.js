@@ -41,7 +41,6 @@ export class StereoscopicFreeCamera extends FreeCamera {
     protected override _setRigMode = () => _SetStereoscopicRigMode(this);
 }
 
-
 let _registered = false;
 export function registerStereoscopicFreeCamera(): void {
     if (_registered) {

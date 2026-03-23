@@ -227,7 +227,6 @@ export class EffectLayerSceneComponent implements ISceneSerializableComponent {
     }
 }
 
-
 let _registered = false;
 export function registerEffectLayerSceneComponent(): void {
     if (_registered) {

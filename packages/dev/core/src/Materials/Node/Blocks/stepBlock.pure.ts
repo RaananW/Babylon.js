@@ -63,7 +63,6 @@ export class StepBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerStepBlock(): void {
     if (_registered) {

@@ -105,7 +105,6 @@ export class GeometrySmoothStepBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerGeometrySmoothStepBlock(): void {
     if (_registered) {

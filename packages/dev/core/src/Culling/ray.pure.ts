@@ -6,7 +6,24 @@ import type { Matrix } from "../Maths/math.vector";
 import type { PickingInfo } from "../Collisions/pickingInfo";
 import { Scene } from "../scene";
 import { Camera } from "../Cameras/camera";
-import { Ray, AddRayExtensions, CreatePickingRayInCameraSpace, CreatePickingRayInCameraSpaceToRef, CreatePickingRayToRef, MultiPick, MultiPickWithRay, Pick, PickWithBoundingInfo, PickWithRay, RayZero, RayCreateNew, RayCreateNewFromTo, RayCreateFromToToRef, RayTransform, RayTransformToRef } from "./ray.core";
+import {
+    Ray,
+    AddRayExtensions,
+    CreatePickingRayInCameraSpace,
+    CreatePickingRayInCameraSpaceToRef,
+    CreatePickingRayToRef,
+    MultiPick,
+    MultiPickWithRay,
+    Pick,
+    PickWithBoundingInfo,
+    PickWithRay,
+    RayZero,
+    RayCreateNew,
+    RayCreateNewFromTo,
+    RayCreateFromToToRef,
+    RayTransform,
+    RayTransformToRef,
+} from "./ray.core";
 import type { MeshPredicate, TrianglePickingPredicate } from "./ray.core";
 
 export * from "./ray.core";

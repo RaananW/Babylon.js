@@ -617,7 +617,6 @@ export class TriPlanarBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerTriPlanarBlock(): void {
     if (_registered) {

@@ -142,7 +142,6 @@ export class CircleOfConfusionPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerCircleOfConfusionPostProcess(): void {
     if (_registered) {

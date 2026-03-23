@@ -455,7 +455,6 @@ export class FlyCamera extends TargetCamera {
 
 // Register Class Name
 
-
 let _registered = false;
 export function registerFlyCamera(): void {
     if (_registered) {

@@ -65,7 +65,6 @@ export class ComputeNormalsBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerComputeNormalsBlock(): void {
     if (_registered) {

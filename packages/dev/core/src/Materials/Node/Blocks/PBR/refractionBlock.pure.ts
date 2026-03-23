@@ -438,7 +438,6 @@ export class RefractionBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerRefractionBlock(): void {
     if (_registered) {

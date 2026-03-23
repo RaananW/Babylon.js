@@ -749,7 +749,6 @@ export class PBRMaterial extends PBRBaseMaterial {
     }
 }
 
-
 let _registered = false;
 export function registerPbrMaterial(): void {
     if (_registered) {

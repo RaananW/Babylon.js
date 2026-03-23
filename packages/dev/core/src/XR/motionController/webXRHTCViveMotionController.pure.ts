@@ -234,7 +234,6 @@ const HTCViveLayout: IMotionControllerLayoutMap = {
     },
 };
 
-
 let _registered = false;
 export function registerWebXRHTCViveMotionController(): void {
     if (_registered) {

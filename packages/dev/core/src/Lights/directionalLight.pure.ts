@@ -349,7 +349,6 @@ export class DirectionalLight extends ShadowLight {
     }
 }
 
-
 let _registered = false;
 export function registerDirectionalLight(): void {
     if (_registered) {

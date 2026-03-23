@@ -67,7 +67,6 @@ export class DisplayPassPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerDisplayPassPostProcess(): void {
     if (_registered) {

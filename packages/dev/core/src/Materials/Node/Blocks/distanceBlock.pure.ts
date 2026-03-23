@@ -70,7 +70,6 @@ export class DistanceBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerDistanceBlock(): void {
     if (_registered) {

@@ -5,7 +5,6 @@ import type { Scene } from "../scene";
 import { Node } from "../node";
 import { Vector3 } from "../Maths/math.vector.pure";
 
-
 /**
  * This represents a FPS type of camera. This is only here for back compat purpose.
  * Please use the UniversalCamera instead as both are identical.
@@ -33,7 +32,6 @@ export class GamepadCamera extends UniversalCamera {
         return "GamepadCamera";
     }
 }
-
 
 let _registered = false;
 export function registerGamepadCamera(): void {

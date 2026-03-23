@@ -184,7 +184,6 @@ export class FresnelParameters {
     }
 }
 
-
 let _registered = false;
 export function registerFresnelParameters(): void {
     if (_registered) {

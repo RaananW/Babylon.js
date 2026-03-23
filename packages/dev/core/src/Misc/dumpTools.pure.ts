@@ -321,7 +321,6 @@ export const DumpTools = {
  * @internal
  */
 
-
 let _registered = false;
 export function registerDumpTools(): void {
     if (_registered) {

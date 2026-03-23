@@ -89,7 +89,6 @@ export class ExtractHighlightsPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerExtractHighlightsPostProcess(): void {
     if (_registered) {

@@ -59,7 +59,6 @@ export class DiscardBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerDiscardBlock(): void {
     if (_registered) {

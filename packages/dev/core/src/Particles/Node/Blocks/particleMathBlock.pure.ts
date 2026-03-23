@@ -355,7 +355,6 @@ export class ParticleMathBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerParticleMathBlock(): void {
     if (_registered) {

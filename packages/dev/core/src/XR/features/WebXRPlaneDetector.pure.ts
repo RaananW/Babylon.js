@@ -267,7 +267,6 @@ export class WebXRPlaneDetector extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRPlaneDetector(): void {
     if (_registered) {

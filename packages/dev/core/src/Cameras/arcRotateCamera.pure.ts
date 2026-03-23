@@ -1591,7 +1591,6 @@ export class ArcRotateCamera extends TargetCamera {
     }
 }
 
-
 let _registered = false;
 export function registerArcRotateCamera(): void {
     if (_registered) {

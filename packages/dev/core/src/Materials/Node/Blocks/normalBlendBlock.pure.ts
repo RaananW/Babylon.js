@@ -86,7 +86,6 @@ export class NormalBlendBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerNormalBlendBlock(): void {
     if (_registered) {

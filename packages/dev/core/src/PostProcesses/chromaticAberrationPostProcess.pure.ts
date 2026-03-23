@@ -167,7 +167,6 @@ export class ChromaticAberrationPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerChromaticAberrationPostProcess(): void {
     if (_registered) {

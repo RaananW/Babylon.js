@@ -427,7 +427,6 @@ export class WebXRAnchorSystem extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRAnchorSystem(): void {
     if (_registered) {

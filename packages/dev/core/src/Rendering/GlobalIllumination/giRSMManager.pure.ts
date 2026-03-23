@@ -1050,7 +1050,6 @@ export class GIRSMRenderPluginMaterial extends MaterialPluginBase {
     }
 }
 
-
 let _registered = false;
 export function registerGiRSMManager(): void {
     if (_registered) {

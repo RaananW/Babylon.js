@@ -138,7 +138,6 @@ export class WebXRBackgroundRemover extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRBackgroundRemover(): void {
     if (_registered) {

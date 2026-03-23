@@ -532,7 +532,6 @@ export class MorphTargetsBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerMorphTargetsBlock(): void {
     if (_registered) {

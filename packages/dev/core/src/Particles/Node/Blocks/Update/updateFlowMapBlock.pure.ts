@@ -110,7 +110,6 @@ export class UpdateFlowMapBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerUpdateFlowMapBlock(): void {
     if (_registered) {

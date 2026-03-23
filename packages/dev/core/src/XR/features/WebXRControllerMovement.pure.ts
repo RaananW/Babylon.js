@@ -595,7 +595,6 @@ export class WebXRControllerMovement extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRControllerMovement(): void {
     if (_registered) {

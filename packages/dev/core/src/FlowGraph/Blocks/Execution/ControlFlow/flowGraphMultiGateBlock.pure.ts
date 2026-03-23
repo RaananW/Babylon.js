@@ -138,7 +138,6 @@ export class FlowGraphMultiGateBlock extends FlowGraphExecutionBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphMultiGateBlock(): void {
     if (_registered) {

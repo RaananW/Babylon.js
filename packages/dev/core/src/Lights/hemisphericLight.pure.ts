@@ -130,7 +130,6 @@ export class HemisphericLight extends Light {
     }
 }
 
-
 let _registered = false;
 export function registerHemisphericLight(): void {
     if (_registered) {

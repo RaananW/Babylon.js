@@ -94,7 +94,6 @@ export class ReplaceColorBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerReplaceColorBlock(): void {
     if (_registered) {

@@ -348,7 +348,6 @@ export class WebXRSpaceWarp extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRSpaceWarp(): void {
     if (_registered) {

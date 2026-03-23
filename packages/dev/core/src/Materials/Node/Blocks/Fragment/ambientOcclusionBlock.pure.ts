@@ -308,7 +308,6 @@ export class AmbientOcclusionBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerAmbientOcclusionBlock(): void {
     if (_registered) {

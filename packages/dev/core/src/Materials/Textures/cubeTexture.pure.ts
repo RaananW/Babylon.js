@@ -586,7 +586,6 @@ export class CubeTexture extends BaseTexture {
     }
 }
 
-
 let _registered = false;
 export function registerCubeTexture(): void {
     if (_registered) {

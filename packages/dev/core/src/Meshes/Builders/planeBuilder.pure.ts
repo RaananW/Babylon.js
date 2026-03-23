@@ -117,7 +117,6 @@ export const PlaneBuilder = {
     CreatePlane,
 };
 
-
 let _registered = false;
 export function registerPlaneBuilder(): void {
     if (_registered) {

@@ -124,7 +124,6 @@ export class ShadowGeneratorSceneComponent implements ISceneSerializableComponen
     }
 }
 
-
 let _registered = false;
 export function registerShadowGeneratorSceneComponent(): void {
     if (_registered) {

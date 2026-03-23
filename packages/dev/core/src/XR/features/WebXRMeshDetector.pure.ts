@@ -308,7 +308,6 @@ export class WebXRMeshDetector extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRMeshDetector(): void {
     if (_registered) {

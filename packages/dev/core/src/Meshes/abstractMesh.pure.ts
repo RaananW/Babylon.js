@@ -2834,7 +2834,6 @@ export abstract class AbstractMesh extends TransformNode implements IDisposable,
     }
 }
 
-
 let _registered = false;
 export function registerAbstractMesh(): void {
     if (_registered) {

@@ -215,7 +215,6 @@ export class ComputeShaderParticleSystem implements IGPUParticleSystemPlatform {
     }
 }
 
-
 let _registered = false;
 export function registerComputeShaderParticleSystem(): void {
     if (_registered) {

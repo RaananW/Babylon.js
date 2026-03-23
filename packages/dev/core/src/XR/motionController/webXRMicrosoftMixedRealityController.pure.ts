@@ -513,7 +513,6 @@ const MixedRealityProfile: IMotionControllerLayoutMap = {
     },
 };
 
-
 let _registered = false;
 export function registerWebXRMicrosoftMixedRealityController(): void {
     if (_registered) {

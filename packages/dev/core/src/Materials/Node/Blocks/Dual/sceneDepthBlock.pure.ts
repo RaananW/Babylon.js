@@ -307,7 +307,6 @@ export class SceneDepthBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerSceneDepthBlock(): void {
     if (_registered) {

@@ -305,7 +305,6 @@ export const LinesBuilder = {
     CreateLines,
 };
 
-
 let _registered = false;
 export function registerLinesBuilder(): void {
     if (_registered) {

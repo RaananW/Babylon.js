@@ -281,7 +281,6 @@ const OculusTouchLayouts: IMotionControllerLayoutMap = {
     },
 };
 
-
 let _registered = false;
 export function registerWebXROculusTouchMotionController(): void {
     if (_registered) {

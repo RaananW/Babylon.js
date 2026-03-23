@@ -521,7 +521,6 @@ export class SpotLight extends ShadowLight {
     }
 }
 
-
 let _registered = false;
 export function registerSpotLight(): void {
     if (_registered) {

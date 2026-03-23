@@ -804,7 +804,6 @@ export class MeshDebugPluginMaterial extends MaterialPluginBase {
     }
 }
 
-
 let _registered = false;
 export function registerMeshDebugPluginMaterial(): void {
     if (_registered) {

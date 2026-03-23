@@ -43,7 +43,6 @@ export class FlowGraphContextBlock extends FlowGraphBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphContextBlock(): void {
     if (_registered) {

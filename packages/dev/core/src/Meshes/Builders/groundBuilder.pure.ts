@@ -502,7 +502,6 @@ export const GroundBuilder = {
     CreateTiledGround,
 };
 
-
 let _registered = false;
 export function registerGroundBuilder(): void {
     if (_registered) {

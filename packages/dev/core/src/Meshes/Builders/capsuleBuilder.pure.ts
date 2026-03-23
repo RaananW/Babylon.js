@@ -290,7 +290,6 @@ export const CapsuleBuilder = {
     CreateCapsule,
 };
 
-
 let _registered = false;
 export function registerCapsuleBuilder(): void {
     if (_registered) {

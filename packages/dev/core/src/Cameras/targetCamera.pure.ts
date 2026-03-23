@@ -596,7 +596,6 @@ export class TargetCamera extends Camera {
     }
 }
 
-
 let _registered = false;
 export function registerTargetCamera(): void {
     if (_registered) {

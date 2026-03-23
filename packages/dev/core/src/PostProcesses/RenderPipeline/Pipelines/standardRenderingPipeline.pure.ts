@@ -1685,7 +1685,6 @@ export class StandardRenderingPipeline extends PostProcessRenderPipeline impleme
     public static LuminanceSteps: number = 6;
 }
 
-
 let _registered = false;
 export function registerStandardRenderingPipeline(): void {
     if (_registered) {

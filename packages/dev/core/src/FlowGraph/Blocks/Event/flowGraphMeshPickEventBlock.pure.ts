@@ -135,7 +135,6 @@ export class FlowGraphMeshPickEventBlock extends FlowGraphEventBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphMeshPickEventBlock(): void {
     if (_registered) {

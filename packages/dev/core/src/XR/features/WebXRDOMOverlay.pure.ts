@@ -167,7 +167,6 @@ export class WebXRDomOverlay extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRDOMOverlay(): void {
     if (_registered) {

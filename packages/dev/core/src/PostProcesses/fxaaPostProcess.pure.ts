@@ -80,7 +80,6 @@ export class FxaaPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerFxaaPostProcess(): void {
     if (_registered) {

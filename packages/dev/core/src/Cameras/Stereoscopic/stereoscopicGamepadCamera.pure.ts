@@ -41,7 +41,6 @@ export class StereoscopicGamepadCamera extends GamepadCamera {
     protected override _setRigMode = () => _SetStereoscopicRigMode(this);
 }
 
-
 let _registered = false;
 export function registerStereoscopicGamepadCamera(): void {
     if (_registered) {

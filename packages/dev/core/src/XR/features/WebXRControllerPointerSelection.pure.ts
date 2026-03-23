@@ -933,7 +933,6 @@ export class WebXRControllerPointerSelection extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRControllerPointerSelection(): void {
     if (_registered) {

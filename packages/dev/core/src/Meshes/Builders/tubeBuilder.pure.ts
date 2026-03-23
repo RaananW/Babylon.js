@@ -192,7 +192,6 @@ export const TubeBuilder = {
     CreateTube,
 };
 
-
 let _registered = false;
 export function registerTubeBuilder(): void {
     if (_registered) {

@@ -315,7 +315,6 @@ export class FragmentOutputBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFragmentOutputBlock(): void {
     if (_registered) {

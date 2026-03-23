@@ -131,7 +131,6 @@ const GenericHandSelectGraspProfile: IMotionControllerLayoutMap = {
     },
 };
 
-
 let _registered = false;
 export function registerWebXRGenericHandController(): void {
     if (_registered) {

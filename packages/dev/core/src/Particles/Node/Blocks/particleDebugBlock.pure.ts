@@ -140,7 +140,6 @@ export class ParticleDebugBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerParticleDebugBlock(): void {
     if (_registered) {

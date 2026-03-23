@@ -216,7 +216,6 @@ export class WebXRRawCameraAccess extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRRawCameraAccess(): void {
     if (_registered) {

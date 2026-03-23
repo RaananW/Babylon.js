@@ -177,7 +177,6 @@ export const TorusKnotBuilder = {
     CreateTorusKnot,
 };
 
-
 let _registered = false;
 export function registerTorusKnotBuilder(): void {
     if (_registered) {

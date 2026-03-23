@@ -111,7 +111,6 @@ export class HDRCubeTexture extends EnvCubeTexture {
     }
 }
 
-
 let _registered = false;
 export function registerHdrCubeTexture(): void {
     if (_registered) {

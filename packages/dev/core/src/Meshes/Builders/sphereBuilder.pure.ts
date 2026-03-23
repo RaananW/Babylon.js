@@ -172,7 +172,6 @@ export const SphereBuilder = {
     CreateSphere,
 };
 
-
 let _registered = false;
 export function registerSphereBuilder(): void {
     if (_registered) {

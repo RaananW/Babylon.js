@@ -115,7 +115,6 @@ export class EXRCubeTexture extends EnvCubeTexture {
     }
 }
 
-
 let _registered = false;
 export function registerExrCubeTexture(): void {
     if (_registered) {

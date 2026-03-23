@@ -544,7 +544,6 @@ export class ReflectionBlock extends ReflectionTextureBaseBlock {
     }
 }
 
-
 let _registered = false;
 export function registerReflectionBlock(): void {
     if (_registered) {

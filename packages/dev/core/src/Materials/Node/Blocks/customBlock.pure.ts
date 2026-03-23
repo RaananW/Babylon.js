@@ -213,7 +213,6 @@ export class CustomBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerCustomBlock(): void {
     if (_registered) {

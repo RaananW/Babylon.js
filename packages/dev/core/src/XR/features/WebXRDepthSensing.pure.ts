@@ -708,7 +708,6 @@ export class WebXRDepthSensing extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRDepthSensing(): void {
     if (_registered) {

@@ -1283,7 +1283,6 @@ export class ParticleSystem extends ThinParticleSystem {
     }
 }
 
-
 let _registered = false;
 export function registerParticleSystem(): void {
     if (_registered) {

@@ -5,7 +5,6 @@ import type { Scene } from "../scene";
 import { Node } from "../node";
 import { Vector3 } from "../Maths/math.vector.pure";
 
-
 /**
  * This represents a free type of camera. It can be useful in First Person Shooter game for instance.
  * It is identical to the Free Camera and simply adds by default a virtual joystick.
@@ -35,7 +34,6 @@ export class VirtualJoysticksCamera extends FreeCamera {
         return "VirtualJoysticksCamera";
     }
 }
-
 
 let _registered = false;
 export function registerVirtualJoysticksCamera(): void {

@@ -121,7 +121,6 @@ export class DefaultCollisionCoordinator implements ICollisionCoordinator {
     }
 }
 
-
 let _registered = false;
 export function registerCollisionCoordinator(): void {
     if (_registered) {

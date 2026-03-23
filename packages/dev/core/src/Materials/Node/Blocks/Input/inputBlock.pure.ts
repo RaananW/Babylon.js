@@ -962,7 +962,6 @@ export class InputBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerMaterialsNodeBlocksInputInputBlock(): void {
     if (_registered) {

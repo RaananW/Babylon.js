@@ -7,7 +7,6 @@ import type { Scene } from "../scene";
 import { Node } from "../node";
 import { Vector3 } from "../Maths/math.vector.pure";
 
-
 /**
  * This represents a FPS type of camera controlled by touch.
  * This is like a universal camera minus the Gamepad controls.
@@ -91,7 +90,6 @@ export class TouchCamera extends FreeCamera {
         }
     }
 }
-
 
 let _registered = false;
 export function registerTouchCamera(): void {

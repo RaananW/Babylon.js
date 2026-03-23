@@ -2406,7 +2406,6 @@ export class StandardMaterial extends StandardMaterialBase {
     }
 }
 
-
 let _registered = false;
 export function registerStandardMaterial(): void {
     if (_registered) {

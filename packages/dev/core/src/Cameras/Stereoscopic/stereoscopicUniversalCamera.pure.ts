@@ -41,7 +41,6 @@ export class StereoscopicUniversalCamera extends UniversalCamera {
     protected override _setRigMode = () => _SetStereoscopicRigMode(this);
 }
 
-
 let _registered = false;
 export function registerStereoscopicUniversalCamera(): void {
     if (_registered) {

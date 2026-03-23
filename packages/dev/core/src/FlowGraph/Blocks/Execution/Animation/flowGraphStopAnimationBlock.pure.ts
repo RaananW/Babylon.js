@@ -132,7 +132,6 @@ export class FlowGraphStopAnimationBlock extends FlowGraphAsyncExecutionBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphStopAnimationBlock(): void {
     if (_registered) {

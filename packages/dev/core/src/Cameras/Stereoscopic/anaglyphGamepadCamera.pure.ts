@@ -37,7 +37,6 @@ export class AnaglyphGamepadCamera extends GamepadCamera {
     protected override _setRigMode = () => _SetStereoscopicAnaglyphRigMode(this);
 }
 
-
 let _registered = false;
 export function registerAnaglyphGamepadCamera(): void {
     if (_registered) {

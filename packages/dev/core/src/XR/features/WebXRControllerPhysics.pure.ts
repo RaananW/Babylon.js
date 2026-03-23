@@ -685,7 +685,6 @@ export class WebXRControllerPhysics extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRControllerPhysics(): void {
     if (_registered) {

@@ -458,7 +458,6 @@ export class ClearCoatBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerClearCoatBlock(): void {
     if (_registered) {

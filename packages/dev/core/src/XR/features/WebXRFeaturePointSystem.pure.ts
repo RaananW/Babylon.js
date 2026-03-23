@@ -164,7 +164,6 @@ export class WebXRFeaturePointSystem extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRFeaturePointSystem(): void {
     if (_registered) {

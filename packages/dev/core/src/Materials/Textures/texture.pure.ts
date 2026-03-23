@@ -1248,7 +1248,6 @@ export class Texture extends BaseTexture {
     }
 }
 
-
 let _registered = false;
 export function registerTexture(): void {
     if (_registered) {

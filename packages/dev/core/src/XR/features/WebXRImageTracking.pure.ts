@@ -293,7 +293,6 @@ export class WebXRImageTracking extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRImageTracking(): void {
     if (_registered) {

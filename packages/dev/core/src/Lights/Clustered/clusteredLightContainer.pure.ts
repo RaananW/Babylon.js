@@ -594,7 +594,6 @@ export class ClusteredLightContainer extends Light {
     }
 }
 
-
 let _registered = false;
 export function registerClusteredLightContainer(): void {
     if (_registered) {

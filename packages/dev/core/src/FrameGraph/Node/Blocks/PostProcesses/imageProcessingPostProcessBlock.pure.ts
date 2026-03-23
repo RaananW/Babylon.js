@@ -260,7 +260,6 @@ export class NodeRenderGraphImageProcessingPostProcessBlock extends NodeRenderGr
     }
 }
 
-
 let _registered = false;
 export function registerImageProcessingPostProcessBlock(): void {
     if (_registered) {

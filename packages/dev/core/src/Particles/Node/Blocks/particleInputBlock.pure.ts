@@ -340,7 +340,6 @@ export class ParticleInputBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerParticleInputBlock(): void {
     if (_registered) {

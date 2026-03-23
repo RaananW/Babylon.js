@@ -715,7 +715,6 @@ export function ComputeYawPitchFromLookAtToRef(
     return result;
 }
 
-
 let _registered = false;
 export function registerGeospatialCamera(): void {
     if (_registered) {

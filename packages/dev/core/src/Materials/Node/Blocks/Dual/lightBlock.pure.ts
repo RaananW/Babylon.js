@@ -542,7 +542,6 @@ export class LightBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerLightBlock(): void {
     if (_registered) {

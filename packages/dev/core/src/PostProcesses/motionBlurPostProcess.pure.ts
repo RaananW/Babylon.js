@@ -322,7 +322,6 @@ export class MotionBlurPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerMotionBlurPostProcess(): void {
     if (_registered) {

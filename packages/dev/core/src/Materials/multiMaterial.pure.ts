@@ -273,7 +273,6 @@ export class MultiMaterial extends Material {
     }
 }
 
-
 let _registered = false;
 export function registerMultiMaterial(): void {
     if (_registered) {

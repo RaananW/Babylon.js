@@ -856,7 +856,6 @@ export class ProceduralTexture extends Texture {
     }
 }
 
-
 let _registered = false;
 export function registerProceduralTexture(): void {
     if (_registered) {

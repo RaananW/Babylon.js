@@ -657,7 +657,6 @@ export function VideoTextureCreateFromWebCam(
         });
 }
 
-
 let _registered = false;
 export function registerVideoTexture(): void {
     if (_registered) {

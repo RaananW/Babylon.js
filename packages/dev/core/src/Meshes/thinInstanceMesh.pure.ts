@@ -57,7 +57,15 @@ export function registerThinInstanceMesh(): void {
         this._userThinInstanceBuffersStorage.strides[kind] = stride;
         this._userThinInstanceBuffersStorage.sizes[kind] = stride * Math.max(32, this._thinInstanceDataStorage.instancesCount); // Initial size
         this._userThinInstanceBuffersStorage.data[kind] = new Float32Array(this._userThinInstanceBuffersStorage.sizes[kind]);
-        this._userThinInstanceBuffersStorage.vertexBuffers[kind] = new VertexBuffer(this.getEngine(), this._userThinInstanceBuffersStorage.data[kind], kind, true, false, stride, true);
+        this._userThinInstanceBuffersStorage.vertexBuffers[kind] = new VertexBuffer(
+            this.getEngine(),
+            this._userThinInstanceBuffersStorage.data[kind],
+            kind,
+            true,
+            false,
+            stride,
+            true
+        );
 
         this.setVerticesBuffer(this._userThinInstanceBuffersStorage.vertexBuffers[kind]!);
     };

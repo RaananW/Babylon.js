@@ -181,7 +181,6 @@ export class IridescenceBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerIridescenceBlock(): void {
     if (_registered) {

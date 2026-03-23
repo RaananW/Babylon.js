@@ -810,7 +810,6 @@ export const LoadAssetContainer = (
     return container;
 };
 
-
 let _registered = false;
 export function registerBabylonFileLoader(): void {
     if (_registered) {
@@ -1213,7 +1212,8 @@ export function registerBabylonFileLoader(): void {
             } finally {
                 if (log !== null && SceneLoaderFlags.loggingLevel !== Constants.SCENELOADER_NO_LOGGING) {
                     Logger.Log(
-                        logOperation("importMesh", parsedData ? parsedData.producer : "Unknown") + (SceneLoaderFlags.loggingLevel !== Constants.SCENELOADER_MINIMAL_LOGGING ? log : "")
+                        logOperation("importMesh", parsedData ? parsedData.producer : "Unknown") +
+                            (SceneLoaderFlags.loggingLevel !== Constants.SCENELOADER_MINIMAL_LOGGING ? log : "")
                     );
                 }
                 _ResetTempContainers();
@@ -1298,7 +1298,11 @@ export function registerBabylonFileLoader(): void {
                     }
                     log = "\tPhysics engine " + (parsedData.physicsEngine ? parsedData.physicsEngine : "oimo") + " enabled\n";
                     //else - default engine, which is currently oimo
-                    const physicsGravity = parsedData.gravity ? Vector3.FromArray(parsedData.gravity) : parsedData.physicsGravity ? Vector3.FromArray(parsedData.physicsGravity) : null;
+                    const physicsGravity = parsedData.gravity
+                        ? Vector3.FromArray(parsedData.gravity)
+                        : parsedData.physicsGravity
+                          ? Vector3.FromArray(parsedData.physicsGravity)
+                          : null;
                     scene.enablePhysics(physicsGravity, physicsPlugin);
                 }
 
@@ -1338,7 +1342,8 @@ export function registerBabylonFileLoader(): void {
             } finally {
                 if (log !== null && SceneLoaderFlags.loggingLevel !== Constants.SCENELOADER_NO_LOGGING) {
                     Logger.Log(
-                        logOperation("importScene", parsedData ? parsedData.producer : "Unknown") + (SceneLoaderFlags.loggingLevel !== Constants.SCENELOADER_MINIMAL_LOGGING ? log : "")
+                        logOperation("importScene", parsedData ? parsedData.producer : "Unknown") +
+                            (SceneLoaderFlags.loggingLevel !== Constants.SCENELOADER_MINIMAL_LOGGING ? log : "")
                     );
                 }
             }

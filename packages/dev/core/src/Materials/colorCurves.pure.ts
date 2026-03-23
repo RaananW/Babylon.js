@@ -562,7 +562,6 @@ export class ColorCurves {
     }
 }
 
-
 let _registered = false;
 export function registerColorCurves(): void {
     if (_registered) {

@@ -130,7 +130,6 @@ export class ParticleVectorMathBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerParticleVectorMathBlock(): void {
     if (_registered) {

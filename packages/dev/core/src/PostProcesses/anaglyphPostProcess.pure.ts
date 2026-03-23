@@ -56,7 +56,6 @@ export class AnaglyphPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerAnaglyphPostProcess(): void {
     if (_registered) {

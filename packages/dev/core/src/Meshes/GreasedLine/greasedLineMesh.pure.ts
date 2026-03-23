@@ -397,7 +397,6 @@ export class GreasedLineMesh extends GreasedLineBaseMesh {
     }
 }
 
-
 let _registered = false;
 export function registerGreasedLineMesh(): void {
     if (_registered) {

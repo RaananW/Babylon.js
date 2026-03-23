@@ -323,7 +323,6 @@ export class GeometryInputBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerGeometryInputBlock(): void {
     if (_registered) {

@@ -91,7 +91,6 @@ export class DepthOfFieldBlurPostProcess extends BlurPostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerDepthOfFieldBlurPostProcess(): void {
     if (_registered) {

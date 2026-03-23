@@ -639,7 +639,6 @@ export abstract class ReflectionTextureBaseBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerReflectionTextureBaseBlock(): void {
     if (_registered) {

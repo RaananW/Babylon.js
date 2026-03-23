@@ -125,7 +125,6 @@ export const TorusBuilder = {
     CreateTorus,
 };
 
-
 let _registered = false;
 export function registerTorusBuilder(): void {
     if (_registered) {

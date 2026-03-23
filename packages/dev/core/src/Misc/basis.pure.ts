@@ -366,7 +366,6 @@ export const BasisTools = {
     LoadTextureFromTranscodeResult,
 };
 
-
 let _registered = false;
 export function registerBasis(): void {
     if (_registered) {

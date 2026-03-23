@@ -115,7 +115,6 @@ export class NativeXRFrame implements XRFrame {
     }
 }
 
-
 let _registered = false;
 export function registerNativeXRFrame(): void {
     if (_registered) {

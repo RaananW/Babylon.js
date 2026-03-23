@@ -501,7 +501,6 @@ export class PerturbNormalBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerPerturbNormalBlock(): void {
     if (_registered) {

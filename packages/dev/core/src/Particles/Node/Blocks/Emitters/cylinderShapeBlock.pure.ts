@@ -183,7 +183,6 @@ export class CylinderShapeBlock extends NodeParticleBlock implements IShapeBlock
     }
 }
 
-
 let _registered = false;
 export function registerCylinderShapeBlock(): void {
     if (_registered) {

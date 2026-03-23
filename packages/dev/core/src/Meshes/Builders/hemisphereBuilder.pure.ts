@@ -39,7 +39,6 @@ export const HemisphereBuilder = {
     CreateHemisphere,
 };
 
-
 let _registered = false;
 export function registerHemisphereBuilder(): void {
     if (_registered) {

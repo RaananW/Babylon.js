@@ -236,7 +236,6 @@ export class BonesBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerBonesBlock(): void {
     if (_registered) {

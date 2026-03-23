@@ -159,7 +159,6 @@ export class InterpolateValueAction extends Action {
     }
 }
 
-
 let _registered = false;
 export function registerInterpolateValueAction(): void {
     if (_registered) {

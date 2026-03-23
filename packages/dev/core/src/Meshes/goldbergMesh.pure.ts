@@ -299,7 +299,6 @@ export class GoldbergMesh extends Mesh {
     }
 }
 
-
 let _registered = false;
 export function registerGoldbergMesh(): void {
     if (_registered) {

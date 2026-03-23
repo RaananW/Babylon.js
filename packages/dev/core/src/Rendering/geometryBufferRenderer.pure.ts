@@ -1395,7 +1395,6 @@ export class GeometryBufferRenderer {
     }
 }
 
-
 let _registered = false;
 export function registerGeometryBufferRenderer(): void {
     if (_registered) {

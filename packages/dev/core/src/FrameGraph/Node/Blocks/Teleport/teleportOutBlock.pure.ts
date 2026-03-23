@@ -131,7 +131,6 @@ export class NodeRenderGraphTeleportOutBlock extends NodeRenderGraphBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFrameGraphNodeBlocksTeleportTeleportOutBlock(): void {
     if (_registered) {

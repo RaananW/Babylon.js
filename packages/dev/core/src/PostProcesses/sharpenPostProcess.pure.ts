@@ -119,7 +119,6 @@ export class SharpenPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerSharpenPostProcess(): void {
     if (_registered) {

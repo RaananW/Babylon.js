@@ -258,7 +258,6 @@ const OculusHandProfile: IMotionControllerLayoutMap = {
     },
 };
 
-
 let _registered = false;
 export function registerWebXROculusHandController(): void {
     if (_registered) {

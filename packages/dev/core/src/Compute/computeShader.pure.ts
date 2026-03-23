@@ -545,7 +545,6 @@ export class ComputeShader {
     }
 }
 
-
 let _registered = false;
 export function registerComputeShader(): void {
     if (_registered) {

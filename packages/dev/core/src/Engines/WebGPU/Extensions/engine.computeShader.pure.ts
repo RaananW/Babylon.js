@@ -32,7 +32,10 @@ export function registerWebGPUEngineComputeShader(): void {
         return new WebGPUComputeContext(this._device, this._cacheSampler);
     };
 
-    WebGPUEngine.prototype.createComputeEffect = function (baseName: string | (IComputeShaderPath & { computeToken?: string }), options: IComputeEffectCreationOptions): ComputeEffect {
+    WebGPUEngine.prototype.createComputeEffect = function (
+        baseName: string | (IComputeShaderPath & { computeToken?: string }),
+        options: IComputeEffectCreationOptions
+    ): ComputeEffect {
         const compute = typeof baseName === "string" ? baseName : baseName.computeToken || baseName.computeSource || baseName.computeElement || baseName.compute;
 
         const name = compute + "@" + options.defines;

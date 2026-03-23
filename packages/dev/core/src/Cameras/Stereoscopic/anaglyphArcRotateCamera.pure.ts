@@ -40,7 +40,6 @@ export class AnaglyphArcRotateCamera extends ArcRotateCamera {
     protected override _setRigMode = () => _SetStereoscopicAnaglyphRigMode(this);
 }
 
-
 let _registered = false;
 export function registerAnaglyphArcRotateCamera(): void {
     if (_registered) {

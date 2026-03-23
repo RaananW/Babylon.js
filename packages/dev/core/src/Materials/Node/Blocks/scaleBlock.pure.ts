@@ -65,7 +65,6 @@ export class ScaleBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerScaleBlock(): void {
     if (_registered) {

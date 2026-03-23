@@ -60,7 +60,6 @@ export class ClusteredLightingSceneComponent implements ISceneComponent {
     };
 }
 
-
 let _registered = false;
 export function registerClusteredLightingSceneComponent(): void {
     if (_registered) {

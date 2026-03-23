@@ -236,7 +236,6 @@ export class NodeRenderGraphGlowLayerBlock extends NodeRenderGraphBlock {
     }
 }
 
-
 let _registered = false;
 export function registerGlowLayerBlock(): void {
     if (_registered) {

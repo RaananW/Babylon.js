@@ -442,7 +442,6 @@ export const RibbonBuilder = {
     CreateRibbon,
 };
 
-
 let _registered = false;
 export function registerRibbonBuilder(): void {
     if (_registered) {

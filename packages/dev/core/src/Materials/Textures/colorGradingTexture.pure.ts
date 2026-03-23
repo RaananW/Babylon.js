@@ -313,7 +313,6 @@ export class ColorGradingTexture extends BaseTexture {
     }
 }
 
-
 let _registered = false;
 export function registerColorGradingTexture(): void {
     if (_registered) {

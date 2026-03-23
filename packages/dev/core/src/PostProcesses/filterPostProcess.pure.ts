@@ -96,7 +96,6 @@ export class FilterPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerFilterPostProcess(): void {
     if (_registered) {

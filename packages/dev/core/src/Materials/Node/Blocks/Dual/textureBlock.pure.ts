@@ -771,7 +771,6 @@ export class TextureBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerTextureBlock(): void {
     if (_registered) {

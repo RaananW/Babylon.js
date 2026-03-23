@@ -37,7 +37,6 @@ export class AnaglyphUniversalCamera extends UniversalCamera {
     protected override _setRigMode = () => _SetStereoscopicAnaglyphRigMode(this);
 }
 
-
 let _registered = false;
 export function registerAnaglyphUniversalCamera(): void {
     if (_registered) {

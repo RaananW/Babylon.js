@@ -1152,7 +1152,6 @@ export class BackgroundMaterial extends BackgroundMaterialBase {
     }
 }
 
-
 let _registered = false;
 export function registerBackgroundMaterial(): void {
     if (_registered) {

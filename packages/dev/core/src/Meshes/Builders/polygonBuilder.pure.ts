@@ -237,7 +237,6 @@ export const PolygonBuilder = {
     CreatePolygon,
 };
 
-
 let _registered = false;
 export function registerPolygonBuilder(): void {
     if (_registered) {

@@ -351,7 +351,6 @@ export class InstancedLinesMesh extends InstancedMesh {
     }
 }
 
-
 let _registered = false;
 export function registerLinesMesh(): void {
     if (_registered) {

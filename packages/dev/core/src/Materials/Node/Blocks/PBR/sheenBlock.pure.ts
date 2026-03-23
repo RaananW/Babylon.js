@@ -240,7 +240,6 @@ export class SheenBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerSheenBlock(): void {
     if (_registered) {

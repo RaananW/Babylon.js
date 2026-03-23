@@ -1296,7 +1296,6 @@ export class PhysicsImpostor {
     public static SoftbodyImpostor = 103;
 }
 
-
 let _registered = false;
 export function registerPhysicsImpostor(): void {
     if (_registered) {

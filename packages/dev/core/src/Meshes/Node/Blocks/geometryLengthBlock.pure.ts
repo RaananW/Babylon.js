@@ -62,7 +62,6 @@ export class GeometryLengthBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerGeometryLengthBlock(): void {
     if (_registered) {

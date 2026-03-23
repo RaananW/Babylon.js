@@ -131,7 +131,6 @@ export class SetupSpriteSheetBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerSetupSpriteSheetBlock(): void {
     if (_registered) {

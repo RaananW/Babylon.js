@@ -61,7 +61,6 @@ export class FlowGraphSendCustomEventBlock extends FlowGraphExecutionBlockWithOu
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphSendCustomEventBlock(): void {
     if (_registered) {

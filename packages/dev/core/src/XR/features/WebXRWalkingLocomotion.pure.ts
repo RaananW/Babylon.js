@@ -477,7 +477,6 @@ export class WebXRWalkingLocomotion extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRWalkingLocomotion(): void {
     if (_registered) {

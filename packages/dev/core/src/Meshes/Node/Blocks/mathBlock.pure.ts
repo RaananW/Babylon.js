@@ -345,7 +345,6 @@ export class MathBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerMathBlock(): void {
     if (_registered) {

@@ -73,7 +73,6 @@ export class GeometryDesaturateBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerGeometryDesaturateBlock(): void {
     if (_registered) {

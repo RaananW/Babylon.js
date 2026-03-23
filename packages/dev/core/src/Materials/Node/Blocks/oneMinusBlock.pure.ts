@@ -58,7 +58,6 @@ export class OneMinusBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerOneMinusBlock(): void {
     if (_registered) {

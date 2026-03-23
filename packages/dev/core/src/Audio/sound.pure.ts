@@ -1072,7 +1072,6 @@ export class Sound {
 
 // Register Class Name
 
-
 let _registered = false;
 export function registerSound(): void {
     if (_registered) {

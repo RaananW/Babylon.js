@@ -305,7 +305,6 @@ export class ScreenSpaceReflectionPostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerScreenSpaceReflectionPostProcess(): void {
     if (_registered) {

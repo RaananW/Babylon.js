@@ -914,7 +914,6 @@ export class BaseParticleSystem implements IClipPlanesHolder {
 
 // Register Class Name
 
-
 let _registered = false;
 export function registerBaseParticleSystem(): void {
     if (_registered) {

@@ -65,7 +65,6 @@ export class ArcTan2Block extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerArcTan2Block(): void {
     if (_registered) {

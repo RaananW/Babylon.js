@@ -98,7 +98,6 @@ export const LatheBuilder = {
     CreateLathe,
 };
 
-
 let _registered = false;
 export function registerLatheBuilder(): void {
     if (_registered) {

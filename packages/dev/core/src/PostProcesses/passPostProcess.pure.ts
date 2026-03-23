@@ -177,7 +177,6 @@ export class PassCubePostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerPassPostProcess(): void {
     if (_registered) {

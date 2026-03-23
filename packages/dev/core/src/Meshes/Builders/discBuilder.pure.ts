@@ -116,7 +116,6 @@ export const DiscBuilder = {
     CreateDisc,
 };
 
-
 let _registered = false;
 export function registerDiscBuilder(): void {
     if (_registered) {

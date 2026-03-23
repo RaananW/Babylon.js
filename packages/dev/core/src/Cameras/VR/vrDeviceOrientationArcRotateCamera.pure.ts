@@ -54,7 +54,6 @@ export class VRDeviceOrientationArcRotateCamera extends ArcRotateCamera {
     protected override _setRigMode = (rigParams: any) => _SetVrRigMode(this, rigParams);
 }
 
-
 let _registered = false;
 export function registerVrDeviceOrientationArcRotateCamera(): void {
     if (_registered) {

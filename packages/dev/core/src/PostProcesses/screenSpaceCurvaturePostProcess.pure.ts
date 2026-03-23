@@ -151,7 +151,6 @@ export class ScreenSpaceCurvaturePostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerScreenSpaceCurvaturePostProcess(): void {
     if (_registered) {

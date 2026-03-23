@@ -37,7 +37,6 @@ export class AnaglyphFreeCamera extends FreeCamera {
     protected override _setRigMode = () => _SetStereoscopicAnaglyphRigMode(this);
 }
 
-
 let _registered = false;
 export function registerAnaglyphFreeCamera(): void {
     if (_registered) {

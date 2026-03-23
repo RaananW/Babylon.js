@@ -248,7 +248,6 @@ export class AnisotropyBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerAnisotropyBlock(): void {
     if (_registered) {

@@ -416,7 +416,6 @@ export class FlowGraphExtractMatrix3DBlock extends FlowGraphMathExtractBlock<Flo
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphMathCombineExtractBlocks(): void {
     if (_registered) {

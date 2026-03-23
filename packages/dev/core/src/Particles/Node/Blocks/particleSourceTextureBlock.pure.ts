@@ -346,7 +346,6 @@ export class ParticleTextureSourceBlock extends NodeParticleBlock {
     }
 }
 
-
 let _registered = false;
 export function registerParticleSourceTextureBlock(): void {
     if (_registered) {

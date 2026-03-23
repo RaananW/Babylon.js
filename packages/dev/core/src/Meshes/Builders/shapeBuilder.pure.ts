@@ -377,7 +377,6 @@ export const ShapeBuilder = {
     ExtrudeShapeCustom,
 };
 
-
 let _registered = false;
 export function registerShapeBuilder(): void {
     if (_registered) {

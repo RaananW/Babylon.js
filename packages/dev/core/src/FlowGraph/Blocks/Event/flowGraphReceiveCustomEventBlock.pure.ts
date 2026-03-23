@@ -90,7 +90,6 @@ export class FlowGraphReceiveCustomEventBlock extends FlowGraphEventBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphReceiveCustomEventBlock(): void {
     if (_registered) {

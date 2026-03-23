@@ -188,7 +188,6 @@ export class TAAMaterialManager {
     }
 }
 
-
 let _registered = false;
 export function registerTaaMaterialManager(): void {
     if (_registered) {

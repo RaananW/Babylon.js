@@ -98,7 +98,6 @@ export class FlowGraphInteger {
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphInteger(): void {
     if (_registered) {

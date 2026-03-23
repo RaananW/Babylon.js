@@ -621,7 +621,6 @@ export const PolyhedronBuilder = {
     CreatePolyhedron,
 };
 
-
 let _registered = false;
 export function registerPolyhedronBuilder(): void {
     if (_registered) {

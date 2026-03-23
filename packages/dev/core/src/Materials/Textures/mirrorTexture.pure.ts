@@ -353,7 +353,6 @@ export class MirrorTexture extends RenderTargetTexture {
     }
 }
 
-
 let _registered = false;
 export function registerMirrorTexture(): void {
     if (_registered) {

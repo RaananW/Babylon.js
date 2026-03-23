@@ -258,7 +258,6 @@ export class ImageProcessingBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerImageProcessingBlock(): void {
     if (_registered) {

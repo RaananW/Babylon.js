@@ -292,7 +292,6 @@ export class PrePassTextureBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerPrePassTextureBlock(): void {
     if (_registered) {

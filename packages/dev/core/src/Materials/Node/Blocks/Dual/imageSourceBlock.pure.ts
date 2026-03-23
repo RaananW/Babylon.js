@@ -223,7 +223,6 @@ export class ImageSourceBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerImageSourceBlock(): void {
     if (_registered) {

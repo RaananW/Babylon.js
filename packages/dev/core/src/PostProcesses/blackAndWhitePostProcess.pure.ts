@@ -86,7 +86,6 @@ export class BlackAndWhitePostProcess extends PostProcess {
     }
 }
 
-
 let _registered = false;
 export function registerBlackAndWhitePostProcess(): void {
     if (_registered) {

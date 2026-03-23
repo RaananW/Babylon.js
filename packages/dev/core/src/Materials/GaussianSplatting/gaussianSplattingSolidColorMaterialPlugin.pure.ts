@@ -213,7 +213,6 @@ if (uniforms.solidColorEnabled > 0.5) {
     }
 }
 
-
 let _registered = false;
 export function registerGaussianSplattingSolidColorMaterialPlugin(): void {
     if (_registered) {

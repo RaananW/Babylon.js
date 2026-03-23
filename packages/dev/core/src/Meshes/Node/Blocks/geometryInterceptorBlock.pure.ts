@@ -84,7 +84,6 @@ export class GeometryInterceptorBlock extends NodeGeometryBlock {
     }
 }
 
-
 let _registered = false;
 export function registerGeometryInterceptorBlock(): void {
     if (_registered) {

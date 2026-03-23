@@ -73,7 +73,6 @@ export class DepthSourceBlock extends ImageSourceBlock {
     }
 }
 
-
 let _registered = false;
 export function registerDepthSourceBlock(): void {
     if (_registered) {

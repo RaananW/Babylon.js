@@ -3434,7 +3434,6 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
     }
 }
 
-
 let _registered = false;
 export function registerOpenpbrMaterial(): void {
     if (_registered) {

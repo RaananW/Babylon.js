@@ -273,7 +273,6 @@ export class WebXRMotionControllerManager {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRMotionControllerManager(): void {
     if (_registered) {

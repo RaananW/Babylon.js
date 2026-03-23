@@ -429,7 +429,6 @@ export const IcoSphereBuilder = {
     CreateIcoSphere,
 };
 
-
 let _registered = false;
 export function registerIcoSphereBuilder(): void {
     if (_registered) {
@@ -439,7 +438,11 @@ export function registerIcoSphereBuilder(): void {
 
     VertexData.CreateIcoSphere = CreateIcoSphereVertexData;
 
-    Mesh.CreateIcoSphere = (name: string, options: { radius?: number; flat?: boolean; subdivisions?: number; sideOrientation?: number; updatable?: boolean }, scene: Scene): Mesh => {
+    Mesh.CreateIcoSphere = (
+        name: string,
+        options: { radius?: number; flat?: boolean; subdivisions?: number; sideOrientation?: number; updatable?: boolean },
+        scene: Scene
+    ): Mesh => {
         return CreateIcoSphere(name, options, scene);
     };
 }

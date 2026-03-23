@@ -6730,7 +6730,6 @@ export class Scene implements IAnimatable, IClipPlanesHolder, IAssetContainer {
 
 // Register Class Name
 
-
 let _registered = false;
 export function registerScene(): void {
     if (_registered) {

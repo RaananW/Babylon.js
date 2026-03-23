@@ -156,7 +156,6 @@ export class LoopBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerLoopBlock(): void {
     if (_registered) {

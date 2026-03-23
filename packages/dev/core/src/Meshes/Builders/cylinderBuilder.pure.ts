@@ -372,7 +372,6 @@ export const CylinderBuilder = {
     CreateCylinder,
 };
 
-
 let _registered = false;
 export function registerCylinderBuilder(): void {
     if (_registered) {

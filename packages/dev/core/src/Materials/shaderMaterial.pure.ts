@@ -1941,7 +1941,6 @@ export class ShaderMaterial extends PushMaterial {
     public static CreateFromSnippetAsync = ShaderMaterial.ParseFromSnippetAsync;
 }
 
-
 let _registered = false;
 export function registerShaderMaterial(): void {
     if (_registered) {

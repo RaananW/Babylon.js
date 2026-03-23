@@ -376,7 +376,6 @@ export class WebXRLayers extends WebXRAbstractFeature {
     }
 }
 
-
 let _registered = false;
 export function registerWebXRLayers(): void {
     if (_registered) {

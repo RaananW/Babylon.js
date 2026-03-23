@@ -74,7 +74,6 @@ export class FlowGraphTransformCoordinatesSystemBlock extends FlowGraphBlock {
     }
 }
 
-
 let _registered = false;
 export function registerFlowGraphTransformCoordinatesSystemBlock(): void {
     if (_registered) {

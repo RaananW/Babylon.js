@@ -270,7 +270,6 @@ export class LightInformationBlock extends NodeMaterialBlock {
     }
 }
 
-
 let _registered = false;
 export function registerLightInformationBlock(): void {
     if (_registered) {

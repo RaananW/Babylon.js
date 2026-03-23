@@ -131,7 +131,6 @@ export class BoxShapeBlock extends NodeParticleBlock implements IShapeBlock {
     }
 }
 
-
 let _registered = false;
 export function registerBoxShapeBlock(): void {
     if (_registered) {

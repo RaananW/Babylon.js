@@ -806,7 +806,6 @@ export class CannonJSPlugin implements IPhysicsEnginePlugin {
     }
 }
 
-
 let _registered = false;
 export function registerCannonJSPlugin(): void {
     if (_registered) {

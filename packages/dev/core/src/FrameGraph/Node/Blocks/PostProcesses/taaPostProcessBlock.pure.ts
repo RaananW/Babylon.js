@@ -172,7 +172,6 @@ export class NodeRenderGraphTAAPostProcessBlock extends NodeRenderGraphBaseWithP
     }
 }
 
-
 let _registered = false;
 export function registerTaaPostProcessBlock(): void {
     if (_registered) {
