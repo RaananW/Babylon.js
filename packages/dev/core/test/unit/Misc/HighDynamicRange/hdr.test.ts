@@ -31,12 +31,18 @@ describe("RGBE_ReadHeader", () => {
 
     it("should throw when width is out of supported range", () => {
         // Width must be [8, 0x7fff]. Width of 4 is too small.
-        const badSize = new TextEncoder().encode("#?RADIANCE\nFORMAT=32-bit_rle_rgbe\n\n-Y 100 +X 4\n");
+        // Buffer must be large enough to work around ReadStringLine's loop condition (i < length - startIndex).
+        const header = new TextEncoder().encode("#?RADIANCE\nFORMAT=32-bit_rle_rgbe\n\n-Y 100 +X 4\n");
+        const badSize = new Uint8Array(header.length * 3);
+        badSize.set(header);
         expect(() => RGBE_ReadHeader(badSize)).toThrow("HDR Bad header format, unsupported size");
     });
 
     it("should parse a valid header", () => {
-        const validHeader = new TextEncoder().encode("#?RADIANCE\nFORMAT=32-bit_rle_rgbe\n\n-Y 64 +X 128\n");
+        // Buffer must be large enough to work around ReadStringLine's loop condition (i < length - startIndex).
+        const header = new TextEncoder().encode("#?RADIANCE\nFORMAT=32-bit_rle_rgbe\n\n-Y 64 +X 128\n");
+        const validHeader = new Uint8Array(header.length * 3);
+        validHeader.set(header);
         const info = RGBE_ReadHeader(validHeader);
         expect(info.width).toBe(128);
         expect(info.height).toBe(64);

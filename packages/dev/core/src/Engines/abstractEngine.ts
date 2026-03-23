@@ -1703,10 +1703,12 @@ export abstract class AbstractEngine {
             if (!buffer) {
                 this._loadFile(
                     url,
-                    (data) => {
-                        callbackAsync(new Uint8Array(data as ArrayBuffer)).catch((reason) => {
+                    async (data) => {
+                        try {
+                            await callbackAsync(new Uint8Array(data as ArrayBuffer));
+                        } catch (reason) {
                             onInternalError("Failed to parse texture data", reason);
-                        });
+                        }
                     },
                     undefined,
                     scene ? scene.offlineProvider : undefined,
@@ -1716,14 +1718,17 @@ export abstract class AbstractEngine {
                     }
                 );
             } else {
+                const processBufferAsync = async (data: ArrayBufferView) => {
+                    try {
+                        await callbackAsync(data);
+                    } catch (reason) {
+                        onInternalError("Failed to parse texture data", reason);
+                    }
+                };
                 if (buffer instanceof ArrayBuffer) {
-                    callbackAsync(new Uint8Array(buffer)).catch((reason) => {
-                        onInternalError("Failed to parse texture data", reason);
-                    });
+                    void processBufferAsync(new Uint8Array(buffer));
                 } else if (ArrayBuffer.isView(buffer)) {
-                    callbackAsync(buffer).catch((reason) => {
-                        onInternalError("Failed to parse texture data", reason);
-                    });
+                    void processBufferAsync(buffer);
                 } else {
                     if (onError) {
                         onError("Unable to load: only ArrayBuffer or ArrayBufferView is supported", null);
