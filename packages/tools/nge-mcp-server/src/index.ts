@@ -22,7 +22,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import { CreateErrorResponse, CreateTextResponse, ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { GeometryGraphManager } from "./geometryGraph.js";
@@ -750,17 +750,17 @@ server.registerTool(
     async ({ geometryName, outputFile }) => {
         const json = manager.exportJSON(geometryName);
         if (!json) {
-            return { content: [{ type: "text", text: `Geometry "${geometryName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Geometry "${geometryName}" not found.`);
         }
         if (outputFile) {
             try {
                 WriteTextFileEnsuringDirectory(outputFile, json);
-                return { content: [{ type: "text", text: `NGE JSON written to: ${outputFile}` }] };
+                return CreateTextResponse(`NGE JSON written to: ${outputFile}`);
             } catch (e) {
-                return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+                return CreateErrorResponse(`Error writing file: ${(e as Error).message}`);
             }
         }
-        return { content: [{ type: "text", text: json }] };
+        return CreateTextResponse(json);
     }
 );
 
@@ -787,14 +787,14 @@ server.registerTool(
                 fileDescription: "NGE JSON file",
             }).text;
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         const result = manager.importJSON(geometryName, jsonStr);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
         const desc = manager.describeGeometry(geometryName);
-        return { content: [{ type: "text", text: `Imported successfully.\n\n${desc}` }] };
+        return CreateTextResponse(`Imported successfully.\n\n${desc}`);
     }
 );
 
@@ -814,31 +814,21 @@ server.registerTool(
         try {
             const snippetResult = await LoadSnippet(snippetId);
             if (snippetResult.type === "unknown") {
-                return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
+                return CreateErrorResponse(`Error: Snippet "${snippetId}" has an unrecognized format.`);
             }
             if (snippetResult.type !== "nodeGeometry") {
-                return {
-                    content: [{ type: "text", text: `Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "nodeGeometry".` }],
-                    isError: true,
-                };
+                return CreateErrorResponse(`Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "nodeGeometry".`);
             }
             const dataResult = snippetResult as IDataSnippetResult;
             const jsonStr = JSON.stringify(dataResult.data);
             const result = manager.importJSON(geometryName, jsonStr);
             if (result !== "OK") {
-                return { content: [{ type: "text", text: `Error importing snippet data: ${result}` }], isError: true };
+                return CreateErrorResponse(`Error importing snippet data: ${result}`);
             }
             const desc = manager.describeGeometry(geometryName);
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: `Imported snippet "${snippetId}" as "${geometryName}" successfully.\n\n${desc}`,
-                    },
-                ],
-            };
+            return CreateTextResponse(`Imported snippet "${snippetId}" as "${geometryName}" successfully.\n\n${desc}`);
         } catch (e) {
-            return { content: [{ type: "text", text: `Error fetching snippet "${snippetId}": ${(e as Error).message}` }], isError: true };
+            return CreateErrorResponse(`Error fetching snippet "${snippetId}": ${(e as Error).message}`);
         }
     }
 );

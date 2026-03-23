@@ -24,7 +24,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { ParseJsonText, ResolveDefinedInput, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import { CreateErrorResponse, CreateTextResponse, ParseJsonText, ResolveDefinedInput, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 
 import { ControlRegistry, BaseControlProperties, GetControlCatalogSummary, GetControlTypeDetails } from "./catalog.js";
 import { GuiManager } from "./guiManager.js";
@@ -815,17 +815,17 @@ server.registerTool(
     async ({ guiName, outputFile }) => {
         const json = manager.exportJSON(guiName);
         if (!json) {
-            return { content: [{ type: "text", text: `GUI "${guiName}" not found.` }], isError: true };
+            return CreateErrorResponse(`GUI "${guiName}" not found.`);
         }
         if (outputFile) {
             try {
                 WriteTextFileEnsuringDirectory(outputFile, json);
-                return { content: [{ type: "text", text: `GUI JSON written to: ${outputFile}` }] };
+                return CreateTextResponse(`GUI JSON written to: ${outputFile}`);
             } catch (e) {
-                return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+                return CreateErrorResponse(`Error writing file: ${(e as Error).message}`);
             }
         }
-        return { content: [{ type: "text", text: json }] };
+        return CreateTextResponse(json);
     }
 );
 
@@ -852,14 +852,14 @@ server.registerTool(
                 fileDescription: "GUI JSON file",
             }).text;
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         const result = manager.importJSON(guiName, jsonStr);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
         const desc = manager.describeTexture(guiName);
-        return { content: [{ type: "text", text: `Imported successfully.\n\n${desc}` }] };
+        return CreateTextResponse(`Imported successfully.\n\n${desc}`);
     }
 );
 
@@ -879,31 +879,21 @@ server.registerTool(
         try {
             const snippetResult = await LoadSnippet(snippetId);
             if (snippetResult.type === "unknown") {
-                return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
+                return CreateErrorResponse(`Error: Snippet "${snippetId}" has an unrecognized format.`);
             }
             if (snippetResult.type !== "gui") {
-                return {
-                    content: [{ type: "text", text: `Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "gui".` }],
-                    isError: true,
-                };
+                return CreateErrorResponse(`Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "gui".`);
             }
             const dataResult = snippetResult as IDataSnippetResult;
             const jsonStr = JSON.stringify(dataResult.data);
             const result = manager.importJSON(guiName, jsonStr);
             if (result !== "OK") {
-                return { content: [{ type: "text", text: `Error importing snippet data: ${result}` }], isError: true };
+                return CreateErrorResponse(`Error importing snippet data: ${result}`);
             }
             const desc = manager.describeTexture(guiName);
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: `Imported snippet "${snippetId}" as "${guiName}" successfully.\n\n${desc}`,
-                    },
-                ],
-            };
+            return CreateTextResponse(`Imported snippet "${snippetId}" as "${guiName}" successfully.\n\n${desc}`);
         } catch (e) {
-            return { content: [{ type: "text", text: `Error fetching snippet "${snippetId}": ${(e as Error).message}` }], isError: true };
+            return CreateErrorResponse(`Error fetching snippet "${snippetId}": ${(e as Error).message}`);
         }
     }
 );

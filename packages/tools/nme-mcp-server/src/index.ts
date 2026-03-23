@@ -27,7 +27,7 @@ import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { MaterialGraphManager } from "./materialGraph.js";
-import { ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import { CreateErrorResponse, CreateTextResponse, ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
 import type { IDataSnippetResult } from "@tools/snippet-loader";
 import { startSessionServer, createSession, notifyMaterialUpdate, getSessionUrl, getSessionForMaterial, closeSessionForMaterial, stopSessionServer } from "./sessionServer.js";
@@ -741,17 +741,17 @@ server.registerTool(
     async ({ materialName, outputFile }) => {
         const json = manager.exportJSON(materialName);
         if (!json) {
-            return { content: [{ type: "text", text: `Material "${materialName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Material "${materialName}" not found.`);
         }
         if (outputFile) {
             try {
                 WriteTextFileEnsuringDirectory(outputFile, json);
-                return { content: [{ type: "text", text: `NME JSON written to: ${outputFile}` }] };
+                return CreateTextResponse(`NME JSON written to: ${outputFile}`);
             } catch (e) {
-                return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+                return CreateErrorResponse(`Error writing file: ${(e as Error).message}`);
             }
         }
-        return { content: [{ type: "text", text: json }] };
+        return CreateTextResponse(json);
     }
 );
 
@@ -778,14 +778,14 @@ server.registerTool(
                 fileDescription: "NME JSON file",
             }).text;
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         const result = manager.importJSON(materialName, jsonStr);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
         const desc = manager.describeMaterial(materialName);
-        return { content: [{ type: "text", text: `Imported successfully.\n\n${desc}` }] };
+        return CreateTextResponse(`Imported successfully.\n\n${desc}`);
     }
 );
 
@@ -805,31 +805,21 @@ server.registerTool(
         try {
             const snippetResult = await LoadSnippet(snippetId);
             if (snippetResult.type === "unknown") {
-                return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
+                return CreateErrorResponse(`Error: Snippet "${snippetId}" has an unrecognized format.`);
             }
             if (snippetResult.type !== "nodeMaterial") {
-                return {
-                    content: [{ type: "text", text: `Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "nodeMaterial".` }],
-                    isError: true,
-                };
+                return CreateErrorResponse(`Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "nodeMaterial".`);
             }
             const dataResult = snippetResult as IDataSnippetResult;
             const jsonStr = JSON.stringify(dataResult.data);
             const result = manager.importJSON(materialName, jsonStr);
             if (result !== "OK") {
-                return { content: [{ type: "text", text: `Error importing snippet data: ${result}` }], isError: true };
+                return CreateErrorResponse(`Error importing snippet data: ${result}`);
             }
             const desc = manager.describeMaterial(materialName);
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: `Imported snippet "${snippetId}" as "${materialName}" successfully.\n\n${desc}`,
-                    },
-                ],
-            };
+            return CreateTextResponse(`Imported snippet "${snippetId}" as "${materialName}" successfully.\n\n${desc}`);
         } catch (e) {
-            return { content: [{ type: "text", text: `Error fetching snippet "${snippetId}": ${(e as Error).message}` }], isError: true };
+            return CreateErrorResponse(`Error fetching snippet "${snippetId}": ${(e as Error).message}`);
         }
     }
 );
@@ -984,16 +974,9 @@ server.registerTool(
                 { type: "nodeMaterial", data: ParseJsonText({ jsonText: json, jsonLabel: "NME JSON" }) },
                 { snippetId, metadata: { name, description, tags } }
             );
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: `Saved material "${materialName}" to snippet server.\n\nSnippet ID: ${result.id}\nVersion: ${result.version}\nFull ID: ${result.snippetId}\n\nLoad in NME editor: https://nme.babylonjs.com/#${result.snippetId}`,
-                    },
-                ],
-            };
+            return CreateTextResponse(`Saved material "${materialName}" to snippet server.\n\nSnippet ID: ${result.id}\nVersion: ${result.version}\nFull ID: ${result.snippetId}\n\nLoad in NME editor: https://nme.babylonjs.com/#${result.snippetId}`);
         } catch (e) {
-            return { content: [{ type: "text", text: `Error saving snippet: ${(e as Error).message}` }], isError: true };
+            return CreateErrorResponse(`Error saving snippet: ${(e as Error).message}`);
         }
     }
 );
