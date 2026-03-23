@@ -123,3 +123,26 @@ export function ValidateNodeMaterialAttachmentPayload(value: unknown): IJsonObje
 
     return parsed;
 }
+
+/**
+ * Validate a Smart Filter payload before attaching it to a scene.
+ * Expected format: `{ format: "smartFilter", formatVersion: 1, blocks: [...], connections: [...] }`.
+ * @param value - Smart Filter JSON as text or parsed object.
+ * @returns The parsed smart filter object.
+ */
+export function ValidateSmartFilterAttachmentPayload(value: unknown): IJsonObject {
+    const parsed = _parseJsonObject(value, "Smart Filter JSON");
+    if (parsed.format !== "smartFilter") {
+        throw new Error(`Invalid Smart Filter JSON: format must be "smartFilter" but got "${String(parsed.format)}".`);
+    }
+    if (parsed.formatVersion !== 1) {
+        throw new Error(`Invalid Smart Filter JSON: formatVersion must be 1 but got ${String(parsed.formatVersion)}.`);
+    }
+    if (!Array.isArray(parsed.blocks)) {
+        throw new Error("Invalid Smart Filter JSON: must contain a 'blocks' array.");
+    }
+    if (!Array.isArray(parsed.connections)) {
+        throw new Error("Invalid Smart Filter JSON: must contain a 'connections' array.");
+    }
+    return parsed;
+}

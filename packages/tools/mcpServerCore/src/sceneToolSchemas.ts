@@ -67,6 +67,18 @@ export function CreateSceneNodeGeometryFields(zodFactory: any) {
 }
 
 /**
+ * Create the Smart Filter attachment input fields used by the Scene MCP server.
+ * @param zodFactory - The caller's local Zod factory.
+ * @returns Scene Smart Filter attachment field schemas.
+ */
+export function CreateSceneSmartFilterAttachmentFields(zodFactory: any) {
+    return {
+        smartFilterJson: CreateInlineJsonSchema(zodFactory, "The Smart Filter JSON string (from the Smart Filters MCP server's export_smart_filter_json)") as any,
+        smartFilterJsonFile: CreateJsonFileSchema(zodFactory, "Absolute path to a file containing the Smart Filter JSON (alternative to inline smartFilterJson)") as any,
+    };
+}
+
+/**
  * Create the raw scene import input fields used by the Scene MCP server.
  * @param zodFactory - The caller's local Zod factory.
  * @returns Scene raw import field schemas.

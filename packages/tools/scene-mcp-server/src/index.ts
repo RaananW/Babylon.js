@@ -41,6 +41,7 @@ import {
     CreateSceneNodeGeometryFields,
     CreateSceneNodeMaterialInputFields,
     CreateSceneRenderGraphAttachmentFields,
+    CreateSceneSmartFilterAttachmentFields,
     CreateTextResponse,
     CreateTextResponses,
     ParseJsonText,
@@ -174,11 +175,12 @@ server.registerResource("scene-overview", "scene://overview", {}, async (uri) =>
                 "- **GUI MCP server**: Export GUI JSON → attach here via `attach_gui` (auto-included in code exports)",
                 "- **Node Render Graph MCP server** (babylonjs-node-render-graph): Build a custom render pipeline → export JSON → attach here via `attach_node_render_graph`",
                 "- **Node Geometry MCP server** (babylonjs-node-geometry): Design procedural geometry → export JSON → add as a mesh via `add_node_geometry_mesh`",
+                "- **Smart Filters MCP server** (babylonjs-smart-filters): Build a Smart Filter post-processing pipeline → export JSON → attach here via `attach_smart_filter`",
                 "",
                 "### File-based handoff (recommended for large payloads)",
                 "To avoid passing large JSON through the conversation context, use file-based handoff:",
                 "1. On the producing server, call the export tool with `outputFile` to write JSON to disk",
-                "2. On this server, call the import/attach tool with the corresponding `*File` parameter (e.g. `nmeJsonFile`, `coordinatorJsonFile`, `guiJsonFile`, `nrgJsonFile`, `ngeJsonFile`)",
+                "2. On this server, call the import/attach tool with the corresponding `*File` parameter (e.g. `nmeJsonFile`, `coordinatorJsonFile`, `guiJsonFile`, `nrgJsonFile`, `ngeJsonFile`, `smartFilterJsonFile`)",
                 "Only the file path passes through the conversation — the JSON never enters the context window.",
                 "",
                 "## Shadows Best Practices",
@@ -2654,6 +2656,65 @@ server.registerTool(
     async ({ sceneName }) => {
         const result = manager.detachNodeRenderGraph(sceneName);
         return result === "OK" ? CreateTextResponse(`Node Render Graph detached from scene "${sceneName}".`) : CreateErrorResponse(`Error: ${result}`);
+    }
+);
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Tools — Smart Filter
+// ═══════════════════════════════════════════════════════════════════════════
+
+server.registerTool(
+    "attach_smart_filter",
+    {
+        description:
+            "Attach a Smart Filter JSON (from the Smart Filters MCP server's export_smart_filter_json) to the scene. " +
+            "Once attached, the exported code will use SmartFilterDeserializer to parse the filter and " +
+            "createRuntimeAsync() to apply it as a post-processing pipeline. Only one Smart Filter can be attached " +
+            "at a time; re-calling this tool replaces the previous one. " +
+            "Provide either the inline smartFilterJson string OR a smartFilterJsonFile path (not both).",
+        inputSchema: {
+            sceneName: z.string().describe("Name of the scene to attach the Smart Filter to"),
+            ...CreateSceneSmartFilterAttachmentFields(z),
+        },
+    },
+    async ({ sceneName, smartFilterJson, smartFilterJsonFile }) => {
+        let jsonStr: string;
+        try {
+            jsonStr = ResolveInlineOrFileText({
+                inlineText: smartFilterJson,
+                filePath: smartFilterJsonFile,
+                inlineLabel: "smartFilterJson",
+                fileLabel: "smartFilterJsonFile",
+                fileDescription: "Smart Filter JSON file",
+            }).text;
+        } catch (e) {
+            return CreateErrorResponse((e as Error).message);
+        }
+        let parsed: unknown;
+        try {
+            parsed = ParseJsonText({ jsonText: jsonStr, jsonLabel: "Smart Filter JSON" });
+        } catch (e) {
+            return CreateErrorResponse((e as Error).message);
+        }
+        const result = manager.attachSmartFilter(sceneName, parsed);
+        if (result !== "OK") {
+            return CreateErrorResponse(`Error: ${result}`);
+        }
+        return CreateTextResponse(`Smart Filter attached to scene "${sceneName}". It will be included in all code exports automatically.`);
+    }
+);
+
+server.registerTool(
+    "detach_smart_filter",
+    {
+        description: "Remove the attached Smart Filter from the scene.",
+        inputSchema: {
+            sceneName: z.string().describe("Name of the scene"),
+        },
+    },
+    async ({ sceneName }) => {
+        const result = manager.detachSmartFilter(sceneName);
+        return result === "OK" ? CreateTextResponse(`Smart Filter detached from scene "${sceneName}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 

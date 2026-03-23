@@ -36,6 +36,7 @@ import {
     ValidateNodeGeometryAttachmentPayload,
     ValidateNodeMaterialAttachmentPayload,
     ValidateNodeRenderGraphAttachmentPayload,
+    ValidateSmartFilterAttachmentPayload,
 } from "../../mcpServerCore/dist/index.js";
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -723,6 +724,11 @@ export interface ISerializedScene {
      * Each entry's ngeJson is used to emit NodeGeometry.Parse() + build() + createMesh() calls.
      */
     nodeGeometryMeshes?: Array<{ name: string; ngeJson: unknown }>;
+    /**
+     * Smart Filter JSON (from the Smart Filters MCP server).
+     * When present, the code generator emits SmartFilterDeserializer.deserialize() + createRuntimeAsync() calls.
+     */
+    smartFilterJson?: unknown;
 }
 
 /**
@@ -2376,6 +2382,12 @@ export class SceneManager {
             lines.push("");
         }
 
+        // Smart Filter
+        if (scene.smartFilterJson) {
+            lines.push(`## Smart Filter: attached`);
+            lines.push("");
+        }
+
         // Integrations
         if (scene.integrations && scene.integrations.length > 0) {
             lines.push(`## Integrations (${scene.integrations.length})`);
@@ -2816,6 +2828,41 @@ export class SceneManager {
     }
 
     /**
+     * Attach a Smart Filter JSON descriptor to a scene.
+     * The JSON must be Smart Filter V1-compatible (from the Smart Filters MCP server's export_smart_filter_json tool).
+     * @param sceneName The scene to attach the Smart Filter to
+     * @param smartFilterJson The Smart Filter descriptor JSON
+     * @returns "OK" or an error message
+     */
+    attachSmartFilter(sceneName: string, smartFilterJson: unknown): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        try {
+            smartFilterJson = ValidateSmartFilterAttachmentPayload(smartFilterJson);
+        } catch (e) {
+            return (e as Error).message;
+        }
+        scene.smartFilterJson = smartFilterJson;
+        return "OK";
+    }
+
+    /**
+     * Remove an attached Smart Filter from a scene.
+     * @param sceneName The scene to detach the Smart Filter from
+     * @returns "OK" or an error message
+     */
+    detachSmartFilter(sceneName: string): string {
+        const scene = this.getScene(sceneName);
+        if (!scene) {
+            return `Scene "${sceneName}" not found.`;
+        }
+        delete scene.smartFilterJson;
+        return "OK";
+    }
+
+    /**
      * Add (or replace) a Node Geometry mesh on a scene.
      * The ngeJson must have customType === "BABYLON.NodeGeometry".
      * @param sceneName The scene to add the mesh to
@@ -2884,6 +2931,9 @@ export class SceneManager {
         if (opts.nodeGeometryMeshes === undefined && scene.nodeGeometryMeshes) {
             opts.nodeGeometryMeshes = scene.nodeGeometryMeshes;
         }
+        if (opts.smartFilterJson === undefined && scene.smartFilterJson) {
+            opts.smartFilterJson = scene.smartFilterJson;
+        }
         return generateSceneCode(scene, opts);
     }
 
@@ -2910,6 +2960,9 @@ export class SceneManager {
         }
         if (opts.nodeGeometryMeshes === undefined && scene.nodeGeometryMeshes) {
             opts.nodeGeometryMeshes = scene.nodeGeometryMeshes;
+        }
+        if (opts.smartFilterJson === undefined && scene.smartFilterJson) {
+            opts.smartFilterJson = scene.smartFilterJson;
         }
         return generateProjectFiles(scene, opts);
     }

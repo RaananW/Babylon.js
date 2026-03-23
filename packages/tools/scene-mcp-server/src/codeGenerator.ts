@@ -1166,6 +1166,41 @@ function generateNodeGeometryMesh(meshName: string, ngeJson: unknown, sceneVar: 
     return lines.join("\n");
 }
 
+/**
+ * Generates code to deserialize and run a Smart Filter.
+ *
+ * The generated code:
+ * 1. Uses `SmartFilterDeserializer` from `@babylonjs/smart-filters` to parse the JSON.
+ * 2. Uses `BuiltInBlockRegistrations` from `@babylonjs/smart-filters-blocks` as the block factory.
+ * 3. Calls `createRuntimeAsync()` to produce a `SmartFilterRuntime`.
+ * 4. Hooks into `scene.onAfterRenderObservable` so the filter renders every frame.
+ *
+ * @param smartFilterJson  The parsed Smart Filter JSON object
+ * @param sceneVar         The scene variable name in the generated code
+ * @returns A string of code to deserialize and run the Smart Filter
+ */
+function generateSmartFilter(smartFilterJson: unknown, sceneVar: string): string {
+    const lines: string[] = [];
+    const jsonStr = JSON.stringify(smartFilterJson);
+    lines.push(`// ─── Smart Filter ─────────────────────────────────────────────────────────`);
+    lines.push(`// Requires @babylonjs/smart-filters and @babylonjs/smart-filters-blocks packages.`);
+    lines.push(`const _sfJson = JSON.parse(${JSON.stringify(jsonStr)});`);
+    lines.push(`const _sfBlockRegs = BABYLON.BuiltInBlockRegistrations;`);
+    lines.push(`const _sfDeserializer = new BABYLON.SmartFilterDeserializer(`);
+    lines.push(`    async (_sf, _eng, serializedBlock, _deser) => {`);
+    lines.push(
+        `        const reg = _sfBlockRegs.find(r => r.blockType === serializedBlock.blockType && (!serializedBlock.namespace || r.namespace === serializedBlock.namespace));`
+    );
+    lines.push(`        return reg && reg.factory ? await reg.factory(_sf, _eng, _deser, serializedBlock) : null;`);
+    lines.push(`    },`);
+    lines.push(`    BABYLON.InputBlockDeserializer`);
+    lines.push(`);`);
+    lines.push(`const _smartFilter = await _sfDeserializer.deserialize(engine, _sfJson);`);
+    lines.push(`const _smartFilterRuntime = await _smartFilter.createRuntimeAsync(engine);`);
+    lines.push(`${sceneVar}.onAfterRenderObservable.add(() => { _smartFilterRuntime.render(); });`);
+    return lines.join("\n");
+}
+
 function generateSound(snd: ISerializedSound, _sceneVar: string): string {
     const lines: string[] = [];
     const v = V(snd);
@@ -1712,9 +1747,19 @@ function generateGUI(guiJson: unknown, sceneVar: string): IGUIGenResult {
  * @param hasFlowGraph - Whether the scene uses Flow Graph (adds Flow Graph import)
  * @param hasNRG - Whether the scene uses Node Render Graph (adds NRG import)
  * @param hasNGE - Whether the scene uses Node Geometry (adds NodeGeometry import)
+ * @param hasSmartFilter - Whether the scene uses Smart Filters (adds Smart Filter imports)
  * @returns The converted ES6 module code string with import statements
  */
-function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAudio: boolean, hasFlowGraph: boolean, hasNRG?: boolean, hasNGE?: boolean): string {
+function convertToES6(
+    code: string,
+    hasPhysics: boolean,
+    hasGUI: boolean,
+    hasAudio: boolean,
+    hasFlowGraph: boolean,
+    hasNRG?: boolean,
+    hasNGE?: boolean,
+    hasSmartFilter?: boolean
+): string {
     // Helper: collect BABYLON.* references only OUTSIDE of quoted strings.
     // The regex alternates between matching a quoted string (skip) vs BABYLON.X (capture).
     // This prevents collecting/replacing BABYLON references inside JSON string values
@@ -1741,6 +1786,18 @@ function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAud
 
     // ── 3. Build imports ─────────────────────────────────────────────────
     const importLines: string[] = [];
+
+    // Smart Filter types come from dedicated packages, not @babylonjs/core
+    const smartFilterCoreTypes = new Set(["SmartFilterDeserializer", "InputBlockDeserializer"]);
+    const smartFilterBlockTypes = new Set(["BuiltInBlockRegistrations"]);
+    if (hasSmartFilter) {
+        for (const t of smartFilterCoreTypes) {
+            coreRefs.delete(t);
+        }
+        for (const t of smartFilterBlockTypes) {
+            coreRefs.delete(t);
+        }
+    }
 
     if (coreRefs.size > 0) {
         const sorted = [...coreRefs].sort();
@@ -1774,6 +1831,11 @@ function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAud
 
     if (hasNGE) {
         importLines.push(`import "@babylonjs/core/Meshes/Node/nodeGeometry";`);
+    }
+
+    if (hasSmartFilter) {
+        importLines.push(`import { SmartFilterDeserializer, InputBlockDeserializer } from "@babylonjs/smart-filters";`);
+        importLines.push(`import { BuiltInBlockRegistrations } from "@babylonjs/smart-filters-blocks";`);
     }
 
     // ── 4. Replace BABYLON.GUI.* → just the class name (outside strings) ─
@@ -1819,9 +1881,10 @@ function convertToES6(code: string, hasPhysics: boolean, hasGUI: boolean, hasAud
  * @param hasPhysics - Whether to include the Havok physics dependency
  * @param hasGUI - Whether to include the GUI dependency
  * @param hasInspector - Whether to include the Inspector dependency
+ * @param hasSmartFilter - Whether to include the Smart Filters dependencies
  * @returns The package.json content as a JSON string
  */
-function generatePackageJson(sceneName: string, hasPhysics: boolean, hasGUI: boolean, hasInspector: boolean): string {
+function generatePackageJson(sceneName: string, hasPhysics: boolean, hasGUI: boolean, hasInspector: boolean, hasSmartFilter?: boolean): string {
     const deps: Record<string, string> = {
         "@babylonjs/core": "^7.0.0",
         "@babylonjs/loaders": "^7.0.0",
@@ -1834,6 +1897,10 @@ function generatePackageJson(sceneName: string, hasPhysics: boolean, hasGUI: boo
     }
     if (hasInspector) {
         deps["@babylonjs/inspector"] = "^7.0.0";
+    }
+    if (hasSmartFilter) {
+        deps["@babylonjs/smart-filters"] = "^7.0.0";
+        deps["@babylonjs/smart-filters-blocks"] = "^7.0.0";
     }
 
     const pkg = {
@@ -1958,6 +2025,11 @@ export interface ICodeGeneratorOptions {
      * Each entry generates NodeGeometry.Parse() + build() + createMesh() code.
      */
     nodeGeometryMeshes?: Array<{ name: string; ngeJson: unknown }>;
+    /**
+     * Optional Smart Filter JSON descriptor (from the Smart Filters MCP server).
+     * When provided, SmartFilterDeserializer.deserialize() + createRuntimeAsync() code will be generated.
+     */
+    smartFilterJson?: unknown;
     /**
      * Whether to enable collision callbacks on physics bodies.
      * When true, `body.setCollisionCallbackEnabled(true)` is generated.
@@ -2253,6 +2325,7 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         guiJson: options?.guiJson ?? null,
         nodeRenderGraphJson: options?.nodeRenderGraphJson ?? null,
         nodeGeometryMeshes: options?.nodeGeometryMeshes ?? [],
+        smartFilterJson: options?.smartFilterJson ?? null,
         enableCollisionCallbacks: options?.enableCollisionCallbacks ?? false,
     };
 
@@ -2567,6 +2640,13 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         bodyParts.push(``);
     }
 
+    // ── Smart Filter ──────────────────────────────────────────────────────
+    const sfJson = opts.smartFilterJson;
+    if (sfJson) {
+        bodyParts.push(generateSmartFilter(sfJson, S));
+        bodyParts.push(``);
+    }
+
     // ── Inspector v2 ──────────────────────────────────────────────────────
     const hasInspector = !!scene.inspector?.enabled;
     if (hasInspector) {
@@ -2681,7 +2761,8 @@ export function generateSceneCode(scene: ISerializedScene, options?: ICodeGenera
         const hasFlowGraph = scene.flowGraphs.length > 0;
         const hasNRG = !!opts.nodeRenderGraphJson;
         const hasNGE = (opts.nodeGeometryMeshes ?? []).length > 0;
-        result = convertToES6(result, hasPhysics, hasGUI, hasAudio, hasFlowGraph, hasNRG, hasNGE);
+        const hasSmartFilter = !!opts.smartFilterJson;
+        result = convertToES6(result, hasPhysics, hasGUI, hasAudio, hasFlowGraph, hasNRG, hasNGE, hasSmartFilter);
     }
 
     return result;
@@ -2699,6 +2780,7 @@ export function generateProjectFiles(scene: ISerializedScene, options?: ICodeGen
     const hasPhysics = scene.environment.physicsEnabled || scene.meshes.some((m) => m.physics);
     const hasGUI = !!options?.guiJson;
     const hasInspector = !!scene.inspector?.enabled;
+    const hasSmartFilter = !!options?.smartFilterJson;
 
     // Generate the main scene code in ES6 format
     const sceneCode = generateSceneCode(scene, {
@@ -2711,7 +2793,7 @@ export function generateProjectFiles(scene: ISerializedScene, options?: ICodeGen
     });
 
     const files: Record<string, string> = {
-        "package.json": generatePackageJson(scene.name, hasPhysics, hasGUI, hasInspector),
+        "package.json": generatePackageJson(scene.name, hasPhysics, hasGUI, hasInspector, hasSmartFilter),
         "tsconfig.json": generateTsConfig(),
         "vite.config.ts": generateViteConfig(),
         "index.html": generateIndexHtml(scene.name),

@@ -3,6 +3,7 @@ import { GuiManager } from "../../../gui-mcp-server/src/guiManager";
 import { GeometryGraphManager } from "../../../nge-mcp-server/src/geometryGraph";
 import { MaterialGraphManager } from "../../../nme-mcp-server/src/materialGraph";
 import { RenderGraphManager } from "../../../node-render-graph-mcp-server/src/renderGraph";
+import { SmartFiltersGraphManager } from "../../../smart-filters-mcp-server/src/smartFiltersGraph";
 import { SceneManager } from "../../src/sceneManager";
 
 function getSceneId(result: string | { id: string }): string {
@@ -153,5 +154,70 @@ describe("Scene MCP Server – Cross-server integration coverage", () => {
         expect(indexTs).toContain("NodeGeometry.Parse");
         expect(indexTs).toContain('createMesh("terrain"');
         expect(indexTs).toContain("BABYLON.BoxBlock");
+    });
+
+    it("uses exported Smart Filter JSON in generated scene code", () => {
+        const sfMgr = new SmartFiltersGraphManager();
+        sfMgr.createGraph("sf1");
+        const sfJson = sfMgr.exportJSON("sf1");
+        expect(sfJson).toBeDefined();
+
+        const sceneMgr = new SceneManager();
+        sceneMgr.createScene("s");
+        ok(sceneMgr.attachSmartFilter("s", sfJson));
+
+        const code = sceneMgr.exportCode("s");
+        expect(code).not.toBeNull();
+        expect(code).toContain("SmartFilterDeserializer");
+        expect(code).toContain("BuiltInBlockRegistrations");
+        expect(code).toContain("InputBlockDeserializer");
+        expect(code).toContain("createRuntimeAsync");
+        expect(code).toContain("onAfterRenderObservable");
+    });
+
+    it("attaches and detaches Smart Filter from scene", () => {
+        const sfMgr = new SmartFiltersGraphManager();
+        sfMgr.createGraph("sf1");
+        const sfJson = sfMgr.exportJSON("sf1");
+
+        const sceneMgr = new SceneManager();
+        sceneMgr.createScene("s");
+        ok(sceneMgr.attachSmartFilter("s", sfJson));
+
+        const desc = sceneMgr.describeScene("s");
+        expect(desc).toContain("Smart Filter: attached");
+
+        ok(sceneMgr.detachSmartFilter("s"));
+        const desc2 = sceneMgr.describeScene("s");
+        expect(desc2).not.toContain("Smart Filter: attached");
+    });
+
+    it("rejects invalid Smart Filter JSON", () => {
+        const sceneMgr = new SceneManager();
+        sceneMgr.createScene("s");
+        const result = sceneMgr.attachSmartFilter("s", { format: "wrong" });
+        expect(typeof result).toBe("string");
+        expect(result).toContain("Invalid Smart Filter");
+    });
+
+    it("auto-includes Smart Filter JSON in exportProject", () => {
+        const sfMgr = new SmartFiltersGraphManager();
+        sfMgr.createGraph("sf1");
+        const sfJson = sfMgr.exportJSON("sf1");
+
+        const sceneMgr = new SceneManager();
+        sceneMgr.createScene("s");
+        ok(sceneMgr.attachSmartFilter("s", sfJson));
+
+        const project = sceneMgr.exportProject("s", { format: "es6" });
+        expect(project).not.toBeNull();
+        const indexTs = project!["src/index.ts"];
+        expect(indexTs).toContain("SmartFilterDeserializer");
+        expect(indexTs).toContain('@babylonjs/smart-filters');
+        expect(indexTs).toContain('@babylonjs/smart-filters-blocks');
+
+        const pkgJson = JSON.parse(project!["package.json"]);
+        expect(pkgJson.dependencies).toHaveProperty("@babylonjs/smart-filters");
+        expect(pkgJson.dependencies).toHaveProperty("@babylonjs/smart-filters-blocks");
     });
 });

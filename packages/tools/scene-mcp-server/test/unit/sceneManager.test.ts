@@ -1490,4 +1490,43 @@ describe("Scene MCP Server – SceneManager", () => {
         mgr.clearAll();
         expect(mgr.listScenes()).toEqual([]);
     });
+
+    // ── Test: attachSmartFilter ──────────────────────────────────────────
+
+    it("attaches and detaches Smart Filter JSON", () => {
+        const mgr = new SceneManager();
+        mgr.createScene("s");
+        const sfJson = { format: "smartFilter", formatVersion: 1, blocks: [], connections: [] };
+        ok(mgr.attachSmartFilter("s", sfJson));
+        expect(mgr.getScene("s")!.smartFilterJson).toBeDefined();
+
+        ok(mgr.detachSmartFilter("s"));
+        expect(mgr.getScene("s")!.smartFilterJson).toBeUndefined();
+    });
+
+    it("rejects Smart Filter JSON with wrong format", () => {
+        const mgr = new SceneManager();
+        mgr.createScene("s");
+        const result = mgr.attachSmartFilter("s", { format: "notASmartFilter", formatVersion: 1, blocks: [], connections: [] });
+        expect(result).toContain('format must be "smartFilter"');
+    });
+
+    it("parses Smart Filter JSON from string", () => {
+        const mgr = new SceneManager();
+        mgr.createScene("s");
+        ok(mgr.attachSmartFilter("s", '{"format":"smartFilter","formatVersion":1,"blocks":[],"connections":[]}'));
+        expect(mgr.getScene("s")!.smartFilterJson).toBeDefined();
+    });
+
+    it("exportCode auto-includes attached Smart Filter JSON", () => {
+        const mgr = new SceneManager();
+        mgr.createScene("s");
+        const sfJson = { format: "smartFilter", formatVersion: 1, blocks: [], connections: [] };
+        ok(mgr.attachSmartFilter("s", sfJson));
+
+        const code = mgr.exportCode("s");
+        expect(code).not.toBeNull();
+        expect(code).toContain("SmartFilterDeserializer");
+        expect(code).toContain("createRuntimeAsync");
+    });
 });
