@@ -75,6 +75,7 @@ export class GlobalState {
     // ── MCP Session state ──────────────────────────────────────────────
     mcpSessionUrl: string | null = null;
     mcpSessionConnected: boolean = false;
+    mcpEventSource: EventSource | null = null;
     onMcpSessionStateChangedObservable = new Observable<boolean>();
 
     /** Gets the mode */

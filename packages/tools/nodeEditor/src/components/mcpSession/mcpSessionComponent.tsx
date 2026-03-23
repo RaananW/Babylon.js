@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { GlobalState } from "../../globalState";
 import { SerializationTools } from "../../serializationTools";
 import { LogEntry } from "../log/logComponent";
@@ -17,20 +17,24 @@ interface IMcpSessionComponentProps {
  * @returns The React element.
  */
 export const McpSessionComponent: React.FC<IMcpSessionComponentProps> = ({ globalState }) => {
-    const [url, setUrl] = useState<string>("");
-    const [connected, setConnected] = useState<boolean>(false);
-    const eventSourceRef = useRef<EventSource | null>(null);
+    const [url, setUrl] = useState<string>(globalState.mcpSessionUrl ?? "");
+    const [connected, setConnected] = useState<boolean>(globalState.mcpSessionConnected);
 
-    // Keep globalState in sync
+    // Sync local state with globalState when the component mounts or the
+    // connection state changes externally (e.g. SSE error while unmounted).
     useEffect(() => {
+        const observer = globalState.onMcpSessionStateChangedObservable.add((state) => {
+            setConnected(state);
+        });
+        // Sync on mount in case state changed while we were unmounted
+        setConnected(globalState.mcpSessionConnected);
+        if (globalState.mcpSessionUrl) {
+            setUrl(globalState.mcpSessionUrl);
+        }
         return () => {
-            // Cleanup on unmount
-            if (eventSourceRef.current) {
-                eventSourceRef.current.close();
-                eventSourceRef.current = null;
-            }
+            globalState.onMcpSessionStateChangedObservable.remove(observer);
         };
-    }, []);
+    }, [globalState]);
 
     const loadMaterialFromJson = useCallback(
         (json: any) => {
@@ -38,7 +42,11 @@ export const McpSessionComponent: React.FC<IMcpSessionComponentProps> = ({ globa
             if (!globalState.nodeMaterial) {
                 return;
             }
-            globalState.nodeMaterial.build();
+            // Don't call nodeMaterial.build() here — the onResetRequiredObservable
+            // handler in GraphEditor calls build() (which creates graph nodes and
+            // positions them from editorData) then buildMaterial() (which compiles
+            // shaders).  Calling build() here would trigger UpdateLocations before
+            // graph nodes exist, zeroing all editorData positions.
             globalState.onResetRequiredObservable.notifyObservers(false);
             globalState.stateManager.onSelectionChangedObservable.notifyObservers(null);
             globalState.onClearUndoStack.notifyObservers();
@@ -67,9 +75,16 @@ export const McpSessionComponent: React.FC<IMcpSessionComponentProps> = ({ globa
                     });
                 }
 
-                // Open SSE connection
+                // Close any pre-existing EventSource before opening a new one
+                if (globalState.mcpEventSource) {
+                    globalState.mcpEventSource.close();
+                    globalState.mcpEventSource = null;
+                }
+
+                // Open SSE connection — stored on globalState so it survives
+                // component unmount/remount cycles.
                 const es = new EventSource(`${sessionUrl}/events`);
-                eventSourceRef.current = es;
+                globalState.mcpEventSource = es;
 
                 es.onmessage = (event) => {
                     try {
@@ -84,26 +99,23 @@ export const McpSessionComponent: React.FC<IMcpSessionComponentProps> = ({ globa
                 es.addEventListener("session-closed", (event) => {
                     const info = JSON.parse((event as MessageEvent).data);
                     globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`MCP Session ended: ${info.reason}`, false));
-                    setConnected(false);
                     globalState.mcpSessionConnected = false;
+                    globalState.mcpEventSource = null;
                     globalState.onMcpSessionStateChangedObservable.notifyObservers(false);
                     es.close();
-                    eventSourceRef.current = null;
                 });
 
                 es.onerror = () => {
-                    setConnected(false);
                     globalState.mcpSessionConnected = false;
+                    globalState.mcpEventSource = null;
                     globalState.onMcpSessionStateChangedObservable.notifyObservers(false);
                     es.close();
-                    eventSourceRef.current = null;
                 };
 
-                // Update state
+                // Update state — the observable listener sets local `connected`
                 globalState.mcpSessionUrl = sessionUrl;
                 globalState.mcpSessionConnected = true;
                 globalState.onMcpSessionStateChangedObservable.notifyObservers(true);
-                setConnected(true);
             } catch (err) {
                 globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`MCP Session: Connection failed — ${err}`, true));
             }
@@ -112,14 +124,13 @@ export const McpSessionComponent: React.FC<IMcpSessionComponentProps> = ({ globa
     );
 
     const handleDisconnect = useCallback(() => {
-        if (eventSourceRef.current) {
-            eventSourceRef.current.close();
-            eventSourceRef.current = null;
+        if (globalState.mcpEventSource) {
+            globalState.mcpEventSource.close();
+            globalState.mcpEventSource = null;
         }
         globalState.mcpSessionConnected = false;
         globalState.mcpSessionUrl = null;
         globalState.onMcpSessionStateChangedObservable.notifyObservers(false);
-        setConnected(false);
     }, [globalState]);
 
     const handlePush = useCallback(async () => {
