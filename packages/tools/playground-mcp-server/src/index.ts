@@ -20,7 +20,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod/v4";
 import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
-import { CreateErrorResponse, CreateTextResponse } from "../../mcpServerCore/dist/index.js";
+import { CreateErrorResponse, CreateSnippetIdSchema, CreateTextResponse, RunSnippetResponse } from "../../mcpServerCore/dist/index.js";
 
 import { PlaygroundManager } from "./playgroundManager.js";
 import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
@@ -347,32 +347,33 @@ server.registerTool(
             'Snippet IDs look like "ABC123" or "ABC123#2" (with revision).',
         inputSchema: {
             playgroundName: z.string().describe("Name for the playground (creates or replaces)"),
-            snippetId: z.string().describe('Snippet ID from the Babylon.js Snippet Server (e.g. "ABC123" or "ABC123#2")'),
+            snippetId: CreateSnippetIdSchema(z),
         },
     },
     async ({ playgroundName, snippetId }) => {
-        try {
-            const snippetResult = await LoadSnippet(snippetId);
-            if (snippetResult.type !== "playground") {
-                return CreateErrorResponse(`Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not a playground snippet.`);
-            }
-            const pgResult = snippetResult as IPlaygroundSnippetResult;
-            const code = pgResult.code;
-            const language = pgResult.language ?? "JS";
+        return RunSnippetResponse({
+            snippetId,
+            loadSnippet: LoadSnippet,
+            createResponse: (snippetResult) => {
+                if (snippetResult.type !== "playground") {
+                    return CreateErrorResponse(`Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not a playground snippet.`);
+                }
+                const pgResult = snippetResult as IPlaygroundSnippetResult;
+                const code = pgResult.code;
+                const language = pgResult.language ?? "JS";
 
-            // Create or replace
-            if (!manager.getPlayground(playgroundName)) {
-                manager.createPlayground(playgroundName, language, code);
-            } else {
-                manager.setCode(playgroundName, code);
-            }
+                // Create or replace
+                if (!manager.getPlayground(playgroundName)) {
+                    manager.createPlayground(playgroundName, language, code);
+                } else {
+                    manager.setCode(playgroundName, code);
+                }
 
-            _notifyIfSession(playgroundName);
+                _notifyIfSession(playgroundName);
 
-            return CreateTextResponse(`Loaded snippet "${snippetId}" into "${playgroundName}" (${language}, ${code.length} chars).`);
-        } catch (e) {
-            return CreateErrorResponse(`Error fetching snippet "${snippetId}": ${(e as Error).message}`);
-        }
+                return CreateTextResponse(`Loaded snippet "${snippetId}" into "${playgroundName}" (${language}, ${code.length} chars).`);
+            },
+        });
     }
 );
 

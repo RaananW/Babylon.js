@@ -26,11 +26,17 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod/v4";
 import {
     CreateErrorResponse,
+    CreateJsonExportResponse,
+    CreateInlineJsonSchema,
+    CreateJsonImportResponse,
+    CreateJsonFileSchema,
+    CreateOutputFileSchema,
+    CreateSnippetIdSchema,
     CreateTextResponse,
+    CreateTypedSnippetImportResponse,
     ParseJsonText,
+    RunSnippetResponse,
     ResolveDefinedInput,
-    ResolveInlineOrFileText,
-    WriteTextFileEnsuringDirectory,
 } from "../../mcpServerCore/dist/index.js";
 
 import { ControlRegistry, BaseControlProperties, GetControlCatalogSummary, GetControlTypeDetails } from "./catalog.js";
@@ -813,26 +819,16 @@ server.registerTool(
             "(avoids large JSON payloads in the conversation context).",
         inputSchema: {
             guiName: z.string().describe("Name of the GUI to export"),
-            outputFile: z
-                .string()
-                .optional()
-                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
+            outputFile: CreateOutputFileSchema(z),
         },
     },
     async ({ guiName, outputFile }) => {
-        const json = manager.exportJSON(guiName);
-        if (!json) {
-            return CreateErrorResponse(`GUI "${guiName}" not found.`);
-        }
-        if (outputFile) {
-            try {
-                WriteTextFileEnsuringDirectory(outputFile, json);
-                return CreateTextResponse(`GUI JSON written to: ${outputFile}`);
-            } catch (e) {
-                return CreateErrorResponse(`Error writing file: ${(e as Error).message}`);
-            }
-        }
-        return CreateTextResponse(json);
+        return CreateJsonExportResponse({
+            jsonText: manager.exportJSON(guiName),
+            outputFile,
+            missingMessage: `GUI "${guiName}" not found.`,
+            fileLabel: "GUI JSON",
+        });
     }
 );
 
@@ -844,29 +840,18 @@ server.registerTool(
             "Provide either the inline json string OR a jsonFile path (not both).",
         inputSchema: {
             guiName: z.string().describe("Name to give the imported GUI"),
-            json: z.string().optional().describe("The Babylon.js GUI JSON string to import"),
-            jsonFile: z.string().optional().describe("Absolute path to a file containing the GUI JSON to import (alternative to inline json)"),
+            json: CreateInlineJsonSchema(z, "The Babylon.js GUI JSON string to import"),
+            jsonFile: CreateJsonFileSchema(z, "Absolute path to a file containing the GUI JSON to import (alternative to inline json)"),
         },
     },
     async ({ guiName, json, jsonFile }) => {
-        let jsonStr: string;
-        try {
-            jsonStr = ResolveInlineOrFileText({
-                inlineText: json,
-                filePath: jsonFile,
-                inlineLabel: "json",
-                fileLabel: "jsonFile",
-                fileDescription: "GUI JSON file",
-            }).text;
-        } catch (e) {
-            return CreateErrorResponse((e as Error).message);
-        }
-        const result = manager.importJSON(guiName, jsonStr);
-        if (result !== "OK") {
-            return CreateErrorResponse(`Error: ${result}`);
-        }
-        const desc = manager.describeTexture(guiName);
-        return CreateTextResponse(`Imported successfully.\n\n${desc}`);
+        return CreateJsonImportResponse({
+            json,
+            jsonFile,
+            fileDescription: "GUI JSON file",
+            importJson: (jsonText) => manager.importJSON(guiName, jsonText),
+            describeImported: () => manager.describeTexture(guiName),
+        });
     }
 );
 
@@ -879,29 +864,23 @@ server.registerTool(
             'Snippet IDs look like "ABC123" or "ABC123#2" (with revision).',
         inputSchema: {
             guiName: z.string().describe("Name to give the imported GUI in memory"),
-            snippetId: z.string().describe('Snippet ID from the Babylon.js Snippet Server (e.g. "ABC123" or "ABC123#2")'),
+            snippetId: CreateSnippetIdSchema(z),
         },
     },
     async ({ guiName, snippetId }) => {
-        try {
-            const snippetResult = await LoadSnippet(snippetId);
-            if (snippetResult.type === "unknown") {
-                return CreateErrorResponse(`Error: Snippet "${snippetId}" has an unrecognized format.`);
-            }
-            if (snippetResult.type !== "gui") {
-                return CreateErrorResponse(`Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "gui".`);
-            }
-            const dataResult = snippetResult as IDataSnippetResult;
-            const jsonStr = JSON.stringify(dataResult.data);
-            const result = manager.importJSON(guiName, jsonStr);
-            if (result !== "OK") {
-                return CreateErrorResponse(`Error importing snippet data: ${result}`);
-            }
-            const desc = manager.describeTexture(guiName);
-            return CreateTextResponse(`Imported snippet "${snippetId}" as "${guiName}" successfully.\n\n${desc}`);
-        } catch (e) {
-            return CreateErrorResponse(`Error fetching snippet "${snippetId}": ${(e as Error).message}`);
-        }
+        return RunSnippetResponse({
+            snippetId,
+            loadSnippet: async (requestedSnippetId: string) => (await LoadSnippet(requestedSnippetId)) as IDataSnippetResult,
+            createResponse: (snippetResult: IDataSnippetResult) =>
+                CreateTypedSnippetImportResponse({
+                    snippetId,
+                    snippetResult,
+                    expectedType: "gui",
+                    importJson: (jsonText) => manager.importJSON(guiName, jsonText),
+                    describeImported: () => manager.describeTexture(guiName),
+                    successMessage: `Imported snippet "${snippetId}" as "${guiName}" successfully.`,
+                }),
+        });
     }
 );
 

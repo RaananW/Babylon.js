@@ -30,7 +30,18 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import {
+    CreateInlineJsonSchema,
+    CreateJsonFileSchema,
+    CreateJsonImportSummaryResponse,
+    CreateOutputFileSchema,
+    CreateOverwriteSchema,
+    CreateSnippetIdSchema,
+    CreateTypedSnippetImportSummaryResponse,
+    ParseJsonText,
+    RunSnippetResponse,
+    WriteTextFileEnsuringDirectory,
+} from "../../mcpServerCore/dist/index.js";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { RenderGraphManager } from "./renderGraph.js";
@@ -774,10 +785,7 @@ server.registerTool(
         ].join("\n"),
         inputSchema: {
             graphName: z.string().describe("Name of the render graph to export"),
-            outputFile: z
-                .string()
-                .optional()
-                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
+            outputFile: CreateOutputFileSchema(z),
         },
     },
     async ({ graphName, outputFile }) => {
@@ -813,37 +821,25 @@ server.registerTool(
         ].join("\n"),
         inputSchema: {
             graphName: z.string().describe("Name to assign to the imported graph in memory"),
-            json: z.string().optional().describe("NRGE-compatible JSON string (output of export_graph_json or NodeRenderGraph.serialize())"),
-            jsonFile: z.string().optional().describe("Absolute path to a file containing the NRGE JSON to import (alternative to inline json)"),
-            overwrite: z.boolean().optional().describe("If true, replace any existing graph with the same name. Default: false."),
+            json: CreateInlineJsonSchema(z, "NRGE-compatible JSON string (output of export_graph_json or NodeRenderGraph.serialize())"),
+            jsonFile: CreateJsonFileSchema(z, "Absolute path to a file containing the NRGE JSON to import (alternative to inline json)"),
+            overwrite: CreateOverwriteSchema(z),
         },
     },
     async ({ graphName, json, jsonFile, overwrite }) => {
-        try {
-            const jsonStr = ResolveInlineOrFileText({
-                inlineText: json,
-                filePath: jsonFile,
-                inlineLabel: "json",
-                fileLabel: "jsonFile",
-                fileDescription: "NRGE JSON file",
-            }).text;
-            const graph = manager.importJson(graphName, jsonStr, overwrite ?? false);
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: [
-                            `Imported render graph "${graphName}" with ${graph.blocks.length} blocks.`,
-                            `outputNodeId: ${graph.outputNodeId ?? "(not set)"}`,
-                            "",
-                            "Call describe_graph to inspect the imported structure.",
-                        ].join("\n"),
-                    },
-                ],
-            };
-        } catch (e) {
-            return { content: [{ type: "text", text: `Error: ${(e as Error).message}` }], isError: true };
-        }
+        return CreateJsonImportSummaryResponse({
+            json,
+            jsonFile,
+            fileDescription: "NRGE JSON file",
+            importJson: (jsonText: string) => manager.importJson(graphName, jsonText, overwrite ?? false),
+            createSuccessText: (graph: { blocks: unknown[]; outputNodeId?: number | null }) =>
+                [
+                    `Imported render graph "${graphName}" with ${graph.blocks.length} blocks.`,
+                    `outputNodeId: ${graph.outputNodeId ?? "(not set)"}`,
+                    "",
+                    "Call describe_graph to inspect the imported structure.",
+                ].join("\n"),
+        });
     }
 );
 
@@ -856,41 +852,29 @@ server.registerTool(
             'Snippet IDs look like "ABC123" or "ABC123#2" (with revision).',
         inputSchema: {
             graphName: z.string().describe("Name to assign to the imported graph in memory"),
-            snippetId: z.string().describe('Snippet ID from the Babylon.js Snippet Server (e.g. "ABC123" or "ABC123#2")'),
-            overwrite: z.boolean().optional().describe("If true, replace any existing graph with the same name. Default: false."),
+            snippetId: CreateSnippetIdSchema(z),
+            overwrite: CreateOverwriteSchema(z),
         },
     },
     async ({ graphName, snippetId, overwrite }) => {
-        try {
-            const snippetResult = await LoadSnippet(snippetId);
-            if (snippetResult.type === "unknown") {
-                return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
-            }
-            if (snippetResult.type !== "nodeRenderGraph") {
-                return {
-                    content: [{ type: "text", text: `Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "nodeRenderGraph".` }],
-                    isError: true,
-                };
-            }
-            const dataResult = snippetResult as IDataSnippetResult;
-            const jsonStr = JSON.stringify(dataResult.data);
-            const graph = manager.importJson(graphName, jsonStr, overwrite ?? false);
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: [
+        return RunSnippetResponse({
+            snippetId,
+            loadSnippet: async (requestedSnippetId: string) => (await LoadSnippet(requestedSnippetId)) as IDataSnippetResult,
+            createResponse: (snippetResult: IDataSnippetResult) =>
+                CreateTypedSnippetImportSummaryResponse({
+                    snippetId,
+                    snippetResult,
+                    expectedType: "nodeRenderGraph",
+                    importJson: (jsonText: string) => manager.importJson(graphName, jsonText, overwrite ?? false),
+                    createSuccessText: (graph: { blocks: unknown[]; outputNodeId?: number | null }) =>
+                        [
                             `Imported snippet "${snippetId}" as render graph "${graphName}" with ${graph.blocks.length} blocks.`,
                             `outputNodeId: ${graph.outputNodeId ?? "(not set)"}`,
                             "",
                             "Call describe_graph to inspect the imported structure.",
                         ].join("\n"),
-                    },
-                ],
-            };
-        } catch (e) {
-            return { content: [{ type: "text", text: `Error fetching snippet "${snippetId}": ${(e as Error).message}` }], isError: true };
-        }
+                }),
+        });
     }
 );
 

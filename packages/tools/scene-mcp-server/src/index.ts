@@ -31,7 +31,16 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
 import {
+    CreateJsonExportResponse,
+    CreateJsonImportResponse,
     CreateErrorResponse,
+    CreateOutputFileSchema,
+    CreateSceneFlowGraphAttachmentFields,
+    CreateSceneGuiAttachmentFields,
+    CreateSceneImportFields,
+    CreateSceneNodeGeometryFields,
+    CreateSceneNodeMaterialInputFields,
+    CreateSceneRenderGraphAttachmentFields,
     CreateTextResponse,
     CreateTextResponses,
     ParseJsonText,
@@ -1019,12 +1028,7 @@ server.registerTool(
             metallic: z.number().optional().describe("Shorthand for properties.metallic (PBRMaterial) — 0 to 1"),
             roughness: z.number().optional().describe("Shorthand for properties.roughness (PBRMaterial) — 0 to 1"),
             alpha: z.number().optional().describe("Shorthand for properties.alpha — 0 (transparent) to 1 (opaque)"),
-            nmeJson: z.string().optional().describe("For NodeMaterial: the full NME JSON string exported from the Node Material MCP server"),
-            nmeJsonFile: z
-                .string()
-                .optional()
-                .describe("For NodeMaterial: absolute path to a file containing the NME JSON (alternative to inline nmeJson — avoids large payloads in context)"),
-            snippetId: z.string().optional().describe("For NodeMaterial: a Babylon.js Snippet Server ID to load from"),
+            ...CreateSceneNodeMaterialInputFields(z),
         },
     },
     async ({
@@ -1790,10 +1794,7 @@ server.registerTool(
         inputSchema: {
             sceneName: z.string().describe("Name of the scene"),
             name: z.string().optional().describe("Name for this flow graph attachment (defaults to 'flowGraph')"),
-            coordinatorJson: z.string().optional().describe("The complete Flow Graph coordinator JSON string"),
-            coordinatorJsonFile: z.string().optional().describe("Absolute path to a file containing the Flow Graph coordinator JSON (alternative to inline coordinatorJson)"),
-            flowGraphJsonFile: z.string().optional().describe("Alias for coordinatorJsonFile — path to the Flow Graph JSON file"),
-            flowGraphJson: z.string().optional().describe("Alias for coordinatorJson — the Flow Graph JSON string"),
+            ...CreateSceneFlowGraphAttachmentFields(z),
             scopeNodeIds: z.array(z.string()).optional().describe("Optional: limit this flow graph to specific node IDs"),
         },
     },
@@ -2539,8 +2540,7 @@ server.registerTool(
             "Provide either the inline guiJson string OR a guiJsonFile path (not both).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to attach the GUI to"),
-            guiJson: z.string().optional().describe("The GUI descriptor JSON string (from the GUI MCP server's export_gui_json)"),
-            guiJsonFile: z.string().optional().describe("Absolute path to a file containing the GUI JSON (alternative to inline guiJson)"),
+            ...CreateSceneGuiAttachmentFields(z),
         },
     },
     async ({ sceneName, guiJson, guiJsonFile }) => {
@@ -2613,8 +2613,7 @@ server.registerTool(
             "Provide either the inline nrgJson string OR a nrgJsonFile path (not both).",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to attach the render graph to"),
-            nrgJson: z.string().optional().describe("The NRG JSON string (from the Node Render Graph MCP server's export_graph_json tool)"),
-            nrgJsonFile: z.string().optional().describe("Absolute path to a file containing the NRG JSON (alternative to inline nrgJson)"),
+            ...CreateSceneRenderGraphAttachmentFields(z),
         },
     },
     async ({ sceneName, nrgJson, nrgJsonFile }) => {
@@ -2673,8 +2672,7 @@ server.registerTool(
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to add the mesh to"),
             meshName: z.string().describe("Name to give the created mesh"),
-            ngeJson: z.string().optional().describe("The NGE JSON string (from the Node Geometry MCP server's export_geometry_json tool)"),
-            ngeJsonFile: z.string().optional().describe("Absolute path to a file containing the NGE JSON (alternative to inline ngeJson)"),
+            ...CreateSceneNodeGeometryFields(z),
         },
     },
     async ({ sceneName, meshName, ngeJson, ngeJsonFile }) => {
@@ -3024,26 +3022,16 @@ server.registerTool(
             "When outputFile is provided, the JSON is written to disk and only the file path is returned.",
         inputSchema: {
             sceneName: z.string().describe("Name of the scene to export"),
-            outputFile: z
-                .string()
-                .optional()
-                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
+            outputFile: CreateOutputFileSchema(z),
         },
     },
     async ({ sceneName, outputFile }) => {
-        const json = manager.exportJSON(sceneName);
-        if (!json) {
-            return CreateErrorResponse(`Scene "${sceneName}" not found.`);
-        }
-        if (outputFile) {
-            try {
-                WriteTextFileEnsuringDirectory(outputFile, json);
-                return CreateTextResponse(`Scene JSON written to: ${outputFile}`);
-            } catch (e) {
-                return CreateErrorResponse(`Error writing file: ${(e as Error).message}`);
-            }
-        }
-        return CreateTextResponse(json);
+        return CreateJsonExportResponse({
+            jsonText: manager.exportJSON(sceneName),
+            outputFile,
+            missingMessage: `Scene "${sceneName}" not found.`,
+            fileLabel: "Scene JSON",
+        });
     }
 );
 
@@ -3053,29 +3041,17 @@ server.registerTool(
         description: "Import a scene descriptor JSON into memory for editing. " + "Provide either the inline json string OR a jsonFile path (not both).",
         inputSchema: {
             sceneName: z.string().describe("Name to give the imported scene"),
-            json: z.string().optional().describe("The scene descriptor JSON string"),
-            jsonFile: z.string().optional().describe("Absolute path to a file containing the scene descriptor JSON (alternative to inline json)"),
+            ...CreateSceneImportFields(z),
         },
     },
     async ({ sceneName, json, jsonFile }) => {
-        let jsonStr: string;
-        try {
-            jsonStr = ResolveInlineOrFileText({
-                inlineText: json,
-                filePath: jsonFile,
-                inlineLabel: "json",
-                fileLabel: "jsonFile",
-                fileDescription: "scene descriptor JSON file",
-            }).text;
-        } catch (e) {
-            return CreateErrorResponse((e as Error).message);
-        }
-        const result = manager.importJSON(sceneName, jsonStr);
-        if (result !== "OK") {
-            return CreateErrorResponse(`Error: ${result}`);
-        }
-        const desc = manager.describeScene(sceneName);
-        return CreateTextResponse(`Imported successfully.\n\n${desc}`);
+        return CreateJsonImportResponse({
+            json,
+            jsonFile,
+            fileDescription: "Scene descriptor JSON file",
+            importJson: (jsonText: string) => manager.importJSON(sceneName, jsonText),
+            describeImported: () => manager.describeScene(sceneName),
+        });
     }
 );
 

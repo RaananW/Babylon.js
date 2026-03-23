@@ -22,7 +22,19 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { CreateErrorResponse, CreateTextResponse, ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import {
+    CreateErrorResponse,
+    CreateJsonExportResponse,
+    CreateInlineJsonSchema,
+    CreateJsonImportResponse,
+    CreateJsonFileSchema,
+    CreateOutputFileSchema,
+    CreateSnippetIdSchema,
+    CreateTextResponse,
+    CreateTypedSnippetImportResponse,
+    ParseJsonText,
+    RunSnippetResponse,
+} from "../../mcpServerCore/dist/index.js";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { GeometryGraphManager } from "./geometryGraph.js";
@@ -741,26 +753,16 @@ server.registerTool(
             "(avoids large JSON payloads in the conversation context).",
         inputSchema: {
             geometryName: z.string().describe("Name of the geometry to export"),
-            outputFile: z
-                .string()
-                .optional()
-                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
+            outputFile: CreateOutputFileSchema(z),
         },
     },
     async ({ geometryName, outputFile }) => {
-        const json = manager.exportJSON(geometryName);
-        if (!json) {
-            return CreateErrorResponse(`Geometry "${geometryName}" not found.`);
-        }
-        if (outputFile) {
-            try {
-                WriteTextFileEnsuringDirectory(outputFile, json);
-                return CreateTextResponse(`NGE JSON written to: ${outputFile}`);
-            } catch (e) {
-                return CreateErrorResponse(`Error writing file: ${(e as Error).message}`);
-            }
-        }
-        return CreateTextResponse(json);
+        return CreateJsonExportResponse({
+            jsonText: manager.exportJSON(geometryName),
+            outputFile,
+            missingMessage: `Geometry "${geometryName}" not found.`,
+            fileLabel: "NGE JSON",
+        });
     }
 );
 
@@ -772,29 +774,18 @@ server.registerTool(
             "Provide either the inline json string OR a jsonFile path (not both).",
         inputSchema: {
             geometryName: z.string().describe("Name to give the imported geometry"),
-            json: z.string().optional().describe("The NGE JSON string to import"),
-            jsonFile: z.string().optional().describe("Absolute path to a file containing the NGE JSON to import (alternative to inline json)"),
+            json: CreateInlineJsonSchema(z, "The NGE JSON string to import"),
+            jsonFile: CreateJsonFileSchema(z, "Absolute path to a file containing the NGE JSON to import (alternative to inline json)"),
         },
     },
     async ({ geometryName, json, jsonFile }) => {
-        let jsonStr: string;
-        try {
-            jsonStr = ResolveInlineOrFileText({
-                inlineText: json,
-                filePath: jsonFile,
-                inlineLabel: "json",
-                fileLabel: "jsonFile",
-                fileDescription: "NGE JSON file",
-            }).text;
-        } catch (e) {
-            return CreateErrorResponse((e as Error).message);
-        }
-        const result = manager.importJSON(geometryName, jsonStr);
-        if (result !== "OK") {
-            return CreateErrorResponse(`Error: ${result}`);
-        }
-        const desc = manager.describeGeometry(geometryName);
-        return CreateTextResponse(`Imported successfully.\n\n${desc}`);
+        return CreateJsonImportResponse({
+            json,
+            jsonFile,
+            fileDescription: "NGE JSON file",
+            importJson: (jsonText) => manager.importJSON(geometryName, jsonText),
+            describeImported: () => manager.describeGeometry(geometryName),
+        });
     }
 );
 
@@ -807,29 +798,23 @@ server.registerTool(
             'Snippet IDs look like "ABC123" or "ABC123#2" (with revision).',
         inputSchema: {
             geometryName: z.string().describe("Name to give the imported geometry in memory"),
-            snippetId: z.string().describe('Snippet ID from the Babylon.js Snippet Server (e.g. "ABC123" or "ABC123#2")'),
+            snippetId: CreateSnippetIdSchema(z),
         },
     },
     async ({ geometryName, snippetId }) => {
-        try {
-            const snippetResult = await LoadSnippet(snippetId);
-            if (snippetResult.type === "unknown") {
-                return CreateErrorResponse(`Error: Snippet "${snippetId}" has an unrecognized format.`);
-            }
-            if (snippetResult.type !== "nodeGeometry") {
-                return CreateErrorResponse(`Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "nodeGeometry".`);
-            }
-            const dataResult = snippetResult as IDataSnippetResult;
-            const jsonStr = JSON.stringify(dataResult.data);
-            const result = manager.importJSON(geometryName, jsonStr);
-            if (result !== "OK") {
-                return CreateErrorResponse(`Error importing snippet data: ${result}`);
-            }
-            const desc = manager.describeGeometry(geometryName);
-            return CreateTextResponse(`Imported snippet "${snippetId}" as "${geometryName}" successfully.\n\n${desc}`);
-        } catch (e) {
-            return CreateErrorResponse(`Error fetching snippet "${snippetId}": ${(e as Error).message}`);
-        }
+        return RunSnippetResponse({
+            snippetId,
+            loadSnippet: async (requestedSnippetId: string) => (await LoadSnippet(requestedSnippetId)) as IDataSnippetResult,
+            createResponse: (snippetResult: IDataSnippetResult) =>
+                CreateTypedSnippetImportResponse({
+                    snippetId,
+                    snippetResult,
+                    expectedType: "nodeGeometry",
+                    importJson: (jsonText) => manager.importJSON(geometryName, jsonText),
+                    describeImported: () => manager.describeGeometry(geometryName),
+                    successMessage: `Imported snippet "${snippetId}" as "${geometryName}" successfully.`,
+                }),
+        });
     }
 );
 

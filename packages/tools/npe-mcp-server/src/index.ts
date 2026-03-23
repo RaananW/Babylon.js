@@ -22,7 +22,17 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import {
+    CreateInlineJsonSchema,
+    CreateJsonFileSchema,
+    CreateJsonImportResponse,
+    CreateOutputFileSchema,
+    CreateSnippetIdSchema,
+    CreateTypedSnippetImportResponse,
+    ParseJsonText,
+    RunSnippetResponse,
+    WriteTextFileEnsuringDirectory,
+} from "../../mcpServerCore/dist/index.js";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { ParticleGraphManager } from "./particleGraph.js";
@@ -743,10 +753,7 @@ server.registerTool(
             "(avoids large JSON payloads in the conversation context).",
         inputSchema: {
             particleSystemName: z.string().describe("Name of the particle system set to export"),
-            outputFile: z
-                .string()
-                .optional()
-                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
+            outputFile: CreateOutputFileSchema(z),
         },
     },
     async ({ particleSystemName, outputFile }) => {
@@ -774,29 +781,18 @@ server.registerTool(
             "Provide either the inline json string OR a jsonFile path (not both).",
         inputSchema: {
             particleSystemName: z.string().describe("Name to give the imported particle system set"),
-            json: z.string().optional().describe("The NPE JSON string to import"),
-            jsonFile: z.string().optional().describe("Absolute path to a file containing the NPE JSON to import (alternative to inline json)"),
+            json: CreateInlineJsonSchema(z, "The NPE JSON string to import"),
+            jsonFile: CreateJsonFileSchema(z, "Absolute path to a file containing the NPE JSON to import (alternative to inline json)"),
         },
     },
     async ({ particleSystemName, json, jsonFile }) => {
-        let jsonStr: string;
-        try {
-            jsonStr = ResolveInlineOrFileText({
-                inlineText: json,
-                filePath: jsonFile,
-                inlineLabel: "json",
-                fileLabel: "jsonFile",
-                fileDescription: "NPE JSON file",
-            }).text;
-        } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
-        }
-        const result = manager.importJSON(particleSystemName, jsonStr);
-        if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
-        }
-        const desc = manager.describeParticleSet(particleSystemName);
-        return { content: [{ type: "text", text: `Imported successfully.\n\n${desc}` }] };
+        return CreateJsonImportResponse({
+            json,
+            jsonFile,
+            fileDescription: "NPE JSON file",
+            importJson: (jsonText: string) => manager.importJSON(particleSystemName, jsonText),
+            describeImported: () => manager.describeParticleSet(particleSystemName),
+        });
     }
 );
 
@@ -809,39 +805,23 @@ server.registerTool(
             'Snippet IDs look like "ABC123" or "ABC123#2" (with revision).',
         inputSchema: {
             particleSystemName: z.string().describe("Name to give the imported particle system set in memory"),
-            snippetId: z.string().describe('Snippet ID from the Babylon.js Snippet Server (e.g. "ABC123" or "ABC123#2")'),
+            snippetId: CreateSnippetIdSchema(z),
         },
     },
     async ({ particleSystemName, snippetId }) => {
-        try {
-            const snippetResult = await LoadSnippet(snippetId);
-            if (snippetResult.type === "unknown") {
-                return { content: [{ type: "text", text: `Error: Snippet "${snippetId}" has an unrecognized format.` }], isError: true };
-            }
-            if (snippetResult.type !== "nodeParticle") {
-                return {
-                    content: [{ type: "text", text: `Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "nodeParticle".` }],
-                    isError: true,
-                };
-            }
-            const dataResult = snippetResult as IDataSnippetResult;
-            const jsonStr = JSON.stringify(dataResult.data);
-            const result = manager.importJSON(particleSystemName, jsonStr);
-            if (result !== "OK") {
-                return { content: [{ type: "text", text: `Error importing snippet data: ${result}` }], isError: true };
-            }
-            const desc = manager.describeParticleSet(particleSystemName);
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: `Imported snippet "${snippetId}" as "${particleSystemName}" successfully.\n\n${desc}`,
-                    },
-                ],
-            };
-        } catch (e) {
-            return { content: [{ type: "text", text: `Error fetching snippet "${snippetId}": ${(e as Error).message}` }], isError: true };
-        }
+        return RunSnippetResponse({
+            snippetId,
+            loadSnippet: async (requestedSnippetId: string) => (await LoadSnippet(requestedSnippetId)) as IDataSnippetResult,
+            createResponse: (snippetResult: IDataSnippetResult) =>
+                CreateTypedSnippetImportResponse({
+                    snippetId,
+                    snippetResult,
+                    expectedType: "nodeParticle",
+                    importJson: (jsonText: string) => manager.importJSON(particleSystemName, jsonText),
+                    describeImported: () => manager.describeParticleSet(particleSystemName),
+                    successMessage: `Imported snippet "${snippetId}" as "${particleSystemName}" successfully.`,
+                }),
+        });
     }
 );
 

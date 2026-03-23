@@ -27,7 +27,19 @@ import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { MaterialGraphManager } from "./materialGraph.js";
-import { CreateErrorResponse, CreateTextResponse, ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import {
+    CreateErrorResponse,
+    CreateJsonExportResponse,
+    CreateInlineJsonSchema,
+    CreateJsonImportResponse,
+    CreateJsonFileSchema,
+    CreateOutputFileSchema,
+    CreateSnippetIdSchema,
+    CreateTextResponse,
+    CreateTypedSnippetImportResponse,
+    ParseJsonText,
+    RunSnippetResponse,
+} from "../../mcpServerCore/dist/index.js";
 import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
 import type { IDataSnippetResult } from "@tools/snippet-loader";
 import { startSessionServer, createSession, notifyMaterialUpdate, getSessionUrl, getSessionForMaterial, closeSessionForMaterial, stopSessionServer } from "./sessionServer.js";
@@ -732,26 +744,16 @@ server.registerTool(
             "(avoids large JSON payloads in the conversation context).",
         inputSchema: {
             materialName: z.string().describe("Name of the material to export"),
-            outputFile: z
-                .string()
-                .optional()
-                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
+            outputFile: CreateOutputFileSchema(z),
         },
     },
     async ({ materialName, outputFile }) => {
-        const json = manager.exportJSON(materialName);
-        if (!json) {
-            return CreateErrorResponse(`Material "${materialName}" not found.`);
-        }
-        if (outputFile) {
-            try {
-                WriteTextFileEnsuringDirectory(outputFile, json);
-                return CreateTextResponse(`NME JSON written to: ${outputFile}`);
-            } catch (e) {
-                return CreateErrorResponse(`Error writing file: ${(e as Error).message}`);
-            }
-        }
-        return CreateTextResponse(json);
+        return CreateJsonExportResponse({
+            jsonText: manager.exportJSON(materialName),
+            outputFile,
+            missingMessage: `Material "${materialName}" not found.`,
+            fileLabel: "NME JSON",
+        });
     }
 );
 
@@ -763,29 +765,18 @@ server.registerTool(
             "Provide either the inline json string OR a jsonFile path (not both).",
         inputSchema: {
             materialName: z.string().describe("Name to give the imported material"),
-            json: z.string().optional().describe("The NME JSON string to import"),
-            jsonFile: z.string().optional().describe("Absolute path to a file containing the NME JSON to import (alternative to inline json)"),
+            json: CreateInlineJsonSchema(z, "The NME JSON string to import"),
+            jsonFile: CreateJsonFileSchema(z, "Absolute path to a file containing the NME JSON to import (alternative to inline json)"),
         },
     },
     async ({ materialName, json, jsonFile }) => {
-        let jsonStr: string;
-        try {
-            jsonStr = ResolveInlineOrFileText({
-                inlineText: json,
-                filePath: jsonFile,
-                inlineLabel: "json",
-                fileLabel: "jsonFile",
-                fileDescription: "NME JSON file",
-            }).text;
-        } catch (e) {
-            return CreateErrorResponse((e as Error).message);
-        }
-        const result = manager.importJSON(materialName, jsonStr);
-        if (result !== "OK") {
-            return CreateErrorResponse(`Error: ${result}`);
-        }
-        const desc = manager.describeMaterial(materialName);
-        return CreateTextResponse(`Imported successfully.\n\n${desc}`);
+        return CreateJsonImportResponse({
+            json,
+            jsonFile,
+            fileDescription: "NME JSON file",
+            importJson: (jsonText) => manager.importJSON(materialName, jsonText),
+            describeImported: () => manager.describeMaterial(materialName),
+        });
     }
 );
 
@@ -798,29 +789,23 @@ server.registerTool(
             'Snippet IDs look like "ABC123" or "ABC123#2" (with revision).',
         inputSchema: {
             materialName: z.string().describe("Name to give the imported material in memory"),
-            snippetId: z.string().describe('Snippet ID from the Babylon.js Snippet Server (e.g. "ABC123" or "ABC123#2")'),
+            snippetId: CreateSnippetIdSchema(z),
         },
     },
     async ({ materialName, snippetId }) => {
-        try {
-            const snippetResult = await LoadSnippet(snippetId);
-            if (snippetResult.type === "unknown") {
-                return CreateErrorResponse(`Error: Snippet "${snippetId}" has an unrecognized format.`);
-            }
-            if (snippetResult.type !== "nodeMaterial") {
-                return CreateErrorResponse(`Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not "nodeMaterial".`);
-            }
-            const dataResult = snippetResult as IDataSnippetResult;
-            const jsonStr = JSON.stringify(dataResult.data);
-            const result = manager.importJSON(materialName, jsonStr);
-            if (result !== "OK") {
-                return CreateErrorResponse(`Error importing snippet data: ${result}`);
-            }
-            const desc = manager.describeMaterial(materialName);
-            return CreateTextResponse(`Imported snippet "${snippetId}" as "${materialName}" successfully.\n\n${desc}`);
-        } catch (e) {
-            return CreateErrorResponse(`Error fetching snippet "${snippetId}": ${(e as Error).message}`);
-        }
+        return RunSnippetResponse({
+            snippetId,
+            loadSnippet: async (requestedSnippetId: string) => (await LoadSnippet(requestedSnippetId)) as IDataSnippetResult,
+            createResponse: (snippetResult: IDataSnippetResult) =>
+                CreateTypedSnippetImportResponse({
+                    snippetId,
+                    snippetResult,
+                    expectedType: "nodeMaterial",
+                    importJson: (jsonText) => manager.importJSON(materialName, jsonText),
+                    describeImported: () => manager.describeMaterial(materialName),
+                    successMessage: `Imported snippet "${snippetId}" as "${materialName}" successfully.`,
+                }),
+        });
     }
 );
 

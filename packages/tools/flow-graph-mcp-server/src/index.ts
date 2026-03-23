@@ -23,7 +23,14 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { CreateErrorResponse, CreateTextResponse, ResolveDefinedInput, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import {
+    CreateInlineJsonSchema,
+    CreateJsonExportResponse,
+    CreateJsonFileSchema,
+    CreateJsonImportResponse,
+    CreateOutputFileSchema,
+    ResolveDefinedInput,
+} from "../../mcpServerCore/dist/index.js";
 
 import { FlowGraphBlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { FlowGraphManager } from "./flowGraphManager.js";
@@ -815,26 +822,16 @@ server.registerTool(
                 .boolean()
                 .default(false)
                 .describe("If true, exports only the graph-level JSON (without the coordinator wrapper). Useful for embedding in glTF or other formats."),
-            outputFile: z
-                .string()
-                .optional()
-                .describe("Optional absolute file path. When provided, the JSON is written to this file and the path is returned instead of the full JSON."),
+            outputFile: CreateOutputFileSchema(z),
         },
     },
     async ({ graphName, graphOnly, outputFile }) => {
-        const json = graphOnly ? manager.exportGraphJSON(graphName) : manager.exportJSON(graphName);
-        if (!json) {
-            return CreateErrorResponse(`Graph "${graphName}" not found.`);
-        }
-        if (outputFile) {
-            try {
-                WriteTextFileEnsuringDirectory(outputFile, json);
-                return CreateTextResponse(`Flow Graph JSON written to: ${outputFile}`);
-            } catch (e) {
-                return CreateErrorResponse(`Error writing file: ${(e as Error).message}`);
-            }
-        }
-        return CreateTextResponse(json);
+        return CreateJsonExportResponse({
+            jsonText: graphOnly ? manager.exportGraphJSON(graphName) : manager.exportJSON(graphName),
+            outputFile,
+            missingMessage: `Graph "${graphName}" not found.`,
+            fileLabel: "Flow Graph JSON",
+        });
     }
 );
 
@@ -846,29 +843,18 @@ server.registerTool(
             "Provide either the inline json string OR a jsonFile path (not both).",
         inputSchema: {
             graphName: z.string().describe("Name to give the imported flow graph"),
-            json: z.string().optional().describe("The Flow Graph JSON string to import"),
-            jsonFile: z.string().optional().describe("Absolute path to a file containing the Flow Graph JSON to import (alternative to inline json)"),
+            json: CreateInlineJsonSchema(z, "The Flow Graph JSON string to import"),
+            jsonFile: CreateJsonFileSchema(z, "Absolute path to a file containing the Flow Graph JSON to import (alternative to inline json)"),
         },
     },
     async ({ graphName, json, jsonFile }) => {
-        let jsonStr: string;
-        try {
-            jsonStr = ResolveInlineOrFileText({
-                inlineText: json,
-                filePath: jsonFile,
-                inlineLabel: "json",
-                fileLabel: "jsonFile",
-                fileDescription: "Flow Graph JSON file",
-            }).text;
-        } catch (e) {
-            return CreateErrorResponse((e as Error).message);
-        }
-        const result = manager.importJSON(graphName, jsonStr);
-        if (result !== "OK") {
-            return CreateErrorResponse(`Error: ${result}`);
-        }
-        const desc = manager.describeGraph(graphName);
-        return CreateTextResponse(`Imported successfully.\n\n${desc}`);
+        return CreateJsonImportResponse({
+            json,
+            jsonFile,
+            fileDescription: "Flow Graph JSON file",
+            importJson: (jsonText) => manager.importJSON(graphName, jsonText),
+            describeImported: () => manager.describeGraph(graphName),
+        });
     }
 );
 
