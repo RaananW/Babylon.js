@@ -1,0 +1,438 @@
+import type { IScenario } from "@memlab/core";
+
+import type { GlobalConfig } from "./config";
+import { createBabylonLeakFilter, type LeakFilterOptions } from "./filters";
+import {
+    evaluateDisposePlaygroundScene,
+    evaluateInitializePlaygroundScene,
+    evaluateInitializePackageScene,
+    evaluateMountViewerScenario,
+    evaluateUnmountViewerScenario,
+    type PackageSceneBrowserOptions,
+    type PlaygroundSceneBrowserOptions,
+    type ViewerSceneBrowserOptions,
+} from "./browserActions";
+
+interface PageLike {
+    evaluate: (...args: any[]) => Promise<any>;
+    waitForFunction: (...args: any[]) => Promise<any>;
+    setViewport: (viewport: { width: number; height: number }) => Promise<void>;
+}
+
+/** Supported scenario groups. */
+export type ScenarioSuite = "ci" | "extended" | "packages" | "all";
+
+interface BaseScenarioDefinition {
+    /** Stable identifier used by the CLI. */
+    id: string;
+    /** Human readable scenario name. */
+    name: string;
+    /** Package this scenario is intended to validate. */
+    packageName: string;
+    /** Scenario suites that include this scenario. */
+    suites: Exclude<ScenarioSuite, "all">[];
+    /** Optional memlab repeat count. */
+    repeat?: number;
+    /** Optional per-scenario timeout. */
+    timeoutMs?: number;
+    /** Optional delay after the scene becomes ready. */
+    settleAfterReadyMs?: number;
+    /** Optional delay after disposal completes. */
+    settleAfterDisposeMs?: number;
+    /** Optional leak filter overrides. */
+    leakFilterOptions?: LeakFilterOptions;
+}
+
+/** Scenario definition for Babylon playground-based leak checks. */
+export interface PlaygroundScenarioDefinition extends BaseScenarioDefinition {
+    /** Discriminator. */
+    kind: "playground";
+    /** Playground identifier to run. */
+    playgroundId: string;
+    /** Number of frames to render after the scene is ready. */
+    renderCount?: number;
+    /** Whether to briefly show the inspector during the action. */
+    toggleInspector?: boolean;
+    /** Whether to mutate the active camera during the action. */
+    simulateCameraMove?: boolean;
+    /** Whether to briefly exercise animation groups during the action. */
+    exerciseAnimationGroups?: boolean;
+}
+
+/** Scenario definition for non-core package pages. */
+export interface ViewerScenarioDefinition extends BaseScenarioDefinition {
+    /** Discriminator. */
+    kind: "viewer";
+    /** Relative path of the page that serves the viewer app. */
+    urlPath: string;
+    /** HTML injected into the page to create the viewer scenario. */
+    viewerHtml: string;
+    /** Required minimum rendered frame count. */
+    minFrameCount?: number;
+}
+
+/** Scenario definition for package-focused checks hosted on the Babylon Server empty page. */
+export interface PackageScenarioDefinition extends BaseScenarioDefinition {
+    /** Discriminator. */
+    kind: "package";
+    /** Browser-side package scenario identifier. */
+    packageScenario: PackageSceneBrowserOptions["scenario"];
+    /** Number of frames to render after the package action is ready. */
+    renderCount?: number;
+}
+
+/** All supported scenario definitions. */
+export type MemoryLeakScenarioDefinition = PlaygroundScenarioDefinition | ViewerScenarioDefinition | PackageScenarioDefinition;
+
+/**
+ * Default scenario coverage for the Babylon memory leak runner.
+ */
+export const defaultScenarioDefinitions: MemoryLeakScenarioDefinition[] = [
+    {
+        id: "core-playground-2FDQT5-1508",
+        name: "Core Playground #2FDQT5#1508",
+        packageName: "@babylonjs/core",
+        kind: "playground",
+        playgroundId: "#2FDQT5#1508",
+        suites: ["ci", "extended"],
+        repeat: 1,
+        timeoutMs: 90000,
+        renderCount: 8,
+        simulateCameraMove: true,
+        exerciseAnimationGroups: true,
+        settleAfterReadyMs: 150,
+        settleAfterDisposeMs: 150,
+    },
+    {
+        id: "core-playground-T90MQ4-14",
+        name: "Core Playground #T90MQ4#14",
+        packageName: "@babylonjs/core",
+        kind: "playground",
+        playgroundId: "#T90MQ4#14",
+        suites: ["ci", "extended"],
+        repeat: 1,
+        timeoutMs: 90000,
+        renderCount: 8,
+        settleAfterReadyMs: 150,
+        settleAfterDisposeMs: 150,
+    },
+    {
+        id: "core-playground-8EDB5N-2",
+        name: "Core Playground #8EDB5N#2",
+        packageName: "@babylonjs/core",
+        kind: "playground",
+        playgroundId: "#8EDB5N#2",
+        suites: ["ci", "extended"],
+        repeat: 1,
+        timeoutMs: 90000,
+        renderCount: 8,
+        settleAfterReadyMs: 150,
+        settleAfterDisposeMs: 150,
+    },
+    {
+        id: "core-playground-LL5BIQ-636",
+        name: "Core Playground #LL5BIQ#636",
+        packageName: "@babylonjs/core",
+        kind: "playground",
+        playgroundId: "#LL5BIQ#636",
+        suites: ["ci", "extended"],
+        repeat: 1,
+        timeoutMs: 120000,
+        renderCount: 14,
+        simulateCameraMove: true,
+        exerciseAnimationGroups: true,
+        settleAfterReadyMs: 250,
+        settleAfterDisposeMs: 250,
+    },
+    {
+        id: "core-playground-YACNQS-2",
+        name: "Core Playground #YACNQS#2",
+        packageName: "@babylonjs/core",
+        kind: "playground",
+        playgroundId: "#YACNQS#2",
+        suites: ["extended"],
+        repeat: 1,
+        timeoutMs: 90000,
+        renderCount: 8,
+        settleAfterReadyMs: 150,
+        settleAfterDisposeMs: 150,
+    },
+    {
+        id: "core-playground-SLV8LW-3",
+        name: "Core Playground #SLV8LW#3",
+        packageName: "@babylonjs/core",
+        kind: "playground",
+        playgroundId: "#SLV8LW#3",
+        suites: ["extended"],
+        repeat: 1,
+        timeoutMs: 90000,
+        renderCount: 8,
+        settleAfterReadyMs: 150,
+        settleAfterDisposeMs: 150,
+    },
+    {
+        id: "core-playground-1LK70I-40",
+        name: "Core Playground #1LK70I#40",
+        packageName: "@babylonjs/core",
+        kind: "playground",
+        playgroundId: "#1LK70I#40",
+        suites: ["extended"],
+        repeat: 1,
+        timeoutMs: 120000,
+        renderCount: 16,
+        settleAfterReadyMs: 250,
+        settleAfterDisposeMs: 250,
+    },
+    {
+        id: "gui-fullscreen-ui-controls",
+        name: "GUI Fullscreen UI Controls",
+        packageName: "@babylonjs/gui",
+        kind: "package",
+        packageScenario: "gui-fullscreen-ui",
+        suites: ["packages"],
+        repeat: 1,
+        timeoutMs: 90000,
+        renderCount: 10,
+        settleAfterReadyMs: 150,
+        settleAfterDisposeMs: 150,
+    },
+    {
+        id: "gui-mesh-adt-controls",
+        name: "GUI Mesh ADT Controls",
+        packageName: "@babylonjs/gui",
+        kind: "package",
+        packageScenario: "gui-mesh-adt",
+        suites: ["packages"],
+        repeat: 1,
+        timeoutMs: 90000,
+        renderCount: 10,
+        settleAfterReadyMs: 150,
+        settleAfterDisposeMs: 150,
+    },
+    {
+        id: "loaders-boombox-import",
+        name: "Loaders Boombox Import",
+        packageName: "@babylonjs/loaders",
+        kind: "package",
+        packageScenario: "loaders-boombox-import",
+        suites: ["packages"],
+        repeat: 1,
+        timeoutMs: 120000,
+        renderCount: 10,
+        settleAfterReadyMs: 250,
+        settleAfterDisposeMs: 250,
+    },
+    {
+        id: "loaders-obj-direct-load",
+        name: "Loaders OBJ Direct Load",
+        packageName: "@babylonjs/loaders",
+        kind: "package",
+        packageScenario: "loaders-obj-direct-load",
+        suites: ["packages"],
+        repeat: 1,
+        timeoutMs: 90000,
+        renderCount: 8,
+        settleAfterReadyMs: 150,
+        settleAfterDisposeMs: 150,
+    },
+    {
+        id: "loaders-stl-direct-load",
+        name: "Loaders STL Direct Load",
+        packageName: "@babylonjs/loaders",
+        kind: "package",
+        packageScenario: "loaders-stl-direct-load",
+        suites: ["packages"],
+        repeat: 1,
+        timeoutMs: 90000,
+        renderCount: 8,
+        settleAfterReadyMs: 150,
+        settleAfterDisposeMs: 150,
+    },
+    {
+        id: "serializers-gltf-export",
+        name: "Serializers glTF Export",
+        packageName: "@babylonjs/serializers",
+        kind: "package",
+        packageScenario: "serializers-gltf-export",
+        suites: ["packages"],
+        repeat: 1,
+        timeoutMs: 120000,
+        renderCount: 8,
+        settleAfterReadyMs: 200,
+        settleAfterDisposeMs: 200,
+    },
+    {
+        id: "serializers-glb-export",
+        name: "Serializers GLB Export",
+        packageName: "@babylonjs/serializers",
+        kind: "package",
+        packageScenario: "serializers-glb-export",
+        suites: ["packages"],
+        repeat: 1,
+        timeoutMs: 120000,
+        renderCount: 8,
+        settleAfterReadyMs: 200,
+        settleAfterDisposeMs: 200,
+    },
+    {
+        id: "viewer-boombox-web-component",
+        name: "Viewer Boombox Web Component",
+        packageName: "@tools/viewer",
+        kind: "viewer",
+        suites: ["extended"],
+        repeat: 1,
+        timeoutMs: 90000,
+        urlPath: "/packages/tools/viewer/test/apps/web/test.html",
+        minFrameCount: 20,
+        viewerHtml: '<babylon-viewer render-when-idle source="https://assets.babylonjs.com/meshes/boombox.glb" environment="auto" animation-auto-play></babylon-viewer>',
+        settleAfterReadyMs: 150,
+        settleAfterDisposeMs: 150,
+        leakFilterOptions: { minRetainedSize: 50000 },
+    },
+];
+
+/**
+ * Resolves scenario definitions from a suite name and optional ids.
+ * @param suite The scenario suite to resolve.
+ * @param scenarioIds Optional explicit scenario ids.
+ * @param definitions Scenario definitions to resolve from.
+ * @returns The resolved scenario definitions.
+ */
+export function resolveScenarioDefinitions(
+    suite: ScenarioSuite = "ci",
+    scenarioIds?: string[],
+    definitions: MemoryLeakScenarioDefinition[] = defaultScenarioDefinitions
+): MemoryLeakScenarioDefinition[] {
+    if (scenarioIds?.length) {
+        const selected = definitions.filter((definition) => scenarioIds.includes(definition.id));
+        const missingScenarioIds = scenarioIds.filter((scenarioId) => !selected.some((definition) => definition.id === scenarioId));
+        if (missingScenarioIds.length > 0) {
+            throw new Error(`Unknown memory leak scenario(s): ${missingScenarioIds.join(", ")}.`);
+        }
+        return selected;
+    }
+
+    if (suite === "all") {
+        return [...definitions];
+    }
+
+    return definitions.filter((definition) => definition.suites.includes(suite));
+}
+
+const waitForHarnessIdle = async (page: PageLike, timeoutMs: number) => {
+    await page.waitForFunction(
+        () => {
+            const harnessState = (window as any).__babylonLeakHarnessState;
+            return !!window.document && !harnessState?.busy;
+        },
+        { timeout: timeoutMs }
+    );
+
+    const errorMessage = await page.evaluate(() => (window as any).__babylonLeakHarnessState?.lastError ?? null);
+    if (errorMessage) {
+        throw new Error(errorMessage);
+    }
+};
+
+const createSharedScenarioScaffold = (
+    definition: BaseScenarioDefinition,
+    initialPageUrl: () => string
+): Pick<IScenario, "url" | "repeat" | "isPageLoaded" | "beforeInitialPageLoad"> => {
+    return {
+        url: initialPageUrl,
+        repeat: () => definition.repeat ?? 0,
+        beforeInitialPageLoad: async (page: PageLike) => {
+            await page.setViewport({ width: 1280, height: 720 });
+        },
+        isPageLoaded: async (page: PageLike) => {
+            await page.waitForFunction(
+                () => {
+                    const harnessState = (window as any).__babylonLeakHarnessState;
+                    return document.readyState === "complete" && !harnessState?.busy;
+                },
+                { timeout: definition.timeoutMs ?? 60000 }
+            );
+            return true;
+        },
+    };
+};
+
+/**
+ * Builds a memlab scenario object from a scenario definition.
+ * @param definition The scenario definition.
+ * @param config The resolved global configuration.
+ * @returns The memlab scenario.
+ */
+export function createMemlabScenario(definition: MemoryLeakScenarioDefinition, config: GlobalConfig): IScenario {
+    if (definition.kind === "playground") {
+        const browserOptions: PlaygroundSceneBrowserOptions = {
+            baseUrl: config.baseUrl,
+            snippetUrl: config.snippetUrl,
+            pgRoot: config.pgRoot,
+            playgroundId: definition.playgroundId,
+            renderCount: definition.renderCount,
+            toggleInspector: definition.toggleInspector,
+            simulateCameraMove: definition.simulateCameraMove,
+            exerciseAnimationGroups: definition.exerciseAnimationGroups,
+            engineName: "webgl2",
+            settleAfterReadyMs: definition.settleAfterReadyMs,
+            settleAfterDisposeMs: definition.settleAfterDisposeMs,
+        };
+
+        return {
+            ...createSharedScenarioScaffold(definition, () => `${config.baseUrl}/empty.html`),
+            action: async (page: PageLike) => {
+                await page.evaluate(evaluateInitializePlaygroundScene, browserOptions);
+                await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
+            },
+            back: async (page: PageLike) => {
+                await page.evaluate(evaluateDisposePlaygroundScene, { settleAfterDisposeMs: definition.settleAfterDisposeMs });
+                await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
+            },
+            leakFilter: createBabylonLeakFilter(definition.leakFilterOptions),
+        };
+    }
+
+    if (definition.kind === "package") {
+        const browserOptions: PackageSceneBrowserOptions = {
+            baseUrl: config.baseUrl,
+            assetsUrl: config.assetsUrl,
+            scenario: definition.packageScenario,
+            renderCount: definition.renderCount,
+            settleAfterReadyMs: definition.settleAfterReadyMs,
+        };
+
+        return {
+            ...createSharedScenarioScaffold(definition, () => `${config.baseUrl}/empty.html`),
+            action: async (page: PageLike) => {
+                await page.evaluate(evaluateInitializePackageScene, browserOptions);
+                await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
+            },
+            back: async (page: PageLike) => {
+                await page.evaluate(evaluateDisposePlaygroundScene, { settleAfterDisposeMs: definition.settleAfterDisposeMs });
+                await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
+            },
+            leakFilter: createBabylonLeakFilter(definition.leakFilterOptions),
+        };
+    }
+
+    const browserOptions: ViewerSceneBrowserOptions = {
+        viewerHtml: definition.viewerHtml,
+        minFrameCount: definition.minFrameCount,
+        settleAfterReadyMs: definition.settleAfterReadyMs,
+        settleAfterDisposeMs: definition.settleAfterDisposeMs,
+    };
+
+    return {
+        ...createSharedScenarioScaffold(definition, () => `${config.viewerBaseUrl}${definition.urlPath}`),
+        action: async (page: PageLike) => {
+            await page.evaluate(evaluateMountViewerScenario, browserOptions);
+            await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
+        },
+        back: async (page: PageLike) => {
+            await page.evaluate(evaluateUnmountViewerScenario, { settleAfterDisposeMs: definition.settleAfterDisposeMs });
+            await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
+        },
+        leakFilter: createBabylonLeakFilter(definition.leakFilterOptions),
+    };
+}
