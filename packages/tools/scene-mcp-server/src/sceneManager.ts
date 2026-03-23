@@ -30,6 +30,13 @@ import {
 } from "./catalog.js";
 
 import { generateSceneCode, generateProjectFiles, generateSnippet, type ICodeGeneratorOptions, type ISnippetOptions } from "./codeGenerator.js";
+import {
+    ValidateFlowGraphAttachmentPayload,
+    ValidateGuiAttachmentPayload,
+    ValidateNodeGeometryAttachmentPayload,
+    ValidateNodeMaterialAttachmentPayload,
+    ValidateNodeRenderGraphAttachmentPayload,
+} from "../../mcpServerCore/dist/index.js";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Serialized types — these form the scene descriptor JSON
@@ -1068,6 +1075,13 @@ export class SceneManager {
         if (!MaterialPresets[type] && type !== "NodeMaterial" && type !== "StandardMaterial" && type !== "PBRMaterial") {
             return `Unknown material type "${type}". Known types: ${Object.keys(MaterialPresets).join(", ")}`;
         }
+        if (type === "NodeMaterial" && nmeJson) {
+            try {
+                ValidateNodeMaterialAttachmentPayload(nmeJson);
+            } catch (e) {
+                return (e as Error).message;
+            }
+        }
         const id = this.nextId(sceneName, "mat");
         const mat: ISerializedMaterial = { id, name, type, properties: properties ?? {}, nmeJson, snippetId };
         scene.materials.push(mat);
@@ -1589,6 +1603,12 @@ export class SceneManager {
         if (!scene) {
             return `Scene "${sceneName}" not found.`;
         }
+        let validatedFlowGraph;
+        try {
+            validatedFlowGraph = ValidateFlowGraphAttachmentPayload(coordinatorJson);
+        } catch (e) {
+            return (e as Error).message;
+        }
         const id = this.nextId(sceneName, "fg");
         // Gap 33: Replace existing flow graph with same name instead of duplicating
         const existingIdx = scene.flowGraphs.findIndex((fg) => fg.name === name);
@@ -1601,14 +1621,12 @@ export class SceneManager {
         // Validate mesh references inside the coordinator JSON
         const warnings: string[] = [];
         try {
-            const parsed = typeof coordinatorJson === "string" ? JSON.parse(coordinatorJson) : coordinatorJson;
             const knownMeshNames = new Set([...scene.meshes.map((m) => m.name), ...scene.transformNodes.map((t) => t.name)]);
             const knownMeshIds = new Set([...scene.meshes.map((m) => m.id), ...scene.transformNodes.map((t) => t.id)]);
 
             // Walk all blocks in all flow graphs looking for mesh/camera references in config
-            const graphs = parsed.flowGraphs ?? parsed.graphs ?? [];
-            for (const fg of graphs) {
-                const blocks = fg.allBlocks ?? fg.blocks ?? [];
+            for (const fg of validatedFlowGraph.graphs) {
+                const blocks = (Array.isArray(fg.allBlocks) ? fg.allBlocks : Array.isArray(fg.blocks) ? fg.blocks : []) as Array<Record<string, unknown>>;
                 for (const block of blocks) {
                     const config = block.config;
                     if (!config) {
@@ -2559,17 +2577,10 @@ export class SceneManager {
         if (!scene) {
             return `Scene "${sceneName}" not found.`;
         }
-        // Basic validation — must have a root container
-        if (typeof guiJson === "string") {
-            try {
-                guiJson = JSON.parse(guiJson);
-            } catch (e) {
-                return `Invalid GUI JSON: ${e instanceof Error ? e.message : String(e)}`;
-            }
-        }
-        const gui = guiJson as { root?: unknown };
-        if (!gui || typeof gui !== "object" || !gui.root) {
-            return "Invalid GUI JSON: must contain a 'root' object.";
+        try {
+            guiJson = ValidateGuiAttachmentPayload(guiJson);
+        } catch (e) {
+            return (e as Error).message;
         }
         scene.guiJson = guiJson;
         return "OK";
@@ -2731,16 +2742,10 @@ export class SceneManager {
         if (!scene) {
             return `Scene "${sceneName}" not found.`;
         }
-        if (typeof nrgJson === "string") {
-            try {
-                nrgJson = JSON.parse(nrgJson);
-            } catch (e) {
-                return `Invalid NRG JSON: ${(e as Error).message}`;
-            }
-        }
-        const nrg = nrgJson as { customType?: string };
-        if (nrg.customType !== "BABYLON.NodeRenderGraph") {
-            return `Invalid NRG JSON: customType must be "BABYLON.NodeRenderGraph" but got "${nrg.customType}".`;
+        try {
+            nrgJson = ValidateNodeRenderGraphAttachmentPayload(nrgJson);
+        } catch (e) {
+            return (e as Error).message;
         }
         scene.nodeRenderGraphJson = nrgJson;
         return "OK";
@@ -2772,16 +2777,10 @@ export class SceneManager {
         if (!scene) {
             return `Scene "${sceneName}" not found.`;
         }
-        if (typeof ngeJson === "string") {
-            try {
-                ngeJson = JSON.parse(ngeJson);
-            } catch (e) {
-                return `Invalid NGE JSON: ${(e as Error).message}`;
-            }
-        }
-        const nge = ngeJson as { customType?: string };
-        if (nge.customType !== "BABYLON.NodeGeometry") {
-            return `Invalid NGE JSON: customType must be "BABYLON.NodeGeometry" but got "${nge.customType}".`;
+        try {
+            ngeJson = ValidateNodeGeometryAttachmentPayload(ngeJson);
+        } catch (e) {
+            return (e as Error).message;
         }
         if (!scene.nodeGeometryMeshes) {
             scene.nodeGeometryMeshes = [];
