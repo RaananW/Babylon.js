@@ -2505,7 +2505,7 @@ server.registerTool(
     },
     async ({ sceneName }) => {
         const desc = manager.describeScene(sceneName);
-        return { content: [{ type: "text", text: desc }] };
+        return CreateTextResponse(desc);
     }
 );
 
@@ -2520,7 +2520,7 @@ server.registerTool(
     },
     async ({ sceneName, nodeId }) => {
         const desc = manager.describeNode(sceneName, nodeId);
-        return { content: [{ type: "text", text: desc }] };
+        return CreateTextResponse(desc);
     }
 );
 
@@ -2536,14 +2536,14 @@ server.registerTool(
         if (type) {
             const info = MeshPrimitives[type];
             if (!info) {
-                return { content: [{ type: "text", text: `Unknown mesh type "${type}".` }], isError: true };
+                return CreateErrorResponse(`Unknown mesh type "${type}".`);
             }
             const opts = Object.entries(info.options)
                 .map(([k, v]) => `  • ${k} (${v.type}${v.default !== undefined ? `, default: ${v.default}` : ""}): ${v.description}`)
                 .join("\n");
-            return { content: [{ type: "text", text: `## ${type}\n${info.description}\n\n### Options:\n${opts}` }] };
+            return CreateTextResponse(`## ${type}\n${info.description}\n\n### Options:\n${opts}`);
         }
-        return { content: [{ type: "text", text: `## Mesh Primitives\n${GetMeshPrimitivesSummary()}` }] };
+        return CreateTextResponse(`## Mesh Primitives\n${GetMeshPrimitivesSummary()}`);
     }
 );
 
@@ -2559,14 +2559,14 @@ server.registerTool(
         if (type) {
             const info = CameraTypes[type];
             if (!info) {
-                return { content: [{ type: "text", text: `Unknown camera type "${type}".` }], isError: true };
+                return CreateErrorResponse(`Unknown camera type "${type}".`);
             }
             const opts = Object.entries(info.options)
                 .map(([k, v]) => `  • ${k} (${v.type}${v.default !== undefined ? `, default: ${JSON.stringify(v.default)}` : ""}): ${v.description}`)
                 .join("\n");
-            return { content: [{ type: "text", text: `## ${type}\n${info.description}\n\n### Properties:\n${opts}` }] };
+            return CreateTextResponse(`## ${type}\n${info.description}\n\n### Properties:\n${opts}`);
         }
-        return { content: [{ type: "text", text: `## Camera Types\n${GetCameraTypesSummary()}` }] };
+        return CreateTextResponse(`## Camera Types\n${GetCameraTypesSummary()}`);
     }
 );
 
@@ -2582,14 +2582,14 @@ server.registerTool(
         if (type) {
             const info = LightTypes[type];
             if (!info) {
-                return { content: [{ type: "text", text: `Unknown light type "${type}".` }], isError: true };
+                return CreateErrorResponse(`Unknown light type "${type}".`);
             }
             const opts = Object.entries(info.options)
                 .map(([k, v]) => `  • ${k} (${v.type}${v.default !== undefined ? `, default: ${JSON.stringify(v.default)}` : ""}): ${v.description}`)
                 .join("\n");
-            return { content: [{ type: "text", text: `## ${type}\n${info.description}\n\n### Properties:\n${opts}` }] };
+            return CreateTextResponse(`## ${type}\n${info.description}\n\n### Properties:\n${opts}`);
         }
-        return { content: [{ type: "text", text: `## Light Types\n${GetLightTypesSummary()}` }] };
+        return CreateTextResponse(`## Light Types\n${GetLightTypesSummary()}`);
     }
 );
 
@@ -2605,27 +2605,27 @@ server.registerTool(
         if (type) {
             const info = MaterialPresets[type];
             if (!info) {
-                return { content: [{ type: "text", text: `Unknown material type "${type}".` }], isError: true };
+                return CreateErrorResponse(`Unknown material type "${type}".`);
             }
             const opts = Object.entries(info.options)
                 .map(([k, v]) => `  • ${k} (${v.type}${v.default !== undefined ? `, default: ${JSON.stringify(v.default)}` : ""}): ${v.description}`)
                 .join("\n");
-            return { content: [{ type: "text", text: `## ${type}\n${info.description}\n\n### Properties:\n${opts}` }] };
+            return CreateTextResponse(`## ${type}\n${info.description}\n\n### Properties:\n${opts}`);
         }
-        return { content: [{ type: "text", text: `## Material Types\n${GetMaterialPresetsSummary()}` }] };
+        return CreateTextResponse(`## Material Types\n${GetMaterialPresetsSummary()}`);
     }
 );
 
 server.registerTool("list_particle_emitter_types", { description: "List all available particle emitter shapes (Box, Sphere, Cone, etc.) and their options." }, async () => {
-    return { content: [{ type: "text", text: `## Particle Emitter Types\n${GetParticleEmitterTypesSummary()}` }] };
+    return CreateTextResponse(`## Particle Emitter Types\n${GetParticleEmitterTypesSummary()}`);
 });
 
 server.registerTool("list_physics_constraint_types", { description: "List all available physics constraint/joint types (BallAndSocket, Hinge, Slider, etc.)." }, async () => {
-    return { content: [{ type: "text", text: `## Physics Constraint Types\n${GetPhysicsConstraintTypesSummary()}` }] };
+    return CreateTextResponse(`## Physics Constraint Types\n${GetPhysicsConstraintTypesSummary()}`);
 });
 
 server.registerTool("list_post_process_effects", { description: "List all available post-processing effects and their configuration properties." }, async () => {
-    return { content: [{ type: "text", text: `## Post-Process Effects\n${GetPostProcessEffectsSummary()}` }] };
+    return CreateTextResponse(`## Post-Process Effects\n${GetPostProcessEffectsSummary()}`);
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -2673,18 +2673,13 @@ server.registerTool(
     async ({ sceneName, enabled, overlay, initialTab }) => {
         const result = manager.enableInspector(sceneName, enabled, { overlay, initialTab });
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: enabled
-                        ? `Inspector v2 enabled on scene "${sceneName}".${overlay ? " (overlay mode)" : " (embedded mode)"}${initialTab ? ` Initial tab: ${initialTab}.` : ""}`
-                        : `Inspector disabled on scene "${sceneName}".`,
-                },
-            ],
-        };
+        return CreateTextResponse(
+            enabled
+                ? `Inspector v2 enabled on scene "${sceneName}".${overlay ? " (overlay mode)" : " (embedded mode)"}${initialTab ? ` Initial tab: ${initialTab}.` : ""}`
+                : `Inspector disabled on scene "${sceneName}".`
+        );
     }
 );
 
@@ -2718,21 +2713,19 @@ server.registerTool(
                 fileDescription: "GUI JSON file",
             }).text;
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         let parsed: unknown;
         try {
             parsed = ParseJsonText({ jsonText: jsonStr, jsonLabel: "GUI JSON" });
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         const result = manager.attachGUI(sceneName, parsed);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return {
-            content: [{ type: "text", text: `GUI attached to scene "${sceneName}". It will be automatically included in all code exports.` }],
-        };
+        return CreateTextResponse(`GUI attached to scene "${sceneName}". It will be automatically included in all code exports.`);
     }
 );
 
@@ -2746,10 +2739,7 @@ server.registerTool(
     },
     async ({ sceneName }) => {
         const result = manager.detachGUI(sceneName);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `GUI detached from scene "${sceneName}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK" ? CreateTextResponse(`GUI detached from scene "${sceneName}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2763,7 +2753,7 @@ server.registerTool(
     },
     async ({ sceneName }) => {
         const desc = manager.describeGUI(sceneName);
-        return { content: [{ type: "text", text: desc }] };
+        return CreateTextResponse(desc);
     }
 );
 
@@ -2797,26 +2787,19 @@ server.registerTool(
                 fileDescription: "NRG JSON file",
             }).text;
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         let parsed: unknown;
         try {
             parsed = ParseJsonText({ jsonText: jsonStr, jsonLabel: "NRG JSON" });
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         const result = manager.attachNodeRenderGraph(sceneName, parsed);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Node Render Graph attached to scene "${sceneName}". It will be included in all code exports automatically.`,
-                },
-            ],
-        };
+        return CreateTextResponse(`Node Render Graph attached to scene "${sceneName}". It will be included in all code exports automatically.`);
     }
 );
 
@@ -2830,10 +2813,9 @@ server.registerTool(
     },
     async ({ sceneName }) => {
         const result = manager.detachNodeRenderGraph(sceneName);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Node Render Graph detached from scene "${sceneName}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK"
+            ? CreateTextResponse(`Node Render Graph detached from scene "${sceneName}".`)
+            : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2867,26 +2849,19 @@ server.registerTool(
                 fileDescription: "NGE JSON file",
             }).text;
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         let parsed: unknown;
         try {
             parsed = ParseJsonText({ jsonText: jsonStr, jsonLabel: "NGE JSON" });
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         const result = manager.addNodeGeometryMesh(sceneName, meshName, parsed);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Node Geometry mesh "${meshName}" added to scene "${sceneName}". It will be included in all code exports automatically.`,
-                },
-            ],
-        };
+        return CreateTextResponse(`Node Geometry mesh "${meshName}" added to scene "${sceneName}". It will be included in all code exports automatically.`);
     }
 );
 
@@ -2901,10 +2876,9 @@ server.registerTool(
     },
     async ({ sceneName, meshName }) => {
         const result = manager.removeNodeGeometryMesh(sceneName, meshName);
-        return {
-            content: [{ type: "text", text: result === "OK" ? `Node Geometry mesh "${meshName}" removed from scene "${sceneName}".` : `Error: ${result}` }],
-            isError: result !== "OK",
-        };
+        return result === "OK"
+            ? CreateTextResponse(`Node Geometry mesh "${meshName}" removed from scene "${sceneName}".`)
+            : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2997,11 +2971,9 @@ server.registerTool(
         }
         const result = manager.addIntegration(sceneName, normalized as Parameters<typeof manager.addIntegration>[1]);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return {
-            content: [{ type: "text", text: `Added ${integration.type} integration to "${sceneName}".` }],
-        };
+        return CreateTextResponse(`Added ${integration.type} integration to "${sceneName}".`);
     }
 );
 
@@ -3033,7 +3005,7 @@ server.registerTool(
                 results.push(`Added ${integ.type}`);
             }
         }
-        return { content: [{ type: "text", text: `Integrations:\n${results.join("\n")}` }] };
+        return CreateTextResponse(`Integrations:\n${results.join("\n")}`);
     }
 );
 
@@ -3049,9 +3021,9 @@ server.registerTool(
     async ({ sceneName, index }) => {
         const result = manager.removeIntegration(sceneName, index);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return { content: [{ type: "text", text: `Removed integration at index ${index}.` }] };
+        return CreateTextResponse(`Removed integration at index ${index}.`);
     }
 );
 
@@ -3065,7 +3037,7 @@ server.registerTool(
     },
     async ({ sceneName }) => {
         const result = manager.listIntegrations(sceneName);
-        return { content: [{ type: "text", text: result }] };
+        return CreateTextResponse(result);
     }
 );
 
@@ -3390,7 +3362,7 @@ server.registerTool(
                 results.push(line);
             }
         }
-        return { content: [{ type: "text", text: `Added meshes:\n${results.join("\n")}` }] };
+        return CreateTextResponse(`Added meshes:\n${results.join("\n")}`);
     }
 );
 
@@ -3459,7 +3431,7 @@ server.registerTool(
             }
         }
 
-        return { content: [{ type: "text", text: results.join("\n") }] };
+        return CreateTextResponse(results.join("\n"));
     }
 );
 
