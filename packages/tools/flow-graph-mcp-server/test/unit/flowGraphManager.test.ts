@@ -725,8 +725,9 @@ describe("Flow Graph MCP Server – FlowGraphManager Validation", () => {
         const mgr = new FlowGraphManager();
 
         expect(mgr.importJSON("g", "not json")).toContain("Failed to parse");
-        expect(mgr.importJSON("g", '{"random":"data"}')).toContain("Invalid JSON format");
-        expect(mgr.importJSON("g", '{"_flowGraphs":[]}')).toContain("No flow graphs");
+        expect(mgr.importJSON("g", '{"random":"data"}')).toContain("Invalid Flow Graph JSON");
+        expect(mgr.importJSON("g", '{"_flowGraphs":[]}')).toContain("Invalid Flow Graph JSON");
+        expect(mgr.importJSON("g", '{"_flowGraphs":[{"name":"bad"}]}')).toContain("Invalid Flow Graph JSON");
     });
 
     // ── Test 43: SetBlockConfig on missing block ────────────────────────

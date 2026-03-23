@@ -738,6 +738,57 @@ export interface ISerializedInspector {
     initialTab?: string;
 }
 
+const _requiredSerializedSceneArrayFields = [
+    "textures",
+    "materials",
+    "transformNodes",
+    "meshes",
+    "models",
+    "cameras",
+    "lights",
+    "animations",
+    "animationGroups",
+    "flowGraphs",
+    "sounds",
+    "particleSystems",
+    "physicsConstraints",
+    "glowLayers",
+    "highlightLayers",
+] as const;
+
+function _getInvalidSerializedSceneFields(parsed: unknown): string[] {
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        return ["scene"];
+    }
+
+    const scene = parsed as Record<string, unknown>;
+    const invalidFields: string[] = [];
+
+    if (typeof scene.version !== "string" || scene.version.length === 0) {
+        invalidFields.push("version");
+    }
+
+    if (!scene.environment || typeof scene.environment !== "object" || Array.isArray(scene.environment)) {
+        invalidFields.push("environment");
+    }
+
+    for (const field of _requiredSerializedSceneArrayFields) {
+        if (!Array.isArray(scene[field])) {
+            invalidFields.push(field);
+        }
+    }
+
+    if (scene.integrations !== undefined && !Array.isArray(scene.integrations)) {
+        invalidFields.push("integrations");
+    }
+
+    if (scene.nodeGeometryMeshes !== undefined && !Array.isArray(scene.nodeGeometryMeshes)) {
+        invalidFields.push("nodeGeometryMeshes");
+    }
+
+    return invalidFields;
+}
+
 // ─── Integration types ────────────────────────────────────────────────────
 
 /** Physics collision dispatches a FlowGraph custom event */
@@ -2881,8 +2932,9 @@ export class SceneManager {
     importJSON(sceneName: string, json: string): string {
         try {
             const parsed = JSON.parse(json) as ISerializedScene;
-            if (!parsed.version || !parsed.meshes) {
-                return "Invalid scene JSON: missing required fields (version, meshes).";
+            const invalidFields = _getInvalidSerializedSceneFields(parsed);
+            if (invalidFields.length > 0) {
+                return `Invalid scene JSON: missing or invalid required fields (${invalidFields.join(", ")}).`;
             }
             parsed.name = sceneName;
             this.scenes.set(sceneName, parsed);

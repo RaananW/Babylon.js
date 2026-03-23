@@ -14,6 +14,8 @@
  *    Multiple graphs can coexist (keyed by graph name).
  */
 
+import { ValidateFlowGraphAttachmentPayload } from "../../mcpServerCore/dist/index.js";
+
 import { FlowGraphBlockRegistry, type IFlowGraphBlockTypeInfo } from "./blockRegistry.js";
 
 // ─── Types matching Babylon.js serialization format ───────────────────────
@@ -975,20 +977,8 @@ export class FlowGraphManager {
      */
     public importJSON(graphName: string, json: string): string {
         try {
-            const parsed = JSON.parse(json);
-            let flowGraphData: ISerializedFlowGraph;
-
-            // Accept either coordinator-level or graph-level JSON
-            if (parsed._flowGraphs && Array.isArray(parsed._flowGraphs)) {
-                if (parsed._flowGraphs.length === 0) {
-                    return "No flow graphs found in the coordinator JSON.";
-                }
-                flowGraphData = parsed._flowGraphs[0];
-            } else if (parsed.allBlocks && Array.isArray(parsed.allBlocks)) {
-                flowGraphData = parsed;
-            } else {
-                return "Invalid JSON format. Expected either coordinator JSON with _flowGraphs or graph JSON with allBlocks.";
-            }
+            const validated = ValidateFlowGraphAttachmentPayload(json);
+            const flowGraphData = validated.graphs[0] as unknown as ISerializedFlowGraph;
 
             const graph: InMemoryGraph = {
                 name: graphName,

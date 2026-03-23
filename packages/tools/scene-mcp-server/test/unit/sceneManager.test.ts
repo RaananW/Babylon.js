@@ -161,9 +161,21 @@ describe("Scene MCP Server – SceneManager", () => {
     it("adds NodeMaterial with nmeJson", () => {
         const mgr = new SceneManager();
         mgr.createScene("s");
-        const id = getId(mgr.addMaterial("s", "custom", "NodeMaterial", {}, '{"editorData":{}}'));
+        const validNodeMaterialJson = JSON.stringify({
+            blocks: [{ customType: "BABYLON.VertexOutputBlock" }, { customType: "BABYLON.FragmentOutputBlock" }],
+            outputNodes: ["vertexOutput", "fragmentOutput"],
+        });
+        const id = getId(mgr.addMaterial("s", "custom", "NodeMaterial", {}, validNodeMaterialJson));
         expect(id).toBe("mat_1");
-        expect(mgr.getScene("s")!.materials[0].nmeJson).toBe('{"editorData":{}}');
+        expect(mgr.getScene("s")!.materials[0].nmeJson).toBe(validNodeMaterialJson);
+    });
+
+    it("rejects invalid NodeMaterial nmeJson", () => {
+        const mgr = new SceneManager();
+        mgr.createScene("s");
+        const result = mgr.addMaterial("s", "custom", "NodeMaterial", {}, '{"editorData":{}}');
+        expect(typeof result).toBe("string");
+        expect(result).toContain("Invalid NME JSON");
     });
 
     // ── Test 8: removeMaterial ───────────────────────────────────────────
@@ -1073,8 +1085,16 @@ describe("Scene MCP Server – SceneManager", () => {
     it("parses NRG JSON from string", () => {
         const mgr = new SceneManager();
         mgr.createScene("s");
-        ok(mgr.attachNodeRenderGraph("s", '{"customType":"BABYLON.NodeRenderGraph"}'));
+        ok(mgr.attachNodeRenderGraph("s", '{"customType":"BABYLON.NodeRenderGraph","blocks":[]}'));
         expect(mgr.getScene("s")!.nodeRenderGraphJson).toBeDefined();
+    });
+
+    it("rejects Flow Graph JSON without coordinator or graph blocks", () => {
+        const mgr = new SceneManager();
+        mgr.createScene("s");
+        const result = mgr.attachFlowGraph("s", "fg", JSON.stringify({ blocks: [] }));
+        expect(typeof result).toBe("string");
+        expect(result).toContain("Invalid Flow Graph JSON");
     });
 
     // ── Test 55: addNodeGeometryMesh ─────────────────────────────────────
@@ -1135,7 +1155,36 @@ describe("Scene MCP Server – SceneManager", () => {
     it("rejects JSON missing required fields", () => {
         const mgr = new SceneManager();
         const result = mgr.importJSON("s", '{"name":"s"}');
-        expect(result).toContain("missing required fields");
+        expect(result).toContain("missing or invalid required fields");
+        expect(result).toContain("environment");
+    });
+
+    it("rejects JSON with invalid serialized scene arrays", () => {
+        const mgr = new SceneManager();
+        const result = mgr.importJSON(
+            "s",
+            JSON.stringify({
+                version: "1.0.0",
+                environment: {},
+                textures: {},
+                materials: [],
+                transformNodes: [],
+                meshes: [],
+                models: [],
+                cameras: [],
+                lights: [],
+                animations: [],
+                animationGroups: [],
+                flowGraphs: [],
+                sounds: [],
+                particleSystems: [],
+                physicsConstraints: [],
+                glowLayers: [],
+                highlightLayers: [],
+            })
+        );
+        expect(result).toContain("missing or invalid required fields");
+        expect(result).toContain("textures");
     });
 
     // ── Test 57: Sequential ID generation ────────────────────────────────

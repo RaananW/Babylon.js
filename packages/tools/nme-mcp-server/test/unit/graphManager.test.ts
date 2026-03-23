@@ -226,6 +226,13 @@ describe("Node Material MCP Server – Graph Manager Validation", () => {
         });
     }
 
+    it("rejects invalid material JSON on import", () => {
+        const mgr = new MaterialGraphManager();
+
+        expect(mgr.importJSON("bad", '{"blocks":[],"outputNodes":[]}')).toContain("Invalid NME JSON");
+        expect(mgr.importJSON("bad", "not json")).toContain("Invalid NME JSON: parse error.");
+    });
+
     // ─── Test 4: Block registry coverage ──────────────────────────────────
 
     it("every block type can be instantiated with correct customType and port counts", () => {

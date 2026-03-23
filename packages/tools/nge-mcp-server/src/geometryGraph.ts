@@ -14,6 +14,8 @@
  *    export.  Multiple geometry graphs can coexist (keyed by name).
  */
 
+import { ValidateNodeGeometryAttachmentPayload } from "../../mcpServerCore/dist/index.js";
+
 import { BlockRegistry, type IBlockTypeInfo } from "./blockRegistry.js";
 
 // ─── Types ────────────────────────────────────────────────────────────────
@@ -996,7 +998,7 @@ export class GeometryGraphManager {
      */
     importJSON(geometryName: string, json: string): string {
         try {
-            const parsed = JSON.parse(json) as ISerializedGeometry;
+            const parsed = ValidateNodeGeometryAttachmentPayload(json) as unknown as ISerializedGeometry;
             this._geometries.set(geometryName, parsed);
 
             const maxId = parsed.blocks.reduce((max, b) => Math.max(max, b.id), 0);
@@ -1005,7 +1007,7 @@ export class GeometryGraphManager {
 
             return "OK";
         } catch (e) {
-            return `Failed to parse JSON: ${(e as Error).message}`;
+            return (e as Error).message;
         }
     }
 

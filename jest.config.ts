@@ -30,6 +30,7 @@ const createProject = (type: string) => {
         testPathIgnorePatterns: ["/node_modules/", "/packages/.*/src/"],
         moduleNameMapper: {
             ...stripAnyJsExtensionFound(pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/packages/" })),
+            "^\.\.\/\.\.\/mcpServerCore\/dist\/(.*)\\.js$": "<rootDir>/packages/tools/mcpServerCore/src/$1",
             // Remove .js from imports (for packages that include .js in the import paths)
             "^(.+)\\.js$": "$1",
         },

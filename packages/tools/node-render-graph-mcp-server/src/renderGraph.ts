@@ -58,6 +58,8 @@
  *     `targetConnectionName`  – output port name on the source block
  */
 
+import { ValidateNodeRenderGraphAttachmentPayload } from "../../mcpServerCore/dist/index.js";
+
 import { BlockRegistry } from "./blockRegistry.js";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
@@ -632,16 +634,7 @@ export class RenderGraphManager {
      * @returns The imported serialised render graph
      */
     public importJson(graphName: string, json: string, overwrite = false): ISerializedRenderGraph {
-        let parsed: ISerializedRenderGraph;
-        try {
-            parsed = JSON.parse(json) as ISerializedRenderGraph;
-        } catch (e) {
-            throw new Error(`Invalid JSON: ${(e as Error).message}`, { cause: e });
-        }
-
-        if (!parsed.blocks || !Array.isArray(parsed.blocks)) {
-            throw new Error("Invalid NRGE JSON: missing 'blocks' array.");
-        }
+        const parsed = ValidateNodeRenderGraphAttachmentPayload(json) as unknown as ISerializedRenderGraph;
 
         if (this._graphs.has(graphName) && !overwrite) {
             throw new Error(`A render graph named "${graphName}" already exists. ` + "Pass overwrite=true to replace it.");

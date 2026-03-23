@@ -14,6 +14,8 @@
  *    export.  Multiple graphs can coexist (keyed by material name).
  */
 
+import { ValidateNodeMaterialAttachmentPayload } from "../../mcpServerCore/dist/index.js";
+
 import { BlockRegistry, BlockRegistryByClassName, type IBlockTypeInfo } from "./blockRegistry.js";
 
 // ─── Types ────────────────────────────────────────────────────────────────
@@ -1315,7 +1317,7 @@ export class MaterialGraphManager {
      */
     importJSON(materialName: string, json: string): string {
         try {
-            const parsed = JSON.parse(json) as ISerializedMaterial;
+            const parsed = ValidateNodeMaterialAttachmentPayload(json) as unknown as ISerializedMaterial;
             this._materials.set(materialName, parsed);
 
             // Set nextId to be one higher than the max block id
@@ -1325,7 +1327,7 @@ export class MaterialGraphManager {
 
             return "OK";
         } catch (e) {
-            return `Failed to parse JSON: ${(e as Error).message}`;
+            return (e as Error).message;
         }
     }
 

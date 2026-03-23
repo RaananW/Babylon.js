@@ -466,6 +466,13 @@ describe("GUI MCP Server – GuiManager Validation", () => {
         expect(parsed2.root.children[0].children[0].text).toBe("imported");
     });
 
+    it("rejects invalid GUI JSON on import", () => {
+        const mgr = new GuiManager();
+
+        expect(mgr.importJSON("bad", '{"width":512}')).toContain("Invalid GUI JSON");
+        expect(mgr.importJSON("bad", "not json")).toContain("Invalid GUI JSON: parse error.");
+    });
+
     // ── Test 23: Export strips internal properties ──────────────────────
 
     it("export strips internal _nextId, _controlIndex, etc.", () => {

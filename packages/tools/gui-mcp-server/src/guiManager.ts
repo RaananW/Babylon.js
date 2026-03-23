@@ -12,6 +12,8 @@
  * 3. **Stateful & idempotent** – controls can be added, removed, moved, etc.
  */
 
+import { ValidateGuiAttachmentPayload } from "../../mcpServerCore/dist/index.js";
+
 import { ControlRegistry, BaseControlProperties, type IControlTypeInfo } from "./catalog.js";
 
 // ─── Types ────────────────────────────────────────────────────────────────
@@ -833,20 +835,16 @@ export class GuiManager {
      */
     importJSON(textureName: string, json: string): string {
         try {
-            const parsed = JSON.parse(json);
+            const parsed = ValidateGuiAttachmentPayload(json);
 
-            if (!parsed.root) {
-                return "Invalid GUI JSON — missing 'root' property.";
-            }
-
-            const width = parsed.width ?? 1920;
-            const height = parsed.height ?? 1080;
+            const width = typeof parsed.width === "number" ? parsed.width : 1920;
+            const height = typeof parsed.height === "number" ? parsed.height : 1080;
 
             this.createTexture(textureName, { width, height, isFullscreen: true });
             const tex = this._textures.get(textureName)!;
 
             // Replace root with imported data
-            tex.root = parsed.root;
+            tex.root = parsed.root as ISerializedControl;
             tex._controlIndex.clear();
             tex._parentIndex.clear();
             tex._gridCellIndex.clear();
@@ -856,7 +854,7 @@ export class GuiManager {
 
             return "OK";
         } catch (e) {
-            return `Failed to parse JSON: ${(e as Error).message}`;
+            return (e as Error).message;
         }
     }
 

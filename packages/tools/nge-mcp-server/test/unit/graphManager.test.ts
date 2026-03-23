@@ -411,6 +411,13 @@ describe("Node Geometry MCP Server – Graph Manager Validation", () => {
         expect(parsed2.outputNodeId).toBe(parsed1.outputNodeId);
     });
 
+    it("rejects invalid geometry JSON on import", () => {
+        const mgr = new GeometryGraphManager();
+
+        expect(mgr.importJSON("bad", '{"customType":"WRONG","blocks":[]}')).toContain("Invalid NGE JSON");
+        expect(mgr.importJSON("bad", "not json")).toContain("Invalid NGE JSON: parse error.");
+    });
+
     // ── Test 14: Default serialized properties ──────────────────────────
 
     it("applies defaultSerializedProperties from registry", () => {
