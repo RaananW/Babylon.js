@@ -106,5 +106,11 @@ declare module "../../Meshes/abstractMesh" {
          * @see https://doc.babylonjs.com/features/featuresDeepDive/occlusionQueries
          */
         forceRenderingWhenOccluded: boolean;
+
+        /**
+         * This number indicates the render pass id used to run the occlusion query. The default value is -1, which means run the occlusion query in all render passes.
+         * @see https://doc.babylonjs.com/features/featuresDeepDive/occlusionQueries
+         */
+        occlusionForRenderPassId: number;
     }
 }

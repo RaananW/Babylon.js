@@ -2796,7 +2796,7 @@ export abstract class AbstractMesh extends TransformNode implements IDisposable,
     }
 
     /** @internal */
-    public _checkOcclusionQuery(): boolean {
+    public _checkOcclusionQuery(_checkOnly = false): boolean {
         // Will be replaced by correct code if Occlusion queries are referenced
         return false;
     }

@@ -35,6 +35,9 @@ export class _OcclusionDataStorage {
 
     /** @internal */
     public forceRenderingWhenOccluded = false;
+
+    /** @internal */
+    public occlusionForRenderPassId = -1;
 }
 
 let _registered = false;
@@ -155,8 +158,19 @@ export function registerAbstractEngineQuery(): void {
         configurable: true,
     });
 
+    Object.defineProperty(AbstractMesh.prototype, "occlusionForRenderPassId", {
+        get: function (this: AbstractMesh) {
+            return this._occlusionDataStorage.occlusionForRenderPassId;
+        },
+        set: function (this: AbstractMesh, value: number) {
+            this._occlusionDataStorage.occlusionForRenderPassId = value;
+        },
+        enumerable: true,
+        configurable: true,
+    });
+
     // We also need to update AbstractMesh as there is a portion of the code there
-    AbstractMesh.prototype._checkOcclusionQuery = function () {
+    AbstractMesh.prototype._checkOcclusionQuery = function (checkOnly: boolean) {
         const dataStorage = this._occlusionDataStorage;
 
         if (dataStorage.occlusionType === AbstractMesh.OCCLUSION_TYPE_NONE) {
@@ -199,6 +213,10 @@ export function registerAbstractEngineQuery(): void {
                     return dataStorage.occlusionType === AbstractMesh.OCCLUSION_TYPE_OPTIMISTIC ? false : dataStorage.isOccluded;
                 }
             }
+        }
+
+        if (checkOnly) {
+            return dataStorage.isOccluded;
         }
 
         const scene = this.getScene();

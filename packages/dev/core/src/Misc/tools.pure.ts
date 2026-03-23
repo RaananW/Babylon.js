@@ -225,6 +225,14 @@ export class Tools {
     public static readonly _DefaultCdnUrl = "https://cdn.babylonjs.com";
 
     /**
+     * The CDN version to use when constructing versioned CDN URLs.
+     * Injected at build time by the version update script.
+     * When set, unversioned CDN URLs will be rewritten to include this version prefix.
+     * @internal
+     */
+    public static _CdnVersion = "8.56.1";
+
+    /**
      * @internal
      */
     public static readonly _DefaultAssetsUrl = "https://assets.babylonjs.com/core";
@@ -259,13 +267,22 @@ export class Tools {
         if (!scriptUrl) {
             return "";
         }
-        // if the base URL was set, and the script Url is an absolute path change the default path
-        if (Tools.ScriptBaseUrl && scriptUrl.startsWith(Tools._DefaultCdnUrl)) {
-            // change the default host, which is https://cdn.babylonjs.com with the one defined
-            // make sure no trailing slash is present
-
-            const baseUrl = Tools.ScriptBaseUrl[Tools.ScriptBaseUrl.length - 1] === "/" ? Tools.ScriptBaseUrl.substring(0, Tools.ScriptBaseUrl.length - 1) : Tools.ScriptBaseUrl;
-            scriptUrl = scriptUrl.replace(Tools._DefaultCdnUrl, baseUrl);
+        if (scriptUrl.startsWith(Tools._DefaultCdnUrl)) {
+            if (Tools.ScriptBaseUrl) {
+                // if the base URL was set, and the script Url is an absolute path change the default path
+                // change the default host, which is https://cdn.babylonjs.com with the one defined
+                // make sure no trailing slash is present
+                const baseUrl = Tools.ScriptBaseUrl.endsWith("/") ? Tools.ScriptBaseUrl.slice(0, -1) : Tools.ScriptBaseUrl;
+                scriptUrl = scriptUrl.replace(Tools._DefaultCdnUrl, baseUrl);
+            } else if (Tools._CdnVersion) {
+                // If a CDN version is set (injected at build time), rewrite unversioned CDN URLs to versioned ones
+                const versionedBase = `${Tools._DefaultCdnUrl}/v${Tools._CdnVersion}`;
+                // Guard against double-versioning if the URL already contains the version prefix
+                // (e.g. when GetBabylonScriptURL is called multiple times on the same URL)
+                if (!scriptUrl.startsWith(versionedBase)) {
+                    scriptUrl = scriptUrl.replace(Tools._DefaultCdnUrl, versionedBase);
+                }
+            }
         }
 
         // run the preprocessor

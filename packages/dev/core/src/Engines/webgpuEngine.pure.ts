@@ -906,7 +906,7 @@ export class WebGPUEngine extends ThinWebGPUEngine {
             disableMorphTargetTexture: false,
             textureNorm16: textureFormatsTier1,
             blendParametersPerTarget: true,
-            dualSourceBlending: true,
+            dualSourceBlending: this._deviceEnabledExtensions.includes(WebGPUConstants.FeatureName.DualSourceBlending),
         };
 
         this._features = {
