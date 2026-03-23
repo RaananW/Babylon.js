@@ -974,7 +974,9 @@ server.registerTool(
                 { type: "nodeMaterial", data: ParseJsonText({ jsonText: json, jsonLabel: "NME JSON" }) },
                 { snippetId, metadata: { name, description, tags } }
             );
-            return CreateTextResponse(`Saved material "${materialName}" to snippet server.\n\nSnippet ID: ${result.id}\nVersion: ${result.version}\nFull ID: ${result.snippetId}\n\nLoad in NME editor: https://nme.babylonjs.com/#${result.snippetId}`);
+            return CreateTextResponse(
+                `Saved material "${materialName}" to snippet server.\n\nSnippet ID: ${result.id}\nVersion: ${result.version}\nFull ID: ${result.snippetId}\n\nLoad in NME editor: https://nme.babylonjs.com/#${result.snippetId}`
+            );
         } catch (e) {
             return CreateErrorResponse(`Error saving snippet: ${(e as Error).message}`);
         }

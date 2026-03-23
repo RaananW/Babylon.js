@@ -1505,9 +1505,7 @@ server.registerTool(
     },
     async ({ sceneName, childId, parentId }) => {
         const result = manager.setParent(sceneName, childId, parentId);
-        return result === "OK"
-            ? CreateTextResponse(parentId ? `Set "${childId}" parent to "${parentId}".` : `Un-parented "${childId}".`)
-            : CreateErrorResponse(`Error: ${result}`);
+        return result === "OK" ? CreateTextResponse(parentId ? `Set "${childId}" parent to "${parentId}".` : `Un-parented "${childId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2083,9 +2081,7 @@ server.registerTool(
     },
     async ({ sceneName, particleSystemId, gradientType, gradient, value }) => {
         const result = manager.addParticleGradient(sceneName, particleSystemId, gradientType, gradient, value as number | { r: number; g: number; b: number; a?: number });
-        return result === "OK"
-            ? CreateTextResponse(`Added ${gradientType} gradient at ${gradient} to "${particleSystemId}".`)
-            : CreateErrorResponse(`Error: ${result}`);
+        return result === "OK" ? CreateTextResponse(`Added ${gradientType} gradient at ${gradient} to "${particleSystemId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2300,9 +2296,7 @@ server.registerTool(
     },
     async ({ sceneName, highlightLayerId, meshId, color, glowEmissiveOnly }) => {
         const result = manager.addMeshToHighlightLayer(sceneName, highlightLayerId, meshId, color, glowEmissiveOnly);
-        return result === "OK"
-            ? CreateTextResponse(`Added mesh "${meshId}" to highlight layer "${highlightLayerId}".`)
-            : CreateErrorResponse(`Error: ${result}`);
+        return result === "OK" ? CreateTextResponse(`Added mesh "${meshId}" to highlight layer "${highlightLayerId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 
@@ -2318,9 +2312,7 @@ server.registerTool(
     },
     async ({ sceneName, highlightLayerId, meshId }) => {
         const result = manager.removeMeshFromHighlightLayer(sceneName, highlightLayerId, meshId);
-        return result === "OK"
-            ? CreateTextResponse(`Removed mesh "${meshId}" from highlight layer "${highlightLayerId}".`)
-            : CreateErrorResponse(`Error: ${result}`);
+        return result === "OK" ? CreateTextResponse(`Removed mesh "${meshId}" from highlight layer "${highlightLayerId}".`) : CreateErrorResponse(`Error: ${result}`);
     }
 );
 

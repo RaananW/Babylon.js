@@ -267,7 +267,9 @@ server.registerTool(
         if (!doc) {
             return CreateErrorResponse(`Error: Playground "${playgroundName}" not found.`);
         }
-        return CreateTextResponse(`Playground "${playgroundName}" (${doc.language}, ${doc.code.length} chars):\n\n\`\`\`${doc.language === "TS" ? "typescript" : "javascript"}\n${doc.code}\n\`\`\``);
+        return CreateTextResponse(
+            `Playground "${playgroundName}" (${doc.language}, ${doc.code.length} chars):\n\n\`\`\`${doc.language === "TS" ? "typescript" : "javascript"}\n${doc.code}\n\`\`\``
+        );
     }
 );
 

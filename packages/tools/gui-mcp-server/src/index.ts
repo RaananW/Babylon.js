@@ -24,7 +24,14 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { CreateErrorResponse, CreateTextResponse, ParseJsonText, ResolveDefinedInput, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import {
+    CreateErrorResponse,
+    CreateTextResponse,
+    ParseJsonText,
+    ResolveDefinedInput,
+    ResolveInlineOrFileText,
+    WriteTextFileEnsuringDirectory,
+} from "../../mcpServerCore/dist/index.js";
 
 import { ControlRegistry, BaseControlProperties, GetControlCatalogSummary, GetControlTypeDetails } from "./catalog.js";
 import { GuiManager } from "./guiManager.js";

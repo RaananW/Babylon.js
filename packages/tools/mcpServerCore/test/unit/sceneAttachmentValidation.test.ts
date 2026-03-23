@@ -51,9 +51,7 @@ describe("scene attachment validation helpers", () => {
     });
 
     it("rejects empty Flow Graph coordinators", () => {
-        expect(() => ValidateFlowGraphAttachmentPayload({ _flowGraphs: [] })).toThrow(
-            "Invalid Flow Graph JSON: '_flowGraphs' must contain at least one graph."
-        );
+        expect(() => ValidateFlowGraphAttachmentPayload({ _flowGraphs: [] })).toThrow("Invalid Flow Graph JSON: '_flowGraphs' must contain at least one graph.");
     });
 
     it("accepts Node Material JSON with both output blocks", () => {
