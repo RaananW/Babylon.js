@@ -18,12 +18,7 @@ This package is not a standalone MCP server. It provides the common infrastructu
 The server packages consume this package from their entrypoints to avoid repeating the same MCP boilerplate:
 
 ```ts
-import {
-	CreateJsonExportResponse,
-	CreateJsonImportResponse,
-	CreateOutputFileSchema,
-	CreateJsonFileSchema,
-} from "../../mcpServerCore/dist/index.js";
+import { CreateJsonExportResponse, CreateJsonImportResponse, CreateOutputFileSchema, CreateJsonFileSchema } from "../../mcpServerCore/dist/index.js";
 ```
 
 That keeps repeated handler logic centralized while preserving clear, package-local tool definitions.
