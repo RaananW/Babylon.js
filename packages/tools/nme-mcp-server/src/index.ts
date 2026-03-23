@@ -22,11 +22,12 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { MaterialGraphManager } from "./materialGraph.js";
+import { ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
 import type { IDataSnippetResult } from "@tools/snippet-loader";
 import { startSessionServer, createSession, notifyMaterialUpdate, getSessionUrl, getSessionForMaterial, closeSessionForMaterial, stopSessionServer } from "./sessionServer.js";
@@ -744,8 +745,7 @@ server.registerTool(
         }
         if (outputFile) {
             try {
-                mkdirSync(dirname(outputFile), { recursive: true });
-                writeFileSync(outputFile, json, "utf-8");
+                WriteTextFileEnsuringDirectory(outputFile, json);
                 return { content: [{ type: "text", text: `NME JSON written to: ${outputFile}` }] };
             } catch (e) {
                 return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
@@ -768,16 +768,17 @@ server.registerTool(
         },
     },
     async ({ materialName, json, jsonFile }) => {
-        let jsonStr = json;
-        if (!jsonStr && jsonFile) {
-            try {
-                jsonStr = readFileSync(jsonFile, "utf-8");
-            } catch (e) {
-                return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
-            }
-        }
-        if (!jsonStr) {
-            return { content: [{ type: "text", text: "Either json or jsonFile must be provided." }], isError: true };
+        let jsonStr: string;
+        try {
+            jsonStr = ResolveInlineOrFileText({
+                inlineText: json,
+                filePath: jsonFile,
+                inlineLabel: "json",
+                fileLabel: "jsonFile",
+                fileDescription: "NME JSON file",
+            }).text;
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         const result = manager.importJSON(materialName, jsonStr);
         if (result !== "OK") {

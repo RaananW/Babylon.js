@@ -39,6 +39,8 @@
             "@tools/node-render-graph-editor/*": ["tools/nodeRenderGraphEditor/src/*"],
             "@tools/node-particle-editor/*": ["tools/nodeParticleEditor/src/*"],
             "@tools/accessibility/*": ["tools/accessibility/src/*"],
+            "@tools/mcp-server-core": ["tools/mcpServerCore/src/index"],
+            "@tools/mcp-server-core/*": ["tools/mcpServerCore/src/*"],
             "@dev/core": ["dev/core/src"],
             "@dev/gui": ["dev/gui/src"],
             "@dev/materials": ["dev/materials/src"],
