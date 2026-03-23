@@ -23,12 +23,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import { ResolveDefinedInput, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 
 import { FlowGraphBlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { FlowGraphManager } from "./flowGraphManager.js";
-
-// ─── Singleton graph manager ──────────────────────────────────────────────
 const manager = new FlowGraphManager();
 
 // ─── MCP Server ───────────────────────────────────────────────────────────
@@ -940,10 +938,16 @@ server.registerTool(
         },
     },
     async ({ graphName, name: nameAlias, connections }) => {
-        // Gap 50 fix: resolve graphName alias
-        const resolvedGraphName = graphName ?? nameAlias;
-        if (!resolvedGraphName) {
-            return { content: [{ type: "text", text: "Error: Either 'graphName' or 'name' must be provided." }], isError: true };
+        let resolvedGraphName: string;
+        try {
+            resolvedGraphName = ResolveDefinedInput({
+                candidates: [
+                    { label: "'graphName'", value: graphName },
+                    { label: "'name'", value: nameAlias },
+                ],
+            });
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         const results: string[] = [];
         for (const conn of connections) {

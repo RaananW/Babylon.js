@@ -1,5 +1,6 @@
 import { dirname } from "node:path";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { IsInputProvided, RequireAtLeastOneInput } from "./inputValidation.js";
 
 /**
  * Options used to resolve text from either inline content or a file path.
@@ -38,24 +39,28 @@ export function ResolveInlineOrFileText(options: IResolveInlineOrFileTextOptions
     const fileLabel = options.fileLabel ?? "jsonFile";
     const fileDescription = options.fileDescription ?? "file";
 
-    if (options.inlineText && options.filePath) {
+    if (IsInputProvided(options.inlineText) && IsInputProvided(options.filePath)) {
         throw new Error(`Provide either ${inlineLabel} or ${fileLabel}, not both.`);
     }
 
-    if (options.inlineText) {
+    if (IsInputProvided(options.inlineText)) {
         return {
-            text: options.inlineText,
+            text: options.inlineText as string,
             source: "inline",
         };
     }
 
-    if (!options.filePath) {
-        throw new Error(`Either ${inlineLabel} or ${fileLabel} must be provided.`);
-    }
+    RequireAtLeastOneInput({
+        candidates: [
+            { label: inlineLabel, value: options.inlineText },
+            { label: fileLabel, value: options.filePath },
+        ],
+        missingMessage: `Either ${inlineLabel} or ${fileLabel} must be provided.`,
+    });
 
     try {
         return {
-            text: readFileSync(options.filePath, "utf-8"),
+            text: readFileSync(options.filePath as string, "utf-8"),
             source: "file",
         };
     } catch (error) {

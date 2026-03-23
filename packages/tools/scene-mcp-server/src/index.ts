@@ -30,7 +30,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import { ParseJsonText, RequireAtLeastOneInput, ResolveDefinedInput, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 import { join } from "node:path";
 
 import {
@@ -707,9 +707,16 @@ server.registerTool(
         isActive,
     }) => {
         // Gap 26: resolve cameraType alias
-        const resolvedRawType = rawType ?? cameraType;
-        if (!resolvedRawType) {
-            return { content: [{ type: "text", text: "Error: Either type or cameraType must be provided." }], isError: true };
+        let resolvedRawType: string;
+        try {
+            resolvedRawType = ResolveDefinedInput({
+                candidates: [
+                    { label: "type", value: rawType },
+                    { label: "cameraType", value: cameraType },
+                ],
+            });
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         // Validate camera type
         const validCameraTypes = ["ArcRotateCamera", "FreeCamera", "UniversalCamera", "FollowCamera"];
@@ -867,9 +874,16 @@ server.registerTool(
         shadowEnabled,
     }) => {
         // Gap 45 fix: resolve lightType alias
-        const resolvedType = type ?? lightType;
-        if (!resolvedType) {
-            return { content: [{ type: "text", text: "Error: Either 'type' or 'lightType' must be provided." }], isError: true };
+        let resolvedType: string;
+        try {
+            resolvedType = ResolveDefinedInput({
+                candidates: [
+                    { label: "'type'", value: type },
+                    { label: "'lightType'", value: lightType },
+                ],
+            });
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         // Merge convenience aliases into properties (top-level wins)
         const mergedProps: Record<string, unknown> = { ...((optionsAlias as Record<string, unknown>) || {}), ...((properties as Record<string, unknown>) || {}) };
@@ -944,9 +958,16 @@ server.registerTool(
         },
     },
     async ({ sceneName, lightId, name: nameAlias, properties, direction, intensity, diffuse, specular, groundColor, range, shadowEnabled }) => {
-        const resolvedLightId = lightId ?? nameAlias;
-        if (!resolvedLightId) {
-            return { content: [{ type: "text", text: "Error: Either lightId or name must be provided." }], isError: true };
+        let resolvedLightId: string;
+        try {
+            resolvedLightId = ResolveDefinedInput({
+                candidates: [
+                    { label: "lightId", value: lightId },
+                    { label: "name", value: nameAlias },
+                ],
+            });
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         // Gap 23: Merge convenience aliases into properties
         const mergedProps: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
@@ -1108,18 +1129,20 @@ server.registerTool(
             }
         }
         // Validate that NodeMaterial has at least one source for its definition
-        if (type === "NodeMaterial" && !resolvedNmeJson && !snippetId) {
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text:
-                            `Error: NodeMaterial requires at least one of: nmeJson (inline JSON string), nmeJsonFile (path to exported NME JSON file), or snippetId. ` +
-                            `Use the Node Material MCP server's export_material_json tool to export the material to a file, then pass the file path via nmeJsonFile.`,
-                    },
-                ],
-                isError: true,
-            };
+        if (type === "NodeMaterial") {
+            try {
+                RequireAtLeastOneInput({
+                    candidates: [
+                        { label: "nmeJson", value: resolvedNmeJson },
+                        { label: "snippetId", value: snippetId },
+                    ],
+                    missingMessage:
+                        `Error: NodeMaterial requires at least one of: nmeJson (inline JSON string), nmeJsonFile (path to exported NME JSON file), or snippetId. ` +
+                        `Use the Node Material MCP server's export_material_json tool to export the material to a file, then pass the file path via nmeJsonFile.`,
+                });
+            } catch (e) {
+                return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            }
         }
         // Validate that NME JSON is actually valid JSON
         if (type === "NodeMaterial" && resolvedNmeJson) {
@@ -1221,9 +1244,16 @@ server.registerTool(
     },
     async ({ sceneName, materialId, materialName, properties, albedoColor, diffuseColor, specularColor, emissiveColor, metallic, roughness, alpha }) => {
         // Gap 46 fix: resolve materialName alias
-        const resolvedMaterialId = materialId ?? materialName;
-        if (!resolvedMaterialId) {
-            return { content: [{ type: "text", text: "Error: Either 'materialId' or 'materialName' must be provided." }], isError: true };
+        let resolvedMaterialId: string;
+        try {
+            resolvedMaterialId = ResolveDefinedInput({
+                candidates: [
+                    { label: "'materialId'", value: materialId },
+                    { label: "'materialName'", value: materialName },
+                ],
+            });
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         const mergedProperties: Record<string, unknown> = { ...((properties as Record<string, unknown>) || {}) };
         if (albedoColor !== undefined && !("albedoColor" in mergedProperties)) {
@@ -1505,9 +1535,18 @@ server.registerTool(
     },
     async ({ sceneName, nodeId, meshId, meshName, name: nameAlias, position, rotation, rotationQuaternion, scaling }) => {
         // Gap 47 fix: also accept meshName
-        const resolvedNodeId = nodeId ?? meshId ?? meshName ?? nameAlias;
-        if (!resolvedNodeId) {
-            return { content: [{ type: "text", text: "Error: Either nodeId, meshId, or name must be provided." }], isError: true };
+        let resolvedNodeId: string;
+        try {
+            resolvedNodeId = ResolveDefinedInput({
+                candidates: [
+                    { label: "nodeId", value: nodeId },
+                    { label: "meshId", value: meshId },
+                    { label: "meshName", value: meshName },
+                    { label: "name", value: nameAlias },
+                ],
+            });
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         const result = manager.setTransform(sceneName, resolvedNodeId, { position, rotation, rotationQuaternion, scaling } as Record<string, unknown>);
         return {
@@ -1768,17 +1807,32 @@ server.registerTool(
         isTrigger,
     }) => {
         // Gap 48 fix: resolve aliases
-        const resolvedMeshId = meshId ?? meshName ?? nameAlias;
-        if (!resolvedMeshId) {
-            return { content: [{ type: "text", text: "Error: Either 'meshId', 'meshName', or 'name' must be provided." }], isError: true };
-        }
-        const resolvedBodyTypeRaw = bodyType ?? typeAlias;
-        if (resolvedBodyTypeRaw === undefined) {
-            return { content: [{ type: "text", text: "Error: Either 'bodyType' or 'type' must be provided." }], isError: true };
-        }
-        const resolvedShapeTypeRaw = shapeType ?? shape;
-        if (!resolvedShapeTypeRaw) {
-            return { content: [{ type: "text", text: "Error: Either 'shapeType' or 'shape' must be provided." }], isError: true };
+        let resolvedMeshId: string;
+        let resolvedBodyTypeRaw: string | number;
+        let resolvedShapeTypeRaw: string;
+        try {
+            resolvedMeshId = ResolveDefinedInput({
+                candidates: [
+                    { label: "'meshId'", value: meshId },
+                    { label: "'meshName'", value: meshName },
+                    { label: "'name'", value: nameAlias },
+                ],
+            });
+            resolvedBodyTypeRaw = ResolveDefinedInput<string | number>({
+                candidates: [
+                    { label: "'bodyType'", value: bodyType },
+                    { label: "'type'", value: typeAlias },
+                ],
+                isPresent: (value) => value !== undefined && value !== null,
+            });
+            resolvedShapeTypeRaw = ResolveDefinedInput({
+                candidates: [
+                    { label: "'shapeType'", value: shapeType },
+                    { label: "'shape'", value: shape },
+                ],
+            });
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         // Gap 21 fix: Normalize bodyType — accept case-insensitive strings and map to numbers
         let resolvedBodyType: string | number = resolvedBodyTypeRaw;

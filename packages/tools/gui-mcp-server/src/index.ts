@@ -24,7 +24,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import { ParseJsonText, ResolveDefinedInput, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 
 import { ControlRegistry, BaseControlProperties, GetControlCatalogSummary, GetControlTypeDetails } from "./catalog.js";
 import { GuiManager } from "./guiManager.js";
@@ -302,9 +302,16 @@ server.registerTool(
         },
     },
     async ({ name, guiName, width, height, isFullscreen, idealWidth, idealHeight }) => {
-        const resolvedName = name ?? guiName;
-        if (!resolvedName) {
-            return { content: [{ type: "text", text: "Error: Either name or guiName must be provided." }], isError: true };
+        let resolvedName: string;
+        try {
+            resolvedName = ResolveDefinedInput({
+                candidates: [
+                    { label: "name", value: name },
+                    { label: "guiName", value: guiName },
+                ],
+            });
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         manager.createTexture(resolvedName, { width, height, isFullscreen, idealWidth, idealHeight });
         return {
