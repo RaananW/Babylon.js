@@ -73,7 +73,11 @@ export const countCurrentObjects = async (initialValues: CountValues, classes = 
 };
 
 // eslint-disable-next-line no-restricted-syntax
-export const evaluateInitEngine = async ({ engineName, baseUrl, parallelCompilation = true }: { engineName?: string; baseUrl?: string; parallelCompilation?: boolean } = {}) => {
+export const evaluateInitEngine = async ({
+    engineName,
+    baseUrl,
+    parallelCompilation: _parallelCompilation = true,
+}: { engineName?: string; baseUrl?: string; parallelCompilation?: boolean } = {}) => {
     // run garbage collection
     window.gc && window.gc();
     engineName = engineName ? engineName.toLowerCase() : "webgl2";
@@ -278,7 +282,7 @@ export const prepareLeakDetection = async (classes: string[] = ClassesToCheck) =
                             },
                             { cacheGlobally: true, sync: true }
                         );
-                    } catch (e) {
+                    } catch (_e) {
                         target.__stackStrace = err.stack;
                         window.classesConstructed[id] = { id: id, stackTrace: err.stack, className: target.getClassName ? target.getClassName() : "unknown" };
                         resolve(window.classesConstructed[id]);
@@ -381,6 +385,8 @@ export type PerformanceTestType = "dev" | "preview" | "stable";
 export const performanceStats = {
     /**
      * Compute the mean of an array of numbers.
+     * @param values Array of numbers to compute the mean of.
+     * @returns The mean (average) of the input values.
      */
     mean(values: number[]): number {
         return values.reduce((sum, v) => sum + v, 0) / values.length;
@@ -388,6 +394,8 @@ export const performanceStats = {
 
     /**
      * Compute the sample standard deviation of an array of numbers.
+     * @param values Array of numbers to compute the standard deviation of.
+     * @returns The sample standard deviation of the input values.
      */
     stddev(values: number[]): number {
         const m = performanceStats.mean(values);
@@ -398,15 +406,22 @@ export const performanceStats = {
     /**
      * Compute the coefficient of variation (stddev / mean). A value above ~0.10
      * indicates noisy measurements that may not be reliable.
+     * @param values Array of numbers to compute the coefficient of variation of.
+     * @returns The coefficient of variation of the input values.
      */
     coefficientOfVariation(values: number[]): number {
         const m = performanceStats.mean(values);
-        if (m === 0) return 0;
+        if (m === 0) {
+            return 0;
+        }
         return performanceStats.stddev(values) / m;
     },
 
     /**
      * Trim sorted values by removing `count` elements from each end.
+     * @param values Array of numbers to trim.
+     * @param count Number of elements to remove from each end.
+     * @returns The trimmed array of numbers.
      */
     trimmed(values: number[], count: number): number[] {
         const sorted = [...values].sort((a, b) => a - b);
@@ -417,6 +432,10 @@ export const performanceStats = {
      * Perform Welch's t-test to determine if `sampleB` is significantly slower
      * than `sampleA`. Returns a p-value (one-tailed: B > A).
      * A low p-value (< 0.05) means B is significantly slower than A.
+     * @see https://en.wikipedia.org/wiki/Welch%27s_t-test
+     * @param sampleA Array of numbers representing the first sample (e.g., baseline performance).
+     * @param sampleB Array of numbers representing the second sample (e.g., new performance).
+     * @returns An object containing the t-statistic, degrees of freedom, and p-value of the test.
      */
     welchTTest(sampleA: number[], sampleB: number[]): { t: number; df: number; pValue: number } {
         const nA = sampleA.length;
@@ -442,9 +461,14 @@ export const performanceStats = {
 /**
  * Approximate the CDF of the t-distribution using the regularized incomplete
  * beta function. Accurate enough for hypothesis testing.
+ * @param t - The t-statistic.
+ * @param df - Degrees of freedom.
+ * @returns The probability that a t-distributed variable is less than or equal to t.
  */
 function tDistCDF(t: number, df: number): number {
-    if (df <= 0) return 0.5;
+    if (df <= 0) {
+        return 0.5;
+    }
     const x = df / (df + t * t);
     const halfDf = df / 2;
     const prob = 0.5 * regularizedIncompleteBeta(x, halfDf, 0.5);
@@ -454,44 +478,63 @@ function tDistCDF(t: number, df: number): number {
 /**
  * Compute the regularized incomplete beta function I_x(a, b) using a
  * continued-fraction expansion (Lentz's method).
+ * @param x - The upper limit of integration (0 \<= x \<= 1).
+ * @param a - Shape parameter a.
+ * @param b - Shape parameter b.
+ * @returns The value of the regularized incomplete beta function.
  */
 function regularizedIncompleteBeta(x: number, a: number, b: number): number {
-    if (x <= 0) return 0;
-    if (x >= 1) return 1;
+    if (x <= 0) {
+        return 0;
+    }
+    if (x >= 1) {
+        return 1;
+    }
 
     const lnBeta = lnGamma(a) + lnGamma(b) - lnGamma(a + b);
     const front = Math.exp(Math.log(x) * a + Math.log(1 - x) * b - lnBeta) / a;
 
     // Lentz's continued fraction
-    let f = 1;
     let c = 1;
     let d = 1 - ((a + b) * x) / (a + 1);
-    if (Math.abs(d) < 1e-30) d = 1e-30;
+    if (Math.abs(d) < 1e-30) {
+        d = 1e-30;
+    }
     d = 1 / d;
-    f = d;
+    let f = d;
 
     for (let i = 1; i <= 200; i++) {
         const m = i;
         // even step
         let numerator = (m * (b - m) * x) / ((a + 2 * m - 1) * (a + 2 * m));
         d = 1 + numerator * d;
-        if (Math.abs(d) < 1e-30) d = 1e-30;
+        if (Math.abs(d) < 1e-30) {
+            d = 1e-30;
+        }
         c = 1 + numerator / c;
-        if (Math.abs(c) < 1e-30) c = 1e-30;
+        if (Math.abs(c) < 1e-30) {
+            c = 1e-30;
+        }
         d = 1 / d;
         f *= c * d;
 
         // odd step
         numerator = -((a + m) * (a + b + m) * x) / ((a + 2 * m) * (a + 2 * m + 1));
         d = 1 + numerator * d;
-        if (Math.abs(d) < 1e-30) d = 1e-30;
+        if (Math.abs(d) < 1e-30) {
+            d = 1e-30;
+        }
         c = 1 + numerator / c;
-        if (Math.abs(c) < 1e-30) c = 1e-30;
+        if (Math.abs(c) < 1e-30) {
+            c = 1e-30;
+        }
         d = 1 / d;
         const delta = c * d;
         f *= delta;
 
-        if (Math.abs(delta - 1) < 1e-10) break;
+        if (Math.abs(delta - 1) < 1e-10) {
+            break;
+        }
     }
 
     return front * f;
@@ -499,6 +542,8 @@ function regularizedIncompleteBeta(x: number, a: number, b: number): number {
 
 /**
  * Lanczos approximation for ln(Gamma(z)).
+ * @param z - The input value.
+ * @returns The natural log of the gamma function evaluated at z.
  */
 function lnGamma(z: number): number {
     const g = 7;
@@ -602,8 +647,14 @@ const defaultPerfOptions: Required<PerformanceTestOptions> = {
 /**
  * Collect render-time measurements for a scene.
  * Includes warmup passes that are discarded, then `numberOfPasses` measured passes.
+ * @param page - Playwright page instance.
+ * @param baseUrl - Base URL of the test server.
+ * @param type - Whether to test the "dev" or "stable" build.
+ * @param createSceneFunction - Function evaluated in the page to create the scene.
+ * @param opts - Performance test options.
  * @param evaluateArg - A single serializable argument passed to `page.evaluate(createSceneFunction, evaluateArg)`.
  *   Playwright requires exactly one argument. Callers must bundle whatever the scene function needs into this object.
+ * @returns The performance result containing timing measurements.
  */
 // eslint-disable-next-line no-restricted-syntax
 export const collectPerformanceSamples = async (
@@ -692,7 +743,12 @@ export const collectPerformanceSamples = async (
  * 2. Checks coefficient of variation to detect noisy measurements.
  * 3. Uses ratio check AND Welch's t-test — both must indicate regression to fail.
  * 4. On failure, runs confirmation passes to reduce false positives.
+ * @param page - Playwright page instance.
+ * @param baseUrl - Base URL of the test server.
+ * @param createSceneFunction - Function evaluated in the page to create the scene.
+ * @param options - Performance test options.
  * @param evaluateArg - A single serializable argument passed to `page.evaluate(createSceneFunction, evaluateArg)`.
+ * @returns The performance comparison result.
  */
 // eslint-disable-next-line no-restricted-syntax
 export const comparePerformance = async (
@@ -813,6 +869,14 @@ export const comparePerformance = async (
 /**
  * Legacy API — collect measurements for a single build type.
  * Kept for backward compatibility with existing tests.
+ * @param page - Playwright page instance.
+ * @param baseUrl - Base URL of the test server.
+ * @param type - Whether to test the "dev" or "stable" build.
+ * @param createSceneFunction - Function evaluated in the page to create the scene.
+ * @param numberOfPasses - Number of measurement passes.
+ * @param framesToRender - Frames rendered per pass.
+ * @param evaluateArg - Optional serializable argument for the scene function.
+ * @returns The average render time in milliseconds.
  */
 // eslint-disable-next-line no-restricted-syntax
 export const checkPerformanceOfScene = async (
