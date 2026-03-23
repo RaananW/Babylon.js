@@ -30,7 +30,16 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { ParseJsonText, RequireAtLeastOneInput, ResolveDefinedInput, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import {
+    CreateErrorResponse,
+    CreateTextResponse,
+    CreateTextResponses,
+    ParseJsonText,
+    RequireAtLeastOneInput,
+    ResolveDefinedInput,
+    ResolveInlineOrFileText,
+    WriteTextFileEnsuringDirectory,
+} from "../../mcpServerCore/dist/index.js";
 import { join } from "node:path";
 
 import {
@@ -3110,7 +3119,7 @@ server.registerTool(
                     includePreviewInError: true,
                 });
             } catch (e) {
-                return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+                return CreateErrorResponse((e as Error).message);
             }
         }
         const code = manager.exportCode(sceneName, {
@@ -3124,17 +3133,17 @@ server.registerTool(
             enableCollisionCallbacks,
         });
         if (!code) {
-            return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Scene "${sceneName}" not found.`);
         }
         if (outputFile) {
             try {
                 WriteTextFileEnsuringDirectory(outputFile, code);
-                return { content: [{ type: "text", text: `Scene code written to: ${outputFile}` }] };
+                return CreateTextResponse(`Scene code written to: ${outputFile}`);
             } catch (e) {
-                return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+                return CreateErrorResponse(`Error writing file: ${(e as Error).message}`);
             }
         }
-        return { content: [{ type: "text", text: code }] };
+        return CreateTextResponse(code);
     }
 );
 
@@ -3167,7 +3176,7 @@ server.registerTool(
                     includePreviewInError: true,
                 });
             } catch (e) {
-                return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+                return CreateErrorResponse((e as Error).message);
             }
         }
         const files = manager.exportProject(sceneName, {
@@ -3176,7 +3185,7 @@ server.registerTool(
             enableCollisionCallbacks,
         });
         if (!files) {
-            return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Scene "${sceneName}" not found.`);
         }
         if (outputDir) {
             try {
@@ -3187,18 +3196,15 @@ server.registerTool(
                 const fileList = Object.keys(files)
                     .map((f) => `  • ${f}`)
                     .join("\n");
-                return { content: [{ type: "text", text: `Wrote ${Object.keys(files).length} project files to ${outputDir}:\n${fileList}` }] };
+                return CreateTextResponse(`Wrote ${Object.keys(files).length} project files to ${outputDir}:\n${fileList}`);
             } catch (e) {
-                return { content: [{ type: "text", text: `Error writing project files: ${(e as Error).message}` }], isError: true };
+                return CreateErrorResponse(`Error writing project files: ${(e as Error).message}`);
             }
         }
-        const fileParts = Object.entries(files).map(([path, content]) => ({
-            type: "text" as const,
-            text: `--- ${path} ---\n${content}`,
-        }));
-        return {
-            content: [{ type: "text", text: `Generated ${Object.keys(files).length} project files:` }, ...fileParts],
-        };
+        return CreateTextResponses([
+            `Generated ${Object.keys(files).length} project files:`,
+            ...Object.entries(files).map(([path, content]) => `--- ${path} ---\n${content}`),
+        ]);
     }
 );
 
@@ -3221,17 +3227,17 @@ server.registerTool(
     async ({ sceneName, outputFile }) => {
         const json = manager.exportJSON(sceneName);
         if (!json) {
-            return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Scene "${sceneName}" not found.`);
         }
         if (outputFile) {
             try {
                 WriteTextFileEnsuringDirectory(outputFile, json);
-                return { content: [{ type: "text", text: `Scene JSON written to: ${outputFile}` }] };
+                return CreateTextResponse(`Scene JSON written to: ${outputFile}`);
             } catch (e) {
-                return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+                return CreateErrorResponse(`Error writing file: ${(e as Error).message}`);
             }
         }
-        return { content: [{ type: "text", text: json }] };
+        return CreateTextResponse(json);
     }
 );
 
@@ -3256,14 +3262,14 @@ server.registerTool(
                 fileDescription: "scene descriptor JSON file",
             }).text;
         } catch (e) {
-            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
+            return CreateErrorResponse((e as Error).message);
         }
         const result = manager.importJSON(sceneName, jsonStr);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
         const desc = manager.describeScene(sceneName);
-        return { content: [{ type: "text", text: `Imported successfully.\n\n${desc}` }] };
+        return CreateTextResponse(`Imported successfully.\n\n${desc}`);
     }
 );
 
@@ -3292,7 +3298,7 @@ server.registerTool(
     },
     async ({ sceneName, objectIds, categories, format, sceneVarName }) => {
         if (!objectIds?.length && !categories?.length) {
-            return { content: [{ type: "text", text: "At least one of objectIds or categories must be provided." }], isError: true };
+            return CreateErrorResponse("At least one of objectIds or categories must be provided.");
         }
         const snippet = manager.exportSnippet(sceneName, {
             objectIds,
@@ -3301,9 +3307,9 @@ server.registerTool(
             sceneVarName,
         });
         if (!snippet) {
-            return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Scene "${sceneName}" not found.`);
         }
-        return { content: [{ type: "text", text: snippet }] };
+        return CreateTextResponse(snippet);
     }
 );
 
@@ -3477,60 +3483,48 @@ server.registerTool(
     async ({ sceneName, port }) => {
         const scene = manager.getScene(sceneName);
         if (!scene) {
-            return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Scene "${sceneName}" not found.`);
         }
         try {
             const url = await startPreview(manager, sceneName, port);
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: [
-                            `Preview server started!`,
-                            ``,
-                            `  Scene:  ${sceneName}`,
-                            `  URL:    ${url}`,
-                            ``,
-                            `Open ${url} in a browser to see the scene.`,
-                            `The preview auto-updates on every browser refresh — no restart needed when you modify the scene.`,
-                            ``,
-                            `Other routes:`,
-                            `  ${url}/scenes        — list all available scenes`,
-                            `  ${url}/scene/<name>  — preview a specific scene`,
-                            `  ${url}/api/scene.json — raw scene JSON`,
-                            `  ${url}/api/code       — generated JavaScript code`,
-                        ].join("\n"),
-                    },
-                ],
-            };
+            return CreateTextResponse(
+                [
+                    `Preview server started!`,
+                    ``,
+                    `  Scene:  ${sceneName}`,
+                    `  URL:    ${url}`,
+                    ``,
+                    `Open ${url} in a browser to see the scene.`,
+                    `The preview auto-updates on every browser refresh — no restart needed when you modify the scene.`,
+                    ``,
+                    `Other routes:`,
+                    `  ${url}/scenes        — list all available scenes`,
+                    `  ${url}/scene/<name>  — preview a specific scene`,
+                    `  ${url}/api/scene.json — raw scene JSON`,
+                    `  ${url}/api/code       — generated JavaScript code`,
+                ].join("\n")
+            );
         } catch (err) {
-            return { content: [{ type: "text", text: `Failed to start preview: ${err instanceof Error ? err.message : String(err)}` }], isError: true };
+            return CreateErrorResponse(`Failed to start preview: ${err instanceof Error ? err.message : String(err)}`);
         }
     }
 );
 
 server.registerTool("stop_preview", { description: "Stop the built-in preview server." }, async () => {
     if (!isPreviewRunning()) {
-        return { content: [{ type: "text", text: "No preview server is running." }] };
+        return CreateTextResponse("No preview server is running.");
     }
     await stopPreview();
-    return { content: [{ type: "text", text: "Preview server stopped." }] };
+    return CreateTextResponse("Preview server stopped.");
 });
 
 server.registerTool("get_preview_url", { description: "Get the URL of the currently running preview server, if any." }, async () => {
     if (!isPreviewRunning()) {
-        return { content: [{ type: "text", text: "No preview server is running. Use start_preview to launch one." }] };
+        return CreateTextResponse("No preview server is running. Use start_preview to launch one.");
     }
     const url = getPreviewUrl()!;
     const scene = getPreviewSceneName()!;
-    return {
-        content: [
-            {
-                type: "text",
-                text: `Preview running at ${url} (scene: "${scene}").\nRefresh the browser to see the latest changes.`,
-            },
-        ],
-    };
+    return CreateTextResponse(`Preview running at ${url} (scene: "${scene}").\nRefresh the browser to see the latest changes.`);
 });
 
 server.registerTool(
@@ -3543,21 +3537,14 @@ server.registerTool(
     },
     async ({ sceneName }) => {
         if (!isPreviewRunning()) {
-            return { content: [{ type: "text", text: "No preview server is running. Use start_preview first." }], isError: true };
+            return CreateErrorResponse("No preview server is running. Use start_preview first.");
         }
         const scene = manager.getScene(sceneName);
         if (!scene) {
-            return { content: [{ type: "text", text: `Scene "${sceneName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Scene "${sceneName}" not found.`);
         }
         setPreviewScene(sceneName);
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Preview switched to scene "${sceneName}".\nRefresh the browser at ${getPreviewUrl()} to see it.`,
-                },
-            ],
-        };
+        return CreateTextResponse(`Preview switched to scene "${sceneName}".\nRefresh the browser at ${getPreviewUrl()} to see it.`);
     }
 );
 

@@ -20,6 +20,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod/v4";
 import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
+import { CreateErrorResponse, CreateTextResponse } from "../../mcpServerCore/dist/index.js";
 
 import { PlaygroundManager } from "./playgroundManager.js";
 import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
@@ -194,7 +195,7 @@ server.registerTool(
         const lang = language ?? "JS";
         const result = manager.createPlayground(playgroundName, lang, code);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
 
         // Auto-start session
@@ -209,14 +210,7 @@ server.registerTool(
         }
 
         const doc = manager.getPlayground(playgroundName)!;
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Created playground "${playgroundName}" (${lang}, ${doc.code.length} chars).${sessionInfo}`,
-                },
-            ],
-        };
+        return CreateTextResponse(`Created playground "${playgroundName}" (${lang}, ${doc.code.length} chars).${sessionInfo}`);
     }
 );
 
@@ -229,14 +223,14 @@ server.registerTool(
     async () => {
         const names = manager.listPlaygrounds();
         if (names.length === 0) {
-            return { content: [{ type: "text", text: "No playgrounds in memory. Use create_playground to create one." }] };
+            return CreateTextResponse("No playgrounds in memory. Use create_playground to create one.");
         }
         const lines = names.map((n) => {
             const doc = manager.getPlayground(n)!;
             const sid = getSessionForPlayground(n);
             return `• ${n} (${doc.language}, ${doc.code.length} chars)${sid ? ` [session: ${sid}]` : ""}`;
         });
-        return { content: [{ type: "text", text: `Playgrounds in memory:\n${lines.join("\n")}` }] };
+        return CreateTextResponse(`Playgrounds in memory:\n${lines.join("\n")}`);
     }
 );
 
@@ -252,9 +246,9 @@ server.registerTool(
         closeSessionForPlayground(playgroundName);
         const result = manager.deletePlayground(playgroundName);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return { content: [{ type: "text", text: `Deleted playground "${playgroundName}".` }] };
+        return CreateTextResponse(`Deleted playground "${playgroundName}".`);
     }
 );
 
@@ -271,16 +265,9 @@ server.registerTool(
     async ({ playgroundName }) => {
         const doc = manager.getPlayground(playgroundName);
         if (!doc) {
-            return { content: [{ type: "text", text: `Error: Playground "${playgroundName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Error: Playground "${playgroundName}" not found.`);
         }
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Playground "${playgroundName}" (${doc.language}, ${doc.code.length} chars):\n\n\`\`\`${doc.language === "TS" ? "typescript" : "javascript"}\n${doc.code}\n\`\`\``,
-                },
-            ],
-        };
+        return CreateTextResponse(`Playground "${playgroundName}" (${doc.language}, ${doc.code.length} chars):\n\n\`\`\`${doc.language === "TS" ? "typescript" : "javascript"}\n${doc.code}\n\`\`\``);
     }
 );
 
@@ -299,17 +286,10 @@ server.registerTool(
     async ({ playgroundName, code }) => {
         const result = manager.setCode(playgroundName, code);
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
         _notifyIfSession(playgroundName);
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Updated code for "${playgroundName}" (${code.length} chars).`,
-                },
-            ],
-        };
+        return CreateTextResponse(`Updated code for "${playgroundName}" (${code.length} chars).`);
     }
 );
 
@@ -326,16 +306,11 @@ server.registerTool(
     async ({ playgroundName }) => {
         const doc = manager.getPlayground(playgroundName);
         if (!doc) {
-            return { content: [{ type: "text", text: `Error: Playground "${playgroundName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Error: Playground "${playgroundName}" not found.`);
         }
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: `Playground "${playgroundName}":\n  Language: ${doc.language}\n  Title: ${doc.title}\n  Description: ${doc.description || "(none)"}\n  Tags: ${doc.tags || "(none)"}\n  Code length: ${doc.code.length} chars`,
-                },
-            ],
-        };
+        return CreateTextResponse(
+            `Playground "${playgroundName}":\n  Language: ${doc.language}\n  Title: ${doc.title}\n  Description: ${doc.description || "(none)"}\n  Tags: ${doc.tags || "(none)"}\n  Code length: ${doc.code.length} chars`
+        );
     }
 );
 
@@ -353,9 +328,9 @@ server.registerTool(
     async ({ playgroundName, title, description, tags }) => {
         const result = manager.setMetadata(playgroundName, { title, description, tags });
         if (result !== "OK") {
-            return { content: [{ type: "text", text: `Error: ${result}` }], isError: true };
+            return CreateErrorResponse(`Error: ${result}`);
         }
-        return { content: [{ type: "text", text: `Updated metadata for "${playgroundName}".` }] };
+        return CreateTextResponse(`Updated metadata for "${playgroundName}".`);
     }
 );
 
@@ -377,10 +352,7 @@ server.registerTool(
         try {
             const snippetResult = await LoadSnippet(snippetId);
             if (snippetResult.type !== "playground") {
-                return {
-                    content: [{ type: "text", text: `Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not a playground snippet.` }],
-                    isError: true,
-                };
+                return CreateErrorResponse(`Error: Snippet "${snippetId}" is of type "${snippetResult.type}", not a playground snippet.`);
             }
             const pgResult = snippetResult as IPlaygroundSnippetResult;
             const code = pgResult.code;
@@ -395,16 +367,9 @@ server.registerTool(
 
             _notifyIfSession(playgroundName);
 
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: `Loaded snippet "${snippetId}" into "${playgroundName}" (${language}, ${code.length} chars).`,
-                    },
-                ],
-            };
+            return CreateTextResponse(`Loaded snippet "${snippetId}" into "${playgroundName}" (${language}, ${code.length} chars).`);
         } catch (e) {
-            return { content: [{ type: "text", text: `Error fetching snippet "${snippetId}": ${(e as Error).message}` }], isError: true };
+            return CreateErrorResponse(`Error fetching snippet "${snippetId}": ${(e as Error).message}`);
         }
     }
 );
@@ -423,14 +388,14 @@ server.registerTool(
     async ({ playgroundName, filePath }) => {
         const doc = manager.getPlayground(playgroundName);
         if (!doc) {
-            return { content: [{ type: "text", text: `Error: Playground "${playgroundName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Error: Playground "${playgroundName}" not found.`);
         }
         try {
             mkdirSync(dirname(filePath), { recursive: true });
             writeFileSync(filePath, doc.code, "utf-8");
-            return { content: [{ type: "text", text: `Saved code to ${filePath} (${doc.code.length} chars).` }] };
+            return CreateTextResponse(`Saved code to ${filePath} (${doc.code.length} chars).`);
         } catch (e) {
-            return { content: [{ type: "text", text: `Error writing file: ${(e as Error).message}` }], isError: true };
+            return CreateErrorResponse(`Error writing file: ${(e as Error).message}`);
         }
     }
 );
@@ -455,9 +420,9 @@ server.registerTool(
                 manager.setCode(playgroundName, code);
             }
             _notifyIfSession(playgroundName);
-            return { content: [{ type: "text", text: `Loaded ${filePath} into "${playgroundName}" (${lang}, ${code.length} chars).` }] };
+            return CreateTextResponse(`Loaded ${filePath} into "${playgroundName}" (${lang}, ${code.length} chars).`);
         } catch (e) {
-            return { content: [{ type: "text", text: `Error reading file: ${(e as Error).message}` }], isError: true };
+            return CreateErrorResponse(`Error reading file: ${(e as Error).message}`);
         }
     }
 );
@@ -476,22 +441,15 @@ server.registerTool(
     },
     async ({ playgroundName }) => {
         if (!manager.getPlayground(playgroundName)) {
-            return { content: [{ type: "text", text: `Error: Playground "${playgroundName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Error: Playground "${playgroundName}" not found.`);
         }
         try {
             const port = await startSessionServer(manager);
             const sessionId = createSession(playgroundName);
             const url = getSessionUrl(sessionId, port);
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: `Session URL for "${playgroundName}": ${url}\n\nPaste this URL in the Playground's "Connect to MCP Session" panel.`,
-                    },
-                ],
-            };
+            return CreateTextResponse(`Session URL for "${playgroundName}": ${url}\n\nPaste this URL in the Playground's "Connect to MCP Session" panel.`);
         } catch (e) {
-            return { content: [{ type: "text", text: `Error starting session: ${(e as Error).message}` }], isError: true };
+            return CreateErrorResponse(`Error starting session: ${(e as Error).message}`);
         }
     }
 );
@@ -507,9 +465,9 @@ server.registerTool(
     async ({ playgroundName }) => {
         const closed = closeSessionForPlayground(playgroundName);
         if (!closed) {
-            return { content: [{ type: "text", text: `No active session for "${playgroundName}".` }] };
+            return CreateTextResponse(`No active session for "${playgroundName}".`);
         }
-        return { content: [{ type: "text", text: `Closed session for "${playgroundName}".` }] };
+        return CreateTextResponse(`Closed session for "${playgroundName}".`);
     }
 );
 
@@ -533,23 +491,18 @@ server.registerTool(
     async ({ playgroundName, snippetId, name, description, tags }) => {
         const doc = manager.getPlayground(playgroundName);
         if (!doc) {
-            return { content: [{ type: "text", text: `Playground "${playgroundName}" not found.` }], isError: true };
+            return CreateErrorResponse(`Playground "${playgroundName}" not found.`);
         }
         try {
             const result = await SaveSnippet(
                 { type: "playground", code: doc.code, language: doc.language, engine: "WebGL2" },
                 { snippetId, metadata: { name: name ?? doc.title, description: description ?? doc.description, tags: tags ?? doc.tags } }
             );
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: `Saved playground "${playgroundName}" to snippet server.\n\nSnippet ID: ${result.id}\nVersion: ${result.version}\nFull ID: ${result.snippetId}\n\nOpen in Playground: https://playground.babylonjs.com/#${result.snippetId}`,
-                    },
-                ],
-            };
+            return CreateTextResponse(
+                `Saved playground "${playgroundName}" to snippet server.\n\nSnippet ID: ${result.id}\nVersion: ${result.version}\nFull ID: ${result.snippetId}\n\nOpen in Playground: https://playground.babylonjs.com/#${result.snippetId}`
+            );
         } catch (e) {
-            return { content: [{ type: "text", text: `Error saving snippet: ${(e as Error).message}` }], isError: true };
+            return CreateErrorResponse(`Error saving snippet: ${(e as Error).message}`);
         }
     }
 );
