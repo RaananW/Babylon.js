@@ -22,7 +22,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import { ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { GeometryGraphManager } from "./geometryGraph.js";
@@ -894,7 +894,10 @@ server.registerTool(
             return { content: [{ type: "text", text: `Geometry "${geometryName}" not found.` }], isError: true };
         }
         try {
-            const result = await SaveSnippet({ type: "nodeGeometry", data: JSON.parse(json) }, { snippetId, metadata: { name, description, tags } });
+            const result = await SaveSnippet(
+                { type: "nodeGeometry", data: ParseJsonText({ jsonText: json, jsonLabel: "NGE JSON" }) },
+                { snippetId, metadata: { name, description, tags } }
+            );
             return {
                 content: [
                     {

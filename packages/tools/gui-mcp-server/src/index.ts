@@ -24,7 +24,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import { ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 
 import { ControlRegistry, BaseControlProperties, GetControlCatalogSummary, GetControlTypeDetails } from "./catalog.js";
 import { GuiManager } from "./guiManager.js";
@@ -1067,7 +1067,7 @@ server.registerTool(
             return { content: [{ type: "text", text: `GUI "${guiName}" not found.` }], isError: true };
         }
         try {
-            const result = await SaveSnippet({ type: "gui", data: JSON.parse(json) }, { snippetId, metadata: { name, description, tags } });
+            const result = await SaveSnippet({ type: "gui", data: ParseJsonText({ jsonText: json, jsonLabel: "GUI JSON" }) }, { snippetId, metadata: { name, description, tags } });
             return {
                 content: [
                     {

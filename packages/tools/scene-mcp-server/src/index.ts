@@ -30,7 +30,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import { ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 import { join } from "node:path";
 
 import {
@@ -2659,9 +2659,9 @@ server.registerTool(
         }
         let parsed: unknown;
         try {
-            parsed = JSON.parse(jsonStr);
-        } catch {
-            return { content: [{ type: "text", text: `Invalid GUI JSON: parse error.` }], isError: true };
+            parsed = ParseJsonText({ jsonText: jsonStr, jsonLabel: "GUI JSON" });
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         const result = manager.attachGUI(sceneName, parsed);
         if (result !== "OK") {
@@ -2738,9 +2738,9 @@ server.registerTool(
         }
         let parsed: unknown;
         try {
-            parsed = JSON.parse(jsonStr);
-        } catch {
-            return { content: [{ type: "text", text: "Invalid NRG JSON: parse error." }], isError: true };
+            parsed = ParseJsonText({ jsonText: jsonStr, jsonLabel: "NRG JSON" });
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         const result = manager.attachNodeRenderGraph(sceneName, parsed);
         if (result !== "OK") {
@@ -2808,9 +2808,9 @@ server.registerTool(
         }
         let parsed: unknown;
         try {
-            parsed = JSON.parse(jsonStr);
-        } catch {
-            return { content: [{ type: "text", text: "Invalid NGE JSON: parse error." }], isError: true };
+            parsed = ParseJsonText({ jsonText: jsonStr, jsonLabel: "NGE JSON" });
+        } catch (e) {
+            return { content: [{ type: "text", text: (e as Error).message }], isError: true };
         }
         const result = manager.addNodeGeometryMesh(sceneName, meshName, parsed);
         if (result !== "OK") {
@@ -3050,9 +3050,13 @@ server.registerTool(
         let parsedGuiJson: unknown;
         if (guiJson) {
             try {
-                parsedGuiJson = JSON.parse(guiJson);
-            } catch {
-                return { content: [{ type: "text", text: `Invalid GUI JSON: ${(guiJson as string).slice(0, 100)}...` }], isError: true };
+                parsedGuiJson = ParseJsonText({
+                    jsonText: guiJson,
+                    jsonLabel: "GUI JSON",
+                    includePreviewInError: true,
+                });
+            } catch (e) {
+                return { content: [{ type: "text", text: (e as Error).message }], isError: true };
             }
         }
         const code = manager.exportCode(sceneName, {
@@ -3103,9 +3107,13 @@ server.registerTool(
         let parsedGuiJson: unknown;
         if (guiJson) {
             try {
-                parsedGuiJson = JSON.parse(guiJson);
-            } catch {
-                return { content: [{ type: "text", text: `Invalid GUI JSON: ${(guiJson as string).slice(0, 100)}...` }], isError: true };
+                parsedGuiJson = ParseJsonText({
+                    jsonText: guiJson,
+                    jsonLabel: "GUI JSON",
+                    includePreviewInError: true,
+                });
+            } catch (e) {
+                return { content: [{ type: "text", text: (e as Error).message }], isError: true };
             }
         }
         const files = manager.exportProject(sceneName, {

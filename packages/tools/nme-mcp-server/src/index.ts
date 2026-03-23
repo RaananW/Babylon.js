@@ -27,7 +27,7 @@ import { dirname } from "node:path";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { MaterialGraphManager } from "./materialGraph.js";
-import { ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
+import { ParseJsonText, ResolveInlineOrFileText, WriteTextFileEnsuringDirectory } from "../../mcpServerCore/dist/index.js";
 import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
 import type { IDataSnippetResult } from "@tools/snippet-loader";
 import { startSessionServer, createSession, notifyMaterialUpdate, getSessionUrl, getSessionForMaterial, closeSessionForMaterial, stopSessionServer } from "./sessionServer.js";
@@ -980,7 +980,10 @@ server.registerTool(
             return { content: [{ type: "text", text: `Material "${materialName}" not found.` }], isError: true };
         }
         try {
-            const result = await SaveSnippet({ type: "nodeMaterial", data: JSON.parse(json) }, { snippetId, metadata: { name, description, tags } });
+            const result = await SaveSnippet(
+                { type: "nodeMaterial", data: ParseJsonText({ jsonText: json, jsonLabel: "NME JSON" }) },
+                { snippetId, metadata: { name, description, tags } }
+            );
             return {
                 content: [
                     {
