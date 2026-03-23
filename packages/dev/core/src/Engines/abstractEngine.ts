@@ -1704,8 +1704,9 @@ export abstract class AbstractEngine {
                 this._loadFile(
                     url,
                     (data) => {
-                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                        callbackAsync(new Uint8Array(data as ArrayBuffer));
+                        callbackAsync(new Uint8Array(data as ArrayBuffer)).catch((reason) => {
+                            onInternalError("Failed to parse texture data", reason);
+                        });
                     },
                     undefined,
                     scene ? scene.offlineProvider : undefined,
@@ -1716,11 +1717,13 @@ export abstract class AbstractEngine {
                 );
             } else {
                 if (buffer instanceof ArrayBuffer) {
-                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    callbackAsync(new Uint8Array(buffer));
+                    callbackAsync(new Uint8Array(buffer)).catch((reason) => {
+                        onInternalError("Failed to parse texture data", reason);
+                    });
                 } else if (ArrayBuffer.isView(buffer)) {
-                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    callbackAsync(buffer);
+                    callbackAsync(buffer).catch((reason) => {
+                        onInternalError("Failed to parse texture data", reason);
+                    });
                 } else {
                     if (onError) {
                         onError("Unable to load: only ArrayBuffer or ArrayBufferView is supported", null);
