@@ -153,6 +153,8 @@ export class LoadManager {
     /**
      * Processes a parsed playground snippet result from the snippet loader,
      * applying engine switch logic and hydrating the editor.
+     * @param result - The parsed playground snippet result
+     * @param suppressEngineSwitchDialog - Whether to suppress the engine switch dialog
      */
     private async _processPlaygroundResultAsync(result: IPlaygroundSnippetResult, suppressEngineSwitchDialog = false) {
         // Apply metadata
@@ -234,6 +236,8 @@ export class LoadManager {
     /**
      * Processes a raw JSON payload string (from local storage or file).
      * Parses via the snippet loader and delegates to _processPlaygroundResultAsync.
+     * @param data - The raw JSON string to parse
+     * @param suppressEngineSwitchDialog - Whether to suppress the engine switch dialog
      */
     private _processJsonPayloadFromString(data: string, suppressEngineSwitchDialog = false) {
         // eslint-disable-next-line github/no-then
@@ -276,6 +280,7 @@ export class LoadManager {
             }
 
             // Use the snippet loader to fetch and parse the snippet
+            // eslint-disable-next-line github/no-then
             void this._fetchAndProcessSnippetAsync(id, suppressEngineSwitchDialog).catch((error) => {
                 const message = error instanceof Error ? error.message : `Failed to load playground ${id}.`;
                 this._notifyLoadFailure(message);
