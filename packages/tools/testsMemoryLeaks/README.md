@@ -14,7 +14,7 @@ This package contains the Babylon.js memlab-based memory leak runner.
 - `ci`: the PR-facing Babylon Server suite. This is the first-class memory-leak suite intended to run on every PR through the root `test:memory-leaks` entrypoint.
 - `extended`: additional Babylon Server playground scenarios that are useful locally but increase runtime.
 - `packages`: deterministic `empty.html` scenarios for focused bundle and subsystem coverage. The suite currently includes richer `@babylonjs/core` feature scenes plus `@babylonjs/gui`, `@babylonjs/loaders`, `@babylonjs/materials`, `@babylonjs/post-processes`, `@babylonjs/procedural-textures`, and `@babylonjs/serializers` coverage.
-  The current coverage includes a combined core feature stack that exercises audio, physics, particles, and navigation, a core rendering stack that exercises render targets, core materials, and shadows, plus fullscreen GUI, mesh-attached GUI, remote glTF loading, direct OBJ/STL loading, materials-library stacks, procedural texture stacks, post-process stacks, and both glTF and GLB export paths.
+  The current coverage includes a combined core feature stack that exercises audio, physics, particles, and navigation, a core rendering stack that exercises render targets, core materials, and shadows, a core texture stack that exercises dynamic textures, raw textures, render targets, and post-process chains, plus fullscreen GUI, mesh-attached GUI, remote glTF loading, direct OBJ/STL loading, materials-library stacks, procedural texture stacks, post-process stacks, and both glTF and GLB export paths.
 - `all`: every scenario in this package.
 
 ## Running
@@ -80,7 +80,7 @@ The updated runner:
 - Exercises animation-heavy scenes by briefly starting and stopping animation groups before snapshots are taken.
 - Keeps inspector-driven interactions out of the `ci` suite because the legacy inspector currently retains a static scene reference after `hide()`, which would make the PR gate fail for the wrong reason.
 - Runs the current package-focused scenarios on the same stable Babylon Server host page instead of depending on separate package dev servers.
-- Expands the deterministic core coverage with combined scenes for audio, physics, particles, navigation, rendering, core materials, and shadow generation on the same host page, without folding those slower feature stacks into the PR-facing `ci` gate.
+- Expands the deterministic core coverage with combined scenes for audio, physics, particles, navigation, rendering, core materials, shadow generation, textures, render targets, and post-process chains on the same host page, without folding those slower feature stacks into the PR-facing `ci` gate.
 - Extends package coverage with richer materials, procedural texture, and post-process scenes that exercise additional Babylon bundles while keeping the teardown path explicit.
 - Tracks a small browser-side harness state so the runner can wait for the page to become idle before memlab snapshots are taken.
 - Separates core CI-safe scenarios from slower or package-specific scenarios.

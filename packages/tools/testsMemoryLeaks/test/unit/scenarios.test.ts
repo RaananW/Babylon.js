@@ -158,6 +158,24 @@ describe("memory leak scenarios", () => {
         expect(page.evaluate).toHaveBeenNthCalledWith(3, evaluateDisposePlaygroundScene, expect.objectContaining({ settleAfterDisposeMs: 250 }));
     });
 
+    it("creates the combined core textures render target post-process scenario on top of empty.html", async () => {
+        const definition = defaultScenarioDefinitions.find((scenario) => scenario.id === "core-textures-render-targets-postprocess-stack");
+        const config = getGlobalConfig();
+        const scenario = createMemlabScenario(definition!, config);
+
+        const page = createPageMock();
+
+        await scenario.action?.(page as any);
+        await scenario.back?.(page as any);
+
+        expect(page.evaluate).toHaveBeenNthCalledWith(
+            1,
+            evaluateInitializePackageScene,
+            expect.objectContaining({ scenario: "core-textures-render-targets-postprocess-stack", assetsUrl: expect.any(String), settleAfterReadyMs: 250 })
+        );
+        expect(page.evaluate).toHaveBeenNthCalledWith(3, evaluateDisposePlaygroundScene, expect.objectContaining({ settleAfterDisposeMs: 250 }));
+    });
+
     it("includes a heavier animation-driven playground in the ci suite", () => {
         const scenarios = resolveScenarioDefinitions("ci");
 
@@ -177,10 +195,13 @@ describe("memory leak scenarios", () => {
 
         expect(ciScenarios.some((scenario) => scenario.id === "core-feature-stack")).toBe(false);
         expect(ciScenarios.some((scenario) => scenario.id === "core-rendering-materials-shadows-stack")).toBe(false);
+        expect(ciScenarios.some((scenario) => scenario.id === "core-textures-render-targets-postprocess-stack")).toBe(false);
         expect(extendedScenarios.some((scenario) => scenario.id === "core-feature-stack")).toBe(true);
         expect(extendedScenarios.some((scenario) => scenario.id === "core-rendering-materials-shadows-stack")).toBe(true);
+        expect(extendedScenarios.some((scenario) => scenario.id === "core-textures-render-targets-postprocess-stack")).toBe(true);
         expect(packageScenarios.some((scenario) => scenario.id === "core-feature-stack")).toBe(true);
         expect(packageScenarios.some((scenario) => scenario.id === "core-rendering-materials-shadows-stack")).toBe(true);
+        expect(packageScenarios.some((scenario) => scenario.id === "core-textures-render-targets-postprocess-stack")).toBe(true);
     });
 
     it("covers deterministic core and package scenarios on empty.html", () => {
@@ -197,6 +218,6 @@ describe("memory leak scenarios", () => {
                 "@babylonjs/serializers",
             ])
         );
-        expect(scenarios).toHaveLength(12);
+        expect(scenarios).toHaveLength(13);
     });
 });

@@ -52,6 +52,7 @@ export interface PackageSceneBrowserOptions {
     scenario:
         | "core-feature-stack"
         | "core-rendering-materials-shadows-stack"
+        | "core-textures-render-targets-postprocess-stack"
         | "gui-fullscreen-ui"
         | "gui-mesh-adt"
         | "loaders-boombox-import"
@@ -637,6 +638,104 @@ export async function evaluateInitializePackageScene(options: PackageSceneBrowse
             if (previewPlane.material !== previewMaterial || !renderGround.receiveShadows) {
                 throw new Error("The rendering scenario did not keep the core material and shadow wiring active.");
             }
+        } else if (options.scenario === "core-textures-render-targets-postprocess-stack") {
+            const textureGround = scene.getMeshByName("ground");
+            if (!textureGround) {
+                throw new Error("The textures scenario could not reuse the base ground mesh.");
+            }
+
+            const dynamicTexture = new BABYLON.DynamicTexture("textures-dynamic", { width: 256, height: 256 }, scene, false);
+            const dynamicContext = dynamicTexture.getContext();
+            dynamicContext.fillStyle = "#0e1626";
+            dynamicContext.fillRect(0, 0, 256, 256);
+            dynamicContext.fillStyle = "#3fd0ff";
+            dynamicContext.fillRect(18, 18, 220, 56);
+            dynamicContext.fillStyle = "#ffffff";
+            dynamicContext.font = "bold 42px sans-serif";
+            dynamicContext.fillText("MEM", 28, 62);
+            dynamicContext.strokeStyle = "#ff9f43";
+            dynamicContext.lineWidth = 10;
+            dynamicContext.strokeRect(24, 96, 208, 132);
+            dynamicTexture.update(false);
+
+            const rawTextureData = new Uint8Array(64 * 64 * 4);
+            for (let index = 0; index < rawTextureData.length; index += 4) {
+                const pixelIndex = index / 4;
+                const x = pixelIndex % 64;
+                const y = Math.floor(pixelIndex / 64);
+                const stripe = (x + y) % 2 === 0;
+                rawTextureData[index] = stripe ? 250 : 40;
+                rawTextureData[index + 1] = stripe ? 110 : 180;
+                rawTextureData[index + 2] = stripe ? 70 : 255;
+                rawTextureData[index + 3] = 255;
+            }
+            const rawTexture = BABYLON.RawTexture.CreateRGBATexture(rawTextureData, 64, 64, scene, false, false, BABYLON.Constants.TEXTURE_NEAREST_NEAREST);
+
+            const texturedBox = BABYLON.MeshBuilder.CreateBox("textures-box", { size: 1.25 }, scene);
+            texturedBox.position = new BABYLON.Vector3(-1.5, 0.05, 0.1);
+            const boxMaterial = new BABYLON.StandardMaterial("textures-box-material", scene);
+            boxMaterial.diffuseTexture = rawTexture;
+            boxMaterial.emissiveTexture = dynamicTexture;
+            boxMaterial.specularColor = new BABYLON.Color3(0.18, 0.18, 0.18);
+            texturedBox.material = boxMaterial;
+
+            const texturedSphere = BABYLON.MeshBuilder.CreateSphere("textures-sphere", { diameter: 1.3, segments: 32 }, scene);
+            texturedSphere.position = new BABYLON.Vector3(1.5, 0.2, -0.2);
+            const sphereMaterial = new BABYLON.PBRMaterial("textures-sphere-material", scene);
+            sphereMaterial.albedoTexture = dynamicTexture;
+            sphereMaterial.metallic = 0.05;
+            sphereMaterial.roughness = 0.42;
+            sphereMaterial.emissiveTexture = rawTexture;
+            texturedSphere.material = sphereMaterial;
+
+            const renderTargetTexture = new BABYLON.RenderTargetTexture("textures-rtt", { width: 512, height: 512 }, scene, false, true);
+            renderTargetTexture.activeCamera = camera;
+            renderTargetTexture.clearColor = new BABYLON.Color4(0.02, 0.03, 0.05, 1);
+            renderTargetTexture.renderList = [texturedBox, texturedSphere];
+            renderTargetTexture.refreshRate = 1;
+            scene.customRenderTargets.push(renderTargetTexture);
+
+            const previewPlane = BABYLON.MeshBuilder.CreatePlane("textures-preview", { width: 2.8, height: 1.6 }, scene);
+            previewPlane.position = new BABYLON.Vector3(0, 1.85, 2.3);
+            const previewMaterial = new BABYLON.StandardMaterial("textures-preview-material", scene);
+            previewMaterial.disableLighting = true;
+            previewMaterial.emissiveTexture = renderTargetTexture;
+            previewMaterial.diffuseColor = BABYLON.Color3.Black();
+            previewPlane.material = previewMaterial;
+
+            const groundMaterial = textureGround.material as any;
+            groundMaterial.diffuseTexture = dynamicTexture;
+            groundMaterial.specularColor = BABYLON.Color3.Black();
+
+            const passPostProcess = new BABYLON.PassPostProcess("textures-pass", 1.0, camera);
+            const blackAndWhitePostProcess = new BABYLON.BlackAndWhitePostProcess("textures-bw", 1.0, camera);
+            const blurPostProcess = new BABYLON.BlurPostProcess("textures-blur", new BABYLON.Vector2(1, 0), 6, 1.0, camera);
+            blurPostProcess.autoClear = false;
+            blurPostProcess.kernel = 12;
+            blackAndWhitePostProcess.degree = 0.35;
+
+            if (renderTargetTexture.renderList?.length !== 2) {
+                throw new Error("The textures scenario did not register the expected render target meshes.");
+            }
+
+            for (let index = 0; index < 12; index++) {
+                texturedBox.rotation.y += 0.09;
+                texturedSphere.rotation.x += 0.05;
+                texturedSphere.rotation.y -= 0.04;
+                blackAndWhitePostProcess.degree = 0.2 + index * 0.03;
+                dynamicContext.fillStyle = index % 2 === 0 ? "#ff9f43" : "#3fd0ff";
+                dynamicContext.fillRect(36 + index * 4, 110, 24, 96);
+                dynamicTexture.update(false);
+                scene.render();
+            }
+
+            if (!passPostProcess.isReusable() && !previewMaterial.emissiveTexture) {
+                throw new Error("The textures scenario did not keep its post-process and render target wiring active.");
+            }
+
+            blurPostProcess.dispose(camera);
+            blackAndWhitePostProcess.dispose(camera);
+            passPostProcess.dispose(camera);
         } else if (options.scenario === "gui-fullscreen-ui") {
             const sphere = BABYLON.MeshBuilder.CreateSphere("gui-sphere", { diameter: 1.4, segments: 32 }, scene);
             sphere.position.y = 0.2;
