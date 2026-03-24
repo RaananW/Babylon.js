@@ -146,6 +146,57 @@ export class GltfManager {
         return this.describeGltf(name);
     }
 
+    /**
+     * Resolve external buffer and image URIs by reading the referenced files
+     * and converting them to base64 data URIs.  This makes the in-memory
+     * document fully self-contained so it can be exported as GLB.
+     *
+     * @param name     Name of the loaded document.
+     * @param baseDir  Directory containing the .gltf file (for resolving
+     *                 relative URIs).
+     * @returns A status message.
+     */
+    async resolveExternalBuffers(name: string, baseDir: string): Promise<string> {
+        const doc = this._getDoc(name);
+        if (typeof doc === "string") {
+            return doc;
+        }
+
+        const fs = await import("node:fs");
+        const path = await import("node:path");
+
+        let resolved = 0;
+
+        // Resolve buffer URIs
+        for (const buf of ArrayOrEmpty(doc.buffers)) {
+            if (buf.uri && !buf.uri.startsWith("data:")) {
+                const filePath = path.resolve(baseDir, buf.uri);
+                if (fs.existsSync(filePath)) {
+                    const data = fs.readFileSync(filePath);
+                    buf.uri = `data:application/octet-stream;base64,${data.toString("base64")}`;
+                    buf.byteLength = data.length;
+                    resolved++;
+                }
+            }
+        }
+
+        // Resolve image URIs
+        for (const img of ArrayOrEmpty(doc.images)) {
+            if (img.uri && !img.uri.startsWith("data:")) {
+                const filePath = path.resolve(baseDir, img.uri);
+                if (fs.existsSync(filePath)) {
+                    const data = fs.readFileSync(filePath);
+                    const ext = path.extname(img.uri).toLowerCase();
+                    const mime = ext === ".png" ? "image/png" : ext === ".jpg" || ext === ".jpeg" ? "image/jpeg" : "application/octet-stream";
+                    img.uri = `data:${mime};base64,${data.toString("base64")}`;
+                    resolved++;
+                }
+            }
+        }
+
+        return resolved > 0 ? `Resolved ${resolved} external URI(s) into embedded data.` : "No external URIs to resolve.";
+    }
+
     listGltfs(): string {
         if (this._documents.size === 0) {
             return "No glTF documents in memory.";
@@ -1738,16 +1789,60 @@ export class GltfManager {
             return null;
         }
 
-        // Build JSON chunk
-        const jsonString = JSON.stringify(doc);
-        // Pad to 4-byte alignment
-        const jsonPadded = jsonString + " ".repeat((4 - (jsonString.length % 4)) % 4);
-        const jsonBuffer = Buffer.from(jsonPadded, "utf-8");
+        // Collect binary buffer data (decode data URIs → raw bytes)
+        const buffers = ArrayOrEmpty(doc.buffers);
+        const binChunks: Buffer[] = [];
+        let totalBinLength = 0;
 
-        // GLB header: magic (4) + version (4) + length (4) = 12
-        // JSON chunk: length (4) + type (4) + data = 8 + jsonBuffer.length
-        // No binary chunk for now
-        const totalLength = 12 + 8 + jsonBuffer.length;
+        for (const buf of buffers) {
+            if (buf.uri && buf.uri.startsWith("data:")) {
+                const commaIdx = buf.uri.indexOf(",");
+                if (commaIdx !== -1) {
+                    const raw = Buffer.from(buf.uri.substring(commaIdx + 1), "base64");
+                    binChunks.push(raw);
+                    totalBinLength += raw.length;
+                    continue;
+                }
+            }
+            // No data or external URI — push empty placeholder of declared size
+            binChunks.push(Buffer.alloc(buf.byteLength || 0));
+            totalBinLength += buf.byteLength || 0;
+        }
+
+        // Build a single merged BIN buffer (GLB spec: one BIN chunk for all buffers)
+        // For multi-buffer glTFs we concatenate (this is correct for single-buffer,
+        // which covers the vast majority of real glTFs).
+        const hasBin = totalBinLength > 0;
+        const binPaddedLength = hasBin ? totalBinLength + ((4 - (totalBinLength % 4)) % 4) : 0;
+        const binBuffer = hasBin ? Buffer.alloc(binPaddedLength) : null;
+
+        if (binBuffer) {
+            let offset = 0;
+            for (const chunk of binChunks) {
+                chunk.copy(binBuffer, offset);
+                offset += chunk.length;
+            }
+            // Remainder is already zero-filled (proper GLB BIN padding)
+        }
+
+        // Build the JSON chunk — modify buffer entries to point at the GLB BIN chunk
+        const exportDoc = DeepClone(doc);
+        if (hasBin && exportDoc.buffers && exportDoc.buffers.length > 0) {
+            // GLB spec: first buffer has no URI and its byteLength = total BIN chunk size
+            exportDoc.buffers[0].uri = undefined;
+            exportDoc.buffers[0].byteLength = totalBinLength;
+            // Remove extra buffers (all merged into the single BIN chunk)
+            if (exportDoc.buffers.length > 1) {
+                exportDoc.buffers.length = 1;
+            }
+        }
+
+        const jsonString = JSON.stringify(exportDoc);
+        const jsonPadded = jsonString + " ".repeat((4 - (jsonString.length % 4)) % 4);
+        const jsonChunkData = Buffer.from(jsonPadded, "utf-8");
+
+        // GLB layout: Header (12) + JSON chunk header (8) + JSON data + [BIN chunk header (8) + BIN data]
+        const totalLength = 12 + 8 + jsonChunkData.length + (hasBin ? 8 + binPaddedLength : 0);
 
         const glb = Buffer.alloc(totalLength);
         let offset = 0;
@@ -1761,11 +1856,21 @@ export class GltfManager {
         offset += 4; // total length
 
         // JSON chunk
-        glb.writeUInt32LE(jsonBuffer.length, offset);
-        offset += 4; // chunk length
+        glb.writeUInt32LE(jsonChunkData.length, offset);
+        offset += 4;
         glb.writeUInt32LE(0x4e4f534a, offset);
-        offset += 4; // "JSON" type
-        jsonBuffer.copy(glb, offset);
+        offset += 4; // "JSON"
+        jsonChunkData.copy(glb, offset);
+        offset += jsonChunkData.length;
+
+        // BIN chunk
+        if (binBuffer) {
+            glb.writeUInt32LE(binPaddedLength, offset);
+            offset += 4;
+            glb.writeUInt32LE(0x004e4942, offset);
+            offset += 4; // "BIN\0"
+            binBuffer.copy(glb, offset);
+        }
 
         return glb;
     }

@@ -89,7 +89,7 @@ Server.registerTool(
         },
     },
     async ({ name, json, jsonFile }) => {
-        return CreateJsonImportSummaryResponse({
+        const result = CreateJsonImportSummaryResponse({
             json,
             jsonFile,
             fileDescription: "glTF file",
@@ -99,6 +99,14 @@ Server.registerTool(
             },
             createSuccessText: () => Manager.describeGltf(name),
         });
+
+        // If loaded from a file, resolve external buffer/image URIs
+        if (jsonFile && !result.content[0]?.text?.startsWith("Error")) {
+            const { dirname } = await import("node:path");
+            await Manager.resolveExternalBuffers(name, dirname(jsonFile));
+        }
+
+        return result;
     }
 );
 
@@ -1079,19 +1087,27 @@ Server.registerTool(
         },
     },
     async ({ name, json, jsonFile }) => {
-        return CreateJsonImportSummaryResponse({
+        const result = CreateJsonImportSummaryResponse({
             json,
             jsonFile,
             fileDescription: "glTF file",
             importJson: (text) => {
-                const result = Manager.loadGltf(name, text);
-                if (result.startsWith("Error")) {
-                    throw new Error(result);
+                const r = Manager.loadGltf(name, text);
+                if (r.startsWith("Error")) {
+                    throw new Error(r);
                 }
                 return name;
             },
             createSuccessText: () => `Imported.\n\n${Manager.describeGltf(name)}`,
         });
+
+        // If loaded from a file, resolve external buffer/image URIs
+        if (jsonFile && !result.content[0]?.text?.startsWith("Error")) {
+            const { dirname } = await import("node:path");
+            await Manager.resolveExternalBuffers(name, dirname(jsonFile));
+        }
+
+        return result;
     }
 );
 
