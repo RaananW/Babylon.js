@@ -141,14 +141,18 @@ describe("PreviewServer", () => {
             expect(text).toContain("Nodes");
         });
 
-        it("should redirect / to sandbox URL", async () => {
+        it("should serve a viewer page at /", async () => {
             const mgr = createManagerWithBox();
             const port = nextPort();
             await startPreview(mgr, "Box", port);
 
-            const res = await fetch(`http://localhost:${port}/`, { redirect: "manual" });
-            expect(res.status).toBe(302);
-            expect(res.headers.get("location")).toContain("sandbox.babylonjs.com");
+            const res = await fetch(`http://localhost:${port}/`);
+            expect(res.status).toBe(200);
+            expect(res.headers.get("content-type")).toContain("text/html");
+            const html = await res.text();
+            expect(html).toContain("renderCanvas");
+            expect(html).toContain("/model.glb");
+            expect(html).toContain("sandbox.babylonjs.com");
         });
 
         it("should return 404 for unknown routes", async () => {

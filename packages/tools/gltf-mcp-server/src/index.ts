@@ -1208,7 +1208,7 @@ Server.registerTool(
         description:
             "Start a local preview server and return a Babylon.js Sandbox URL to view the glTF document in a browser. " +
             "The server re-exports the document on every request, so the preview always reflects the latest state. " +
-            "Refresh the Sandbox page after making edits to see changes.",
+            "Refresh the page after making edits to see changes. Open the server root URL for a built-in viewer, or use the Sandbox URL directly.",
         inputSchema: {
             name: NameSchema,
             port: z.number().int().min(1024).max(65535).optional().describe("Port for the local server (default: 8766)."),
@@ -1223,10 +1223,10 @@ Server.registerTool(
                     `Preview server started!`,
                     ``,
                     `  Document:   ${name}`,
-                    `  Server:     ${serverUrl}`,
+                    `  Viewer:     ${serverUrl}/`,
                     `  Sandbox:    ${sandboxUrl}`,
                     ``,
-                    `Open the Sandbox URL in a browser to view the model.`,
+                    `Open the Viewer URL for a built-in 3D viewer (recommended).`,
                     `The model is served live — refresh the page after edits.`,
                     ``,
                     `Direct links:`,
@@ -1269,7 +1269,7 @@ Server.registerTool(
         const serverUrl = getPreviewServerUrl();
         const sandboxUrl = getSandboxUrl();
         const docName = getPreviewDocName();
-        return CreateTextResponse([`Document: ${docName}`, `Server:   ${serverUrl}`, `Sandbox:  ${sandboxUrl}`].join("\n"));
+        return CreateTextResponse([`Document: ${docName}`, `Viewer:   ${serverUrl}/`, `Sandbox:  ${sandboxUrl}`].join("\n"));
     }
 );
 

@@ -34,6 +34,49 @@ let _version: number = 0;
 const SANDBOX_BASE = "https://sandbox.babylonjs.com";
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  Built-in viewer HTML
+// ═══════════════════════════════════════════════════════════════════════════
+
+function getViewerHtml(serverUrl: string, sandboxUrl: string): string {
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>glTF Preview — ${_docName}</title>
+<style>
+  html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#1e1e1e}
+  #renderCanvas{width:100%;height:100%;touch-action:none;outline:none}
+  #toolbar{position:fixed;top:8px;right:12px;z-index:10;display:flex;gap:8px;font:13px/1.4 system-ui,sans-serif}
+  #toolbar a,#toolbar button{background:rgba(255,255,255,.12);color:#ccc;border:1px solid rgba(255,255,255,.2);
+    padding:4px 10px;border-radius:4px;text-decoration:none;cursor:pointer;font:inherit}
+  #toolbar a:hover,#toolbar button:hover{background:rgba(255,255,255,.22)}
+</style>
+</head>
+<body>
+<div id="toolbar">
+  <button onclick="location.reload()">&#x21bb; Refresh</button>
+  <a href="${sandboxUrl}" target="_blank" rel="noopener">Open in Sandbox &#x2197;</a>
+</div>
+<canvas id="renderCanvas"></canvas>
+<script src="https://cdn.babylonjs.com/babylon.js"><\/script>
+<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"><\/script>
+<script>
+(function(){
+  var canvas=document.getElementById("renderCanvas");
+  var engine=new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:true,stencil:true});
+  BABYLON.SceneLoader.Load("","${serverUrl}/model.glb?t="+Date.now(),engine,function(scene){
+    scene.createDefaultCameraOrLight(true,true,true);
+    scene.createDefaultEnvironment();
+    engine.runRenderLoop(function(){scene.render()});
+  },null,function(_scene,msg){document.body.innerHTML="<pre style=\\"color:red;padding:2em\\">"+msg+"</pre>"});
+  window.addEventListener("resize",function(){engine.resize()});
+})();
+<\/script>
+</body>
+</html>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  Public queries
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -174,11 +217,16 @@ export async function startPreview(manager: GltfManager, docName: string, port: 
                 return;
             }
 
-            // ── / — redirect to the Sandbox ────────────────────────────
+            // ── / — serve a built-in viewer page ───────────────────────
             if (pathname === "/" || pathname === "/index.html") {
+                const serverUrl = getPreviewServerUrl()!;
                 const sandboxUrl = getSandboxUrl()!;
-                res.writeHead(302, { Location: sandboxUrl });
-                res.end();
+                const html = getViewerHtml(serverUrl, sandboxUrl);
+                res.writeHead(200, {
+                    "Content-Type": "text/html; charset=utf-8",
+                    "Cache-Control": "no-cache, no-store, must-revalidate",
+                });
+                res.end(html);
                 return;
             }
 
