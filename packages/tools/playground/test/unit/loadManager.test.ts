@@ -1,4 +1,15 @@
-jest.mock(
+// Provide a global JSZip stub so that localSession.ts can initialize
+// (it reads JSZip.compressions.DEFLATE at the top level).
+(globalThis as any).JSZip = {
+    compressions: {
+        DEFLATE: {
+            compress: (d: Uint8Array) => d,
+            uncompress: (d: Uint8Array) => d,
+        },
+    },
+};
+
+vi.mock(
     "monaco-editor/esm/vs/language/typescript/lib/typescriptServices",
     () => ({
         typescript: {
@@ -15,21 +26,22 @@ jest.mock(
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockFetchSnippet = jest.fn();
-const mockParseSnippetResponse = jest.fn();
+const mockFetchSnippet = vi.fn();
+const mockParseSnippetResponse = vi.fn();
 
-jest.mock("@tools/snippet-loader", () => ({
+vi.mock("@tools/snippet-loader", () => ({
     FetchSnippet: (...args: unknown[]) => mockFetchSnippet(...args),
     ParseSnippetResponse: (...args: unknown[]) => mockParseSnippetResponse(...args),
 }));
 
-jest.mock("../../src/tools/localSession", () => ({
-    ReadLastLocal: jest.fn(),
+vi.mock("../../src/tools/localSession", () => ({
+    ReadLastLocal: vi.fn(),
 }));
 
 import { Observable } from "@dev/core";
 import type { IPlaygroundSnippetResult, ISnippetServerResponse, IV2Manifest, IRuntimeFeatures } from "@tools/snippet-loader";
 import { ReadLastLocal } from "../../src/tools/localSession";
+import type { Mock } from "vitest";
 
 // ---------------------------------------------------------------------------
 // Minimal GlobalState mock
@@ -62,7 +74,7 @@ function createMockGlobalState() {
         onLanguageChangedObservable: new Observable<void>(),
         onEngineSwitchDialogRequiredObservable: new Observable<{ currentEngine: string; targetEngine: string; resolve: (val: boolean) => void }>(),
 
-        showEngineSwitchDialogAsync: jest.fn().mockResolvedValue(false),
+        showEngineSwitchDialogAsync: vi.fn().mockResolvedValue(false),
     };
 }
 
@@ -140,17 +152,17 @@ function setupDomMocks() {
 
     if (typeof globalThis.window === "undefined") {
         (globalThis as Record<string, unknown>).window = {
-            addEventListener: jest.fn(),
+            addEventListener: vi.fn(),
             location: locationMock,
-            confirm: jest.fn().mockReturnValue(true),
+            confirm: vi.fn().mockReturnValue(true),
         };
     } else {
-        jest.spyOn(window, "addEventListener").mockImplementation(() => {});
+        vi.spyOn(window, "addEventListener").mockImplementation(() => {});
     }
 
     if (typeof globalThis.history === "undefined") {
         (globalThis as Record<string, unknown>).history = {
-            replaceState: jest.fn(),
+            replaceState: vi.fn(),
         };
     }
 
@@ -193,7 +205,7 @@ describe("LoadManager", () => {
     beforeEach(() => {
         mockFetchSnippet.mockReset();
         mockParseSnippetResponse.mockReset();
-        (ReadLastLocal as jest.Mock).mockReset();
+        (ReadLastLocal as Mock).mockReset();
 
         // Reset location for each test with proper hash behavior
         const loc = createLocationMock();
@@ -328,7 +340,7 @@ describe("LoadManager", () => {
 
         it("prompts for engine switch when snippet engine differs from current", async () => {
             const globalState = createMockGlobalState();
-            globalState.showEngineSwitchDialogAsync = jest.fn().mockResolvedValue(true);
+            globalState.showEngineSwitchDialogAsync = vi.fn().mockResolvedValue(true);
             sessionStorage.setItem("engineVersion", "WebGL2");
 
             const parsedResult = makePlaygroundResult({
@@ -403,7 +415,7 @@ describe("LoadManager", () => {
                 }),
             });
 
-            (ReadLastLocal as jest.Mock).mockReturnValue(localData);
+            (ReadLastLocal as Mock).mockReturnValue(localData);
 
             const parsedResult = makePlaygroundResult({
                 snippetId: "MYTOKEN#0",

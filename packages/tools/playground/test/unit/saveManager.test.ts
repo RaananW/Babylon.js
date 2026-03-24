@@ -1,4 +1,4 @@
-jest.mock(
+vi.mock(
     "monaco-editor/esm/vs/language/typescript/lib/typescriptServices",
     () => ({
         typescript: {
@@ -15,14 +15,15 @@ jest.mock(
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockSaveSnippet = jest.fn();
+const mockSaveSnippet = vi.fn();
 
-jest.mock("@tools/snippet-loader", () => ({
+vi.mock("@tools/snippet-loader", () => ({
     SaveSnippet: (...args: any[]) => mockSaveSnippet(...args),
 }));
 
 import { Observable } from "@dev/core";
 import type { ISaveSnippetResult } from "@tools/snippet-loader";
+import type { Mock } from "vitest";
 
 // ---------------------------------------------------------------------------
 // Minimal GlobalState mock
@@ -70,10 +71,10 @@ function setupDomMocks() {
 
     if (typeof globalThis.history === "undefined") {
         (globalThis as any).history = {
-            replaceState: jest.fn(),
+            replaceState: vi.fn(),
         };
     } else {
-        jest.spyOn(history, "replaceState").mockImplementation(() => {});
+        vi.spyOn(history, "replaceState").mockImplementation(() => {});
     }
 
     // Mock sessionStorage and localStorage
@@ -96,7 +97,7 @@ function setupDomMocks() {
 
     if (typeof globalThis.window === "undefined") {
         (globalThis as any).window = {
-            confirm: jest.fn().mockReturnValue(true),
+            confirm: vi.fn().mockReturnValue(true),
         };
     }
 }
@@ -121,8 +122,8 @@ describe("SaveManager", () => {
         (globalThis as any).location.pathname = "/";
         (globalThis as any).location.href = "http://localhost:1338/";
 
-        if (history.replaceState && (history.replaceState as jest.Mock).mockReset) {
-            (history.replaceState as jest.Mock).mockReset();
+        if (history.replaceState && (history.replaceState as Mock).mockReset) {
+            (history.replaceState as Mock).mockReset();
         }
     });
 
@@ -243,7 +244,7 @@ describe("SaveManager", () => {
             await savedPromise;
 
             expect(history.replaceState).toHaveBeenCalled();
-            const newUrl = (history.replaceState as jest.Mock).mock.calls[0][2];
+            const newUrl = (history.replaceState as Mock).mock.calls[0][2];
             expect(newUrl).toContain("#ABC");
             expect(newUrl).toContain("#1");
         });
@@ -269,7 +270,7 @@ describe("SaveManager", () => {
 
             await savedPromise;
 
-            const newUrl = (history.replaceState as jest.Mock).mock.calls[0][2];
+            const newUrl = (history.replaceState as Mock).mock.calls[0][2];
             expect(newUrl).toContain("/revision/2");
         });
 
@@ -294,7 +295,7 @@ describe("SaveManager", () => {
 
             await savedPromise;
 
-            const newUrl = (history.replaceState as jest.Mock).mock.calls[0][2];
+            const newUrl = (history.replaceState as Mock).mock.calls[0][2];
             expect(newUrl).toContain("revision/3");
             expect(newUrl).not.toContain("revision/1");
         });
@@ -320,7 +321,7 @@ describe("SaveManager", () => {
 
             await savedPromise;
 
-            const newUrl = (history.replaceState as jest.Mock).mock.calls[0][2];
+            const newUrl = (history.replaceState as Mock).mock.calls[0][2];
             expect(newUrl).toContain("revision=1");
         });
     });
