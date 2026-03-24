@@ -31,6 +31,14 @@
         "babylonjs-playground": {
             "command": "node",
             "args": ["./packages/tools/playground-mcp-server/dist/index.js"]
+        },
+        "babylonjs-gltf": {
+            "command": "node",
+            "args": ["./packages/tools/gltf-mcp-server/dist/index.js"]
+        },
+        "babylonjs-smart-filters": {
+            "command": "node",
+            "args": ["./packages/tools/smart-filters-mcp-server/dist/index.js"]
         }
     }
 }

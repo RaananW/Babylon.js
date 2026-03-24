@@ -22,6 +22,7 @@ import {
 } from "@tools/mcp-server-core";
 
 import { GltfManager } from "./gltfManager.js";
+import { startPreview, stopPreview, isPreviewRunning, getPreviewServerUrl, getSandboxUrl, getPreviewDocName, setPreviewDocument } from "./previewServer.js";
 
 /* ------------------------------------------------------------------ */
 /*  Singleton manager                                                  */
@@ -1198,6 +1199,98 @@ Server.registerTool(
 );
 
 /* ================================================================== */
+/*  10b. Preview tools                                                 */
+/* ================================================================== */
+
+Server.registerTool(
+    "start_preview",
+    {
+        description:
+            "Start a local preview server and return a Babylon.js Sandbox URL to view the glTF document in a browser. " +
+            "The server re-exports the document on every request, so the preview always reflects the latest state. " +
+            "Refresh the Sandbox page after making edits to see changes.",
+        inputSchema: {
+            name: NameSchema,
+            port: z.number().int().min(1024).max(65535).optional().describe("Port for the local server (default: 8766)."),
+        },
+    },
+    async ({ name, port }) => {
+        try {
+            const sandboxUrl = await startPreview(Manager, name, port ?? 8766);
+            const serverUrl = getPreviewServerUrl();
+            return CreateTextResponse(
+                [
+                    `Preview server started!`,
+                    ``,
+                    `  Document:   ${name}`,
+                    `  Server:     ${serverUrl}`,
+                    `  Sandbox:    ${sandboxUrl}`,
+                    ``,
+                    `Open the Sandbox URL in a browser to view the model.`,
+                    `The model is served live — refresh the page after edits.`,
+                    ``,
+                    `Direct links:`,
+                    `  GLB:  ${serverUrl}/model.glb`,
+                    `  JSON: ${serverUrl}/model.gltf`,
+                    `  Info: ${serverUrl}/api/info`,
+                ].join("\n")
+            );
+        } catch (error) {
+            return CreateErrorResponse(`Failed to start preview: ${(error as Error).message}`);
+        }
+    }
+);
+
+Server.registerTool(
+    "stop_preview",
+    {
+        description: "Stop the running glTF preview server.",
+        inputSchema: {},
+    },
+    async () => {
+        if (!isPreviewRunning()) {
+            return CreateTextResponse("No preview server is running.");
+        }
+        await stopPreview();
+        return CreateTextResponse("Preview server stopped.");
+    }
+);
+
+Server.registerTool(
+    "get_preview_url",
+    {
+        description: "Get the current preview server URL and Sandbox link.",
+        inputSchema: {},
+    },
+    async () => {
+        if (!isPreviewRunning()) {
+            return CreateTextResponse("No preview server is running. Use start_preview to start one.");
+        }
+        const serverUrl = getPreviewServerUrl();
+        const sandboxUrl = getSandboxUrl();
+        const docName = getPreviewDocName();
+        return CreateTextResponse([`Document: ${docName}`, `Server:   ${serverUrl}`, `Sandbox:  ${sandboxUrl}`].join("\n"));
+    }
+);
+
+Server.registerTool(
+    "set_preview_scene",
+    {
+        description: "Switch which glTF document the preview server is serving (without restarting).",
+        inputSchema: {
+            name: NameSchema,
+        },
+    },
+    async ({ name }) => {
+        if (!isPreviewRunning()) {
+            return CreateErrorResponse("No preview server is running. Use start_preview first.");
+        }
+        setPreviewDocument(name);
+        return CreateTextResponse(`Preview now serving "${name}". Refresh the Sandbox page to see it.`);
+    }
+);
+
+/* ================================================================== */
 /*  11. Search/discovery tools                                         */
 /* ================================================================== */
 
@@ -1350,8 +1443,25 @@ Server.registerPrompt("inspect-and-optimize", { description: "Load, inspect, and
 /*  Start                                                              */
 /* ================================================================== */
 
+async function Cleanup() {
+    if (isPreviewRunning()) {
+        await stopPreview();
+    }
+}
+
 async function Main() {
     const transport = new StdioServerTransport();
+
+    // Stop the preview server when the transport closes (session ends)
+    transport.onclose = () => {
+        void Cleanup();
+    };
+
+    // Stop the preview server on process signals (restart / kill)
+    process.on("SIGINT", () => void Cleanup().then(() => process.exit(0)));
+    process.on("SIGTERM", () => void Cleanup().then(() => process.exit(0)));
+    process.on("beforeExit", () => void Cleanup());
+
     await Server.connect(transport);
     // eslint-disable-next-line no-console
     console.error("babylonjs-gltf MCP server running on stdio");
