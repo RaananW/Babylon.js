@@ -271,6 +271,27 @@ Server.registerTool(
 );
 
 Server.registerTool(
+    "read_accessor_data",
+    {
+        description:
+            "Read the binary data of an accessor as a flat array of float values. " +
+            "Handles byte stride, normalization, and component type conversion. " +
+            "Returns the decoded data array, component count per element, and total element count. " +
+            "Requires buffer data to be embedded as base64 data URIs (automatically done when loading .gltf files from disk).",
+        inputSchema: { name: NameSchema, accessorIndex: AccessorIndexSchema },
+    },
+    async ({ name, accessorIndex }) => {
+        const result = Manager.readAccessorData(name, accessorIndex);
+        if (typeof result === "string") {
+            return CreateErrorResponse(result);
+        }
+        return CreateTextResponse(
+            `Accessor ${accessorIndex}: ${result.count} elements × ${result.componentCount} components\n` + `Data (${result.data.length} floats): [${result.data.join(", ")}]`
+        );
+    }
+);
+
+Server.registerTool(
     "describe_sampler",
     {
         description: "Describe a sampler: mag/min filter, wrap modes.",

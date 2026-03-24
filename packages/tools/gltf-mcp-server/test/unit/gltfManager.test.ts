@@ -1004,3 +1004,132 @@ describe("GltfManager — Index Compaction", () => {
         expect(mgr.compactIndices("none")).toContain("Error");
     });
 });
+
+// ---------- Accessor Data Reading -----------------------------------------
+
+/**
+ * A glTF with a real binary buffer containing:
+ *   - 3 VEC3 FLOAT positions:           (0,0,0), (1,0,0), (0,1,0)  → 36 bytes at offset 0
+ *   - 3 SCALAR UNSIGNED_SHORT indices:   0, 1, 2 (padded to 8 bytes) → offset 36
+ *   - 3 VEC4 UNSIGNED_BYTE colors (norm):[255,0,0,255],[0,255,0,255],[0,0,255,255] → offset 44
+ * Total buffer = 56 bytes.
+ */
+const BUFFER_BASE64 = "AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAAAAAAAAgD8AAAAAAAABAAIAAAD/AAD/AP8A/wAA//8=";
+
+const ACCESSOR_GLTF = JSON.stringify({
+    asset: { version: "2.0" },
+    scene: 0,
+    scenes: [{ nodes: [0] }],
+    nodes: [{ mesh: 0 }],
+    meshes: [
+        {
+            primitives: [{ attributes: { POSITION: 0, COLOR_0: 2 }, indices: 1 }],
+        },
+    ],
+    accessors: [
+        // 0: positions — VEC3 FLOAT
+        { bufferView: 0, componentType: 5126, count: 3, type: "VEC3", byteOffset: 0 },
+        // 1: indices — SCALAR UNSIGNED_SHORT
+        { bufferView: 1, componentType: 5123, count: 3, type: "SCALAR", byteOffset: 0 },
+        // 2: colors — VEC4 UNSIGNED_BYTE normalized
+        { bufferView: 2, componentType: 5121, count: 3, type: "VEC4", normalized: true, byteOffset: 0 },
+    ],
+    bufferViews: [
+        // 0: positions
+        { buffer: 0, byteOffset: 0, byteLength: 36, target: 34962 },
+        // 1: indices
+        { buffer: 0, byteOffset: 36, byteLength: 6, target: 34963 },
+        // 2: colors
+        { buffer: 0, byteOffset: 44, byteLength: 12 },
+    ],
+    buffers: [{ uri: `data:application/octet-stream;base64,${BUFFER_BASE64}`, byteLength: 56 }],
+});
+
+describe("GltfManager — Accessor Data", () => {
+    let mgr: GltfManager;
+
+    beforeEach(() => {
+        mgr = new GltfManager();
+        mgr.loadGltf("doc", ACCESSOR_GLTF);
+    });
+
+    it("reads VEC3 FLOAT position data", () => {
+        const result = mgr.readAccessorData("doc", 0);
+        expect(typeof result).not.toBe("string");
+        if (typeof result === "string") return;
+        expect(result.count).toBe(3);
+        expect(result.componentCount).toBe(3);
+        expect(result.data.length).toBe(9);
+        // vertex 0: (0,0,0)
+        expect(result.data[0]).toBeCloseTo(0);
+        expect(result.data[1]).toBeCloseTo(0);
+        expect(result.data[2]).toBeCloseTo(0);
+        // vertex 1: (1,0,0)
+        expect(result.data[3]).toBeCloseTo(1);
+        expect(result.data[4]).toBeCloseTo(0);
+        expect(result.data[5]).toBeCloseTo(0);
+        // vertex 2: (0,1,0)
+        expect(result.data[6]).toBeCloseTo(0);
+        expect(result.data[7]).toBeCloseTo(1);
+        expect(result.data[8]).toBeCloseTo(0);
+    });
+
+    it("reads SCALAR UNSIGNED_SHORT index data", () => {
+        const result = mgr.readAccessorData("doc", 1);
+        expect(typeof result).not.toBe("string");
+        if (typeof result === "string") return;
+        expect(result.count).toBe(3);
+        expect(result.componentCount).toBe(1);
+        expect(result.data).toEqual([0, 1, 2]);
+    });
+
+    it("reads VEC4 UNSIGNED_BYTE normalized color data", () => {
+        const result = mgr.readAccessorData("doc", 2);
+        expect(typeof result).not.toBe("string");
+        if (typeof result === "string") return;
+        expect(result.count).toBe(3);
+        expect(result.componentCount).toBe(4);
+        expect(result.data.length).toBe(12);
+        // Color 0: (255,0,0,255) normalized → (1,0,0,1)
+        expect(result.data[0]).toBeCloseTo(1);
+        expect(result.data[1]).toBeCloseTo(0);
+        expect(result.data[2]).toBeCloseTo(0);
+        expect(result.data[3]).toBeCloseTo(1);
+        // Color 1: (0,255,0,255) normalized → (0,1,0,1)
+        expect(result.data[4]).toBeCloseTo(0);
+        expect(result.data[5]).toBeCloseTo(1);
+        expect(result.data[6]).toBeCloseTo(0);
+        expect(result.data[7]).toBeCloseTo(1);
+    });
+
+    it("returns error for out-of-range accessor index", () => {
+        const result = mgr.readAccessorData("doc", 99);
+        expect(typeof result).toBe("string");
+        expect(result).toContain("Error");
+    });
+
+    it("returns error for non-existent document", () => {
+        const result = mgr.readAccessorData("nothere", 0);
+        expect(typeof result).toBe("string");
+        expect(result).toContain("Error");
+    });
+
+    it("returns zeros for accessor with no bufferView", () => {
+        // Modify accessor 0 to have no bufferView
+        const doc = mgr._getDocumentForTest("doc")!;
+        delete doc.accessors![0].bufferView;
+        const result = mgr.readAccessorData("doc", 0);
+        expect(typeof result).not.toBe("string");
+        if (typeof result === "string") return;
+        expect(result.data.every((v: number) => v === 0)).toBe(true);
+        expect(result.data.length).toBe(9);
+    });
+
+    it("returns error when buffer has no data URI", () => {
+        const doc = mgr._getDocumentForTest("doc")!;
+        delete doc.buffers![0].uri;
+        const result = mgr.readAccessorData("doc", 0);
+        expect(typeof result).toBe("string");
+        expect(result).toContain("Error");
+    });
+});

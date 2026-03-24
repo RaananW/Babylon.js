@@ -15,6 +15,7 @@
         "dev": "tsc --watch"
     },
     "dependencies": {
+        "@dev/core": "1.0.0",
         "@modelcontextprotocol/sdk": "^1.12.1",
         "@tools/mcp-server-core": "1.0.0",
         "zod": "^4.3.6"

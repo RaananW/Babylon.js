@@ -19,6 +19,8 @@ import type {
     GltfExtensionTargetType,
 } from "./gltfTypes.js";
 
+import { GetTypeByteLength, GetTypedArrayConstructor, GetFloatData } from "@dev/core/Buffers/bufferUtils";
+
 /* ------------------------------------------------------------------ */
 /*  Helper utilities                                                   */
 /* ------------------------------------------------------------------ */
@@ -547,6 +549,98 @@ export class GltfManager {
             lines.push(`- **Max**: [${acc.max.join(", ")}]`);
         }
         return lines.join("\n");
+    }
+
+    /**
+     * Returns the number of components for a glTF accessor type string.
+     */
+    private static _getNumComponents(type: string): number {
+        switch (type) {
+            case "SCALAR":
+                return 1;
+            case "VEC2":
+                return 2;
+            case "VEC3":
+                return 3;
+            case "VEC4":
+            case "MAT2":
+                return 4;
+            case "MAT3":
+                return 9;
+            case "MAT4":
+                return 16;
+            default:
+                throw new Error(`Unknown accessor type: ${type}`);
+        }
+    }
+
+    /**
+     * Decodes the raw binary buffer for a given buffer index from its data URI.
+     * Returns null if the buffer has no data URI.
+     */
+    private _getBufferBytes(doc: IGltfDocument, bufferIndex: number): Uint8Array | null {
+        const buf = ArrayOrEmpty(doc.buffers)[bufferIndex];
+        if (!buf?.uri) {
+            return null;
+        }
+        const m = buf.uri.match(/^data:[^;]*;base64,(.*)$/);
+        if (!m) {
+            return null;
+        }
+        const raw = atob(m[1]);
+        const bytes = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) {
+            bytes[i] = raw.charCodeAt(i);
+        }
+        return bytes;
+    }
+
+    /**
+     * Reads the data of an accessor as a flat Float32Array.
+     * Handles byte stride, normalization, and component type conversion
+     * using the utilities from @dev/core bufferUtils.
+     */
+    readAccessorData(name: string, accessorIndex: number): { data: number[]; componentCount: number; count: number } | string {
+        const doc = this._getDoc(name);
+        if (typeof doc === "string") {
+            return doc;
+        }
+        const accessors = ArrayOrEmpty(doc.accessors);
+        if (accessorIndex < 0 || accessorIndex >= accessors.length) {
+            return `Error: Accessor index ${accessorIndex} out of range (0..${accessors.length - 1}).`;
+        }
+        const acc = accessors[accessorIndex];
+
+        if (acc.bufferView === undefined) {
+            // Accessor with no bufferView — all zeros (sparse-only or placeholder)
+            const numComponents = GltfManager._getNumComponents(acc.type);
+            return { data: new Array(acc.count * numComponents).fill(0), componentCount: numComponents, count: acc.count };
+        }
+
+        const bufferViews = ArrayOrEmpty(doc.bufferViews);
+        const bv = bufferViews[acc.bufferView];
+        if (!bv) {
+            return `Error: Buffer view ${acc.bufferView} not found.`;
+        }
+
+        const bufferBytes = this._getBufferBytes(doc, bv.buffer);
+        if (!bufferBytes) {
+            return `Error: Cannot read buffer ${bv.buffer} — no data URI present.`;
+        }
+
+        const numComponents = GltfManager._getNumComponents(acc.type);
+        const componentByteLength = GetTypeByteLength(acc.componentType);
+        const defaultStride = numComponents * componentByteLength;
+        const byteStride = bv.byteStride ?? defaultStride;
+        const byteOffset = (bv.byteOffset ?? 0) + (acc.byteOffset ?? 0);
+
+        const floatData = GetFloatData(bufferBytes, numComponents, acc.componentType, byteOffset, byteStride, acc.normalized ?? false, acc.count);
+
+        return {
+            data: Array.from(floatData),
+            componentCount: numComponents,
+            count: acc.count,
+        };
     }
 
     describeSampler(name: string, samplerIndex: number): string {

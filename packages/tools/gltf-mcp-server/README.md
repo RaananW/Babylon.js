@@ -33,10 +33,11 @@ npx babylonjs-gltf
 - `delete_gltf` — Remove a document from memory
 - `clone_gltf` — Deep-clone a document under a new name
 
-### 2. Inspection (18 tools)
+### 2. Inspection & Data Access (19 tools)
 
 - `describe_gltf` — Full document summary: metadata, counts, extensions, warnings
 - `describe_scene`, `describe_node`, `describe_mesh`, `describe_material`, `describe_animation`, `describe_skin`, `describe_texture`, `describe_image`, `describe_accessor`, `describe_sampler` — Detailed per-object descriptions
+- `read_accessor_data` — Decode binary accessor data into a flat float array (handles stride, normalization, and component type conversion using Babylon.js core buffer utilities)
 - `list_scenes`, `list_nodes`, `list_meshes`, `list_materials`, `list_animations`, `list_textures`, `list_extensions` — Listing/summary tools
 
 ### 3. Node & Scene Editing (11 tools)
@@ -112,7 +113,7 @@ When loading `.gltf` files from disk, external buffers (`.bin`) and images (`.pn
 
 The preview server at `http://localhost:8766/` serves a self-contained viewer page that loads Babylon.js from CDN and fetches the model from the same server (same-origin). It also provides direct GLB/JSON download endpoints and an "Open in Sandbox" link. The model is re-exported on every request, so refreshing the page always shows the latest state.
 
-**Total: 87 tools**
+**Total: 88 tools**
 
 ## Example Workflows
 
@@ -147,8 +148,8 @@ The preview server at `http://localhost:8766/` serves a self-contained viewer pa
 
 ## Limitations & Follow-Up Items
 
-- **Binary buffer data**: The server manages glTF JSON structure but does not create accessor/buffer data for geometry vertices. Meshes added via `add_mesh` have empty attribute maps. Full geometry authoring requires importing existing accessor data.
-- **Animation authoring**: Animation channels/samplers can be inspected and removed, but creating new animation data (keyframes, accessors) is not yet supported.
+- **Binary buffer reading**: Buffer data can be read via `read_accessor_data` (positions, normals, UVs, indices, animation keyframes, etc.) but writing/creating new accessor data is not yet supported. Meshes added via `add_mesh` have empty attribute maps.
+- **Animation authoring**: Animation channels/samplers can be inspected and their keyframe data read via `read_accessor_data`, but creating new animation data is not yet supported.
 - **Skin authoring**: Skins can be inspected and removed but not created from scratch.
 
 ## Architecture
@@ -161,7 +162,7 @@ The preview server at `http://localhost:8766/` serves a self-contained viewer pa
 
 ### Key Design Decisions
 
-- **No engine dependency**: The server never instantiates a Babylon `Engine`, `Scene`, or `SceneSerializer`. All operations are pure JSON manipulation on `IGLTF` objects.
+- **Minimal engine dependency**: The server never instantiates a Babylon `Engine`, `Scene`, or `SceneSerializer`. All operations are pure JSON manipulation on `IGLTF` objects. The only import from `@dev/core` is the `bufferUtils` module (and its lightweight dependencies `Constants` and `Logger`), which provides binary accessor data decoding — type-aware TypedArray construction, byte stride handling, and normalization. Rollup tree-shakes the rest of core out of the bundle.
 - **ESM module**: Uses dynamic `await import("node:fs")` / `await import("node:path")` for file operations (no `require()`).
 - **External buffer resolution**: When loading a `.gltf` from disk, all referenced `.bin` buffers and image files are read and converted to `data:` URIs so the document is fully self-contained.
 - **GLB export**: Manually assembles the GLB binary (12-byte header + JSON chunk + BIN chunk with 4-byte alignment padding). Decodes data-URI buffers into raw bytes for the BIN chunk.
