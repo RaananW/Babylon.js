@@ -1,4 +1,8 @@
+import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
 import { FlowGraphManager, resetUniqueIdCounter } from "../../../flow-graph-mcp-server/src/flowGraphManager";
+import { GltfManager } from "../../../gltf-mcp-server/src/gltfManager";
 import { GuiManager } from "../../../gui-mcp-server/src/guiManager";
 import { GeometryGraphManager } from "../../../nge-mcp-server/src/geometryGraph";
 import { MaterialGraphManager } from "../../../nme-mcp-server/src/materialGraph";
@@ -158,13 +162,13 @@ describe("Scene MCP Server – Cross-server integration coverage", () => {
 
     it("uses exported Smart Filter JSON in generated scene code", () => {
         const sfMgr = new SmartFiltersGraphManager();
-        sfMgr.createGraph("sf1");
-        const sfJson = sfMgr.exportJSON("sf1");
-        expect(sfJson).toBeDefined();
+        sfMgr.createGraph("blur");
+        const sfJson = sfMgr.exportJSON("blur");
+        expect(sfJson).not.toBeNull();
 
         const sceneMgr = new SceneManager();
         sceneMgr.createScene("s");
-        ok(sceneMgr.attachSmartFilter("s", sfJson));
+        ok(sceneMgr.attachSmartFilter("s", sfJson!));
 
         const code = sceneMgr.exportCode("s");
         expect(code).not.toBeNull();
@@ -177,47 +181,179 @@ describe("Scene MCP Server – Cross-server integration coverage", () => {
 
     it("attaches and detaches Smart Filter from scene", () => {
         const sfMgr = new SmartFiltersGraphManager();
-        sfMgr.createGraph("sf1");
-        const sfJson = sfMgr.exportJSON("sf1");
+        sfMgr.createGraph("postFx");
+        const sfJson = sfMgr.exportJSON("postFx");
+        expect(sfJson).not.toBeNull();
 
         const sceneMgr = new SceneManager();
         sceneMgr.createScene("s");
-        ok(sceneMgr.attachSmartFilter("s", sfJson));
 
-        const desc = sceneMgr.describeScene("s");
-        expect(desc).toContain("Smart Filter: attached");
+        ok(sceneMgr.attachSmartFilter("s", sfJson!));
+        // Verify it's stored on the scene
+        const scene = sceneMgr.getScene("s")!;
+        expect(scene.smartFilterJson).toBeDefined();
 
         ok(sceneMgr.detachSmartFilter("s"));
-        const desc2 = sceneMgr.describeScene("s");
-        expect(desc2).not.toContain("Smart Filter: attached");
+        expect(scene.smartFilterJson).toBeUndefined();
     });
 
     it("rejects invalid Smart Filter JSON", () => {
         const sceneMgr = new SceneManager();
         sceneMgr.createScene("s");
-        const result = sceneMgr.attachSmartFilter("s", { format: "wrong" });
-        expect(typeof result).toBe("string");
-        expect(result).toContain("Invalid Smart Filter");
+
+        const result = sceneMgr.attachSmartFilter("s", { format: "wrong", formatVersion: 1, blocks: [], connections: [] });
+        expect(result).toContain("format must be");
     });
 
     it("auto-includes Smart Filter JSON in exportProject", () => {
         const sfMgr = new SmartFiltersGraphManager();
-        sfMgr.createGraph("sf1");
-        const sfJson = sfMgr.exportJSON("sf1");
+        sfMgr.createGraph("pp");
+        const sfJson = sfMgr.exportJSON("pp");
 
         const sceneMgr = new SceneManager();
         sceneMgr.createScene("s");
-        ok(sceneMgr.attachSmartFilter("s", sfJson));
+        ok(sceneMgr.attachSmartFilter("s", sfJson!));
 
         const project = sceneMgr.exportProject("s", { format: "es6" });
         expect(project).not.toBeNull();
         const indexTs = project!["src/index.ts"];
         expect(indexTs).toContain("SmartFilterDeserializer");
-        expect(indexTs).toContain('@babylonjs/smart-filters');
-        expect(indexTs).toContain('@babylonjs/smart-filters-blocks');
+        expect(indexTs).toContain("@babylonjs/smart-filters");
+        expect(indexTs).toContain("@babylonjs/smart-filters-blocks");
 
-        const pkgJson = JSON.parse(project!["package.json"]);
-        expect(pkgJson.dependencies).toHaveProperty("@babylonjs/smart-filters");
-        expect(pkgJson.dependencies).toHaveProperty("@babylonjs/smart-filters-blocks");
+        // package.json should include smart-filter deps
+        const pkg = JSON.parse(project!["package.json"]);
+        expect(pkg.dependencies["@babylonjs/smart-filters"]).toBeDefined();
+        expect(pkg.dependencies["@babylonjs/smart-filters-blocks"]).toBeDefined();
+    });
+
+    it("uses glTF MCP exported GLB file in scene add_model and generated code", () => {
+        // 1. Build a minimal glTF document with a node, mesh, and material
+        const gltfMgr = new GltfManager();
+        gltfMgr.createGltf("character");
+        gltfMgr.addNode("character", "Root");
+        gltfMgr.addMesh("character", "Body");
+        gltfMgr.assignMeshToNode("character", 0, 0);
+        gltfMgr.addMaterial("character", "Skin");
+        gltfMgr.setPrimitiveMaterial("character", 0, 0, 0);
+
+        // 2. Export as GLB and write to a temp file
+        const glb = gltfMgr.exportGlb("character");
+        expect(glb).not.toBeNull();
+        const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "gltf-scene-test-"));
+        const glbPath = path.join(tmpDir, "character.glb");
+        fs.writeFileSync(glbPath, glb!);
+        expect(fs.existsSync(glbPath)).toBe(true);
+
+        // 3. Verify the exported GLB is valid by re-importing it
+        const reimported = gltfMgr.importGlb("character_reimport", glb!);
+        expect(reimported).not.toContain("Error");
+
+        // 4. Use SceneManager to add the GLB as a model
+        const sceneMgr = new SceneManager();
+        sceneMgr.createScene("s");
+        sceneMgr.addCamera("s", "cam", "ArcRotateCamera", {
+            alpha: -Math.PI / 2,
+            beta: Math.PI / 3,
+            radius: 5,
+            target: { x: 0, y: 1, z: 0 },
+            isActive: true,
+        });
+        sceneMgr.addLight("s", "light", "HemisphericLight");
+        const modelResult = sceneMgr.addModel("s", "character", glbPath, undefined, undefined, {
+            animationGroups: ["Walk", "Idle"],
+        });
+        expect(typeof modelResult).not.toBe("string");
+
+        // 5. Verify generated code references the file and ImportMeshAsync
+        const code = sceneMgr.exportCode("s", { format: "es6" });
+        expect(code).not.toBeNull();
+        expect(code).toContain("SceneLoader.ImportMeshAsync");
+        expect(code).toContain("character.glb");
+        expect(code).toContain('"character"');
+
+        // 6. Verify animation group lookups appear in generated code
+        expect(code).toContain("getAnimationGroupByName");
+        expect(code).toContain('"Walk"');
+        expect(code).toContain('"Idle"');
+
+        // Cleanup temp file
+        fs.unlinkSync(glbPath);
+        fs.rmdirSync(tmpDir);
+    });
+
+    it("uses glTF MCP exported JSON in scene add_model and project export", () => {
+        // 1. Build a glTF document
+        const gltfMgr = new GltfManager();
+        gltfMgr.createGltf("prop");
+        gltfMgr.addNode("prop", "Crate");
+        gltfMgr.addMesh("prop", "CrateMesh");
+        gltfMgr.assignMeshToNode("prop", 0, 0);
+
+        // 2. Export as JSON and write to a temp file
+        const json = gltfMgr.exportJson("prop");
+        expect(json).not.toBeNull();
+        const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "gltf-scene-json-test-"));
+        const gltfPath = path.join(tmpDir, "crate.gltf");
+        fs.writeFileSync(gltfPath, json!);
+
+        // 3. Add to scene and export as project
+        const sceneMgr = new SceneManager();
+        sceneMgr.createScene("s");
+        sceneMgr.addCamera("s", "cam", "ArcRotateCamera", { isActive: true });
+        const modelResult = sceneMgr.addModel("s", "crate", gltfPath);
+        expect(typeof modelResult).not.toBe("string");
+
+        const project = sceneMgr.exportProject("s", { format: "es6" });
+        expect(project).not.toBeNull();
+        const indexTs = project!["src/index.ts"];
+        expect(indexTs).toContain("SceneLoader.ImportMeshAsync");
+        expect(indexTs).toContain("crate.gltf");
+
+        // Cleanup
+        fs.unlinkSync(gltfPath);
+        fs.rmdirSync(tmpDir);
+    });
+
+    it("round-trips glTF MCP document through GLB export, reimport, and scene integration", () => {
+        // Build, export as GLB, reimport, verify structure is preserved
+        const gltfMgr = new GltfManager();
+        gltfMgr.createGltf("vehicle");
+        gltfMgr.addNode("vehicle", "Chassis");
+        gltfMgr.addNode("vehicle", "Wheel_FL", 0); // child of Chassis
+        gltfMgr.addNode("vehicle", "Wheel_FR", 0); // child of Chassis
+        gltfMgr.addMesh("vehicle", "ChassisBody");
+        gltfMgr.addMesh("vehicle", "WheelMesh");
+        gltfMgr.assignMeshToNode("vehicle", 0, 0);
+        gltfMgr.assignMeshToNode("vehicle", 1, 1);
+        gltfMgr.assignMeshToNode("vehicle", 2, 1);
+        gltfMgr.addMaterial("vehicle", "PaintRed");
+
+        const glb = gltfMgr.exportGlb("vehicle");
+        expect(glb).not.toBeNull();
+
+        // Reimport and verify the structure
+        const result = gltfMgr.importGlb("vehicle_imported", glb!);
+        expect(result).not.toContain("Error");
+
+        const desc = gltfMgr.describeGltf("vehicle_imported");
+        expect(desc).toContain("**Nodes**: 3");
+        expect(desc).toContain("**Meshes**: 2");
+        expect(desc).toContain("**Materials**: 1");
+
+        // Use in scene
+        const sceneMgr = new SceneManager();
+        sceneMgr.createScene("s");
+        sceneMgr.addCamera("s", "cam", "FreeCamera", { isActive: true });
+        const modelResult = sceneMgr.addModel("s", "vehicle", "./assets/vehicle.glb", {
+            position: { x: 0, y: 0, z: 5 },
+        });
+        expect(typeof modelResult).not.toBe("string");
+
+        const code = sceneMgr.exportCode("s", { format: "es6" });
+        expect(code).not.toBeNull();
+        expect(code).toContain("SceneLoader.ImportMeshAsync");
+        expect(code).toContain("vehicle.glb");
+        expect(code).toContain("position");
     });
 });
