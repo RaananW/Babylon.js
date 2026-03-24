@@ -6,7 +6,8 @@ export * from "./runner";
 export * from "./scenarios";
 
 if (require.main === module) {
-    void import("./cli").then(async ({ runCli }) => {
-        await runCli(process.argv.slice(2));
-    });
+    void (async () => {
+        const { RunCli } = await import("./cli");
+        await RunCli(process.argv.slice(2));
+    })();
 }

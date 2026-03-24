@@ -1,7 +1,7 @@
-import { defaultScenarioDefinitions, type ScenarioSuite } from "./scenarios";
-import { runScenarioSuite, type MemoryLeakRunnerOptions } from "./runner";
+import { DefaultScenarioDefinitions, type ScenarioSuite } from "./scenarios";
+import { RunScenarioSuite, type IMemoryLeakRunnerOptions } from "./runner";
 
-const getArgValue = (argv: string[], name: string): string | undefined => {
+const GetArgValue = (argv: string[], name: string): string | undefined => {
     const prefixedArg = `--${name}=`;
     const directMatch = argv.find((arg) => arg.startsWith(prefixedArg));
     if (directMatch) {
@@ -16,25 +16,29 @@ const getArgValue = (argv: string[], name: string): string | undefined => {
     return undefined;
 };
 
+const WriteStdoutLine = (message: string) => {
+    process.stdout.write(`${message}\n`);
+};
+
 /**
  * Parses CLI arguments for the memory leak runner.
  * @param argv Raw process arguments.
  * @returns Parsed runner options and control flags.
  */
-export function parseCliArgs(argv: string[]) {
-    const suite = (getArgValue(argv, "suite") as ScenarioSuite | undefined) ?? "ci";
-    const scenarioArg = getArgValue(argv, "scenario");
+export function ParseCliArgs(argv: string[]) {
+    const suite = (GetArgValue(argv, "suite") as ScenarioSuite | undefined) ?? "ci";
+    const scenarioArg = GetArgValue(argv, "scenario");
     const scenarioIds = scenarioArg
         ?.split(",")
         .map((scenarioId) => scenarioId.trim())
         .filter(Boolean);
-    const workDir = getArgValue(argv, "work-dir");
-    const chromiumBinary = getArgValue(argv, "chromium-binary");
+    const workDir = GetArgValue(argv, "work-dir");
+    const chromiumBinary = GetArgValue(argv, "chromium-binary");
     const failFast = !argv.includes("--no-fail-fast");
     const listOnly = argv.includes("--list");
     const skipWarmup = argv.includes("--skip-warmup");
 
-    const options: MemoryLeakRunnerOptions = {
+    const options: IMemoryLeakRunnerOptions = {
         suite,
         scenarioIds,
         workDir,
@@ -50,18 +54,18 @@ export function parseCliArgs(argv: string[]) {
  * Executes the memory leak runner CLI.
  * @param argv Raw process arguments.
  */
-export async function runCli(argv: string[]): Promise<void> {
-    const { listOnly, options } = parseCliArgs(argv);
+export async function RunCli(argv: string[]): Promise<void> {
+    const { listOnly, options } = ParseCliArgs(argv);
 
     if (listOnly) {
-        defaultScenarioDefinitions.forEach((definition) => {
-            console.log(`${definition.id}\t${definition.packageName}\t${definition.suites.join(",")}\t${definition.name}`);
+        DefaultScenarioDefinitions.forEach((definition) => {
+            WriteStdoutLine(`${definition.id}\t${definition.packageName}\t${definition.suites.join(",")}\t${definition.name}`);
         });
         return;
     }
 
-    const results = await runScenarioSuite(options);
+    const results = await RunScenarioSuite(options);
     results.forEach((result) => {
-        console.log(`${result.definition.id}: 0 leak(s). Memlab artifacts: ${result.resultDirectory}`);
+        WriteStdoutLine(`${result.definition.id}: 0 leak(s). Memlab artifacts: ${result.resultDirectory}`);
     });
 }

@@ -3,7 +3,7 @@ import type { IHeapNode, IHeapSnapshot, IScenario } from "@memlab/core";
 /**
  * Tuning options for the Babylon-specific memlab leak filter.
  */
-export interface LeakFilterOptions {
+export interface ILeakFilterOptions {
     /** Minimum retained size that should be considered interesting. */
     minRetainedSize?: number;
     /** Exact node names to ignore. */
@@ -16,22 +16,22 @@ export interface LeakFilterOptions {
     ignoredEdgeTypes?: string[];
 }
 
-const defaultIgnoredNames = ["FontAwesomeConfig", "WebGL2RenderingContext"];
-const defaultIgnoredNameFragments = ["system "];
-const defaultIgnoredTypes = ["hidden"];
-const defaultIgnoredEdgeTypes = ["internal", "hidden", "weak"];
+const DefaultIgnoredNames = ["FontAwesomeConfig", "WebGL2RenderingContext"];
+const DefaultIgnoredNameFragments = ["system "];
+const DefaultIgnoredTypes = ["hidden"];
+const DefaultIgnoredEdgeTypes = ["internal", "hidden", "weak"];
 
 /**
  * Creates the default Babylon-specific memlab leak filter.
  * @param options Optional filter overrides.
  * @returns A memlab leak filter callback.
  */
-export function createBabylonLeakFilter(options: LeakFilterOptions = {}): NonNullable<IScenario["leakFilter"]> {
+export function CreateBabylonLeakFilter(options: ILeakFilterOptions = {}): NonNullable<IScenario["leakFilter"]> {
     const minRetainedSize = options.minRetainedSize ?? 40000;
-    const ignoredNames = new Set(options.ignoredNames ?? defaultIgnoredNames);
-    const ignoredNameFragments = options.ignoredNameFragments ?? defaultIgnoredNameFragments;
-    const ignoredTypes = new Set(options.ignoredTypes ?? defaultIgnoredTypes);
-    const ignoredEdgeTypes = new Set(options.ignoredEdgeTypes ?? defaultIgnoredEdgeTypes);
+    const ignoredNames = new Set(options.ignoredNames ?? DefaultIgnoredNames);
+    const ignoredNameFragments = options.ignoredNameFragments ?? DefaultIgnoredNameFragments;
+    const ignoredTypes = new Set(options.ignoredTypes ?? DefaultIgnoredTypes);
+    const ignoredEdgeTypes = new Set(options.ignoredEdgeTypes ?? DefaultIgnoredEdgeTypes);
 
     return (node: IHeapNode, _snapshot: IHeapSnapshot, _leakedNodeIds: Set<number>) => {
         if (node.retainedSize < minRetainedSize) {

@@ -11,9 +11,9 @@ const loadRunnerModules = async () => {
 
     return {
         run: memlabModule.run,
-        parseCliArgs: cliModule.parseCliArgs,
+        parseCliArgs: cliModule.ParseCliArgs,
         MemoryLeakRunnerError: runnerModule.MemoryLeakRunnerError,
-        runScenarioSuite: runnerModule.runScenarioSuite,
+        runScenarioSuite: runnerModule.RunScenarioSuite,
     };
 };
 

@@ -1,19 +1,19 @@
 import type { IScenario } from "@memlab/core";
 
-import type { GlobalConfig } from "./config";
-import { createBabylonLeakFilter, type LeakFilterOptions } from "./filters";
+import type { IGlobalConfig } from "./config";
+import { CreateBabylonLeakFilter, type ILeakFilterOptions } from "./filters";
 import {
-    evaluateDisposePlaygroundScene,
-    evaluateInitializePlaygroundScene,
-    evaluateInitializePackageScene,
-    evaluateMountViewerScenario,
-    evaluateUnmountViewerScenario,
-    type PackageSceneBrowserOptions,
-    type PlaygroundSceneBrowserOptions,
-    type ViewerSceneBrowserOptions,
+    EvaluateDisposePlaygroundScene,
+    EvaluateInitializePlaygroundScene,
+    EvaluateInitializePackageScene,
+    EvaluateMountViewerScenario,
+    EvaluateUnmountViewerScenario,
+    type IPackageSceneBrowserOptions,
+    type IPlaygroundSceneBrowserOptions,
+    type IViewerSceneBrowserOptions,
 } from "./browserActions";
 
-interface PageLike {
+interface IPageLike {
     evaluate: (...args: any[]) => Promise<any>;
     waitForFunction: (...args: any[]) => Promise<any>;
     setViewport: (viewport: { width: number; height: number }) => Promise<void>;
@@ -22,7 +22,7 @@ interface PageLike {
 /** Supported scenario groups. */
 export type ScenarioSuite = "ci" | "extended" | "packages" | "all";
 
-interface BaseScenarioDefinition {
+interface IBaseScenarioDefinition {
     /** Stable identifier used by the CLI. */
     id: string;
     /** Human readable scenario name. */
@@ -40,11 +40,11 @@ interface BaseScenarioDefinition {
     /** Optional delay after disposal completes. */
     settleAfterDisposeMs?: number;
     /** Optional leak filter overrides. */
-    leakFilterOptions?: LeakFilterOptions;
+    leakFilterOptions?: ILeakFilterOptions;
 }
 
 /** Scenario definition for Babylon playground-based leak checks. */
-export interface PlaygroundScenarioDefinition extends BaseScenarioDefinition {
+export interface IPlaygroundScenarioDefinition extends IBaseScenarioDefinition {
     /** Discriminator. */
     kind: "playground";
     /** Playground identifier to run. */
@@ -60,7 +60,7 @@ export interface PlaygroundScenarioDefinition extends BaseScenarioDefinition {
 }
 
 /** Scenario definition for non-core package pages. */
-export interface ViewerScenarioDefinition extends BaseScenarioDefinition {
+export interface IViewerScenarioDefinition extends IBaseScenarioDefinition {
     /** Discriminator. */
     kind: "viewer";
     /** Relative path of the page that serves the viewer app. */
@@ -72,22 +72,22 @@ export interface ViewerScenarioDefinition extends BaseScenarioDefinition {
 }
 
 /** Scenario definition for package-focused checks hosted on the Babylon Server empty page. */
-export interface PackageScenarioDefinition extends BaseScenarioDefinition {
+export interface IPackageScenarioDefinition extends IBaseScenarioDefinition {
     /** Discriminator. */
     kind: "package";
     /** Browser-side package scenario identifier. */
-    packageScenario: PackageSceneBrowserOptions["scenario"];
+    packageScenario: IPackageSceneBrowserOptions["scenario"];
     /** Number of frames to render after the package action is ready. */
     renderCount?: number;
 }
 
 /** All supported scenario definitions. */
-export type MemoryLeakScenarioDefinition = PlaygroundScenarioDefinition | ViewerScenarioDefinition | PackageScenarioDefinition;
+export type MemoryLeakScenarioDefinition = IPlaygroundScenarioDefinition | IViewerScenarioDefinition | IPackageScenarioDefinition;
 
 /**
  * Default scenario coverage for the Babylon memory leak runner.
  */
-export const defaultScenarioDefinitions: MemoryLeakScenarioDefinition[] = [
+export const DefaultScenarioDefinitions: MemoryLeakScenarioDefinition[] = [
     {
         id: "core-playground-2FDQT5-1508",
         name: "Core Playground #2FDQT5#1508",
@@ -376,10 +376,10 @@ export const defaultScenarioDefinitions: MemoryLeakScenarioDefinition[] = [
  * @param definitions Scenario definitions to resolve from.
  * @returns The resolved scenario definitions.
  */
-export function resolveScenarioDefinitions(
+export function ResolveScenarioDefinitions(
     suite: ScenarioSuite = "ci",
     scenarioIds?: string[],
-    definitions: MemoryLeakScenarioDefinition[] = defaultScenarioDefinitions
+    definitions: MemoryLeakScenarioDefinition[] = DefaultScenarioDefinitions
 ): MemoryLeakScenarioDefinition[] {
     if (scenarioIds?.length) {
         const selected = definitions.filter((definition) => scenarioIds.includes(definition.id));
@@ -397,7 +397,7 @@ export function resolveScenarioDefinitions(
     return definitions.filter((definition) => definition.suites.includes(suite));
 }
 
-const waitForHarnessIdle = async (page: PageLike, timeoutMs: number) => {
+const WaitForHarnessIdleAsync = async (page: IPageLike, timeoutMs: number) => {
     await page.waitForFunction(
         () => {
             const harnessState = (window as any).__babylonLeakHarnessState;
@@ -412,26 +412,30 @@ const waitForHarnessIdle = async (page: PageLike, timeoutMs: number) => {
     }
 };
 
-const createSharedScenarioScaffold = (
-    definition: BaseScenarioDefinition,
+const CreateSharedScenarioScaffold = (
+    definition: IBaseScenarioDefinition,
     initialPageUrl: () => string
 ): Pick<IScenario, "url" | "repeat" | "isPageLoaded" | "beforeInitialPageLoad"> => {
+    const beforeInitialPageLoadAsync = async (page: IPageLike) => {
+        await page.setViewport({ width: 1280, height: 720 });
+    };
+
+    const isPageLoadedAsync = async (page: IPageLike) => {
+        await page.waitForFunction(
+            () => {
+                const harnessState = (window as any).__babylonLeakHarnessState;
+                return document.readyState === "complete" && !harnessState?.busy;
+            },
+            { timeout: definition.timeoutMs ?? 60000 }
+        );
+        return true;
+    };
+
     return {
         url: initialPageUrl,
         repeat: () => definition.repeat ?? 0,
-        beforeInitialPageLoad: async (page: PageLike) => {
-            await page.setViewport({ width: 1280, height: 720 });
-        },
-        isPageLoaded: async (page: PageLike) => {
-            await page.waitForFunction(
-                () => {
-                    const harnessState = (window as any).__babylonLeakHarnessState;
-                    return document.readyState === "complete" && !harnessState?.busy;
-                },
-                { timeout: definition.timeoutMs ?? 60000 }
-            );
-            return true;
-        },
+        beforeInitialPageLoad: beforeInitialPageLoadAsync,
+        isPageLoaded: isPageLoadedAsync,
     };
 };
 
@@ -441,9 +445,9 @@ const createSharedScenarioScaffold = (
  * @param config The resolved global configuration.
  * @returns The memlab scenario.
  */
-export function createMemlabScenario(definition: MemoryLeakScenarioDefinition, config: GlobalConfig): IScenario {
+export function CreateMemlabScenario(definition: MemoryLeakScenarioDefinition, config: IGlobalConfig): IScenario {
     if (definition.kind === "playground") {
-        const browserOptions: PlaygroundSceneBrowserOptions = {
+        const browserOptions: IPlaygroundSceneBrowserOptions = {
             baseUrl: config.baseUrl,
             snippetUrl: config.snippetUrl,
             pgRoot: config.pgRoot,
@@ -457,22 +461,25 @@ export function createMemlabScenario(definition: MemoryLeakScenarioDefinition, c
             settleAfterDisposeMs: definition.settleAfterDisposeMs,
         };
 
+        const actionAsync = async (page: IPageLike) => {
+            await page.evaluate(EvaluateInitializePlaygroundScene, browserOptions);
+            await WaitForHarnessIdleAsync(page, definition.timeoutMs ?? 60000);
+        };
+        const backAsync = async (page: IPageLike) => {
+            await page.evaluate(EvaluateDisposePlaygroundScene, { settleAfterDisposeMs: definition.settleAfterDisposeMs });
+            await WaitForHarnessIdleAsync(page, definition.timeoutMs ?? 60000);
+        };
+
         return {
-            ...createSharedScenarioScaffold(definition, () => `${config.baseUrl}/empty.html`),
-            action: async (page: PageLike) => {
-                await page.evaluate(evaluateInitializePlaygroundScene, browserOptions);
-                await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
-            },
-            back: async (page: PageLike) => {
-                await page.evaluate(evaluateDisposePlaygroundScene, { settleAfterDisposeMs: definition.settleAfterDisposeMs });
-                await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
-            },
-            leakFilter: createBabylonLeakFilter(definition.leakFilterOptions),
+            ...CreateSharedScenarioScaffold(definition, () => `${config.baseUrl}/empty.html`),
+            action: actionAsync,
+            back: backAsync,
+            leakFilter: CreateBabylonLeakFilter(definition.leakFilterOptions),
         };
     }
 
     if (definition.kind === "package") {
-        const browserOptions: PackageSceneBrowserOptions = {
+        const browserOptions: IPackageSceneBrowserOptions = {
             baseUrl: config.baseUrl,
             assetsUrl: config.assetsUrl,
             scenario: definition.packageScenario,
@@ -480,37 +487,43 @@ export function createMemlabScenario(definition: MemoryLeakScenarioDefinition, c
             settleAfterReadyMs: definition.settleAfterReadyMs,
         };
 
+        const actionAsync = async (page: IPageLike) => {
+            await page.evaluate(EvaluateInitializePackageScene, browserOptions);
+            await WaitForHarnessIdleAsync(page, definition.timeoutMs ?? 60000);
+        };
+        const backAsync = async (page: IPageLike) => {
+            await page.evaluate(EvaluateDisposePlaygroundScene, { settleAfterDisposeMs: definition.settleAfterDisposeMs });
+            await WaitForHarnessIdleAsync(page, definition.timeoutMs ?? 60000);
+        };
+
         return {
-            ...createSharedScenarioScaffold(definition, () => `${config.baseUrl}/empty.html`),
-            action: async (page: PageLike) => {
-                await page.evaluate(evaluateInitializePackageScene, browserOptions);
-                await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
-            },
-            back: async (page: PageLike) => {
-                await page.evaluate(evaluateDisposePlaygroundScene, { settleAfterDisposeMs: definition.settleAfterDisposeMs });
-                await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
-            },
-            leakFilter: createBabylonLeakFilter(definition.leakFilterOptions),
+            ...CreateSharedScenarioScaffold(definition, () => `${config.baseUrl}/empty.html`),
+            action: actionAsync,
+            back: backAsync,
+            leakFilter: CreateBabylonLeakFilter(definition.leakFilterOptions),
         };
     }
 
-    const browserOptions: ViewerSceneBrowserOptions = {
+    const browserOptions: IViewerSceneBrowserOptions = {
         viewerHtml: definition.viewerHtml,
         minFrameCount: definition.minFrameCount,
         settleAfterReadyMs: definition.settleAfterReadyMs,
         settleAfterDisposeMs: definition.settleAfterDisposeMs,
     };
 
+    const actionAsync = async (page: IPageLike) => {
+        await page.evaluate(EvaluateMountViewerScenario, browserOptions);
+        await WaitForHarnessIdleAsync(page, definition.timeoutMs ?? 60000);
+    };
+    const backAsync = async (page: IPageLike) => {
+        await page.evaluate(EvaluateUnmountViewerScenario, { settleAfterDisposeMs: definition.settleAfterDisposeMs });
+        await WaitForHarnessIdleAsync(page, definition.timeoutMs ?? 60000);
+    };
+
     return {
-        ...createSharedScenarioScaffold(definition, () => `${config.viewerBaseUrl}${definition.urlPath}`),
-        action: async (page: PageLike) => {
-            await page.evaluate(evaluateMountViewerScenario, browserOptions);
-            await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
-        },
-        back: async (page: PageLike) => {
-            await page.evaluate(evaluateUnmountViewerScenario, { settleAfterDisposeMs: definition.settleAfterDisposeMs });
-            await waitForHarnessIdle(page, definition.timeoutMs ?? 60000);
-        },
-        leakFilter: createBabylonLeakFilter(definition.leakFilterOptions),
+        ...CreateSharedScenarioScaffold(definition, () => `${config.viewerBaseUrl}${definition.urlPath}`),
+        action: actionAsync,
+        back: backAsync,
+        leakFilter: CreateBabylonLeakFilter(definition.leakFilterOptions),
     };
 }

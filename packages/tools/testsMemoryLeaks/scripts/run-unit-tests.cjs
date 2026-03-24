@@ -25,7 +25,7 @@ const vitestPackage = resolveOptionalPackage("vitest");
 const jestPackage = resolveOptionalPackage("jest");
 
 if (!vitestPackage && !jestPackage) {
-    console.error("Neither Vitest nor Jest could be resolved for memory leak unit tests.");
+    process.stderr.write("Neither Vitest nor Jest could be resolved for memory leak unit tests.\n");
     process.exit(1);
 }
 

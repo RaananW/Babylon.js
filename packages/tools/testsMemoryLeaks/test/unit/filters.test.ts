@@ -1,8 +1,8 @@
-import { createBabylonLeakFilter } from "../../src/filters";
+import { CreateBabylonLeakFilter } from "../../src/filters";
 
 describe("createBabylonLeakFilter", () => {
     it("filters known noisy nodes", () => {
-        const filter = createBabylonLeakFilter();
+        const filter = CreateBabylonLeakFilter();
 
         expect(
             filter(
@@ -18,7 +18,7 @@ describe("createBabylonLeakFilter", () => {
     });
 
     it("filters nodes below the retained size threshold", () => {
-        const filter = createBabylonLeakFilter({ minRetainedSize: 50000 });
+        const filter = CreateBabylonLeakFilter({ minRetainedSize: 50000 });
 
         expect(
             filter(
@@ -34,7 +34,7 @@ describe("createBabylonLeakFilter", () => {
     });
 
     it("keeps large user objects that are not part of the ignore lists", () => {
-        const filter = createBabylonLeakFilter();
+        const filter = CreateBabylonLeakFilter();
 
         expect(
             filter(

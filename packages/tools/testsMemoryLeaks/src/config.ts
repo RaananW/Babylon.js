@@ -3,7 +3,7 @@ import { checkArgs, populateEnvironment } from "@dev/build-tools";
 /**
  * Global configuration used by the memory leak scenarios.
  */
-export interface GlobalConfig {
+export interface IGlobalConfig {
     /** Base URL for the Babylon server assets. */
     baseUrl: string;
     /** Base URL for the Babylon viewer test app. */
@@ -23,7 +23,7 @@ export interface GlobalConfig {
  * @param overrideConfig Optional configuration overrides.
  * @returns The merged global configuration.
  */
-export function getGlobalConfig(overrideConfig: Partial<GlobalConfig> = {}): GlobalConfig {
+export function GetGlobalConfig(overrideConfig: Partial<IGlobalConfig> = {}): IGlobalConfig {
     populateEnvironment();
 
     const protocol = checkArgs(["--enable-https"], true) ? "https" : "http";

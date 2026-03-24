@@ -1,7 +1,7 @@
 /**
  * Browser-side options used to load a playground scene in memlab.
  */
-export interface PlaygroundSceneBrowserOptions {
+export interface IPlaygroundSceneBrowserOptions {
     /** Babylon server base URL. */
     baseUrl: string;
     /** Playground snippet API URL. */
@@ -29,7 +29,7 @@ export interface PlaygroundSceneBrowserOptions {
 /**
  * Browser-side options used to mount a viewer scenario in memlab.
  */
-export interface ViewerSceneBrowserOptions {
+export interface IViewerSceneBrowserOptions {
     /** Viewer HTML that should be attached to the DOM. */
     viewerHtml: string;
     /** Minimum rendered frame count before the action is considered stable. */
@@ -43,7 +43,7 @@ export interface ViewerSceneBrowserOptions {
 /**
  * Browser-side options used to run package-focused scenarios on top of empty.html.
  */
-export interface PackageSceneBrowserOptions {
+export interface IPackageSceneBrowserOptions {
     /** Babylon server base URL. */
     baseUrl: string;
     /** Shared Babylon assets base URL. */
@@ -74,27 +74,38 @@ export interface PackageSceneBrowserOptions {
  * This function is evaluated in the browser context by Puppeteer.
  * @param options Playground load options.
  */
-export async function evaluateInitializePlaygroundScene(options: PlaygroundSceneBrowserOptions): Promise<void> {
+export async function EvaluateInitializePlaygroundScene(options: IPlaygroundSceneBrowserOptions): Promise<void> {
     const globalWindow = window as typeof window & {
-        __babylonLeakHarnessState?: { busy: boolean; status: string; lastError?: string };
         BABYLON?: any;
         engine?: any;
         scene?: any;
         canvas?: HTMLCanvasElement;
         seed?: number;
-        __babylonOriginalMathRandom?: () => number;
     };
+    const globalWindowRecord = globalWindow as typeof globalWindow & Record<string, unknown>;
+    const harnessStateKey = "__babylonLeakHarnessState";
+    const originalMathRandomKey = "__babylonOriginalMathRandom";
 
     const setHarnessState = (status: string, busy: boolean, lastError?: string) => {
-        globalWindow.__babylonLeakHarnessState = { busy, status, lastError };
+        globalWindowRecord[harnessStateKey] = { busy, status, lastError };
     };
-    const waitForAnimationFrames = async (count = 2) => {
-        for (let index = 0; index < count; index++) {
-            await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-        }
-    };
-    const waitForSettle = async (delayMs = 0, frameCount = 2) => {
-        await waitForAnimationFrames(frameCount);
+    const waitForAnimationFramesAsync = async (count = 2) =>
+        await new Promise<void>((resolve) => {
+            const advanceFrame = (remainingFrameCount: number) => {
+                if (remainingFrameCount <= 0) {
+                    resolve();
+                    return;
+                }
+
+                requestAnimationFrame(() => {
+                    advanceFrame(remainingFrameCount - 1);
+                });
+            };
+
+            advanceFrame(count);
+        });
+    const waitForSettleAsync = async (delayMs = 0, frameCount = 2) => {
+        await waitForAnimationFramesAsync(frameCount);
         await Promise.resolve();
 
         if (delayMs > 0) {
@@ -106,7 +117,9 @@ export async function evaluateInitializePlaygroundScene(options: PlaygroundScene
     setHarnessState("loading", true);
 
     try {
-        globalWindow.__babylonOriginalMathRandom ??= globalWindow.Math.random;
+        if (!globalWindowRecord[originalMathRandomKey]) {
+            globalWindowRecord[originalMathRandomKey] = globalWindow.Math.random;
+        }
         globalWindow.seed = 1;
         globalWindow.Math.random = function () {
             const currentSeed = globalWindow.seed ?? 1;
@@ -115,6 +128,7 @@ export async function evaluateInitializePlaygroundScene(options: PlaygroundScene
             return x - Math.floor(x);
         };
 
+        // eslint-disable-next-line @typescript-eslint/naming-convention -- BABYLON is the intentional runtime namespace.
         const BABYLON = globalWindow.BABYLON;
         if (!BABYLON) {
             throw new Error("BABYLON is not available on the test page.");
@@ -178,7 +192,7 @@ export async function evaluateInitializePlaygroundScene(options: PlaygroundScene
             .replace("http://", "https://");
 
         const createSceneResult = eval(code + "\ncreateScene(engine)");
-        const scene = createSceneResult?.then ? await createSceneResult : createSceneResult;
+        const scene = await Promise.resolve(createSceneResult);
         globalWindow.scene = scene;
 
         if (!scene) {
@@ -186,7 +200,7 @@ export async function evaluateInitializePlaygroundScene(options: PlaygroundScene
         }
 
         await scene.whenReadyAsync();
-        await waitForSettle(0, 2);
+        await waitForSettleAsync(0, 2);
 
         const renderCount = options.renderCount ?? 6;
         for (let index = 0; index < renderCount; index++) {
@@ -233,7 +247,7 @@ export async function evaluateInitializePlaygroundScene(options: PlaygroundScene
             scene.render();
         }
 
-        await waitForSettle(options.settleAfterReadyMs ?? 150, 2);
+        await waitForSettleAsync(options.settleAfterReadyMs ?? 150, 2);
 
         setHarnessState("ready", false);
     } catch (error) {
@@ -248,25 +262,36 @@ export async function evaluateInitializePlaygroundScene(options: PlaygroundScene
  * This function is evaluated in the browser context by Puppeteer.
  * @param options Package scenario options.
  */
-export async function evaluateInitializePackageScene(options: PackageSceneBrowserOptions): Promise<void> {
+export async function EvaluateInitializePackageScene(options: IPackageSceneBrowserOptions): Promise<void> {
     const globalWindow = window as typeof window & {
-        __babylonLeakHarnessState?: { busy: boolean; status: string; lastError?: string };
         BABYLON?: any;
         engine?: any;
         scene?: any;
         canvas?: HTMLCanvasElement;
     };
+    const globalWindowRecord = globalWindow as typeof globalWindow & Record<string, unknown>;
+    const harnessStateKey = "__babylonLeakHarnessState";
 
     const setHarnessState = (status: string, busy: boolean, lastError?: string) => {
-        globalWindow.__babylonLeakHarnessState = { busy, status, lastError };
+        globalWindowRecord[harnessStateKey] = { busy, status, lastError };
     };
-    const waitForAnimationFrames = async (count = 2) => {
-        for (let index = 0; index < count; index++) {
-            await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-        }
-    };
-    const waitForSettle = async (delayMs = 0, frameCount = 2) => {
-        await waitForAnimationFrames(frameCount);
+    const waitForAnimationFramesAsync = async (count = 2) =>
+        await new Promise<void>((resolve) => {
+            const advanceFrame = (remainingFrameCount: number) => {
+                if (remainingFrameCount <= 0) {
+                    resolve();
+                    return;
+                }
+
+                requestAnimationFrame(() => {
+                    advanceFrame(remainingFrameCount - 1);
+                });
+            };
+
+            advanceFrame(count);
+        });
+    const waitForSettleAsync = async (delayMs = 0, frameCount = 2) => {
+        await waitForAnimationFramesAsync(frameCount);
         await Promise.resolve();
 
         if (delayMs > 0) {
@@ -278,6 +303,7 @@ export async function evaluateInitializePackageScene(options: PackageSceneBrowse
     setHarnessState("loading", true);
 
     try {
+        // eslint-disable-next-line @typescript-eslint/naming-convention -- BABYLON is the intentional runtime namespace.
         const BABYLON = globalWindow.BABYLON;
         if (!BABYLON) {
             throw new Error("BABYLON is not available on the test page.");
@@ -482,7 +508,7 @@ export async function evaluateInitializePackageScene(options: PackageSceneBrowse
             gpuParticleSystem?.stop?.();
             scene.render();
 
-            const recastFactory = (globalThis as typeof globalThis & { Recast?: any }).Recast;
+            const recastFactory = (globalThis as Record<string, unknown>)["Recast"];
             const recastInjection = typeof recastFactory === "function" ? await recastFactory() : recastFactory;
             if (!recastInjection || !BABYLON.RecastJSPlugin) {
                 throw new Error("The Recast navigation runtime is not available on the memory leak page.");
@@ -1045,7 +1071,7 @@ export async function evaluateInitializePackageScene(options: PackageSceneBrowse
             scene.render();
         }
 
-        await waitForSettle(options.settleAfterReadyMs ?? 150, 2);
+        await waitForSettleAsync(options.settleAfterReadyMs ?? 150, 2);
 
         setHarnessState("ready", false);
     } catch (error) {
@@ -1058,23 +1084,35 @@ export async function evaluateInitializePackageScene(options: PackageSceneBrowse
 /**
  * Disposes the active Babylon scene and engine from the memlab page.
  * This function is evaluated in the browser context by Puppeteer.
+ * @param options Disposal timing options.
  */
-export async function evaluateDisposePlaygroundScene(options: Pick<PlaygroundSceneBrowserOptions, "settleAfterDisposeMs"> = {}): Promise<void> {
+export async function EvaluateDisposePlaygroundScene(options: Pick<IPlaygroundSceneBrowserOptions, "settleAfterDisposeMs"> = {}): Promise<void> {
     const globalWindow = window as typeof window & {
-        __babylonLeakHarnessState?: { busy: boolean; status: string; lastError?: string };
         BABYLON?: any;
         engine?: any;
         scene?: any;
         canvas?: HTMLCanvasElement;
-        __babylonOriginalMathRandom?: () => number;
     };
-    const waitForAnimationFrames = async (count = 2) => {
-        for (let index = 0; index < count; index++) {
-            await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-        }
-    };
-    const waitForSettle = async (delayMs = 0, frameCount = 2) => {
-        await waitForAnimationFrames(frameCount);
+    const globalWindowRecord = globalWindow as typeof globalWindow & Record<string, unknown>;
+    const harnessStateKey = "__babylonLeakHarnessState";
+    const originalMathRandomKey = "__babylonOriginalMathRandom";
+    const waitForAnimationFramesAsync = async (count = 2) =>
+        await new Promise<void>((resolve) => {
+            const advanceFrame = (remainingFrameCount: number) => {
+                if (remainingFrameCount <= 0) {
+                    resolve();
+                    return;
+                }
+
+                requestAnimationFrame(() => {
+                    advanceFrame(remainingFrameCount - 1);
+                });
+            };
+
+            advanceFrame(count);
+        });
+    const waitForSettleAsync = async (delayMs = 0, frameCount = 2) => {
+        await waitForAnimationFramesAsync(frameCount);
         await Promise.resolve();
 
         if (delayMs > 0) {
@@ -1090,7 +1128,7 @@ export async function evaluateDisposePlaygroundScene(options: Pick<PlaygroundSce
         }
     };
 
-    globalWindow.__babylonLeakHarnessState = { busy: true, status: "disposing" };
+    globalWindowRecord[harnessStateKey] = { busy: true, status: "disposing" };
 
     try {
         if (globalWindow.scene?.debugLayer?.isVisible()) {
@@ -1127,23 +1165,24 @@ export async function evaluateDisposePlaygroundScene(options: Pick<PlaygroundSce
             floatingOriginCurrentScene.eyeAtCamera = true;
         }
 
-        if (globalWindow.__babylonOriginalMathRandom) {
-            globalWindow.Math.random = globalWindow.__babylonOriginalMathRandom;
+        const originalMathRandom = globalWindowRecord[originalMathRandomKey] as (() => number) | undefined;
+        if (originalMathRandom) {
+            globalWindow.Math.random = originalMathRandom;
         }
         delete (globalWindow as any).seed;
 
-        await waitForSettle(options?.settleAfterDisposeMs ?? 150, 3);
+        await waitForSettleAsync(options?.settleAfterDisposeMs ?? 150, 3);
         forceGarbageCollection();
-        await waitForSettle(50, 2);
+        await waitForSettleAsync(50, 2);
 
         if (globalWindow.scene || globalWindow.engine) {
             throw new Error("The memory leak harness still holds engine or scene references after disposal.");
         }
 
-        globalWindow.__babylonLeakHarnessState = { busy: false, status: "disposed" };
+        globalWindowRecord[harnessStateKey] = { busy: false, status: "disposed" };
     } catch (error) {
         const message = error instanceof Error ? error.message : `${error}`;
-        globalWindow.__babylonLeakHarnessState = { busy: false, status: "error", lastError: message };
+        globalWindowRecord[harnessStateKey] = { busy: false, status: "error", lastError: message };
         throw error;
     }
 }
@@ -1153,26 +1192,35 @@ export async function evaluateDisposePlaygroundScene(options: Pick<PlaygroundSce
  * This function is evaluated in the browser context by Puppeteer.
  * @param options Viewer mount options.
  */
-export async function evaluateMountViewerScenario(options: ViewerSceneBrowserOptions): Promise<void> {
-    const globalWindow = window as typeof window & {
-        __babylonLeakHarnessState?: { busy: boolean; status: string; lastError?: string; mountedElementSelector?: string };
-    };
+export async function EvaluateMountViewerScenario(options: IViewerSceneBrowserOptions): Promise<void> {
+    const globalWindow = window as typeof window & Record<string, unknown>;
+    const harnessStateKey = "__babylonLeakHarnessState";
 
     const setHarnessState = (status: string, busy: boolean, lastError?: string) => {
-        globalWindow.__babylonLeakHarnessState = {
+        globalWindow[harnessStateKey] = {
             busy,
             status,
             lastError,
             mountedElementSelector: "babylon-viewer",
         };
     };
-    const waitForAnimationFrames = async (count = 2) => {
-        for (let index = 0; index < count; index++) {
-            await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-        }
-    };
-    const waitForSettle = async (delayMs = 0, frameCount = 2) => {
-        await waitForAnimationFrames(frameCount);
+    const waitForAnimationFramesAsync = async (count = 2) =>
+        await new Promise<void>((resolve) => {
+            const advanceFrame = (remainingFrameCount: number) => {
+                if (remainingFrameCount <= 0) {
+                    resolve();
+                    return;
+                }
+
+                requestAnimationFrame(() => {
+                    advanceFrame(remainingFrameCount - 1);
+                });
+            };
+
+            advanceFrame(count);
+        });
+    const waitForSettleAsync = async (delayMs = 0, frameCount = 2) => {
+        await waitForAnimationFramesAsync(frameCount);
         await Promise.resolve();
 
         if (delayMs > 0) {
@@ -1192,24 +1240,31 @@ export async function evaluateMountViewerScenario(options: ViewerSceneBrowserOpt
         container.innerHTML = options.viewerHtml;
         document.body.appendChild(container);
 
-        const waitForCondition = async (predicate: () => boolean, timeoutMs: number, errorMessage: string) => {
-            const startTime = Date.now();
-            while (!predicate()) {
-                if (Date.now() - startTime >= timeoutMs) {
-                    throw new Error(errorMessage);
-                }
-                await new Promise((resolve) => setTimeout(resolve, 50));
+        const waitForConditionAsync = async (predicate: () => boolean, timeoutMs: number, errorMessage: string, startTime = Date.now()) => {
+            if (predicate()) {
+                return;
             }
+
+            if (Date.now() - startTime >= timeoutMs) {
+                throw new Error(errorMessage);
+            }
+
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            await waitForConditionAsync(predicate, timeoutMs, errorMessage, startTime);
         };
 
-        await waitForCondition(() => !!document.querySelector("babylon-viewer"), 30000, "The viewer element was not attached to the page.");
+        await waitForConditionAsync(() => !!document.querySelector("babylon-viewer"), 30000, "The viewer element was not attached to the page.");
 
         const viewerElement = document.querySelector("babylon-viewer") as any;
 
-        await waitForCondition(() => !!viewerElement.viewerDetails && viewerElement.viewerDetails.viewer.loadingProgress === false, 60000, "The viewer did not finish loading.");
+        await waitForConditionAsync(
+            () => !!viewerElement.viewerDetails && viewerElement.viewerDetails.viewer.loadingProgress === false,
+            60000,
+            "The viewer did not finish loading."
+        );
 
         const minFrameCount = options.minFrameCount ?? 20;
-        await waitForCondition(
+        await waitForConditionAsync(
             () => {
                 const details = viewerElement.viewerDetails;
                 const engine = details?.scene?.getEngine?.();
@@ -1219,7 +1274,7 @@ export async function evaluateMountViewerScenario(options: ViewerSceneBrowserOpt
             `The viewer did not render ${minFrameCount} frames.`
         );
 
-        await waitForSettle(options.settleAfterReadyMs ?? 150, 2);
+        await waitForSettleAsync(options.settleAfterReadyMs ?? 150, 2);
 
         setHarnessState("ready", false);
     } catch (error) {
@@ -1232,18 +1287,28 @@ export async function evaluateMountViewerScenario(options: ViewerSceneBrowserOpt
 /**
  * Unmounts the Babylon viewer custom element after a memlab action.
  * This function is evaluated in the browser context by Puppeteer.
+ * @param options Disposal timing options.
  */
-export async function evaluateUnmountViewerScenario(options: Pick<ViewerSceneBrowserOptions, "settleAfterDisposeMs"> = {}): Promise<void> {
-    const globalWindow = window as typeof window & {
-        __babylonLeakHarnessState?: { busy: boolean; status: string; lastError?: string };
-    };
-    const waitForAnimationFrames = async (count = 2) => {
-        for (let index = 0; index < count; index++) {
-            await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-        }
-    };
-    const waitForSettle = async (delayMs = 0, frameCount = 2) => {
-        await waitForAnimationFrames(frameCount);
+export async function EvaluateUnmountViewerScenario(options: Pick<IViewerSceneBrowserOptions, "settleAfterDisposeMs"> = {}): Promise<void> {
+    const globalWindow = window as typeof window & Record<string, unknown>;
+    const harnessStateKey = "__babylonLeakHarnessState";
+    const waitForAnimationFramesAsync = async (count = 2) =>
+        await new Promise<void>((resolve) => {
+            const advanceFrame = (remainingFrameCount: number) => {
+                if (remainingFrameCount <= 0) {
+                    resolve();
+                    return;
+                }
+
+                requestAnimationFrame(() => {
+                    advanceFrame(remainingFrameCount - 1);
+                });
+            };
+
+            advanceFrame(count);
+        });
+    const waitForSettleAsync = async (delayMs = 0, frameCount = 2) => {
+        await waitForAnimationFramesAsync(frameCount);
         await Promise.resolve();
 
         if (delayMs > 0) {
@@ -1259,24 +1324,24 @@ export async function evaluateUnmountViewerScenario(options: Pick<ViewerSceneBro
         }
     };
 
-    globalWindow.__babylonLeakHarnessState = { busy: true, status: "disposing" };
+    globalWindow[harnessStateKey] = { busy: true, status: "disposing" };
 
     try {
         (document.querySelector("babylon-viewer") as HTMLElement | null)?.remove();
         document.getElementById("__babylonMemlabViewerRoot")?.remove();
 
-        await waitForSettle(options?.settleAfterDisposeMs ?? 150, 2);
+        await waitForSettleAsync(options?.settleAfterDisposeMs ?? 150, 2);
         forceGarbageCollection();
-        await waitForSettle(50, 2);
+        await waitForSettleAsync(50, 2);
 
         if (document.querySelector("babylon-viewer") || document.getElementById("__babylonMemlabViewerRoot")) {
             throw new Error("The viewer test app still has mounted elements after unmount.");
         }
 
-        globalWindow.__babylonLeakHarnessState = { busy: false, status: "disposed" };
+        globalWindow[harnessStateKey] = { busy: false, status: "disposed" };
     } catch (error) {
         const message = error instanceof Error ? error.message : `${error}`;
-        globalWindow.__babylonLeakHarnessState = { busy: false, status: "error", lastError: message };
+        globalWindow[harnessStateKey] = { busy: false, status: "error", lastError: message };
         throw error;
     }
 }
