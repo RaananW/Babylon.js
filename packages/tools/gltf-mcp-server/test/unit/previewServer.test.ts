@@ -153,6 +153,22 @@ describe("PreviewServer", () => {
             expect(html).toContain("renderCanvas");
             expect(html).toContain("/model.glb");
             expect(html).toContain("sandbox.babylonjs.com");
+            expect(html).toContain("animPanel");
+            expect(html).toContain("animSelect");
+        });
+
+        it("should serve animation list at /api/animations", async () => {
+            const mgr = createManagerWithBox();
+            const port = nextPort();
+            await startPreview(mgr, "Box", port);
+
+            const res = await fetch(`http://localhost:${port}/api/animations`);
+            expect(res.status).toBe(200);
+            expect(res.headers.get("content-type")).toContain("application/json");
+            const anims = await res.json();
+            expect(Array.isArray(anims)).toBe(true);
+            // Box has no animations
+            expect(anims.length).toBe(0);
         });
 
         it("should return 404 for unknown routes", async () => {

@@ -50,6 +50,25 @@ function getViewerHtml(serverUrl: string, sandboxUrl: string): string {
   #toolbar a,#toolbar button{background:rgba(255,255,255,.12);color:#ccc;border:1px solid rgba(255,255,255,.2);
     padding:4px 10px;border-radius:4px;text-decoration:none;cursor:pointer;font:inherit}
   #toolbar a:hover,#toolbar button:hover{background:rgba(255,255,255,.22)}
+  #animPanel{position:fixed;bottom:0;left:0;right:0;z-index:10;background:rgba(30,30,30,.92);
+    border-top:1px solid rgba(255,255,255,.15);padding:8px 16px;font:12px/1.5 system-ui,sans-serif;color:#ccc;
+    display:none;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto}
+  #animPanel.visible{display:flex}
+  #animPanel .anim-header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  #animPanel .anim-header label{color:#999;font-size:11px}
+  #animPanel select{background:#2d2d2d;color:#ccc;border:1px solid rgba(255,255,255,.2);border-radius:3px;
+    padding:3px 6px;font:inherit}
+  #animPanel button{background:rgba(255,255,255,.12);color:#ccc;border:1px solid rgba(255,255,255,.2);
+    padding:3px 10px;border-radius:3px;cursor:pointer;font:inherit}
+  #animPanel button:hover{background:rgba(255,255,255,.22)}
+  #animPanel button.active{background:rgba(100,180,255,.3);border-color:rgba(100,180,255,.5)}
+  #animPanel .speed-control{display:flex;align-items:center;gap:6px}
+  #animPanel .speed-control input[type=range]{width:80px;accent-color:#5a9fd4}
+  #animPanel .speed-control span{min-width:30px;text-align:center}
+  #animPanel .progress-row{display:flex;align-items:center;gap:8px}
+  #animPanel .progress-row input[type=range]{flex:1;accent-color:#5a9fd4}
+  #animPanel .progress-row span{min-width:80px;text-align:right;font-variant-numeric:tabular-nums}
+  #noAnims{color:#666;font-style:italic}
 </style>
 </head>
 <body>
@@ -58,18 +77,167 @@ function getViewerHtml(serverUrl: string, sandboxUrl: string): string {
   <a href="${sandboxUrl}" target="_blank" rel="noopener">Open in Sandbox &#x2197;</a>
 </div>
 <canvas id="renderCanvas"></canvas>
+<div id="animPanel">
+  <div class="anim-header">
+    <label>Animation:</label>
+    <select id="animSelect"></select>
+    <button id="btnPlay" title="Play">&#x25B6;</button>
+    <button id="btnPause" title="Pause">&#x23F8;</button>
+    <button id="btnStop" title="Stop">&#x23F9;</button>
+    <div class="speed-control">
+      <label>Speed:</label>
+      <input type="range" id="speedSlider" min="0" max="3" step="0.1" value="1">
+      <span id="speedVal">1.0x</span>
+    </div>
+  </div>
+  <div class="progress-row">
+    <input type="range" id="scrubber" min="0" max="1000" value="0" step="1">
+    <span id="timeLabel">0.00 / 0.00s</span>
+  </div>
+</div>
 <script src="https://cdn.babylonjs.com/babylon.js"><\/script>
 <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"><\/script>
 <script>
 (function(){
   var canvas=document.getElementById("renderCanvas");
   var engine=new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:true,stencil:true});
+  var animGroups=[];
+  var currentGroup=null;
+  var scrubbing=false;
+
   BABYLON.SceneLoader.Load("","${serverUrl}/model.glb?t="+Date.now(),engine,function(scene){
     scene.createDefaultCameraOrLight(true,true,true);
     scene.createDefaultEnvironment();
-    engine.runRenderLoop(function(){scene.render()});
+    engine.runRenderLoop(function(){
+      scene.render();
+      if(currentGroup&&currentGroup.isPlaying&&!scrubbing){
+        updateScrubber();
+      }
+    });
+
+    animGroups=scene.animationGroups||[];
+    initAnimPanel(scene);
   },null,function(_scene,msg){document.body.innerHTML="<pre style=\\"color:red;padding:2em\\">"+msg+"</pre>"});
   window.addEventListener("resize",function(){engine.resize()});
+
+  function initAnimPanel(scene){
+    var panel=document.getElementById("animPanel");
+    var select=document.getElementById("animSelect");
+    var btnPlay=document.getElementById("btnPlay");
+    var btnPause=document.getElementById("btnPause");
+    var btnStop=document.getElementById("btnStop");
+    var speedSlider=document.getElementById("speedSlider");
+    var speedVal=document.getElementById("speedVal");
+    var scrubberEl=document.getElementById("scrubber");
+    var timeLabel=document.getElementById("timeLabel");
+
+    if(animGroups.length===0){
+      return; // panel stays hidden
+    }
+    panel.classList.add("visible");
+
+    // Stop all auto-playing animations first
+    animGroups.forEach(function(g){g.stop()});
+
+    // Populate dropdown
+    animGroups.forEach(function(g,i){
+      var opt=document.createElement("option");
+      opt.value=i;
+      opt.textContent=(g.name||"Animation "+i)+" ("+g.targetedAnimations.length+" targets)";
+      select.appendChild(opt);
+    });
+
+    currentGroup=animGroups[0]||null;
+    if(currentGroup){
+      currentGroup.start(true);
+      updateButtonStates();
+    }
+
+    select.addEventListener("change",function(){
+      if(currentGroup)currentGroup.stop();
+      currentGroup=animGroups[parseInt(select.value)]||null;
+      if(currentGroup){
+        currentGroup.speedRatio=parseFloat(speedSlider.value);
+        currentGroup.start(true);
+        updateButtonStates();
+        updateScrubber();
+      }
+    });
+
+    btnPlay.addEventListener("click",function(){
+      if(!currentGroup)return;
+      if(currentGroup.isPlaying&&!currentGroup.isPaused){return}
+      if(currentGroup.isPaused){currentGroup.play(true)}
+      else{currentGroup.start(true)}
+      currentGroup.speedRatio=parseFloat(speedSlider.value);
+      updateButtonStates();
+    });
+
+    btnPause.addEventListener("click",function(){
+      if(!currentGroup||!currentGroup.isPlaying)return;
+      currentGroup.pause();
+      updateButtonStates();
+    });
+
+    btnStop.addEventListener("click",function(){
+      if(!currentGroup)return;
+      currentGroup.stop();
+      currentGroup.goToFrame(currentGroup.from);
+      updateButtonStates();
+      updateScrubber();
+    });
+
+    speedSlider.addEventListener("input",function(){
+      var v=parseFloat(this.value);
+      speedVal.textContent=v.toFixed(1)+"x";
+      if(currentGroup)currentGroup.speedRatio=v;
+    });
+
+    scrubberEl.addEventListener("mousedown",function(){scrubbing=true});
+    scrubberEl.addEventListener("touchstart",function(){scrubbing=true});
+    scrubberEl.addEventListener("input",function(){
+      if(!currentGroup)return;
+      var ratio=parseInt(this.value)/1000;
+      var frame=currentGroup.from+ratio*(currentGroup.to-currentGroup.from);
+      var wasPlaying=currentGroup.isPlaying&&!currentGroup.isPaused;
+      if(wasPlaying)currentGroup.pause();
+      currentGroup.goToFrame(frame);
+      var t=(frame-currentGroup.from)/(scene.getAnimationRatio()||1)/60;
+      var total=(currentGroup.to-currentGroup.from)/(scene.getAnimationRatio()||1)/60;
+      timeLabel.textContent=formatTime(frame,currentGroup)+formatTime(currentGroup.to,currentGroup);
+    });
+    scrubberEl.addEventListener("mouseup",function(){scrubbing=false});
+    scrubberEl.addEventListener("touchend",function(){scrubbing=false});
+
+    function updateButtonStates(){
+      btnPlay.classList.toggle("active",currentGroup&&currentGroup.isPlaying&&!currentGroup.isPaused);
+      btnPause.classList.toggle("active",currentGroup&&currentGroup.isPaused);
+    }
+  }
+
+  function updateScrubber(){
+    if(!currentGroup)return;
+    var scrubberEl=document.getElementById("scrubber");
+    var timeLabel=document.getElementById("timeLabel");
+    var anims=currentGroup.targetedAnimations;
+    if(!anims||anims.length===0)return;
+    var masterAnim=anims[0].animation;
+    var runtimeAnims=currentGroup.animatables;
+    var currentFrame=currentGroup.from;
+    if(runtimeAnims&&runtimeAnims.length>0){
+      currentFrame=runtimeAnims[0].masterFrame||currentGroup.from;
+    }
+    var range=currentGroup.to-currentGroup.from;
+    if(range>0){
+      var ratio=(currentFrame-currentGroup.from)/range;
+      scrubberEl.value=Math.round(ratio*1000);
+    }
+    timeLabel.textContent=currentFrame.toFixed(1)+" / "+currentGroup.to.toFixed(1)+" frames";
+  }
+
+  function formatTime(frame,group){
+    return frame.toFixed(1);
+  }
 })();
 <\/script>
 </body>
@@ -217,6 +385,27 @@ export async function startPreview(manager: GltfManager, docName: string, port: 
                 return;
             }
 
+            // ── /api/animations — list animations as JSON ──────────────
+            if (pathname === "/api/animations") {
+                const doc = _manager!.getDoc(_docName);
+                if (!doc) {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ error: `No document "${_docName}"` }));
+                    return;
+                }
+                const anims = (doc.animations ?? []).map((a, i) => ({
+                    index: i,
+                    name: a.name ?? `Animation ${i}`,
+                    channels: a.channels?.length ?? 0,
+                }));
+                res.writeHead(200, {
+                    "Content-Type": "application/json",
+                    "Cache-Control": "no-cache, no-store",
+                });
+                res.end(JSON.stringify(anims));
+                return;
+            }
+
             // ── / — serve a built-in viewer page ───────────────────────
             if (pathname === "/" || pathname === "/index.html") {
                 const serverUrl = getPreviewServerUrl()!;
@@ -232,7 +421,7 @@ export async function startPreview(manager: GltfManager, docName: string, port: 
 
             // ── 404 ────────────────────────────────────────────────────
             res.writeHead(404, { "Content-Type": "text/plain" });
-            res.end("Not found. Routes: /model.glb, /model.gltf, /api/info, /");
+            res.end("Not found. Routes: /model.glb, /model.gltf, /api/info, /api/animations, /");
         });
 
         srv.on("error", (err: NodeJS.ErrnoException) => {

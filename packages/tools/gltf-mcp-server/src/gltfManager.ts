@@ -2049,6 +2049,13 @@ export class GltfManager {
         return this._documents.get(name);
     }
 
+    /**
+     * Get the raw glTF document object by name, or undefined if not found.
+     */
+    getDoc(name: string): IGltfDocument | undefined {
+        return this._documents.get(name);
+    }
+
     /* ================ Private helpers =========================== */
 
     private _getDoc(name: string): IGltfDocument | string {
