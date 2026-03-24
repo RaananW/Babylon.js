@@ -50,11 +50,16 @@ export interface PackageSceneBrowserOptions {
     assetsUrl: string;
     /** Package scenario identifier. */
     scenario:
+        | "core-feature-stack"
+        | "core-rendering-materials-shadows-stack"
         | "gui-fullscreen-ui"
         | "gui-mesh-adt"
         | "loaders-boombox-import"
         | "loaders-obj-direct-load"
         | "loaders-stl-direct-load"
+        | "materials-library-stack"
+        | "postprocesses-digital-rain-stack"
+        | "procedural-textures-stack"
         | "serializers-gltf-export"
         | "serializers-glb-export";
     /** Number of frames to render after the scenario completes its main action. */
@@ -330,7 +335,309 @@ export async function evaluateInitializePackageScene(options: PackageSceneBrowse
 
         createBaseContent();
 
-        if (options.scenario === "gui-fullscreen-ui") {
+        if (options.scenario === "core-feature-stack") {
+            const speaker = BABYLON.MeshBuilder.CreateSphere("audio-speaker", { diameter: 0.7, segments: 24 }, scene);
+            speaker.position = new BABYLON.Vector3(-1.35, 0.25, 0);
+            const listenerMarker = BABYLON.MeshBuilder.CreateBox("audio-listener", { size: 0.35 }, scene);
+            listenerMarker.position = new BABYLON.Vector3(1.6, 0.15, -0.2);
+
+            const speakerMaterial = new BABYLON.StandardMaterial("audio-speaker-material", scene);
+            speakerMaterial.diffuseColor = new BABYLON.Color3(0.92, 0.55, 0.18);
+            speaker.material = speakerMaterial;
+
+            const listenerMaterial = new BABYLON.StandardMaterial("audio-listener-material", scene);
+            listenerMaterial.emissiveColor = new BABYLON.Color3(0.25, 0.72, 0.94);
+            listenerMarker.material = listenerMaterial;
+
+            if (!BABYLON.Engine.audioEngine && BABYLON.AudioEngine) {
+                BABYLON.Engine.audioEngine = new BABYLON.AudioEngine();
+            }
+
+            const audioContext = BABYLON.Engine.audioEngine?.audioContext;
+            if (!audioContext) {
+                throw new Error("The legacy Babylon audio engine is not available on the memory leak page.");
+            }
+
+            const sampleRate = audioContext.sampleRate || 22050;
+            const audioBuffer = audioContext.createBuffer(1, Math.floor(sampleRate * 0.24), sampleRate);
+            const samples = audioBuffer.getChannelData(0);
+            for (let index = 0; index < samples.length; index++) {
+                const envelope = Math.min(1, index / 220) * Math.min(1, (samples.length - index) / 220);
+                const harmonic = Math.sin((2 * Math.PI * 330 * index) / sampleRate) + Math.sin((2 * Math.PI * 660 * index) / sampleRate) * 0.25;
+                samples[index] = harmonic * 0.45 * envelope;
+            }
+
+            const sound = new BABYLON.Sound("audio-tone", audioBuffer, scene, null, {
+                autoplay: false,
+                loop: true,
+            });
+
+            sound.setVolume(0.4);
+            sound.setPlaybackRate(1.12);
+
+            BABYLON.Engine.audioEngine?.unlock?.();
+            BABYLON.Engine.audioEngine?.setGlobalVolume?.(0.65);
+
+            sound.play(0, 0, 0.14);
+            speaker.position.x += 1.4;
+            scene.render();
+            sound.pause();
+            sound.play(0, 0.04, 0.08);
+            scene.render();
+            sound.stop();
+
+            const cannonInjection = (globalThis as typeof globalThis & { CANNON?: any }).CANNON;
+            if (!cannonInjection || !BABYLON.CannonJSPlugin || !BABYLON.PhysicsImpostor) {
+                throw new Error("The Cannon physics runtime is not available on the memory leak page.");
+            }
+
+            const physicsSteps = { count: 0 };
+            scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin(true, 10, cannonInjection));
+            scene.onBeforePhysicsObservable.add(() => {
+                physicsSteps.count += 1;
+            });
+
+            const physicsGround = BABYLON.MeshBuilder.CreateGround("physics-ground", { width: 14, height: 14 }, scene);
+            physicsGround.position.y = -1;
+
+            const sphere = BABYLON.MeshBuilder.CreateSphere("physics-sphere", { diameter: 1, segments: 24 }, scene);
+            sphere.position = new BABYLON.Vector3(-1.4, 2.2, 0);
+            sphere.physicsImpostor = new BABYLON.PhysicsImpostor(sphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1, restitution: 0.55, friction: 0.2 }, scene);
+
+            const box = BABYLON.MeshBuilder.CreateBox("physics-box", { size: 0.95 }, scene);
+            box.position = new BABYLON.Vector3(1.1, 1.2, 0.4);
+            box.rotation.z = Math.PI / 10;
+            box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0.8, restitution: 0.2, friction: 0.55 }, scene);
+
+            sphere.applyImpulse(new BABYLON.Vector3(2.8, 0, 0.3), sphere.getAbsolutePosition());
+            box.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(-0.45, 0, -0.18));
+
+            for (let index = 0; index < 18; index++) {
+                scene.render();
+            }
+
+            const sphereVelocity = sphere.physicsImpostor.getLinearVelocity();
+            if (!sphereVelocity || sphere.position.y >= 2.2 || physicsSteps.count === 0) {
+                throw new Error("The physics scenario did not advance the Cannon simulation.");
+            }
+
+            const flareTextureUrl = `${options.baseUrl}/textures/flare.png`;
+            const emitter = BABYLON.MeshBuilder.CreateSphere("particles-emitter", { diameter: 0.35 }, scene);
+            emitter.position = new BABYLON.Vector3(0, 0.35, 0);
+            emitter.isVisible = false;
+
+            const cpuParticleSystem = new BABYLON.ParticleSystem("particles-cpu", 2500, scene);
+            cpuParticleSystem.particleTexture = new BABYLON.Texture(flareTextureUrl, scene);
+            cpuParticleSystem.emitter = emitter;
+            cpuParticleSystem.minEmitPower = 0.8;
+            cpuParticleSystem.maxEmitPower = 2.2;
+            cpuParticleSystem.emitRate = 650;
+            cpuParticleSystem.minSize = 0.08;
+            cpuParticleSystem.maxSize = 0.22;
+            cpuParticleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+            cpuParticleSystem.color1 = new BABYLON.Color4(0.48, 0.76, 1, 1);
+            cpuParticleSystem.color2 = new BABYLON.Color4(1, 0.42, 0.26, 1);
+            cpuParticleSystem.start();
+
+            const spsSource = BABYLON.MeshBuilder.CreateBox("particles-sps-source", { size: 0.15 }, scene);
+            const solidParticleSystem = new BABYLON.SolidParticleSystem("particles-sps", scene, { updatable: true });
+            solidParticleSystem.addShape(spsSource, 120, {
+                positionFunction: (particle: any, particleIndex: number) => {
+                    particle.position.x = -3 + (particleIndex % 15) * 0.4;
+                    particle.position.y = -0.2 + Math.floor(particleIndex / 15) * 0.18;
+                    particle.position.z = Math.sin(particleIndex * 0.35) * 0.65;
+                    particle.rotation.x = particleIndex * 0.05;
+                    particle.color = new BABYLON.Color4(0.18, 0.62, 0.95, 1);
+                },
+            });
+            const solidParticleMesh = solidParticleSystem.buildMesh();
+            spsSource.dispose();
+            solidParticleSystem.initParticles();
+            solidParticleSystem.setParticles();
+
+            let gpuParticleSystem: any = null;
+            if (BABYLON.GPUParticleSystem?.IsSupported) {
+                gpuParticleSystem = new BABYLON.GPUParticleSystem("particles-gpu", { capacity: 1800 }, scene);
+                gpuParticleSystem.particleTexture = new BABYLON.Texture(flareTextureUrl, scene);
+                gpuParticleSystem.emitter = new BABYLON.Vector3(1.75, 0.4, 0);
+                gpuParticleSystem.minEmitPower = 0.6;
+                gpuParticleSystem.maxEmitPower = 1.8;
+                gpuParticleSystem.emitRate = 420;
+                gpuParticleSystem.start();
+            }
+
+            scene.onBeforeRenderObservable.add(() => {
+                emitter.position.x = Math.sin(scene.getEngine().getDeltaTime() * 0.002 + emitter.position.x) * 0.6;
+                solidParticleMesh.rotation.y += 0.01;
+                solidParticleMesh.rotation.x += 0.003;
+                solidParticleSystem.setParticles();
+            });
+
+            for (let index = 0; index < 16; index++) {
+                scene.render();
+            }
+
+            cpuParticleSystem.stop();
+            gpuParticleSystem?.stop?.();
+            scene.render();
+
+            const recastFactory = (globalThis as typeof globalThis & { Recast?: any }).Recast;
+            const recastInjection = typeof recastFactory === "function" ? await recastFactory() : recastFactory;
+            if (!recastInjection || !BABYLON.RecastJSPlugin) {
+                throw new Error("The Recast navigation runtime is not available on the memory leak page.");
+            }
+
+            const navigationGround = BABYLON.MeshBuilder.CreateGround("navigation-ground", { width: 12, height: 12, subdivisions: 12 }, scene);
+            navigationGround.position.y = -1;
+
+            const obstacle = BABYLON.MeshBuilder.CreateBox("navigation-obstacle", { width: 1.3, height: 1.6, depth: 1.8 }, scene);
+            obstacle.position = new BABYLON.Vector3(0, -0.2, 0);
+
+            const navigationPlugin = new BABYLON.RecastJSPlugin(recastInjection);
+            navigationPlugin.createNavMesh([navigationGround, obstacle], {
+                cs: 0.2,
+                ch: 0.2,
+                walkableSlopeAngle: 45,
+                walkableHeight: 2,
+                walkableClimb: 0.4,
+                walkableRadius: 0.5,
+                maxEdgeLen: 12,
+                maxSimplificationError: 1.3,
+                minRegionArea: 8,
+                mergeRegionArea: 20,
+                maxVertsPerPoly: 6,
+                detailSampleDist: 6,
+                detailSampleMaxError: 1,
+            });
+
+            const debugNavMesh = navigationPlugin.createDebugNavMesh(scene);
+            debugNavMesh.position.y = -0.96;
+            const debugMaterial = new BABYLON.StandardMaterial("navigation-debug-material", scene);
+            debugMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.6, 0.3);
+            debugMaterial.alpha = 0.35;
+            debugNavMesh.material = debugMaterial;
+
+            const agentMesh = BABYLON.MeshBuilder.CreateCapsule("navigation-agent", { height: 1.3, radius: 0.28 }, scene);
+            agentMesh.position = new BABYLON.Vector3(-3.2, -0.35, -2.2);
+            const navigationStart = navigationPlugin.getClosestPoint(agentMesh.position);
+            const navigationTarget = navigationPlugin.getClosestPoint(new BABYLON.Vector3(3.1, -0.35, 2.1));
+            const navigationPath = navigationPlugin.computePath(navigationStart, navigationTarget);
+            if (!navigationPath.length) {
+                throw new Error("The navigation scenario did not produce a navigation path.");
+            }
+
+            for (const waypoint of navigationPath.slice(1)) {
+                agentMesh.position.copyFrom(navigationPlugin.moveAlong(agentMesh.position, waypoint));
+                scene.render();
+            }
+
+            for (let index = 0; index < 18; index++) {
+                scene.render();
+            }
+
+            if (agentMesh.position.x <= -3.1) {
+                throw new Error("The navigation scenario did not move along the Recast navigation path.");
+            }
+        } else if (options.scenario === "core-rendering-materials-shadows-stack") {
+            const renderGround = scene.getMeshByName("ground");
+            if (!renderGround) {
+                throw new Error("The rendering scenario could not reuse the base ground mesh.");
+            }
+
+            renderGround.receiveShadows = true;
+            const renderGroundMaterial = renderGround.material as any;
+            renderGroundMaterial.diffuseColor = new BABYLON.Color3(0.22, 0.24, 0.28);
+            renderGroundMaterial.specularColor = BABYLON.Color3.Black();
+
+            const sun = new BABYLON.DirectionalLight("render-sun", new BABYLON.Vector3(-0.55, -1, 0.35), scene);
+            sun.position = new BABYLON.Vector3(10, 14, -8);
+            sun.intensity = 1.65;
+
+            const fill = new BABYLON.PointLight("render-fill", new BABYLON.Vector3(-3, 4, 3), scene);
+            fill.intensity = 0.45;
+
+            const shadowGenerator = new BABYLON.ShadowGenerator(1024, sun);
+            shadowGenerator.usePercentageCloserFiltering = true;
+            shadowGenerator.bias = 0.0005;
+            shadowGenerator.normalBias = 0.02;
+
+            const heroSphere = BABYLON.MeshBuilder.CreateSphere("render-hero-sphere", { diameter: 1.4, segments: 48 }, scene);
+            heroSphere.position = new BABYLON.Vector3(-1.85, 0.2, 0.35);
+            const heroMaterial = new BABYLON.PBRMaterial("render-hero-material", scene);
+            heroMaterial.albedoColor = new BABYLON.Color3(0.77, 0.44, 0.18);
+            heroMaterial.metallic = 0.55;
+            heroMaterial.roughness = 0.24;
+            heroMaterial.environmentIntensity = 0.7;
+            heroSphere.material = heroMaterial;
+
+            const reflectorBox = BABYLON.MeshBuilder.CreateBox("render-reflector-box", { size: 1.2 }, scene);
+            reflectorBox.position = new BABYLON.Vector3(0.3, -0.05, -0.4);
+            reflectorBox.rotation = new BABYLON.Vector3(Math.PI / 18, Math.PI / 7, Math.PI / 24);
+            const reflectorMaterial = new BABYLON.StandardMaterial("render-reflector-material", scene);
+            reflectorMaterial.diffuseColor = new BABYLON.Color3(0.18, 0.52, 0.9);
+            reflectorMaterial.specularColor = new BABYLON.Color3(0.75, 0.82, 0.95);
+            reflectorMaterial.specularPower = 96;
+            reflectorBox.material = reflectorMaterial;
+
+            const knot = BABYLON.MeshBuilder.CreateTorusKnot("render-knot", { radius: 0.65, tube: 0.2, radialSegments: 128, tubularSegments: 48 }, scene);
+            knot.position = new BABYLON.Vector3(2.05, 0.55, 0.25);
+            const knotMaterial = new BABYLON.StandardMaterial("render-knot-material", scene);
+            knotMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.82, 0.68);
+            knotMaterial.emissiveColor = new BABYLON.Color3(0.03, 0.12, 0.09);
+            knotMaterial.specularColor = new BABYLON.Color3(0.35, 0.4, 0.42);
+            knot.material = knotMaterial;
+
+            shadowGenerator.addShadowCaster(heroSphere);
+            shadowGenerator.addShadowCaster(reflectorBox);
+            shadowGenerator.addShadowCaster(knot);
+
+            const reflectionTarget = new BABYLON.RenderTargetTexture("render-reflection-target", { width: 512, height: 512 }, scene, false, true);
+            reflectionTarget.renderList = [heroSphere, reflectorBox, knot];
+            reflectionTarget.activeCamera = camera;
+            reflectionTarget.clearColor = new BABYLON.Color4(0.03, 0.03, 0.05, 1);
+            reflectionTarget.refreshRate = 1;
+            scene.customRenderTargets.push(reflectionTarget);
+
+            const previewPlane = BABYLON.MeshBuilder.CreatePlane("render-preview-plane", { width: 2.2, height: 1.2 }, scene);
+            previewPlane.position = new BABYLON.Vector3(0.1, 1.8, 2.55);
+            previewPlane.rotation.x = -Math.PI / 16;
+            const previewMaterial = new BABYLON.StandardMaterial("render-preview-material", scene);
+            previewMaterial.disableLighting = true;
+            previewMaterial.emissiveTexture = reflectionTarget;
+            previewMaterial.diffuseColor = BABYLON.Color3.Black();
+            previewPlane.material = previewMaterial;
+
+            const defaultPipeline = new BABYLON.DefaultRenderingPipeline("render-pipeline", false, scene, [camera]);
+            defaultPipeline.samples = 2;
+            defaultPipeline.imageProcessingEnabled = true;
+            defaultPipeline.fxaaEnabled = true;
+            defaultPipeline.bloomEnabled = true;
+            defaultPipeline.bloomWeight = 0.18;
+
+            const shadowMap = shadowGenerator.getShadowMap();
+            if (!shadowMap || shadowMap.renderList?.length !== 3) {
+                throw new Error("The rendering scenario did not register the expected shadow casters.");
+            }
+
+            if (reflectionTarget.renderList?.length !== 3) {
+                throw new Error("The rendering scenario did not register the expected render target meshes.");
+            }
+
+            for (let index = 0; index < 14; index++) {
+                heroSphere.rotation.y += 0.08;
+                reflectorBox.rotation.y -= 0.05;
+                knot.rotation.x += 0.04;
+                knot.rotation.y += 0.06;
+                sun.direction.x = -0.55 + index * 0.01;
+                heroMaterial.metallic = 0.45 + index * 0.01;
+                heroMaterial.roughness = 0.3 - index * 0.005;
+                scene.render();
+            }
+
+            if (previewPlane.material !== previewMaterial || !renderGround.receiveShadows) {
+                throw new Error("The rendering scenario did not keep the core material and shadow wiring active.");
+            }
+        } else if (options.scenario === "gui-fullscreen-ui") {
             const sphere = BABYLON.MeshBuilder.CreateSphere("gui-sphere", { diameter: 1.4, segments: 32 }, scene);
             sphere.position.y = 0.2;
 
@@ -471,6 +778,125 @@ export async function evaluateInitializePackageScene(options: PackageSceneBrowse
             }
             result.meshes[0].position.x = 0.5;
             scene.render();
+        } else if (options.scenario === "materials-library-stack") {
+            const sun = new BABYLON.DirectionalLight("materials-sun", new BABYLON.Vector3(-0.45, -1, 0.25), scene);
+            sun.position = new BABYLON.Vector3(14, 18, -10);
+            sun.intensity = 1.3;
+
+            const skyDome = BABYLON.MeshBuilder.CreateSphere("materials-sky-dome", { diameter: 60, segments: 32, sideOrientation: BABYLON.Mesh.BACKSIDE }, scene);
+            const skyMaterial = new BABYLON.SkyMaterial("materials-sky-material", scene);
+            skyMaterial.backFaceCulling = false;
+            skyMaterial.azimuth = 0.22;
+            skyMaterial.inclination = 0.36;
+            skyMaterial.luminance = 0.65;
+            skyMaterial.turbidity = 8;
+            skyDome.material = skyMaterial;
+
+            const materialsGround = BABYLON.MeshBuilder.CreateGround("materials-ground", { width: 14, height: 14, subdivisions: 6 }, scene);
+            materialsGround.position.y = -1;
+            const gridMaterial = new BABYLON.GridMaterial("materials-grid", scene);
+            gridMaterial.majorUnitFrequency = 5;
+            gridMaterial.minorUnitVisibility = 0.35;
+            gridMaterial.gridRatio = 0.8;
+            gridMaterial.mainColor = new BABYLON.Color3(0.13, 0.14, 0.18);
+            gridMaterial.lineColor = new BABYLON.Color3(0.48, 0.76, 0.94);
+            gridMaterial.opacity = 0.96;
+            materialsGround.material = gridMaterial;
+            materialsGround.receiveShadows = true;
+
+            const knot = BABYLON.MeshBuilder.CreateTorusKnot("materials-knot", { radius: 0.8, tube: 0.22, radialSegments: 160, tubularSegments: 48 }, scene);
+            knot.position = new BABYLON.Vector3(-1.4, 0.6, 0.1);
+            const normalMaterial = new BABYLON.NormalMaterial("materials-normal", scene);
+            knot.material = normalMaterial;
+
+            const capsule = BABYLON.MeshBuilder.CreateCapsule("materials-capsule", { height: 2.4, radius: 0.48, tessellation: 24 }, scene);
+            capsule.position = new BABYLON.Vector3(1.65, 0.35, -0.25);
+            capsule.rotation.z = Math.PI / 7;
+            const cellMaterial = new BABYLON.CellMaterial("materials-cell", scene);
+            cellMaterial.diffuseColor = new BABYLON.Color3(0.9, 0.52, 0.18);
+            capsule.material = cellMaterial;
+
+            const shadowGenerator = new BABYLON.ShadowGenerator(1024, sun);
+            shadowGenerator.useBlurExponentialShadowMap = true;
+            shadowGenerator.blurKernel = 16;
+            shadowGenerator.addShadowCaster(knot);
+            shadowGenerator.addShadowCaster(capsule);
+
+            skyMaterial.azimuth += 0.08;
+            knot.rotation.y = Math.PI / 4;
+            capsule.rotation.x = Math.PI / 12;
+            scene.render();
+        } else if (options.scenario === "postprocesses-digital-rain-stack") {
+            const meshes: any[] = [];
+            for (let x = -2; x <= 2; x++) {
+                for (let z = -2; z <= 2; z++) {
+                    const box = BABYLON.MeshBuilder.CreateBox(`post-box-${x}-${z}`, { size: 0.8 }, scene);
+                    box.position = new BABYLON.Vector3(x * 1.15, 0.2, z * 1.15);
+                    const boxMaterial = new BABYLON.StandardMaterial(`post-box-material-${x}-${z}`, scene);
+                    boxMaterial.diffuseColor = new BABYLON.Color3(0.16 + (x + 2) * 0.1, 0.22 + (z + 2) * 0.08, 0.65);
+                    boxMaterial.specularColor = new BABYLON.Color3(0.15, 0.15, 0.15);
+                    box.material = boxMaterial;
+                    meshes.push(box);
+                }
+            }
+
+            const edgePostProcess = new BABYLON.EdgeDetectionPostProcess("post-edge", scene, 1.0, camera);
+            edgePostProcess.edgeIntensity = 0.35;
+            edgePostProcess.edgeWidth = 0.55;
+            edgePostProcess.edgeColor = new BABYLON.Color3(0.4, 1, 0.78);
+
+            const digitalRainPostProcess = new BABYLON.DigitalRainPostProcess("post-digital-rain", camera, {
+                font: "18px Monospace",
+                mixToNormal: 0.2,
+                mixToTile: 0.15,
+            });
+            digitalRainPostProcess.speed = 0.006;
+
+            meshes.forEach((mesh, index) => {
+                mesh.rotation.y = index * 0.08;
+            });
+            camera.alpha += 0.18;
+            scene.render();
+        } else if (options.scenario === "procedural-textures-stack") {
+            const woodTexture = new BABYLON.WoodProceduralTexture("procedural-wood", 256, scene);
+            woodTexture.ampScale = 65;
+            woodTexture.woodColor = new BABYLON.Color3(0.45, 0.27, 0.16);
+
+            const cloudTexture = new BABYLON.CloudProceduralTexture("procedural-cloud", 256, scene);
+            cloudTexture.amplitude = 0.82;
+            cloudTexture.numOctaves = 6;
+            cloudTexture.skyColor = new BABYLON.Color4(0.1, 0.26, 0.48, 1);
+            cloudTexture.cloudColor = new BABYLON.Color4(0.9, 0.95, 1, 1);
+
+            const fireTexture = new BABYLON.FireProceduralTexture("procedural-fire", 256, scene);
+            fireTexture.fireColors = BABYLON.FireProceduralTexture.PurpleFireColors;
+            fireTexture.speed = new BABYLON.Vector2(0.38, 0.22);
+            fireTexture.time = 0.6;
+
+            const crate = BABYLON.MeshBuilder.CreateBox("procedural-crate", { size: 1.45 }, scene);
+            crate.position = new BABYLON.Vector3(-1.8, 0, 0);
+            const crateMaterial = new BABYLON.StandardMaterial("procedural-crate-material", scene);
+            crateMaterial.diffuseTexture = woodTexture;
+            crate.material = crateMaterial;
+
+            const billboard = BABYLON.MeshBuilder.CreatePlane("procedural-billboard", { width: 3.2, height: 2 }, scene);
+            billboard.position = new BABYLON.Vector3(0.25, 1.5, 2.2);
+            const billboardMaterial = new BABYLON.StandardMaterial("procedural-billboard-material", scene);
+            billboardMaterial.emissiveTexture = cloudTexture;
+            billboardMaterial.disableLighting = true;
+            billboard.material = billboardMaterial;
+
+            const orb = BABYLON.MeshBuilder.CreateSphere("procedural-orb", { diameter: 1.35, segments: 32 }, scene);
+            orb.position = new BABYLON.Vector3(1.8, 0.2, -0.15);
+            const orbMaterial = new BABYLON.StandardMaterial("procedural-orb-material", scene);
+            orbMaterial.emissiveTexture = fireTexture;
+            orbMaterial.disableLighting = true;
+            orb.material = orbMaterial;
+
+            for (let index = 0; index < 4; index++) {
+                fireTexture.time += 0.3;
+                scene.render();
+            }
         } else if (options.scenario === "serializers-gltf-export") {
             const box = BABYLON.MeshBuilder.CreateBox("serializers-box", { size: 1.2 }, scene);
             box.position.x = -1.1;
@@ -584,6 +1010,17 @@ export async function evaluateDisposePlaygroundScene(options: Pick<PlaygroundSce
         globalWindow.engine?.dispose?.();
         globalWindow.engine = null;
         (globalWindow as any).canvas = undefined;
+
+        const lastCreatedAudioEngine = globalWindow.BABYLON?.LastCreatedAudioEngine?.();
+        lastCreatedAudioEngine?.dispose?.();
+
+        const legacyAudioEngine = globalWindow.BABYLON?.Engine?.audioEngine;
+        if (legacyAudioEngine && legacyAudioEngine !== lastCreatedAudioEngine) {
+            legacyAudioEngine.dispose?.();
+        }
+        if (globalWindow.BABYLON?.Engine) {
+            globalWindow.BABYLON.Engine.audioEngine = null;
+        }
 
         const floatingOriginCurrentScene = globalWindow.BABYLON?.FloatingOriginCurrentScene;
         if (floatingOriginCurrentScene) {

@@ -104,6 +104,60 @@ describe("memory leak scenarios", () => {
         expect(page.evaluate).toHaveBeenNthCalledWith(3, evaluateDisposePlaygroundScene, expect.objectContaining({ settleAfterDisposeMs: 150 }));
     });
 
+    it("creates the materials-library package scenario on top of empty.html", async () => {
+        const definition = defaultScenarioDefinitions.find((scenario) => scenario.id === "materials-library-stack");
+        const config = getGlobalConfig();
+        const scenario = createMemlabScenario(definition!, config);
+
+        const page = createPageMock();
+
+        await scenario.action?.(page as any);
+        await scenario.back?.(page as any);
+
+        expect(page.evaluate).toHaveBeenNthCalledWith(
+            1,
+            evaluateInitializePackageScene,
+            expect.objectContaining({ scenario: "materials-library-stack", assetsUrl: expect.any(String) })
+        );
+        expect(page.evaluate).toHaveBeenNthCalledWith(3, evaluateDisposePlaygroundScene, expect.objectContaining({ settleAfterDisposeMs: 250 }));
+    });
+
+    it("creates the combined core feature package scenario on top of empty.html", async () => {
+        const definition = defaultScenarioDefinitions.find((scenario) => scenario.id === "core-feature-stack");
+        const config = getGlobalConfig();
+        const scenario = createMemlabScenario(definition!, config);
+
+        const page = createPageMock();
+
+        await scenario.action?.(page as any);
+        await scenario.back?.(page as any);
+
+        expect(page.evaluate).toHaveBeenNthCalledWith(
+            1,
+            evaluateInitializePackageScene,
+            expect.objectContaining({ scenario: "core-feature-stack", assetsUrl: expect.any(String), settleAfterReadyMs: 300 })
+        );
+        expect(page.evaluate).toHaveBeenNthCalledWith(3, evaluateDisposePlaygroundScene, expect.objectContaining({ settleAfterDisposeMs: 300 }));
+    });
+
+    it("creates the combined core rendering and shadows package scenario on top of empty.html", async () => {
+        const definition = defaultScenarioDefinitions.find((scenario) => scenario.id === "core-rendering-materials-shadows-stack");
+        const config = getGlobalConfig();
+        const scenario = createMemlabScenario(definition!, config);
+
+        const page = createPageMock();
+
+        await scenario.action?.(page as any);
+        await scenario.back?.(page as any);
+
+        expect(page.evaluate).toHaveBeenNthCalledWith(
+            1,
+            evaluateInitializePackageScene,
+            expect.objectContaining({ scenario: "core-rendering-materials-shadows-stack", assetsUrl: expect.any(String), settleAfterReadyMs: 250 })
+        );
+        expect(page.evaluate).toHaveBeenNthCalledWith(3, evaluateDisposePlaygroundScene, expect.objectContaining({ settleAfterDisposeMs: 250 }));
+    });
+
     it("includes a heavier animation-driven playground in the ci suite", () => {
         const scenarios = resolveScenarioDefinitions("ci");
 
@@ -116,10 +170,33 @@ describe("memory leak scenarios", () => {
         expect(scenarios.some((scenario) => scenario.kind === "playground" && scenario.toggleInspector)).toBe(false);
     });
 
-    it("focuses the packages suite on gui, loaders, and serializers with broader coverage per package", () => {
+    it("exposes the combined deterministic core feature scenario outside the ci suite", () => {
+        const ciScenarios = resolveScenarioDefinitions("ci");
+        const extendedScenarios = resolveScenarioDefinitions("extended");
+        const packageScenarios = resolveScenarioDefinitions("packages");
+
+        expect(ciScenarios.some((scenario) => scenario.id === "core-feature-stack")).toBe(false);
+        expect(ciScenarios.some((scenario) => scenario.id === "core-rendering-materials-shadows-stack")).toBe(false);
+        expect(extendedScenarios.some((scenario) => scenario.id === "core-feature-stack")).toBe(true);
+        expect(extendedScenarios.some((scenario) => scenario.id === "core-rendering-materials-shadows-stack")).toBe(true);
+        expect(packageScenarios.some((scenario) => scenario.id === "core-feature-stack")).toBe(true);
+        expect(packageScenarios.some((scenario) => scenario.id === "core-rendering-materials-shadows-stack")).toBe(true);
+    });
+
+    it("covers deterministic core and package scenarios on empty.html", () => {
         const scenarios = resolveScenarioDefinitions("packages");
 
-        expect(new Set(scenarios.map((scenario) => scenario.packageName))).toEqual(new Set(["@babylonjs/gui", "@babylonjs/loaders", "@babylonjs/serializers"]));
-        expect(scenarios).toHaveLength(7);
+        expect(new Set(scenarios.map((scenario) => scenario.packageName))).toEqual(
+            new Set([
+                "@babylonjs/core",
+                "@babylonjs/gui",
+                "@babylonjs/loaders",
+                "@babylonjs/materials",
+                "@babylonjs/post-processes",
+                "@babylonjs/procedural-textures",
+                "@babylonjs/serializers",
+            ])
+        );
+        expect(scenarios).toHaveLength(12);
     });
 });
