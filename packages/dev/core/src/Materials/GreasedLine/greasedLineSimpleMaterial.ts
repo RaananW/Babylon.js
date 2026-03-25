@@ -11,6 +11,7 @@ import type { GreasedLineMaterialOptions, IGreasedLineMaterial } from "./greased
 import { GreasedLineMeshColorDistributionType, GreasedLineMeshColorMode } from "./greasedLineMaterialInterfaces";
 import { GreasedLineTools } from "../../Misc/greasedLineTools";
 import { GreasedLineMaterialDefaults } from "./greasedLineMaterialDefaults";
+import { ShaderStore } from "../../Engines/shaderStore";
 
 export const GreasedLineUseOffsetsSimpleMaterialDefine = "GREASED_LINE_USE_OFFSETS";
 
@@ -112,6 +113,7 @@ export class GreasedLineSimpleMaterial extends ShaderMaterial implements IGrease
                     } else {
                         await Promise.all([import("../../Shaders/greasedLine.vertex"), import("../../Shaders/greasedLine.fragment")]);
                     }
+                    await ShaderStore.LoadPendingIncludesAsync();
                 },
                 shaderLanguage: isWGSL ? ShaderLanguage.WGSL : ShaderLanguage.GLSL,
             }

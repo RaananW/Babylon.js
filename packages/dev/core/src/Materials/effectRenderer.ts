@@ -11,6 +11,7 @@ import type { DataBuffer } from "../Buffers/dataBuffer";
 import { DrawWrapper } from "./drawWrapper";
 import type { IRenderTargetTexture, RenderTargetWrapper } from "../Engines/renderTargetWrapper";
 import { ShaderLanguage } from "./shaderLanguage";
+import { ShaderStore } from "../Engines/shaderStore";
 
 // Prevents ES6 issue if not imported.
 import "../Shaders/postprocess.vertex";
@@ -575,6 +576,7 @@ export class EffectWrapper {
                 ? undefined
                 : async () => {
                       await Promise.all(this._importPromises);
+                      await ShaderStore.LoadPendingIncludesAsync();
                       this._shadersLoaded = true;
                   };
 

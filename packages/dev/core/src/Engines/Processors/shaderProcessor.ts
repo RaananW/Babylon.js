@@ -36,11 +36,33 @@ export function Initialize(options: _IProcessingOptions): void {
     }
 }
 
+/**
+ * Pre-strips conditional blocks (#ifdef/#ifndef/#if/#else/#elif/#endif) from shader source
+ * based on the provided defines, BEFORE include resolution. This ensures that #include directives
+ * inside disabled conditional blocks are never resolved, enabling tree-shaking of unused shader includes.
+ * @param sourceCode the shader source code
+ * @param options the processing options (uses defines and processor)
+ * @param engine the engine (optional, used for global defines)
+ * @returns the source code with disabled conditional blocks removed
+ * @internal
+ */
+export function PreStripConditionalIncludes(sourceCode: string, options: _IProcessingOptions, engine?: AbstractEngine): string {
+    const preprocessors = PreparePreProcessors(options, engine);
+    const preProcessorsFromCode: { [key: string]: string } = {};
+    // Pass options without the processor so that EvaluatePreProcessors only evaluates
+    // #ifdef/#endif conditionals and does NOT run line-level processors (texture, uniform,
+    // varying, etc.) — those must only run once, during ProcessShaderConversion.
+    const strippedOptions: _IProcessingOptions = { ...options, processor: null };
+    return EvaluatePreProcessors(sourceCode, preprocessors, strippedOptions, preProcessorsFromCode);
+}
+
 /** @internal */
 export function Process(sourceCode: string, options: _IProcessingOptions, callback: (migratedCode: string, codeBeforeMigration: string) => void, engine?: AbstractEngine) {
     if (options.processor?.preProcessShaderCode) {
         sourceCode = options.processor.preProcessShaderCode(sourceCode, options.isFragment);
     }
+    // Pre-strip conditional blocks so that #include directives inside disabled #ifdef blocks are never resolved.
+    sourceCode = PreStripConditionalIncludes(sourceCode, options, engine);
     ProcessIncludes(sourceCode, options, (codeWithIncludes) => {
         if (options.processCodeAfterIncludes) {
             codeWithIncludes = options.processCodeAfterIncludes(options.isFragment ? "fragment" : "vertex", codeWithIncludes, options.defines);
@@ -55,6 +77,8 @@ export function PreProcess(sourceCode: string, options: _IProcessingOptions, cal
     if (options.processor?.preProcessShaderCode) {
         sourceCode = options.processor.preProcessShaderCode(sourceCode, options.isFragment);
     }
+    // Pre-strip conditional blocks so that #include directives inside disabled #ifdef blocks are never resolved.
+    sourceCode = PreStripConditionalIncludes(sourceCode, options, engine);
     ProcessIncludes(sourceCode, options, (codeWithIncludes) => {
         if (options.processCodeAfterIncludes) {
             codeWithIncludes = options.processCodeAfterIncludes(options.isFragment ? "fragment" : "vertex", codeWithIncludes, options.defines);

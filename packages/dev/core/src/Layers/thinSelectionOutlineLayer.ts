@@ -1,3 +1,4 @@
+import { ShaderStore } from "../Engines/shaderStore";
 import { VertexBuffer } from "../Buffers/buffer";
 import { Camera } from "../Cameras/camera";
 import { Constants } from "../Engines/constants";
@@ -351,6 +352,7 @@ export class ThinSelectionOutlineLayer extends ThinEffectLayer {
                 import("../Shaders/selectionOutline.fragment"),
             ]);
         }
+        await ShaderStore.LoadPendingIncludesAsync();
 
         await super._importShadersAsync();
     }

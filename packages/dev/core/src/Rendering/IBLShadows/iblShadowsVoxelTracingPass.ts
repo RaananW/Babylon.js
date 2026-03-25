@@ -13,6 +13,7 @@ import type { IProceduralTextureCreationOptions } from "core/Materials/Textures/
 import type { CubeTexture } from "../../Materials/Textures/cubeTexture";
 import { Logger } from "../../Misc/logger";
 import type { EventState } from "../../Misc/observable";
+import { ShaderStore } from "../../Engines/shaderStore";
 import type { Nullable } from "../../types";
 
 /**
@@ -308,6 +309,7 @@ export class _IblShadowsVoxelTracingPass {
                 } else {
                     await Promise.all([import("../../Shaders/iblShadowVoxelTracing.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         };
         this._outputTexture = new ProceduralTexture(

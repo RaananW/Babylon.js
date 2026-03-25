@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { ShaderStore } from "../Engines/shaderStore";
 import type { Scene } from "../scene";
 import { Vector2 } from "../Maths/math.vector";
 import { VertexBuffer } from "../Buffers/buffer";
@@ -180,6 +181,7 @@ export class ThinGlowLayer extends ThinEffectLayer {
         } else {
             await Promise.all([import("../Shaders/glowMapMerge.fragment"), import("../Shaders/glowMapMerge.vertex"), import("../Shaders/glowBlurPostProcess.fragment")]);
         }
+        await ShaderStore.LoadPendingIncludesAsync();
 
         await super._importShadersAsync();
     }

@@ -19,6 +19,7 @@ import { Logger } from "core/Misc/logger";
 import type { Scene } from "core/scene";
 import type { Nullable } from "core/types";
 import type { Observer } from "core/Misc/observable";
+import { ShaderStore } from "../Engines/shaderStore";
 
 /**
  * Class used to store the result of a GPU picking operation
@@ -177,6 +178,7 @@ export class GPUPicker {
                 } else {
                     await Promise.all([import("../Shaders/picking.fragment"), import("../Shaders/picking.vertex")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         };
 

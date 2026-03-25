@@ -122,6 +122,7 @@ export class DiffuseSkyIrradianceLut {
                         ? [import("./ShadersWGSL/fullscreenTriangle.vertex"), import("./ShadersWGSL/diffuseSkyIrradiance.fragment")]
                         : [import("./Shaders/fullscreenTriangle.vertex"), import("./Shaders/diffuseSkyIrradiance.fragment")]
                 );
+                await ShaderStore.LoadPendingIncludesAsync();
 
                 // Replace the CUSTOM_IRRADIANCE_FILTERING_INPUT and CUSTOM_IRRADIANCE_FILTERING_FUNCTION placeholders.
                 // Note, the regex replacements look for lines that *only* contain these placeholder strings.

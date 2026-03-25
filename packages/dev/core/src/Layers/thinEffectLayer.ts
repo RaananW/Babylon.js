@@ -1,4 +1,5 @@
 import type { SmartArray } from "../Misc/smartArray";
+import { ShaderStore } from "../Engines/shaderStore";
 import { Observable } from "../Misc/observable";
 import type { Nullable } from "../types";
 import type { Camera } from "../Cameras/camera";
@@ -753,6 +754,7 @@ export class ThinEffectLayer {
         } else {
             await Promise.all([import("../Shaders/glowMapGeneration.vertex"), import("../Shaders/glowMapGeneration.fragment")]);
         }
+        await ShaderStore.LoadPendingIncludesAsync();
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._additionalImportShadersAsync?.();
     }

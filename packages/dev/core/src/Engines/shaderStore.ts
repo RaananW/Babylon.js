@@ -56,4 +56,60 @@ export class ShaderStore {
     public static GetIncludesShadersStore(shaderLanguage = ShaderLanguage.GLSL): { [key: string]: string } {
         return shaderLanguage === ShaderLanguage.GLSL ? ShaderStore.IncludesShadersStore : ShaderStore.IncludesShadersStoreWGSL;
     }
+
+    /**
+     * @internal
+     * Map of shader name to a function that eagerly loads all of its include dependencies in parallel.
+     * Populated at module load time by generated shader .ts files.
+     * Consumed by LoadPendingIncludesAsync().
+     */
+    static _PendingIncludesLoaders: Array<() => Promise<unknown>> = [];
+
+    /**
+     * @internal
+     * Shared promise for the currently in-flight loading operation, so multiple callers
+     * await the same work rather than duplicating loads.
+     */
+    private static _CurrentLoadingPromise: Promise<void> | null = null;
+
+    /**
+     * Call after importing shader modules to eagerly load all their include dependencies.
+     * Each generated shader module registers a batch-loader at import time.
+     * This method fires them all in parallel and clears the pending list.
+     * It loops to also load nested include dependencies (include files that themselves
+     * reference further includes push their own loaders when imported).
+     * Concurrent callers share the same loading promise to avoid duplicate work.
+     * @internal
+     */
+    static async LoadPendingIncludesAsync(): Promise<void> {
+        // Fast path: nothing pending and no in-flight loading
+        if (ShaderStore._PendingIncludesLoaders.length === 0 && !ShaderStore._CurrentLoadingPromise) {
+            return;
+        }
+        // If loading is already in progress, wait for it then check for stragglers
+        if (ShaderStore._CurrentLoadingPromise) {
+            await ShaderStore._CurrentLoadingPromise;
+            if (ShaderStore._PendingIncludesLoaders.length > 0) {
+                await ShaderStore.LoadPendingIncludesAsync();
+            }
+            return;
+        }
+        // Start a new loading cycle that loops until all nested includes are loaded
+        const doLoadAsync = async () => {
+            while (ShaderStore._PendingIncludesLoaders.length > 0) {
+                const loaders = ShaderStore._PendingIncludesLoaders.splice(0);
+                // eslint-disable-next-line no-await-in-loop
+                await Promise.all(loaders.map(async (fn) => await fn()));
+            }
+        };
+        const promise = doLoadAsync();
+        ShaderStore._CurrentLoadingPromise = promise;
+        try {
+            await promise;
+        } finally {
+            if (ShaderStore._CurrentLoadingPromise === promise) {
+                ShaderStore._CurrentLoadingPromise = null;
+            }
+        }
+    }
 }

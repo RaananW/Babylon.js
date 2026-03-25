@@ -6,6 +6,7 @@ import type { TextureSize } from "./textureCreationOptions";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { Constants } from "../../Engines/constants";
 import type { Texture } from "./texture";
+import { ShaderStore } from "../../Engines/shaderStore";
 
 /**
  * Configuration for a texture input source
@@ -182,6 +183,7 @@ export async function MergeTexturesAsync(name: string, config: ITextureMergeConf
             } else {
                 await Promise.all([import("../../Shaders/textureMerger.fragment")]);
             }
+            await ShaderStore.LoadPendingIncludesAsync();
         },
     };
     const proceduralTexture = new ProceduralTexture(name, outputSize, _ShaderName, scene, outputTextureOptions);

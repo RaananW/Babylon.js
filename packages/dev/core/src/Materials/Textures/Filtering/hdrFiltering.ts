@@ -9,6 +9,7 @@ import type { Nullable } from "../../../types";
 import type { RenderTargetWrapper } from "../../../Engines/renderTargetWrapper";
 
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { ShaderStore } from "../../../Engines/shaderStore";
 
 /**
  * Options for texture filtering
@@ -185,6 +186,7 @@ export class HDRFiltering {
                 } else {
                     await Promise.all([import("../../../Shaders/hdrFiltering.vertex"), import("../../../Shaders/hdrFiltering.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
 

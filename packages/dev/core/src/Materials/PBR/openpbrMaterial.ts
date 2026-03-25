@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { ShaderStore } from "../../Engines/shaderStore";
 import { serialize, expandToProperty, addAccessorsForMaterialProperty } from "../../Misc/decorators";
 import { GetEnvironmentBRDFTexture, GetEnvironmentFuzzBRDFTexture } from "../../Misc/brdfTextureTools";
 import type { Nullable } from "../../types";
@@ -2793,6 +2794,7 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
                           } else {
                               await Promise.all([import("../../Shaders/openpbr.vertex"), import("../../Shaders/openpbr.fragment")]);
                           }
+                          await ShaderStore.LoadPendingIncludesAsync();
 
                           this._shadersLoaded = true;
                       },

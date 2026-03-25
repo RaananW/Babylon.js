@@ -36,6 +36,7 @@ import {
     PrepareUniformsAndSamplersList,
 } from "../materialHelper.functions";
 import { ShaderLanguage } from "../shaderLanguage";
+import { ShaderStore } from "../../Engines/shaderStore";
 
 /**
  * Computes the maximum number of Gaussian Splatting compound parts supported by the given engine.
@@ -340,6 +341,7 @@ export class GaussianSplattingMaterial extends PushMaterial {
                         } else {
                             await Promise.all([import("../../Shaders/gaussianSplatting.fragment"), import("../../Shaders/gaussianSplatting.vertex")]);
                         }
+                        await ShaderStore.LoadPendingIncludesAsync();
                     },
                 },
                 engine

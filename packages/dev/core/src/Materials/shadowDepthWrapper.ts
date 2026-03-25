@@ -12,6 +12,8 @@ import { RandomGUID } from "../Misc/guid";
 import { DrawWrapper } from "./drawWrapper";
 import { EngineStore } from "../Engines/engineStore";
 import { ShaderLanguage } from "./shaderLanguage";
+// Direct synchronous access to this include requires it to be eagerly loaded
+import "../Shaders/ShadersInclude/shadowMapFragmentExtraDeclaration";
 
 /**
  * Options to be used when creating a shadow depth material

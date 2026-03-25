@@ -14,6 +14,7 @@ import { BindBonesParameters, BindMorphTargetParameters, PrepareDefinesAndAttrib
 import { EffectFallbacks } from "core/Materials/effectFallbacks";
 import type { IEffectCreationOptions } from "core/Materials/effect";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { ShaderStore } from "../Engines/shaderStore";
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -425,6 +426,7 @@ export class OutlineRenderer implements ISceneComponent {
                             } else {
                                 await Promise.all([import("../Shaders/outline.fragment"), import("../Shaders/outline.vertex")]);
                             }
+                            await ShaderStore.LoadPendingIncludesAsync();
                         },
                     },
                     this.scene.getEngine()

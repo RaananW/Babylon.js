@@ -12,6 +12,7 @@ import type { IblShadowsRenderPipeline } from "./iblShadowsRenderPipeline";
 import { Observable } from "../../Misc/observable";
 import type { EventState } from "../../Misc/observable";
 import type { Nullable } from "../../types";
+import { ShaderStore } from "../../Engines/shaderStore";
 
 /**
  * This should not be instantiated directly, as it is part of a scene component
@@ -188,6 +189,7 @@ export class _IblShadowsAccumulationPass {
                 } else {
                     await Promise.all([import("../../Shaders/iblShadowAccumulation.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         };
         this._outputTexture = new ProceduralTexture(
@@ -232,6 +234,7 @@ export class _IblShadowsAccumulationPass {
                 } else {
                     await Promise.all([import("../../Shaders/pass.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         };
 
@@ -264,6 +267,7 @@ export class _IblShadowsAccumulationPass {
                 } else {
                     await Promise.all([import("../../Shaders/pass.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         };
 

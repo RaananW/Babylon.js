@@ -17,6 +17,7 @@ import type { DataBuffer } from "../Buffers/dataBuffer";
 import { SmartArray } from "../Misc/smartArray";
 import { DrawWrapper } from "../Materials/drawWrapper";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { ShaderStore } from "../Engines/shaderStore";
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -264,6 +265,7 @@ export class EdgesRenderer implements IEdgesRenderer {
                         } else {
                             await Promise.all([import("../Shaders/line.vertex"), import("../Shaders/line.fragment")]);
                         }
+                        await ShaderStore.LoadPendingIncludesAsync();
                     },
                 },
                 false

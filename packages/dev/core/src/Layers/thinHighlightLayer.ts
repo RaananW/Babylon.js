@@ -1,4 +1,5 @@
 import type { Observer, Nullable, Scene, SubMesh, AbstractMesh, Mesh, Effect, IThinEffectLayerOptions, Color3, EffectWrapper } from "core/index";
+import { ShaderStore } from "../Engines/shaderStore";
 import { Vector2 } from "../Maths/math.vector";
 import { VertexBuffer } from "../Buffers/buffer";
 import { Material } from "../Materials/material";
@@ -248,6 +249,7 @@ export class ThinHighlightLayer extends ThinEffectLayer {
         } else {
             await Promise.all([import("../Shaders/glowMapMerge.fragment"), import("../Shaders/glowMapMerge.vertex"), import("../Shaders/glowBlurPostProcess.fragment")]);
         }
+        await ShaderStore.LoadPendingIncludesAsync();
 
         await super._importShadersAsync();
     }

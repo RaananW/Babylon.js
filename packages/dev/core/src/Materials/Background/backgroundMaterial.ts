@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { ShaderStore } from "../../Engines/shaderStore";
 import { serialize, serializeAsColor3, expandToProperty, serializeAsTexture, serializeAsVector3 } from "../../Misc/decorators";
 import { SmartArray } from "../../Misc/smartArray";
 import { Logger } from "../../Misc/logger";
@@ -826,6 +827,7 @@ export class BackgroundMaterial extends BackgroundMaterialBase {
                               } else {
                                   await Promise.all([import("../../Shaders/background.vertex"), import("../../Shaders/background.fragment")]);
                               }
+                              await ShaderStore.LoadPendingIncludesAsync();
 
                               this._shadersLoaded = true;
                           },

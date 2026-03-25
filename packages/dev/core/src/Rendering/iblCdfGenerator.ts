@@ -19,6 +19,7 @@ import type { Nullable } from "../types";
 import { EngineStore } from "../Engines/engineStore";
 import { Logger } from "../Misc/logger";
 import { _RetryWithInterval } from "../Misc/timingTools";
+import { ShaderStore } from "../Engines/shaderStore";
 
 /**
  * Build cdf maps to be used for IBL importance sampling.
@@ -222,6 +223,7 @@ export class IblCdfGenerator {
                 } else {
                     await Promise.all([import("../Shaders/iblCdfx.fragment"), import("../Shaders/iblCdfy.fragment"), import("../Shaders/iblScaledLuminance.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         };
         const icdfOptions: IProceduralTextureCreationOptions = {
@@ -238,6 +240,7 @@ export class IblCdfGenerator {
                 } else {
                     await Promise.all([import("../Shaders/iblIcdf.fragment"), import("../Shaders/iblDominantDirection.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         };
         this._cdfyPT = new ProceduralTexture("cdfyTexture", { width: size.width, height: size.height + 1 }, "iblCdfy", this._scene, cdfOptions, false, false);

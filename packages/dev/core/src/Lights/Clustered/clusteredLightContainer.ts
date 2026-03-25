@@ -28,6 +28,7 @@ import type { SpotLight } from "../spotLight";
 import type { RenderTargetWrapper } from "../../Engines/renderTargetWrapper";
 
 import "core/Meshes/thinInstanceMesh";
+import { ShaderStore } from "../../Engines/shaderStore";
 
 Node.AddNodeConstructor("Light_Type_5", (name, scene) => {
     return () => new ClusteredLightContainer(name, [], scene);
@@ -252,6 +253,7 @@ export class ClusteredLightContainer extends Light {
                 } else {
                     await Promise.all([import("../../Shaders/lightProxy.vertex"), import("../../Shaders/lightProxy.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
 

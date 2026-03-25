@@ -20,6 +20,7 @@ import { Material } from "../Materials/material";
 
 import "../Engines/Extensions/engine.multiRender";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { ShaderStore } from "../Engines/shaderStore";
 import type { RenderTargetWrapper } from "../Engines/renderTargetWrapper";
 import type { Nullable } from "../types";
 
@@ -295,6 +296,7 @@ export class ThinDepthPeelingRenderer {
                 } else {
                     await import("../Shaders/oitBackBlend.fragment");
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
         this._blendBackEffectWrapperPingPong = new EffectWrapper({
@@ -310,6 +312,7 @@ export class ThinDepthPeelingRenderer {
                 } else {
                     await import("../Shaders/oitBackBlend.fragment");
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
 
@@ -326,6 +329,7 @@ export class ThinDepthPeelingRenderer {
                 } else {
                     await import("../Shaders/oitFinalSimpleBlend.fragment");
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
 

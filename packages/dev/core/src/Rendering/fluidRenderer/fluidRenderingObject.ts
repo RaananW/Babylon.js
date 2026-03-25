@@ -7,6 +7,7 @@ import { Observable } from "core/Misc/observable";
 import type { Scene } from "core/scene";
 import type { Nullable } from "core/types";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { ShaderStore } from "../../Engines/shaderStore";
 
 /**
  * Defines the base object used for fluid rendering.
@@ -144,6 +145,7 @@ export abstract class FluidRenderingObject {
                 } else {
                     await Promise.all([import("../../Shaders/fluidRenderingParticleDepth.vertex"), import("../../Shaders/fluidRenderingParticleDepth.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
 
@@ -164,6 +166,7 @@ export abstract class FluidRenderingObject {
                 } else {
                     await Promise.all([import("../../Shaders/fluidRenderingParticleThickness.vertex"), import("../../Shaders/fluidRenderingParticleThickness.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
     }

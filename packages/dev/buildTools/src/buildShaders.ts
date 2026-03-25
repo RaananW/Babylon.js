@@ -16,7 +16,9 @@ import type { DevPackageName } from "./packageMapping.js";
 
 /**
  * Template creating hidden ts file containing the shaders.
- * When moving to pure es6 we will need to remove the Shader assignment
+ * For main shaders: includes are registered as lazy resolvers instead of side-effect imports.
+ * A pending includes loader is self-registered so that materials can eagerly load all includes
+ * during extraInitializationsAsync via ShaderStore.LoadPendingIncludesAsync().
  */
 const TsShaderTemplate = `// Do not edit.
 import { ShaderStore } from "##SHADERSTORELOCATION_PLACEHOLDER##";
@@ -27,6 +29,7 @@ const shader = \`##SHADER_PLACEHOLDER##\`;
 if (!ShaderStore.##SHADERSTORE_PLACEHOLDER##[name]) {
     ShaderStore.##SHADERSTORE_PLACEHOLDER##[name] = shader;
 }
+##LOADINCLUDES_PLACEHOLDER##
 ##EXPORT_PLACEHOLDER##
 `;
 
@@ -140,11 +143,16 @@ export function BuildShader(filePath: string, basePackageName: string | undefine
         .replace(/\{\n([^#])/g, "{$1")
         .replace(/\n\}/g, "}")
         .replace(/^(?:[\t ]*(?:\r?\n|\r))+/gm, "")
-        .replace(/;\n([^#])/g, ";$1");
+        // Join consecutive lines (minification), but preserve newlines before:
+        // - preprocessor directives (#ifdef, #include, etc.)
+        // - shader declaration keywords that the processor handles per-line
+        .replace(/;\n(?!#|varying |uniform |attribute |var |var<|const |fn |struct |@|flat |linear |perspective )/g, ";");
 
-    // Generate imports for includes.
+    // Collect include dependencies for eager loading via _PendingIncludesLoaders.
     let includeText = "";
+    const includeImportPaths: string[] = [];
     const includes = GetIncludes(fxData);
+    const useEagerIncludes = checkArgs("--eager-includes", true);
     includes.forEach((entry) => {
         // Entry may have been something like #include<core/helperFunctions> where "core" is intended to override the basePackageName.
         const isCoreInclude = (entry as string).startsWith("core/");
@@ -160,17 +168,21 @@ export function BuildShader(filePath: string, basePackageName: string | undefine
                 throw new Error("Unnecessary core include");
             }
 
-            includeText =
-                includeText +
-                `import "./ShadersInclude/${entry}";
+            if (useEagerIncludes) {
+                includeText += `import "./ShadersInclude/${entry}";
 `;
+            } else {
+                includeImportPaths.push(`"./ShadersInclude/${entry}"`);
+            }
         } else {
             const basePackageNameForImport = isCoreInclude ? "core" : basePackageName === undefined ? DetermineBasePackageNameForShaderInclude(filePath) : basePackageName;
             const actualEntry = (entry as string).replace(/^core\//, "");
-            includeText =
-                includeText +
-                `import "${basePackageNameForImport}/Shaders${appendDirName}/ShadersInclude/${actualEntry}";
+            if (useEagerIncludes) {
+                includeText += `import "${basePackageNameForImport}/Shaders${appendDirName}/ShadersInclude/${actualEntry}";
 `;
+            } else {
+                includeImportPaths.push(`"${basePackageNameForImport}/Shaders${appendDirName}/ShadersInclude/${actualEntry}"`);
+            }
             // The shader code itself also needs to be updated by replacing `#include<core/helperFunctions>` with `#include<helperFunctions>`
             if (isCoreInclude) {
                 fxData = fxData.replace(new RegExp(`#include<${entry}>`, "g"), `#include<${actualEntry}>`);
@@ -185,12 +197,31 @@ export function BuildShader(filePath: string, basePackageName: string | undefine
     if (isCore) {
         if (isInclude) {
             shaderStoreLocation = "../../Engines/shaderStore";
-            includeText = includeText.replace(/ShadersInclude\//g, "");
+            if (useEagerIncludes) {
+                includeText = includeText.replace(/ShadersInclude\//g, "");
+            }
         } else {
             shaderStoreLocation = "../Engines/shaderStore";
         }
     } else {
         shaderStoreLocation = "core/Engines/shaderStore";
+    }
+
+    // Generate loadIncludesAsync for shader files (including includes with nested #include directives).
+    // This self-registers a pending loader that eagerly loads all includes in parallel so
+    // the store is fully populated before ProcessIncludes runs.
+    // Include files also push loaders for their nested includes so that
+    // LoadPendingIncludesAsync can recursively load the full dependency tree.
+    let loadIncludesText = "";
+    if (!useEagerIncludes && includeImportPaths.length > 0) {
+        const imports = includeImportPaths.map((p) => `    import(${p})`).join(",\n");
+        loadIncludesText = `ShaderStore._PendingIncludesLoaders.push(() => Promise.all([
+${imports}
+]));`;
+        // For include files in core, paths are relative to ShadersInclude/ not Shaders/
+        if (isInclude && isCore) {
+            loadIncludesText = loadIncludesText.replace(/\.\/(ShadersInclude\/)/g, "./");
+        }
     }
 
     // Fill template in.
@@ -200,6 +231,7 @@ export function BuildShader(filePath: string, basePackageName: string | undefine
         .replace("##NAME_PLACEHOLDER##", shaderName)
         .replace("##SHADER_PLACEHOLDER##", fxData)
         .replace(new RegExp("##SHADERSTORE_PLACEHOLDER##", "g"), shaderStore)
+        .replace("##LOADINCLUDES_PLACEHOLDER##", loadIncludesText)
         .replace(
             "##EXPORT_PLACEHOLDER##",
             `/** @internal */

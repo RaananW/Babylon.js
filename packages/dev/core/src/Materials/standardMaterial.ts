@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { ShaderStore } from "../Engines/shaderStore";
 import { serialize, serializeAsColor3, expandToProperty, serializeAsFresnelParameters, serializeAsTexture } from "../Misc/decorators";
 import { SmartArray } from "../Misc/smartArray";
 import type { IAnimatable } from "../Animations/animatable.interface";
@@ -1276,6 +1277,7 @@ export class StandardMaterial extends StandardMaterialBase {
                               } else {
                                   await Promise.all([import("../Shaders/default.vertex"), import("../Shaders/default.fragment")]);
                               }
+                              await ShaderStore.LoadPendingIncludesAsync();
                               this._shadersLoaded = true;
                           },
                 },

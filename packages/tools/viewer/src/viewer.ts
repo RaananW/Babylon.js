@@ -59,6 +59,7 @@ import { _RetryWithInterval } from "core/Misc/timingTools";
 import { GetExtensionFromUrl } from "core/Misc/urlTools";
 import { Scene } from "core/scene";
 import { registerBuiltInLoaders } from "loaders/dynamic";
+import { ShaderStore } from "core/Engines/shaderStore";
 
 // eslint-disable-next-line @typescript-eslint/promise-function-async
 const LazySSAODependenciesPromise = new Lazy(() =>
@@ -1992,6 +1993,7 @@ export class Viewer implements IDisposable {
                     } else {
                         await Promise.all([import("./Shaders/envShadowGround.vertex"), import("./Shaders/envShadowGround.fragment")]);
                     }
+                    await ShaderStore.LoadPendingIncludesAsync();
                 },
             };
 

@@ -12,6 +12,7 @@ import { ShaderMaterial } from "../Materials/shaderMaterial";
 import type { Effect } from "../Materials/effect";
 import type { MeshCreationOptions } from "./mesh";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { ShaderStore } from "../Engines/shaderStore";
 
 Mesh._LinesMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
     return LinesMesh.Parse(parsedMesh, scene);
@@ -140,6 +141,7 @@ export class LinesMesh extends Mesh {
                 } else {
                     await Promise.all([import("../Shaders/color.vertex"), import("../Shaders/color.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             };
 
             const material = new ShaderMaterial("colorShader", this.getScene(), "color", options, false);

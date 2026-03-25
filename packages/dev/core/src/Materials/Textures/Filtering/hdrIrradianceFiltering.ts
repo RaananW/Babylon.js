@@ -9,6 +9,7 @@ import type { Nullable } from "../../../types";
 import type { RenderTargetWrapper } from "../../../Engines/renderTargetWrapper";
 
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { ShaderStore } from "../../../Engines/shaderStore";
 import { IblCdfGenerator } from "../../../Rendering/iblCdfGenerator";
 
 /**
@@ -177,6 +178,7 @@ export class HDRIrradianceFiltering {
                 } else {
                     await Promise.all([import("../../../Shaders/hdrIrradianceFiltering.vertex"), import("../../../Shaders/hdrIrradianceFiltering.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
 

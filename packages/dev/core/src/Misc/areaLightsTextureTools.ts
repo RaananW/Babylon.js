@@ -4,6 +4,7 @@ import { EffectRenderer, EffectWrapper } from "core/Materials/effectRenderer";
 import type { ThinTexture } from "core/Materials/Textures/thinTexture";
 import type { Nullable } from "core/types";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { ShaderStore } from "../Engines/shaderStore";
 import { Vector2 } from "core/Maths/math.vector";
 import { WhenTextureReadyAsync } from "core/Misc/textureTools";
 import { BaseTexture } from "core/Materials/Textures/baseTexture";
@@ -83,6 +84,7 @@ export class AreaLightTextureTools {
                 } else {
                     await import("../Shaders/areaLightTextureProcessing.fragment");
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
 

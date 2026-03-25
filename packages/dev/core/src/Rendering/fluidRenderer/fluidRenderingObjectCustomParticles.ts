@@ -6,6 +6,7 @@ import type { FloatArray, Nullable } from "core/types";
 
 import { FluidRenderingObject } from "./fluidRenderingObject";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { ShaderStore } from "../../Engines/shaderStore";
 
 /**
  * Defines a rendering object based on a list of custom buffers
@@ -90,6 +91,7 @@ export class FluidRenderingObjectCustomParticles extends FluidRenderingObject {
                 } else {
                     await import("../../Shaders/fluidRenderingParticleDiffuse.fragment");
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
     }

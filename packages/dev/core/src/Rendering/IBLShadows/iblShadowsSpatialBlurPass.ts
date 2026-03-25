@@ -11,6 +11,7 @@ import type { IProceduralTextureCreationOptions } from "core/Materials/Textures/
 import type { IblShadowsRenderPipeline } from "./iblShadowsRenderPipeline";
 import type { EventState } from "../../Misc/observable";
 import type { Nullable } from "../../types";
+import { ShaderStore } from "../../Engines/shaderStore";
 
 /**
  * This should not be instanciated directly, as it is part of a scene component
@@ -142,6 +143,7 @@ export class _IblShadowsSpatialBlurPass {
                 } else {
                     await Promise.all([import("../../Shaders/iblShadowSpatialBlur.fragment")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         };
         this._outputTexture = new ProceduralTexture(

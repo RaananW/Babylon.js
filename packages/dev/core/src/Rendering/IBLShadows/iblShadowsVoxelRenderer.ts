@@ -20,6 +20,7 @@ import { EffectRenderer, EffectWrapper } from "../../Materials/effectRenderer";
 import type { IblShadowsRenderPipeline } from "./iblShadowsRenderPipeline";
 import type { RenderTargetWrapper } from "core/Engines";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
+import { ShaderStore } from "../../Engines/shaderStore";
 
 /**
  * Voxel-based shadow rendering for IBL's.
@@ -314,6 +315,7 @@ export class _IblShadowsVoxelRenderer {
                 } else {
                     await import("../../Shaders/copyTexture3DLayerToTexture.fragment");
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
 
@@ -410,6 +412,7 @@ export class _IblShadowsVoxelRenderer {
                 } else {
                     await import("../../Shaders/iblCombineVoxelGrids.fragment");
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         };
         if (this._engine.isWebGPU) {
@@ -460,6 +463,7 @@ export class _IblShadowsVoxelRenderer {
                 } else {
                     await import("../../Shaders/iblGenerateVoxelMip.fragment");
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         };
         this._mipArray = new Array(Math.ceil(Math.log2(this._voxelResolution)));
@@ -563,6 +567,7 @@ export class _IblShadowsVoxelRenderer {
                 } else {
                     await Promise.all([import("../../Shaders/iblVoxelGrid.fragment"), import("../../Shaders/iblVoxelGrid.vertex")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
         this._voxelMaterial.cullBackFaces = false;
@@ -579,6 +584,7 @@ export class _IblShadowsVoxelRenderer {
                 } else {
                     await Promise.all([import("../../Shaders/iblVoxelSlabDebug.fragment"), import("../../Shaders/iblVoxelSlabDebug.vertex")]);
                 }
+                await ShaderStore.LoadPendingIncludesAsync();
             },
         });
     }

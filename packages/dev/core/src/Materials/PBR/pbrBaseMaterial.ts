@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { ShaderStore } from "../../Engines/shaderStore";
 import { expandToProperty } from "../../Misc/decorators";
 import { Logger } from "../../Misc/logger";
 import { SmartArray } from "../../Misc/smartArray";
@@ -1548,6 +1549,7 @@ export abstract class PBRBaseMaterial extends PBRBaseMaterialBase {
                           } else {
                               await Promise.all([import("../../Shaders/pbr.vertex"), import("../../Shaders/pbr.fragment")]);
                           }
+                          await ShaderStore.LoadPendingIncludesAsync();
 
                           this._shadersLoaded = true;
                       },

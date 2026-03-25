@@ -21,6 +21,7 @@ import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { Constants } from "../Engines/constants";
 import { _RetryWithInterval } from "../Misc/timingTools";
 import { Logger } from "../Misc/logger";
+import { ShaderStore } from "../Engines/shaderStore";
 
 declare module "../scene" {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -320,6 +321,7 @@ export class BoundingBoxRenderer implements ISceneComponent {
                     } else {
                         await Promise.all([import("../Shaders/boundingBoxRenderer.vertex"), import("../Shaders/boundingBoxRenderer.fragment")]);
                     }
+                    await ShaderStore.LoadPendingIncludesAsync();
                 },
             },
             false
@@ -346,6 +348,7 @@ export class BoundingBoxRenderer implements ISceneComponent {
                     } else {
                         await Promise.all([import("../Shaders/boundingBoxRenderer.vertex"), import("../Shaders/boundingBoxRenderer.fragment")]);
                     }
+                    await ShaderStore.LoadPendingIncludesAsync();
                 },
             },
             true

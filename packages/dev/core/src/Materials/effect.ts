@@ -427,6 +427,11 @@ export class Effect implements IDisposable {
             await extraInitializationsAsync();
         }
 
+        // Eagerly load all pending shader includes so that ProcessIncludes is synchronous.
+        // The WGSL processor is a singleton that stores per-effect state; async include resolution
+        // would allow another effect's Initialize() to overwrite that state mid-processing.
+        await EngineShaderStore.LoadPendingIncludesAsync();
+
         this._processingContext = shaderProcessingContext || this._engine._getShaderProcessingContext(this._shaderLanguage, false);
 
         const processorOptions: _IProcessingOptions = {
