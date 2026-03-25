@@ -435,6 +435,12 @@ Phase 0 (Audit tooling)  ← DONE
                                                   ├─> 10.2 (integrate into build pipeline)
                                                   ├─> 10.3 (verify bundle smoke tests)
                                                   └─> 10.4 (viewer validation with pure barrel)
+                                            └─> Phase 11 (side-effect warning stubs)  ← DONE
+                                                  ├─> 11.1 (add _MissingSideEffect utility)
+                                                  ├─> 11.2 (automation script)
+                                                  ├─> 11.3 (generate 273 stubs in 21 files)
+                                                  ├─> 11.4 (verify TypeScript compilation)
+                                                  └─> 11.5 (verify bundle smoke tests)
 ```
 
 ## Phase 7 — Fix Pure Barrel Integrity
@@ -1270,6 +1276,97 @@ avoid using decorators until in standard"`.
 **Conclusion**: The current `/*#__PURE__*/` injection approach already solves the tree-shaking
 problem completely. Migrating to TC39 decorators is worthwhile for standards compliance but
 would NOT eliminate the need for pure annotations.
+
+## Phase 11 — Side-Effect Warning Stubs
+
+### Problem Statement
+
+When a user imports from the pure barrel (or any tree-shaken entry point), augmented prototype
+methods are **not attached** until the corresponding side-effect module is imported. Calling an
+unregistered method throws a cryptic `TypeError: scene.getPhysicsEngine is not a function`.
+This is especially confusing because TypeScript's `declare module` makes the types globally
+visible — the code compiles fine, but crashes at runtime.
+
+### Solution
+
+Install lightweight **warning stubs** on class prototypes for **all methods/properties declared
+in `.types.ts` augmentation files**. When called without the required side-effect import, the
+stub logs a helpful `console.warn` pointing to the tree-shaking documentation, instead of
+crashing. The stubs are **overwritten** when the real register function runs — zero impact
+for users who import the side-effect module correctly.
+
+### Implementation
+
+**Utility functions** — added to `Misc/devTools.ts`:
+
+- `_MissingSideEffect(className, methodName)` — returns a stub function that warns once
+- `_MissingSideEffectProperty(className, propName)` — returns a `{ get, configurable: true }` descriptor
+
+**Automation script** — `scripts/treeshaking/generateSideEffectStubs.mjs`:
+
+- Parses all 143 `.types.ts` files to extract `declare module` blocks
+- Handles multi-line method signatures (parenthesis depth tracking)
+- Handles nested object type literals (brace depth tracking)
+- Skips `_`-prefixed internal members
+- Resolves `declare module` paths to target source files (prefers `.pure.ts`)
+- Injects stubs between `#region GENERATED_SIDE_EFFECT_STUBS` markers (idempotent)
+- Usage: `npm run generate:side-effect-stubs` (or `--dry-run`, `--verbose`)
+
+**Stub patterns**:
+
+```typescript
+// Methods — ??= prevents overwriting if real implementation loaded first
+Scene.prototype.getPhysicsEngine ??= _MissingSideEffect("Scene", "getPhysicsEngine") as any;
+
+// Properties — Object.defineProperty with configurable: true
+if (!Object.getOwnPropertyDescriptor(Scene.prototype, "debugLayer")) {
+    Object.defineProperty(Scene.prototype, "debugLayer", _MissingSideEffectProperty("Scene", "debugLayer"));
+}
+```
+
+**Warning output**:
+
+```
+[Babylon.js] Scene.getPhysicsEngine() requires a side-effect import.
+  See: https://doc.babylonjs.com/setup/treeshaking
+```
+
+### Results
+
+- [x] **11.1** — Added `_MissingSideEffect` and `_MissingSideEffectProperty` to `Misc/devTools.ts`
+- [x] **11.2** — Created automation script: `scripts/treeshaking/generateSideEffectStubs.mjs`
+- [x] **11.3** — Generated stubs across 21 target class files
+- [x] **11.4** — TypeScript compilation: ✅ zero errors
+- [x] **11.5** — Bundle smoke tests: ✅ all pass
+
+### Stub Coverage
+
+| Target File                               |   Stubs | Note                                    |
+| ----------------------------------------- | ------: | --------------------------------------- |
+| `scene.pure.ts`                           |      78 | Scene methods + properties              |
+| `Engines/abstractEngine.ts`               |     108 | Engine states, stencil, textures, etc.  |
+| `Meshes/mesh.pure.ts`                     |      18 | Thin instances, particles, simplify     |
+| `Meshes/abstractMesh.pure.ts`             |      18 | Occlusion, physics, decals, edges       |
+| `Engines/engine.pure.ts`                  |      13 | Multiview, transform feedback, textures |
+| `Engines/thinEngine.ts`                   |       8 | Uniform buffers, time queries           |
+| `Meshes/transformNode.ts`                 |       5 | Physics v2 body/impulse/torque          |
+| `Cameras/freeCameraInputsManager.ts`      |       3 | Device orientation, joystick, gamepad   |
+| `Misc/observable.ts`                      |       3 | Promise notifications, coroutines       |
+| `Materials/effect.ts`                     |       3 | Post-process textures, depth stencil    |
+| `Buffers/buffer.pure.ts`                  |       3 | Effective byte stride/offset/buffer     |
+| `Cameras/arcRotateCameraInputsManager.ts` |       2 | VR orientation, gamepad                 |
+| `Materials/Textures/baseTexture.pure.ts`  |       2 | Spherical polynomial                    |
+| `Meshes/linesMesh.pure.ts`                |       2 | Edge rendering for lines                |
+| 7 other files                             |       7 | 1 each (bone, material, subMesh, etc.)  |
+| **Total**                                 | **273** | 215 methods + 58 properties             |
+
+### Size Impact
+
+| Component                | Minified   | Gzipped   |
+| ------------------------ | ---------- | --------- |
+| Shared utility functions | ~200 bytes | ~120 B    |
+| 273 stub assignments     | ~16 KB     | ~3-4 KB   |
+| **Total**                | **~16 KB** | **~4 KB** |
 
 ---
 

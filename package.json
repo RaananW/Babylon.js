@@ -100,6 +100,7 @@
         "split:register-class": "node ./scripts/treeshaking/splitRegisterClass.mjs",
         "inject:pure-annotations": "node ./scripts/treeshaking/injectPureAnnotations.mjs",
         "generate:pure-barrels": "node ./scripts/treeshaking/generatePureBarrels.mjs",
+        "generate:side-effect-stubs": "node ./scripts/treeshaking/generateSideEffectStubs.mjs",
         "test:treeshaking": "node ./scripts/treeshaking/bundleSmokeTest.mjs",
         "check:manifest-drift": "node ./scripts/treeshaking/checkManifestDrift.mjs",
         "catalog:static-helpers": "node ./scripts/treeshaking/catalogStaticHelpers.mjs",

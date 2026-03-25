@@ -362,3 +362,10 @@ export function registerLinesMesh(): void {
         return LinesMesh.Parse(parsedMesh, scene);
     };
 }
+
+// #region GENERATED_SIDE_EFFECT_STUBS — do not edit, regenerate with `npm run generate:side-effect-stubs`
+import { _MissingSideEffect, _MissingSideEffectProperty } from "../Misc/devTools";
+
+LinesMesh.prototype.enableEdgesRendering ??= _MissingSideEffect("LinesMesh", "enableEdgesRendering") as any;
+InstancedLinesMesh.prototype.enableEdgesRendering ??= _MissingSideEffect("InstancedLinesMesh", "enableEdgesRendering") as any;
+// #endregion GENERATED_SIDE_EFFECT_STUBS

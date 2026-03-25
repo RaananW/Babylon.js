@@ -3039,3 +3039,11 @@ export abstract class PBRBaseMaterial extends PBRBaseMaterialBase {
         super.dispose(forceDisposeEffect, forceDisposeTextures);
     }
 }
+
+// #region GENERATED_SIDE_EFFECT_STUBS — do not edit, regenerate with `npm run generate:side-effect-stubs`
+import { _MissingSideEffect, _MissingSideEffectProperty } from "../../Misc/devTools";
+
+if (!Object.getOwnPropertyDescriptor(PBRBaseMaterial.prototype, "decalMap")) {
+    Object.defineProperty(PBRBaseMaterial.prototype, "decalMap", _MissingSideEffectProperty("PBRBaseMaterial", "decalMap"));
+}
+// #endregion GENERATED_SIDE_EFFECT_STUBS
