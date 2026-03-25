@@ -292,6 +292,30 @@ Server.registerTool(
 );
 
 Server.registerTool(
+    "write_accessor_data",
+    {
+        description:
+            "Write float data back into an accessor's binary buffer. " +
+            "Converts from float values to the accessor's native component type (BYTE, SHORT, INT, FLOAT, etc.), handling normalization and byte stride. " +
+            "The data array length must equal accessor.count × componentCount. " +
+            "Use read_accessor_data first to inspect the current values, then modify and write back. " +
+            "This enables manipulation of vertex positions, normals, UVs, animation keyframes, weights, and any other accessor-backed data.",
+        inputSchema: {
+            name: NameSchema,
+            accessorIndex: AccessorIndexSchema,
+            data: z.array(z.number()).describe("Flat array of float values to write. Length must equal count × componentCount of the accessor."),
+        },
+    },
+    async ({ name, accessorIndex, data }) => {
+        const result = Manager.writeAccessorData(name, accessorIndex, data);
+        if (result) {
+            return CreateErrorResponse(result);
+        }
+        return CreateTextResponse(`Successfully wrote ${data.length} values to accessor ${accessorIndex}.`);
+    }
+);
+
+Server.registerTool(
     "describe_sampler",
     {
         description: "Describe a sampler: mag/min filter, wrap modes.",

@@ -1132,4 +1132,97 @@ describe("GltfManager — Accessor Data", () => {
         expect(typeof result).toBe("string");
         expect(result).toContain("Error");
     });
+
+    it("writes VEC3 FLOAT position data and reads it back", () => {
+        // Write new positions: (2,3,4), (5,6,7), (8,9,10)
+        const newData = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+        const writeResult = mgr.writeAccessorData("doc", 0, newData);
+        expect(writeResult).toBeNull();
+
+        const readResult = mgr.readAccessorData("doc", 0);
+        expect(typeof readResult).not.toBe("string");
+        if (typeof readResult === "string") return;
+        expect(readResult.count).toBe(3);
+        expect(readResult.componentCount).toBe(3);
+        for (let i = 0; i < 9; i++) {
+            expect(readResult.data[i]).toBeCloseTo(newData[i]);
+        }
+    });
+
+    it("writes SCALAR UNSIGNED_SHORT index data and reads it back", () => {
+        const newData = [10, 20, 30];
+        const writeResult = mgr.writeAccessorData("doc", 1, newData);
+        expect(writeResult).toBeNull();
+
+        const readResult = mgr.readAccessorData("doc", 1);
+        expect(typeof readResult).not.toBe("string");
+        if (typeof readResult === "string") return;
+        expect(readResult.data).toEqual([10, 20, 30]);
+    });
+
+    it("writes VEC4 UNSIGNED_BYTE normalized color data and reads it back", () => {
+        // Write normalized values — they'll be quantized to 0..255
+        const newData = [0.5, 0.25, 0.75, 1.0, 0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 1.0, 1.0];
+        const writeResult = mgr.writeAccessorData("doc", 2, newData);
+        expect(writeResult).toBeNull();
+
+        const readResult = mgr.readAccessorData("doc", 2);
+        expect(typeof readResult).not.toBe("string");
+        if (typeof readResult === "string") return;
+        // Values are quantized to 0..255 then normalized back — some precision loss
+        expect(readResult.data[0]).toBeCloseTo(0.5, 1);
+        expect(readResult.data[1]).toBeCloseTo(0.25, 1);
+        expect(readResult.data[2]).toBeCloseTo(0.75, 1);
+        expect(readResult.data[3]).toBeCloseTo(1.0, 1);
+    });
+
+    it("returns error for wrong data length", () => {
+        // Accessor 0 expects 9 values (3 × VEC3), give it 6
+        const result = mgr.writeAccessorData("doc", 0, [1, 2, 3, 4, 5, 6]);
+        expect(typeof result).toBe("string");
+        expect(result).toContain("Expected 9");
+    });
+
+    it("returns error for non-existent document on write", () => {
+        const result = mgr.writeAccessorData("nothere", 0, [0, 0, 0]);
+        expect(typeof result).toBe("string");
+        expect(result).toContain("Error");
+    });
+
+    it("creates buffer and bufferView when writing to accessor with no bufferView", () => {
+        const doc = mgr._getDocumentForTest("doc")!;
+        delete doc.accessors![0].bufferView;
+
+        const newData = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        const writeResult = mgr.writeAccessorData("doc", 0, newData);
+        expect(writeResult).toBeNull();
+
+        // Verify the accessor now has a bufferView
+        expect(doc.accessors![0].bufferView).toBeDefined();
+
+        // Read back the data
+        const readResult = mgr.readAccessorData("doc", 0);
+        expect(typeof readResult).not.toBe("string");
+        if (typeof readResult === "string") return;
+        for (let i = 0; i < 9; i++) {
+            expect(readResult.data[i]).toBeCloseTo(newData[i]);
+        }
+    });
+
+    it("does not corrupt other accessor data when writing", () => {
+        // Read original index data
+        const originalIndices = mgr.readAccessorData("doc", 1);
+        expect(typeof originalIndices).not.toBe("string");
+        if (typeof originalIndices === "string") return;
+
+        // Write new positions (accessor 0)
+        const writeResult = mgr.writeAccessorData("doc", 0, [10, 20, 30, 40, 50, 60, 70, 80, 90]);
+        expect(writeResult).toBeNull();
+
+        // Verify indices (accessor 1, same buffer) are unchanged
+        const indicesAfter = mgr.readAccessorData("doc", 1);
+        expect(typeof indicesAfter).not.toBe("string");
+        if (typeof indicesAfter === "string") return;
+        expect(indicesAfter.data).toEqual(originalIndices.data);
+    });
 });

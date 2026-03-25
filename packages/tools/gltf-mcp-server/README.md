@@ -33,11 +33,12 @@ npx babylonjs-gltf
 - `delete_gltf` — Remove a document from memory
 - `clone_gltf` — Deep-clone a document under a new name
 
-### 2. Inspection & Data Access (19 tools)
+### 2. Inspection & Data Access (20 tools)
 
 - `describe_gltf` — Full document summary: metadata, counts, extensions, warnings
 - `describe_scene`, `describe_node`, `describe_mesh`, `describe_material`, `describe_animation`, `describe_skin`, `describe_texture`, `describe_image`, `describe_accessor`, `describe_sampler` — Detailed per-object descriptions
 - `read_accessor_data` — Decode binary accessor data into a flat float array (handles stride, normalization, and component type conversion using Babylon.js core buffer utilities)
+- `write_accessor_data` — Write float data back into an accessor's binary buffer (handles conversion to native component type, normalization, byte stride). Enables manipulation of vertex positions, normals, UVs, animation keyframes, weights, and any other accessor-backed data.
 - `list_scenes`, `list_nodes`, `list_meshes`, `list_materials`, `list_animations`, `list_textures`, `list_extensions` — Listing/summary tools
 
 ### 3. Node & Scene Editing (11 tools)
@@ -113,7 +114,7 @@ When loading `.gltf` files from disk, external buffers (`.bin`) and images (`.pn
 
 The preview server at `http://localhost:8766/` serves a self-contained viewer page that loads Babylon.js from CDN and fetches the model from the same server (same-origin). It also provides direct GLB/JSON download endpoints and an "Open in Sandbox" link. The model is re-exported on every request, so refreshing the page always shows the latest state.
 
-**Total: 88 tools**
+**Total: 89 tools**
 
 ## Example Workflows
 
@@ -146,10 +147,38 @@ The preview server at `http://localhost:8766/` serves a self-contained viewer pa
 6. export_glb(name: "Helmet", outputFile: "/path/to/modified.glb")
 ```
 
+### Manipulate geometry
+
+```
+1. load_gltf(name: "Model", jsonFile: "/path/to/model.gltf")
+2. describe_mesh(name: "Model", meshIndex: 0)
+   — Shows primitive attributes, e.g. POSITION: accessor 0, NORMAL: accessor 1
+3. read_accessor_data(name: "Model", accessorIndex: 0)
+   — Returns vertex positions as [x,y,z, x,y,z, ...]
+4. write_accessor_data(name: "Model", accessorIndex: 0, data: [modified positions...])
+   — Scale, translate, or deform the mesh
+5. start_preview(name: "Model") — See the result
+```
+
+### Manipulate animation keyframes
+
+```
+1. load_gltf(name: "Anim", jsonFile: "/path/to/animated.gltf")
+2. describe_animation(name: "Anim", animationIndex: 0)
+   — Shows channels with input (time) and output (value) accessor indices
+3. read_accessor_data(name: "Anim", accessorIndex: <input>)
+   — Returns keyframe timestamps
+4. read_accessor_data(name: "Anim", accessorIndex: <output>)
+   — Returns keyframe values (translation, rotation, scale, or weights)
+5. write_accessor_data(name: "Anim", accessorIndex: <output>, data: [modified values...])
+   — Edit animation curves
+6. start_preview(name: "Anim") — Play the modified animation
+```
+
 ## Limitations & Follow-Up Items
 
-- **Binary buffer reading**: Buffer data can be read via `read_accessor_data` (positions, normals, UVs, indices, animation keyframes, etc.) but writing/creating new accessor data is not yet supported. Meshes added via `add_mesh` have empty attribute maps.
-- **Animation authoring**: Animation channels/samplers can be inspected and their keyframe data read via `read_accessor_data`, but creating new animation data is not yet supported.
+- **Binary buffer data**: Accessor data can be read and written via `read_accessor_data`/`write_accessor_data` (positions, normals, UVs, indices, animation keyframes, weights, etc.). Writing preserves the accessor's element count — changing the number of vertices or keyframes requires creating new accessors.
+- **Animation authoring**: Animation keyframes can be read and modified via accessor data tools. Creating entirely new animations (new channels/samplers) from scratch is not yet supported.
 - **Skin authoring**: Skins can be inspected and removed but not created from scratch.
 
 ## Architecture
@@ -162,7 +191,7 @@ The preview server at `http://localhost:8766/` serves a self-contained viewer pa
 
 ### Key Design Decisions
 
-- **Minimal engine dependency**: The server never instantiates a Babylon `Engine`, `Scene`, or `SceneSerializer`. All operations are pure JSON manipulation on `IGLTF` objects. The only import from `@dev/core` is the `bufferUtils` module (and its lightweight dependencies `Constants` and `Logger`), which provides binary accessor data decoding — type-aware TypedArray construction, byte stride handling, and normalization. Rollup tree-shakes the rest of core out of the bundle.
+- **Minimal engine dependency**: The server never instantiates a Babylon `Engine`, `Scene`, or `SceneSerializer`. All operations are pure JSON manipulation on `IGLTF` objects. The only import from `@dev/core` is the `bufferUtils` module (and its lightweight dependencies `Constants` and `Logger`), which provides binary accessor data encoding/decoding — type-aware TypedArray construction, byte stride handling, normalization, and float-to-native-type conversion. Rollup tree-shakes the rest of core out of the bundle.
 - **ESM module**: Uses dynamic `await import("node:fs")` / `await import("node:path")` for file operations (no `require()`).
 - **External buffer resolution**: When loading a `.gltf` from disk, all referenced `.bin` buffers and image files are read and converted to `data:` URIs so the document is fully self-contained.
 - **GLB export**: Manually assembles the GLB binary (12-byte header + JSON chunk + BIN chunk with 4-byte alignment padding). Decodes data-URI buffers into raw bytes for the BIN chunk.

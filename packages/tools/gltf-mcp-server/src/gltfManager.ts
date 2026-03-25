@@ -19,7 +19,7 @@ import type {
     GltfExtensionTargetType,
 } from "./gltfTypes.js";
 
-import { GetTypeByteLength, GetTypedArrayConstructor, GetFloatData } from "@dev/core/Buffers/bufferUtils";
+import { GetTypeByteLength, GetFloatData, EnumerateFloatValues } from "@dev/core/Buffers/bufferUtils";
 
 /* ------------------------------------------------------------------ */
 /*  Helper utilities                                                   */
@@ -596,6 +596,22 @@ export class GltfManager {
     }
 
     /**
+     * Encodes a Uint8Array back into the buffer's data URI.
+     */
+    private _setBufferBytes(doc: IGltfDocument, bufferIndex: number, bytes: Uint8Array): void {
+        const buf = ArrayOrEmpty(doc.buffers)[bufferIndex];
+        if (!buf) {
+            return;
+        }
+        let binary = "";
+        for (let i = 0; i < bytes.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        buf.uri = `data:application/octet-stream;base64,${btoa(binary)}`;
+        buf.byteLength = bytes.length;
+    }
+
+    /**
      * Reads the data of an accessor as a flat Float32Array.
      * Handles byte stride, normalization, and component type conversion
      * using the utilities from @dev/core bufferUtils.
@@ -641,6 +657,78 @@ export class GltfManager {
             componentCount: numComponents,
             count: acc.count,
         };
+    }
+
+    /**
+     * Writes float data back into an accessor's binary buffer.
+     * Converts from float values to the accessor's native component type,
+     * handling normalization and byte stride.
+     * The data array length must equal accessor.count * numComponents.
+     */
+    writeAccessorData(name: string, accessorIndex: number, data: number[]): string | null {
+        const doc = this._getDoc(name);
+        if (typeof doc === "string") {
+            return doc;
+        }
+        const accessors = ArrayOrEmpty(doc.accessors);
+        if (accessorIndex < 0 || accessorIndex >= accessors.length) {
+            return `Error: Accessor index ${accessorIndex} out of range (0..${accessors.length - 1}).`;
+        }
+        const acc = accessors[accessorIndex];
+        const numComponents = GltfManager._getNumComponents(acc.type);
+        const expectedLength = acc.count * numComponents;
+
+        if (data.length !== expectedLength) {
+            return `Error: Expected ${expectedLength} values (${acc.count} elements × ${numComponents} components), got ${data.length}.`;
+        }
+
+        if (acc.bufferView === undefined) {
+            // Create a new buffer and bufferView for this accessor
+            const componentByteLength = GetTypeByteLength(acc.componentType);
+            const byteLength = acc.count * numComponents * componentByteLength;
+            const bytes = new Uint8Array(byteLength);
+            const buffers = EnsureArray<{ uri?: string; byteLength: number }>(doc as unknown as Record<string, unknown>, "buffers");
+            const bufferIndex = buffers.length;
+            buffers.push({ byteLength, uri: "" });
+            this._setBufferBytes(doc, bufferIndex, bytes);
+
+            const bufferViews = EnsureArray<{ buffer: number; byteOffset: number; byteLength: number }>(doc as unknown as Record<string, unknown>, "bufferViews");
+            const bvIndex = bufferViews.length;
+            bufferViews.push({ buffer: bufferIndex, byteOffset: 0, byteLength });
+            acc.bufferView = bvIndex;
+            acc.byteOffset = 0;
+        }
+
+        const bufferViews = ArrayOrEmpty(doc.bufferViews);
+        const bv = bufferViews[acc.bufferView];
+        if (!bv) {
+            return `Error: Buffer view ${acc.bufferView} not found.`;
+        }
+
+        const bufferBytes = this._getBufferBytes(doc, bv.buffer);
+        if (!bufferBytes) {
+            return `Error: Cannot read buffer ${bv.buffer} — no data URI present.`;
+        }
+
+        const componentByteLength = GetTypeByteLength(acc.componentType);
+        const defaultStride = numComponents * componentByteLength;
+        const byteStride = bv.byteStride ?? defaultStride;
+        const byteOffset = (bv.byteOffset ?? 0) + (acc.byteOffset ?? 0);
+
+        // Use EnumerateFloatValues to write data back — the callback replaces
+        // values in-place, and the function handles the conversion from float
+        // to the native component type (including normalization).
+        let dataIdx = 0;
+        EnumerateFloatValues(bufferBytes, byteOffset, byteStride, numComponents, acc.componentType, expectedLength, acc.normalized ?? false, (values) => {
+            for (let i = 0; i < numComponents; i++) {
+                values[i] = data[dataIdx++];
+            }
+        });
+
+        // Write the modified bytes back to the buffer's data URI
+        this._setBufferBytes(doc, bv.buffer, bufferBytes);
+
+        return null;
     }
 
     describeSampler(name: string, samplerIndex: number): string {
