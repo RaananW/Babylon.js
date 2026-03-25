@@ -435,7 +435,7 @@ export const evaluatePrepareScene = async ({
                         .replace(/^\s*export\s+default\s+\w+\s*;?\s*$/gm, "")
                         .replace(/^\s*export\s+default\s+(?=(?:async\s+)?function\b|class\b)/gm, "")
                         .replace(/^\s*export\s+(?=const\b|let\b|var\b|(?:async\s+)?function\b|class\b)/gm, "")
-                        .replace(/^\s*export\s*\{[^}]*\}(?:\s*from\s*['"][^'"]*['"])\s*;?\s*$/gm, "")
+                        .replace(/^\s*export\s*\{[^}]*\}(?:\s*from\s*['"][^'"]*['"])?\s*;?\s*$/gm, "")
                         .replace(/^\s*export\s*\*\s*(?:from\s*['"][^'"]*['"])?\s*;?\s*$/gm, "");
                 } else {
                     code = payload.code.toString();
@@ -471,6 +471,8 @@ export const evaluatePrepareScene = async ({
                     sceneCall = "delayCreateScene(engine)";
                 } else if (/\bdelayLoadScene\b/.test(code)) {
                     sceneCall = "delayLoadScene(engine)";
+                } else if (/\bCreateScene\b/.test(code) && !/\bcreateScene\b/.test(code)) {
+                    sceneCall = "CreateScene(engine)";
                 } else {
                     sceneCall = "createScene(engine)";
                 }
