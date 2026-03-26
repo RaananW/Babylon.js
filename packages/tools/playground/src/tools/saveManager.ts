@@ -136,7 +136,7 @@ export class SaveManager {
             if (result.version && result.version !== "0") {
                 newUrl += "#" + result.version;
             }
-            this.globalState.currentSnippetRevision = `#${result.version}`;
+            this.globalState.currentSnippetRevision = result.version;
             this._replaceUrlSilently(newUrl);
         }
 

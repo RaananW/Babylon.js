@@ -219,7 +219,7 @@ describe("SaveManager", () => {
 
             const [, options] = mockSaveSnippet.mock.calls[0];
             expect(options.snippetId).toBe("EXIST1");
-            expect(globalState.currentSnippetRevision).toBe("#3");
+            expect(globalState.currentSnippetRevision).toBe("3");
         });
     });
 
