@@ -22,6 +22,9 @@ interface IPageLike {
 /** Supported scenario groups. */
 export type ScenarioSuite = "ci" | "extended" | "packages" | "all";
 
+/** Valid suite values for runtime validation. */
+export const ValidScenarioSuites: readonly ScenarioSuite[] = ["ci", "extended", "packages", "all"];
+
 interface IBaseScenarioDefinition {
     /** Stable identifier used by the CLI. */
     id: string;

@@ -66,4 +66,16 @@ describe("memory leak runner", () => {
 
         await expect(runScenarioSuite({ suite: "ci", scenarioIds: ["core-playground-T90MQ4-14"] })).rejects.toBeInstanceOf(MemoryLeakRunnerError);
     });
+
+    it("throws when an invalid suite is passed to ParseCliArgs", async () => {
+        const { parseCliArgs } = await loadRunnerModules();
+
+        expect(() => parseCliArgs(["--suite", "bogus"])).toThrow(/Unknown suite "bogus"/);
+    });
+
+    it("throws when the resolved scenario set is empty", async () => {
+        const { runScenarioSuite } = await loadRunnerModules();
+
+        await expect(runScenarioSuite({ suite: "ci", scenarioIds: ["nonexistent-scenario-id"] })).rejects.toThrow(/Unknown memory leak scenario/);
+    });
 });

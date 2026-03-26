@@ -127,6 +127,9 @@ export async function RunScenario(
 export async function RunScenarioSuite(options: IMemoryLeakRunnerOptions = {}): Promise<IMemoryLeakScenarioResult[]> {
     const config = GetGlobalConfig(options.configOverride);
     const definitions = ResolveScenarioDefinitions(options.suite ?? "ci", options.scenarioIds);
+    if (definitions.length === 0) {
+        throw new Error(`No memory leak scenarios matched the requested suite or scenario IDs (suite: "${options.suite ?? "ci"}").`);
+    }
     const results: IMemoryLeakScenarioResult[] = [];
 
     await RunScenarioDefinitionsSequentiallyAsync(definitions, options, config, results);

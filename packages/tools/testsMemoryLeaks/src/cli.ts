@@ -1,4 +1,4 @@
-import { DefaultScenarioDefinitions, type ScenarioSuite } from "./scenarios";
+import { DefaultScenarioDefinitions, ValidScenarioSuites, type ScenarioSuite } from "./scenarios";
 import { RunScenarioSuite, type IMemoryLeakRunnerOptions } from "./runner";
 
 const GetArgValue = (argv: string[], name: string): string | undefined => {
@@ -26,7 +26,11 @@ const WriteStdoutLine = (message: string) => {
  * @returns Parsed runner options and control flags.
  */
 export function ParseCliArgs(argv: string[]) {
-    const suite = (GetArgValue(argv, "suite") as ScenarioSuite | undefined) ?? "ci";
+    const suiteArg = GetArgValue(argv, "suite");
+    if (suiteArg !== undefined && !ValidScenarioSuites.includes(suiteArg as ScenarioSuite)) {
+        throw new Error(`Unknown suite "${suiteArg}". Valid suites: ${ValidScenarioSuites.join(", ")}.`);
+    }
+    const suite: ScenarioSuite = (suiteArg as ScenarioSuite | undefined) ?? "ci";
     const scenarioArg = GetArgValue(argv, "scenario");
     const scenarioIds = scenarioArg
         ?.split(",")
