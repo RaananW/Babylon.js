@@ -799,7 +799,7 @@ export abstract class Light extends Node implements ISortableLight {
 
         const oldSplice = array.splice;
         array.splice = (index: number, deleteCount?: number) => {
-            const deleted = oldSplice.apply(array, [index, deleteCount]);
+            const deleted = oldSplice.apply(array, [index, deleteCount!]);
 
             for (const item of deleted) {
                 item._resyncLightSource(this);
@@ -825,7 +825,7 @@ export abstract class Light extends Node implements ISortableLight {
 
         const oldSplice = array.splice;
         array.splice = (index: number, deleteCount?: number) => {
-            const deleted = oldSplice.apply(array, [index, deleteCount]);
+            const deleted = oldSplice.apply(array, [index, deleteCount!]);
 
             this._resyncMeshes();
 
