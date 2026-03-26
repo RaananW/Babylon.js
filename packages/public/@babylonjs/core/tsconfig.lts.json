@@ -2,20 +2,17 @@
     "extends": "../../../../tsconfig.build.json",
     "compilerOptions": {
         "outDir": "./",
-        "rootDir": "../../../dev/proceduralTextures/src",
+        "rootDir": "../../../lts/core/src",
         "declaration": true,
-        "importHelpers": true,
         "target": "ES2020",
+        "importHelpers": true,
         "paths": {
             "core/*": [
                 "dev/core/dist/*"
-            ],
-            "procedural-textures/*": [
-                "dev/proceduralTextures/src/*"
             ]
         }
     },
     "include": [
-        "../../../dev/proceduralTextures/src/**/*"
+        "../../../lts/core/src/**/*"
     ]
 }
