@@ -91,7 +91,7 @@ export class ShaderStore {
             while (ShaderStore._PendingIncludesLoaders.length > 0) {
                 const loaders = ShaderStore._PendingIncludesLoaders.splice(0);
                 // eslint-disable-next-line no-await-in-loop
-                await Promise.all(loaders.map((fn) => fn()));
+                await Promise.all(loaders.map(async (fn) => await fn()));
             }
         });
     }
