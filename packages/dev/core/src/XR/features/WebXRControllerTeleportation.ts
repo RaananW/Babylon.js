@@ -1035,8 +1035,9 @@ export class WebXRMotionControllerTeleportation extends WebXRAbstractFeature {
     /**
      * Computes the parabolic ray origin and direction for teleportation.
      * The effective radius scales with the horizontal component of the controller direction,
-     * so pointing more vertically results in shorter landing distances and pointing
-     * horizontally results in landing at approximately `parabolicCheckRadius`.
+     * so pointing more vertically results in shorter landing distances.
+     * Note: the actual landing distance also depends on controller height above the floor;
+     * `parabolicCheckRadius` controls the forward offset, not a strict max ground distance.
      * Modifies the ray in place — the new origin serves as both the raycast start
      * and the Bezier control point for the visual arc.
      * @param ray - The controller ray (origin at controller, direction is forward). Modified in place.
