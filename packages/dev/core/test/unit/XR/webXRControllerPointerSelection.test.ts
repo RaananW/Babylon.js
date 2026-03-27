@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 import { NullEngine } from "core/Engines";
@@ -27,8 +27,8 @@ function createMockXRInput() {
     return {
         controllers: [],
         xrCamera: {},
-        onControllerAddedObservable: { add: jest.fn(), removeCallback: jest.fn() },
-        onControllerRemovedObservable: { add: jest.fn(), removeCallback: jest.fn() },
+        onControllerAddedObservable: { add: vi.fn(), removeCallback: vi.fn() },
+        onControllerRemovedObservable: { add: vi.fn(), removeCallback: vi.fn() },
     } as any;
 }
 
@@ -86,8 +86,8 @@ describe("WebXRControllerPointerSelection", () => {
         for (const c of controllers) {
             controllersMap[c.uniqueId] = {
                 xrController: createMockController(c.uniqueId, c.handedness),
-                laserPointer: { isVisible: false, material: { alpha: 0 }, dispose: jest.fn() },
-                selectionMesh: { isVisible: false, material: {}, dispose: jest.fn() },
+                laserPointer: { isVisible: false, material: { alpha: 0 }, dispose: vi.fn() },
+                selectionMesh: { isVisible: false, material: {}, dispose: vi.fn() },
                 meshUnderPointer: null,
                 pick: null,
                 tmpRay: {},
@@ -231,14 +231,17 @@ describe("WebXRControllerPointerSelection", () => {
             leftData.pointerDownTriggered = true;
             leftData.finalPointerUpTriggered = false;
 
-            const simulatePointerUpSpy = jest.spyOn(scene, "simulatePointerUp");
+            const simulatePointerUpSpy = vi.spyOn(scene, "simulatePointerUp");
+            const isPointerCapturedSpy = vi.spyOn(scene, "isPointerCaptured").mockReturnValue(true);
 
             feature.setAttachedController("right");
 
             expect(simulatePointerUpSpy).toHaveBeenCalledTimes(1);
+            expect(leftData.pointerDownTriggered).toBe(false);
             expect(leftData.finalPointerUpTriggered).toBe(true);
 
             simulatePointerUpSpy.mockRestore();
+            isPointerCapturedSpy.mockRestore();
         });
 
         it("does not simulate pointer up if no pointer was down on previous controller", () => {
@@ -252,7 +255,7 @@ describe("WebXRControllerPointerSelection", () => {
                 "ctrl-left"
             );
 
-            const simulatePointerUpSpy = jest.spyOn(scene, "simulatePointerUp");
+            const simulatePointerUpSpy = vi.spyOn(scene, "simulatePointerUp");
 
             feature.setAttachedController("right");
 
@@ -266,8 +269,8 @@ describe("WebXRControllerPointerSelection", () => {
         it("returns empty string when no controller is attached", () => {
             const feature = createFeature();
             // No controllers injected, _attachedController is undefined by default
-            // but the getter should handle it
-            expect(feature.attachedControllerId).toBeFalsy();
+            // but the getter returns empty string per the public contract
+            expect(feature.attachedControllerId).toBe("");
         });
 
         it("returns the unique id of the attached controller", () => {

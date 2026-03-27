@@ -371,7 +371,7 @@ export class WebXRControllerPointerSelection extends WebXRAbstractFeature {
      * @returns the unique id of the attached controller, or an empty string if none is attached
      */
     public get attachedControllerId(): string {
-        return this._attachedController;
+        return this._attachedController || "";
     }
 
     /**
@@ -408,17 +408,10 @@ export class WebXRControllerPointerSelection extends WebXRAbstractFeature {
                     break;
                 }
             }
-            // Update preferredHandedness so reconnections respect the new preference
-            (this._options as IWebXRControllerPointerSelectionOptions).preferredHandedness = controllerId;
         } else {
             // Treat as a controller unique id
             if (this._controllers[controllerId]) {
                 targetUniqueId = controllerId;
-                // Update preferredHandedness based on the target controller's handedness
-                const targetData = this._controllers[controllerId];
-                if (targetData.xrController) {
-                    (this._options as IWebXRControllerPointerSelectionOptions).preferredHandedness = targetData.xrController.inputSource.handedness;
-                }
             }
         }
 
@@ -426,13 +419,26 @@ export class WebXRControllerPointerSelection extends WebXRAbstractFeature {
             return false;
         }
 
+        // Update preferredHandedness only after confirming the switch will happen
+        if (controllerId === "left" || controllerId === "right" || controllerId === "none") {
+            (this._options as IWebXRControllerPointerSelectionOptions).preferredHandedness = controllerId;
+        } else {
+            const targetData = this._controllers[targetUniqueId];
+            if (targetData.xrController) {
+                (this._options as IWebXRControllerPointerSelectionOptions).preferredHandedness = targetData.xrController.inputSource.handedness;
+            }
+        }
+
         // Properly finalize pointer state on the previous controller
         const prevControllerData = this._controllers[this._attachedController];
-        if (prevControllerData && prevControllerData.pointerDownTriggered && !prevControllerData.finalPointerUpTriggered) {
-            this._scene.simulatePointerUp(prevControllerData.pick || new PickingInfo(), {
+        if (prevControllerData && prevControllerData.pointerDownTriggered && !prevControllerData.finalPointerUpTriggered && this._scene.isPointerCaptured(prevControllerData.id)) {
+            const pointerEventInit: PointerEventInit = {
                 pointerId: prevControllerData.id,
                 pointerType: "xr",
-            });
+            };
+            this._augmentPointerInit(pointerEventInit, prevControllerData.id, prevControllerData.screenCoordinates);
+            this._scene.simulatePointerUp(prevControllerData.pick || new PickingInfo(), pointerEventInit);
+            prevControllerData.pointerDownTriggered = false;
             prevControllerData.finalPointerUpTriggered = true;
         }
 
