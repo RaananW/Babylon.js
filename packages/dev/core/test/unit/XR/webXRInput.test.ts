@@ -19,16 +19,7 @@ function createMockInputSource(overrides: Partial<XRInputSource> = {}): XRInputS
         targetRaySpace: {} as XRSpace,
         gripSpace: {} as XRSpace,
         profiles: ["generic-trigger"],
-        gamepad: {
-            axes: [0, 0, 0, 0],
-            buttons: [{ pressed: false, touched: false, value: 0 }],
-            connected: true,
-            hapticActuators: [],
-            id: "mock-gamepad",
-            index: 0,
-            mapping: "xr-standard",
-            timestamp: 0,
-        } as any,
+        gamepad: null as any,
         ...overrides,
     } as XRInputSource;
 }

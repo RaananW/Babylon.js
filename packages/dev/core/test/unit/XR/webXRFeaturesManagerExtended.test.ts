@@ -11,6 +11,8 @@ import { Observable } from "core/Misc/observable";
 import { beforeEach, afterEach, describe, it, expect, vi } from "vitest";
 
 let featureCounter = 0;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let savedAvailableFeatures: Record<string, any>;
 
 /**
  * Returns a unique feature name for each call to avoid static registry pollution between tests.
@@ -62,6 +64,7 @@ describe("WebXRFeaturesManager – extended", () => {
     let featuresManager: WebXRFeaturesManager;
 
     beforeEach(() => {
+        savedAvailableFeatures = { ...(WebXRFeaturesManager as any)._AvailableFeatures };
         engine = new NullEngine({
             renderHeight: 256,
             renderWidth: 256,
@@ -78,6 +81,7 @@ describe("WebXRFeaturesManager – extended", () => {
         featuresManager.dispose();
         scene.dispose();
         engine.dispose();
+        (WebXRFeaturesManager as any)._AvailableFeatures = savedAvailableFeatures;
     });
 
     describe("static feature registration", () => {

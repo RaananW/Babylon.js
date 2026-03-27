@@ -50,7 +50,7 @@ describe("WebXRSessionManager", () => {
             expect(sessionManager.currentTimestamp).toBe(-1);
         });
 
-        it("has null currentFrame by default", () => {
+        it("has undefined currentFrame by default", () => {
             expect(sessionManager.currentFrame).toBeUndefined();
         });
     });
