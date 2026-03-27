@@ -37,7 +37,7 @@ export class ConvolutionPostProcess extends PostProcess {
         return "ConvolutionPostProcess";
     }
 
-    protected override _effectWrapper: ThinConvolutionPostProcess;
+    declare protected override _effectWrapper: ThinConvolutionPostProcess;
 
     /**
      * Creates a new instance ConvolutionPostProcess

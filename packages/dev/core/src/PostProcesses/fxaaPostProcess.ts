@@ -25,7 +25,7 @@ export class FxaaPostProcess extends PostProcess {
         return "FxaaPostProcess";
     }
 
-    protected override _effectWrapper: ThinFXAAPostProcess;
+    declare protected override _effectWrapper: ThinFXAAPostProcess;
 
     constructor(
         name: string,

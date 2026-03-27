@@ -14,7 +14,7 @@ import { NodeGeometryBlockConnectionPointTypes } from "core/Meshes/Node/Enums/no
 import { Vector3LineComponent } from "shared-ui-components/lines/vector3LineComponent";
 import { Vector4LineComponent } from "shared-ui-components/lines/vector4LineComponent";
 import type { IEditablePropertyListOption } from "core/Decorators/nodeDecorator";
-import { PropertyTypeForEdition, getEditableProperties, type IPropertyDescriptionForEdition } from "core/Decorators/nodeDecorator";
+import { PropertyTypeForEdition, GetEditableProperties, type IPropertyDescriptionForEdition } from "core/Decorators/nodeDecorator";
 import { ForceRebuild } from "shared-ui-components/nodeGraphSystem/automaticProperties";
 
 export class GenericPropertyComponent extends React.Component<IPropertyComponentProps> {
@@ -146,7 +146,7 @@ export class GenericPropertyTabComponent extends React.Component<IPropertyCompon
 
     override render() {
         const block = this.props.nodeData.data as NodeGeometryBlock,
-            propStore: IPropertyDescriptionForEdition[] = getEditableProperties(block);
+            propStore: IPropertyDescriptionForEdition[] = GetEditableProperties(block);
 
         if (!propStore.length) {
             return <></>;

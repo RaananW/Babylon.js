@@ -100,7 +100,9 @@ export function XmlElem(opts?: { name: XmlName }) {
 export function GetXmlFieldMeta(obj: any): FieldMeta[] {
     const ctor = typeof obj === "function" ? obj : obj?.constructor;
     const metadata: DecoratorMetadataObject | undefined = ctor?.[Symbol.metadata];
-    if (!metadata) return [];
+    if (!metadata) {
+        return [];
+    }
     // Walk metadata chain to collect all field metadata
     const result: FieldMeta[] = [];
     let currentMeta: any = metadata;

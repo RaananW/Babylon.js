@@ -51,7 +51,7 @@ export class SharpenPostProcess extends PostProcess {
         return "SharpenPostProcess";
     }
 
-    protected override _effectWrapper: ThinSharpenPostProcess;
+    declare protected override _effectWrapper: ThinSharpenPostProcess;
 
     /**
      * Creates a new instance ConvolutionPostProcess

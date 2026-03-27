@@ -3,7 +3,7 @@ import { LineContainerComponent } from "../../sharedComponents/lineContainerComp
 import { TextInputLineComponent } from "shared-ui-components/lines/textInputLineComponent.js";
 import { TextLineComponent } from "shared-ui-components/lines/textLineComponent.js";
 import type { IPropertyComponentProps } from "shared-ui-components/nodeGraphSystem/interfaces/propertyComponentProps";
-import { type BaseBlock, PropertyTypeForEdition, type IEditablePropertyOption, type IPropertyDescriptionForEdition, getSmartFilterEditableProperties } from "smart-filters";
+import { type BaseBlock, PropertyTypeForEdition, type IEditablePropertyOption, type IPropertyDescriptionForEdition, GetSmartFilterEditableProperties } from "smart-filters";
 import { CheckBoxLineComponent } from "../../sharedComponents/checkBoxLineComponent.js";
 import { FloatSliderComponent } from "../../sharedComponents/floatSliderComponent.js";
 import { FloatLineComponent } from "shared-ui-components/lines/floatLineComponent.js";
@@ -99,8 +99,8 @@ export class GenericPropertyTabComponent extends react.Component<IPropertyCompon
         // }
 
         // Check if options for a specific block changed
-        const currentOptions = getSmartFilterEditableProperties(this.props.nodeData.data);
-        const prevOptions = getSmartFilterEditableProperties(prevProps.nodeData.data);
+        const currentOptions = GetSmartFilterEditableProperties(this.props.nodeData.data);
+        const prevOptions = GetSmartFilterEditableProperties(prevProps.nodeData.data);
 
         if (JSON.stringify(currentOptions) !== JSON.stringify(prevOptions)) {
             this.forceUpdate();
@@ -109,7 +109,7 @@ export class GenericPropertyTabComponent extends react.Component<IPropertyCompon
 
     override render() {
         const block = this.props.nodeData.data as BaseBlock;
-        const propStore: IPropertyDescriptionForEdition[] = getSmartFilterEditableProperties(block);
+        const propStore: IPropertyDescriptionForEdition[] = GetSmartFilterEditableProperties(block);
 
         if (!propStore.length) {
             return <></>;

@@ -32,7 +32,7 @@ export class BloomMergePostProcess extends PostProcess {
         return "BloomMergePostProcess";
     }
 
-    protected override _effectWrapper: ThinBloomMergePostProcess;
+    declare protected override _effectWrapper: ThinBloomMergePostProcess;
 
     /**
      * Creates a new instance of @see BloomMergePostProcess

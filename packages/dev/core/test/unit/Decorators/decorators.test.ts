@@ -21,7 +21,8 @@ describe("TC39 Decorator Migration", () => {
             expect(store).toBeDefined();
             expect(store["myProp"]).toBeDefined();
             expect(store["myProp"].type).toBe(0); // default type
-            expect(store["renamedProp"]).toBeDefined();
+            expect(store["anotherProp"]).toBeDefined();
+            expect(store["anotherProp"].sourceName).toBe("renamedProp");
         });
 
         it("should merge stores from parent and child classes", () => {

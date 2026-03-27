@@ -79,6 +79,7 @@ export interface IPropertyDescriptionForEdition {
 }
 
 /** @internal */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const __bjsSmartFilterPropStoreKey = "__bjs_sf_prop_store__";
 
 /**
@@ -133,7 +134,7 @@ export function EditableInPropertyPage(
  * @param target - the target object (instance or constructor)
  * @returns array of property descriptions
  */
-export function getSmartFilterEditableProperties(target: any): IPropertyDescriptionForEdition[] {
+export function GetSmartFilterEditableProperties(target: any): IPropertyDescriptionForEdition[] {
     const ctor = typeof target === "function" ? target : target?.constructor;
     const metadata: DecoratorMetadataObject | undefined = ctor?.[Symbol.metadata];
     if (!metadata) {

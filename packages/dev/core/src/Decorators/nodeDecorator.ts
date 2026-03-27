@@ -128,6 +128,7 @@ export function editableInPropertyPage(
 }
 
 /** @internal */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const __bjsPropStoreKey = "__bjs_prop_store__";
 
 /**
@@ -136,7 +137,7 @@ export const __bjsPropStoreKey = "__bjs_prop_store__";
  * @param target - the target object (instance or constructor)
  * @returns array of property descriptions
  */
-export function getEditableProperties(target: any): IPropertyDescriptionForEdition[] {
+export function GetEditableProperties(target: any): IPropertyDescriptionForEdition[] {
     const ctor = typeof target === "function" ? target : target?.constructor;
     const metadata: DecoratorMetadataObject | undefined = ctor?.[Symbol.metadata];
     if (!metadata) {

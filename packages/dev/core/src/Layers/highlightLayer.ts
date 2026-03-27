@@ -63,7 +63,7 @@ interface IBlurPostProcess extends PostProcess {
  * It enforces keeping the most luminous color in the color channel.
  */
 class GlowBlurPostProcess extends PostProcess {
-    protected override _effectWrapper: ThinGlowBlurPostProcess;
+    declare protected override _effectWrapper: ThinGlowBlurPostProcess;
 
     constructor(
         name: string,

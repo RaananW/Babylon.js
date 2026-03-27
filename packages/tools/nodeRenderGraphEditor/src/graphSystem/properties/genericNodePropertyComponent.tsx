@@ -13,7 +13,7 @@ import { Color4LineComponent } from "shared-ui-components/lines/color4LineCompon
 import { MatrixLineComponent } from "shared-ui-components/lines/matrixLineComponent";
 import type { NodeRenderGraphBlock } from "core/FrameGraph/Node/nodeRenderGraphBlock";
 import type { IEditablePropertyListOption, IPropertyDescriptionForEdition } from "core/Decorators/nodeDecorator";
-import { PropertyTypeForEdition, getEditableProperties } from "core/Decorators/nodeDecorator";
+import { PropertyTypeForEdition, GetEditableProperties } from "core/Decorators/nodeDecorator";
 import { Constants } from "core/Engines/constants";
 import { ForceRebuild } from "shared-ui-components/nodeGraphSystem/automaticProperties";
 import { Color3LineComponent } from "shared-ui-components/lines/color3LineComponent";
@@ -145,7 +145,7 @@ export class GenericPropertyTabComponent extends React.Component<IPropertyCompon
 
     override render() {
         const block = this.props.nodeData.data as NodeRenderGraphBlock,
-            propStore: IPropertyDescriptionForEdition[] = getEditableProperties(block);
+            propStore: IPropertyDescriptionForEdition[] = GetEditableProperties(block);
 
         if (!propStore.length) {
             return <></>;

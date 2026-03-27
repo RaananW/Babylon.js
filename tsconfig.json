@@ -3,6 +3,7 @@
 
     "compilerOptions": {
         "baseUrl": "packages",
+        "useDefineForClassFields": false,
         "noImplicitAny": true,
         "noImplicitOverride": true,
         "noImplicitReturns": true,

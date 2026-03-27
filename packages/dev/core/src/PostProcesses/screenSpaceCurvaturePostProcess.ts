@@ -56,7 +56,7 @@ export class ScreenSpaceCurvaturePostProcess extends PostProcess {
         return "ScreenSpaceCurvaturePostProcess";
     }
 
-    protected override _effectWrapper: ThinScreenSpaceCurvaturePostProcess;
+    declare protected override _effectWrapper: ThinScreenSpaceCurvaturePostProcess;
 
     /**
      * Creates a new instance ScreenSpaceCurvaturePostProcess

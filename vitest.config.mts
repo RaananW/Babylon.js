@@ -50,7 +50,20 @@ const createProjectConfig = (type: string) => {
     };
 };
 
+// TC39 decorators migration: removing experimentalDecorators changes esbuild's
+// default class field semantics. Explicitly keep assignment semantics to prevent
+// type-only field overrides from shadowing parent constructor assignments.
+const esbuildConfig = {
+    target: "es2021" as const,
+    tsconfigRaw: {
+        compilerOptions: {
+            useDefineForClassFields: false,
+        },
+    },
+};
+
 export default defineConfig({
+    esbuild: esbuildConfig,
     resolve: {
         alias: {
             ...aliases,
@@ -64,6 +77,7 @@ export default defineConfig({
         outputFile: process.env.CI ? { junit: "./junit.xml" } : undefined,
         projects: [
             {
+                esbuild: esbuildConfig,
                 test: createProjectConfig("unit"),
                 resolve: {
                     alias: aliases,

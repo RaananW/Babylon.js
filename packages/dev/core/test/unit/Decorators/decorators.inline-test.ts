@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Quick inline test to verify TC39 decorators work correctly.
  * Run with: npx ts-node --esm --project tsconfig.test.json packages/dev/core/test/unit/Decorators/decorators.inline-test.ts

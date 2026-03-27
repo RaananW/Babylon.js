@@ -3,7 +3,7 @@ import { LineContainerComponent } from "shared-ui-components/lines/lineContainer
 import { CheckBoxLineComponent } from "../../sharedComponents/checkBoxLineComponent";
 import type { InputBlock } from "core/Materials/Node/Blocks/Input/inputBlock";
 import type { IPropertyDescriptionForEdition, IEditablePropertyListOption } from "core/Decorators/nodeDecorator";
-import { PropertyTypeForEdition, getEditableProperties } from "core/Decorators/nodeDecorator";
+import { PropertyTypeForEdition, GetEditableProperties } from "core/Decorators/nodeDecorator";
 import { NodeMaterialBlockTargets } from "core/Materials/Node/Enums/nodeMaterialBlockTargets";
 import type { NodeMaterialBlock } from "core/Materials/Node/nodeMaterialBlock";
 import type { IPropertyComponentProps } from "shared-ui-components/nodeGraphSystem/interfaces/propertyComponentProps";
@@ -139,7 +139,7 @@ type GenericContent = {
 };
 function GetGenericPropertiesContent(stateManager: StateManager, nodeData: INodeData): GenericContent | undefined {
     const block = nodeData.data as NodeMaterialBlock,
-        propStore: IPropertyDescriptionForEdition[] = getEditableProperties(block);
+        propStore: IPropertyDescriptionForEdition[] = GetEditableProperties(block);
 
     if (!propStore.length) {
         return undefined;

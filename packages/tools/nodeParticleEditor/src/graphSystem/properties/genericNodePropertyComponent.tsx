@@ -10,7 +10,7 @@ import { FloatLineComponent } from "shared-ui-components/lines/floatLineComponen
 import { SliderLineComponent } from "shared-ui-components/lines/sliderLineComponent";
 import { Vector3LineComponent } from "shared-ui-components/lines/vector3LineComponent";
 import type { IEditablePropertyListOption } from "core/Decorators/nodeDecorator";
-import { PropertyTypeForEdition, getEditableProperties, type IPropertyDescriptionForEdition } from "core/Decorators/nodeDecorator";
+import { PropertyTypeForEdition, GetEditableProperties, type IPropertyDescriptionForEdition } from "core/Decorators/nodeDecorator";
 import { ForceRebuild } from "shared-ui-components/nodeGraphSystem/automaticProperties";
 import { NodeParticleBlockConnectionPointTypes } from "core/Particles/Node/Enums/nodeParticleBlockConnectionPointTypes";
 import type { NodeParticleConnectionPoint } from "core/Particles/Node/nodeParticleBlockConnectionPoint";
@@ -143,7 +143,7 @@ export class GenericPropertyTabComponent extends React.Component<IPropertyCompon
 
     override render() {
         const block = this.props.nodeData.data as NodeParticleBlock,
-            propStore: IPropertyDescriptionForEdition[] = getEditableProperties(block);
+            propStore: IPropertyDescriptionForEdition[] = GetEditableProperties(block);
 
         if (!propStore.length) {
             return <></>;

@@ -15,7 +15,7 @@ import type { IPortData } from "./interfaces/portData";
 import * as localStyles from "./graphNode.module.scss";
 import * as commonStyles from "./common.module.scss";
 import type { IEditablePropertyListOption, IEditablePropertyOption, IPropertyDescriptionForEdition } from "core/Decorators/nodeDecorator";
-import { getEditableProperties } from "core/Decorators/nodeDecorator";
+import { GetEditableProperties } from "core/Decorators/nodeDecorator";
 import { PropertyTypeForEdition } from "core/Decorators/nodeDecorator";
 import { ForceRebuild } from "./automaticProperties";
 import dropdownArrowIcon from "../imgs/dropdownArrowIcon_white.svg";
@@ -906,7 +906,7 @@ export class GraphNode {
         }
 
         // Options
-        const propStore: IPropertyDescriptionForEdition[] = getEditableProperties(this.content.data);
+        const propStore: IPropertyDescriptionForEdition[] = GetEditableProperties(this.content.data);
         if (propStore.length) {
             const source = this.content.data;
 

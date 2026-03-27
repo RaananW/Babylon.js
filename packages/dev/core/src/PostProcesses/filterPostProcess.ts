@@ -34,7 +34,7 @@ export class FilterPostProcess extends PostProcess {
         return "FilterPostProcess";
     }
 
-    protected override _effectWrapper: ThinFilterPostProcess;
+    declare protected override _effectWrapper: ThinFilterPostProcess;
 
     /**
      *
