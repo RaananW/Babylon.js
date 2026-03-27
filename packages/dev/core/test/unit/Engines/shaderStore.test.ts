@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
+import { AsyncLock } from "core/Misc/asyncLock";
 import { ShaderStore } from "core/Engines/shaderStore";
 
 describe("ShaderStore", () => {
@@ -6,8 +7,8 @@ describe("ShaderStore", () => {
         beforeEach(() => {
             // Reset state between tests
             ShaderStore._PendingIncludesLoaders.length = 0;
-            // Force clear any in-flight promise by accessing private field
-            (ShaderStore as any)._CurrentLoadingPromise = null;
+            // Reset the AsyncLock so no test can leak a pending lock into the next
+            (ShaderStore as any)._LoadLock = new AsyncLock();
         });
 
         it("resolves immediately when no loaders are pending", async () => {
@@ -43,41 +44,49 @@ describe("ShaderStore", () => {
             expect(ShaderStore._PendingIncludesLoaders).toHaveLength(0);
         });
 
-        it("concurrent callers share the same loading promise", async () => {
+        it("concurrent callers serialize via lock — loader is called exactly once", async () => {
             let resolveLoader: () => void;
             const loaderPromise = new Promise<void>((r) => (resolveLoader = r));
             const loader = vi.fn().mockReturnValue(loaderPromise);
             ShaderStore._PendingIncludesLoaders.push(loader);
 
-            // Start two concurrent calls
+            // Start two concurrent callers
             const p1 = ShaderStore.LoadPendingIncludesAsync();
             const p2 = ShaderStore.LoadPendingIncludesAsync();
-
-            // Loader should only be called once despite two callers
-            expect(loader).toHaveBeenCalledOnce();
 
             resolveLoader!();
             await Promise.all([p1, p2]);
 
+            // Loader should be called exactly once: the second caller finds the queue empty
+            expect(loader).toHaveBeenCalledOnce();
             expect(ShaderStore._PendingIncludesLoaders).toHaveLength(0);
         });
 
-        it("clears in-flight promise after completion", async () => {
+        it("lock is released after successful completion", async () => {
             const loader = vi.fn().mockResolvedValue(undefined);
             ShaderStore._PendingIncludesLoaders.push(loader);
 
             await ShaderStore.LoadPendingIncludesAsync();
 
-            expect((ShaderStore as any)._CurrentLoadingPromise).toBeNull();
+            // Calling again with a new loader should work — lock must be free
+            const loader2 = vi.fn().mockResolvedValue(undefined);
+            ShaderStore._PendingIncludesLoaders.push(loader2);
+            await ShaderStore.LoadPendingIncludesAsync();
+            expect(loader2).toHaveBeenCalledOnce();
         });
 
-        it("clears in-flight promise even if a loader rejects", async () => {
+        it("lock is released even if a loader rejects", async () => {
             const error = new Error("loader failed");
             const loader = vi.fn().mockRejectedValue(error);
             ShaderStore._PendingIncludesLoaders.push(loader);
 
             await expect(ShaderStore.LoadPendingIncludesAsync()).rejects.toThrow("loader failed");
-            expect((ShaderStore as any)._CurrentLoadingPromise).toBeNull();
+
+            // Subsequent call should not hang — lock must be free
+            const loader2 = vi.fn().mockResolvedValue(undefined);
+            ShaderStore._PendingIncludesLoaders.push(loader2);
+            await ShaderStore.LoadPendingIncludesAsync();
+            expect(loader2).toHaveBeenCalledOnce();
         });
 
         it("second caller picks up loaders added after first batch finishes", async () => {

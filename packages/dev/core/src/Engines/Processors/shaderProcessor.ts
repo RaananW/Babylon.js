@@ -61,8 +61,6 @@ export function Process(sourceCode: string, options: _IProcessingOptions, callba
     if (options.processor?.preProcessShaderCode) {
         sourceCode = options.processor.preProcessShaderCode(sourceCode, options.isFragment);
     }
-    // Pre-strip conditional blocks so that #include directives inside disabled #ifdef blocks are never resolved.
-    sourceCode = PreStripConditionalIncludes(sourceCode, options, engine);
     ProcessIncludes(sourceCode, options, (codeWithIncludes) => {
         if (options.processCodeAfterIncludes) {
             codeWithIncludes = options.processCodeAfterIncludes(options.isFragment ? "fragment" : "vertex", codeWithIncludes, options.defines);
@@ -77,8 +75,6 @@ export function PreProcess(sourceCode: string, options: _IProcessingOptions, cal
     if (options.processor?.preProcessShaderCode) {
         sourceCode = options.processor.preProcessShaderCode(sourceCode, options.isFragment);
     }
-    // Pre-strip conditional blocks so that #include directives inside disabled #ifdef blocks are never resolved.
-    sourceCode = PreStripConditionalIncludes(sourceCode, options, engine);
     ProcessIncludes(sourceCode, options, (codeWithIncludes) => {
         if (options.processCodeAfterIncludes) {
             codeWithIncludes = options.processCodeAfterIncludes(options.isFragment ? "fragment" : "vertex", codeWithIncludes, options.defines);
