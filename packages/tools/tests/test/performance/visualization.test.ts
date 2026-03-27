@@ -20,8 +20,7 @@ import * as fs from "fs";
 const enabled = process.env.VISUALIZATION_PERF === "true";
 
 const configPath = path.join(__dirname, "..", "visualization", "config.json");
-const configRaw = fs.readFileSync(configPath, "utf-8").replace(/^\uFEFF/, "");
-const configData = JSON.parse(configRaw);
+const configData = enabled ? JSON.parse(fs.readFileSync(configPath, "utf-8").replace(/^\uFEFF/, "")) : { tests: [] };
 
 interface VisualizationTest {
     title: string;

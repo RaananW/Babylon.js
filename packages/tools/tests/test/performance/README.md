@@ -23,13 +23,13 @@ npx playwright install --with-deps
 npm run test:performance
 
 # Only scene tests
-npx playwright test --config playwright.config.ts packages/tools/tests/test/performance/scene.test.ts
+npx playwright test --project=performance --config playwright.config.ts packages/tools/tests/test/performance/scene.test.ts
 
 # Only playground tests
-npx playwright test --config playwright.config.ts packages/tools/tests/test/performance/playgrounds.test.ts
+npx playwright test --project=performance --config playwright.config.ts packages/tools/tests/test/performance/playgrounds.test.ts
 
 # A single test
-npx playwright test --config playwright.config.ts packages/tools/tests/test/performance/scene.test.ts --grep "default scene"
+npx playwright test --project=performance --config playwright.config.ts packages/tools/tests/test/performance/scene.test.ts --grep "default scene"
 ```
 
 ## Comparing Specific CDN Versions

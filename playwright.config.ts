@@ -9,7 +9,15 @@ const browserType = process.env.BROWSER || (isCI ? "Firefox" : "Chrome");
 const numberOfWorkers = process.env.CIWORKERS ? +process.env.CIWORKERS : process.env.CI ? 1 : browserType === "BrowserStack" ? 1 : 4;
 
 // Include the performance summary reporter only when running performance tests
-const isPerformanceRun = process.argv.some((arg) => arg === "performance" || arg === "--project=performance");
+const isPerformanceRun = (() => {
+    const argv = process.argv;
+    for (let i = 0; i < argv.length; i++) {
+        if (argv[i] === "--project=performance" || argv[i] === "-p=performance") return true;
+        if ((argv[i] === "--project" || argv[i] === "-p") && argv[i + 1] === "performance") return true;
+        if (argv[i].includes("/test/performance/") || argv[i].includes("\\test\\performance\\")) return true;
+    }
+    return false;
+})();
 const baseReporters: any[] = isCI ? [["line"], ["junit", { outputFile: "junit.xml" }], ["html", { open: "never" }]] : [["list"], ["html"]];
 if (isPerformanceRun) {
     baseReporters.push(["./packages/tools/tests/performanceSummaryReporter.ts"]);

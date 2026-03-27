@@ -673,7 +673,9 @@ export const collectPerformanceSamples = async (
     let url: string;
     if (type === "dev") {
         url = baseUrl + "/empty.html";
-    } else if (opts.cdnVersion && opts.cdnVersion !== "latest") {
+    } else if (opts.cdnVersion === "latest") {
+        url = "https://cdn.babylonjs.com/empty.html";
+    } else if (opts.cdnVersion) {
         url = `https://cdn.babylonjs.com/v${opts.cdnVersion}/empty.html`;
     } else {
         url = baseUrl + `/empty-${type}.html`;
@@ -827,11 +829,12 @@ export const comparePerformance = async (
 
     // If it looks like a regression and measurements are reliable, run confirmation passes
     if (!initial.passed && opts.confirmationPasses > 0) {
+        const effectiveConfirmationPasses = Math.max(opts.confirmationPasses, opts.trimCount * 2 + 3);
         console.log(
-            `[PERF] Initial result indicates regression (ratio: ${initial.ratio.toFixed(4)}, p: ${initial.pValue.toFixed(4)}). Running ${opts.confirmationPasses} confirmation passes...`
+            `[PERF] Initial result indicates regression (ratio: ${initial.ratio.toFixed(4)}, p: ${initial.pValue.toFixed(4)}). Running ${effectiveConfirmationPasses} confirmation passes...`
         );
 
-        const confirmOpts = { ...opts, numberOfPasses: opts.confirmationPasses, warmupPasses: 1, confirmationPasses: 0 };
+        const confirmOpts = { ...opts, numberOfPasses: effectiveConfirmationPasses, warmupPasses: 1, confirmationPasses: 0 };
         const stableConfirm = await collectPerformanceSamples(page, baseUrl, "stable", createSceneFunction, confirmOpts, evaluateArg);
         let devConfirm: PerformanceResult;
         if (opts.cdnVersionB) {
