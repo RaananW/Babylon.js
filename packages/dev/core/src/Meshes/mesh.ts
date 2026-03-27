@@ -2275,10 +2275,12 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
                 }
                 world.copyToArray(instanceStorage.instancesData, offset);
 
-                // Apply floatingOriginOffset to underlying data sent to buffer
-                instanceStorage.instancesData[offset + 12] -= floatingOriginOffset.x;
-                instanceStorage.instancesData[offset + 13] -= floatingOriginOffset.y;
-                instanceStorage.instancesData[offset + 14] -= floatingOriginOffset.z;
+                // Apply floatingOriginOffset to underlying data sent to buffer.
+                // Subtract from Float64 source to preserve precision at large coordinates.
+                const worldM = world.asArray();
+                instanceStorage.instancesData[offset + 12] = worldM[12] - floatingOriginOffset.x;
+                instanceStorage.instancesData[offset + 13] = worldM[13] - floatingOriginOffset.y;
+                instanceStorage.instancesData[offset + 14] = worldM[14] - floatingOriginOffset.z;
 
                 offset += 16;
                 instancesCount++;
@@ -2310,10 +2312,12 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
                         }
                     }
 
-                    // Apply floatingOriginOffset to underlying data sent to buffer
-                    instanceStorage.instancesData[offset + 12] -= floatingOriginOffset.x;
-                    instanceStorage.instancesData[offset + 13] -= floatingOriginOffset.y;
-                    instanceStorage.instancesData[offset + 14] -= floatingOriginOffset.z;
+                    // Apply floatingOriginOffset to underlying data sent to buffer.
+                    // Subtract from Float64 source to preserve precision at large coordinates.
+                    const matrixM = matrix.asArray();
+                    instanceStorage.instancesData[offset + 12] = matrixM[12] - floatingOriginOffset.x;
+                    instanceStorage.instancesData[offset + 13] = matrixM[13] - floatingOriginOffset.y;
+                    instanceStorage.instancesData[offset + 14] = matrixM[14] - floatingOriginOffset.z;
 
                     offset += 16;
                     instancesCount++;
@@ -3498,8 +3502,8 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
             Vector2.FromArrayToRef(uvs, (index / 3) * 2, uv);
 
             // Compute height
-            const u = (Math.abs(uv.x * uvScale.x + (uvOffset.x % 1)) * (heightMapWidth - 1)) % heightMapWidth | 0;
-            const v = (Math.abs(uv.y * uvScale.y + (uvOffset.y % 1)) * (heightMapHeight - 1)) % heightMapHeight | 0;
+            const u = ((Math.abs(uv.x * uvScale.x + (uvOffset.x % 1)) * (heightMapWidth - 1)) % heightMapWidth) | 0;
+            const v = ((Math.abs(uv.y * uvScale.y + (uvOffset.y % 1)) * (heightMapHeight - 1)) % heightMapHeight) | 0;
 
             const pos = (u + v * heightMapWidth) * 4;
             const r = buffer[pos] / 255.0;
