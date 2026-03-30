@@ -50,7 +50,7 @@ export class ExtractHighlightsPostProcess extends PostProcess {
         return "ExtractHighlightsPostProcess";
     }
 
-    declare protected override _effectWrapper: ThinExtractHighlightsPostProcess;
+    declare protected _effectWrapper: ThinExtractHighlightsPostProcess;
 
     constructor(
         name: string,

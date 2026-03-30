@@ -1,5 +1,5 @@
 /* eslint-disable vitest/no-conditional-expect */
-import { Logger } from "../../src";
+import { Logger } from "../../src/index.js";
 import { SmartFilter } from "../../src/smartFilter.js";
 import { ImportCustomBlockDefinition } from "../../src/serialization/importCustomBlockDefinition.js";
 import { CustomShaderBlock } from "../../src/blockFoundation/customShaderBlock.js";

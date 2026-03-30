@@ -35,7 +35,7 @@ export class BlackAndWhitePostProcess extends PostProcess {
         return "BlackAndWhitePostProcess";
     }
 
-    declare protected override _effectWrapper: ThinBlackAndWhitePostProcess;
+    declare protected _effectWrapper: ThinBlackAndWhitePostProcess;
 
     /**
      * Creates a black and white post process

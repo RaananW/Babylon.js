@@ -107,7 +107,7 @@ export class MotionBlurPostProcess extends PostProcess {
         return "MotionBlurPostProcess";
     }
 
-    declare protected override _effectWrapper: ThinMotionBlurPostProcess;
+    declare protected _effectWrapper: ThinMotionBlurPostProcess;
 
     /**
      * Creates a new instance MotionBlurPostProcess

@@ -75,7 +75,7 @@ export class CircleOfConfusionPostProcess extends PostProcess {
         return "CircleOfConfusionPostProcess";
     }
 
-    declare protected override _effectWrapper: ThinCircleOfConfusionPostProcess;
+    declare protected _effectWrapper: ThinCircleOfConfusionPostProcess;
     private _depthTexture: Nullable<RenderTargetTexture> = null;
 
     /**

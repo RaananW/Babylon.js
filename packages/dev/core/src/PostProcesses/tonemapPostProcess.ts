@@ -47,7 +47,7 @@ export class TonemapPostProcess extends PostProcess {
         return "TonemapPostProcess";
     }
 
-    declare protected override _effectWrapper: ThinTonemapPostProcess;
+    declare protected _effectWrapper: ThinTonemapPostProcess;
 
     /**
      * Creates a new TonemapPostProcess

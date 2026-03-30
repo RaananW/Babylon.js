@@ -116,7 +116,7 @@ export class PassCubePostProcess extends PostProcess {
         return "PassCubePostProcess";
     }
 
-    declare protected override _effectWrapper: ThinPassCubePostProcess;
+    declare protected _effectWrapper: ThinPassCubePostProcess;
 
     /**
      * Creates the PassCubePostProcess
