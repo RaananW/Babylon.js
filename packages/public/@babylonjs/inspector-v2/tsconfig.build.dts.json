@@ -5,7 +5,5 @@
         "declaration": true,
         "emitDeclarationOnly": true
     },
-    "include": [
-        "../../../dev/inspector-v2/src/**/*"
-    ]
+    "include": ["../../../dev/inspector-v2/src/**/*"]
 }
