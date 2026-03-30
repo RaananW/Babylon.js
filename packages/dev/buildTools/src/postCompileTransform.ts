@@ -2,7 +2,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { transformPackageLocation } from "./pathTransform.js";
-import type { BuildType } from "./packageMapping.js";
+import { type BuildType } from "./packageMapping.js";
 import { checkArgs } from "./utils.js";
 
 /**
