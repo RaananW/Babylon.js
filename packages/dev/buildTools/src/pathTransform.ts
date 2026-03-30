@@ -54,7 +54,7 @@ export const transformPackageLocation = (location: string, options: ITransformer
         }
         return AddJS(computedPath, options.appendJS);
     }
-    if (!basePackage || !isValidDevPackageName(basePackage, true) || declarationsOnlyPackages.indexOf(basePackage) !== -1) {
+    if (!basePackage || !isValidDevPackageName(basePackage) || declarationsOnlyPackages.indexOf(basePackage) !== -1) {
         return;
     }
 

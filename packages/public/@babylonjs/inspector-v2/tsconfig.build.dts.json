@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.build.lib.json",
+    "compilerOptions": {
+        "rootDir": "../../../dev/inspector-v2/src",
+        "declaration": true,
+        "emitDeclarationOnly": true
+    },
+    "include": [
+        "../../../dev/inspector-v2/src/**/*"
+    ]
+}

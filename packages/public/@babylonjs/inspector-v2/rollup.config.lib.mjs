@@ -1,9 +1,9 @@
 import typescript from "@rollup/plugin-typescript";
-import { dts } from "rollup-plugin-dts";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import alias from "@rollup/plugin-alias";
 import path from "path";
+import { rewriteDevImports, appendJsToExternalPaths } from "../../rollupUtils.mjs";
 
 // Map dev package names to their public @babylonjs/ equivalents.
 // Must be ordered longest-first to prevent prefix collisions (e.g. gui vs gui-editor).
@@ -16,29 +16,6 @@ const devPackageMap = {
     addons: "@babylonjs/addons",
     core: "@babylonjs/core",
     gui: "@babylonjs/gui",
-};
-
-// Custom plugin to rewrite bare dev package imports to @babylonjs/ scoped packages
-function rewriteDevImports() {
-    return {
-        name: "rewrite-dev-imports",
-        resolveId(source) {
-            for (const [pkg, replacement] of Object.entries(devPackageMap)) {
-                if (replacement && (source === pkg || source.startsWith(pkg + "/"))) {
-                    return { id: replacement + source.slice(pkg.length), external: true };
-                }
-            }
-            return null;
-        },
-    };
-}
-
-// Append .js extension to @babylonjs/ subpath imports for ESM compatibility
-const appendJsToExternalPaths = (id) => {
-    if (/^@babylonjs\/[^/]+\/.+/.test(id) && !id.endsWith(".js")) {
-        return id + ".js";
-    }
-    return id;
 };
 
 const commonConfig = {
@@ -78,7 +55,7 @@ const jsConfig = {
         paths: appendJsToExternalPaths,
     },
     plugins: [
-        rewriteDevImports(),
+        rewriteDevImports(devPackageMap),
         alias({ entries: [{ find: "shared-ui-components", replacement: path.resolve("../../../dev/sharedUiComponents/src") }] }),
         typescript({ tsconfig: "tsconfig.build.lib.json" }),
         nodeResolve({ mainFields: ["browser", "module", "main"] }),
@@ -90,18 +67,4 @@ const jsConfig = {
     },
 };
 
-const dtsConfig = {
-    ...commonConfig,
-    output: {
-        file: "lib/index.d.ts",
-        format: "es",
-        paths: appendJsToExternalPaths,
-    },
-    plugins: [
-        rewriteDevImports(),
-        alias({ entries: [{ find: "shared-ui-components", replacement: path.resolve("../../../dev/sharedUiComponents/src") }] }),
-        dts({ tsconfig: "tsconfig.build.lib.json" }),
-    ],
-};
-
-export default [jsConfig, dtsConfig];
+export default [jsConfig];
