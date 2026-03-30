@@ -12,7 +12,7 @@
         "build:prod": "webpack --env production",
         "build:declaration": "build-tools -c pud --config ./config.json",
         "clean": "rimraf dist && rimraf babylon*.* -g",
-        "test:escheck": "es-check es6 ./babylonjs.serializers.js"
+        "test:escheck": "es-check es2016 ./babylonjs.serializers.js"
     },
     "dependencies": {
         "babylonjs": "9.0.0",

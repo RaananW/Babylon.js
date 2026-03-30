@@ -12,6 +12,8 @@ import { checkArgs } from "./utils.js";
 const SPECIFIER_PATTERNS = [
     // import ... from "specifier"  /  export ... from "specifier"
     /((?:from|module)\s+)(["'])([^"']+)\2/g,
+    // import "specifier"  (side-effect import, no bindings)
+    /(import\s+)(["'])([^"']+)\2(\s*;)/g,
     // require("specifier")
     /(require\s*\(\s*)(["'])([^"']+)\2(\s*\))/g,
     // import("specifier")  (dynamic import)
