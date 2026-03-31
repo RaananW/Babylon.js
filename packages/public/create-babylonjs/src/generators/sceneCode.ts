@@ -1,6 +1,6 @@
 import type { ProjectOptions } from "../index";
 
-const GLTF_MODEL_URL = "https://assets.babylonjs.com/meshes/BoomBox.glb";
+const GLTF_MODEL_URL = "https://assets.babylonjs.com/meshes/boombox.glb";
 
 // ES6 scene code — tree-shakeable imports
 function es6Scene(language: "ts" | "js"): string {

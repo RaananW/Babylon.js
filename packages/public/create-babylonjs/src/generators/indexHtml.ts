@@ -51,7 +51,7 @@ export function generateIndexHtml(options: ProjectOptions): string {
             });
 
             // Load a glTF model
-            await BABYLON.SceneLoader.AppendAsync("https://assets.babylonjs.com/meshes/BoomBox.glb", undefined, scene);
+            await BABYLON.SceneLoader.AppendAsync("https://assets.babylonjs.com/meshes/boombox.glb", undefined, scene);
 
             return scene;
         };

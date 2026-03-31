@@ -73,7 +73,7 @@ describe("generateSceneCode", () => {
             expect(code).toContain("engine.runRenderLoop");
             expect(code).toContain("engine.resize()");
             expect(code).toContain("createDefaultEnvironment");
-            expect(code).toContain("BoomBox.glb");
+            expect(code).toContain("boombox.glb");
         }
     });
 });
