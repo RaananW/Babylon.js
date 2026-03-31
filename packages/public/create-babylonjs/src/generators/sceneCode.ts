@@ -15,6 +15,7 @@ import { SceneLoader } from "@babylonjs/core/Loading/sceneLoader";
 import "@babylonjs/core/Helpers/sceneHelpers";
 import "@babylonjs/core/Materials/standardMaterial";
 import "@babylonjs/core/Materials/PBR/pbrMaterial";
+import "@babylonjs/core/Materials/Textures/Loaders/envTextureLoader";
 import "@babylonjs/loaders/glTF";
 
 const canvas = document.getElementById("renderCanvas")${canvasCast};
