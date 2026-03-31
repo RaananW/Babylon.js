@@ -13,7 +13,7 @@ describe("generateSceneCode", () => {
         expect(code).toContain('import { Engine } from "@babylonjs/core/Engines/engine"');
         expect(code).toContain('import { Scene } from "@babylonjs/core/scene"');
         expect(code).toContain("as HTMLCanvasElement");
-        expect(code).toContain('@babylonjs/loaders/glTF');
+        expect(code).toContain("@babylonjs/loaders/glTF");
         expect(code).toContain("SceneLoader.AppendAsync");
         expect(code).toContain("createDefaultEnvironment");
         expect(code).toContain("@babylonjs/core/Helpers/sceneHelpers");
@@ -30,7 +30,7 @@ describe("generateSceneCode", () => {
         const code = generateSceneCode(options);
         expect(code).toContain('import { Engine } from "@babylonjs/core/Engines/engine"');
         expect(code).not.toContain("as HTMLCanvasElement");
-        expect(code).toContain('@babylonjs/loaders/glTF');
+        expect(code).toContain("@babylonjs/loaders/glTF");
     });
 
     it("generates UMD TypeScript scene with BABYLON namespace and loaders import", () => {
