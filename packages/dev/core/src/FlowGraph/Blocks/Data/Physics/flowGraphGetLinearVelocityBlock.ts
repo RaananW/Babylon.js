@@ -35,7 +35,11 @@ export class FlowGraphGetLinearVelocityBlock extends FlowGraphCachedOperationBlo
         if (!physicsBody) {
             return undefined;
         }
-        const result = new Vector3();
+        let result = context._getExecutionVariable<Vector3 | null>(this, "_cachedVelocity", null);
+        if (!result) {
+            result = new Vector3();
+            context._setExecutionVariable(this, "_cachedVelocity", result);
+        }
         physicsBody.getLinearVelocityToRef(result);
         return result;
     }

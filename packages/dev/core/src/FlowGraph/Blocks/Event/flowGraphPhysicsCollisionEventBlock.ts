@@ -14,12 +14,7 @@ import { type Nullable } from "../../../types";
 /**
  * Configuration for the physics collision event block.
  */
-export interface IFlowGraphPhysicsCollisionEventBlockConfiguration extends IFlowGraphBlockConfiguration {
-    /**
-     * The physics body to listen for collisions on.
-     */
-    body?: PhysicsBody;
-}
+export interface IFlowGraphPhysicsCollisionEventBlockConfiguration extends IFlowGraphBlockConfiguration {}
 
 /**
  * @experimental
@@ -58,8 +53,6 @@ export class FlowGraphPhysicsCollisionEventBlock extends FlowGraphEventBlock {
      */
     public readonly distance: FlowGraphDataConnection<number>;
 
-    private _collisionObserver: Nullable<Observer<IPhysicsCollisionEvent>> = null;
-
     /**
      * Constructs a new FlowGraphPhysicsCollisionEventBlock.
      * @param config - optional configuration for the block
@@ -71,7 +64,7 @@ export class FlowGraphPhysicsCollisionEventBlock extends FlowGraphEventBlock {
         public override config?: IFlowGraphPhysicsCollisionEventBlockConfiguration
     ) {
         super(config);
-        this.body = this.registerDataInput("body", RichTypeAny, config?.body);
+        this.body = this.registerDataInput("body", RichTypeAny);
         this.otherBody = this.registerDataOutput("otherBody", RichTypeAny);
         this.point = this.registerDataOutput("point", RichTypeVector3);
         this.normal = this.registerDataOutput("normal", RichTypeVector3);
@@ -90,9 +83,13 @@ export class FlowGraphPhysicsCollisionEventBlock extends FlowGraphEventBlock {
         }
         // Enable collision callbacks on the body
         physicsBody.setCollisionCallbackEnabled(true);
-        this._collisionObserver = physicsBody.getCollisionObservable().add((event) => {
+        const observer = physicsBody.getCollisionObservable().add((event) => {
             this._onCollision(context, event);
         });
+        // Store observer and subscribed body per-context so multi-context usage is safe
+        // and cleanup can target the original body even if the input changes.
+        context._setExecutionVariable(this, "_collisionObserver", observer);
+        context._setExecutionVariable(this, "_subscribedBody", physicsBody);
     }
 
     private _onCollision(context: FlowGraphContext, event: IPhysicsCollisionEvent): void {
@@ -123,14 +120,19 @@ export class FlowGraphPhysicsCollisionEventBlock extends FlowGraphEventBlock {
     /**
      * @internal
      */
-    public override _cancelPendingTasks(_context: FlowGraphContext): void {
-        if (this._collisionObserver) {
-            const physicsBody = this.body.getValue(_context);
-            if (physicsBody) {
-                physicsBody.getCollisionObservable().remove(this._collisionObserver);
+    public override _cancelPendingTasks(context: FlowGraphContext): void {
+        const observer = context._getExecutionVariable<Nullable<Observer<IPhysicsCollisionEvent>>>(this, "_collisionObserver", null);
+        const subscribedBody = context._getExecutionVariable<Nullable<PhysicsBody>>(this, "_subscribedBody", null);
+        if (observer && subscribedBody) {
+            const observable = subscribedBody.getCollisionObservable();
+            observable.remove(observer);
+            // Disable collision callbacks if no other observers remain
+            if (!observable.hasObservers()) {
+                subscribedBody.setCollisionCallbackEnabled(false);
             }
-            this._collisionObserver = null;
         }
+        context._setExecutionVariable(this, "_collisionObserver", null);
+        context._setExecutionVariable(this, "_subscribedBody", null);
     }
 
     /**
