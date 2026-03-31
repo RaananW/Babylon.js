@@ -2,7 +2,7 @@ import { generateSceneCode } from "../../src/generators/sceneCode";
 import type { ProjectOptions } from "../../src/index";
 
 describe("generateSceneCode", () => {
-    it("generates ES6 TypeScript scene with tree-shakeable imports", () => {
+    it("generates ES6 TypeScript scene with tree-shakeable imports and glTF loader", () => {
         const options: ProjectOptions = {
             projectName: "app",
             moduleFormat: "es6",
@@ -13,7 +13,10 @@ describe("generateSceneCode", () => {
         expect(code).toContain('import { Engine } from "@babylonjs/core/Engines/engine"');
         expect(code).toContain('import { Scene } from "@babylonjs/core/scene"');
         expect(code).toContain("as HTMLCanvasElement");
-        expect(code).toContain("@babylonjs/core/Materials/standardMaterial");
+        expect(code).toContain('@babylonjs/loaders/glTF');
+        expect(code).toContain("SceneLoader.AppendAsync");
+        expect(code).toContain("createDefaultEnvironment");
+        expect(code).toContain("@babylonjs/core/Helpers/sceneHelpers");
         expect(code).not.toContain("BABYLON.");
     });
 
@@ -27,9 +30,10 @@ describe("generateSceneCode", () => {
         const code = generateSceneCode(options);
         expect(code).toContain('import { Engine } from "@babylonjs/core/Engines/engine"');
         expect(code).not.toContain("as HTMLCanvasElement");
+        expect(code).toContain('@babylonjs/loaders/glTF');
     });
 
-    it("generates UMD TypeScript scene with BABYLON namespace", () => {
+    it("generates UMD TypeScript scene with BABYLON namespace and loaders import", () => {
         const options: ProjectOptions = {
             projectName: "app",
             moduleFormat: "umd",
@@ -38,8 +42,10 @@ describe("generateSceneCode", () => {
         };
         const code = generateSceneCode(options);
         expect(code).toContain('import * as BABYLON from "babylonjs"');
+        expect(code).toContain('import "babylonjs-loaders"');
         expect(code).toContain("BABYLON.Engine");
-        expect(code).toContain(": BABYLON.Scene");
+        expect(code).toContain("BABYLON.SceneLoader.AppendAsync");
+        expect(code).toContain("createDefaultEnvironment");
     });
 
     it("generates UMD JavaScript scene with BABYLON global", () => {
@@ -51,10 +57,11 @@ describe("generateSceneCode", () => {
         };
         const code = generateSceneCode(options);
         expect(code).toContain("BABYLON.Engine");
+        expect(code).toContain("BABYLON.SceneLoader.AppendAsync");
         expect(code).not.toContain("import ");
     });
 
-    it("always includes resize handler and render loop", () => {
+    it("always includes resize handler, render loop, and environment", () => {
         const combos: ProjectOptions[] = [
             { projectName: "a", moduleFormat: "es6", language: "ts", bundler: "vite" },
             { projectName: "b", moduleFormat: "umd", language: "js", bundler: "webpack" },
@@ -63,6 +70,8 @@ describe("generateSceneCode", () => {
             const code = generateSceneCode(options);
             expect(code).toContain("engine.runRenderLoop");
             expect(code).toContain("engine.resize()");
+            expect(code).toContain("createDefaultEnvironment");
+            expect(code).toContain("BoomBox.glb");
         }
     });
 });

@@ -1,41 +1,48 @@
 import type { ProjectOptions } from "../index";
 
+const GLTF_MODEL_URL = "https://assets.babylonjs.com/meshes/BoomBox.glb";
+
 // ES6 scene code — tree-shakeable imports
 function es6Scene(language: "ts" | "js"): string {
     const canvasCast = language === "ts" ? " as HTMLCanvasElement" : "";
     return `import { Engine } from "@babylonjs/core/Engines/engine";
 import { Scene } from "@babylonjs/core/scene";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
-import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
-import { CreateSphere } from "@babylonjs/core/Meshes/Builders/sphereBuilder";
-import { CreateGround } from "@babylonjs/core/Meshes/Builders/groundBuilder";
+import { SceneLoader } from "@babylonjs/core/Loading/sceneLoader";
 
-// Side-effect import to enable the default material
+// Side-effect imports: these register plugins and augment prototypes at load time
+import "@babylonjs/core/Helpers/sceneHelpers";
 import "@babylonjs/core/Materials/standardMaterial";
+import "@babylonjs/core/Materials/PBR/pbrMaterial";
+import "@babylonjs/loaders/glTF";
 
 const canvas = document.getElementById("renderCanvas")${canvasCast};
 const engine = new Engine(canvas, true);
 
-const createScene = () => {
+const createScene = async () => {
     const scene = new Scene(engine);
 
-    const camera = new ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new Vector3(0, 0, 0), scene);
+    const camera = new ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 1, new Vector3(0, 0.05, 0), scene);
     camera.attachControl(canvas, true);
+    camera.minZ = 0.001;
 
-    const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-    light.intensity = 0.7;
+    // Create a default environment (skybox + ground + environment lighting)
+    scene.createDefaultEnvironment({
+        createGround: true,
+        createSkybox: true,
+    });
 
-    CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
-    CreateGround("ground", { width: 6, height: 6 }, scene);
+    // Load a glTF model
+    await SceneLoader.AppendAsync("${GLTF_MODEL_URL}", undefined, scene);
 
     return scene;
 };
 
-const scene = createScene();
-
-engine.runRenderLoop(() => {
-    scene.render();
+createScene().then((scene) => {
+    engine.runRenderLoop(() => {
+        scene.render();
+    });
 });
 
 window.addEventListener("resize", () => {
@@ -48,29 +55,34 @@ window.addEventListener("resize", () => {
 function umdScene(language: "ts" | "js"): string {
     if (language === "ts") {
         return `import * as BABYLON from "babylonjs";
+import "babylonjs-loaders";
 
 const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
 const engine = new BABYLON.Engine(canvas, true);
 
-const createScene = (): BABYLON.Scene => {
+const createScene = async (): Promise<BABYLON.Scene> => {
     const scene = new BABYLON.Scene(engine);
 
-    const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new BABYLON.Vector3(0, 0, 0), scene);
+    const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 1, new BABYLON.Vector3(0, 0.05, 0), scene);
     camera.attachControl(canvas, true);
+    camera.minZ = 0.001;
 
-    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-    light.intensity = 0.7;
+    // Create a default environment (skybox + ground + environment lighting)
+    scene.createDefaultEnvironment({
+        createGround: true,
+        createSkybox: true,
+    });
 
-    BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
-    BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+    // Load a glTF model
+    await BABYLON.SceneLoader.AppendAsync("${GLTF_MODEL_URL}", undefined, scene);
 
     return scene;
 };
 
-const scene = createScene();
-
-engine.runRenderLoop(() => {
-    scene.render();
+createScene().then((scene) => {
+    engine.runRenderLoop(() => {
+        scene.render();
+    });
 });
 
 window.addEventListener("resize", () => {
@@ -83,25 +95,29 @@ window.addEventListener("resize", () => {
     return `const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas, true);
 
-const createScene = () => {
+const createScene = async () => {
     const scene = new BABYLON.Scene(engine);
 
-    const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new BABYLON.Vector3(0, 0, 0), scene);
+    const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 1, new BABYLON.Vector3(0, 0.05, 0), scene);
     camera.attachControl(canvas, true);
+    camera.minZ = 0.001;
 
-    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-    light.intensity = 0.7;
+    // Create a default environment (skybox + ground + environment lighting)
+    scene.createDefaultEnvironment({
+        createGround: true,
+        createSkybox: true,
+    });
 
-    BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
-    BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+    // Load a glTF model
+    await BABYLON.SceneLoader.AppendAsync("${GLTF_MODEL_URL}", undefined, scene);
 
     return scene;
 };
 
-const scene = createScene();
-
-engine.runRenderLoop(() => {
-    scene.render();
+createScene().then((scene) => {
+    engine.runRenderLoop(() => {
+        scene.render();
+    });
 });
 
 window.addEventListener("resize", () => {

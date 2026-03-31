@@ -2,7 +2,7 @@ import { generateIndexHtml } from "../../src/generators/indexHtml";
 import type { ProjectOptions } from "../../src/index";
 
 describe("generateIndexHtml", () => {
-    it("generates CDN-only HTML with inline script and BABYLON global", () => {
+    it("generates CDN-only HTML with inline script, loaders, and glTF loading", () => {
         const options: ProjectOptions = {
             projectName: "cdn-app",
             moduleFormat: "umd",
@@ -11,7 +11,10 @@ describe("generateIndexHtml", () => {
         };
         const html = generateIndexHtml(options);
         expect(html).toContain("cdn.babylonjs.com/babylon.js");
+        expect(html).toContain("babylonjs.loaders.min.js");
         expect(html).toContain("BABYLON.Engine");
+        expect(html).toContain("BABYLON.SceneLoader.AppendAsync");
+        expect(html).toContain("createDefaultEnvironment");
         expect(html).toContain('<canvas id="renderCanvas">');
     });
 

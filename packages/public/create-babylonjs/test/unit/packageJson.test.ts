@@ -2,7 +2,7 @@ import { generatePackageJson } from "../../src/generators/packageJson";
 import type { ProjectOptions } from "../../src/index";
 
 describe("generatePackageJson", () => {
-    it("generates ES6 + TypeScript + Vite config", () => {
+    it("generates ES6 + TypeScript + Vite config with loaders", () => {
         const options: ProjectOptions = {
             projectName: "test-app",
             moduleFormat: "es6",
@@ -12,6 +12,7 @@ describe("generatePackageJson", () => {
         const result = JSON.parse(generatePackageJson(options));
         expect(result.name).toBe("test-app");
         expect(result.dependencies["@babylonjs/core"]).toBeDefined();
+        expect(result.dependencies["@babylonjs/loaders"]).toBeDefined();
         expect(result.dependencies["babylonjs"]).toBeUndefined();
         expect(result.devDependencies["vite"]).toBeDefined();
         expect(result.devDependencies["typescript"]).toBeDefined();
@@ -19,7 +20,7 @@ describe("generatePackageJson", () => {
         expect(result.type).toBe("module");
     });
 
-    it("generates UMD + JavaScript + Webpack config", () => {
+    it("generates UMD + JavaScript + Webpack config with loaders", () => {
         const options: ProjectOptions = {
             projectName: "umd-app",
             moduleFormat: "umd",
@@ -28,6 +29,7 @@ describe("generatePackageJson", () => {
         };
         const result = JSON.parse(generatePackageJson(options));
         expect(result.dependencies["babylonjs"]).toBeDefined();
+        expect(result.dependencies["babylonjs-loaders"]).toBeDefined();
         expect(result.dependencies["@babylonjs/core"]).toBeUndefined();
         expect(result.devDependencies["webpack"]).toBeDefined();
         expect(result.devDependencies["typescript"]).toBeUndefined();

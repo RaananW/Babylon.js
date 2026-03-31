@@ -7,11 +7,13 @@ export function generatePackageJson(options: ProjectOptions): string {
     const devDeps: Record<string, string> = {};
     const scripts: Record<string, string> = {};
 
-    // Core Babylon.js dependency
+    // Core Babylon.js dependency + loaders
     if (moduleFormat === "es6") {
         deps["@babylonjs/core"] = "^9.0.0";
+        deps["@babylonjs/loaders"] = "^9.0.0";
     } else {
         deps["babylonjs"] = "^9.0.0";
+        deps["babylonjs-loaders"] = "^9.0.0";
     }
 
     // TypeScript

@@ -29,6 +29,7 @@ export function generateIndexHtml(options: ProjectOptions): string {
     <style>${styles}
     </style>
     <script src="https://cdn.babylonjs.com/babylon.js"><\/script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"><\/script>
 </head>
 <body>
     <canvas id="renderCanvas"></canvas>
@@ -36,25 +37,29 @@ export function generateIndexHtml(options: ProjectOptions): string {
         const canvas = document.getElementById("renderCanvas");
         const engine = new BABYLON.Engine(canvas, true);
 
-        const createScene = function () {
+        const createScene = async function () {
             const scene = new BABYLON.Scene(engine);
 
-            const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new BABYLON.Vector3(0, 0, 0), scene);
+            const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 1, new BABYLON.Vector3(0, 0.05, 0), scene);
             camera.attachControl(canvas, true);
+            camera.minZ = 0.001;
 
-            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-            light.intensity = 0.7;
+            // Create a default environment (skybox + ground + environment lighting)
+            scene.createDefaultEnvironment({
+                createGround: true,
+                createSkybox: true,
+            });
 
-            BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
-            BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+            // Load a glTF model
+            await BABYLON.SceneLoader.AppendAsync("https://assets.babylonjs.com/meshes/BoomBox.glb", undefined, scene);
 
             return scene;
         };
 
-        const scene = createScene();
-
-        engine.runRenderLoop(function () {
-            scene.render();
+        createScene().then(function (scene) {
+            engine.runRenderLoop(function () {
+                scene.render();
+            });
         });
 
         window.addEventListener("resize", function () {
