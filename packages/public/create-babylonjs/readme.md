@@ -75,11 +75,11 @@ All bundler-based templates include a `build:prod` script that creates an optimi
 npm run build:prod
 ```
 
-| Bundler | Output | Preview |
-| ------- | ------ | ------- |
-| Vite | `dist/` | `npm run preview` |
-| Webpack | `dist/` | Serve `dist/` with any static server |
-| Rollup | `dist/bundle.js` | Open `index.html` which references `dist/bundle.js` |
+| Bundler | Output           | Preview                                             |
+| ------- | ---------------- | --------------------------------------------------- |
+| Vite    | `dist/`          | `npm run preview`                                   |
+| Webpack | `dist/`          | Serve `dist/` with any static server                |
+| Rollup  | `dist/bundle.js` | Open `index.html` which references `dist/bundle.js` |
 
 Deploy the contents of `dist/` (or the project root for Rollup) to any static hosting provider.
 
