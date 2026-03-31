@@ -33,6 +33,15 @@ export const AllFlowGraphBlocks: { [category: string]: string[] } = {
         "FlowGraphThrottleBlock",
     ],
     Animation: ["FlowGraphPlayAnimationBlock", "FlowGraphStopAnimationBlock", "FlowGraphPauseAnimationBlock", "FlowGraphInterpolationBlock"],
+    Physics__Events: ["FlowGraphPhysicsCollisionEventBlock"],
+    Physics__Actions: [
+        "FlowGraphApplyForceBlock",
+        "FlowGraphApplyImpulseBlock",
+        "FlowGraphSetLinearVelocityBlock",
+        "FlowGraphSetAngularVelocityBlock",
+        "FlowGraphSetPhysicsMotionTypeBlock",
+    ],
+    Physics__Data: ["FlowGraphGetLinearVelocityBlock", "FlowGraphGetAngularVelocityBlock", "FlowGraphGetPhysicsMassPropertiesBlock"],
     Math__Constants: ["FlowGraphEBlock", "FlowGraphPIBlock", "FlowGraphInfBlock", "FlowGraphNaNBlock", "FlowGraphRandomBlock"],
     Math__Arithmetic: [
         "FlowGraphAddBlock",

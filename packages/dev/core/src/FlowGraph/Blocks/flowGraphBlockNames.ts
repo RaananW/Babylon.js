@@ -149,4 +149,14 @@ export const enum FlowGraphBlockNames {
     BezierCurveEasing = "FlowGraphBezierCurveEasing",
     DataSwitch = "FlowGraphDataSwitchBlock",
     DebugBlock = "FlowGraphDebugBlock",
+    // Physics
+    PhysicsCollisionEvent = "FlowGraphPhysicsCollisionEventBlock",
+    PhysicsApplyForce = "FlowGraphApplyForceBlock",
+    PhysicsApplyImpulse = "FlowGraphApplyImpulseBlock",
+    PhysicsSetLinearVelocity = "FlowGraphSetLinearVelocityBlock",
+    PhysicsSetAngularVelocity = "FlowGraphSetAngularVelocityBlock",
+    PhysicsSetMotionType = "FlowGraphSetPhysicsMotionTypeBlock",
+    PhysicsGetLinearVelocity = "FlowGraphGetLinearVelocityBlock",
+    PhysicsGetAngularVelocity = "FlowGraphGetAngularVelocityBlock",
+    PhysicsGetMassProperties = "FlowGraphGetPhysicsMassPropertiesBlock",
 }
