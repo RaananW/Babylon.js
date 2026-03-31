@@ -45,6 +45,8 @@ export function generateIndexHtml(options: ProjectOptions): string {
 
             // Create a default camera that frames the loaded model
             scene.createDefaultCamera(true, true, true);
+            // Rotate the camera to face the front of the model
+            scene.activeCamera.alpha += Math.PI;
 
             // Create a default environment (skybox + ground + environment lighting)
             scene.createDefaultEnvironment({

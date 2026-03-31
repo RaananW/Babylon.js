@@ -28,6 +28,8 @@ const createScene = async () => {
 
     // Create a default camera that frames the loaded model
     scene.createDefaultCamera(true, true, true);
+    // Rotate the camera to face the front of the model
+    scene.activeCamera.alpha += Math.PI;
 
     // Create a default environment (skybox + ground + environment lighting)
     scene.createDefaultEnvironment({
@@ -67,6 +69,8 @@ const createScene = async (): Promise<BABYLON.Scene> => {
 
     // Create a default camera that frames the loaded model
     scene.createDefaultCamera(true, true, true);
+    // Rotate the camera to face the front of the model
+    scene.activeCamera.alpha += Math.PI;
 
     // Create a default environment (skybox + ground + environment lighting)
     scene.createDefaultEnvironment({
@@ -101,6 +105,8 @@ const createScene = async () => {
 
     // Create a default camera that frames the loaded model
     scene.createDefaultCamera(true, true, true);
+    // Rotate the camera to face the front of the model
+    scene.activeCamera.alpha += Math.PI;
 
     // Create a default environment (skybox + ground + environment lighting)
     scene.createDefaultEnvironment({
