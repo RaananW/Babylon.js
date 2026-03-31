@@ -16,6 +16,7 @@ describe("generateSceneCode", () => {
         expect(code).toContain("@babylonjs/loaders/glTF");
         expect(code).toContain("SceneLoader.AppendAsync");
         expect(code).toContain("createDefaultEnvironment");
+        expect(code).toContain("@babylonjs/core/Loading/loadingScreen");
         expect(code).toContain("@babylonjs/core/Helpers/sceneHelpers");
         expect(code).toContain("@babylonjs/core/Materials/Textures/Loaders/envTextureLoader");
         expect(code).not.toContain("BABYLON.");

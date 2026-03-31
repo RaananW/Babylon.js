@@ -12,6 +12,7 @@ import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { SceneLoader } from "@babylonjs/core/Loading/sceneLoader";
 
 // Side-effect imports: these register plugins and augment prototypes at load time
+import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/core/Helpers/sceneHelpers";
 import "@babylonjs/core/Materials/standardMaterial";
 import "@babylonjs/core/Materials/PBR/pbrMaterial";
