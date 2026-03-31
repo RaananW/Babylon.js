@@ -233,7 +233,10 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
 
             const sceneContext = this._publishSceneContext(scene);
             this.props.globalState.onLogRequiredObservable.notifyObservers(
-                new LogEntry(`Default scene created with ${sceneContext.entries.length} objects. Drop a .glb/.gltf/.babylon file or load a Playground snippet to replace it.`, false)
+                new LogEntry(
+                    `Default scene created with ${sceneContext.entries.length} objects. Drop a .glb/.gltf/.babylon file or load a Playground snippet to replace it.`,
+                    false
+                )
             );
         } catch (err: any) {
             this.props.globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`Failed to create default scene: ${err.message}`, true));
@@ -292,9 +295,7 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
             this.props.globalState.snippetId = "";
 
             this.setState({ isLoading: false, snippetId: "" });
-            this.props.globalState.onLogRequiredObservable.notifyObservers(
-                new LogEntry(`Loaded "${file.name}" with ${sceneContext.entries.length} scene objects`, false)
-            );
+            this.props.globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`Loaded "${file.name}" with ${sceneContext.entries.length} scene objects`, false));
         } catch (err: any) {
             this.setState({
                 isLoading: false,
@@ -337,9 +338,7 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
             }
         }
 
-        this.props.globalState.onLogRequiredObservable.notifyObservers(
-            new LogEntry("Unsupported file format. Drop a .glb, .gltf, or .babylon file.", true)
-        );
+        this.props.globalState.onLogRequiredObservable.notifyObservers(new LogEntry("Unsupported file format. Drop a .glb, .gltf, or .babylon file.", true));
     };
 
     /**

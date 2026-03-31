@@ -13,6 +13,7 @@ The Flow Graph Editor is a visual tool for building, debugging, and testing Baby
 ### Default Scene
 
 When the editor opens without a Playground snippet, a **default scene** is automatically created with:
+
 - An **ArcRotateCamera** (orbit camera with mouse controls)
 - A **HemisphericLight**
 - A **ground plane** (8×8)
@@ -51,9 +52,9 @@ The toolbar at the top provides execution controls:
 
 | Button | Label     | Description                                                                                                                                                     |
 | ------ | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ▶     | **Start** | Starts executing the flow graph. Enabled when the graph is stopped or paused.                                                                                   |
-| ⏸     | **Pause** | Pauses execution. The graph can be resumed with Start.                                                                                                          |
-| ⏹     | **Stop**  | Stops execution and resets execution state.                                                                                                                     |
+| ▶      | **Start** | Starts executing the flow graph. Enabled when the graph is stopped or paused.                                                                                   |
+| ⏸      | **Pause** | Pauses execution. The graph can be resumed with Start.                                                                                                          |
+| ⏹      | **Stop**  | Stops execution and resets execution state.                                                                                                                     |
 | ↺      | **Reset** | Stops execution and reloads the scene from its snippet (if one was loaded). If the reload fails, an error is logged and the graph returns to the Stopped state. |
 
 The **state indicator** next to the controls shows the current graph state: `Stopped`, `Running`, `Paused`, or `Breakpoint`.
@@ -127,8 +128,8 @@ When execution reaches a block with a breakpoint, the graph pauses immediately *
 
 | Button | Label        | Description                                                                                             |
 | ------ | ------------ | ------------------------------------------------------------------------------------------------------- |
-| ▶▶   | **Continue** | Resumes normal execution from the breakpoint. The graph runs until the next breakpoint (or completion). |
-| ▶\|   | **Step**     | Executes only the current block, then pauses again at the next execution block.                         |
+| ▶▶     | **Continue** | Resumes normal execution from the breakpoint. The graph runs until the next breakpoint (or completion). |
+| ▶\|    | **Step**     | Executes only the current block, then pauses again at the next execution block.                         |
 
 ### Removing Breakpoints
 
@@ -206,7 +207,7 @@ If you release the mouse on an incompatible port, an error dialog explains the t
 | ------------------------------------- | ----------------------------- |
 | Any                                   | All types (wildcard)          |
 | Same type                             | Always compatible             |
-| Number ↔ Integer                     | Interchangeable               |
+| Number ↔ Integer                      | Interchangeable               |
 | Vector3, Vector4, Matrix → Quaternion | Accepted via type transformer |
 
 Signal ports (execution flow) have no type restrictions — any signal output can connect to any signal input.
