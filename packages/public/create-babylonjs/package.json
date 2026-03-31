@@ -33,6 +33,6 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/BabylonJS/Babylon.js.git",
-        "directory": "packages/tools/create-babylonjs"
+        "directory": "packages/public/create-babylonjs"
     }
 }
