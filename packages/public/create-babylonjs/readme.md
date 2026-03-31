@@ -10,12 +10,12 @@ npm create babylonjs
 
 The CLI walks you through a few choices and generates a ready-to-run project:
 
-| Prompt | Options |
-|--------|---------|
-| **Project name** | Any name (defaults to `my-babylonjs-app`) |
+| Prompt            | Options                                                                                            |
+| ----------------- | -------------------------------------------------------------------------------------------------- |
+| **Project name**  | Any name (defaults to `my-babylonjs-app`)                                                          |
 | **Module format** | **ES6** (`@babylonjs/core` — tree-shakeable) or **UMD** (`babylonjs` — global `BABYLON` namespace) |
-| **Language** | **TypeScript** or **JavaScript** |
-| **Bundler** | **Vite**, **Webpack**, **Rollup**, or **None** (CDN script tags only — UMD only) |
+| **Language**      | **TypeScript** or **JavaScript**                                                                   |
+| **Bundler**       | **Vite**, **Webpack**, **Rollup**, or **None** (CDN script tags only — UMD only)                   |
 
 ## Generated project
 
@@ -60,12 +60,28 @@ A single `index.html` with `<script>` tags — no npm install required:
 
 ## Bundler configurations
 
-| Bundler | Config file | Dev server |
-|---------|-------------|------------|
-| Vite | `vite.config.ts` / `vite.config.js` | `npm run dev` |
-| Webpack | `webpack.config.js` | `npm run dev` (webpack-dev-server) |
-| Rollup | `rollup.config.mjs` | `npm run dev` (rollup -c -w with livereload) |
-| None | — | Open `index.html` in browser |
+| Bundler | Config file                         | Dev server                                   |
+| ------- | ----------------------------------- | -------------------------------------------- |
+| Vite    | `vite.config.ts` / `vite.config.js` | `npm run dev`                                |
+| Webpack | `webpack.config.js`                 | `npm run dev` (webpack-dev-server)           |
+| Rollup  | `rollup.config.mjs`                 | `npm run dev` (rollup -c -w with livereload) |
+| None    | —                                   | Open `index.html` in browser                 |
+
+## Production build
+
+All bundler-based templates include a `build:prod` script that creates an optimized production bundle:
+
+```bash
+npm run build:prod
+```
+
+| Bundler | Output | Preview |
+| ------- | ------ | ------- |
+| Vite | `dist/` | `npm run preview` |
+| Webpack | `dist/` | Serve `dist/` with any static server |
+| Rollup | `dist/bundle.js` | Open `index.html` which references `dist/bundle.js` |
+
+Deploy the contents of `dist/` (or the project root for Rollup) to any static hosting provider.
 
 ## Quick start
 
@@ -74,6 +90,12 @@ npm create babylonjs
 cd my-babylonjs-app
 npm install
 npm run dev
+```
+
+When you are ready to deploy:
+
+```bash
+npm run build:prod
 ```
 
 ## License
