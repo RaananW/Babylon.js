@@ -78,12 +78,7 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
 
         // Create a default scene so the editor is usable without a snippet
         if (!this.props.globalState.sceneContext && !this.props.globalState.snippetId) {
-            // Defer until next tick so the canvas ref is available
-            setTimeout(() => {
-                if (!this.props.globalState.sceneContext) {
-                    void this._createDefaultSceneAsync();
-                }
-            }, 0);
+            void this._createDefaultSceneAsync();
         }
     }
 
@@ -111,6 +106,7 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
 
     /**
      * Dispose the previous preview engine/scene/context so a new one can be created.
+     * Also clears the sceneContext reference on globalState to avoid stale pointers.
      */
     private _disposeCurrentScene() {
         const oldCtx = this.props.globalState.sceneContext;
@@ -119,15 +115,16 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
             oldCtx.scene.dispose();
             oldCtx.engine.dispose();
             oldCtx.dispose();
+            this.props.globalState.sceneContext = null;
         }
     }
 
     /**
-     * Create an engine on the preview canvas, start the render loop, and wire up resize handling.
+     * Start the render loop on the given engine and wire up resize handling.
      * @param scene - the Babylon.js scene to render
-     * @returns the created engine
+     * @param engine - the engine to run the render loop on
      */
-    private _setupEngineRenderLoop(scene: Scene, engine: Engine) {
+    private _setupEngineRenderLoop(scene: Scene, engine: { runRenderLoop: Engine["runRenderLoop"]; resize: Engine["resize"] }) {
         engine.runRenderLoop(() => {
             if (scene.activeCamera || (scene.activeCameras && scene.activeCameras.length > 0)) {
                 scene.render();
@@ -154,6 +151,8 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
 
     /**
      * Build a SceneContext and publish it to the editor.
+     * @param scene - the scene to wrap in a SceneContext
+     * @returns the newly created SceneContext
      */
     private _publishSceneContext(scene: Scene) {
         const sceneContext = new SceneContext(scene);
@@ -249,8 +248,12 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
      * @param companionFiles - additional files dropped alongside (bin, textures)
      */
     private async _loadFileAsync(file: File, companionFiles?: File[]) {
+        if (this.state.isLoading) {
+            return; // Prevent concurrent loads
+        }
         this.setState({ isLoading: true, error: "" });
 
+        const registeredFiles: string[] = [];
         try {
             const { Engine } = await import("core/Engines/engine");
             const { SceneLoader } = await import("core/Loading/sceneLoader");
@@ -266,10 +269,14 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
             const engine = new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
 
             // Register the main file and any companion files in Babylon's virtual file system
-            FilesInputStore.FilesToLoad[file.name.toLowerCase()] = file;
+            const mainKey = file.name.toLowerCase();
+            FilesInputStore.FilesToLoad[mainKey] = file;
+            registeredFiles.push(mainKey);
             if (companionFiles) {
                 for (const companion of companionFiles) {
-                    FilesInputStore.FilesToLoad[companion.name.toLowerCase()] = companion;
+                    const key = companion.name.toLowerCase();
+                    FilesInputStore.FilesToLoad[key] = companion;
+                    registeredFiles.push(key);
                 }
             }
 
@@ -297,6 +304,15 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
             this.setState({ isLoading: false, snippetId: "" });
             this.props.globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`Loaded "${file.name}" with ${sceneContext.entries.length} scene objects`, false));
         } catch (err: any) {
+            // Clean up registered files on failure
+            try {
+                const { FilesInputStore } = await import("core/Misc/filesInputStore");
+                for (const key of registeredFiles) {
+                    delete FilesInputStore.FilesToLoad[key];
+                }
+            } catch {
+                // FilesInputStore import may itself fail — nothing to clean up
+            }
             this.setState({
                 isLoading: false,
                 error: err.message || "Failed to load file",
@@ -314,6 +330,10 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
     private _handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
+
+        if (this.state.isLoading) {
+            return; // Don't start a new load while one is in progress
+        }
 
         const files = e.dataTransfer?.files;
         if (!files || files.length === 0) {
@@ -422,7 +442,7 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
             window.addEventListener("unhandledrejection", rejectionHandler);
 
             // Start the render loop with resize handling
-            this._setupEngineRenderLoop(scene, engine as unknown as Engine);
+            this._setupEngineRenderLoop(scene, engine);
 
             scene.onDisposeObservable.addOnce(() => {
                 window.removeEventListener("unhandledrejection", rejectionHandler);
