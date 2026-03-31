@@ -40,18 +40,17 @@ export function generateIndexHtml(options: ProjectOptions): string {
         const createScene = async function () {
             const scene = new BABYLON.Scene(engine);
 
-            const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 1, new BABYLON.Vector3(0, 0.05, 0), scene);
-            camera.attachControl(canvas, true);
-            camera.minZ = 0.001;
+            // Load a glTF model
+            await BABYLON.SceneLoader.AppendAsync("https://assets.babylonjs.com/meshes/boombox.glb", undefined, scene);
+
+            // Create a default camera that frames the loaded model
+            scene.createDefaultCamera(true, true, true);
 
             // Create a default environment (skybox + ground + environment lighting)
             scene.createDefaultEnvironment({
                 createGround: true,
                 createSkybox: true,
             });
-
-            // Load a glTF model
-            await BABYLON.SceneLoader.AppendAsync("https://assets.babylonjs.com/meshes/boombox.glb", undefined, scene);
 
             return scene;
         };

@@ -63,7 +63,7 @@ describe("generateSceneCode", () => {
         expect(code).not.toContain("import ");
     });
 
-    it("always includes resize handler, render loop, and environment", () => {
+    it("always includes resize handler, render loop, environment, and auto-framing camera", () => {
         const combos: ProjectOptions[] = [
             { projectName: "a", moduleFormat: "es6", language: "ts", bundler: "vite" },
             { projectName: "b", moduleFormat: "umd", language: "js", bundler: "webpack" },
@@ -72,6 +72,7 @@ describe("generateSceneCode", () => {
             const code = generateSceneCode(options);
             expect(code).toContain("engine.runRenderLoop");
             expect(code).toContain("engine.resize()");
+            expect(code).toContain("createDefaultCamera(true, true, true)");
             expect(code).toContain("createDefaultEnvironment");
             expect(code).toContain("boombox.glb");
         }
