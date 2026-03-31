@@ -60,7 +60,9 @@ describe("generateSceneCode", () => {
         const code = generateSceneCode(options);
         expect(code).toContain("BABYLON.Engine");
         expect(code).toContain("BABYLON.SceneLoader.AppendAsync");
-        expect(code).not.toContain("import ");
+        expect(code).toContain('import * as BABYLON from "babylonjs"');
+        expect(code).toContain('import "babylonjs-loaders"');
+        expect(code).not.toContain("as HTMLCanvasElement");
     });
 
     it("always includes resize handler, render loop, environment, and auto-framing camera", () => {

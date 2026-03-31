@@ -93,8 +93,12 @@ window.addEventListener("resize", () => {
 `;
     }
 
-    // UMD + JS
-    return `const canvas = document.getElementById("renderCanvas");
+    // UMD + JS — imports needed because this file is always bundled
+    // (CDN-only projects inline the scene code directly in index.html)
+    return `import * as BABYLON from "babylonjs";
+import "babylonjs-loaders";
+
+const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas, true);
 
 const createScene = async () => {

@@ -95,6 +95,7 @@ async function main(): Promise<void> {
             console.log("Cancelled.");
             process.exit(0);
         }
+        fs.rmSync(targetDir, { recursive: true, force: true });
     }
 
     scaffoldProject(targetDir, options);
