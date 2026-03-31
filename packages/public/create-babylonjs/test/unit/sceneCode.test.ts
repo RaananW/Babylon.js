@@ -14,12 +14,14 @@ describe("generateSceneCode", () => {
         expect(code).toContain('import { Scene } from "@babylonjs/core/scene"');
         expect(code).toContain("as HTMLCanvasElement");
         expect(code).toContain("@babylonjs/loaders/glTF");
-        expect(code).toContain("SceneLoader.AppendAsync");
+        expect(code).toContain("AppendSceneAsync");
         expect(code).toContain("createDefaultEnvironment");
         expect(code).toContain("@babylonjs/core/Loading/loadingScreen");
         expect(code).toContain("@babylonjs/core/Helpers/sceneHelpers");
         expect(code).toContain("@babylonjs/core/Materials/Textures/Loaders/envTextureLoader");
+        expect(code).toContain("ArcRotateCamera");
         expect(code).not.toContain("BABYLON.");
+        expect(code).not.toContain("SceneLoader.AppendAsync");
     });
 
     it("generates ES6 JavaScript scene without type casts", () => {
@@ -46,7 +48,8 @@ describe("generateSceneCode", () => {
         expect(code).toContain('import * as BABYLON from "babylonjs"');
         expect(code).toContain('import "babylonjs-loaders"');
         expect(code).toContain("BABYLON.Engine");
-        expect(code).toContain("BABYLON.SceneLoader.AppendAsync");
+        expect(code).toContain("BABYLON.AppendSceneAsync");
+        expect(code).toContain("as BABYLON.ArcRotateCamera");
         expect(code).toContain("createDefaultEnvironment");
     });
 
@@ -59,10 +62,11 @@ describe("generateSceneCode", () => {
         };
         const code = generateSceneCode(options);
         expect(code).toContain("BABYLON.Engine");
-        expect(code).toContain("BABYLON.SceneLoader.AppendAsync");
+        expect(code).toContain("BABYLON.AppendSceneAsync");
         expect(code).toContain('import * as BABYLON from "babylonjs"');
         expect(code).toContain('import "babylonjs-loaders"');
         expect(code).not.toContain("as HTMLCanvasElement");
+        expect(code).not.toContain("as BABYLON.ArcRotateCamera");
     });
 
     it("always includes resize handler, render loop, environment, and auto-framing camera", () => {

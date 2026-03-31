@@ -41,7 +41,7 @@ export function generateIndexHtml(options: ProjectOptions): string {
             const scene = new BABYLON.Scene(engine);
 
             // Load a glTF model
-            await BABYLON.SceneLoader.AppendAsync("https://assets.babylonjs.com/meshes/boombox.glb", undefined, scene);
+            await BABYLON.AppendSceneAsync("https://assets.babylonjs.com/meshes/boombox.glb", scene);
 
             // Create a default camera that frames the loaded model
             scene.createDefaultCamera(true, true, true);

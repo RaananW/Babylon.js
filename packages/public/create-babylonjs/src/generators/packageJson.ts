@@ -28,12 +28,10 @@ export function generatePackageJson(options: ProjectOptions): string {
             if (language === "ts") {
                 scripts["dev"] = "vite";
                 scripts["build"] = "tsc && vite build";
-                scripts["build:prod"] = "tsc && vite build";
                 scripts["preview"] = "vite preview";
             } else {
                 scripts["dev"] = "vite";
                 scripts["build"] = "vite build";
-                scripts["build:prod"] = "vite build";
                 scripts["preview"] = "vite preview";
             }
             break;
@@ -48,7 +46,6 @@ export function generatePackageJson(options: ProjectOptions): string {
             }
             scripts["dev"] = "webpack serve --mode development";
             scripts["build"] = "webpack --mode production";
-            scripts["build:prod"] = "webpack --mode production";
             break;
 
         case "rollup":
@@ -63,7 +60,6 @@ export function generatePackageJson(options: ProjectOptions): string {
             }
             scripts["dev"] = "rollup -c -w";
             scripts["build"] = "rollup -c --environment BUILD:production";
-            scripts["build:prod"] = "rollup -c --environment BUILD:production";
             break;
     }
 

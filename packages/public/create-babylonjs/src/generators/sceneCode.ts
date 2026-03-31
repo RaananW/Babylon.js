@@ -5,9 +5,11 @@ const GLTF_MODEL_URL = "https://assets.babylonjs.com/meshes/boombox.glb";
 // ES6 scene code — tree-shakeable imports
 function es6Scene(language: "ts" | "js"): string {
     const canvasCast = language === "ts" ? " as HTMLCanvasElement" : "";
+    const arcCamImport = language === "ts" ? '\nimport { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";' : "";
+    const alphaCast = language === "ts" ? "(scene.activeCamera as ArcRotateCamera)" : "scene.activeCamera";
     return `import { Engine } from "@babylonjs/core/Engines/engine";
 import { Scene } from "@babylonjs/core/scene";
-import { SceneLoader } from "@babylonjs/core/Loading/sceneLoader";
+import { AppendSceneAsync } from "@babylonjs/core/Loading/sceneLoader";${arcCamImport}
 
 // Side-effect imports: these register plugins and augment prototypes at load time
 import "@babylonjs/core/Loading/loadingScreen";
@@ -24,12 +26,12 @@ const createScene = async () => {
     const scene = new Scene(engine);
 
     // Load a glTF model
-    await SceneLoader.AppendAsync("${GLTF_MODEL_URL}", undefined, scene);
+    await AppendSceneAsync("${GLTF_MODEL_URL}", scene);
 
     // Create a default camera that frames the loaded model
     scene.createDefaultCamera(true, true, true);
     // Rotate the camera to face the front of the model
-    scene.activeCamera.alpha += Math.PI;
+    ${alphaCast}.alpha += Math.PI;
 
     // Create a default environment (skybox + ground + environment lighting)
     scene.createDefaultEnvironment({
@@ -65,12 +67,12 @@ const createScene = async (): Promise<BABYLON.Scene> => {
     const scene = new BABYLON.Scene(engine);
 
     // Load a glTF model
-    await BABYLON.SceneLoader.AppendAsync("${GLTF_MODEL_URL}", undefined, scene);
+    await BABYLON.AppendSceneAsync("${GLTF_MODEL_URL}", scene);
 
     // Create a default camera that frames the loaded model
     scene.createDefaultCamera(true, true, true);
     // Rotate the camera to face the front of the model
-    scene.activeCamera.alpha += Math.PI;
+    (scene.activeCamera as BABYLON.ArcRotateCamera).alpha += Math.PI;
 
     // Create a default environment (skybox + ground + environment lighting)
     scene.createDefaultEnvironment({
@@ -105,7 +107,7 @@ const createScene = async () => {
     const scene = new BABYLON.Scene(engine);
 
     // Load a glTF model
-    await BABYLON.SceneLoader.AppendAsync("${GLTF_MODEL_URL}", undefined, scene);
+    await BABYLON.AppendSceneAsync("${GLTF_MODEL_URL}", scene);
 
     // Create a default camera that frames the loaded model
     scene.createDefaultCamera(true, true, true);

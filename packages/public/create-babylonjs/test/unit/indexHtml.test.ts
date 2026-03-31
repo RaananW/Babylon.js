@@ -13,7 +13,7 @@ describe("generateIndexHtml", () => {
         expect(html).toContain("cdn.babylonjs.com/babylon.js");
         expect(html).toContain("babylonjs.loaders.min.js");
         expect(html).toContain("BABYLON.Engine");
-        expect(html).toContain("BABYLON.SceneLoader.AppendAsync");
+        expect(html).toContain("BABYLON.AppendSceneAsync");
         expect(html).toContain("createDefaultCamera(true, true, true)");
         expect(html).toContain("createDefaultEnvironment");
         expect(html).toContain('<canvas id="renderCanvas">');
