@@ -21,21 +21,23 @@ function webpackConfig(options: ProjectOptions): BundlerConfigResult {
     const ext = language === "ts" ? "ts" : "js";
     const filename = "webpack.config.js";
 
-    const tsRule = language === "ts"
-        ? `
+    const tsRule =
+        language === "ts"
+            ? `
             {
                 test: /\\.tsx?$/,
                 use: "ts-loader",
                 exclude: /node_modules/,
             },`
-        : "";
+            : "";
 
-    const resolve = language === "ts"
-        ? `
+    const resolve =
+        language === "ts"
+            ? `
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
     },`
-        : "";
+            : "";
 
     const content = `const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
