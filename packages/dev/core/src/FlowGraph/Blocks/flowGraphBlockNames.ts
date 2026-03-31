@@ -159,4 +159,12 @@ export const enum FlowGraphBlockNames {
     PhysicsGetLinearVelocity = "FlowGraphGetLinearVelocityBlock",
     PhysicsGetAngularVelocity = "FlowGraphGetAngularVelocityBlock",
     PhysicsGetMassProperties = "FlowGraphGetPhysicsMassPropertiesBlock",
+    // Audio
+    AudioPlaySound = "FlowGraphPlaySoundBlock",
+    AudioStopSound = "FlowGraphStopSoundBlock",
+    AudioPauseSound = "FlowGraphPauseSoundBlock",
+    AudioSetVolume = "FlowGraphSetSoundVolumeBlock",
+    AudioSoundEndedEvent = "FlowGraphSoundEndedEventBlock",
+    AudioGetVolume = "FlowGraphGetSoundVolumeBlock",
+    AudioIsSoundPlaying = "FlowGraphIsSoundPlayingBlock",
 }

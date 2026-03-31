@@ -5,3 +5,5 @@ export * from "./ControlFlow/index";
 export * from "./Animation/index";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 export * from "./Physics/index";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+export * from "./Audio/index";

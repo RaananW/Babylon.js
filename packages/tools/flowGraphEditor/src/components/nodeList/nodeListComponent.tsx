@@ -77,6 +77,19 @@ export class NodeListComponent extends React.Component<INodeListComponentProps, 
         FlowGraphGetAngularVelocityBlock: "Gets the angular velocity of a physics body",
         FlowGraphGetPhysicsMassPropertiesBlock: "Gets mass, center of mass, and inertia",
 
+        // Audio Actions
+        FlowGraphPlaySoundBlock: "Plays an Audio V2 sound with volume, offset, and loop options",
+        FlowGraphStopSoundBlock: "Stops an Audio V2 sound",
+        FlowGraphPauseSoundBlock: "Pauses or resumes an Audio V2 sound",
+        FlowGraphSetSoundVolumeBlock: "Sets the volume of an Audio V2 sound",
+
+        // Audio Events
+        FlowGraphSoundEndedEventBlock: "Fires when an Audio V2 sound stops or ends (including manual stop)",
+
+        // Audio Data
+        FlowGraphGetSoundVolumeBlock: "Gets the current volume of an Audio V2 sound",
+        FlowGraphIsSoundPlayingBlock: "Checks whether an Audio V2 sound is currently playing",
+
         // Math Constants
         FlowGraphEBlock: "Euler's number (e)",
         FlowGraphPIBlock: "Pi constant",

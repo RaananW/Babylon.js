@@ -10,7 +10,24 @@ The Flow Graph Editor is a visual tool for building, debugging, and testing Baby
 
 ## Getting Started
 
-### Loading a Scene
+### Default Scene
+
+When the editor opens without a Playground snippet, a **default scene** is automatically created with:
+
+- An **ArcRotateCamera** (orbit camera with mouse controls)
+- A **HemisphericLight**
+- A **ground plane** (8×8)
+- Three primitive meshes: a **box** (blue), a **sphere** (red), and a **cylinder** (green)
+
+This lets you start building and testing flow graph logic immediately. The default scene is replaced when you load a Playground snippet or drop a scene file.
+
+### Loading a Scene from File
+
+You can drag and drop a `.glb`, `.gltf`, or `.babylon` file onto the **Scene Preview** pane to load it as the test scene. For `.gltf` files that reference separate `.bin` or texture files, drop all files together.
+
+The loaded scene replaces the current scene (default or snippet) and populates the scene context with all objects found in the file.
+
+### Loading a Playground Snippet
 
 The editor can load a Babylon.js Playground snippet as a live scene to test your flow graph against.
 
@@ -35,9 +52,9 @@ The toolbar at the top provides execution controls:
 
 | Button | Label     | Description                                                                                                                                                     |
 | ------ | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ▶     | **Start** | Starts executing the flow graph. Enabled when the graph is stopped or paused.                                                                                   |
-| ⏸     | **Pause** | Pauses execution. The graph can be resumed with Start.                                                                                                          |
-| ⏹     | **Stop**  | Stops execution and resets execution state.                                                                                                                     |
+| ▶      | **Start** | Starts executing the flow graph. Enabled when the graph is stopped or paused.                                                                                   |
+| ⏸      | **Pause** | Pauses execution. The graph can be resumed with Start.                                                                                                          |
+| ⏹      | **Stop**  | Stops execution and resets execution state.                                                                                                                     |
 | ↺      | **Reset** | Stops execution and reloads the scene from its snippet (if one was loaded). If the reload fails, an error is logged and the graph returns to the Stopped state. |
 
 The **state indicator** next to the controls shows the current graph state: `Stopped`, `Running`, `Paused`, or `Breakpoint`.
@@ -111,8 +128,8 @@ When execution reaches a block with a breakpoint, the graph pauses immediately *
 
 | Button | Label        | Description                                                                                             |
 | ------ | ------------ | ------------------------------------------------------------------------------------------------------- |
-| ▶▶   | **Continue** | Resumes normal execution from the breakpoint. The graph runs until the next breakpoint (or completion). |
-| ▶\|   | **Step**     | Executes only the current block, then pauses again at the next execution block.                         |
+| ▶▶     | **Continue** | Resumes normal execution from the breakpoint. The graph runs until the next breakpoint (or completion). |
+| ▶\|    | **Step**     | Executes only the current block, then pauses again at the next execution block.                         |
 
 ### Removing Breakpoints
 
@@ -190,7 +207,7 @@ If you release the mouse on an incompatible port, an error dialog explains the t
 | ------------------------------------- | ----------------------------- |
 | Any                                   | All types (wildcard)          |
 | Same type                             | Always compatible             |
-| Number ↔ Integer                     | Interchangeable               |
+| Number ↔ Integer                      | Interchangeable               |
 | Vector3, Vector4, Matrix → Quaternion | Accepted via type transformer |
 
 Signal ports (execution flow) have no type restrictions — any signal output can connect to any signal input.
@@ -326,29 +343,59 @@ The editor includes a set of blocks for interacting with the Babylon.js Physics 
 
 ### Physics Events
 
-| Block                                  | Description                                                                                                                                                   |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **PhysicsCollisionEvent**              | Fires whenever a collision occurs on the specified physics body. Outputs the other body, contact point, normal, impulse, and penetration distance.             |
+| Block                     | Description                                                                                                                                        |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **PhysicsCollisionEvent** | Fires whenever a collision occurs on the specified physics body. Outputs the other body, contact point, normal, impulse, and penetration distance. |
 
 ### Physics Actions (Execution Blocks)
 
-| Block                                  | Description                                                                                                                                                   |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **ApplyForce**                         | Applies a continuous force to a body at a world-space location. Use in a per-frame loop for sustained forces.                                                 |
-| **ApplyImpulse**                       | Applies an instantaneous impulse (velocity change) to a body at a world-space location.                                                                       |
-| **SetLinearVelocity**                  | Directly sets the linear velocity vector of a body.                                                                                                           |
-| **SetAngularVelocity**                 | Directly sets the angular velocity vector of a body.                                                                                                          |
-| **SetPhysicsMotionType**               | Changes the body's motion type: 0 = STATIC, 1 = ANIMATED, 2 = DYNAMIC.                                                                                      |
+| Block                    | Description                                                                                                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| **ApplyForce**           | Applies a continuous force to a body at a world-space location. Use in a per-frame loop for sustained forces. |
+| **ApplyImpulse**         | Applies an instantaneous impulse (velocity change) to a body at a world-space location.                       |
+| **SetLinearVelocity**    | Directly sets the linear velocity vector of a body.                                                           |
+| **SetAngularVelocity**   | Directly sets the angular velocity vector of a body.                                                          |
+| **SetPhysicsMotionType** | Changes the body's motion type: 0 = STATIC, 1 = ANIMATED, 2 = DYNAMIC.                                        |
 
 ### Physics Data (Read-Only Blocks)
 
-| Block                                  | Description                                                                                                                                                   |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **GetLinearVelocity**                  | Reads the current linear velocity of a physics body.                                                                                                          |
-| **GetAngularVelocity**                 | Reads the current angular velocity of a physics body.                                                                                                         |
-| **GetPhysicsMassProperties**           | Reads the mass, center of mass, and inertia of a physics body.                                                                                                |
+| Block                        | Description                                                    |
+| ---------------------------- | -------------------------------------------------------------- |
+| **GetLinearVelocity**        | Reads the current linear velocity of a physics body.           |
+| **GetAngularVelocity**       | Reads the current angular velocity of a physics body.          |
+| **GetPhysicsMassProperties** | Reads the mass, center of mass, and inertia of a physics body. |
 
 > **Note:** Physics blocks require a scene with Physics V2 enabled and bodies attached to meshes. Without a physics engine loaded, the blocks will report errors at runtime.
+
+---
+
+## Audio Blocks
+
+The editor includes blocks for controlling audio playback using the Babylon.js Audio V2 system. These blocks operate on `AbstractSound` references (either `StaticSound` or `StreamingSound` instances created via `CreateSoundAsync` / `CreateStreamingSoundAsync`).
+
+### Audio Actions (Execution Blocks)
+
+| Block              | Description                                                               |
+| ------------------ | ------------------------------------------------------------------------- |
+| **PlaySound**      | Plays the sound with configurable volume, start offset, and loop options. |
+| **StopSound**      | Stops the sound immediately.                                              |
+| **PauseSound**     | Pauses the sound if playing, or resumes it if paused.                     |
+| **SetSoundVolume** | Sets the volume (0–1) of the sound.                                       |
+
+### Audio Events
+
+| Block               | Description                                                               |
+| ------------------- | ------------------------------------------------------------------------- |
+| **SoundEndedEvent** | Fires when the sound finishes playing (does not fire if loop is enabled). |
+
+### Audio Data (Read-Only Blocks)
+
+| Block              | Description                                                 |
+| ------------------ | ----------------------------------------------------------- |
+| **GetSoundVolume** | Reads the current volume of a sound.                        |
+| **IsSoundPlaying** | Returns true if the sound is currently playing or starting. |
+
+> **Note:** Audio blocks require sounds created via the Audio V2 API (`CreateSoundAsync`, `CreateStreamingSoundAsync`). The legacy `Sound` class (V1) is not supported by these blocks.
 
 ---
 

@@ -15,3 +15,5 @@ export * from "./Transformers/index";
 export * from "./Utils/index";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 export * from "./Physics/index";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+export * from "./Audio/index";

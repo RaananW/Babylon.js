@@ -42,6 +42,9 @@ export const AllFlowGraphBlocks: { [category: string]: string[] } = {
         "FlowGraphSetPhysicsMotionTypeBlock",
     ],
     Physics__Data: ["FlowGraphGetLinearVelocityBlock", "FlowGraphGetAngularVelocityBlock", "FlowGraphGetPhysicsMassPropertiesBlock"],
+    Audio__Actions: ["FlowGraphPlaySoundBlock", "FlowGraphStopSoundBlock", "FlowGraphPauseSoundBlock", "FlowGraphSetSoundVolumeBlock"],
+    Audio__Events: ["FlowGraphSoundEndedEventBlock"],
+    Audio__Data: ["FlowGraphGetSoundVolumeBlock", "FlowGraphIsSoundPlayingBlock"],
     Math__Constants: ["FlowGraphEBlock", "FlowGraphPIBlock", "FlowGraphInfBlock", "FlowGraphNaNBlock", "FlowGraphRandomBlock"],
     Math__Arithmetic: [
         "FlowGraphAddBlock",
