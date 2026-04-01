@@ -34,23 +34,23 @@
         "@babylonjs/loaders": "^9.0.0",
         "@babylonjs/materials": "^9.0.0",
         "@babylonjs/serializers": "^9.0.0",
-        "@fluentui-contrib/react-virtualizer": "^1.0.0",
-        "@fluentui/react-components": "^9.70.0",
-        "@fluentui/react-icons": "^2.0.310",
+        "@fluentui-contrib/react-virtualizer": "1.0.0",
+        "@fluentui/react-components": "9.73.5",
+        "@fluentui/react-icons": "2.0.322",
         "react": ">=16.14.0 <20.0.0",
         "react-dom": ">=16.14.0 <20.0.0",
-        "usehooks-ts": "^3.1.1"
+        "usehooks-ts": "3.1.1"
     },
     "devDependencies": {
         "@dev/build-tools": "^1.0.0",
         "@dev/inspector": "1.0.0",
-        "@rollup/plugin-alias": "^5.1.0",
-        "@rollup/plugin-commonjs": "^26.0.1",
-        "@rollup/plugin-node-resolve": "^15.2.3",
-        "@rollup/plugin-typescript": "^11.1.6",
-        "chalk": "^5.3.0",
-        "rollup": "^4.59.0",
-        "rollup-plugin-dts": "^6.1.1"
+        "@rollup/plugin-alias": "5.1.1",
+        "@rollup/plugin-commonjs": "26.0.3",
+        "@rollup/plugin-node-resolve": "15.3.1",
+        "@rollup/plugin-typescript": "11.1.6",
+        "chalk": "5.6.2",
+        "rollup": "4.60.0",
+        "rollup-plugin-dts": "6.4.1"
     },
     "keywords": [
         "3D",

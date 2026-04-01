@@ -19,11 +19,11 @@
     "devDependencies": {
         "@dev/build-tools": "1.0.0",
         "@tools/ktx2decoder": "1.0.0",
-        "source-map-loader": "^4.0.0",
-        "ts-loader": "^9.2.6",
-        "webpack": "^5.103.0",
+        "source-map-loader": "4.0.2",
+        "ts-loader": "9.5.4",
+        "webpack": "5.105.4",
         "webpack-cli": "6.0.1",
-        "webpack-merge": "^5.8.0"
+        "webpack-merge": "5.10.0"
     },
     "keywords": [
         "3D",
