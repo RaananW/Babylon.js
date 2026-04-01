@@ -344,6 +344,91 @@ function buildMultiSystemParticles(): string {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  Example 6 – Gravity Fountain
+//  Particles shoot up from a cone and fall back down via gravity applied
+//  to the direction each frame.
+// ═══════════════════════════════════════════════════════════════════════════
+
+function buildGravityFountain(): string {
+    const mgr = new ParticleGraphManager();
+    mgr.createParticleSet("GravityFountain", "Cone fountain with gravity pulling particles down.");
+
+    const createId = id(mgr.addBlock("GravityFountain", "CreateParticleBlock", "create"));
+    const lifetimeId = id(
+        mgr.addBlock("GravityFountain", "ParticleInputBlock", "lifetime", {
+            type: "Float",
+            value: 3,
+        })
+    );
+    mgr.connectBlocks("GravityFountain", lifetimeId, "output", createId, "lifeTime");
+
+    const emitPowerId = id(
+        mgr.addBlock("GravityFountain", "ParticleInputBlock", "emitPower", {
+            type: "Float",
+            value: 8,
+        })
+    );
+    mgr.connectBlocks("GravityFountain", emitPowerId, "output", createId, "emitPower");
+
+    const shapeId = id(mgr.addBlock("GravityFountain", "ConeShapeBlock", "cone"));
+    mgr.connectBlocks("GravityFountain", createId, "particle", shapeId, "particle");
+
+    const updateAgeId = id(mgr.addBlock("GravityFountain", "UpdateAgeBlock", "updateAge"));
+    mgr.connectBlocks("GravityFountain", shapeId, "output", updateAgeId, "particle");
+
+    const ageInputId = id(
+        mgr.addBlock("GravityFountain", "ParticleInputBlock", "ageInput", {
+            contextualValue: "Age",
+        })
+    );
+    mgr.connectBlocks("GravityFountain", ageInputId, "output", updateAgeId, "age");
+
+    // Gravity direction update: direction += gravity * deltaTime
+    const gravityId = id(
+        mgr.addBlock("GravityFountain", "ParticleInputBlock", "gravity", {
+            type: "Vector3",
+            value: { x: 0, y: -9.81, z: 0 },
+        })
+    );
+    const deltaTimeId = id(
+        mgr.addBlock("GravityFountain", "ParticleInputBlock", "deltaTime", {
+            systemSource: "Delta",
+        })
+    );
+    const gravityDeltaId = id(mgr.addBlock("GravityFountain", "ParticleMathBlock", "gravityDelta", { operation: "Multiply" }));
+    mgr.connectBlocks("GravityFountain", gravityId, "output", gravityDeltaId, "left");
+    mgr.connectBlocks("GravityFountain", deltaTimeId, "output", gravityDeltaId, "right");
+
+    const currentDirId = id(
+        mgr.addBlock("GravityFountain", "ParticleInputBlock", "currentDir", {
+            contextualValue: "Direction",
+        })
+    );
+    const addGravityId = id(mgr.addBlock("GravityFountain", "ParticleMathBlock", "addGravity", { operation: "Add" }));
+    mgr.connectBlocks("GravityFountain", currentDirId, "output", addGravityId, "left");
+    mgr.connectBlocks("GravityFountain", gravityDeltaId, "output", addGravityId, "right");
+
+    const updateDirId = id(mgr.addBlock("GravityFountain", "UpdateDirectionBlock", "updateDir"));
+    mgr.connectBlocks("GravityFountain", updateAgeId, "output", updateDirId, "particle");
+    mgr.connectBlocks("GravityFountain", addGravityId, "output", updateDirId, "direction");
+
+    // Position update
+    const updatePosId = id(mgr.addBlock("GravityFountain", "BasicPositionUpdateBlock", "updatePos"));
+    mgr.connectBlocks("GravityFountain", updateDirId, "output", updatePosId, "particle");
+
+    // System
+    const textureId = id(mgr.addBlock("GravityFountain", "ParticleTextureSourceBlock", "texture", { url: "https://assets.babylonjs.com/textures/flare.png" }));
+    const systemId = id(mgr.addBlock("GravityFountain", "SystemBlock", "system"));
+    mgr.connectBlocks("GravityFountain", textureId, "texture", systemId, "texture");
+    mgr.connectBlocks("GravityFountain", updatePosId, "output", systemId, "particle");
+
+    const issues = mgr.validateParticleSet("GravityFountain");
+    expect(issues.every((i) => !i.startsWith("ERROR"))).toBe(true);
+
+    return mgr.exportJSON("GravityFountain")!;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  Jest Test Wrapper
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -382,5 +467,13 @@ describe("Node Particle MCP Server – Example Generation", () => {
         const systemBlocks = parsed.blocks.filter((b: any) => b.customType === "BABYLON.SystemBlock");
         expect(systemBlocks.length).toBe(2);
         writeExample("MultiSystemParticles", json);
+    });
+
+    it("generates GravityFountain example", () => {
+        const json = buildGravityFountain();
+        const parsed = JSON.parse(json);
+        // Should have gravity, deltaTime, two math blocks, updateDir, updatePos, etc.
+        expect(parsed.blocks.length).toBeGreaterThanOrEqual(13);
+        writeExample("GravityFountain", json);
     });
 });
