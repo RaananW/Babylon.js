@@ -34,12 +34,12 @@
         "@babylonjs/loaders": "^9.0.0",
         "@babylonjs/materials": "^9.0.0",
         "@babylonjs/serializers": "^9.0.0",
-        "@fluentui-contrib/react-virtualizer": "1.0.0",
-        "@fluentui/react-components": "9.73.5",
-        "@fluentui/react-icons": "2.0.322",
+        "@fluentui-contrib/react-virtualizer": "^1.0.0",
+        "@fluentui/react-components": "^9.70.0",
+        "@fluentui/react-icons": "^2.0.310",
         "react": ">=16.14.0 <20.0.0",
         "react-dom": ">=16.14.0 <20.0.0",
-        "usehooks-ts": "3.1.1"
+        "usehooks-ts": "^3.1.1"
     },
     "devDependencies": {
         "@dev/build-tools": "^1.0.0",

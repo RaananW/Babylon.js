@@ -16,7 +16,7 @@
         "webpack-cli": "6.0.1"
     },
     "dependencies": {
-        "ws": "7.5.10"
+        "ws": "8.20.0"
     },
     "optionalDependencies": {
         "bufferutil": "4.1.0",
