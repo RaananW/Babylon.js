@@ -5,6 +5,7 @@ import { type Observer } from "core/Misc/observable";
 import { type Scene } from "core/scene";
 import { type Engine } from "core/Engines/engine";
 import { SceneContext } from "../../sceneContext";
+import { SerializationTools } from "../../serializationTools";
 import { LogEntry } from "../log/logComponent";
 import { LoadSnippet, type IPlaygroundSnippetResult } from "@tools/snippet-loader";
 
@@ -243,6 +244,53 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
     }
 
     /**
+     * After loading a glTF file, check whether the scene has flow graphs loaded
+     * from KHR_interactivity (or any coordinator). If found, serialize the first
+     * graph and load it into the editor, replacing the current graph.
+     * @param scene - the loaded scene
+     * @param fileName - the original file name (for log messages)
+     * @returns true if a flow graph was found and imported
+     */
+    private async _importFlowGraphsFromSceneAsync(scene: Scene, fileName: string): Promise<boolean> {
+        const { FlowGraphCoordinator } = await import("core/FlowGraph/flowGraphCoordinator");
+        const coordinators = FlowGraphCoordinator.SceneCoordinators.get(scene);
+        if (!coordinators || coordinators.length === 0) {
+            return false;
+        }
+
+        // Find the first coordinator that has at least one flow graph
+        let targetGraph: import("core/FlowGraph/flowGraph").FlowGraph | null = null;
+        let targetCoordinator: (typeof coordinators)[0] | null = null;
+        for (const coordinator of coordinators) {
+            if (coordinator.flowGraphs.length > 0) {
+                targetGraph = coordinator.flowGraphs[0];
+                targetCoordinator = coordinator;
+                break;
+            }
+        }
+
+        if (!targetGraph || !targetCoordinator) {
+            return false;
+        }
+
+        // Serialize the loaded graph, then deserialize it into the editor
+        const serialized: any = {};
+        targetGraph.serialize(serialized);
+
+        // Stop the coordinator so its graphs don't keep running in the background
+        targetCoordinator.dispose();
+
+        await SerializationTools.DeserializeAsync(serialized, this.props.globalState);
+        this.props.globalState.onResetRequiredObservable.notifyObservers(false);
+        this.props.globalState.stateManager.onSelectionChangedObservable.notifyObservers(null);
+        this.props.globalState.onClearUndoStack.notifyObservers();
+        this.props.globalState.onLogRequiredObservable.notifyObservers(
+            new LogEntry(`Imported flow graph from "${fileName}" (KHR_interactivity: ${targetGraph.getAllBlocks().length} blocks)`, false)
+        );
+        return true;
+    }
+
+    /**
      * Load a scene from a dropped file (glb, gltf, or babylon).
      * @param file - the main scene file
      * @param companionFiles - additional files dropped alongside (bin, textures)
@@ -300,6 +348,23 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
 
             const sceneContext = this._publishSceneContext(scene);
             this.props.globalState.snippetId = "";
+
+            // Detect flow graphs from the loaded file:
+            // 1. KHR_interactivity (processed by the glTF loader into coordinators)
+            // 2. BABYLON_flow_graph custom extension (our round-trip format)
+            const foundViaCoordinator = await this._importFlowGraphsFromSceneAsync(scene, file.name);
+            if (!foundViaCoordinator) {
+                try {
+                    const imported = await SerializationTools.ImportFromGlbAsync(file, this.props.globalState);
+                    if (imported) {
+                        this.props.globalState.onLogRequiredObservable.notifyObservers(
+                            new LogEntry(`Imported flow graph from "${file.name}" (BABYLON_flow_graph extension)`, false)
+                        );
+                    }
+                } catch {
+                    // Custom extension not present or parse failed — that's fine
+                }
+            }
 
             this.setState({ isLoading: false, snippetId: "" });
             this.props.globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`Loaded "${file.name}" with ${sceneContext.entries.length} scene objects`, false));

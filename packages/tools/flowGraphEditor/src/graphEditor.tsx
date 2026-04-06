@@ -31,6 +31,7 @@ import { type IFlowGraphValidationResult, FlowGraphValidationSeverity } from "co
 import { AnalyzeSmartGroup, ApplySmartGroupExposure } from "./graphSystem/smartGroup";
 import { HelpDialogComponent } from "./components/help/helpDialogComponent";
 import { type HelpTopicId } from "./components/help/helpContent";
+import { TEMPLATE_PREFIX, AllCompositeTemplates, type ICompositeTemplate } from "./compositeTemplates";
 
 /**
  * Pre-populate string (and other primitive) config fields for blocks whose constructors
@@ -280,6 +281,17 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
 
             const selectedLink = this._graphCanvas.selectedLink;
             const selectedNode = this._graphCanvas.selectedNodes.length ? this._graphCanvas.selectedNodes[0] : null;
+
+            // Check if this is a composite template
+            if (eventData.type.startsWith(TEMPLATE_PREFIX)) {
+                const templateName = eventData.type.substring(TEMPLATE_PREFIX.length);
+                const template = AllCompositeTemplates[templateName];
+                if (template) {
+                    await this._emitTemplateAsync(template, targetX, targetY);
+                    return;
+                }
+            }
+
             const newNode = await this._emitNewBlockAsync(eventData.type, targetX, targetY);
 
             if (newNode && eventData.smartAdd) {
@@ -753,7 +765,89 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
         const data = event.dataTransfer.getData("babylonjs-flow-graph-node");
 
         const container = this._diagramContainerRef.current!;
-        void this._emitNewBlockAsync(data, event.clientX - container.offsetLeft, event.clientY - container.offsetTop);
+        const dropX = event.clientX - container.offsetLeft;
+        const dropY = event.clientY - container.offsetTop;
+
+        // Check if this is a composite template drop
+        if (data.startsWith(TEMPLATE_PREFIX)) {
+            const templateName = data.substring(TEMPLATE_PREFIX.length);
+            const template = AllCompositeTemplates[templateName];
+            if (template) {
+                void this._emitTemplateAsync(template, dropX, dropY);
+                return;
+            }
+        }
+
+        void this._emitNewBlockAsync(data, dropX, dropY);
+    }
+
+    /**
+     * Instantiate a composite template: create all blocks, position them, and wire connections.
+     * @param template - the template definition
+     * @param dropX - X position of the drop
+     * @param dropY - Y position of the drop
+     */
+    private async _emitTemplateAsync(template: ICompositeTemplate, dropX: number, dropY: number): Promise<void> {
+        const createdNodes: GraphNode[] = [];
+
+        // Create all blocks
+        for (const blockDef of template.blocks) {
+            try {
+                const factory = blockFactory(blockDef.className);
+                const blockClass = await factory();
+                const config: any = { name: blockDef.className, ...blockDef.config };
+                const block = new (blockClass as any)(config) as FlowGraphBlock;
+
+                const maybeEvent = block as unknown as FlowGraphEventBlock;
+                if (typeof maybeEvent._executeEvent === "function") {
+                    this.props.globalState.flowGraph.addEventBlock(maybeEvent);
+                } else {
+                    this.props.globalState.flowGraph.addBlock(block);
+                }
+
+                const newNode = this.appendBlock(block);
+                newNode.addClassToVisual(block.getClassName());
+
+                // Position the node at the drop location + offset
+                const zoomLevel = this._graphCanvas.zoom;
+                const nodeX = (dropX + blockDef.offsetX - this._graphCanvas.x) / zoomLevel;
+                const nodeY = (dropY + blockDef.offsetY - this._graphCanvas.y) / zoomLevel;
+                newNode.x = nodeX;
+                newNode.y = nodeY;
+                newNode.cleanAccumulation();
+
+                createdNodes.push(newNode);
+            } catch (err) {
+                this.props.globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`Error creating template block "${blockDef.className}": ${err}`, true));
+                return;
+            }
+        }
+
+        // Wire connections
+        for (const conn of template.connections) {
+            const fromNode = createdNodes[conn.fromBlock];
+            const toNode = createdNodes[conn.toBlock];
+            if (!fromNode || !toNode) {
+                continue;
+            }
+
+            // Find the matching ports
+            const fromPort = conn.isSignal
+                ? fromNode.outputPorts.find((p) => p.portData.name === conn.fromPort)
+                : fromNode.outputPorts.find((p) => p.portData.name === conn.fromPort);
+            const toPort = conn.isSignal ? toNode.inputPorts.find((p) => p.portData.name === conn.toPort) : toNode.inputPorts.find((p) => p.portData.name === conn.toPort);
+
+            if (fromPort && toPort) {
+                this._graphCanvas.connectPorts(fromPort.portData, toPort.portData);
+            }
+        }
+
+        // Force a refresh
+        this.setState({});
+
+        const blockCount = createdNodes.length;
+        const connCount = template.connections.length;
+        this.props.globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`Template "${template.name}" created: ${blockCount} blocks, ${connCount} connections`, false));
     }
 
     /** @internal */
