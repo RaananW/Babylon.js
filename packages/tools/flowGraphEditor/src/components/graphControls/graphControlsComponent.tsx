@@ -387,6 +387,15 @@ export class GraphControlsComponent extends React.Component<IGraphControlsProps,
                 >
                     ?
                 </button>
+                <button
+                    className="fge-ctrl-btn fge-ctrl-howto"
+                    title="How to Use (embed code samples)"
+                    onClick={() => {
+                        this.props.globalState.onHowToUseRequested.notifyObservers();
+                    }}
+                >
+                    {"</>"}
+                </button>
             </div>
         );
     }

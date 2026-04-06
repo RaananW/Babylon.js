@@ -31,6 +31,7 @@ import { type IFlowGraphValidationResult, FlowGraphValidationSeverity } from "co
 import { AnalyzeSmartGroup, ApplySmartGroupExposure } from "./graphSystem/smartGroup";
 import { HelpDialogComponent } from "./components/help/helpDialogComponent";
 import { type HelpTopicId } from "./components/help/helpContent";
+import { HowToUseDialogComponent } from "./components/howToUse/howToUseDialogComponent";
 
 /**
  * Pre-populate string (and other primitive) config fields for blocks whose constructors
@@ -46,6 +47,7 @@ interface IGraphEditorState {
     message: string;
     isError: boolean;
     helpTopicId: HelpTopicId | undefined | null;
+    showHowToUse: boolean;
 }
 
 /**
@@ -227,6 +229,10 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
         this.props.globalState.onHelpRequested.add((topicId) => {
             this.setState({ helpTopicId: topicId ?? undefined });
         });
+
+        this.props.globalState.onHowToUseRequested.add(() => {
+            this.setState({ showHowToUse: true });
+        });
     }
 
     /** @internal */
@@ -263,6 +269,7 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
             message: "",
             isError: true,
             helpTopicId: null,
+            showHowToUse: false,
         };
 
         this._graphCanvasRef = React.createRef();
@@ -823,6 +830,7 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
                 {this.state.helpTopicId !== null && (
                     <HelpDialogComponent initialTopicId={this.state.helpTopicId ?? undefined} onClose={() => this.setState({ helpTopicId: null })} />
                 )}
+                {this.state.showHowToUse && <HowToUseDialogComponent globalState={this.props.globalState} onClose={() => this.setState({ showHowToUse: false })} />}
                 <div className="blocker">Flow Graph Editor needs a horizontal resolution of at least 900px</div>
                 <div className="wait-screen hidden">Processing...please wait</div>
             </Portal>
