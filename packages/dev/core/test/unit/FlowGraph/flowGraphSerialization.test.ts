@@ -7,10 +7,13 @@ import {
     FlowGraphCoordinator,
     FlowGraphGetVariableBlock,
     FlowGraphConsoleLogBlock,
+    FlowGraphDivideBlock,
     FlowGraphMultiGateBlock,
+    FlowGraphMultiplyBlock,
     FlowGraphPlayAnimationBlock,
     FlowGraphSceneReadyEventBlock,
     FlowGraphSetPropertyBlock,
+    FlowGraphSubtractBlock,
     RichTypeNumber,
     RichTypeVector3,
     ParseGraphDataConnection,
@@ -25,6 +28,7 @@ import { FlowGraphEventType } from "core/FlowGraph/flowGraphEventType";
 import { FlowGraphPathConverter } from "core/FlowGraph/flowGraphPathConverter";
 import { Vector3 } from "core/Maths";
 import { Mesh } from "core/Meshes";
+import { TransformNode } from "core/Meshes/transformNode";
 import { Logger } from "core/Misc/logger";
 import { Scene } from "core/scene";
 
@@ -226,5 +230,99 @@ describe("Flow Graph Serialization", () => {
 
         scene.onReadyObservable.notifyObservers(scene);
         expect(mesh.position.asArray()).toEqual([1, 2, 3]);
+    });
+
+    it("Binary operation blocks have correct getClassName after construction", () => {
+        const addBlock = new FlowGraphAddBlock();
+        expect(addBlock.getClassName()).toEqual("FlowGraphAddBlock");
+
+        const divideBlock = new FlowGraphDivideBlock();
+        expect(divideBlock.getClassName()).toEqual("FlowGraphDivideBlock");
+
+        const multiplyBlock = new FlowGraphMultiplyBlock();
+        expect(multiplyBlock.getClassName()).toEqual("FlowGraphMultiplyBlock");
+
+        const subtractBlock = new FlowGraphSubtractBlock();
+        expect(subtractBlock.getClassName()).toEqual("FlowGraphSubtractBlock");
+    });
+
+    it("Unconnected input values survive serialize → parse round-trip", () => {
+        const coordinator = new FlowGraphCoordinator({ scene });
+        const graph = coordinator.createGraph();
+        const context = graph.createContext();
+
+        const divideBlock = new FlowGraphDivideBlock();
+        // Set unconnected input "b" to 2 (simulating KHR_interactivity default)
+        divideBlock.b.setValue(2, context);
+        // Set "a" to 10
+        divideBlock.a.setValue(10, context);
+
+        const serialized: any = {};
+        context.serialize(serialized);
+
+        // Connection values should be in the serialized context
+        expect(serialized._connectionValues[divideBlock.a.uniqueId]).toEqual(10);
+        expect(serialized._connectionValues[divideBlock.b.uniqueId]).toEqual(2);
+
+        // Parse back
+        const parsed = ParseFlowGraphContext(serialized, { graph });
+        expect(parsed._getConnectionValue(divideBlock.a)).toEqual(10);
+        expect(parsed._getConnectionValue(divideBlock.b)).toEqual(2);
+    });
+
+    it("Math graph with unconnected inputs produces correct results after round-trip", async () => {
+        const mockContext: any = {};
+        const pathConverter = new FlowGraphPathConverter(mockContext);
+
+        const coordinator = new FlowGraphCoordinator({ scene });
+        const graph = coordinator.createGraph();
+        const context = graph.createContext();
+
+        // Build: OnSceneReady → Log(10 / 2) = 5
+        const sceneReady = new FlowGraphSceneReadyEventBlock();
+        graph.addEventBlock(sceneReady);
+
+        const divideBlock = new FlowGraphDivideBlock();
+        // a=10 (unconnected), b=2 (unconnected)
+        divideBlock.a.setValue(10, context);
+        divideBlock.b.setValue(2, context);
+
+        const logBlock = new FlowGraphConsoleLogBlock();
+        sceneReady.out.connectTo(logBlock.in);
+        logBlock.message.connectTo(divideBlock.value);
+
+        // Serialize entire graph
+        const serialized: any = {};
+        graph.serialize(serialized);
+
+        // Deserialize into a new coordinator
+        const coordinator2 = new FlowGraphCoordinator({ scene });
+        const parsed = await ParseFlowGraphAsync(serialized, { coordinator: coordinator2, pathConverter });
+
+        parsed.start();
+        expect(Logger.Log).toHaveBeenCalledWith(5);
+    });
+
+    it("TransformNode references survive serialize → parse round-trip", () => {
+        const coordinator = new FlowGraphCoordinator({ scene });
+        const graph = coordinator.createGraph();
+        const context = graph.createContext();
+
+        const transformNode = new TransformNode("myTransform", scene);
+        context.setVariable("testNode", transformNode);
+
+        const serialized: any = {};
+        context.serialize(serialized);
+
+        // Serialized as an object with name and className
+        expect(serialized._userVariables.testNode.name).toEqual("myTransform");
+        expect(serialized._userVariables.testNode.className).toEqual("TransformNode");
+
+        // Parse back — should resolve to the same TransformNode in the scene
+        const parsed = ParseFlowGraphContext(serialized, { graph });
+        const resolved = parsed.getVariable("testNode");
+        expect(resolved).toBeDefined();
+        expect(resolved.uniqueId).toEqual(transformNode.uniqueId);
+        expect(resolved.name).toEqual("myTransform");
     });
 });
