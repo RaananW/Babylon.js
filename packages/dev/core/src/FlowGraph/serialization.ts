@@ -13,6 +13,7 @@ function IsMeshClassName(className: string) {
     return (
         className === "Mesh" ||
         className === "AbstractMesh" ||
+        className === "TransformNode" ||
         className === "GroundMesh" ||
         className === "InstanceMesh" ||
         className === "LinesMesh" ||
@@ -148,19 +149,26 @@ export function defaultValueParseFunction(key: string, serializationObject: any,
         finalValue = intermediateValue.value;
     } else {
         if (Array.isArray(intermediateValue)) {
-            // configuration data of an event
-            finalValue = intermediateValue.reduce((acc, val) => {
-                if (!val.eventData) {
+            // Check if this is an event configuration array (objects with id/eventData)
+            // versus a plain array of primitives (e.g. variable name lists)
+            if (intermediateValue.length > 0 && typeof intermediateValue[0] === "object" && intermediateValue[0] !== null) {
+                // configuration data of an event
+                finalValue = intermediateValue.reduce((acc, val) => {
+                    if (!val.eventData) {
+                        return acc;
+                    }
+                    acc[val.id] = {
+                        type: getRichTypeByFlowGraphType(val.type),
+                    };
+                    if (typeof val.value !== "undefined") {
+                        acc[val.id].value = defaultValueParseFunction("value", val, assetsContainer, scene);
+                    }
                     return acc;
-                }
-                acc[val.id] = {
-                    type: getRichTypeByFlowGraphType(val.type),
-                };
-                if (typeof val.value !== "undefined") {
-                    acc[val.id].value = defaultValueParseFunction("value", val, assetsContainer, scene);
-                }
-                return acc;
-            }, {});
+                }, {});
+            } else {
+                // Plain array of primitives — return as-is
+                finalValue = intermediateValue;
+            }
         } else {
             finalValue = intermediateValue;
         }

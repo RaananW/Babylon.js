@@ -258,19 +258,48 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
             return false;
         }
 
-        // Find the first coordinator that has at least one flow graph
-        let targetGraph: import("core/FlowGraph/flowGraph").FlowGraph | null = null;
-        let targetCoordinator: (typeof coordinators)[0] | null = null;
-        for (const coordinator of coordinators) {
-            if (coordinator.flowGraphs.length > 0) {
-                targetGraph = coordinator.flowGraphs[0];
-                targetCoordinator = coordinator;
-                break;
+        // Find the first coordinator that has at least one flow graph.
+        const findGraph = (): { graph: import("core/FlowGraph/flowGraph").FlowGraph; coordinator: (typeof coordinators)[0] } | null => {
+            for (const coordinator of coordinators) {
+                if (coordinator.flowGraphs.length > 0) {
+                    return { graph: coordinator.flowGraphs[0], coordinator };
+                }
+            }
+            return null;
+        };
+
+        // KHR_interactivity's onReady() is async and may not have finished
+        // parsing yet (the glTF loader does not await extension onReady
+        // promises).  Retry with short delays to let the parse microtasks
+        // complete.
+        let found = findGraph();
+        if (!found) {
+            for (let attempt = 0; attempt < 10; attempt++) {
+                // eslint-disable-next-line no-await-in-loop
+                await new Promise<void>((resolve) => setTimeout(resolve, 50));
+                found = findGraph();
+                if (found) {
+                    break;
+                }
             }
         }
 
-        if (!targetGraph || !targetCoordinator) {
+        if (!found) {
             return false;
+        }
+
+        const { graph: targetGraph, coordinator: targetCoordinator } = found;
+
+        // Extract the pathConverter from a JsonPointerParser block before serializing.
+        // KHR_interactivity injects a GLTFPathToObjectConverter into every such block.
+        // This object is not serializable (contains closures), so we must pass it
+        // through directly to the re-parse step.
+        let pathConverter: any = null;
+        for (const block of targetGraph.getAllBlocks()) {
+            if (block.getClassName() === "FlowGraphJsonPointerParserBlock" && (block.config as any)?.pathConverter) {
+                pathConverter = (block.config as any).pathConverter;
+                break;
+            }
         }
 
         // Serialize the loaded graph, then deserialize it into the editor
@@ -280,7 +309,7 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
         // Stop the coordinator so its graphs don't keep running in the background
         targetCoordinator.dispose();
 
-        await SerializationTools.DeserializeAsync(serialized, this.props.globalState);
+        await SerializationTools.DeserializeAsync(serialized, this.props.globalState, scene, pathConverter);
         this.props.globalState.onResetRequiredObservable.notifyObservers(false);
         this.props.globalState.stateManager.onSelectionChangedObservable.notifyObservers(null);
         this.props.globalState.onClearUndoStack.notifyObservers();
@@ -335,11 +364,10 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
             }
 
             // If the loaded scene has no camera, create a default one
-            if (!scene.activeCamera && scene.cameras.length === 0) {
-                const { ArcRotateCamera } = await import("core/Cameras/arcRotateCamera");
-                const { Vector3 } = await import("core/Maths/math.vector");
-                const camera = new ArcRotateCamera("camera", -Math.PI / 4, Math.PI / 3, 10, Vector3.Zero(), scene);
-                camera.attachControl(canvas, true);
+            scene.createDefaultCamera(true, true, true);
+            // Add a default light if the scene has none
+            if (scene.lights.length === 0) {
+                scene.createDefaultLight(true);
             }
 
             this._setupEngineRenderLoop(scene, engine);

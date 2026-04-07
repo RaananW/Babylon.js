@@ -83,17 +83,23 @@ export class SerializationTools {
      * @param serializationObject - the serialized data to load
      * @param globalState - the editor's global state
      */
-    public static async DeserializeAsync(serializationObject: any, globalState: GlobalState): Promise<void> {
+    public static async DeserializeAsync(serializationObject: any, globalState: GlobalState, scene?: import("core/scene").Scene, pathConverter?: any): Promise<void> {
         globalState.onIsLoadingChanged.notifyObservers(true);
         try {
-            const coordinator = new FlowGraphCoordinator({ scene: globalState.scene });
-            const parsedGraph = await ParseFlowGraphAsync(serializationObject, { coordinator });
+            const targetScene = scene ?? globalState.scene;
+            const coordinator = new FlowGraphCoordinator({ scene: targetScene });
+            const parsedGraph = await ParseFlowGraphAsync(serializationObject, { coordinator, pathConverter });
 
             // The graph was parsed against the editor's host scene which may not
             // contain scene objects (meshes, animation groups, animations) that
             // only exist in the preview scene loaded from a snippet.  Stash the
             // serialized names so _rebind*Reference can find them later.
             SerializationTools.PreserveUnresolvedNames(parsedGraph, serializationObject);
+
+            // Sync context connection values into _defaultValue for unconnected
+            // inputs so the editor UI shows the correct value (e.g. "2" instead
+            // of "0" for a divide block's unconnected divisor).
+            SerializationTools.SyncConnectionValuesToDefaults(parsedGraph);
 
             // Restore editor layout data (block positions, frames, zoom)
             if (serializationObject.editorData) {
@@ -116,6 +122,36 @@ export class SerializationTools {
             }
         } finally {
             globalState.onIsLoadingChanged.notifyObservers(false);
+        }
+    }
+
+    /**
+     * After parsing a flow graph from serialized data, unconnected data inputs
+     * have their actual values stored in the execution context's
+     * `_connectionValues` map (keyed by socket uniqueId), while the connection
+     * object's `_defaultValue` stays at the type default (0 for numbers).
+     * The editor UI reads `_defaultValue` for display, so this method copies
+     * the context values into `_defaultValue` for all unconnected inputs.
+     * @param parsedGraph - the parsed flow graph whose inputs need syncing
+     */
+    public static SyncConnectionValuesToDefaults(parsedGraph: FlowGraph): void {
+        const ctx = parsedGraph.getContext(0);
+        if (!ctx) {
+            return;
+        }
+        const connectionValues: Record<string, any> = (ctx as any)._connectionValues;
+        if (!connectionValues) {
+            return;
+        }
+        for (const block of parsedGraph.getAllBlocks()) {
+            for (const input of block.dataInputs) {
+                if (!input.isConnected()) {
+                    const ctxValue = connectionValues[input.uniqueId];
+                    if (ctxValue !== undefined && ctxValue !== null) {
+                        (input as any)._defaultValue = ctxValue;
+                    }
+                }
+            }
         }
     }
 

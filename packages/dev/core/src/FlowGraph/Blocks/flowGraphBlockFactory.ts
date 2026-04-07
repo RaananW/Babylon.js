@@ -355,6 +355,14 @@ export function blockFactory(blockName: FlowGraphBlockNames | string): () => Pro
             if (CustomBlocks[blockName]) {
                 return CustomBlocks[blockName];
             }
+            // Fallback: search for a custom block whose short name matches (e.g. "FlowGraphGLTFDataProvider" → "KHR_interactivity/FlowGraphGLTFDataProvider")
+            if (!blockName.includes("/")) {
+                for (const key in CustomBlocks) {
+                    if (key.endsWith("/" + blockName)) {
+                        return CustomBlocks[key];
+                    }
+                }
+            }
             throw new Error(`Unknown block name ${blockName}`);
     }
 }

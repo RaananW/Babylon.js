@@ -547,6 +547,19 @@ export class GlobalState {
     private _cachedOldIdToName: Map<string, Map<number, string>> | null = null;
 
     /**
+     * Saved user variables from the last execution context before setScene cleared it.
+     * These are restored into the newly created context to preserve mesh references.
+     */
+    private _savedUserVariables: { [key: string]: any } | null = null;
+
+    /**
+     * Saved connection values (unconnected input defaults) from the last execution context
+     * before setScene cleared it. These hold values like the "2" in a divide-by-2 block
+     * that has no incoming connection on its "b" input.
+     */
+    private _savedConnectionValues: { [key: string]: any } | null = null;
+
+    /**
      * Gets the current flow graph
      */
     public get flowGraph(): FlowGraph {
@@ -589,7 +602,15 @@ export class GlobalState {
         // press Start or Reset.  The graph may arrive already started when
         // opened from KHR_interactivity or another runtime path.
         if (flowGraph.state === FlowGraphState.Started || flowGraph.state === FlowGraphState.Paused) {
+            // Snapshot user variables before stop() clears execution contexts.
+            // These variables (e.g. pickedMesh_0 from KHR_interactivity) are
+            // set during parsing and would be lost when stop() empties contexts.
+            this._snapshotUserVariablesFrom(flowGraph);
             flowGraph.stop();
+        } else {
+            // Graph is already stopped but may still have parsed contexts with
+            // variables that we need to preserve for when start() is called.
+            this._snapshotUserVariablesFrom(flowGraph);
         }
 
         // Wire the observer: when scene context changes, update all execution contexts
@@ -612,6 +633,11 @@ export class GlobalState {
                 // Cache the NEW scene's id→name map for the next reload
                 this._cacheSceneIdToNameMap(ctx.scene);
 
+                // Snapshot user variables before setScene clears contexts —
+                // they contain mesh references (pickedMesh_0 etc.) from
+                // KHR_interactivity that must survive scene switches.
+                this._snapshotUserVariables();
+
                 if (typeof flowGraph.setScene === "function") {
                     flowGraph.setScene(ctx.scene);
                 }
@@ -619,12 +645,27 @@ export class GlobalState {
         });
 
         // Wrap createContext() so newly created contexts also inherit the loaded scene
+        // and any saved user variables from the previous context.
         this._originalCreateContext = flowGraph.createContext.bind(flowGraph);
         const origCreate = this._originalCreateContext!;
         flowGraph.createContext = (): FlowGraphContext => {
             const ctx = origCreate();
             if (this.sceneContext) {
                 ctx.assetsContext = this.sceneContext.scene;
+            }
+            // Restore user variables saved before setScene cleared contexts
+            if (this._savedUserVariables) {
+                for (const key in this._savedUserVariables) {
+                    ctx.setVariable(key, this._savedUserVariables[key]);
+                }
+                this._savedUserVariables = null;
+            }
+            // Restore connection values (unconnected input defaults like divide-by-2)
+            if (this._savedConnectionValues) {
+                for (const key in this._savedConnectionValues) {
+                    ctx._setConnectionValueByKey(key, this._savedConnectionValues[key]);
+                }
+                this._savedConnectionValues = null;
             }
             return ctx;
         };
@@ -759,6 +800,11 @@ export class GlobalState {
             this._rebindAnimationGroupReference(block, newScene);
             this._rebindAnimationReference(block, newScene);
         });
+
+        // --- Rebind mesh references stored in context user variables ---
+        // KHR_interactivity stores mesh references in user variables (e.g. pickedMesh_0)
+        // that feed MeshPickEvent blocks through GetVariable connections.
+        this._rebindContextUserVariables(newScene);
     }
 
     /**
@@ -871,6 +917,95 @@ export class GlobalState {
             }
             (animInput as any)._defaultValue = match;
         }
+    }
+
+    /**
+     * Rebind mesh and transform node references stored in context user variables.
+     * KHR_interactivity stores references like pickedMesh_0 in context._userVariables
+     * which are read by GetVariable blocks to feed MeshPickEvent.asset.
+     * When the scene changes, these references become stale and need updating.
+     * @param newScene - the newly loaded scene to resolve references against
+     */
+    private _rebindContextUserVariables(newScene: Scene): void {
+        if (!this._flowGraph) {
+            return;
+        }
+
+        const allMeshesAndNodes = [...newScene.meshes, ...newScene.transformNodes];
+
+        const ctxCount = (this._flowGraph as any)._executionContexts?.length ?? 0;
+        for (let i = 0; i < ctxCount; i++) {
+            const context = this._flowGraph.getContext(i);
+            if (!context) {
+                continue;
+            }
+            const vars = context.userVariables;
+            for (const key in vars) {
+                const value = vars[key];
+                if (!value || typeof value !== "object") {
+                    continue;
+                }
+                // Check if this is a stale mesh/transform node reference (raw descriptor object
+                // that wasn't resolved during parsing, or a reference to a disposed/wrong-scene mesh)
+                const isUnresolved = value.className && (value.id || value.name) && typeof value.getClassName !== "function";
+                const isStaleRef = typeof value.getClassName === "function" && !allMeshesAndNodes.some((m) => m === value);
+
+                if (isUnresolved || isStaleRef) {
+                    const name = value.name ?? (typeof value.getClassName === "function" ? value.name : undefined);
+                    const id = value.id ?? (typeof value.getClassName === "function" ? value.id : undefined);
+
+                    // Try to find by id first, then by name
+                    let match = id ? allMeshesAndNodes.find((m) => m.id === id) : undefined;
+                    if (!match && name) {
+                        match = allMeshesAndNodes.find((m) => m.name === name);
+                    }
+
+                    if (match) {
+                        context.setVariable(key, match);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Snapshot all user variables from the first execution context of a flow graph.
+     * Called just before stop/setScene clears contexts so variables can be restored later.
+     * @param graph - the flow graph to snapshot from (defaults to current graph)
+     */
+    private _snapshotUserVariablesFrom(graph?: FlowGraph): void {
+        const fg = graph ?? this._flowGraph;
+        if (!fg) {
+            return;
+        }
+        const ctx = fg.getContext(0);
+        if (!ctx) {
+            return;
+        }
+        const vars = ctx.userVariables;
+        if (vars && Object.keys(vars).length > 0) {
+            this._savedUserVariables = { ...vars };
+        }
+        // Also snapshot connection values (unconnected input defaults)
+        const connVals = (ctx as any)._connectionValues;
+        if (connVals && Object.keys(connVals).length > 0) {
+            this._savedConnectionValues = { ...connVals };
+        }
+    }
+
+    /**
+     * Convenience alias for snapshotting from the current flow graph.
+     */
+    private _snapshotUserVariables(): void {
+        this._snapshotUserVariablesFrom();
+    }
+
+    /**
+     * Public method to snapshot user variables before an operation that clears contexts.
+     * Call this before flowGraph.stop() to preserve variables for the next start().
+     */
+    public snapshotUserVariables(): void {
+        this._snapshotUserVariablesFrom();
     }
 
     /**

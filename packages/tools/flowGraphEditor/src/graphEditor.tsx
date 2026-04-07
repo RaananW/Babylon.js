@@ -475,7 +475,18 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
             this.loadGraph();
         }
 
-        this.reOrganize(editorData);
+        if (editorData) {
+            this.reOrganize(editorData);
+        } else {
+            // No saved positions — defer auto-layout until after the browser
+            // has painted so that node DOM elements have real dimensions.
+            // setTimeout(0) defers to the next macro-task, after the browser
+            // has completed layout and paint. rAF alone is not sufficient
+            // because it fires *before* layout in some browsers.
+            setTimeout(() => {
+                this.reOrganize(null);
+            }, 0);
+        }
 
         // Notify that the graph has been (re-)built so components like
         // GraphControlsComponent can re-subscribe to the current flow graph.
