@@ -232,6 +232,49 @@ describe("Flow Graph Serialization", () => {
         expect(mesh.position.asArray()).toEqual([1, 2, 3]);
     });
 
+    it("Event block fires both out and done signals after round-trip", async () => {
+        const mockContext: any = {};
+        const pathConverter = new FlowGraphPathConverter(mockContext);
+
+        // Test 1: downstream connected via 'out'
+        const coordinator1 = new FlowGraphCoordinator({ scene });
+        const graph1 = coordinator1.createGraph();
+        const ctx1 = graph1.createContext();
+        ctx1.setVariable("test", "via-out");
+
+        const sceneReady1 = new FlowGraphSceneReadyEventBlock();
+        graph1.addEventBlock(sceneReady1);
+        const log1 = new FlowGraphConsoleLogBlock();
+        sceneReady1.out.connectTo(log1.in);
+        const getVar1 = new FlowGraphGetVariableBlock({ variable: "test" });
+        log1.message.connectTo(getVar1.value);
+
+        const serialized1: any = {};
+        graph1.serialize(serialized1);
+        const parsed1 = await ParseFlowGraphAsync(serialized1, { coordinator: coordinator1, pathConverter });
+        parsed1.start();
+        expect(Logger.Log).toHaveBeenCalledWith("via-out");
+
+        // Test 2: downstream connected via 'done'
+        const coordinator2 = new FlowGraphCoordinator({ scene });
+        const graph2 = coordinator2.createGraph();
+        const ctx2 = graph2.createContext();
+        ctx2.setVariable("test", "via-done");
+
+        const sceneReady2 = new FlowGraphSceneReadyEventBlock();
+        graph2.addEventBlock(sceneReady2);
+        const log2 = new FlowGraphConsoleLogBlock();
+        sceneReady2.done.connectTo(log2.in);
+        const getVar2 = new FlowGraphGetVariableBlock({ variable: "test" });
+        log2.message.connectTo(getVar2.value);
+
+        const serialized2: any = {};
+        graph2.serialize(serialized2);
+        const parsed2 = await ParseFlowGraphAsync(serialized2, { coordinator: coordinator2, pathConverter });
+        parsed2.start();
+        expect(Logger.Log).toHaveBeenCalledWith("via-done");
+    });
+
     it("Binary operation blocks have correct getClassName after construction", () => {
         const addBlock = new FlowGraphAddBlock();
         expect(addBlock.getClassName()).toEqual("FlowGraphAddBlock");
