@@ -6,6 +6,7 @@ import { type FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
 import { FlowGraphCoordinator } from "core/FlowGraph/flowGraphCoordinator";
 import { ParseFlowGraphAsync } from "core/FlowGraph/flowGraphParser";
 import { type Scene } from "core/scene";
+import { Logger } from "core/Misc/logger";
 
 /**
  * Provides serialization and deserialization utilities for the flow graph editor.
@@ -82,6 +83,8 @@ export class SerializationTools {
      * Creates a new FlowGraph from the serialized data and sets it on the global state.
      * @param serializationObject - the serialized data to load
      * @param globalState - the editor's global state
+     * @param scene - optional scene to use instead of globalState.scene
+     * @param pathConverter - optional path converter for JSON pointer blocks
      */
     public static async DeserializeAsync(serializationObject: any, globalState: GlobalState, scene?: Scene, pathConverter?: any): Promise<void> {
         globalState.onIsLoadingChanged.notifyObservers(true);
@@ -118,6 +121,7 @@ export class SerializationTools {
 
             // Restore the flow graph snippet ID
             if (serializationObject.flowGraphSnippetId) {
+                // eslint-disable-next-line require-atomic-updates
                 globalState.flowGraphSnippetId = serializationObject.flowGraphSnippetId;
             }
         } finally {
@@ -204,6 +208,15 @@ export class SerializationTools {
      */
     public static readonly GLTF_EXTENSION_NAME = "BABYLON_flow_graph";
 
+    // GLB format constants
+    private static readonly _GLB_MAGIC = 0x46546c67; // "glTF" in little-endian
+    private static readonly _GLB_MAGIC_BYTES = [0x67, 0x6c, 0x54, 0x46]; // "glTF" byte sequence
+    private static readonly _GLB_VERSION = 2;
+    private static readonly _GLB_HEADER_SIZE = 12;
+    private static readonly _GLB_CHUNK_HEADER_SIZE = 8;
+    private static readonly _GLB_JSON_CHUNK_TYPE = 0x4e4f534a; // "JSON" in little-endian
+    private static readonly _GLB_SPACE_PAD = 0x20;
+
     /**
      * Export the flow graph (and optionally the preview scene) as a .glb file.
      * The flow graph JSON is embedded inside a custom glTF extension called
@@ -246,6 +259,7 @@ export class SerializationTools {
                 // GLTF2Export to the global BABYLON namespace. The webpack config
                 // externalizes `core/` → BABYLON but doesn't handle `serializers/`,
                 // so we access it from the global directly.
+                // eslint-disable-next-line @typescript-eslint/naming-convention
                 const GLTF2Export = (globalThis as any).BABYLON?.GLTF2Export;
                 if (!GLTF2Export) {
                     throw new Error("GLTF2Export not available on BABYLON global");
@@ -260,10 +274,13 @@ export class SerializationTools {
                     if (augmented) {
                         SerializationTools._DownloadBlob(new Blob([augmented.buffer as ArrayBuffer], { type: "model/gltf-binary" }), "flowGraph.glb", globalState);
                         return;
+                    } else {
+                        Logger.Warn("Failed to inject flow graph extension into scene GLB; falling back to minimal export without scene geometry.");
                     }
                 }
-            } catch {
+            } catch (e) {
                 // GLTF2Export not available — fall back to building a minimal glb
+                Logger.Warn("Full scene GLB export failed, falling back to minimal export: " + (e instanceof Error ? e.message : String(e)));
             }
         }
 
@@ -283,13 +300,20 @@ export class SerializationTools {
         const buffer = await file.arrayBuffer();
         const bytes = new Uint8Array(buffer);
 
-        let gltfJson: any = null;
+        let gltfJson: any;
 
         // Check if it's a GLB (binary glTF)
-        if (bytes.length >= 12 && bytes[0] === 0x67 && bytes[1] === 0x6c && bytes[2] === 0x54 && bytes[3] === 0x46) {
+        if (
+            bytes.length >= SerializationTools._GLB_HEADER_SIZE &&
+            bytes[0] === SerializationTools._GLB_MAGIC_BYTES[0] &&
+            bytes[1] === SerializationTools._GLB_MAGIC_BYTES[1] &&
+            bytes[2] === SerializationTools._GLB_MAGIC_BYTES[2] &&
+            bytes[3] === SerializationTools._GLB_MAGIC_BYTES[3]
+        ) {
             // GLB format: header (12 bytes) + JSON chunk (8-byte header + data)
-            const jsonChunkLength = new DataView(buffer, 12, 4).getUint32(0, true);
-            const jsonChunkData = new Uint8Array(buffer, 20, jsonChunkLength);
+            const jsonChunkLength = new DataView(buffer, SerializationTools._GLB_HEADER_SIZE, 4).getUint32(0, true);
+            const jsonDataOffset = SerializationTools._GLB_HEADER_SIZE + SerializationTools._GLB_CHUNK_HEADER_SIZE;
+            const jsonChunkData = new Uint8Array(buffer, jsonDataOffset, jsonChunkLength);
             const decoder = new TextDecoder("utf-8");
             try {
                 gltfJson = JSON.parse(decoder.decode(jsonChunkData));
@@ -327,15 +351,17 @@ export class SerializationTools {
      * @returns the augmented GLB bytes, or null if parsing fails
      */
     private static _InjectExtensionIntoGlb(glbBytes: Uint8Array, fgSerialized: any): Nullable<Uint8Array> {
-        if (glbBytes.length < 20) {
+        const minSize = SerializationTools._GLB_HEADER_SIZE + SerializationTools._GLB_CHUNK_HEADER_SIZE;
+        if (glbBytes.length < minSize) {
             return null;
         }
 
         const view = new DataView(glbBytes.buffer, glbBytes.byteOffset, glbBytes.byteLength);
 
         // Read JSON chunk length from GLB
-        const jsonChunkLength = view.getUint32(12, true);
-        const jsonChunkData = glbBytes.slice(20, 20 + jsonChunkLength);
+        const jsonChunkLength = view.getUint32(SerializationTools._GLB_HEADER_SIZE, true);
+        const jsonDataOffset = SerializationTools._GLB_HEADER_SIZE + SerializationTools._GLB_CHUNK_HEADER_SIZE;
+        const jsonChunkData = glbBytes.slice(jsonDataOffset, jsonDataOffset + jsonChunkLength);
         const decoder = new TextDecoder("utf-8");
 
         let gltfJson: any;
@@ -360,32 +386,32 @@ export class SerializationTools {
         while (newJsonBytes.length % 4 !== 0) {
             const padded = new Uint8Array(newJsonBytes.length + 1);
             padded.set(newJsonBytes);
-            padded[padded.length - 1] = 0x20; // space
+            padded[padded.length - 1] = SerializationTools._GLB_SPACE_PAD;
             newJsonBytes = padded;
         }
 
         // Binary chunk (everything after the original JSON chunk)
-        const binaryStart = 20 + jsonChunkLength;
+        const binaryStart = jsonDataOffset + jsonChunkLength;
         const binaryChunk = glbBytes.slice(binaryStart);
 
         // Build new GLB
-        const totalLength = 12 + 8 + newJsonBytes.length + binaryChunk.length;
+        const totalLength = SerializationTools._GLB_HEADER_SIZE + SerializationTools._GLB_CHUNK_HEADER_SIZE + newJsonBytes.length + binaryChunk.length;
         const result = new Uint8Array(totalLength);
         const resultView = new DataView(result.buffer);
 
         // GLB header
-        resultView.setUint32(0, 0x46546c67, true); // magic "glTF"
-        resultView.setUint32(4, 2, true); // version
+        resultView.setUint32(0, SerializationTools._GLB_MAGIC, true);
+        resultView.setUint32(4, SerializationTools._GLB_VERSION, true);
         resultView.setUint32(8, totalLength, true);
 
         // JSON chunk header
-        resultView.setUint32(12, newJsonBytes.length, true);
-        resultView.setUint32(16, 0x4e4f534a, true); // "JSON"
-        result.set(newJsonBytes, 20);
+        resultView.setUint32(SerializationTools._GLB_HEADER_SIZE, newJsonBytes.length, true);
+        resultView.setUint32(SerializationTools._GLB_HEADER_SIZE + 4, SerializationTools._GLB_JSON_CHUNK_TYPE, true);
+        result.set(newJsonBytes, jsonDataOffset);
 
         // Binary chunk (if any)
         if (binaryChunk.length > 0) {
-            result.set(binaryChunk, 20 + newJsonBytes.length);
+            result.set(binaryChunk, jsonDataOffset + newJsonBytes.length);
         }
 
         return result;
@@ -403,23 +429,24 @@ export class SerializationTools {
         while (jsonBytes.length % 4 !== 0) {
             const padded = new Uint8Array(jsonBytes.length + 1);
             padded.set(jsonBytes);
-            padded[padded.length - 1] = 0x20;
+            padded[padded.length - 1] = SerializationTools._GLB_SPACE_PAD;
             jsonBytes = padded;
         }
 
-        const totalLength = 12 + 8 + jsonBytes.length;
+        const totalLength = SerializationTools._GLB_HEADER_SIZE + SerializationTools._GLB_CHUNK_HEADER_SIZE + jsonBytes.length;
         const glb = new Uint8Array(totalLength);
         const view = new DataView(glb.buffer);
 
         // Header
-        view.setUint32(0, 0x46546c67, true); // "glTF"
-        view.setUint32(4, 2, true); // version 2
+        view.setUint32(0, SerializationTools._GLB_MAGIC, true);
+        view.setUint32(4, SerializationTools._GLB_VERSION, true);
         view.setUint32(8, totalLength, true);
 
         // JSON chunk
-        view.setUint32(12, jsonBytes.length, true);
-        view.setUint32(16, 0x4e4f534a, true); // "JSON"
-        glb.set(jsonBytes, 20);
+        const jsonDataOffset = SerializationTools._GLB_HEADER_SIZE + SerializationTools._GLB_CHUNK_HEADER_SIZE;
+        view.setUint32(SerializationTools._GLB_HEADER_SIZE, jsonBytes.length, true);
+        view.setUint32(SerializationTools._GLB_HEADER_SIZE + 4, SerializationTools._GLB_JSON_CHUNK_TYPE, true);
+        glb.set(jsonBytes, jsonDataOffset);
 
         return glb;
     }

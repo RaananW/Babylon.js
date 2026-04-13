@@ -44,6 +44,6 @@ export class FlowGraphGLTFDataProvider extends FlowGraphBlock {
     }
 
     public override getClassName(): string {
-        return "KHR_interactivity/FlowGraphGLTFDataProvider";
+        return "FlowGraphGLTFDataProvider";
     }
 }

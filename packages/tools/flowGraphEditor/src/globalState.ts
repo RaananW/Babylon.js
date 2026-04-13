@@ -58,6 +58,7 @@ export class GlobalState {
     onPopupClosedObservable = new Observable<void>();
     /** Callback to get a graph node from a flow graph block */
     onGetNodeFromBlock: (block: FlowGraphBlock) => GraphNode;
+    // eslint-disable-next-line jsdoc/require-returns
     /** Callback that returns true if the given graph node is within the visible viewport.
      *  Used by the debug highlighter to skip offscreen nodes and save DOM work. */
     isNodeVisible: (node: GraphNode) => boolean = () => true;
@@ -447,7 +448,10 @@ export class GlobalState {
             // display manager, all ports, and all visual properties.
             const execTime = graphNode.content.executionTime ?? 0;
             if (execTime >= 0 && graphNode.executionTimeElement) {
-                graphNode.executionTimeElement.textContent = `${execTime.toFixed(2)} ms`;
+                const formatted = `${execTime.toFixed(2)} ms`;
+                if (graphNode.executionTimeElement.textContent !== formatted) {
+                    graphNode.executionTimeElement.textContent = formatted;
+                }
             }
 
             // Build lookup of this block's CONNECTED input connections (data + signal).
@@ -934,12 +938,13 @@ export class GlobalState {
             return;
         }
         const currentMesh = (meshInput as any)._defaultValue;
+        const isObjectRef = currentMesh != null && typeof currentMesh === "object";
         // Already pointing at a mesh in the new scene?
-        if (currentMesh && typeof currentMesh === "object" && newScene.meshes.some((m) => m === currentMesh)) {
+        if (isObjectRef && newScene.meshes.some((m) => m === currentMesh)) {
             return;
         }
-        const savedName: string | undefined = (block.config as any)?._meshName ?? (currentMesh && typeof currentMesh === "object" ? currentMesh.name : undefined);
-        const savedUniqueId: number | undefined = currentMesh && typeof currentMesh === "object" ? currentMesh.uniqueId : undefined;
+        const savedName: string | undefined = (block.config as any)?._meshName ?? (isObjectRef ? currentMesh.name : undefined);
+        const savedUniqueId: number | undefined = isObjectRef ? currentMesh.uniqueId : undefined;
         if (!savedName && savedUniqueId === undefined) {
             return;
         }

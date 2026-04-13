@@ -5,6 +5,10 @@ import { FlowGraphBlockNames } from "./flowGraphBlockNames";
  * Any external module that wishes to add a new block to the flow graph can add to this object using the helper function.
  */
 const CustomBlocks: Record<string, () => Promise<typeof FlowGraphBlock>> = {};
+/**
+ * Reverse lookup: short block name → full "module/blockName" key, for O(1) fallback.
+ */
+const ShortNameToFullKey: Record<string, string> = {};
 
 /**
  * If you want to add a new block to the block factory, you should use this function.
@@ -15,7 +19,9 @@ const CustomBlocks: Record<string, () => Promise<typeof FlowGraphBlock>> = {};
  */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function addToBlockFactory(module: string, blockName: string, factory: () => Promise<typeof FlowGraphBlock>): void {
-    CustomBlocks[`${module}/${blockName}`] = factory;
+    const fullKey = `${module}/${blockName}`;
+    CustomBlocks[fullKey] = factory;
+    ShortNameToFullKey[blockName] = fullKey;
 }
 
 /**
@@ -355,12 +361,11 @@ export function blockFactory(blockName: FlowGraphBlockNames | string): () => Pro
             if (CustomBlocks[blockName]) {
                 return CustomBlocks[blockName];
             }
-            // Fallback: search for a custom block whose short name matches (e.g. "FlowGraphGLTFDataProvider" → "KHR_interactivity/FlowGraphGLTFDataProvider")
+            // Fallback: O(1) reverse lookup by short name (e.g. "FlowGraphGLTFDataProvider" → "KHR_interactivity/FlowGraphGLTFDataProvider")
             if (!blockName.includes("/")) {
-                for (const key in CustomBlocks) {
-                    if (key.endsWith("/" + blockName)) {
-                        return CustomBlocks[key];
-                    }
+                const fullKey = ShortNameToFullKey[blockName];
+                if (fullKey && CustomBlocks[fullKey]) {
+                    return CustomBlocks[fullKey];
                 }
             }
             throw new Error(`Unknown block name ${blockName}`);

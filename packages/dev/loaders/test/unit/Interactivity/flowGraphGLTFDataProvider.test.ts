@@ -66,6 +66,6 @@ describe("FlowGraphGLTFDataProvider", () => {
 
     it("returns correct className", () => {
         const block = new FlowGraphGLTFDataProvider({ glTF: undefined as any });
-        expect(block.getClassName()).toBe("KHR_interactivity/FlowGraphGLTFDataProvider");
+        expect(block.getClassName()).toBe("FlowGraphGLTFDataProvider");
     });
 });

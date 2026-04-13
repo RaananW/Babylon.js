@@ -102,7 +102,7 @@ export function defaultValueSerializationFunction(key: string, value: any, seria
                 // Skip known non-serializable keys immediately to avoid
                 // expensive JSON.stringify attempts on large object trees
                 // (e.g. pathConverter holds the entire glTF parse tree).
-                if (key === "pathConverter" || typeof value.convert === "function") {
+                if (key === "pathConverter") {
                     return;
                 }
                 // Quick check: if any own property is a function, the object

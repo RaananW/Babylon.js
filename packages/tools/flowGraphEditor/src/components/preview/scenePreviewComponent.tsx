@@ -306,7 +306,7 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
             if (!pathConverter && block.getClassName() === "FlowGraphJsonPointerParserBlock" && (block.config as any)?.pathConverter) {
                 pathConverter = (block.config as any).pathConverter;
             }
-            if (!liveGLTF && block.getClassName() === "KHR_interactivity/FlowGraphGLTFDataProvider" && (block.config as any)?.glTF) {
+            if (!liveGLTF && block.getClassName() === "FlowGraphGLTFDataProvider" && (block.config as any)?.glTF) {
                 liveGLTF = (block.config as any).glTF;
             }
             if (pathConverter && liveGLTF) {
@@ -327,7 +327,7 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
         // than empty arrays from the non-serializable config.
         if (liveGLTF && this.props.globalState.flowGraph) {
             for (const block of this.props.globalState.flowGraph.getAllBlocks()) {
-                if (block.getClassName() === "KHR_interactivity/FlowGraphGLTFDataProvider") {
+                if (block.getClassName() === "FlowGraphGLTFDataProvider") {
                     (block.config as any).glTF = liveGLTF;
                     // Re-compute outputs from the live glTF data
                     const nodes = liveGLTF.nodes?.map((n: any) => n._babylonTransformNode) || [];

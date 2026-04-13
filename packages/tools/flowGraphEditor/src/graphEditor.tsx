@@ -859,11 +859,22 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
     private async _emitTemplateAsync(template: ICompositeTemplate, dropX: number, dropY: number): Promise<void> {
         const createdNodes: GraphNode[] = [];
 
+        // Pre-resolve all block classes in parallel to avoid await-in-loop
+        const blockClasses: (typeof FlowGraphBlock)[] = [];
+        try {
+            const factories = template.blocks.map((blockDef) => blockFactory(blockDef.className));
+            const resolved = await Promise.all(factories.map(async (f) => await f()));
+            blockClasses.push(...resolved);
+        } catch (err) {
+            this.props.globalState.onLogRequiredObservable.notifyObservers(new LogEntry(`Error resolving template block classes: ${err}`, true));
+            return;
+        }
+
         // Create all blocks
-        for (const blockDef of template.blocks) {
+        for (let i = 0; i < template.blocks.length; i++) {
+            const blockDef = template.blocks[i];
             try {
-                const factory = blockFactory(blockDef.className);
-                const blockClass = await factory();
+                const blockClass = blockClasses[i];
                 const config: any = { name: blockDef.className, ...blockDef.config };
                 const block = new (blockClass as any)(config) as FlowGraphBlock;
 

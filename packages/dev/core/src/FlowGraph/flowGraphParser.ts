@@ -144,14 +144,20 @@ export function ParseFlowGraph(serializationObject: ISerializedFlowGraph, option
     for (const block of blocks) {
         for (const dataIn of block.dataInputs) {
             for (const serializedConnection of dataIn.connectedPointIds) {
-                const connection = dataOutMap.get(serializedConnection) ?? GetDataOutConnectionByUniqueId(blocks, serializedConnection);
+                const connection = dataOutMap.get(serializedConnection);
+                if (!connection) {
+                    throw new Error("Could not find data out connection with unique id " + serializedConnection);
+                }
                 dataIn.connectTo(connection);
             }
         }
         if (block instanceof FlowGraphExecutionBlock) {
             for (const signalOut of block.signalOutputs) {
                 for (const serializedConnection of signalOut.connectedPointIds) {
-                    const connection = signalInMap.get(serializedConnection) ?? GetSignalInConnectionByUniqueId(blocks, serializedConnection);
+                    const connection = signalInMap.get(serializedConnection);
+                    if (!connection) {
+                        throw new Error("Could not find signal in connection with unique id " + serializedConnection);
+                    }
                     signalOut.connectTo(connection);
                 }
             }
@@ -257,9 +263,10 @@ export function ParseFlowGraphBlockWithClassType(
         }
     }
     if (needsPathConverter(serializationObject.className)) {
-        if (parseOptions.pathConverter) {
-            parsedConfig.pathConverter = parseOptions.pathConverter;
+        if (!parseOptions.pathConverter) {
+            throw new Error("Block " + serializationObject.className + " requires a path converter to be provided in parse options.");
         }
+        parsedConfig.pathConverter = parseOptions.pathConverter;
     }
     const obj = new classType(parsedConfig);
     obj.uniqueId = serializationObject.uniqueId;

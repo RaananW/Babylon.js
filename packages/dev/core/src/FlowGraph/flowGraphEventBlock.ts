@@ -22,6 +22,9 @@ export abstract class FlowGraphEventBlock extends FlowGraphAsyncExecutionBlock {
      */
     public _execute(context: FlowGraphContext): void {
         context._notifyExecuteNode(this);
+        // Fire both signals: KHR_interactivity graphs connect to `done`,
+        // while editor-authored graphs typically connect to `out`.
+        // Both must fire so that either wiring style works correctly.
         this.done._activateSignal(context);
         this.out._activateSignal(context);
     }
