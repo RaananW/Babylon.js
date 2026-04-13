@@ -325,4 +325,44 @@ describe("Flow Graph Serialization", () => {
         expect(resolved.uniqueId).toEqual(transformNode.uniqueId);
         expect(resolved.name).toEqual("myTransform");
     });
+
+    it("Multiple meshes with the same id are distinguished by uniqueId through round-trip", () => {
+        const coordinator = new FlowGraphCoordinator({ scene });
+        const graph = coordinator.createGraph();
+        const context = graph.createContext();
+
+        // Create 3 meshes that share the same name/id (simulates glTF instancing)
+        const meshA = new Mesh("Button", scene);
+        const meshB = new Mesh("Button", scene);
+        const meshC = new Mesh("Button", scene);
+
+        // All three have the same id
+        expect(meshA.id).toEqual(meshB.id);
+        expect(meshB.id).toEqual(meshC.id);
+        // But different uniqueIds
+        expect(meshA.uniqueId).not.toEqual(meshB.uniqueId);
+        expect(meshB.uniqueId).not.toEqual(meshC.uniqueId);
+
+        context.setVariable("pickedMesh_0", meshA);
+        context.setVariable("pickedMesh_1", meshB);
+        context.setVariable("pickedMesh_2", meshC);
+
+        const serialized: any = {};
+        context.serialize(serialized);
+
+        // All three serialized with uniqueId preserved
+        expect(serialized._userVariables.pickedMesh_0.uniqueId).toEqual(meshA.uniqueId);
+        expect(serialized._userVariables.pickedMesh_1.uniqueId).toEqual(meshB.uniqueId);
+        expect(serialized._userVariables.pickedMesh_2.uniqueId).toEqual(meshC.uniqueId);
+
+        // Parse back — each variable should resolve to its SPECIFIC mesh
+        const parsed = ParseFlowGraphContext(serialized, { graph });
+        const resolvedA = parsed.getVariable("pickedMesh_0");
+        const resolvedB = parsed.getVariable("pickedMesh_1");
+        const resolvedC = parsed.getVariable("pickedMesh_2");
+
+        expect(resolvedA).toBe(meshA);
+        expect(resolvedB).toBe(meshB);
+        expect(resolvedC).toBe(meshC);
+    });
 });
