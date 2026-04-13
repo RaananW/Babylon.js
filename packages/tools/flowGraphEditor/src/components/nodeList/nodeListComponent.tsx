@@ -8,7 +8,7 @@ import { type Nullable } from "core/types";
 import { NodeLedger } from "shared-ui-components/nodeGraphSystem/nodeLedger";
 import { AllFlowGraphBlocks } from "../../allBlockNames";
 import { GetBlockType, BlockTypeHeaderColor } from "../../graphSystem/blockTypeColors";
-import { GetTemplatesByCategory, AllCompositeTemplates, TEMPLATE_PREFIX } from "../../compositeTemplates";
+import { GetTemplatesByCategory, AllCompositeTemplates } from "../../compositeTemplates";
 
 import "./nodeList.scss";
 
@@ -315,10 +315,7 @@ export class NodeListComponent extends React.Component<INodeListComponentProps, 
                 if (finalName.endsWith("Block")) {
                     finalName = finalName.substring(0, finalName.length - 5);
                 }
-                // Remove template prefix for display
-                if (finalName.startsWith(TEMPLATE_PREFIX)) {
-                    finalName = finalName.substring(TEMPLATE_PREFIX.length);
-                }
+
                 return finalName;
             };
         }
@@ -331,8 +328,7 @@ export class NodeListComponent extends React.Component<INodeListComponentProps, 
                 .filter((name: string) => !this.state.filter || name.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1)
                 .map((name: string) => {
                     const template = AllCompositeTemplates[name];
-                    // Use the TEMPLATE_PREFIX to distinguish from regular blocks in the drop handler
-                    return <DraggableLineComponent key={name} data={TEMPLATE_PREFIX + name} tooltip={template.description} color="#8854d0" />;
+                    return <DraggableLineComponent key={name} data={name} tooltip={template.description} color="#8854d0" />;
                 });
 
             if (templateItems.length) {

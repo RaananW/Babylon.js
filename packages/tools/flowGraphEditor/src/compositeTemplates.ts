@@ -51,11 +51,7 @@ export interface ICompositeTemplate {
     connections: ITemplateConnection[];
 }
 
-/**
- * The prefix used for template entries in the palette.
- * When a drop event starts with this prefix, the editor treats it as a template.
- */
-export const TEMPLATE_PREFIX = "TEMPLATE:";
+
 
 // ─── Curated Templates ──────────────────────────────────────────────────────
 

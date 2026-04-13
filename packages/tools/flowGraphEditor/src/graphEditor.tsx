@@ -31,7 +31,7 @@ import { type IFlowGraphValidationResult, FlowGraphValidationSeverity } from "co
 import { AnalyzeSmartGroup, ApplySmartGroupExposure } from "./graphSystem/smartGroup";
 import { HelpDialogComponent } from "./components/help/helpDialogComponent";
 import { type HelpTopicId } from "./components/help/helpContent";
-import { TEMPLATE_PREFIX, AllCompositeTemplates, type ICompositeTemplate } from "./compositeTemplates";
+import { AllCompositeTemplates, type ICompositeTemplate } from "./compositeTemplates";
 
 /**
  * Pre-populate string (and other primitive) config fields for blocks whose constructors
@@ -285,13 +285,10 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
             const selectedNode = this._graphCanvas.selectedNodes.length ? this._graphCanvas.selectedNodes[0] : null;
 
             // Check if this is a composite template
-            if (eventData.type.startsWith(TEMPLATE_PREFIX)) {
-                const templateName = eventData.type.substring(TEMPLATE_PREFIX.length);
-                const template = AllCompositeTemplates[templateName];
-                if (template) {
-                    await this._emitTemplateAsync(template, targetX, targetY);
-                    return;
-                }
+            const emitTemplate = AllCompositeTemplates[eventData.type];
+            if (emitTemplate) {
+                await this._emitTemplateAsync(emitTemplate, targetX, targetY);
+                return;
             }
 
             const newNode = await this._emitNewBlockAsync(eventData.type, targetX, targetY);
@@ -844,13 +841,10 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
         const dropY = event.clientY - container.offsetTop;
 
         // Check if this is a composite template drop
-        if (data.startsWith(TEMPLATE_PREFIX)) {
-            const templateName = data.substring(TEMPLATE_PREFIX.length);
-            const template = AllCompositeTemplates[templateName];
-            if (template) {
-                void this._emitTemplateAsync(template, dropX, dropY);
-                return;
-            }
+        const dropTemplate = AllCompositeTemplates[data];
+        if (dropTemplate) {
+            void this._emitTemplateAsync(dropTemplate, dropX, dropY);
+            return;
         }
 
         void this._emitNewBlockAsync(data, dropX, dropY);
