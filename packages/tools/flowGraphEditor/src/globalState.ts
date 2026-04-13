@@ -58,6 +58,9 @@ export class GlobalState {
     onPopupClosedObservable = new Observable<void>();
     /** Callback to get a graph node from a flow graph block */
     onGetNodeFromBlock: (block: FlowGraphBlock) => GraphNode;
+    /** Callback that returns true if the given graph node is within the visible viewport.
+     *  Used by the debug highlighter to skip offscreen nodes and save DOM work. */
+    isNodeVisible: (node: GraphNode) => boolean = () => true;
     /** Observable triggered when a drop event is received */
     onDropEventReceivedObservable = new Observable<DragEvent>();
     /** Observable triggered when help dialog is requested. Payload is an optional topic id. */
@@ -248,15 +251,26 @@ export class GlobalState {
     private _debugStateObserver: Nullable<Observer<FlowGraphState>> = null;
     /** Per-node throttle timestamps to avoid excessive highlighting */
     private _highlightThrottleMap = new Map<string, number>();
+    /** Blocks that executed since the last debug frame — batched to avoid per-call DOM work */
+    private _debugPendingBlocks = new Set<FlowGraphBlock>();
+    /** rAF handle for batched debug updates */
+    private _debugRafId: number = 0;
     /** Port elements currently glowing — tracked so we can clear them on stop */
     private _activePortHighlights = new Set<HTMLElement>();
     /** Minimum interval between highlight pulses per node (ms) */
     private static readonly _HIGHLIGHT_THROTTLE_MS = 100;
+    /** Maximum number of nodes to process per rAF frame to keep the editor responsive */
+    private static readonly _MAX_HIGHLIGHTS_PER_FRAME = 30;
     /** Whether the debug pulse CSS has been injected into a given document */
     private static _DebugStyleInjectedDocs = new WeakSet<Document>();
+    /** Monotonically increasing counter toggled on port elements to restart CSS animation without forced reflow */
+    private _pulseGeneration = 0;
 
     /**
-     * Inject the CSS keyframe animation for port pulsing (once per document)
+     * Inject the CSS keyframe animation for port pulsing (once per document).
+     * Uses two alternating animation names keyed by a `data-debug-gen` attribute
+     * so we can restart the animation by toggling the attribute value — no forced
+     * reflow (`void el.offsetWidth`) needed.
      * @param doc - the document to inject the style into
      */
     private static _InjectDebugStyle(doc: Document): void {
@@ -266,35 +280,43 @@ export class GlobalState {
         GlobalState._DebugStyleInjectedDocs.add(doc);
         const style = doc.createElement("style");
         style.textContent = `
-            @keyframes debug-port-pulse {
+            @keyframes debug-port-pulse-a {
                 0%   { box-shadow: 0 0 8px 4px #33B766; }
                 16%  { box-shadow: 0 0 8px 4px #33B766; }
                 100% { box-shadow: none; }
             }
-            [data-debug-pulse] {
-                animation: debug-port-pulse 600ms ease-out forwards;
+            @keyframes debug-port-pulse-b {
+                0%   { box-shadow: 0 0 8px 4px #33B766; }
+                16%  { box-shadow: 0 0 8px 4px #33B766; }
+                100% { box-shadow: none; }
+            }
+            [data-debug-gen="0"] {
+                animation: debug-port-pulse-a 600ms ease-out forwards;
+            }
+            [data-debug-gen="1"] {
+                animation: debug-port-pulse-b 600ms ease-out forwards;
             }
         `;
         doc.head.appendChild(style);
     }
 
     /**
-     * Apply a brief green glow to a port connector element
+     * Apply a brief green glow to a port connector element.
+     * Uses a generation toggle to restart the CSS animation without forcing reflow.
      * @param el - the port HTML element to pulse
      */
     private _pulsePortElement(el: HTMLElement): void {
         GlobalState._InjectDebugStyle(el.ownerDocument);
-        // Remove and re-add to restart the CSS animation if already playing
-        delete el.dataset.debugPulse;
-        void el.offsetWidth; // force reflow so the browser sees the removal
-        el.dataset.debugPulse = "1";
+        // Toggle between "0" and "1" to switch animation names → restarts
+        // the CSS animation without needing void el.offsetWidth (forced reflow).
+        el.dataset.debugGen = String(this._pulseGeneration & 1);
         this._activePortHighlights.add(el);
     }
 
     /** Immediately clear all active port highlights */
     private _clearAllPortHighlights(): void {
         for (const el of this._activePortHighlights) {
-            delete el.dataset.debugPulse;
+            delete el.dataset.debugGen;
         }
         this._activePortHighlights.clear();
     }
@@ -351,6 +373,7 @@ export class GlobalState {
         this._debugExecutionObserver?.remove();
         this._debugExecutionObserver = null;
         this._highlightThrottleMap.clear();
+        this._debugPendingBlocks.clear();
 
         const context = this._flowGraph?.getContext(this.selectedContextIndex);
         if (!context) {
@@ -360,73 +383,128 @@ export class GlobalState {
         // Install breakpoint predicate when attaching to a context
         this._installBreakpointPredicate(context);
 
+        // The observer callback is kept as cheap as possible — it only adds
+        // the block to a pending set.  All DOM work is deferred to a single
+        // requestAnimationFrame pass per frame to avoid freezing on graphs
+        // with many blocks executing every frame.
         this._debugExecutionObserver = context.onNodeExecutedObservable.add((block) => {
-            const now = performance.now();
+            this._debugPendingBlocks.add(block);
+            if (!this._debugRafId) {
+                this._debugRafId = requestAnimationFrame(() => this._flushDebugHighlights());
+            }
+        });
+    }
+
+    /**
+     * Process all pending debug highlights in a single batched DOM pass.
+     * Performance safeguards for large graphs (100+ blocks):
+     * - Per-frame cap: only _MAX_HIGHLIGHTS_PER_FRAME nodes are updated per rAF call
+     * - Viewport culling: offscreen nodes skip all DOM work
+     * - No forced reflows: port pulse uses generation-toggle CSS trick
+     * - No graphNode.refresh(): only the execution-time label is updated
+     * - Link animations are skipped for offscreen nodes
+     */
+    private _flushDebugHighlights(): void {
+        this._debugRafId = 0;
+        const now = performance.now();
+        // Advance the pulse generation so CSS animation restarts via attribute toggle
+        this._pulseGeneration++;
+
+        let processed = 0;
+        for (const block of this._debugPendingBlocks) {
+            if (processed >= GlobalState._MAX_HIGHLIGHTS_PER_FRAME) {
+                // Leave remaining blocks for the next frame
+                break;
+            }
+
             const lastTime = this._highlightThrottleMap.get(block.uniqueId) ?? 0;
             if (now - lastTime < GlobalState._HIGHLIGHT_THROTTLE_MS) {
-                return;
+                // Remove throttled blocks so they don't carry over
+                this._debugPendingBlocks.delete(block);
+                continue;
             }
             this._highlightThrottleMap.set(block.uniqueId, now);
 
-            // Trigger a refresh so executionTime updates in the UI
-            if (this.onGetNodeFromBlock) {
-                const graphNode = this.onGetNodeFromBlock(block);
-                if (graphNode) {
-                    graphNode.refresh();
+            if (!this.onGetNodeFromBlock) {
+                this._debugPendingBlocks.delete(block);
+                continue;
+            }
+            const graphNode = this.onGetNodeFromBlock(block);
+            if (!graphNode) {
+                this._debugPendingBlocks.delete(block);
+                continue;
+            }
 
-                    // Build lookup of this block's CONNECTED input connections (data + signal).
-                    // For signal inputs, only include those that were recently activated so we
-                    // highlight the signal that actually triggered this execution rather than
-                    // every signal input on the block.
-                    const inputSet = new Set<unknown>();
-                    for (const dataIn of block.dataInputs) {
-                        if (dataIn.isConnected()) {
-                            inputSet.add(dataIn);
-                        }
-                    }
-                    if (block instanceof FlowGraphExecutionBlock) {
-                        for (const sig of block.signalInputs) {
-                            if (sig.isConnected() && now - (sig as FlowGraphSignalConnection)._lastActivationTime < GlobalState._HIGHLIGHT_THROTTLE_MS) {
-                                inputSet.add(sig);
-                            }
-                        }
-                    }
+            // Viewport culling — skip all DOM work for offscreen nodes
+            if (!this.isNodeVisible(graphNode)) {
+                this._debugPendingBlocks.delete(block);
+                processed++;
+                continue;
+            }
 
-                    // Pulse the port connector dots for each triggered input
-                    for (const port of graphNode.inputPorts) {
-                        if (inputSet.has(port.portData.data)) {
-                            this._pulsePortElement(port.element);
-                        }
-                    }
+            // Lightweight update: only refresh the execution time label
+            // instead of the full graphNode.refresh() which touches innerHTML,
+            // display manager, all ports, and all visual properties.
+            const execTime = graphNode.content.executionTime ?? 0;
+            if (execTime >= 0 && graphNode.executionTimeElement) {
+                graphNode.executionTimeElement.textContent = `${execTime.toFixed(2)} ms`;
+            }
 
-                    // Pulse output signal ports that actually fired (recently) and are connected
-                    const firedOutputs = new Set<unknown>();
-                    if (block instanceof FlowGraphExecutionBlock) {
-                        for (const sig of block.signalOutputs) {
-                            if (sig.isConnected() && now - (sig as FlowGraphSignalConnection)._lastActivationTime < GlobalState._HIGHLIGHT_THROTTLE_MS) {
-                                firedOutputs.add(sig);
-                            }
-                        }
-                        for (const port of graphNode.outputPorts) {
-                            if (firedOutputs.has(port.portData.data)) {
-                                this._pulsePortElement(port.element);
-                            }
-                        }
-                    }
-
-                    // Animate traveling dot on incoming links
-                    for (const link of graphNode.links) {
-                        if (link.portB && inputSet.has(link.portB.portData.data)) {
-                            link.triggerFlowAnimation();
-                        }
-                        // Also animate outgoing signal links that fired
-                        if (link.portA && firedOutputs.has(link.portA.portData.data)) {
-                            link.triggerFlowAnimation();
-                        }
+            // Build lookup of this block's CONNECTED input connections (data + signal).
+            const inputSet = new Set<unknown>();
+            for (const dataIn of block.dataInputs) {
+                if (dataIn.isConnected()) {
+                    inputSet.add(dataIn);
+                }
+            }
+            if (block instanceof FlowGraphExecutionBlock) {
+                for (const sig of block.signalInputs) {
+                    if (sig.isConnected() && now - (sig as FlowGraphSignalConnection)._lastActivationTime < GlobalState._HIGHLIGHT_THROTTLE_MS) {
+                        inputSet.add(sig);
                     }
                 }
             }
-        });
+
+            // Pulse the port connector dots for each triggered input
+            for (const port of graphNode.inputPorts) {
+                if (inputSet.has(port.portData.data)) {
+                    this._pulsePortElement(port.element);
+                }
+            }
+
+            // Pulse output signal ports that actually fired (recently)
+            const firedOutputs = new Set<unknown>();
+            if (block instanceof FlowGraphExecutionBlock) {
+                for (const sig of block.signalOutputs) {
+                    if (sig.isConnected() && now - (sig as FlowGraphSignalConnection)._lastActivationTime < GlobalState._HIGHLIGHT_THROTTLE_MS) {
+                        firedOutputs.add(sig);
+                    }
+                }
+                for (const port of graphNode.outputPorts) {
+                    if (firedOutputs.has(port.portData.data)) {
+                        this._pulsePortElement(port.element);
+                    }
+                }
+            }
+
+            // Animate traveling dot on links (only for visible nodes)
+            for (const link of graphNode.links) {
+                if (link.portB && inputSet.has(link.portB.portData.data)) {
+                    link.triggerFlowAnimation();
+                }
+                if (link.portA && firedOutputs.has(link.portA.portData.data)) {
+                    link.triggerFlowAnimation();
+                }
+            }
+
+            this._debugPendingBlocks.delete(block);
+            processed++;
+        }
+
+        // If there are still pending blocks, schedule another frame
+        if (this._debugPendingBlocks.size > 0 && !this._debugRafId) {
+            this._debugRafId = requestAnimationFrame(() => this._flushDebugHighlights());
+        }
     }
 
     /** Unsubscribe from debug execution observers */
@@ -436,6 +514,11 @@ export class GlobalState {
         this._debugStateObserver?.remove();
         this._debugStateObserver = null;
         this._highlightThrottleMap.clear();
+        this._debugPendingBlocks.clear();
+        if (this._debugRafId) {
+            cancelAnimationFrame(this._debugRafId);
+            this._debugRafId = 0;
+        }
         this._clearAllPortHighlights();
         this._removeBreakpointPredicate();
     }
@@ -849,10 +932,13 @@ export class GlobalState {
             return;
         }
         const savedName: string | undefined = (block.config as any)?._meshName ?? (currentMesh && typeof currentMesh === "object" ? currentMesh.name : undefined);
-        if (!savedName) {
+        const savedUniqueId: number | undefined = currentMesh && typeof currentMesh === "object" ? currentMesh.uniqueId : undefined;
+        if (!savedName && savedUniqueId === undefined) {
             return;
         }
-        const match = newScene.meshes.find((m) => m.name === savedName);
+        // Filter by name, then prefer uniqueId match when multiple meshes share the same name
+        const candidates = savedName ? newScene.meshes.filter((m) => m.name === savedName) : [];
+        const match = candidates.length === 1 ? candidates[0] : savedUniqueId !== undefined ? candidates.find((m) => m.uniqueId === savedUniqueId) : candidates[0];
         if (match) {
             if (!block.config) {
                 (block as any).config = {};
@@ -953,12 +1039,16 @@ export class GlobalState {
                 if (isUnresolved || isStaleRef) {
                     const name = value.name ?? (typeof value.getClassName === "function" ? value.name : undefined);
                     const id = value.id ?? (typeof value.getClassName === "function" ? value.id : undefined);
+                    const uid: number | undefined = value.uniqueId;
 
-                    // Try to find by id first, then by name
-                    let match = id ? allMeshesAndNodes.find((m) => m.id === id) : undefined;
-                    if (!match && name) {
-                        match = allMeshesAndNodes.find((m) => m.name === name);
+                    // Filter candidates by id first, then by name
+                    let candidates = id ? allMeshesAndNodes.filter((m) => m.id === id) : [];
+                    if (candidates.length === 0 && name) {
+                        candidates = allMeshesAndNodes.filter((m) => m.name === name);
                     }
+
+                    // Prefer uniqueId match when multiple candidates share the same id/name
+                    const match = candidates.length === 1 ? candidates[0] : uid !== undefined ? candidates.find((m) => m.uniqueId === uid) : candidates[0];
 
                     if (match) {
                         context.setVariable(key, match);

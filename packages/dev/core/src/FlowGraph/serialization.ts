@@ -15,6 +15,7 @@ function IsMeshClassName(className: string) {
         className === "AbstractMesh" ||
         className === "TransformNode" ||
         className === "GroundMesh" ||
+        className === "InstancedMesh" ||
         className === "InstanceMesh" ||
         className === "LinesMesh" ||
         className === "GoldbergMesh" ||
@@ -92,13 +93,25 @@ export function defaultValueSerializationFunction(key: string, value: any, seria
                 id: value.id,
                 name: value.name,
                 className,
+                uniqueId: value.uniqueId,
             };
         } else {
             if (typeof value !== "object" || value === null) {
                 serializationObject[key] = value;
             } else {
-                // Plain object (e.g. parsed event config) — store it if JSON-safe,
-                // otherwise skip (e.g. objects containing functions like pathConverter).
+                // Skip known non-serializable keys immediately to avoid
+                // expensive JSON.stringify attempts on large object trees
+                // (e.g. pathConverter holds the entire glTF parse tree).
+                if (key === "pathConverter" || typeof value.convert === "function") {
+                    return;
+                }
+                // Quick check: if any own property is a function, the object
+                // is not JSON-safe and stringify would be wasteful.
+                const hasFunction = Object.values(value).some((v) => typeof v === "function");
+                if (hasFunction) {
+                    return;
+                }
+                // Plain object (e.g. parsed event config) — store it if JSON-safe.
                 try {
                     serializationObject[key] = JSON.parse(JSON.stringify(value));
                 } catch {

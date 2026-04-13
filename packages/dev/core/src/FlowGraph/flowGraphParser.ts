@@ -127,18 +127,31 @@ export function ParseFlowGraph(serializationObject: ISerializedFlowGraph, option
             graph.addEventBlock(block);
         }
     }
-    // After parsing all blocks, connect them
+    // After parsing all blocks, connect them.
+    // Build lookup maps for O(1) connection resolution instead of O(B*P) linear scans.
+    const dataOutMap = new Map<string, FlowGraphDataConnection<any>>();
+    const signalInMap = new Map<string, FlowGraphSignalConnection>();
+    for (const block of blocks) {
+        for (const dataOut of block.dataOutputs) {
+            dataOutMap.set(dataOut.uniqueId, dataOut);
+        }
+        if (block instanceof FlowGraphExecutionBlock) {
+            for (const signalIn of block.signalInputs) {
+                signalInMap.set(signalIn.uniqueId, signalIn);
+            }
+        }
+    }
     for (const block of blocks) {
         for (const dataIn of block.dataInputs) {
             for (const serializedConnection of dataIn.connectedPointIds) {
-                const connection = GetDataOutConnectionByUniqueId(blocks, serializedConnection);
+                const connection = dataOutMap.get(serializedConnection) ?? GetDataOutConnectionByUniqueId(blocks, serializedConnection);
                 dataIn.connectTo(connection);
             }
         }
         if (block instanceof FlowGraphExecutionBlock) {
             for (const signalOut of block.signalOutputs) {
                 for (const serializedConnection of signalOut.connectedPointIds) {
-                    const connection = GetSignalInConnectionByUniqueId(blocks, serializedConnection);
+                    const connection = signalInMap.get(serializedConnection) ?? GetSignalInConnectionByUniqueId(blocks, serializedConnection);
                     signalOut.connectTo(connection);
                 }
             }

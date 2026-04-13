@@ -62,6 +62,8 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
     private _onWidgetKeyUpPointer: any;
     private _historyStack: HistoryStack;
     private _blockClassRegistry = new Map<string, typeof FlowGraphBlock>();
+    /** Cache for O(1) block→GraphNode lookups (rebuilt on graph load) */
+    private _blockToNodeMap = new Map<FlowGraphBlock, GraphNode>();
 
     private _onDocumentKeyDown = (evt: KeyboardEvent) => {
         if (this._historyStack && this._historyStack.processKeyEvent(evt)) {
@@ -338,7 +340,34 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
         });
 
         this.props.globalState.onGetNodeFromBlock = (block) => {
-            return this._graphCanvas.findNodeFromData(block);
+            let node = this._blockToNodeMap.get(block);
+            if (!node) {
+                node = this._graphCanvas.findNodeFromData(block);
+                if (node) {
+                    this._blockToNodeMap.set(block, node);
+                }
+            }
+            return node;
+        };
+
+        // Viewport-based visibility check for debug highlighting.
+        // Uses cached node x/y and the canvas transform — no DOM queries.
+        this.props.globalState.isNodeVisible = (node: GraphNode) => {
+            const gc = this._graphCanvas;
+            const zoom = gc.zoom;
+            // Canvas-space viewport bounds
+            const viewLeft = -gc.x / zoom;
+            const viewTop = -gc.y / zoom;
+            const container = this._diagramContainerRef.current;
+            if (!container) {
+                return true; // fallback: treat as visible
+            }
+            const viewRight = viewLeft + container.clientWidth / zoom;
+            const viewBottom = viewTop + container.clientHeight / zoom;
+            // Node bounds (approximate — use cached width/height or generous defaults)
+            const nodeRight = node.x + 320; // typical max node width
+            const nodeBottom = node.y + 200; // typical max node height
+            return nodeRight >= viewLeft && node.x <= viewRight && nodeBottom >= viewTop && node.y <= viewBottom;
         };
 
         this.props.globalState.hostDocument.removeEventListener("keydown", this._onDocumentKeyDown, false);
@@ -469,6 +498,7 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
 
         // Reset the diagram
         this._graphCanvas.reset();
+        this._blockToNodeMap.clear();
 
         // Load graph of nodes from the flow graph
         if (this.props.globalState.flowGraph) {
@@ -534,8 +564,42 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
         this.showWaitScreen();
         this._graphCanvas._isLoading = true;
 
-        this._graphCanvas.reOrganize(editorData, isImportingAFrame);
+        if (!editorData && this._graphCanvas.nodes.length > 100) {
+            // For large graphs (e.g. KHR_interactivity flocking demo), dagre
+            // layout is too expensive and freezes the browser.  Use a simple
+            // grid layout instead.
+            this._gridLayout();
+        } else {
+            this._graphCanvas.reOrganize(editorData, isImportingAFrame);
+        }
+
+        // Ensure loading flag is cleared and links are rendered.
+        // graphCanvas.reOrganize does this internally, but _gridLayout
+        // bypasses it, so we always do it here to be safe.
+        this._graphCanvas._isLoading = false;
+        for (const node of this._graphCanvas.nodes) {
+            node._refreshLinks();
+        }
         this.hideWaitScreen();
+    }
+
+    /**
+     * Fast grid layout for large graphs — avoids the O(V*E) dagre cost.
+     * Places nodes in a left-to-right grid with fixed column widths.
+     */
+    private _gridLayout() {
+        const nodes = this._graphCanvas.nodes;
+        const cols = Math.ceil(Math.sqrt(nodes.length));
+        const colWidth = 340;
+        const rowHeight = 200;
+        for (let i = 0; i < nodes.length; i++) {
+            nodes[i].x = (i % cols) * colWidth;
+            nodes[i].y = Math.floor(i / cols) * rowHeight;
+            nodes[i].cleanAccumulation();
+        }
+        this._graphCanvas.x = 0;
+        this._graphCanvas.y = 0;
+        this._graphCanvas.zoom = 1;
     }
 
     /** @internal */

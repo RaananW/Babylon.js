@@ -242,10 +242,15 @@ export class SerializationTools {
         // If we have a preview scene, try to use GLTF2Export for a full scene export
         if (scene) {
             try {
-                // Dynamic import — serializers may not be available in all environments
-                const serializerModule = "serializers/glTF/2.0/glTFSerializer";
-                const serializers = await import(/* webpackIgnore: true */ serializerModule);
-                const glbData = await serializers.GLTF2Export.GLBAsync(scene, "flowGraph", {});
+                // The serializers bundle is loaded by the CDN serve and attaches
+                // GLTF2Export to the global BABYLON namespace. The webpack config
+                // externalizes `core/` → BABYLON but doesn't handle `serializers/`,
+                // so we access it from the global directly.
+                const GLTF2Export = (globalThis as any).BABYLON?.GLTF2Export;
+                if (!GLTF2Export) {
+                    throw new Error("GLTF2Export not available on BABYLON global");
+                }
+                const glbData = await GLTF2Export.GLBAsync(scene, "flowGraph", {});
 
                 // Extract the GLB and inject our custom extension into its JSON chunk
                 const glbFile = glbData.glTFFiles["flowGraph.glb"];
