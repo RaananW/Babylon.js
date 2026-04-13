@@ -83,7 +83,7 @@ export class SerializationTools {
      * @param serializationObject - the serialized data to load
      * @param globalState - the editor's global state
      */
-    public static async DeserializeAsync(serializationObject: any, globalState: GlobalState, scene?: import("core/scene").Scene, pathConverter?: any): Promise<void> {
+    public static async DeserializeAsync(serializationObject: any, globalState: GlobalState, scene?: Scene, pathConverter?: any): Promise<void> {
         globalState.onIsLoadingChanged.notifyObservers(true);
         try {
             const targetScene = scene ?? globalState.scene;

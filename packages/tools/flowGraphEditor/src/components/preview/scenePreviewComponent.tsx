@@ -4,6 +4,7 @@ import { type Nullable } from "core/types";
 import { type Observer } from "core/Misc/observable";
 import { type Scene } from "core/scene";
 import { type Engine } from "core/Engines/engine";
+import { type FlowGraph } from "core/FlowGraph/flowGraph";
 import { SceneContext } from "../../sceneContext";
 import { SerializationTools } from "../../serializationTools";
 import { LogEntry } from "../log/logComponent";
@@ -259,7 +260,7 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
         }
 
         // Find the first coordinator that has at least one flow graph.
-        const findGraph = (): { graph: import("core/FlowGraph/flowGraph").FlowGraph; coordinator: (typeof coordinators)[0] } | null => {
+        const findGraph = (): { graph: FlowGraph; coordinator: (typeof coordinators)[0] } | null => {
             for (const coordinator of coordinators) {
                 if (coordinator.flowGraphs.length > 0) {
                     return { graph: coordinator.flowGraphs[0], coordinator };
