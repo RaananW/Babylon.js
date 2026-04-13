@@ -750,6 +750,13 @@ export class GlobalState {
                 }
                 this._savedConnectionValues = null;
             }
+            // Resolve raw descriptor objects (e.g. {className:"Mesh",id:"x"})
+            // into actual scene objects.  _rebindContextUserVariables only
+            // works when execution contexts exist, so call it now that the
+            // context has been created and populated.
+            if (this.sceneContext?.scene) {
+                this._rebindContextUserVariables(this.sceneContext.scene);
+            }
             return ctx;
         };
 

@@ -295,9 +295,20 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
         // This object is not serializable (contains closures), so we must pass it
         // through directly to the re-parse step.
         let pathConverter: any = null;
+        // Also extract glTF config from GLTFDataProvider blocks — the glTF object
+        // contains _babylonTransformNode / _babylonAnimationGroup references that
+        // are NOT serializable.  After re-parse, GLTFDataProvider blocks end up
+        // with empty nodes/animationGroups arrays.  We stash the live glTF here
+        // and re-inject it after deserialization.
+        let liveGLTF: any = null;
         for (const block of targetGraph.getAllBlocks()) {
-            if (block.getClassName() === "FlowGraphJsonPointerParserBlock" && (block.config as any)?.pathConverter) {
+            if (!pathConverter && block.getClassName() === "FlowGraphJsonPointerParserBlock" && (block.config as any)?.pathConverter) {
                 pathConverter = (block.config as any).pathConverter;
+            }
+            if (!liveGLTF && block.getClassName() === "KHR_interactivity/FlowGraphGLTFDataProvider" && (block.config as any)?.glTF) {
+                liveGLTF = (block.config as any).glTF;
+            }
+            if (pathConverter && liveGLTF) {
                 break;
             }
         }
@@ -310,6 +321,29 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
         targetCoordinator.dispose();
 
         await SerializationTools.DeserializeAsync(serialized, this.props.globalState, scene, pathConverter);
+
+        // Re-inject the live glTF into GLTFDataProvider blocks so their nodes
+        // and animationGroups outputs contain the actual Babylon objects rather
+        // than empty arrays from the non-serializable config.
+        if (liveGLTF && this.props.globalState.flowGraph) {
+            for (const block of this.props.globalState.flowGraph.getAllBlocks()) {
+                if (block.getClassName() === "KHR_interactivity/FlowGraphGLTFDataProvider") {
+                    (block.config as any).glTF = liveGLTF;
+                    // Re-compute outputs from the live glTF data
+                    const nodes = liveGLTF.nodes?.map((n: any) => n._babylonTransformNode) || [];
+                    const animationGroups = liveGLTF.animations?.map((a: any) => a._babylonAnimationGroup) || [];
+                    const nodesOutput = block.getDataOutput("nodes");
+                    const agOutput = block.getDataOutput("animationGroups");
+                    if (nodesOutput) {
+                        (nodesOutput as any)._defaultValue = nodes;
+                    }
+                    if (agOutput) {
+                        (agOutput as any)._defaultValue = animationGroups;
+                    }
+                }
+            }
+        }
+
         this.props.globalState.onResetRequiredObservable.notifyObservers(false);
         this.props.globalState.stateManager.onSelectionChangedObservable.notifyObservers(null);
         this.props.globalState.onClearUndoStack.notifyObservers();
