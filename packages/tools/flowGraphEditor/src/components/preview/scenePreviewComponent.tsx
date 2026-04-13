@@ -312,7 +312,6 @@ export class ScenePreviewComponent extends React.Component<IScenePreviewComponen
                 break;
             }
         }
-
         // Serialize the loaded graph, then deserialize it into the editor
         const serialized: any = {};
         targetGraph.serialize(serialized);
