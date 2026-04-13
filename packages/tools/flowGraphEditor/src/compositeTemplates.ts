@@ -51,8 +51,6 @@ export interface ICompositeTemplate {
     connections: ITemplateConnection[];
 }
 
-
-
 // ─── Curated Templates ──────────────────────────────────────────────────────
 
 const ClickToLog: ICompositeTemplate = {
