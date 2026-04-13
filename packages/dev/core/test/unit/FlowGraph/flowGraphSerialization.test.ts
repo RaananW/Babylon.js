@@ -26,6 +26,8 @@ import { FlowGraphConnectionType } from "core/FlowGraph/flowGraphConnection";
 import { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
 import { FlowGraphEventType } from "core/FlowGraph/flowGraphEventType";
 import { FlowGraphPathConverter } from "core/FlowGraph/flowGraphPathConverter";
+import { defaultValueSerializationFunction } from "core/FlowGraph/serialization";
+import { InstancedMesh } from "core/Meshes/instancedMesh";
 import { Vector3 } from "core/Maths";
 import { Mesh } from "core/Meshes";
 import { TransformNode } from "core/Meshes/transformNode";
@@ -407,5 +409,94 @@ describe("Flow Graph Serialization", () => {
         expect(resolvedA).toBe(meshA);
         expect(resolvedB).toBe(meshB);
         expect(resolvedC).toBe(meshC);
+    });
+
+    it("Serialization includes uniqueId for mesh references", () => {
+        const mesh = new Mesh("myMesh", scene);
+        const serialized: any = {};
+        defaultValueSerializationFunction("target", mesh, serialized);
+
+        expect(serialized.target).toBeDefined();
+        expect(serialized.target.id).toEqual("myMesh");
+        expect(serialized.target.name).toEqual("myMesh");
+        expect(serialized.target.className).toEqual("Mesh");
+        expect(serialized.target.uniqueId).toEqual(mesh.uniqueId);
+    });
+
+    it("TransformNode class name is recognized as a mesh type for serialization round-trip", () => {
+        const coordinator = new FlowGraphCoordinator({ scene });
+        const graph = coordinator.createGraph();
+        const context = graph.createContext();
+
+        const tn = new TransformNode("myTN", scene);
+        context.setVariable("tnVar", tn);
+
+        const serialized: any = {};
+        context.serialize(serialized);
+
+        expect(serialized._userVariables.tnVar.className).toEqual("TransformNode");
+
+        const parsed = ParseFlowGraphContext(serialized, { graph });
+        const resolved = parsed.getVariable("tnVar");
+        expect(resolved).toBe(tn);
+    });
+
+    it("InstancedMesh class name is recognized as a mesh type for serialization round-trip", () => {
+        const coordinator = new FlowGraphCoordinator({ scene });
+        const graph = coordinator.createGraph();
+        const context = graph.createContext();
+
+        const sourceMesh = new Mesh("source", scene);
+        const instance = sourceMesh.createInstance("inst1");
+        context.setVariable("instVar", instance);
+
+        const serialized: any = {};
+        context.serialize(serialized);
+
+        // InstancedMesh should serialize with className and uniqueId
+        expect(serialized._userVariables.instVar.className).toBeDefined();
+        expect(serialized._userVariables.instVar.uniqueId).toEqual(instance.uniqueId);
+    });
+
+    it("Serialization skips pathConverter key gracefully", () => {
+        const serialized: any = {};
+        const fakePathConverter = { convert: () => ({}) };
+        defaultValueSerializationFunction("pathConverter", fakePathConverter, serialized);
+        expect(serialized.pathConverter).toBeUndefined();
+    });
+
+    it("Serialization skips objects with function properties", () => {
+        const serialized: any = {};
+        const objWithFn = { name: "test", doSomething: () => {} };
+        defaultValueSerializationFunction("myKey", objWithFn, serialized);
+        expect(serialized.myKey).toBeUndefined();
+    });
+
+    it("Serialization stores plain JSON-safe objects", () => {
+        const serialized: any = {};
+        const plainObj = { a: 1, b: "hello", c: true };
+        defaultValueSerializationFunction("config", plainObj, serialized);
+        expect(serialized.config).toEqual({ a: 1, b: "hello", c: true });
+    });
+
+    it("Plain array of primitives survives parse round-trip without being treated as event config", () => {
+        const coordinator = new FlowGraphCoordinator({ scene });
+        const graph = coordinator.createGraph();
+        const context = graph.createContext();
+
+        // Store a plain array of strings (like variable name lists from variable/set)
+        context.setVariable("varNames", ["rotation", "position", "scale"]);
+
+        const serialized: any = {};
+        context.serialize(serialized);
+
+        // Should be stored as-is (not reduced to an object)
+        expect(Array.isArray(serialized._userVariables.varNames)).toBe(true);
+        expect(serialized._userVariables.varNames).toEqual(["rotation", "position", "scale"]);
+
+        const parsed = ParseFlowGraphContext(serialized, { graph });
+        const resolved = parsed.getVariable("varNames");
+        expect(Array.isArray(resolved)).toBe(true);
+        expect(resolved).toEqual(["rotation", "position", "scale"]);
     });
 });
