@@ -543,6 +543,7 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
     /**
      * Handle right-click context menu on the canvas.
      * Determines what was clicked and builds the appropriate menu.
+     * @param evt the mouse event from the right-click
      */
     private _onContextMenu = (evt: React.MouseEvent) => {
         // Don't suppress native context menu for text inputs
