@@ -304,15 +304,22 @@ export class SerializationTools {
 
         // Check if it's a GLB (binary glTF)
         if (
-            bytes.length >= SerializationTools._GLB_HEADER_SIZE &&
+            bytes.length >= SerializationTools._GLB_HEADER_SIZE + SerializationTools._GLB_CHUNK_HEADER_SIZE &&
             bytes[0] === SerializationTools._GLB_MAGIC_BYTES[0] &&
             bytes[1] === SerializationTools._GLB_MAGIC_BYTES[1] &&
             bytes[2] === SerializationTools._GLB_MAGIC_BYTES[2] &&
             bytes[3] === SerializationTools._GLB_MAGIC_BYTES[3]
         ) {
             // GLB format: header (12 bytes) + JSON chunk (8-byte header + data)
-            const jsonChunkLength = new DataView(buffer, SerializationTools._GLB_HEADER_SIZE, 4).getUint32(0, true);
+            const chunkHeaderView = new DataView(buffer, SerializationTools._GLB_HEADER_SIZE, SerializationTools._GLB_CHUNK_HEADER_SIZE);
+            const jsonChunkLength = chunkHeaderView.getUint32(0, true);
+            const jsonChunkType = chunkHeaderView.getUint32(4, true);
             const jsonDataOffset = SerializationTools._GLB_HEADER_SIZE + SerializationTools._GLB_CHUNK_HEADER_SIZE;
+
+            // Validate: first chunk must be JSON and data must fit within buffer
+            if (jsonChunkType !== SerializationTools._GLB_JSON_CHUNK_TYPE || jsonDataOffset + jsonChunkLength > buffer.byteLength) {
+                return false;
+            }
             const jsonChunkData = new Uint8Array(buffer, jsonDataOffset, jsonChunkLength);
             const decoder = new TextDecoder("utf-8");
             try {

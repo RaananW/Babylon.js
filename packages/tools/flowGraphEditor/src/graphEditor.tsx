@@ -26,7 +26,7 @@ import { ControlledSize, SplitDirection } from "shared-ui-components/split/split
 import { ScenePreviewComponent } from "./components/preview/scenePreviewComponent";
 import { GraphControlsComponent } from "./components/graphControls/graphControlsComponent";
 import { HistoryStack } from "shared-ui-components/historyStack";
-import { type FlowGraphEventBlock } from "core/FlowGraph/flowGraphEventBlock";
+import { FlowGraphEventBlock } from "core/FlowGraph/flowGraphEventBlock";
 import { type IFlowGraphValidationResult, FlowGraphValidationSeverity } from "core/FlowGraph/flowGraphValidator";
 import { AnalyzeSmartGroup, ApplySmartGroupExposure } from "./graphSystem/smartGroup";
 import { HelpDialogComponent } from "./components/help/helpDialogComponent";
@@ -768,9 +768,8 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
             }
 
             // Register event blocks with the flow graph
-            const maybeEvent = newBlock as unknown as FlowGraphEventBlock;
-            if (typeof maybeEvent._executeEvent === "function") {
-                this.props.globalState.flowGraph.addEventBlock(maybeEvent);
+            if (newBlock instanceof FlowGraphEventBlock) {
+                this.props.globalState.flowGraph.addEventBlock(newBlock);
             } else {
                 this.props.globalState.flowGraph.addBlock(newBlock);
             }
@@ -803,12 +802,8 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
             const block = new (blockClass as any)({ name: blockType }) as FlowGraphBlock;
 
             // If this is an event block, register it with the flow graph.
-            // We check for the _executeEvent method which is unique to FlowGraphEventBlock,
-            // rather than checking .type, because other blocks (e.g. GetAssetBlock) also
-            // have a .type field with a different meaning (FlowGraphDataConnection).
-            const maybeEvent = block as unknown as FlowGraphEventBlock;
-            if (typeof maybeEvent._executeEvent === "function") {
-                this.props.globalState.flowGraph.addEventBlock(maybeEvent);
+            if (block instanceof FlowGraphEventBlock) {
+                this.props.globalState.flowGraph.addEventBlock(block);
             } else {
                 this.props.globalState.flowGraph.addBlock(block);
             }
@@ -878,9 +873,8 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
                 const config: any = { name: blockDef.className, ...blockDef.config };
                 const block = new (blockClass as any)(config) as FlowGraphBlock;
 
-                const maybeEvent = block as unknown as FlowGraphEventBlock;
-                if (typeof maybeEvent._executeEvent === "function") {
-                    this.props.globalState.flowGraph.addEventBlock(maybeEvent);
+                if (block instanceof FlowGraphEventBlock) {
+                    this.props.globalState.flowGraph.addEventBlock(block);
                 } else {
                     this.props.globalState.flowGraph.addBlock(block);
                 }
@@ -911,11 +905,11 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
                 continue;
             }
 
-            // Find the matching ports
-            const fromPort = conn.isSignal
-                ? fromNode.outputPorts.find((p) => p.portData.name === conn.fromPort)
-                : fromNode.outputPorts.find((p) => p.portData.name === conn.fromPort);
-            const toPort = conn.isSignal ? toNode.inputPorts.find((p) => p.portData.name === conn.toPort) : toNode.inputPorts.find((p) => p.portData.name === conn.toPort);
+            // Find the matching ports by name (signal and data ports live in
+            // separate arrays on the underlying block, but the GraphNode merges
+            // them into unified outputPorts/inputPorts lists, so a single search works).
+            const fromPort = fromNode.outputPorts.find((p) => p.portData.name === conn.fromPort);
+            const toPort = toNode.inputPorts.find((p) => p.portData.name === conn.toPort);
 
             if (fromPort && toPort) {
                 this._graphCanvas.connectPorts(fromPort.portData, toPort.portData);

@@ -164,7 +164,7 @@ export function defaultValueParseFunction(key: string, serializationObject: any,
         if (Array.isArray(intermediateValue)) {
             // Check if this is an event configuration array (objects with id/eventData)
             // versus a plain array of primitives (e.g. variable name lists)
-            if (intermediateValue.length > 0 && typeof intermediateValue[0] === "object" && intermediateValue[0] !== null) {
+            if (intermediateValue.length > 0 && typeof intermediateValue[0] === "object" && intermediateValue[0] !== null && "eventData" in intermediateValue[0]) {
                 // configuration data of an event
                 finalValue = intermediateValue.reduce((acc, val) => {
                     if (!val.eventData) {

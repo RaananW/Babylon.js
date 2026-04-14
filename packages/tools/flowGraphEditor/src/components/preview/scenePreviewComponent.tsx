@@ -3,6 +3,7 @@ import { type GlobalState } from "../../globalState";
 import { type Nullable } from "core/types";
 import { type Observer } from "core/Misc/observable";
 import { type Scene } from "core/scene";
+import "core/Helpers/sceneHelpers";
 import { type Engine } from "core/Engines/engine";
 import { type FlowGraph } from "core/FlowGraph/flowGraph";
 import { SceneContext } from "../../sceneContext";
