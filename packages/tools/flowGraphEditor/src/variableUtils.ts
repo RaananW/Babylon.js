@@ -25,7 +25,7 @@ export interface IVariableEntry {
  * @param fg - The flow graph to scan.
  * @returns Sorted array of variable entries.
  */
-export function gatherVariables(fg: FlowGraph): IVariableEntry[] {
+export function GatherVariables(fg: FlowGraph): IVariableEntry[] {
     const varMap = new Map<string, IVariableEntry>();
 
     const ensureVar = (name: string): IVariableEntry => {
@@ -77,7 +77,7 @@ export function gatherVariables(fg: FlowGraph): IVariableEntry[] {
  * @param excludeBlock - A block to exclude from the scan.
  * @returns Sorted array of variable names.
  */
-export function gatherVariableNames(fg: FlowGraph, excludeBlock?: FlowGraphBlock): string[] {
+export function GatherVariableNames(fg: FlowGraph, excludeBlock?: FlowGraphBlock): string[] {
     const names = new Set<string>();
     for (const block of fg.getAllBlocks()) {
         if (block === excludeBlock) {
@@ -121,7 +121,7 @@ export function gatherVariableNames(fg: FlowGraph, excludeBlock?: FlowGraphBlock
  * @param oldName - The current variable name.
  * @param newName - The new variable name.
  */
-export function renameVariable(fg: FlowGraph, oldName: string, newName: string): void {
+export function RenameVariable(fg: FlowGraph, oldName: string, newName: string): void {
     if (!newName || newName === oldName) {
         return;
     }
@@ -140,7 +140,7 @@ export function renameVariable(fg: FlowGraph, oldName: string, newName: string):
                     config.variables[idx] = newName;
                     const dataInput = block.getDataInput(oldName);
                     if (dataInput) {
-                        (dataInput as any)._name = newName;
+                        dataInput.name = newName;
                     }
                 }
             } else if (config?.variable === oldName) {
@@ -168,7 +168,7 @@ export function renameVariable(fg: FlowGraph, oldName: string, newName: string):
  * @param fg - The flow graph.
  * @param name - The variable name to delete.
  */
-export function deleteVariable(fg: FlowGraph, name: string): void {
+export function DeleteVariable(fg: FlowGraph, name: string): void {
     const blocksToRemove: FlowGraphBlock[] = [];
 
     for (const block of fg.getAllBlocks()) {
@@ -180,6 +180,15 @@ export function deleteVariable(fg: FlowGraph, name: string): void {
             if (config?.variables) {
                 const idx = config.variables.indexOf(name);
                 if (idx !== -1) {
+                    // Remove the corresponding data input port
+                    const dataInput = block.getDataInput(name);
+                    if (dataInput) {
+                        dataInput.disconnectFromAll();
+                        const portIdx = block.dataInputs.indexOf(dataInput);
+                        if (portIdx !== -1) {
+                            block.dataInputs.splice(portIdx, 1);
+                        }
+                    }
                     config.variables.splice(idx, 1);
                     if (config.variables.length === 0) {
                         blocksToRemove.push(block);
@@ -211,7 +220,7 @@ export function deleteVariable(fg: FlowGraph, name: string): void {
  * @param val - The value to format.
  * @returns A human-readable string representation.
  */
-export function formatVariableValue(val: unknown): string {
+export function FormatVariableValue(val: unknown): string {
     if (val === undefined) {
         return "undefined";
     }
@@ -239,7 +248,7 @@ export function formatVariableValue(val: unknown): string {
  * @param query - The filter query.
  * @returns Filtered suggestions. If query is empty, returns all suggestions.
  */
-export function filterSuggestions(suggestions: string[], query: string): string[] {
+export function FilterSuggestions(suggestions: string[], query: string): string[] {
     const q = query.toLowerCase();
     if (!q) {
         return suggestions;

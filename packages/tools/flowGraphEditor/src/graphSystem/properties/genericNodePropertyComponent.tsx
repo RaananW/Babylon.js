@@ -26,7 +26,7 @@ import { Color3, Color4 } from "core/Maths/math.color";
 import { FlowGraphBlockDisplayName } from "../blockDisplayUtils";
 import { type GlobalState } from "../../globalState";
 import { AutoCompleteInputComponent } from "../../sharedComponents/autoCompleteInputComponent";
-import { gatherVariableNames } from "../../variableUtils";
+import { GatherVariableNames } from "../../variableUtils";
 
 /**
  * Type names whose data inputs can be edited directly in
@@ -162,6 +162,8 @@ export class ConstructorVariablesPropertyTabComponent extends React.Component<IP
      * Gathers all variable names currently defined across the flow graph
      * (from GetVariable/SetVariable blocks and context user variables).
      * Excludes the variable owned by the given block to avoid self-reference.
+     * @param excludeBlock - The block to exclude from the scan.
+     * @returns Sorted array of variable names.
      */
     private _getExistingVariableNames(excludeBlock: FlowGraphBlock): string[] {
         const globalState = this.props.stateManager.data as GlobalState;
@@ -169,7 +171,7 @@ export class ConstructorVariablesPropertyTabComponent extends React.Component<IP
         if (!fg) {
             return [];
         }
-        return gatherVariableNames(fg, excludeBlock);
+        return GatherVariableNames(fg, excludeBlock);
     }
 
     override render() {

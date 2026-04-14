@@ -3,7 +3,7 @@ import { type Engine, NullEngine } from "core/Engines";
 import { type FlowGraph, type FlowGraphContext, FlowGraphCoordinator, FlowGraphGetVariableBlock } from "core/FlowGraph";
 import { FlowGraphSetVariableBlock } from "core/FlowGraph/Blocks/Execution/flowGraphSetVariableBlock";
 import { Scene } from "core/scene";
-import { gatherVariables, gatherVariableNames, renameVariable, deleteVariable, formatVariableValue, filterSuggestions, type IVariableEntry } from "flow-graph-editor/variableUtils";
+import { GatherVariables, GatherVariableNames, RenameVariable, DeleteVariable, FormatVariableValue, FilterSuggestions, type IVariableEntry } from "flow-graph-editor/variableUtils";
 import { CONSTRUCTOR_CONFIG } from "flow-graph-editor/graphSystem/properties/constructorConfigRegistry";
 
 describe("Flow Graph Variable Utils", () => {
@@ -38,7 +38,7 @@ describe("Flow Graph Variable Utils", () => {
     // --------------------------------------------------------
     describe("gatherVariables", () => {
         it("returns empty array for a graph with no variable blocks", () => {
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             expect(result).toEqual([]);
         });
 
@@ -46,7 +46,7 @@ describe("Flow Graph Variable Utils", () => {
             const get = new FlowGraphGetVariableBlock({ variable: "myVar" });
             flowGraph.addBlock(get);
 
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             expect(result).toHaveLength(1);
             expect(result[0]).toEqual({ name: "myVar", getCount: 1, setCount: 0 });
         });
@@ -55,7 +55,7 @@ describe("Flow Graph Variable Utils", () => {
             const set = new FlowGraphSetVariableBlock({ variable: "myVar" });
             flowGraph.addBlock(set);
 
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             expect(result).toHaveLength(1);
             expect(result[0]).toEqual({ name: "myVar", getCount: 0, setCount: 1 });
         });
@@ -64,7 +64,7 @@ describe("Flow Graph Variable Utils", () => {
             flowGraph.addBlock(new FlowGraphGetVariableBlock({ variable: "x" }));
             flowGraph.addBlock(new FlowGraphGetVariableBlock({ variable: "x" }));
 
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             expect(result).toHaveLength(1);
             expect(result[0].getCount).toBe(2);
             expect(result[0].setCount).toBe(0);
@@ -75,7 +75,7 @@ describe("Flow Graph Variable Utils", () => {
             flowGraph.addBlock(new FlowGraphGetVariableBlock({ variable: "counter" }));
             flowGraph.addBlock(new FlowGraphSetVariableBlock({ variable: "counter" }));
 
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             expect(result).toHaveLength(1);
             expect(result[0]).toEqual({ name: "counter", getCount: 2, setCount: 1 });
         });
@@ -84,7 +84,7 @@ describe("Flow Graph Variable Utils", () => {
             const set = new FlowGraphSetVariableBlock({ variables: ["a", "b", "c"] });
             flowGraph.addBlock(set);
 
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             const names = result.map((v) => v.name);
             expect(names).toContain("a");
             expect(names).toContain("b");
@@ -97,7 +97,7 @@ describe("Flow Graph Variable Utils", () => {
         it("includes context user variables not referenced by blocks", () => {
             flowGraphContext.setVariable("orphanVar", 42);
 
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             expect(result).toHaveLength(1);
             expect(result[0]).toEqual({ name: "orphanVar", getCount: 0, setCount: 0 });
         });
@@ -106,7 +106,7 @@ describe("Flow Graph Variable Utils", () => {
             flowGraph.addBlock(new FlowGraphGetVariableBlock({ variable: "fromBlock" }));
             flowGraphContext.setVariable("fromContext", "hello");
 
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             expect(result).toHaveLength(2);
             const names = result.map((v) => v.name);
             expect(names).toContain("fromBlock");
@@ -118,7 +118,7 @@ describe("Flow Graph Variable Utils", () => {
             flowGraph.addBlock(new FlowGraphGetVariableBlock({ variable: "apple" }));
             flowGraph.addBlock(new FlowGraphGetVariableBlock({ variable: "mango" }));
 
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             expect(result.map((v) => v.name)).toEqual(["apple", "mango", "zebra"]);
         });
 
@@ -126,7 +126,7 @@ describe("Flow Graph Variable Utils", () => {
             flowGraph.addBlock(new FlowGraphGetVariableBlock({ variable: "shared" }));
             flowGraphContext.setVariable("shared", 10);
 
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             expect(result).toHaveLength(1);
             expect(result[0]).toEqual({ name: "shared", getCount: 1, setCount: 0 });
         });
@@ -137,7 +137,7 @@ describe("Flow Graph Variable Utils", () => {
     // --------------------------------------------------------
     describe("gatherVariableNames", () => {
         it("returns empty array for graph with no variable blocks", () => {
-            expect(gatherVariableNames(flowGraph)).toEqual([]);
+            expect(GatherVariableNames(flowGraph)).toEqual([]);
         });
 
         it("returns sorted unique variable names", () => {
@@ -145,7 +145,7 @@ describe("Flow Graph Variable Utils", () => {
             flowGraph.addBlock(new FlowGraphSetVariableBlock({ variable: "a" }));
             flowGraph.addBlock(new FlowGraphGetVariableBlock({ variable: "b" }));
 
-            expect(gatherVariableNames(flowGraph)).toEqual(["a", "b"]);
+            expect(GatherVariableNames(flowGraph)).toEqual(["a", "b"]);
         });
 
         it("excludes variables from the excluded block", () => {
@@ -153,14 +153,14 @@ describe("Flow Graph Variable Utils", () => {
             flowGraph.addBlock(excluded);
             flowGraph.addBlock(new FlowGraphGetVariableBlock({ variable: "shared" }));
 
-            const result = gatherVariableNames(flowGraph, excluded);
+            const result = GatherVariableNames(flowGraph, excluded);
             expect(result).toEqual(["shared"]);
         });
 
         it("includes context user variables", () => {
             flowGraphContext.setVariable("contextVar", true);
 
-            const result = gatherVariableNames(flowGraph);
+            const result = GatherVariableNames(flowGraph);
             expect(result).toEqual(["contextVar"]);
         });
     });
@@ -173,7 +173,7 @@ describe("Flow Graph Variable Utils", () => {
             const get = new FlowGraphGetVariableBlock({ variable: "old" });
             flowGraph.addBlock(get);
 
-            renameVariable(flowGraph, "old", "new");
+            RenameVariable(flowGraph, "old", "new");
             expect((get.config as any).variable).toBe("new");
         });
 
@@ -181,7 +181,7 @@ describe("Flow Graph Variable Utils", () => {
             const set = new FlowGraphSetVariableBlock({ variable: "old" });
             flowGraph.addBlock(set);
 
-            renameVariable(flowGraph, "old", "new");
+            RenameVariable(flowGraph, "old", "new");
             expect((set.config as any).variable).toBe("new");
         });
 
@@ -189,14 +189,28 @@ describe("Flow Graph Variable Utils", () => {
             const set = new FlowGraphSetVariableBlock({ variables: ["alpha", "old", "gamma"] });
             flowGraph.addBlock(set);
 
-            renameVariable(flowGraph, "old", "new");
+            RenameVariable(flowGraph, "old", "new");
             expect((set.config as any).variables).toEqual(["alpha", "new", "gamma"]);
+        });
+
+        it("renames the data input port in SetVariable multi-variable mode", () => {
+            const set = new FlowGraphSetVariableBlock({ variables: ["alpha", "old", "gamma"] });
+            flowGraph.addBlock(set);
+
+            // Before rename, port should be named "old"
+            expect(set.getDataInput("old")).toBeDefined();
+
+            RenameVariable(flowGraph, "old", "renamed");
+
+            // After rename, port should be found by new name
+            expect(set.getDataInput("old")).toBeUndefined();
+            expect(set.getDataInput("renamed")).toBeDefined();
         });
 
         it("renames in context user variables", () => {
             flowGraphContext.setVariable("old", 123);
 
-            renameVariable(flowGraph, "old", "new");
+            RenameVariable(flowGraph, "old", "new");
             expect(flowGraphContext.hasVariable("old")).toBe(false);
             expect(flowGraphContext.hasVariable("new")).toBe(true);
             expect(flowGraphContext.getVariable("new")).toBe(123);
@@ -206,7 +220,7 @@ describe("Flow Graph Variable Utils", () => {
             const get = new FlowGraphGetVariableBlock({ variable: "same" });
             flowGraph.addBlock(get);
 
-            renameVariable(flowGraph, "same", "same");
+            RenameVariable(flowGraph, "same", "same");
             expect((get.config as any).variable).toBe("same");
         });
 
@@ -214,7 +228,7 @@ describe("Flow Graph Variable Utils", () => {
             const get = new FlowGraphGetVariableBlock({ variable: "existing" });
             flowGraph.addBlock(get);
 
-            renameVariable(flowGraph, "existing", "");
+            RenameVariable(flowGraph, "existing", "");
             expect((get.config as any).variable).toBe("existing");
         });
 
@@ -224,7 +238,7 @@ describe("Flow Graph Variable Utils", () => {
             flowGraph.addBlock(get1);
             flowGraph.addBlock(get2);
 
-            renameVariable(flowGraph, "target", "renamed");
+            RenameVariable(flowGraph, "target", "renamed");
             expect((get1.config as any).variable).toBe("renamed");
             expect((get2.config as any).variable).toBe("other");
         });
@@ -238,7 +252,7 @@ describe("Flow Graph Variable Utils", () => {
             const get = new FlowGraphGetVariableBlock({ variable: "toDelete" });
             flowGraph.addBlock(get);
 
-            deleteVariable(flowGraph, "toDelete");
+            DeleteVariable(flowGraph, "toDelete");
             expect(flowGraph.getAllBlocks()).toHaveLength(0);
         });
 
@@ -246,7 +260,7 @@ describe("Flow Graph Variable Utils", () => {
             const set = new FlowGraphSetVariableBlock({ variable: "toDelete" });
             flowGraph.addBlock(set);
 
-            deleteVariable(flowGraph, "toDelete");
+            DeleteVariable(flowGraph, "toDelete");
             expect(flowGraph.getAllBlocks()).toHaveLength(0);
         });
 
@@ -254,23 +268,39 @@ describe("Flow Graph Variable Utils", () => {
             const set = new FlowGraphSetVariableBlock({ variables: ["keep", "toDelete"] });
             flowGraph.addBlock(set);
 
-            deleteVariable(flowGraph, "toDelete");
+            DeleteVariable(flowGraph, "toDelete");
             expect(flowGraph.getAllBlocks()).toHaveLength(1);
             expect((set.config as any).variables).toEqual(["keep"]);
+        });
+
+        it("removes the data input port when deleting from multi-variable SetVariable", () => {
+            const set = new FlowGraphSetVariableBlock({ variables: ["keep", "toDelete"] });
+            flowGraph.addBlock(set);
+
+            // Before delete, both ports exist
+            expect(set.getDataInput("keep")).toBeDefined();
+            expect(set.getDataInput("toDelete")).toBeDefined();
+            const portCountBefore = set.dataInputs.length;
+
+            DeleteVariable(flowGraph, "toDelete");
+
+            // After delete, the port for "toDelete" should be gone
+            expect(set.getDataInput("toDelete")).toBeUndefined();
+            expect(set.dataInputs.length).toBe(portCountBefore - 1);
         });
 
         it("removes multi-variable SetVariable block when last variable is deleted", () => {
             const set = new FlowGraphSetVariableBlock({ variables: ["only"] });
             flowGraph.addBlock(set);
 
-            deleteVariable(flowGraph, "only");
+            DeleteVariable(flowGraph, "only");
             expect(flowGraph.getAllBlocks()).toHaveLength(0);
         });
 
         it("removes variable from context", () => {
             flowGraphContext.setVariable("toDelete", "value");
 
-            deleteVariable(flowGraph, "toDelete");
+            DeleteVariable(flowGraph, "toDelete");
             expect(flowGraphContext.hasVariable("toDelete")).toBe(false);
         });
 
@@ -282,7 +312,7 @@ describe("Flow Graph Variable Utils", () => {
             flowGraphContext.setVariable("keep", 1);
             flowGraphContext.setVariable("del", 2);
 
-            deleteVariable(flowGraph, "del");
+            DeleteVariable(flowGraph, "del");
             expect(flowGraph.getAllBlocks()).toHaveLength(1);
             expect((flowGraph.getAllBlocks()[0].config as any).variable).toBe("keep");
             expect(flowGraphContext.hasVariable("keep")).toBe(true);
@@ -294,44 +324,44 @@ describe("Flow Graph Variable Utils", () => {
     // --------------------------------------------------------
     describe("formatVariableValue", () => {
         it("formats undefined", () => {
-            expect(formatVariableValue(undefined)).toBe("undefined");
+            expect(FormatVariableValue(undefined)).toBe("undefined");
         });
 
         it("formats null", () => {
-            expect(formatVariableValue(null)).toBe("null");
+            expect(FormatVariableValue(null)).toBe("null");
         });
 
         it("formats numbers", () => {
-            expect(formatVariableValue(42)).toBe("42");
-            expect(formatVariableValue(3.14)).toBe("3.14");
-            expect(formatVariableValue(0)).toBe("0");
-            expect(formatVariableValue(-1)).toBe("-1");
+            expect(FormatVariableValue(42)).toBe("42");
+            expect(FormatVariableValue(3.14)).toBe("3.14");
+            expect(FormatVariableValue(0)).toBe("0");
+            expect(FormatVariableValue(-1)).toBe("-1");
         });
 
         it("formats booleans", () => {
-            expect(formatVariableValue(true)).toBe("true");
-            expect(formatVariableValue(false)).toBe("false");
+            expect(FormatVariableValue(true)).toBe("true");
+            expect(FormatVariableValue(false)).toBe("false");
         });
 
         it("formats strings", () => {
-            expect(formatVariableValue("hello")).toBe("hello");
-            expect(formatVariableValue("")).toBe("");
+            expect(FormatVariableValue("hello")).toBe("hello");
+            expect(FormatVariableValue("")).toBe("");
         });
 
         it("truncates long strings to 60 chars", () => {
             const long = "a".repeat(100);
-            const result = formatVariableValue(long);
+            const result = FormatVariableValue(long);
             expect(result.length).toBe(60);
             expect(result).toBe("a".repeat(57) + "...");
         });
 
         it("formats objects with custom toString", () => {
             const obj = { toString: () => "Vector3(1, 2, 3)" };
-            expect(formatVariableValue(obj)).toBe("Vector3(1, 2, 3)");
+            expect(FormatVariableValue(obj)).toBe("Vector3(1, 2, 3)");
         });
 
         it("formats plain objects as JSON", () => {
-            expect(formatVariableValue({ x: 1, y: 2 })).toBe('{"x":1,"y":2}');
+            expect(FormatVariableValue({ x: 1, y: 2 })).toBe('{"x":1,"y":2}');
         });
 
         it("truncates long JSON objects", () => {
@@ -339,25 +369,25 @@ describe("Flow Graph Variable Utils", () => {
             for (let i = 0; i < 20; i++) {
                 obj[`longPropertyName${i}`] = i;
             }
-            const result = formatVariableValue(obj);
+            const result = FormatVariableValue(obj);
             expect(result.length).toBe(60);
             expect(result.endsWith("...")).toBe(true);
         });
 
         it("formats arrays via their toString", () => {
-            expect(formatVariableValue([1, 2, 3])).toBe("1,2,3");
+            expect(FormatVariableValue([1, 2, 3])).toBe("1,2,3");
         });
 
         it("handles circular references gracefully", () => {
             const obj: any = {};
             obj.self = obj;
-            expect(formatVariableValue(obj)).toBe("[object]");
+            expect(FormatVariableValue(obj)).toBe("[object]");
         });
 
         it("does not use Object.prototype.toString for plain objects", () => {
             const plain = { a: 1 };
             // plain.toString() === "[object Object]" — should use JSON instead
-            expect(formatVariableValue(plain)).toBe('{"a":1}');
+            expect(FormatVariableValue(plain)).toBe('{"a":1}');
         });
     });
 
@@ -368,27 +398,27 @@ describe("Flow Graph Variable Utils", () => {
         const suggestions = ["playerHealth", "playerName", "enemyCount", "score", "isAlive"];
 
         it("returns all suggestions when query is empty", () => {
-            expect(filterSuggestions(suggestions, "")).toEqual(suggestions);
+            expect(FilterSuggestions(suggestions, "")).toEqual(suggestions);
         });
 
         it("filters case-insensitively", () => {
-            expect(filterSuggestions(suggestions, "PLAYER")).toEqual(["playerHealth", "playerName"]);
+            expect(FilterSuggestions(suggestions, "PLAYER")).toEqual(["playerHealth", "playerName"]);
         });
 
         it("matches substring anywhere in the string", () => {
-            expect(filterSuggestions(suggestions, "count")).toEqual(["enemyCount"]);
+            expect(FilterSuggestions(suggestions, "count")).toEqual(["enemyCount"]);
         });
 
         it("returns empty array when nothing matches", () => {
-            expect(filterSuggestions(suggestions, "xyz")).toEqual([]);
+            expect(FilterSuggestions(suggestions, "xyz")).toEqual([]);
         });
 
         it("preserves order of original suggestions", () => {
-            expect(filterSuggestions(suggestions, "e")).toEqual(["playerHealth", "playerName", "enemyCount", "score", "isAlive"]);
+            expect(FilterSuggestions(suggestions, "e")).toEqual(["playerHealth", "playerName", "enemyCount", "score", "isAlive"]);
         });
 
         it("handles empty suggestions array", () => {
-            expect(filterSuggestions([], "test")).toEqual([]);
+            expect(FilterSuggestions([], "test")).toEqual([]);
         });
     });
 
@@ -421,20 +451,20 @@ describe("Flow Graph Variable Utils", () => {
             const ctx = flowGraph.getContext(0) ?? flowGraph.createContext();
             ctx.setVariable("myNewVar", undefined);
 
-            const result1 = gatherVariables(flowGraph);
+            const result1 = GatherVariables(flowGraph);
             expect(result1.map((v) => v.name)).toContain("myNewVar");
 
             // Call again — should still be there
-            const result2 = gatherVariables(flowGraph);
+            const result2 = GatherVariables(flowGraph);
             expect(result2.map((v) => v.name)).toContain("myNewVar");
         });
 
         it("context variables survive after renaming", () => {
             flowGraphContext.setVariable("original", 100);
 
-            renameVariable(flowGraph, "original", "renamed");
+            RenameVariable(flowGraph, "original", "renamed");
 
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             expect(result.map((v) => v.name)).toContain("renamed");
             expect(result.map((v) => v.name)).not.toContain("original");
         });
@@ -442,9 +472,9 @@ describe("Flow Graph Variable Utils", () => {
         it("context variables are removed after deleteVariable", () => {
             flowGraphContext.setVariable("toGo", "bye");
 
-            deleteVariable(flowGraph, "toGo");
+            DeleteVariable(flowGraph, "toGo");
 
-            const result = gatherVariables(flowGraph);
+            const result = GatherVariables(flowGraph);
             expect(result.map((v) => v.name)).not.toContain("toGo");
         });
     });

@@ -363,11 +363,11 @@ export const HelpTopics: IHelpTopic[] = [
             },
             {
                 heading: "From Snippet Server",
-                html: `<p>If you've saved your graph to the snippet server, the dialog pre-fills the snippet ID. Use <code>FlowGraph.ParseFromSnippetAsync()</code> to load it.</p>`,
+                html: `<p>If you've saved your graph to the snippet server, the dialog pre-fills the snippet ID. Fetch the snippet JSON and use <code>ParseFlowGraphAsync()</code> from <code>@babylonjs/core/FlowGraph/flowGraphParser</code> to load it.</p>`,
             },
             {
                 heading: "From JSON File",
-                html: `<p>Save your graph as a JSON file, then use <code>FlowGraph.ParseFlowGraphAsync()</code> to parse it. Both methods require a <code>FlowGraphCoordinator</code> tied to your scene.</p>`,
+                html: `<p>Save your graph as a JSON file, then use <code>ParseFlowGraphAsync()</code> from <code>@babylonjs/core/FlowGraph/flowGraphParser</code> to parse it. Both methods require a <code>FlowGraphCoordinator</code> tied to your scene.</p>`,
             },
         ],
     },

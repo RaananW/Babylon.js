@@ -48,8 +48,8 @@ The loaded scene's objects (meshes, lights, cameras, etc.) become available as r
 
 Click the **&lt;/&gt;** button in the toolbar to open the **How to Use** dialog. It shows copy-to-clipboard code samples for integrating your flow graph into a project:
 
-- **From snippet server** — `FlowGraph.ParseFromSnippetAsync("<snippetId>", { coordinator })` — pre-filled with the current snippet ID if saved.
-- **From JSON file** — Load the saved `.json` file and call `FlowGraph.ParseFlowGraphAsync(data, { coordinator })`.
+- **From snippet server** — Fetch the snippet JSON from `https://snippet.babylonjs.com/<snippetId>`, parse the payload, then call `ParseFlowGraphAsync(data, { coordinator })` from `@babylonjs/core/FlowGraph/flowGraphParser`.
+- **From JSON file** — Load the saved `.json` file and call `ParseFlowGraphAsync(data, { coordinator })` from `@babylonjs/core/FlowGraph/flowGraphParser`.
 
 Each code sample includes the necessary import statements and is ready to paste into your project.
 

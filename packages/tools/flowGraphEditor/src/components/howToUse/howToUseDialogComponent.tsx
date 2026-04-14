@@ -53,19 +53,28 @@ export class HowToUseDialogComponent extends React.Component<IHowToUseDialogProp
     override render() {
         const snippetId = this.props.globalState.flowGraphSnippetId;
 
-        const snippetCode = `import { FlowGraph } from "@babylonjs/core/FlowGraph/flowGraph";
-import { FlowGraphCoordinator } from "@babylonjs/core/FlowGraph/flowGraphCoordinator";
+        const snippetCode = `import { FlowGraphCoordinator } from "@babylonjs/core/FlowGraph/flowGraphCoordinator";
+import { ParseFlowGraphAsync } from "@babylonjs/core/FlowGraph/flowGraphParser";
 
 // After creating your scene:
 const coordinator = new FlowGraphCoordinator({ scene });
-const flowGraph = await FlowGraph.ParseFromSnippetAsync(
-    "${snippetId || "<your-snippet-id>"}",
+
+// Fetch the snippet from the Babylon.js snippet server:
+const response = await fetch(
+    "https://snippet.babylonjs.com/${snippetId || "<your-snippet-id>"}"
+);
+const snippet = await response.json();
+const data = JSON.parse(snippet.jsonPayload);
+
+// Parse and start the flow graph:
+const flowGraph = await ParseFlowGraphAsync(
+    JSON.parse(data.flowGraph),
     { coordinator }
 );
 flowGraph.start();`;
 
-        const fileCode = `import { FlowGraph } from "@babylonjs/core/FlowGraph/flowGraph";
-import { FlowGraphCoordinator } from "@babylonjs/core/FlowGraph/flowGraphCoordinator";
+        const fileCode = `import { FlowGraphCoordinator } from "@babylonjs/core/FlowGraph/flowGraphCoordinator";
+import { ParseFlowGraphAsync } from "@babylonjs/core/FlowGraph/flowGraphParser";
 
 // Load the saved JSON file:
 const response = await fetch("./flowGraph.json");
@@ -73,7 +82,7 @@ const data = await response.json();
 
 // After creating your scene:
 const coordinator = new FlowGraphCoordinator({ scene });
-const flowGraph = await FlowGraph.ParseFlowGraphAsync(
+const flowGraph = await ParseFlowGraphAsync(
     data,
     { coordinator }
 );

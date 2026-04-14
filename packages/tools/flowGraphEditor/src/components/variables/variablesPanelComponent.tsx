@@ -3,7 +3,7 @@ import { type GlobalState } from "../../globalState";
 import { type Nullable } from "core/types";
 import { type Observer } from "core/Misc/observable";
 import { FlowGraphState } from "core/FlowGraph/flowGraph";
-import { gatherVariables, renameVariable, deleteVariable, formatVariableValue, type IVariableEntry } from "../../variableUtils";
+import { GatherVariables, RenameVariable, DeleteVariable, FormatVariableValue, type IVariableEntry } from "../../variableUtils";
 import "./variables.scss";
 
 interface IVariablesPanelProps {
@@ -104,7 +104,7 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         const ctx = fg.getContext(0);
         if (ctx) {
             for (const [key, val] of Object.entries(ctx.userVariables)) {
-                values.set(key, formatVariableValue(val));
+                values.set(key, FormatVariableValue(val));
             }
         }
         this.setState({ runtimeValues: values });
@@ -120,7 +120,7 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             return;
         }
 
-        const variables = gatherVariables(fg);
+        const variables = GatherVariables(fg);
         this.setState({ variables });
     }
 
@@ -139,16 +139,15 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             return;
         }
 
-        renameVariable(fg, oldName, newName);
+        RenameVariable(fg, oldName, newName);
 
         this.props.globalState.stateManager.onRebuildRequiredObservable.notifyObservers();
         this._refreshVariables();
     }
 
     /**
-     * Delete a variable by removing it from all GetVariable and SetVariable blocks
-     * that reference it. The blocks themselves are NOT deleted — their variable
-     * reference is cleared.
+     * Delete a variable by removing all GetVariable and SetVariable blocks that
+     * reference it, and removing it from all execution contexts.
      * @param name - the variable name to delete
      */
     private _deleteVariable(name: string) {
@@ -157,7 +156,7 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             return;
         }
 
-        deleteVariable(fg, name);
+        DeleteVariable(fg, name);
 
         this.props.globalState.stateManager.onRebuildRequiredObservable.notifyObservers();
         this._refreshVariables();
@@ -188,12 +187,10 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         }
         ctx.setVariable(name, undefined);
 
-        this._refreshVariables();
-
-        // Start editing the new variable name
-        const newVars = [...this.state.variables, { name, getCount: 0, setCount: 0 }].sort((a, b) => a.name.localeCompare(b.name));
-        const newIdx = newVars.findIndex((v) => v.name === name);
-        this.setState({ variables: newVars, editingIndex: newIdx, editingName: name });
+        // Gather the updated list and start editing the new variable
+        const variables = GatherVariables(fg);
+        const newIdx = variables.findIndex((v) => v.name === name);
+        this.setState({ variables, editingIndex: newIdx, editingName: name });
     }
 
     private _startEditing(index: number) {
@@ -238,8 +235,15 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
                                     className="fge-variable-name"
                                     value={editingName}
                                     onChange={(e) => this.setState({ editingName: e.target.value })}
-                                    onBlur={() => this._commitEditing()}
+                                    onFocus={() => {
+                                        this.props.globalState.lockObject.lock = true;
+                                    }}
+                                    onBlur={() => {
+                                        this.props.globalState.lockObject.lock = false;
+                                        this._commitEditing();
+                                    }}
                                     onKeyDown={(e) => {
+                                        e.stopPropagation();
                                         if (e.key === "Enter") {
                                             this._commitEditing();
                                         } else if (e.key === "Escape") {

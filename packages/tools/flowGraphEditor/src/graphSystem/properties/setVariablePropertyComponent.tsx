@@ -13,7 +13,7 @@ import { RichTypeAny } from "core/FlowGraph/flowGraphRichTypes";
 import { RemoveDataInput } from "./blockMutationHelper";
 import { type GlobalState } from "../../globalState";
 import { AutoCompleteInputComponent } from "../../sharedComponents/autoCompleteInputComponent";
-import { gatherVariableNames } from "../../variableUtils";
+import { GatherVariableNames } from "../../variableUtils";
 
 /**
  * Property panel for FlowGraphSetVariableBlock.
@@ -73,7 +73,7 @@ export class SetVariablePropertyComponent extends React.Component<IPropertyCompo
         const config = this._getConfig();
         const alreadyAdded = new Set(config.variables ?? []);
 
-        const allNames = gatherVariableNames(fg, currentBlock);
+        const allNames = GatherVariableNames(fg, currentBlock);
         return allNames.filter((name) => !alreadyAdded.has(name));
     }
 
