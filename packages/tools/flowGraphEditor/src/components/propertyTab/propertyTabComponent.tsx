@@ -164,11 +164,7 @@ export class PropertyTabComponent extends React.Component<IPropertyTabComponentP
 
                 ShowToast(this.props.globalState, "Graph saved — ID: " + newId + " (copied to clipboard)", "success");
             } else {
-                ShowToast(
-                    this.props.globalState,
-                    `Unable to save flow graph (${(dataToSend.payload.length / 1024).toFixed(0)} KB). Please try again.`,
-                    "error"
-                );
+                ShowToast(this.props.globalState, `Unable to save flow graph (${(dataToSend.payload.length / 1024).toFixed(0)} KB). Please try again.`, "error");
             }
         } catch {
             this.props.globalState.onLogRequiredObservable.notifyObservers(new LogEntry("Unable to save flow graph to snippet server", true));
