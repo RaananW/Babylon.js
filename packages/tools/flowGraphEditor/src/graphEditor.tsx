@@ -620,17 +620,17 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
                             continue;
                         }
                         for (const input of block.dataInputs) {
-                            input.disconnectFrom();
+                            input.disconnectFromAll();
                         }
                         for (const output of block.dataOutputs) {
-                            output.disconnectFrom();
+                            output.disconnectFromAll();
                         }
                         if (block instanceof FlowGraphExecutionBlock) {
                             for (const sig of block.signalInputs) {
-                                sig.disconnectFrom();
+                                sig.disconnectFromAll();
                             }
                             for (const sig of block.signalOutputs) {
-                                sig.disconnectFrom();
+                                sig.disconnectFromAll();
                             }
                         }
                     }
