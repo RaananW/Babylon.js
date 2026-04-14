@@ -2,21 +2,9 @@ import * as React from "react";
 import { type GlobalState } from "../../globalState";
 import { type Nullable } from "core/types";
 import { type Observer } from "core/Misc/observable";
-import { type FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
-import { FlowGraphBlockNames } from "core/FlowGraph/Blocks/flowGraphBlockNames";
+import { FlowGraphState } from "core/FlowGraph/flowGraph";
+import { gatherVariables, renameVariable, deleteVariable, formatVariableValue, type IVariableEntry } from "../../variableUtils";
 import "./variables.scss";
-
-/**
- * Represents a variable found across the graph's blocks.
- */
-interface IVariableEntry {
-    /** Variable name */
-    name: string;
-    /** Number of GetVariable blocks referencing this name */
-    getCount: number;
-    /** Number of SetVariable blocks referencing this name */
-    setCount: number;
-}
 
 interface IVariablesPanelProps {
     globalState: GlobalState;
@@ -26,6 +14,8 @@ interface IVariablesPanelState {
     variables: IVariableEntry[];
     editingIndex: number | null;
     editingName: string;
+    isRunning: boolean;
+    runtimeValues: Map<string, string>;
 }
 
 /**
@@ -34,18 +24,22 @@ interface IVariablesPanelState {
  */
 export class VariablesPanelComponent extends React.Component<IVariablesPanelProps, IVariablesPanelState> {
     private _builtObserver: Nullable<Observer<void>> = null;
+    private _stateObserver: Nullable<Observer<FlowGraphState>> = null;
+    private _pollTimer: ReturnType<typeof setInterval> | null = null;
 
     /** @internal */
     constructor(props: IVariablesPanelProps) {
         super(props);
-        this.state = { variables: [], editingIndex: null, editingName: "" };
+        this.state = { variables: [], editingIndex: null, editingName: "", isRunning: false, runtimeValues: new Map() };
     }
 
     /** @internal */
     override componentDidMount() {
         this._builtObserver = this.props.globalState.onBuiltObservable.add(() => {
+            this._subscribeToFlowGraph();
             this._refreshVariables();
         });
+        this._subscribeToFlowGraph();
         this._refreshVariables();
     }
 
@@ -53,6 +47,67 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
     override componentWillUnmount() {
         this._builtObserver?.remove();
         this._builtObserver = null;
+        this._stateObserver?.remove();
+        this._stateObserver = null;
+        this._stopPolling();
+    }
+
+    private _subscribeToFlowGraph() {
+        this._stateObserver?.remove();
+        this._stateObserver = null;
+        this._stopPolling();
+
+        const fg = this.props.globalState.flowGraph;
+        if (!fg) {
+            return;
+        }
+
+        const running = fg.state === FlowGraphState.Started;
+        this.setState({ isRunning: running });
+        if (running) {
+            this._startPolling();
+        }
+
+        this._stateObserver = fg.onStateChangedObservable.add((newState) => {
+            const isRunning = newState === FlowGraphState.Started;
+            this.setState({ isRunning });
+            if (isRunning) {
+                this._startPolling();
+            } else {
+                // Do one final read so the panel shows the last values
+                this._pollRuntimeValues();
+                this._stopPolling();
+            }
+        });
+    }
+
+    private _startPolling() {
+        this._stopPolling();
+        this._pollRuntimeValues();
+        this._pollTimer = setInterval(() => this._pollRuntimeValues(), 200);
+    }
+
+    private _stopPolling() {
+        if (this._pollTimer !== null) {
+            clearInterval(this._pollTimer);
+            this._pollTimer = null;
+        }
+    }
+
+    private _pollRuntimeValues() {
+        const fg = this.props.globalState.flowGraph;
+        if (!fg) {
+            return;
+        }
+
+        const values = new Map<string, string>();
+        const ctx = fg.getContext(0);
+        if (ctx) {
+            for (const [key, val] of Object.entries(ctx.userVariables)) {
+                values.set(key, formatVariableValue(val));
+            }
+        }
+        this.setState({ runtimeValues: values });
     }
 
     /**
@@ -65,36 +120,7 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             return;
         }
 
-        const varMap = new Map<string, IVariableEntry>();
-
-        const ensureVar = (name: string): IVariableEntry => {
-            let entry = varMap.get(name);
-            if (!entry) {
-                entry = { name, getCount: 0, setCount: 0 };
-                varMap.set(name, entry);
-            }
-            return entry;
-        };
-
-        fg.visitAllBlocks((block: FlowGraphBlock) => {
-            const className = block.getClassName();
-            const config = block.config as any;
-            if (className === FlowGraphBlockNames.GetVariable) {
-                if (config?.variable) {
-                    ensureVar(config.variable).getCount++;
-                }
-            } else if (className === FlowGraphBlockNames.SetVariable) {
-                if (config?.variables) {
-                    for (const v of config.variables) {
-                        ensureVar(v).setCount++;
-                    }
-                } else if (config?.variable) {
-                    ensureVar(config.variable).setCount++;
-                }
-            }
-        });
-
-        const variables = Array.from(varMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+        const variables = gatherVariables(fg);
         this.setState({ variables });
     }
 
@@ -113,43 +139,7 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             return;
         }
 
-        fg.visitAllBlocks((block: FlowGraphBlock) => {
-            const className = block.getClassName();
-            const config = block.config as any;
-            if (className === FlowGraphBlockNames.GetVariable) {
-                if (config?.variable === oldName) {
-                    config.variable = newName;
-                }
-            } else if (className === FlowGraphBlockNames.SetVariable) {
-                if (config?.variables) {
-                    const idx = config.variables.indexOf(oldName);
-                    if (idx !== -1) {
-                        config.variables[idx] = newName;
-                        // Also rename the data input
-                        const dataInput = block.getDataInput(oldName);
-                        if (dataInput) {
-                            (dataInput as any)._name = newName;
-                        }
-                    }
-                } else if (config?.variable === oldName) {
-                    config.variable = newName;
-                }
-            }
-        });
-
-        // Also rename in any context's userVariables
-        let ctxIndex = 0;
-        let ctx = fg.getContext(ctxIndex);
-        while (ctx) {
-            if (ctx.hasVariable(oldName)) {
-                const value = ctx.getVariable(oldName);
-                ctx.setVariable(newName, value);
-                // Remove old entry
-                delete (ctx as any)._userVariables[oldName];
-            }
-            ctxIndex++;
-            ctx = fg.getContext(ctxIndex);
-        }
+        renameVariable(fg, oldName, newName);
 
         this.props.globalState.stateManager.onRebuildRequiredObservable.notifyObservers();
         this._refreshVariables();
@@ -167,42 +157,7 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             return;
         }
 
-        const blocksToRemove: FlowGraphBlock[] = [];
-
-        fg.visitAllBlocks((block: FlowGraphBlock) => {
-            const className = block.getClassName();
-            const config = block.config as any;
-            if (className === FlowGraphBlockNames.GetVariable && config?.variable === name) {
-                blocksToRemove.push(block);
-            } else if (className === FlowGraphBlockNames.SetVariable) {
-                if (config?.variables) {
-                    const idx = config.variables.indexOf(name);
-                    if (idx !== -1) {
-                        config.variables.splice(idx, 1);
-                        if (config.variables.length === 0) {
-                            blocksToRemove.push(block);
-                        }
-                    }
-                } else if (config?.variable === name) {
-                    blocksToRemove.push(block);
-                }
-            }
-        });
-
-        for (const block of blocksToRemove) {
-            fg.removeBlock(block);
-        }
-
-        // Remove from contexts
-        let ctxIndex = 0;
-        let ctx = fg.getContext(ctxIndex);
-        while (ctx) {
-            if (ctx.hasVariable(name)) {
-                delete (ctx as any)._userVariables[name];
-            }
-            ctxIndex++;
-            ctx = fg.getContext(ctxIndex);
-        }
+        deleteVariable(fg, name);
 
         this.props.globalState.stateManager.onRebuildRequiredObservable.notifyObservers();
         this._refreshVariables();
@@ -229,13 +184,9 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         // Set the variable on context 0 with a default empty value
         let ctx = fg.getContext(0);
         if (!ctx) {
-            fg.start();
-            ctx = fg.getContext(0);
-            fg.stop();
+            ctx = fg.createContext();
         }
-        if (ctx) {
-            ctx.setVariable(name, undefined);
-        }
+        ctx.setVariable(name, undefined);
 
         this._refreshVariables();
 
@@ -265,12 +216,13 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
 
     /** @internal */
     override render() {
-        const { variables, editingIndex, editingName } = this.state;
+        const { variables, editingIndex, editingName, isRunning, runtimeValues } = this.state;
 
         return (
             <div className="fge-variables-panel">
                 <div className="fge-variables-header">
                     <h3>Variables</h3>
+                    {isRunning && <span className="fge-variables-running-badge">● Live</span>}
                     <button className="fge-variables-add-btn" onClick={() => this._addVariable()} title="Add a new variable">
                         + Add
                     </button>
@@ -280,32 +232,39 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
                 )}
                 {variables.map((v, idx) => (
                     <div key={v.name} className="fge-variable-row">
-                        {editingIndex === idx ? (
-                            <input
-                                className="fge-variable-name"
-                                value={editingName}
-                                onChange={(e) => this.setState({ editingName: e.target.value })}
-                                onBlur={() => this._commitEditing()}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        this._commitEditing();
-                                    } else if (e.key === "Escape") {
-                                        this.setState({ editingIndex: null });
-                                    }
-                                }}
-                                autoFocus
-                            />
-                        ) : (
-                            <span className="fge-variable-name" onDoubleClick={() => this._startEditing(idx)} title="Double-click to rename">
-                                {v.name}
+                        <div className="fge-variable-row-top">
+                            {editingIndex === idx ? (
+                                <input
+                                    className="fge-variable-name"
+                                    value={editingName}
+                                    onChange={(e) => this.setState({ editingName: e.target.value })}
+                                    onBlur={() => this._commitEditing()}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            this._commitEditing();
+                                        } else if (e.key === "Escape") {
+                                            this.setState({ editingIndex: null });
+                                        }
+                                    }}
+                                    autoFocus
+                                />
+                            ) : (
+                                <span className="fge-variable-name" onDoubleClick={() => this._startEditing(idx)} title="Double-click to rename">
+                                    {v.name}
+                                </span>
+                            )}
+                            <span className="fge-variable-type" title={`${v.getCount} get, ${v.setCount} set`}>
+                                {v.getCount}G / {v.setCount}S
                             </span>
+                            <button className="fge-variable-delete-btn" title="Delete variable and its blocks" onClick={() => this._deleteVariable(v.name)}>
+                                ✕
+                            </button>
+                        </div>
+                        {runtimeValues.size > 0 && (
+                            <div className="fge-variable-value" title={runtimeValues.get(v.name) ?? "undefined"}>
+                                = {runtimeValues.get(v.name) ?? "undefined"}
+                            </div>
                         )}
-                        <span className="fge-variable-type" title={`${v.getCount} get, ${v.setCount} set`}>
-                            {v.getCount}G / {v.setCount}S
-                        </span>
-                        <button className="fge-variable-delete-btn" title="Delete variable and its blocks" onClick={() => this._deleteVariable(v.name)}>
-                            ✕
-                        </button>
                     </div>
                 ))}
                 <div className="fge-variables-info">

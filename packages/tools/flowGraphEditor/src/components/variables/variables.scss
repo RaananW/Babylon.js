@@ -12,12 +12,20 @@
         margin-bottom: 8px;
         padding-bottom: 6px;
         border-bottom: 1px solid #444;
+        gap: 6px;
 
         h3 {
             margin: 0;
             font-size: 13px;
             font-weight: 600;
             color: #ddd;
+        }
+
+        .fge-variables-running-badge {
+            color: #4caf50;
+            font-size: 11px;
+            font-weight: 600;
+            flex-shrink: 0;
         }
 
         .fge-variables-add-btn {
@@ -28,6 +36,7 @@
             cursor: pointer;
             font-size: 12px;
             padding: 2px 8px;
+            margin-left: auto;
             &:hover {
                 background: #555;
                 color: #fff;
@@ -44,13 +53,19 @@
 
     .fge-variable-row {
         display: flex;
-        align-items: center;
-        gap: 6px;
+        flex-direction: column;
+        gap: 2px;
         padding: 4px 0;
         border-bottom: 1px solid #333;
 
         &:last-child {
             border-bottom: none;
+        }
+
+        .fge-variable-row-top {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .fge-variable-name {
@@ -90,6 +105,18 @@
             &:hover {
                 color: #e55;
             }
+        }
+
+        .fge-variable-value {
+            font:
+                11px "Consolas",
+                "Courier New",
+                monospace;
+            color: #4caf50;
+            padding: 0 6px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     }
 
