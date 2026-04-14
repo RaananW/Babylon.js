@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 CUTOFF="2026-01-01T00:00:00Z"
-RECENT_MO="2.5"
+RECENT_MO="3.5"
 OLDER_MO="69"
 INPUT="pr-analysis/combined_prs.json"
 OUTPUT="pr-analysis/comparison_lines.txt"

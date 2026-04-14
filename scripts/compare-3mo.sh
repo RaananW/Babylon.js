@@ -5,8 +5,8 @@ set -euo pipefail
 INPUT="${1:-pr-analysis/combined_prs.json}"
 OUTPUT="${2:-pr-analysis/comparison_recent.txt}"
 CUTOFF="2026-01-01T00:00:00Z"
-RECENT_LABEL="Jan 1 - Mar 14 2026"
-RECENT_MO="2.5"
+RECENT_LABEL="Jan 1 - Apr 14 2026"
+RECENT_MO="3.5"
 OLDER_LABEL="Mar 2019 - Dec 2025"
 OLDER_MO="69"
 

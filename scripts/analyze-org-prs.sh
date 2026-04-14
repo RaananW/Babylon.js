@@ -15,6 +15,8 @@
 #   --detailed              Fetch extra fields: reviews, comments, participants, reactions
 #                           WARNING: much slower for large repos (extra API calls per PR)
 #   --skip-existing         Skip repos whose JSON output file already exists
+#   --update                Incremental update: fetch only PRs newer than the latest
+#                           already in each repo's JSON, then merge & deduplicate
 #   -h, --help              Show this help
 #
 # Requirements: gh (GitHub CLI) authenticated, jq
@@ -46,6 +48,7 @@ SPECIFIC_REPOS=""
 INCLUDE_FORKS=false
 DETAILED=false
 SKIP_EXISTING=false
+UPDATE_MODE=false
 
 # ─── Parse arguments ──────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -58,6 +61,7 @@ while [[ $# -gt 0 ]]; do
         --include-forks) INCLUDE_FORKS=true; shift ;;
         --detailed)     DETAILED=true; shift ;;
         --skip-existing) SKIP_EXISTING=true; shift ;;
+        --update) UPDATE_MODE=true; shift ;;
         -h|--help)
             sed -n '2,/^$/p' "$0" | sed 's/^#//; s/^ //'
             exit 0
@@ -86,6 +90,7 @@ echo "  GitHub PR Analysis for org: $ORG"
 echo "  Date range: $SINCE → $UNTIL"
 echo "  Output: $OUTPUT_DIR"
 echo "  Detailed mode: $DETAILED"
+echo "  Update mode: $UPDATE_MODE"
 echo "═══════════════════════════════════════════════════════════════"
 
 # ─── Verify tools ─────────────────────────────────────────────────────────────
@@ -278,11 +283,72 @@ for REPO in "${REPOS[@]}"; do
     OUT_FILE="$RAW_DIR/${REPO}.json"
 
     # ── Skip if already complete ──
-    if [[ "$SKIP_EXISTING" == true && -f "$OUT_FILE" ]]; then
+    if [[ "$SKIP_EXISTING" == true && "$UPDATE_MODE" == false && -f "$OUT_FILE" ]]; then
         COUNT=$(jq 'length' "$OUT_FILE" 2>/dev/null || echo 0)
         if [[ "$COUNT" -gt 0 ]]; then
             echo "  ⏭  $REPO — skipped (already exists, $COUNT PRs)"
             TOTAL_PRS=$((TOTAL_PRS + COUNT))
+            continue
+        fi
+    fi
+
+    # ── Update mode: fetch only new PRs since latest in existing data ──
+    if [[ "$UPDATE_MODE" == true && -f "$OUT_FILE" ]]; then
+        EXISTING_COUNT=$(jq 'length' "$OUT_FILE" 2>/dev/null || echo 0)
+        if [[ "$EXISTING_COUNT" -gt 0 ]]; then
+            # Find the latest createdAt in existing data
+            LATEST=$(jq -r '[.[].createdAt] | sort | last' "$OUT_FILE")
+            echo ""
+            echo "─── Updating $ORG/$REPO (have $EXISTING_COUNT PRs, latest: $LATEST) ───"
+
+            # Fetch PRs created after the latest existing one
+            NEW_FILE="$OUT_FILE.update"
+            echo "  ↻  Fetching PRs since $LATEST..."
+
+            # Use lightweight + enrichment for safety (handles large repos)
+            if gh pr list \
+                -R "$ORG/$REPO" \
+                --state all \
+                --limit 99999 \
+                --json "$LIGHT_FIELDS" \
+                > "$NEW_FILE.tmp" 2>/dev/null; then
+
+                # Filter to only PRs newer than what we have (and within --until)
+                jq --arg since "$LATEST" --arg until "$UNTIL" '
+                    [ .[] | select(.createdAt > $since and .createdAt <= $until) ]
+                ' "$NEW_FILE.tmp" > "$NEW_FILE"
+                rm -f "$NEW_FILE.tmp"
+
+                NEW_COUNT=$(jq 'length' "$NEW_FILE")
+                if [[ "$NEW_COUNT" -eq 0 ]]; then
+                    echo "  ✓  No new PRs since $LATEST"
+                    rm -f "$NEW_FILE"
+                    TOTAL_PRS=$((TOTAL_PRS + EXISTING_COUNT))
+                    continue
+                fi
+
+                echo "  ✓  Found $NEW_COUNT new PRs, enriching..."
+
+                # Enrich new PRs (enrich_prs writes to outfile via infile.enriched checkpoint)
+                ENRICHED_NEW="$NEW_FILE.final"
+                enrich_prs "$REPO" "$NEW_FILE" "$ENRICHED_NEW"
+
+                # Merge: existing + new, deduplicate by PR number
+                jq -s '
+                    (.[0] + .[1]) | group_by(.number) | map(last)
+                    | sort_by(.createdAt)
+                ' "$OUT_FILE" "$ENRICHED_NEW" > "$OUT_FILE.merged"
+                mv "$OUT_FILE.merged" "$OUT_FILE"
+                rm -f "$NEW_FILE" "$ENRICHED_NEW" "$NEW_FILE.enriched"
+
+                FINAL_COUNT=$(jq 'length' "$OUT_FILE")
+                echo "  ✓  $REPO — $FINAL_COUNT PRs total ($NEW_COUNT new)"
+                TOTAL_PRS=$((TOTAL_PRS + FINAL_COUNT))
+            else
+                echo "  ⚠  $REPO — update fetch failed, keeping existing data"
+                rm -f "$NEW_FILE" "$NEW_FILE.tmp"
+                TOTAL_PRS=$((TOTAL_PRS + EXISTING_COUNT))
+            fi
             continue
         fi
     fi

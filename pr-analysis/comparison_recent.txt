@@ -1,5 +1,5 @@
 ==============================================================================
-  PR ACTIVITY: Jan 1 - Mar 14 2026 vs Mar 2019 - Dec 2025
+  PR ACTIVITY: Jan 1 - Apr 14 2026 vs Mar 2019 - Dec 2025
 ==============================================================================
 
 ------------------------------------------------------------------------------
@@ -7,15 +7,15 @@
 ------------------------------------------------------------------------------
 
                                    Recent       Prior    Chg/mo
-  Total PRs                           551       11274
-  PRs/month                         220.4       163.4       35%
-  Merged                              551       11274
+  Total PRs                           741       11274
+  PRs/month                         211.7       163.4       30%
+  Merged                              741       11274
   Merge rate                         100%        100%
-  Unique contributors                  45         567
+  Unique contributors                  54         567
 
-  Additions/month                  125189      243049
-  Deletions/month                  116876      288512
-  Files changed/month                1341        2294
+  Additions/month                  154583      243049
+  Deletions/month                   97151      288512
+  Files changed/month                2227        2294
 
   Median merge time                  0.1d        0.1d
 
@@ -26,108 +26,120 @@
   Babylon.js
   ----------
                                    Recent       Prior    Chg/mo
-  PRs                                 432        9209
-  PRs/month                         172.8       133.5       29%
-  Merged                              432        9209
-  Additions/mo                     112450      213726
-  Deletions/mo                     111984      268321
-  Unique contributors                  42         420
+  PRs                                 593        9209
+  PRs/month                         169.4       133.5       27%
+  Merged                              593        9209
+  Additions/mo                     103237      213726
+  Deletions/mo                      90784      268321
+  Unique contributors                  49         420
 
   BabylonNative
   -------------
                                    Recent       Prior    Chg/mo
-  PRs                                  35         853
-  PRs/month                            14        12.4       13%
-  Merged                               35         853
-  Additions/mo                       7600       27054
-  Deletions/mo                       1780       18749
+  PRs                                  48         853
+  PRs/month                          13.7        12.4       11%
+  Merged                               48         853
+  Additions/mo                       5538       27054
+  Deletions/mo                       1305       18749
   Unique contributors                   6          40
 
   Documentation
   -------------
                                    Recent       Prior    Chg/mo
-  PRs                                  84        1212
-  PRs/month                          33.6        17.6       91%
-  Merged                               84        1212
-  Additions/mo                       5140        2269
-  Deletions/mo                       3112        1442
-  Unique contributors                  17         227
+  PRs                                 100        1212
+  PRs/month                          28.6        17.6       63%
+  Merged                              100        1212
+  Additions/mo                      45808        2269
+  Deletions/mo                       5062        1442
+  Unique contributors                  19         227
 
 ------------------------------------------------------------------------------
   PER CONTRIBUTOR (active in recent period, sorted by recent PRs)
 ------------------------------------------------------------------------------
 
   Contributor               R.PRs  P.PRs  R.Mrgd  P.Mrgd  R.+lines  P.+lines  R.-lines  P.-lines   Chg/mo
-  Popov72                      97   1461      97    1461      5792    171120      1668     59681      83%
-  ryantrem                     72    365      72     365     35101    295815     31720    256080     444%
-  georginahalpern              71    100      71     100     17803     12198      3702      5100    1860%
-  VicenteCartas                64     70      64      70      9247     12797      3699      3379    2423%
-  sebavan                      26   1294      26    1294    101066   6175664    129644   6143618     -45%
-  CedricGuillemet              24    652      24     652      3057    190371      1819    107612       2%
-  bghgary                      22    460      22     460     16198    813811      2499    129355      32%
-  deltakosh                    22   1625      22    1625      2438   5778454       676   4412351     -63%
-  kircher1                     18     52      18      52      1988     10418       296      3730     855%
-  RaananW                      17   1218      17    1218     12811   1345569     26505   7023646     -61%
-  AmoebaChant                  10     75      10      75      2276     26526       227      2625     268%
-  alexchuber                   10    139      10     139       853     15801       264      4477      99%
-  app/copilot-swe-agent        10      0      10       0        26         0        19         0       0%
-  docEdub                       9    156       9     156        82     23758        92     10129      59%
-  app/github-actions            7      0       7       0        68         0        58         0       0%
-  spsDrop                       7      2       7       2      1098       107        91        18    9560%
-  SergioRZMasson                6     63       6      63       969     10103       200      6408     163%
-  app/dependabot                6     51       6      51     90781    432195     87537    428803     225%
-  MiiBond                       5     76       5      76      2834     31141       523      6373      82%
-  marns                         5      3       5       3       786       131       173        32    4500%
-  bkaradzic-microsoft           4      0       4       0       567         0       370         0       0%
+  Popov72                     128   1461     128    1461      9603    171120      2188     59681      73%
+  ryantrem                     96    365      96     365     57685    295815     47663    256080     419%
+  VicenteCartas                86     70      86      70     12960     12797      4502      3379    2322%
+  georginahalpern              73    100      73     100     18013     12198      3726      5100    1339%
+  RaananW                      56   1218      56    1218    199710   1345569     50879   7023646      -9%
+  CedricGuillemet              34    652      34     652      3165    190371      1892    107612       3%
+  sebavan                      29   1294      29    1294    101404   6175664    129940   6143618     -56%
+  bghgary                      28    460      28     460     16448    813811      2532    129355      20%
+  AmoebaChant                  24     75      24      75      8132     26526      4941      2625     531%
+  deltakosh                    23   1625      23    1625      2439   5778454       677   4412351     -72%
+  kircher1                     22     52      22      52      2151     10418       407      3730     734%
+  app/copilot-swe-agent        11      0      11       0        27         0        21         0       0%
+  MiiBond                      10     76      10      76      5790     31141      1137      6373     159%
+  alexchuber                   10    139      10     139       853     15801       264      4477      42%
+  app/github-actions            9      0       9       0        72         0        63         0       0%
+  docEdub                       9    156       9     156        82     23758        92     10129      14%
+  spsDrop                       8      2       8       2      1251       107       189        18    7786%
+  SergioRZMasson                7     63       7      63       974     10103       202      6408     119%
+  app/dependabot                7     51       7      51     90786    432195     87573    428803     171%
+  marns                         7      3       7       3      1140       131       220        32    4500%
+  bkaradzic-microsoft           6      0       6       0       662         0       396         0       0%
+  Jeggery                       5      0       5       0        56         0         9         0       0%
+  noname0310                    5     31       5      31       511      3792       103       944     218%
+  regnaio                       5      2       5       2        31         2        23         1    4829%
   eliemichel                    4      0       4       0       546         0        48         0       0%
-  noname0310                    4     31       4      31       399      3792        47       944     256%
-  Jeggery                       3      0       3       0        31         0         1         0       0%
-  BarthPaleologue               2      8       2       8        49       307         1        22     590%
+  kzhsw                         3     32       3      32       165       902        16       320      85%
+  wmurphyrd                     3      2       3       2       188        17         5         2    2857%
+  BarthPaleologue               2      8       2       8        49       307         1        22     393%
+  HasKha                        2      0       2       0        34         0         8         0       0%
   aknshr                        2      0       2       0       938         0       103         0       0%
   matthargett                   2      0       2       0       151         0        76         0       0%
-  pandaGaume                    2      8       2       8      3752      1724         0       413     590%
-  regnaio                       2      2       2       2         2         2         1         1    2660%
-  wmurphyrd                     2      2       2       2         4        17         4         2    2660%
-  yuripourre                    2     11       2      11       357      2998        25       308     402%
-  HasKha                        1      0       1       0        32         0         8         0       0%
-  PirateJC                      1     94       1      94       346      4609         0      2543     -71%
-  barroij                       1     14       1      14         1       747         1       437      97%
+  pandaGaume                    2      8       2       8      3752      1724         0       413     393%
+  yuripourre                    2     11       2      11       357      2998        25       308     258%
+  PirateJC                      1     94       1      94       346      4609         0      2543     -79%
+  amirt01                       1      0       1       0         1         0         1         0       0%
+  barroij                       1     14       1      14         1       747         1       437      41%
+  beppemarazzi                  1      1       1       1        10         5         0         5    1871%
   bgaborg                       1      0       1       0         8         0         3         0       0%
   bkargerooom                   1      0       1       0         4         0         0         0       0%
+  foxn31                        1      0       1       0         1         0         1         0       0%
   jneufferrpm                   1      0       1       0         1         0         1         0       0%
+  klibertowski                  1      1       1       1         9        13         1         1    1871%
+  kv-bh                         1      5       1       5         8       100         5        57     294%
+  lockphase                     1     19       1      19         8       516         0       114       4%
   mahahahad                     1      0       1       0         2         0         2         0       0%
   petermart                     1      0       1       0         3         0         1         0       0%
   raymondyfei                   1      0       1       0       106         0        26         0       0%
-  ricardovg4                    1      7       1       7        30        65        30        15     294%
+  ricardovg4                    1      7       1       7        30        65        30        15     182%
   sgottschlich                  1      0       1       0       206         0         2         0       0%
-  simonedevit                   1      9       1       9         2       505         3        84     207%
-  thomlucc                      1     13       1      13         8       189         0        51     112%
-  wiiskii                       1      1       1       1       153         1        26         1    2660%
+  simonedevit                   1      9       1       9         2       505         3        84     119%
+  syuilo                        1      0       1       0         3         0         3         0       0%
+  thomlucc                      1     13       1      13         8       189         0        51      52%
+  tibotiber                     1      2       1       2         4         8         0         2     886%
+  wiiskii                       1      1       1       1       153         1        26         1    1871%
 
-  R.=Recent (Jan 1 - Mar 14 2026)  P.=Prior (Mar 2019 - Dec 2025)
+  R.=Recent (Jan 1 - Apr 14 2026)  P.=Prior (Mar 2019 - Dec 2025)
   Chg/mo = % change in monthly PR rate. Positive = more PRs/month recently.
 
 ------------------------------------------------------------------------------
   CONTRIBUTOR FLOW
 ------------------------------------------------------------------------------
 
-  New (recent only):          15
-  Returning (both periods):   30
-  Inactive (prior only):      537
+  New (recent only):          18
+  Returning (both periods):   36
+  Inactive (prior only):      531
 
   New contributors:
-    app/copilot-swe-agent (10 PRs)
-    app/github-actions (7 PRs)
-    bkaradzic-microsoft (4 PRs)
+    app/copilot-swe-agent (11 PRs)
+    app/github-actions (9 PRs)
+    bkaradzic-microsoft (6 PRs)
+    Jeggery (5 PRs)
     eliemichel (4 PRs)
-    Jeggery (3 PRs)
+    HasKha (2 PRs)
     aknshr (2 PRs)
     matthargett (2 PRs)
-    HasKha (1 PRs)
+    amirt01 (1 PRs)
     bgaborg (1 PRs)
     bkargerooom (1 PRs)
+    foxn31 (1 PRs)
     jneufferrpm (1 PRs)
     mahahahad (1 PRs)
     petermart (1 PRs)
     raymondyfei (1 PRs)
     sgottschlich (1 PRs)
+    syuilo (1 PRs)

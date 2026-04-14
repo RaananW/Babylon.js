@@ -1,0 +1,99 @@
+==============================================================================
+  MONTHLY PR ACTIVITY — last 12 months
+==============================================================================
+
+------------------------------------------------------------------------------
+  OVERALL — PRs, contributors, and lines per month
+------------------------------------------------------------------------------
+
+  Month         PRs  Authors       Adds       Dels        Net      Churn    Files   Avg/PR
+  ---------- ------ -------- ---------- ---------- ---------- ---------- -------- --------
+  2025-04       138       32      26.7K      13.3K      13.4K        40K     1.8K      290
+  2025-05       155       30      19.4K        10K       9.4K      29.4K      928      190
+  2025-06       132       21      73.8K      36.9K      36.9K     110.7K     1.4K      839
+  2025-07       117       19      59.1K      33.8K      25.3K      92.9K      923      794
+  2025-08       145       25      24.5K       5.8K      18.7K      30.3K      730      209
+  2025-09       128       22      90.3K      76.2K      14.1K     166.5K      659     1.3K
+  2025-10       179       27      57.3K      38.4K      18.9K      95.7K       1K      535
+  2025-11       151       21      78.3K      36.6K      41.8K     114.9K      866      761
+  2025-12       101       21      20.5K       7.9K      12.6K      28.4K      635      281
+  2026-01       209       24     158.9K     161.5K      -2618     320.4K     1.2K     1.5K
+  2026-02       236       35     136.4K     122.3K      14.1K     258.7K     1.5K     1.1K
+  2026-03       221       31     228.5K      47.8K     180.7K     276.3K     4.6K     1.3K
+  2026-04        75       20      17.2K       8.4K       8.9K      25.6K      537      342
+
+------------------------------------------------------------------------------
+  PER REPOSITORY — PRs per month
+------------------------------------------------------------------------------
+
+  Month      Babylon.js     BabylonNative  Documentation 
+  ---------- -------------- -------------- --------------
+  2025-04               101             20             17
+  2025-05               121              7             27
+  2025-06               120              5              7
+  2025-07               102              8              7
+  2025-08               135              1              9
+  2025-09               113              2             13
+  2025-10               150              6             23
+  2025-11               128             13             10
+  2025-12                76              6             19
+  2026-01               175             10             24
+  2026-02               180             18             38
+  2026-03               170             17             34
+  2026-04                68              3              4
+
+------------------------------------------------------------------------------
+  PER REPOSITORY — total lines changed (adds+dels) per month
+------------------------------------------------------------------------------
+
+  Month      Babylon.js     BabylonNative  Documentation 
+  ---------- -------------- -------------- --------------
+  2025-04             31.3K           7.1K           1.6K
+  2025-05             21.7K           4.8K           2.9K
+  2025-06            110.3K             61            327
+  2025-07             92.2K            292            373
+  2025-08             29.6K              2            672
+  2025-09            160.5K             5K             1K
+  2025-10             92.9K           1.7K           1.2K
+  2025-11             81.2K          32.2K           1.5K
+  2025-12             25.9K           1.6K            853
+  2026-01            317.4K           1.5K           1.6K
+  2026-02            223.9K          16.2K          18.6K
+  2026-03              113K           6.1K         157.2K
+  2026-04             24.9K            123            627
+
+------------------------------------------------------------------------------
+  TOP 10 CONTRIBUTORS PER MONTH (by PR count)
+------------------------------------------------------------------------------
+
+  2025-04:  Popov72(20), CedricGuillemet(17), RaananW(15), docEdub(12), alexchuber(11), deltakosh(11), ryantrem(9), Pheo(8), MiiBond(3), bghgary(3)
+  2025-05:  deltakosh(32), Popov72(22), RaananW(20), docEdub(9), CedricGuillemet(7), MiiBond(7), RolandCsibrei(7), ryantrem(5), AmoebaChant(4), alexchuber(4)
+  2025-06:  ryantrem(30), deltakosh(17), georginahalpern(14), alexchuber(10), CedricGuillemet(8), Popov72(6), bghgary(6), docEdub(6), MiiBond(5), sebavan(5)
+  2025-07:  ryantrem(19), deltakosh(17), georginahalpern(12), CedricGuillemet(10), alexchuber(10), AmoebaChant(9), docEdub(8), sebavan(7), matanui159(5), Popov72(4)
+  2025-08:  deltakosh(28), ryantrem(22), alexchuber(21), Popov72(15), georginahalpern(10), VicenteCartas(9), AmoebaChant(7), bghgary(4), kzhsw(4), RolandCsibrei(3)
+  2025-09:  Popov72(30), ryantrem(14), alexchuber(12), sebavan(10), VicenteCartas(8), deltakosh(8), AmoebaChant(7), georginahalpern(6), CedricGuillemet(5), MiiBond(4)
+  2025-10:  Popov72(30), ryantrem(27), georginahalpern(18), CedricGuillemet(13), alexchuber(13), MiiBond(9), VicenteCartas(9), RolandCsibrei(7), docEdub(7), AmoebaChant(6)
+  2025-11:  VicenteCartas(31), georginahalpern(26), Popov72(19), docEdub(13), ryantrem(13), CedricGuillemet(8), alexchuber(7), bghgary(6), deltakosh(6), kircher1(6)
+  2025-12:  Popov72(24), CedricGuillemet(12), docEdub(9), georginahalpern(9), ryantrem(9), AmoebaChant(7), bghgary(6), EANadim(3), marns(3), sebavan(3)
+  2026-01:  georginahalpern(45), Popov72(30), VicenteCartas(29), ryantrem(21), sebavan(21), deltakosh(13), CedricGuillemet(8), bghgary(8), alexchuber(6), docEdub(5)
+  2026-02:  Popov72(36), ryantrem(31), VicenteCartas(30), georginahalpern(23), bghgary(13), CedricGuillemet(11), kircher1(11), deltakosh(9), AmoebaChant(8), app/copilot-swe-agent(6)
+  2026-03:  RaananW(48), Popov72(46), ryantrem(35), CedricGuillemet(14), VicenteCartas(10), AmoebaChant(9), kircher1(8), app/github-actions(7), bghgary(6), app/copilot-swe-agent(5)
+  2026-04:  VicenteCartas(17), Popov72(16), ryantrem(9), AmoebaChant(7), RaananW(4), MiiBond(3), regnaio(3), bkaradzic-microsoft(2), kircher1(2), sebavan(2)
+
+------------------------------------------------------------------------------
+  TOP 10 CONTRIBUTORS PER MONTH (by lines changed)
+------------------------------------------------------------------------------
+
+  2025-04:  RaananW(13.7K), docEdub(5.5K), deltakosh(5K), CedricGuillemet(4.6K), Pheo(2.2K), ryantrem(2.2K), Popov72(2.1K), alexandremottet(888), MiiBond(880), alexchuber(746)
+  2025-05:  RaananW(8.1K), ryantrem(7.1K), docEdub(5.4K), deltakosh(3.4K), Popov72(1.3K), PatrickRyanMS(1.2K), MiiBond(502), RolandCsibrei(423), yuripourre(338), alexchuber(337)
+  2025-06:  app/dependabot(59.1K), deltakosh(16.5K), MiiBond(15.6K), ryantrem(5.1K), Popov72(3.5K), georginahalpern(3K), alexchuber(2.1K), docEdub(1.8K), bghgary(1.4K), SergioRZMasson(650)
+  2025-07:  app/dependabot(59.2K), AmoebaChant(18.9K), ryantrem(4.8K), georginahalpern(4.3K), matanui159(1.9K), deltakosh(1.1K), docEdub(995), Popov72(714), CedricGuillemet(326), alexchuber(266)
+  2025-08:  VicenteCartas(8.1K), ryantrem(5K), RolandCsibrei(3.5K), AmoebaChant(2.8K), deltakosh(2.3K), georginahalpern(2K), alexchuber(1.7K), Popov72(1.6K), yuripourre(1.1K), matanui159(528)
+  2025-09:  app/dependabot(119.5K), sebavan(11.6K), knervous(10.5K), CedricGuillemet(6K), kircher1(5.4K), ryantrem(3.3K), VicenteCartas(1.6K), georginahalpern(1.5K), Popov72(1.3K), yuripourre(1.1K)
+  2025-10:  app/dependabot(59.9K), knervous(10.7K), Popov72(5.8K), MiiBond(5.5K), ryantrem(5K), georginahalpern(2.1K), CedricGuillemet(1.9K), AmoebaChant(1.1K), alexchuber(686), VicenteCartas(571)
+  2025-11:  app/dependabot(62.5K), bghgary(31.4K), Popov72(5.2K), VicenteCartas(4K), ryantrem(2.9K), docEdub(2.9K), georginahalpern(2.6K), CedricGuillemet(1.2K), AmoebaChant(963), alexchuber(351)
+  2025-12:  Popov72(6.2K), sebavan(4.6K), ryantrem(4K), docEdub(3.5K), bghgary(1.8K), noname0310(1.6K), georginahalpern(1.4K), VicenteCartas(1.4K), PirateJC(1K), AmoebaChant(890)
+  2026-01:  sebavan(224.8K), ryantrem(59.9K), georginahalpern(17.2K), VicenteCartas(6.3K), MiiBond(3.1K), Popov72(2.1K), bghgary(1.5K), aknshr(1K), alexchuber(861), SergioRZMasson(789)
+  2026-02:  app/dependabot(178K), RaananW(25.9K), bghgary(11.5K), sebavan(5.9K), ryantrem(5.7K), VicenteCartas(5.2K), CedricGuillemet(4.4K), georginahalpern(4K), pandaGaume(3.5K), Popov72(3.3K)
+  2026-03:  RaananW(223.9K), ryantrem(27.6K), bghgary(5.9K), AmoebaChant(5.3K), Popov72(3.9K), MiiBond(3.4K), VicenteCartas(2.6K), kircher1(687), georginahalpern(509), CedricGuillemet(406)
+  2026-04:  ryantrem(12.2K), AmoebaChant(5.3K), VicenteCartas(3.4K), Popov72(2.5K), RaananW(732), sebavan(570), marns(308), spsDrop(251), MiiBond(152), bkaradzic-microsoft(121)

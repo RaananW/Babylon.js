@@ -39,6 +39,7 @@ bash scripts/analyze-org-prs.sh --since 2024-01-01 --until 2025-01-01
 | `--include-forks`      | Include forked repos                           | off                |
 | `--detailed`           | Fetch reviews, comments, participants (slower) | off                |
 | `--skip-existing`      | Skip repos whose output file already exists    | off                |
+| `--update`             | Incremental: fetch only new PRs since last run | off                |
 
 **Output files:**
 
@@ -85,7 +86,16 @@ bash scripts/compare-lines.sh
 open pr-analysis/combined_prs.csv
 ```
 
-To refresh data later, use `--skip-existing` to only fetch new repos, or delete the specific `pr-analysis/raw/<repo>.json` file and re-run.
+To refresh data later, use `--skip-existing` to only fetch new repos, or `--update` to incrementally add new PRs to existing repos:
+
+```bash
+# Add new PRs since last fetch (fast — only fetches what's new)
+bash scripts/analyze-org-prs.sh --repos "Babylon.js,BabylonNative,Documentation" --update
+
+# Or to fully re-fetch a repo, delete its raw file first
+rm pr-analysis/raw/Babylon.js.json
+bash scripts/analyze-org-prs.sh --repos "Babylon.js"
+```
 
 ## Notes
 
