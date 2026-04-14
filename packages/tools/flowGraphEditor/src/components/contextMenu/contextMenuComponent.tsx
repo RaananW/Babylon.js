@@ -50,7 +50,31 @@ export class ContextMenuComponent extends React.Component<IContextMenuComponentP
 
     /** @internal */
     override componentDidMount() {
-        // Adjust position if menu would overflow the viewport
+        this._clampToViewport();
+        // Close on Escape
+        this._onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                this.props.onClose();
+            }
+        };
+        document.addEventListener("keydown", this._onKeyDown);
+    }
+
+    /** @internal */
+    override componentDidUpdate() {
+        this._clampToViewport();
+    }
+
+    /** @internal */
+    override componentWillUnmount() {
+        if (this._onKeyDown) {
+            document.removeEventListener("keydown", this._onKeyDown);
+        }
+    }
+
+    private _onKeyDown: ((e: KeyboardEvent) => void) | null = null;
+
+    private _clampToViewport() {
         const el = this._menuRef.current;
         if (!el) {
             return;
@@ -70,23 +94,33 @@ export class ContextMenuComponent extends React.Component<IContextMenuComponentP
     override render() {
         return (
             <div className="fge-context-menu-overlay" onPointerDown={() => this.props.onClose()} onContextMenu={(e) => e.preventDefault()}>
-                <div ref={this._menuRef} className="fge-context-menu" style={{ left: this.props.x, top: this.props.y }} onPointerDown={(e) => e.stopPropagation()}>
+                <div ref={this._menuRef} className="fge-context-menu" role="menu" style={{ left: this.props.x, top: this.props.y }} onPointerDown={(e) => e.stopPropagation()}>
                     {this.props.items.map((entry, idx) => {
                         if (IsSeparator(entry)) {
-                            return <div key={`sep-${idx}`} className="fge-ctx-separator" />;
+                            return <div key={`sep-${idx}`} className="fge-ctx-separator" role="separator" />;
                         }
                         const item = entry;
                         return (
                             <div
-                                key={item.label}
+                                key={`item-${idx}`}
                                 className={`fge-ctx-item${item.disabled ? " disabled" : ""}`}
                                 role="menuitem"
+                                tabIndex={item.disabled ? -1 : 0}
                                 aria-label={item.ariaLabel ?? item.label}
                                 aria-disabled={item.disabled}
                                 onClick={() => {
                                     if (!item.disabled) {
                                         item.action();
                                         this.props.onClose();
+                                    }
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        if (!item.disabled) {
+                                            item.action();
+                                            this.props.onClose();
+                                        }
                                     }
                                 }}
                             >

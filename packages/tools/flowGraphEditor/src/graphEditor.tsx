@@ -545,6 +545,11 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
      * Determines what was clicked and builds the appropriate menu.
      */
     private _onContextMenu = (evt: React.MouseEvent) => {
+        // Don't suppress native context menu for text inputs
+        const target = evt.target;
+        if (target instanceof HTMLElement && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.closest("[contenteditable]"))) {
+            return;
+        }
         evt.preventDefault();
         evt.stopPropagation();
 
@@ -580,6 +585,9 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
                 label: "Duplicate",
                 shortcut: `${ctrlKey}+C / ${ctrlKey}+V`,
                 action: () => {
+                    // Update mouse location so paste places nodes at the right-click position
+                    this._mouseLocationX = evt.pageX;
+                    this._mouseLocationY = evt.pageY;
                     // Use the copy/paste mechanism
                     const keydownC = new KeyboardEvent("keydown", { key: "c", ctrlKey: !isMac, metaKey: isMac, bubbles: true });
                     globalState.hostDocument.dispatchEvent(keydownC);
@@ -683,6 +691,9 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
                 label: "Paste",
                 shortcut: `${ctrlKey}+V`,
                 action: () => {
+                    // Update mouse location so paste places nodes at the right-click position
+                    this._mouseLocationX = evt.pageX;
+                    this._mouseLocationY = evt.pageY;
                     const keydownV = new KeyboardEvent("keydown", { key: "v", ctrlKey: !isMac, metaKey: isMac, bubbles: true });
                     globalState.hostDocument.dispatchEvent(keydownV);
                 },
