@@ -15,7 +15,7 @@ export type HelpTopicId =
     | "keyboard-shortcuts"
     | "block-properties"
     | "how-to-use"
-    | "variables";
+    | "variables"
     | "gltf-import-export"
     | "composite-templates";
 
@@ -388,6 +388,10 @@ export const HelpTopics: IHelpTopic[] = [
 <li><b>✕</b> — deletes the variable and removes all blocks referencing it.</li>
 </ul>
 <p>Each row shows a reference count (e.g., <code>2G / 1S</code> = 2 get blocks, 1 set block).</p>`,
+            },
+        ],
+    },
+    {
         id: "gltf-import-export",
         title: "glTF Import / Export",
         sections: [
