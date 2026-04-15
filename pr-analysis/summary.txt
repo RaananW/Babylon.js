@@ -2,21 +2,24 @@ SUMMARY REPORT
 ═══════════════════════════════════════════════════════════
 
 OVERALL
-  Total PRs:       12816
-  Total repos:     3
+  Total PRs:       12821
+  Total repos:     4
   Date range:      2019-03-14T09:42:30Z → 2026-04-14T08:16:37Z
 
 BY STATE
-  Merged:          12015
+  Merged:          12020
   Closed:          759
   Open:            42
 
 CODE CHANGES (all PRs)
-  Total additions: 38682155
-  Total deletions: 22443560
-  Total files:     203511
+  Total additions: 38683015
+  Total deletions: 22443811
+  Total files:     203557
 
 PER-REPO BREAKDOWN
+  Babylon-Lite:
+    PRs: 5  |  Merged: 5  |  Closed: 0  |  Open: 0
+    Additions: 860  |  Deletions: 251  |  Files changed: 46
   Babylon.js:
     PRs: 10373  |  Merged: 9802  |  Closed: 545  |  Open: 26
     Additions: 36148036  |  Deletions: 20864982  |  Files changed: 183948
@@ -28,7 +31,7 @@ PER-REPO BREAKDOWN
     Additions: 430069  |  Deletions: 224084  |  Files changed: 10745
 
 TOP 20 CONTRIBUTORS (by PR count)
-  deltakosh: 1668 PRs
+  deltakosh: 1673 PRs
   Popov72: 1619 PRs
   sebavan: 1341 PRs
   RaananW: 1330 PRs
@@ -52,7 +55,7 @@ TOP 20 CONTRIBUTORS (by PR count)
 REVIEW DECISIONS
   APPROVED: 8675
   REVIEW_REQUIRED: 2729
-  : 1288
+  : 1293
   CHANGES_REQUESTED: 124
 
 YEARLY BREAKDOWN
@@ -63,7 +66,7 @@ YEARLY BREAKDOWN
   2023: 1426 total (1319 merged, 107 closed, 0 open)
   2024: 1471 total (1377 merged, 94 closed, 0 open)
   2025: 1815 total (1695 merged, 117 closed, 3 open)
-  2026: 848 total (741 merged, 68 closed, 39 open)
+  2026: 853 total (746 merged, 68 closed, 39 open)
 
 MONTHLY PR CREATION (last 24 months, for trend analysis)
   2024-05: 123
@@ -89,32 +92,32 @@ MONTHLY PR CREATION (last 24 months, for trend analysis)
   2026-01: 220
   2026-02: 255
   2026-03: 277
-  2026-04: 96
+  2026-04: 101
 
 MERGE TIME DISTRIBUTION (merged PRs only)
   Median:  0.1 days
   P90:     3 days
   P99:     27.2 days
   Max:     467.5 days
-  < 1 day: 9586 PRs
+  < 1 day: 9591 PRs
   1-7 d:   1902 PRs
   7-30 d:  424 PRs
   30+ d:   103 PRs
 
 PR SIZE DISTRIBUTION (by total lines changed = additions + deletions)
   XS (1-10 lines):     3791
-  S  (11-100 lines):   4468
-  M  (101-500 lines):  2209
+  S  (11-100 lines):   4469
+  M  (101-500 lines):  2212
   L  (501-1000 lines): 698
   XL (1000+ lines):    1582
 
 DAY-OF-WEEK DISTRIBUTION (PR creation)
-  Sun: 370  Mon: 2254  Tue: 2492  Wed: 2446  Thu: 2542  Fri: 2169  Sat: 543
+  Sun: 371  Mon: 2258  Tue: 2492  Wed: 2446  Thu: 2542  Fri: 2169  Sat: 543
 
 HOUR-OF-DAY DISTRIBUTION (PR creation, UTC)
-  00h: 590  01h: 362  02h: 203  03h: 142
+  00h: 593  01h: 362  02h: 203  03h: 142
   04h: 123  05h: 138  06h: 113  07h: 148
   08h: 243  09h: 388  10h: 446  11h: 438
   12h: 478  13h: 598  14h: 646  15h: 886
-  16h: 1050  17h: 1066  18h: 881  19h: 744
-  20h: 818  21h: 873  22h: 745  23h: 697
+  16h: 1051  17h: 1066  18h: 881  19h: 744
+  20h: 818  21h: 873  22h: 745  23h: 698

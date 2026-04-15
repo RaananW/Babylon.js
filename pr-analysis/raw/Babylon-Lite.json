@@ -1,0 +1,152 @@
+[
+  {
+    "additions": 253,
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "changedFiles": 18,
+    "closedAt": "2026-04-13T18:10:56Z",
+    "createdAt": "2026-04-13T16:58:22Z",
+    "deletions": 174,
+    "headRefName": "scenenode-hierarchy-refactor",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-13T18:10:56Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 5,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "refactor: unify scene hierarchy with SceneNode base and bidirectional EulerProxy",
+    "updatedAt": "2026-04-13T18:10:58Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/5"
+  },
+  {
+    "additions": 0,
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "changedFiles": 0,
+    "closedAt": "2026-04-13T01:00:51Z",
+    "createdAt": "2026-04-13T00:46:25Z",
+    "deletions": 0,
+    "headRefName": "test/bundle-size-verify",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-13T01:00:51Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 4,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "ci: verify bundle-size captures all JS files",
+    "updatedAt": "2026-04-13T01:00:53Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/4"
+  },
+  {
+    "additions": 8,
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "changedFiles": 5,
+    "closedAt": "2026-04-13T00:43:28Z",
+    "createdAt": "2026-04-13T00:38:40Z",
+    "deletions": 46,
+    "headRefName": "test/swiftshader-plumbing",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-13T00:43:28Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 3,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "test: remove WebGPU skip guards — test SwiftShader in CI",
+    "updatedAt": "2026-04-13T00:43:30Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/3"
+  },
+  {
+    "additions": 263,
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "changedFiles": 1,
+    "closedAt": "2026-04-13T00:34:24Z",
+    "createdAt": "2026-04-13T00:30:10Z",
+    "deletions": 0,
+    "headRefName": "docs/porting-guide",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-13T00:34:24Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 2,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "docs: add Babylon.js → Babylon Lite porting guide",
+    "updatedAt": "2026-04-13T00:34:24Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/2"
+  },
+  {
+    "additions": 336,
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "changedFiles": 22,
+    "closedAt": "2026-04-13T00:23:03Z",
+    "createdAt": "2026-04-12T23:08:54Z",
+    "deletions": 31,
+    "headRefName": "fix/camera-dirty-tracking",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-13T00:23:03Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 1,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "fix: camera dirty tracking — bump worldVersion in markLocalDirty()",
+    "updatedAt": "2026-04-13T00:23:17Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/1"
+  }
+]

@@ -18,7 +18,7 @@ Fetches comprehensive PR data from all (or selected) repos in the BabylonJS org.
 bash scripts/analyze-org-prs.sh
 
 # Fetch specific repos only
-bash scripts/analyze-org-prs.sh --repos "Babylon.js,BabylonNative,Documentation"
+bash scripts/analyze-org-prs.sh --repos "Babylon.js,BabylonNative,Documentation,Babylon-Lite"
 
 # Skip repos already fetched
 bash scripts/analyze-org-prs.sh --skip-existing
@@ -76,9 +76,7 @@ Output: `pr-analysis/comparison_lines.txt`
 
 ```bash
 # 1. Fetch data (first time — takes ~30 min for large repos)
-bash scripts/analyze-org-prs.sh --repos "Babylon.js,BabylonNative,Documentation"
-
-# 2. Generate comparison reports
+bash scripts/analyze-org-prs.sh --repos "Babylon.js,BabylonNative,Documentation,Babylon-Lite"
 bash scripts/compare-3mo.sh
 bash scripts/compare-lines.sh
 
@@ -90,7 +88,7 @@ To refresh data later, use `--skip-existing` to only fetch new repos, or `--upda
 
 ```bash
 # Add new PRs since last fetch (fast — only fetches what's new)
-bash scripts/analyze-org-prs.sh --repos "Babylon.js,BabylonNative,Documentation" --update
+bash scripts/analyze-org-prs.sh --repos "Babylon.js,BabylonNative,Documentation,Babylon-Lite" --update
 
 # Or to fully re-fetch a repo, delete its raw file first
 rm pr-analysis/raw/Babylon.js.json
