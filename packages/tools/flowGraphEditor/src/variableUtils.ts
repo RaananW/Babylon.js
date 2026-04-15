@@ -243,6 +243,53 @@ export function FormatVariableValue(val: unknown): string {
 }
 
 /**
+ * Parse a user-entered string into a typed value, preserving the original
+ * value's type when possible.  Falls back to string if the input doesn't
+ * match the current type.
+ * @param input - The string the user typed.
+ * @param currentValue - The current value of the variable (used for type hint).
+ * @returns The parsed value.
+ */
+export function ParseVariableValue(input: string, currentValue: unknown): unknown {
+    const trimmed = input.trim();
+
+    // Boolean keywords
+    if (trimmed === "true") {
+        return true;
+    }
+    if (trimmed === "false") {
+        return false;
+    }
+
+    // null / undefined keywords
+    if (trimmed === "null") {
+        return null;
+    }
+    if (trimmed === "undefined") {
+        return undefined;
+    }
+
+    // If the current value is a number, try to parse as number first
+    if (typeof currentValue === "number" || currentValue === undefined) {
+        const n = Number(trimmed);
+        if (trimmed !== "" && !isNaN(n)) {
+            return n;
+        }
+    }
+
+    // Try JSON parse for objects/arrays
+    if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+        try {
+            return JSON.parse(trimmed);
+        } catch {
+            // fall through to string
+        }
+    }
+
+    return trimmed;
+}
+
+/**
  * Filter autocomplete suggestions by a query string (case-insensitive substring match).
  * @param suggestions - The full list of suggestions.
  * @param query - The filter query.

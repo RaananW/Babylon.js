@@ -3,7 +3,7 @@ import { type GlobalState } from "../../globalState";
 import { type Nullable } from "core/types";
 import { type Observer } from "core/Misc/observable";
 import { FlowGraphState } from "core/FlowGraph/flowGraph";
-import { GatherVariables, RenameVariable, DeleteVariable, FormatVariableValue, type IVariableEntry } from "../../variableUtils";
+import { GatherVariables, RenameVariable, DeleteVariable, FormatVariableValue, ParseVariableValue, type IVariableEntry } from "../../variableUtils";
 import "./variables.scss";
 
 interface IVariablesPanelProps {
@@ -12,15 +12,21 @@ interface IVariablesPanelProps {
 
 interface IVariablesPanelState {
     variables: IVariableEntry[];
-    editingIndex: number | null;
+    /** Index of the variable whose *name* is being edited (null = none). */
+    editingNameIndex: number | null;
     editingName: string;
+    /** Index of the variable whose *value* is being edited (null = none). */
+    editingValueIndex: number | null;
+    editingValue: string;
     isRunning: boolean;
     runtimeValues: Map<string, string>;
+    collapsed: boolean;
 }
 
 /**
- * Panel component that lists all flow graph variables (referenced by
- * GetVariable / SetVariable blocks) and supports add, rename, and delete.
+ * Compact variables strip that sits between the toolbar and the canvas.
+ * Shows variable names (shared across contexts) and per-context values
+ * with inline editing for both.
  */
 export class VariablesPanelComponent extends React.Component<IVariablesPanelProps, IVariablesPanelState> {
     private _builtObserver: Nullable<Observer<void>> = null;
@@ -31,7 +37,16 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
     /** @internal */
     constructor(props: IVariablesPanelProps) {
         super(props);
-        this.state = { variables: [], editingIndex: null, editingName: "", isRunning: false, runtimeValues: new Map() };
+        this.state = {
+            variables: [],
+            editingNameIndex: null,
+            editingName: "",
+            editingValueIndex: null,
+            editingValue: "",
+            isRunning: false,
+            runtimeValues: new Map(),
+            collapsed: false,
+        };
     }
 
     /** @internal */
@@ -41,7 +56,6 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             this._refreshVariables();
         });
         this._contextChangedObserver = this.props.globalState.onSelectedContextChanged.add(() => {
-            // Re-poll values for the newly selected context
             this._pollRuntimeValues();
         });
         this._subscribeToFlowGraph();
@@ -81,7 +95,6 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             if (isRunning) {
                 this._startPolling();
             } else {
-                // Do one final read so the panel shows the last values
                 this._pollRuntimeValues();
                 this._stopPolling();
             }
@@ -117,9 +130,6 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         this.setState({ runtimeValues: values });
     }
 
-    /**
-     * Scan all blocks in the flow graph to build the variable list.
-     */
     private _refreshVariables() {
         const fg = this.props.globalState.flowGraph;
         if (!fg) {
@@ -131,11 +141,6 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         this.setState({ variables });
     }
 
-    /**
-     * Rename a variable across all GetVariable and SetVariable blocks.
-     * @param oldName - the current name
-     * @param newName - the new name
-     */
     private _renameVariable(oldName: string, newName: string) {
         if (!newName || newName === oldName) {
             return;
@@ -147,16 +152,10 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         }
 
         RenameVariable(fg, oldName, newName);
-
         this.props.globalState.stateManager.onRebuildRequiredObservable.notifyObservers();
         this._refreshVariables();
     }
 
-    /**
-     * Delete a variable by removing all GetVariable and SetVariable blocks that
-     * reference it, and removing it from all execution contexts.
-     * @param name - the variable name to delete
-     */
     private _deleteVariable(name: string) {
         const fg = this.props.globalState.flowGraph;
         if (!fg) {
@@ -164,16 +163,11 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         }
 
         DeleteVariable(fg, name);
-
         this.props.globalState.stateManager.onRebuildRequiredObservable.notifyObservers();
         this._refreshVariables();
     }
 
-    /**
-     * Add a new variable by creating a GetVariable block with a default name.
-     */
     private _addVariable() {
-        // Find a unique name
         const existing = new Set(this.state.variables.map((v) => v.name));
         let idx = 1;
         let name = "newVariable";
@@ -181,108 +175,171 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             name = `newVariable${idx++}`;
         }
 
-        // Add a SetVariable block referencing this name so the variable is registered
         const fg = this.props.globalState.flowGraph;
         if (!fg) {
             return;
         }
 
-        // Set the variable on the selected context with a default empty value
         let ctx = fg.getContext(this.props.globalState.selectedContextIndex);
         if (!ctx) {
             ctx = fg.createContext();
         }
         ctx.setVariable(name, undefined);
 
-        // Gather the updated list and start editing the new variable
         const variables = GatherVariables(fg);
         const newIdx = variables.findIndex((v) => v.name === name);
-        this.setState({ variables, editingIndex: newIdx, editingName: name });
+        this.setState({ variables, editingNameIndex: newIdx, editingName: name, collapsed: false });
     }
 
-    private _startEditing(index: number) {
-        this.setState({ editingIndex: index, editingName: this.state.variables[index].name });
+    // --- Name editing ---
+
+    private _startNameEditing(index: number) {
+        this.setState({ editingNameIndex: index, editingName: this.state.variables[index].name });
     }
 
-    private _commitEditing() {
-        const { editingIndex, editingName, variables } = this.state;
-        if (editingIndex === null || editingIndex >= variables.length) {
-            this.setState({ editingIndex: null });
+    private _commitNameEditing() {
+        const { editingNameIndex, editingName, variables } = this.state;
+        if (editingNameIndex === null || editingNameIndex >= variables.length) {
+            this.setState({ editingNameIndex: null });
             return;
         }
-        const oldName = variables[editingIndex].name;
+        const oldName = variables[editingNameIndex].name;
         const newName = editingName.trim();
-        this.setState({ editingIndex: null });
+        this.setState({ editingNameIndex: null });
         if (newName && newName !== oldName) {
             this._renameVariable(oldName, newName);
         }
     }
 
+    // --- Value editing ---
+
+    private _startValueEditing(index: number) {
+        const name = this.state.variables[index].name;
+        const display = this.state.runtimeValues.get(name) ?? "undefined";
+        this.setState({ editingValueIndex: index, editingValue: display });
+    }
+
+    private _commitValueEditing() {
+        const { editingValueIndex, editingValue, variables } = this.state;
+        if (editingValueIndex === null || editingValueIndex >= variables.length) {
+            this.setState({ editingValueIndex: null });
+            return;
+        }
+        const name = variables[editingValueIndex].name;
+        this.setState({ editingValueIndex: null });
+
+        const fg = this.props.globalState.flowGraph;
+        if (!fg) {
+            return;
+        }
+
+        const ctx = fg.getContext(this.props.globalState.selectedContextIndex);
+        if (!ctx) {
+            return;
+        }
+
+        const currentValue = ctx.userVariables[name];
+        const parsed = ParseVariableValue(editingValue, currentValue);
+        ctx.setVariable(name, parsed);
+        this._pollRuntimeValues();
+    }
+
     /** @internal */
     override render() {
-        const { variables, editingIndex, editingName, isRunning, runtimeValues } = this.state;
+        const { variables, editingNameIndex, editingName, editingValueIndex, editingValue, runtimeValues, collapsed } = this.state;
+        const varCount = variables.length;
 
         return (
-            <div className="fge-variables-panel">
-                <div className="fge-variables-header">
-                    <h3>Variables</h3>
-                    {isRunning && <span className="fge-variables-running-badge">● Live</span>}
-                    <button className="fge-variables-add-btn" onClick={() => this._addVariable()} title="Add a new variable">
-                        + Add
+            <div className="fge-variables-strip">
+                <div className="fge-variables-strip-header">
+                    <button className="fge-variables-toggle" onClick={() => this.setState({ collapsed: !collapsed })} title={collapsed ? "Expand variables" : "Collapse variables"}>
+                        {collapsed ? "▶" : "▼"}
+                    </button>
+                    <span className="fge-variables-strip-title">Variables{varCount > 0 ? ` (${varCount})` : ""}</span>
+                    {this.state.isRunning && <span className="fge-variables-live-badge">● Live</span>}
+                    <button className="fge-variables-strip-add" onClick={() => this._addVariable()} title="Add a new variable">
+                        +
                     </button>
                 </div>
-                {variables.length === 0 && (
-                    <div className="fge-variables-empty">No variables defined. Use GetVariable / SetVariable blocks or click &quot;+ Add&quot; to create one.</div>
-                )}
-                {variables.map((v, idx) => (
-                    <div key={v.name} className="fge-variable-row">
-                        <div className="fge-variable-row-top">
-                            {editingIndex === idx ? (
-                                <input
-                                    className="fge-variable-name"
-                                    value={editingName}
-                                    onChange={(e) => this.setState({ editingName: e.target.value })}
-                                    onFocus={() => {
-                                        this.props.globalState.lockObject.lock = true;
-                                    }}
-                                    onBlur={() => {
-                                        this.props.globalState.lockObject.lock = false;
-                                        this._commitEditing();
-                                    }}
-                                    onKeyDown={(e) => {
-                                        e.stopPropagation();
-                                        if (e.key === "Enter") {
-                                            this._commitEditing();
-                                        } else if (e.key === "Escape") {
-                                            this.setState({ editingIndex: null });
-                                        }
-                                    }}
-                                    autoFocus
-                                />
-                            ) : (
-                                <span className="fge-variable-name" onDoubleClick={() => this._startEditing(idx)} title="Double-click to rename">
-                                    {v.name}
-                                </span>
-                            )}
-                            <span className="fge-variable-type" title={`${v.getCount} get, ${v.setCount} set`}>
-                                {v.getCount}G / {v.setCount}S
-                            </span>
-                            <button className="fge-variable-delete-btn" title="Delete variable and its blocks" onClick={() => this._deleteVariable(v.name)}>
-                                ✕
-                            </button>
-                        </div>
-                        {runtimeValues.size > 0 && (
-                            <div className="fge-variable-value" title={runtimeValues.get(v.name) ?? "undefined"}>
-                                = {runtimeValues.get(v.name) ?? "undefined"}
+                {!collapsed && (
+                    <div className="fge-variables-strip-body">
+                        {variables.length === 0 ? (
+                            <div className="fge-variables-strip-empty">No variables. Click + to add one, or use GetVariable/SetVariable blocks.</div>
+                        ) : (
+                            <div className="fge-variables-strip-table">
+                                {variables.map((v, idx) => (
+                                    <div key={v.name} className="fge-var-cell">
+                                        <div className="fge-var-cell-name-row">
+                                            {editingNameIndex === idx ? (
+                                                <input
+                                                    className="fge-var-cell-name-input"
+                                                    value={editingName}
+                                                    onChange={(e) => this.setState({ editingName: e.target.value })}
+                                                    onFocus={() => {
+                                                        this.props.globalState.lockObject.lock = true;
+                                                    }}
+                                                    onBlur={() => {
+                                                        this.props.globalState.lockObject.lock = false;
+                                                        this._commitNameEditing();
+                                                    }}
+                                                    onKeyDown={(e) => {
+                                                        e.stopPropagation();
+                                                        if (e.key === "Enter") {
+                                                            this._commitNameEditing();
+                                                        } else if (e.key === "Escape") {
+                                                            this.setState({ editingNameIndex: null });
+                                                        }
+                                                    }}
+                                                    autoFocus
+                                                />
+                                            ) : (
+                                                <span
+                                                    className="fge-var-cell-name"
+                                                    onDoubleClick={() => this._startNameEditing(idx)}
+                                                    title={`${v.name} (${v.getCount}G/${v.setCount}S) — double-click to rename`}
+                                                >
+                                                    {v.name}
+                                                </span>
+                                            )}
+                                            <button className="fge-var-cell-delete" title="Delete variable and its blocks" onClick={() => this._deleteVariable(v.name)}>
+                                                ✕
+                                            </button>
+                                        </div>
+                                        <div className="fge-var-cell-value-row">
+                                            {editingValueIndex === idx ? (
+                                                <input
+                                                    className="fge-var-cell-value-input"
+                                                    value={editingValue}
+                                                    onChange={(e) => this.setState({ editingValue: e.target.value })}
+                                                    onFocus={() => {
+                                                        this.props.globalState.lockObject.lock = true;
+                                                    }}
+                                                    onBlur={() => {
+                                                        this.props.globalState.lockObject.lock = false;
+                                                        this._commitValueEditing();
+                                                    }}
+                                                    onKeyDown={(e) => {
+                                                        e.stopPropagation();
+                                                        if (e.key === "Enter") {
+                                                            this._commitValueEditing();
+                                                        } else if (e.key === "Escape") {
+                                                            this.setState({ editingValueIndex: null });
+                                                        }
+                                                    }}
+                                                    autoFocus
+                                                />
+                                            ) : (
+                                                <span className="fge-var-cell-value" onClick={() => this._startValueEditing(idx)} title="Click to edit value for this context">
+                                                    {runtimeValues.get(v.name) ?? "undefined"}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         )}
                     </div>
-                ))}
-                <div className="fge-variables-info">
-                    Double-click a name to rename. Renaming propagates to all Get/Set blocks.
-                    <br />
-                    Deleting a variable removes all GetVariable and SetVariable blocks that reference it.
-                </div>
+                )}
             </div>
         );
     }

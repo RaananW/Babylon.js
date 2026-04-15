@@ -3,7 +3,16 @@ import { type Engine, NullEngine } from "core/Engines";
 import { type FlowGraph, type FlowGraphContext, FlowGraphCoordinator, FlowGraphGetVariableBlock } from "core/FlowGraph";
 import { FlowGraphSetVariableBlock } from "core/FlowGraph/Blocks/Execution/flowGraphSetVariableBlock";
 import { Scene } from "core/scene";
-import { GatherVariables, GatherVariableNames, RenameVariable, DeleteVariable, FormatVariableValue, FilterSuggestions, type IVariableEntry } from "flow-graph-editor/variableUtils";
+import {
+    GatherVariables,
+    GatherVariableNames,
+    RenameVariable,
+    DeleteVariable,
+    FormatVariableValue,
+    FilterSuggestions,
+    ParseVariableValue,
+    type IVariableEntry,
+} from "flow-graph-editor/variableUtils";
 import { CONSTRUCTOR_CONFIG } from "flow-graph-editor/graphSystem/properties/constructorConfigRegistry";
 
 describe("Flow Graph Variable Utils", () => {
@@ -476,6 +485,63 @@ describe("Flow Graph Variable Utils", () => {
 
             const result = GatherVariables(flowGraph);
             expect(result.map((v) => v.name)).not.toContain("toGo");
+        });
+    });
+
+    // --------------------------------------------------------
+    // ParseVariableValue
+    // --------------------------------------------------------
+    describe("ParseVariableValue", () => {
+        it("parses boolean true", () => {
+            expect(ParseVariableValue("true", false)).toBe(true);
+        });
+
+        it("parses boolean false", () => {
+            expect(ParseVariableValue("false", true)).toBe(false);
+        });
+
+        it("parses null", () => {
+            expect(ParseVariableValue("null", "anything")).toBe(null);
+        });
+
+        it("parses undefined", () => {
+            expect(ParseVariableValue("undefined", 42)).toBe(undefined);
+        });
+
+        it("parses number when current value is number", () => {
+            expect(ParseVariableValue("42.5", 10)).toBe(42.5);
+        });
+
+        it("parses number when current value is undefined", () => {
+            expect(ParseVariableValue("7", undefined)).toBe(7);
+        });
+
+        it("returns string when number parse fails and current is number", () => {
+            expect(ParseVariableValue("hello", 10)).toBe("hello");
+        });
+
+        it("parses JSON object", () => {
+            expect(ParseVariableValue('{"a":1}', "x")).toEqual({ a: 1 });
+        });
+
+        it("parses JSON array", () => {
+            expect(ParseVariableValue("[1,2,3]", "x")).toEqual([1, 2, 3]);
+        });
+
+        it("returns string for invalid JSON starting with {", () => {
+            expect(ParseVariableValue("{bad", "x")).toBe("{bad");
+        });
+
+        it("returns plain string for regular text", () => {
+            expect(ParseVariableValue("hello world", "prev")).toBe("hello world");
+        });
+
+        it("trims whitespace", () => {
+            expect(ParseVariableValue("  42  ", 0)).toBe(42);
+        });
+
+        it("handles negative numbers", () => {
+            expect(ParseVariableValue("-3.14", 0)).toBe(-3.14);
         });
     });
 });
