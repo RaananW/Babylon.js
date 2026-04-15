@@ -77,6 +77,10 @@ export interface ISerializedFlowGraphContext {
      */
     uniqueId: string;
     /**
+     * An optional user-facing name for the context
+     */
+    name?: string;
+    /**
      * User variables
      */
     _userVariables: { [key: string]: any };

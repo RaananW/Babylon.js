@@ -78,6 +78,12 @@ export class FlowGraphContext {
     @serialize()
     public uniqueId = RandomGUID();
     /**
+     * An optional user-facing name for the context.
+     * Defaults to an empty string; the editor may assign a label like "Context 0".
+     */
+    @serialize()
+    public name: string = "";
+    /**
      * These are the variables defined by a user.
      */
     private _userVariables: { [key: string]: any } = {};
@@ -636,6 +642,7 @@ export class FlowGraphContext {
      */
     public serialize(serializationObject: any = {}, valueSerializationFunction: (key: string, value: any, serializationObject: any) => void = defaultValueSerializationFunction) {
         serializationObject.uniqueId = this.uniqueId;
+        serializationObject.name = this.name;
         serializationObject._userVariables = {};
         for (const key in this._userVariables) {
             valueSerializationFunction(key, this._userVariables[key], serializationObject._userVariables);

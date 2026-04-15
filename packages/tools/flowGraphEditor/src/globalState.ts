@@ -248,8 +248,31 @@ export class GlobalState {
     private _isDebugMode: boolean = false;
     /** Observable triggered when debug mode changes */
     onDebugModeChanged = new Observable<boolean>();
+    /** Observable triggered when the selected context index changes */
+    onSelectedContextChanged = new Observable<number>();
     /** The index of the context to observe in debug mode (0 = first context) */
-    selectedContextIndex: number = 0;
+    private _selectedContextIndex: number = 0;
+
+    /** Get the currently selected execution context index */
+    public get selectedContextIndex(): number {
+        return this._selectedContextIndex;
+    }
+
+    /** Set the selected execution context index.
+     * Switches debug/breakpoint observers to the new context.
+     */
+    public set selectedContextIndex(value: number) {
+        if (value === this._selectedContextIndex) {
+            return;
+        }
+        this._selectedContextIndex = value;
+        // Re-attach debug observers to the new context if debug mode is active
+        if (this._isDebugMode && this._flowGraph?.state === FlowGraphState.Started) {
+            this._attachContextExecutionObserver();
+        }
+        this.onSelectedContextChanged.notifyObservers(value);
+    }
+
     /** Observer tracking node execution for debug highlighting */
     private _debugExecutionObserver: Nullable<Observer<FlowGraphBlock>> = null;
     /** Observer tracking graph state changes for debug re-subscription */
@@ -612,6 +635,89 @@ export class GlobalState {
         ctx?.stepExecution();
     }
 
+    // ── Execution Context Management ───────────────────────────────────
+    /** Observable triggered when a context is added or removed */
+    onContextListChanged = new Observable<void>();
+
+    /**
+     * Create a new execution context on the current flow graph.
+     * Assigns a default name like "Context N".
+     * @returns the index of the newly created context, or -1 if no graph
+     */
+    public createNewContext(): number {
+        if (!this._flowGraph) {
+            return -1;
+        }
+        const ctx = this._flowGraph.createContext();
+        const index = this._flowGraph.contextCount - 1;
+        ctx.name = `Context ${index}`;
+        // Copy the assets context from the scene if available
+        if (this.sceneContext?.scene) {
+            ctx.assetsContext = this.sceneContext.scene;
+        }
+        this.onContextListChanged.notifyObservers();
+        return index;
+    }
+
+    /**
+     * Remove an execution context by index.
+     * If the removed context was the selected one, selects the nearest remaining context.
+     * @param index - the index of the context to remove
+     * @returns true if removed successfully
+     */
+    public removeContextAt(index: number): boolean {
+        if (!this._flowGraph) {
+            return false;
+        }
+        // Don't allow removing the last context
+        if (this._flowGraph.contextCount <= 1) {
+            return false;
+        }
+        const removed = this._flowGraph.removeContext(index);
+        if (!removed) {
+            return false;
+        }
+        // Adjust selection
+        if (this._selectedContextIndex >= this._flowGraph.contextCount) {
+            this._selectedContextIndex = this._flowGraph.contextCount - 1;
+        }
+        if (this._isDebugMode && this._flowGraph.state === FlowGraphState.Started) {
+            this._attachContextExecutionObserver();
+        }
+        this.onContextListChanged.notifyObservers();
+        this.onSelectedContextChanged.notifyObservers(this._selectedContextIndex);
+        return true;
+    }
+
+    /**
+     * Rename an execution context.
+     * @param index - the index of the context
+     * @param name - the new name
+     */
+    public renameContext(index: number, name: string): void {
+        const ctx = this._flowGraph?.getContext(index);
+        if (ctx) {
+            ctx.name = name;
+            this.onContextListChanged.notifyObservers();
+        }
+    }
+
+    /**
+     * Get a summary of all execution contexts (index, uniqueId, name).
+     * @returns an array of context info objects
+     */
+    public getContextList(): Array<{ index: number; uniqueId: string; name: string }> {
+        const result: Array<{ index: number; uniqueId: string; name: string }> = [];
+        if (!this._flowGraph) {
+            return result;
+        }
+        for (let i = 0; i < this._flowGraph.contextCount; i++) {
+            const ctx = this._flowGraph.getContext(i);
+            result.push({ index: i, uniqueId: ctx.uniqueId, name: ctx.name || `Context ${i}` });
+        }
+        return result;
+    }
+
     /** The scene context populated when a Playground snippet is loaded */
     sceneContext: Nullable<SceneContext> = null;
     /** Observable triggered when the scene context changes (snippet loaded/disposed) */
@@ -741,6 +847,10 @@ export class GlobalState {
         const origCreate = this._originalCreateContext!;
         flowGraph.createContext = (): FlowGraphContext => {
             const ctx = origCreate();
+            // Assign a default name if the context doesn't have one
+            if (!ctx.name) {
+                ctx.name = `Context ${flowGraph.contextCount - 1}`;
+            }
             if (this.sceneContext) {
                 ctx.assetsContext = this.sceneContext.scene;
             }
@@ -1084,7 +1194,8 @@ export class GlobalState {
         if (!fg) {
             return;
         }
-        const ctx = fg.getContext(0);
+        // Snapshot from the selected context (or context 0 as fallback)
+        const ctx = fg.getContext(this._selectedContextIndex) ?? fg.getContext(0);
         if (!ctx) {
             return;
         }

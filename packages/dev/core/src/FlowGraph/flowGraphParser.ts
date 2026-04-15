@@ -184,6 +184,7 @@ export function ParseFlowGraphContext(serializationObject: ISerializedFlowGraphC
     result.treatDataAsRightHanded = rightHanded || false;
     const valueParseFunction = options.valueParseFunction ?? defaultValueParseFunction;
     result.uniqueId = serializationObject.uniqueId;
+    result.name = serializationObject.name ?? "";
     const scene = result.getScene();
     // check if assets context is available
     if (serializationObject._assetsContext) {

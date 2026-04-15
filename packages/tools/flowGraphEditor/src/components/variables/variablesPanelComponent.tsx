@@ -25,6 +25,7 @@ interface IVariablesPanelState {
 export class VariablesPanelComponent extends React.Component<IVariablesPanelProps, IVariablesPanelState> {
     private _builtObserver: Nullable<Observer<void>> = null;
     private _stateObserver: Nullable<Observer<FlowGraphState>> = null;
+    private _contextChangedObserver: Nullable<Observer<number>> = null;
     private _pollTimer: ReturnType<typeof setInterval> | null = null;
 
     /** @internal */
@@ -39,6 +40,10 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             this._subscribeToFlowGraph();
             this._refreshVariables();
         });
+        this._contextChangedObserver = this.props.globalState.onSelectedContextChanged.add(() => {
+            // Re-poll values for the newly selected context
+            this._pollRuntimeValues();
+        });
         this._subscribeToFlowGraph();
         this._refreshVariables();
     }
@@ -49,6 +54,8 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         this._builtObserver = null;
         this._stateObserver?.remove();
         this._stateObserver = null;
+        this._contextChangedObserver?.remove();
+        this._contextChangedObserver = null;
         this._stopPolling();
     }
 
@@ -101,7 +108,7 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         }
 
         const values = new Map<string, string>();
-        const ctx = fg.getContext(0);
+        const ctx = fg.getContext(this.props.globalState.selectedContextIndex);
         if (ctx) {
             for (const [key, val] of Object.entries(ctx.userVariables)) {
                 values.set(key, FormatVariableValue(val));
@@ -180,8 +187,8 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             return;
         }
 
-        // Set the variable on context 0 with a default empty value
-        let ctx = fg.getContext(0);
+        // Set the variable on the selected context with a default empty value
+        let ctx = fg.getContext(this.props.globalState.selectedContextIndex);
         if (!ctx) {
             ctx = fg.createContext();
         }
