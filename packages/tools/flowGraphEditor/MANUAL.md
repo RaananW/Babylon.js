@@ -78,6 +78,38 @@ Double-click a variable name to edit it. Press **Enter** to confirm or **Escape*
 
 Click the **✕** button on a variable row to delete it. This removes all `GetVariable` and `SetVariable` blocks that reference the variable, and removes the variable from all execution contexts.
 
+### glTF Import / Export
+
+**Importing a glTF with an interactive flow graph:**
+
+- Drag-and-drop a `.glb` or `.gltf` file onto the scene preview pane.
+- If the file contains a **KHR_interactivity** extension, the flow graph is automatically loaded into the editor.
+- If the file contains a **BABYLON_flow_graph** custom extension (created by this editor's export), the flow graph is restored as well.
+- The scene from the file is loaded as the preview scene so block references to meshes, cameras, and lights can be resolved.
+
+**Loading a glTF graph without a scene:**
+
+- Use the **Load glTF** button in the FILE section of the property panel.
+- This reads only the **BABYLON_flow_graph** extension from a `.glb`/`.gltf` file (no scene is loaded).
+
+**Exporting:**
+
+- Click **Export glTF (.glb)** in the FILE section of the property panel.
+- If a preview scene is loaded and the serializers package is available, the scene and flow graph are exported together.
+- Otherwise, a minimal `.glb` containing only the flow graph data is created.
+- The exported file uses the **BABYLON_flow_graph** custom extension and can be re-imported into this editor.
+
+### Composite Templates
+
+The palette contains a **Templates** section with pre-built multi-block patterns:
+
+- **Common Patterns** — Click → Log, Timer Loop, Toggle Boolean, Branch on Condition, Sequence Chain, Delayed Action, Pointer Interaction
+- **Animation Patterns** — Lerp Animation (tick-driven interpolation)
+- **Communication** — Custom Event Bridge (send + receive pair)
+- **glTF Interactivity** — Get → Set Property, Get → Set Variable
+
+Drag a template from the palette onto the canvas. All blocks are created and internally wired automatically. You can then edit individual blocks (change targets, configure conditions, etc.).
+
 ---
 
 ## Graph Controls
