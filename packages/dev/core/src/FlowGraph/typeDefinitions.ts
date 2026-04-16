@@ -85,6 +85,11 @@ export interface ISerializedFlowGraphContext {
      */
     _userVariables: { [key: string]: any };
     /**
+     * Optional type annotations for user variables.
+     * Keys are variable names; values are type name strings.
+     */
+    _variableTypes?: { [key: string]: string };
+    /**
      * Values of the connection points
      */
     _connectionValues: { [key: string]: any };

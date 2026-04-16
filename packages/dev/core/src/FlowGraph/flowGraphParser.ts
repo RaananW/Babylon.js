@@ -223,6 +223,12 @@ export function ParseFlowGraphContext(serializationObject: ISerializedFlowGraphC
         const value = valueParseFunction(key, serializationObject._userVariables, result.assetsContext, scene);
         result.userVariables[key] = value;
     }
+    // Restore variable type annotations
+    if (serializationObject._variableTypes) {
+        for (const key in serializationObject._variableTypes) {
+            result.setVariableType(key, serializationObject._variableTypes[key]);
+        }
+    }
     for (const key in serializationObject._connectionValues) {
         const value = valueParseFunction(key, serializationObject._connectionValues, result.assetsContext, scene);
         result._setConnectionValueByKey(key, value);
