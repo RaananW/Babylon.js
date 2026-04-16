@@ -806,7 +806,12 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
             // Use the FlowGraph block factory to create the block asynchronously
             const factory = blockFactory(blockType);
             const blockClass = await factory();
-            const block = new (blockClass as any)({ name: blockType }) as FlowGraphBlock;
+            // Constant blocks need a default value so their output port type is resolved correctly.
+            const config: any = { name: blockType };
+            if (blockType === "FlowGraphConstantBlock") {
+                config.value = 0;
+            }
+            const block = new (blockClass as any)(config) as FlowGraphBlock;
 
             // If this is an event block, register it with the flow graph.
             if (block instanceof FlowGraphEventBlock) {
