@@ -765,6 +765,21 @@ export class GlobalState {
     private _savedContextSnapshots: any[] | null = null;
 
     /**
+     * Runtime (non-serialized) copies of each execution context's data.
+     * Unlike _savedContextSnapshots (which holds serialized/JSON-safe values for
+     * injecting into saved files), these hold actual runtime objects (Vector3,
+     * Mesh references, etc.) so they can be restored directly into newly
+     * created contexts without needing to re-parse.
+     */
+    private _savedContextRuntimeData: Array<{
+        userVariables: { [key: string]: any };
+        connectionValues: { [key: string]: any };
+        variableTypes: { [key: string]: string };
+        name: string;
+        uniqueId: string;
+    }> | null = null;
+
+    /**
      * Gets the current flow graph
      */
     public get flowGraph(): FlowGraph {
@@ -846,6 +861,9 @@ export class GlobalState {
                 if (typeof flowGraph.setScene === "function") {
                     flowGraph.setScene(ctx.scene);
                 }
+                // Re-create contexts from snapshots so the editor UI has
+                // live contexts after setScene() clears them.
+                this._restoreContextsFromSnapshots(flowGraph);
             }
         });
 
@@ -862,33 +880,55 @@ export class GlobalState {
             if (this.sceneContext) {
                 ctx.assetsContext = this.sceneContext.scene;
             }
-            // Restore user variables saved before setScene cleared contexts
-            if (this._savedUserVariables) {
-                for (const key in this._savedUserVariables) {
-                    ctx.setVariable(key, this._savedUserVariables[key]);
-                }
-                this._savedUserVariables = null;
-            }
-            // Restore connection values (unconnected input defaults like divide-by-2)
-            if (this._savedConnectionValues) {
-                for (const key in this._savedConnectionValues) {
-                    ctx._setConnectionValueByKey(key, this._savedConnectionValues[key]);
-                }
-                this._savedConnectionValues = null;
-            }
-            // Restore variable types from context snapshots
-            if (this._savedContextSnapshots && this._savedContextSnapshots.length > 0) {
-                // Use the snapshot matching this context's index, or the first one
+            // Restore full context data from the runtime snapshot matching
+            // this context's index. This handles user variables, variable types,
+            // connection values, and names for ALL contexts (not just the first).
+            if (this._savedContextRuntimeData && this._savedContextRuntimeData.length > 0) {
                 const ctxIndex = flowGraph.contextCount - 1;
-                const snapshot = this._savedContextSnapshots[ctxIndex] ?? this._savedContextSnapshots[0];
-                if (snapshot?._variableTypes) {
-                    for (const key in snapshot._variableTypes) {
-                        ctx.setVariableType(key, snapshot._variableTypes[key]);
+                const runtimeData = this._savedContextRuntimeData[ctxIndex] ?? this._savedContextRuntimeData[0];
+                if (runtimeData) {
+                    for (const key in runtimeData.userVariables) {
+                        ctx.setVariable(key, runtimeData.userVariables[key]);
+                    }
+                    // For variables whose runtime value is undefined/null (e.g. Mesh
+                    // references that couldn't be resolved against the host scene during
+                    // parsing), fall back to the serialized descriptor object so that
+                    // _rebindContextUserVariables can resolve them against the preview scene.
+                    const serializedSnapshot = this._savedContextSnapshots?.[ctxIndex] ?? this._savedContextSnapshots?.[0];
+                    if (serializedSnapshot?._userVariables) {
+                        for (const key in serializedSnapshot._userVariables) {
+                            const serializedVal = serializedSnapshot._userVariables[key];
+                            if (serializedVal && typeof serializedVal === "object" && serializedVal.className && !ctx.userVariables[key]) {
+                                ctx.setVariable(key, serializedVal);
+                            }
+                        }
+                    }
+                    for (const key in runtimeData.variableTypes) {
+                        ctx.setVariableType(key, runtimeData.variableTypes[key]);
+                    }
+                    for (const key in runtimeData.connectionValues) {
+                        ctx._setConnectionValueByKey(key, runtimeData.connectionValues[key]);
+                    }
+                    if (runtimeData.name) {
+                        ctx.name = runtimeData.name;
+                    }
+                    if (runtimeData.uniqueId) {
+                        ctx.uniqueId = runtimeData.uniqueId;
                     }
                 }
-                // Restore the context name from the snapshot
-                if (snapshot?.name) {
-                    ctx.name = snapshot.name;
+            } else {
+                // Legacy path: restore from flat saved variables (first context only)
+                if (this._savedUserVariables) {
+                    for (const key in this._savedUserVariables) {
+                        ctx.setVariable(key, this._savedUserVariables[key]);
+                    }
+                    this._savedUserVariables = null;
+                }
+                if (this._savedConnectionValues) {
+                    for (const key in this._savedConnectionValues) {
+                        ctx._setConnectionValueByKey(key, this._savedConnectionValues[key]);
+                    }
+                    this._savedConnectionValues = null;
                 }
             }
             // Resolve raw descriptor objects (e.g. {className:"Mesh",id:"x"})
@@ -912,6 +952,9 @@ export class GlobalState {
             if (typeof flowGraph.setScene === "function") {
                 flowGraph.setScene(this.sceneContext.scene);
             }
+            // Re-create contexts from snapshots so the editor UI has live
+            // contexts to display (variables panel, context selector, etc.)
+            this._restoreContextsFromSnapshots(flowGraph);
         }
 
         // Re-subscribe debug observers if debug mode is active
@@ -1233,15 +1276,27 @@ export class GlobalState {
             this._savedConnectionValues = { ...connVals };
         }
 
-        // Serialize ALL contexts so they survive stop()/setScene() for
-        // serialization purposes (user variables, variable types, connection values).
+        // Snapshot ALL contexts so they survive stop()/setScene().
+        // Two parallel snapshots:
+        //   _savedContextSnapshots  — serialized (JSON-safe) for file save injection
+        //   _savedContextRuntimeData — runtime objects for live context restoration
         if (fg.contextCount > 0) {
             this._savedContextSnapshots = [];
+            this._savedContextRuntimeData = [];
             for (let i = 0; i < fg.contextCount; i++) {
                 const context = fg.getContext(i);
+                // Serialized snapshot for SerializationTools
                 const serialized: any = {};
                 context.serialize(serialized);
                 this._savedContextSnapshots.push(serialized);
+                // Runtime snapshot for createContext wrapper
+                this._savedContextRuntimeData.push({
+                    userVariables: { ...context.userVariables },
+                    connectionValues: { ...(context as any)._connectionValues },
+                    variableTypes: { ...(context as any)._variableTypes },
+                    name: context.name,
+                    uniqueId: context.uniqueId,
+                });
             }
         }
     }
@@ -1269,6 +1324,26 @@ export class GlobalState {
      */
     public get savedContextSnapshots(): any[] | null {
         return this._savedContextSnapshots;
+    }
+
+    /**
+     * Re-create execution contexts on the flow graph from `_savedContextSnapshots`.
+     * Called after setScene() clears live contexts so the editor UI (variables panel,
+     * context selector) has live contexts to display and serialize.
+     * @param fg - the flow graph to restore contexts on
+     */
+    private _restoreContextsFromSnapshots(fg: FlowGraph): void {
+        if (!this._savedContextSnapshots || this._savedContextSnapshots.length === 0) {
+            return;
+        }
+        if (fg.contextCount > 0) {
+            // Already has contexts (e.g. setScene was a no-op) — don't duplicate
+            return;
+        }
+        for (let i = 0; i < this._savedContextSnapshots.length; i++) {
+            // The wrapped createContext() picks up snapshot[i] automatically
+            fg.createContext();
+        }
     }
 
     /**

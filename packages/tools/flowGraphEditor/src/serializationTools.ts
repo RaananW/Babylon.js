@@ -117,6 +117,14 @@ export class SerializationTools {
             // serialized names so _rebind*Reference can find them later.
             SerializationTools.PreserveUnresolvedNames(parsedGraph, serializationObject);
 
+            // Patch unresolved user-variable descriptors back onto parsed
+            // contexts.  When parsing runs against the editor's host scene
+            // (which has no meshes), Mesh/Light/Camera references resolve to
+            // undefined.  Restore the original {id, name, className} descriptor
+            // so _rebindContextUserVariables can resolve them later against the
+            // preview scene.
+            SerializationTools.PreserveUnresolvedVariables(parsedGraph, serializationObject);
+
             // Sync context connection values into _defaultValue for unconnected
             // inputs so the editor UI shows the correct value (e.g. "2" instead
             // of "0" for a divide block's unconnected divisor).
@@ -216,6 +224,38 @@ export class SerializationTools {
                 // parsing failed to resolve it (parsedValue is undefined/null).
                 if (serializedValue && typeof serializedValue === "object" && serializedValue.name && !parsedValue) {
                     (block.config as any)[nameKey] = serializedValue.name;
+                }
+            }
+        }
+    }
+
+    /**
+     * Patch unresolved user-variable descriptors back onto parsed contexts.
+     * When parsing runs against the editor's host scene (which typically has
+     * no user meshes), Mesh/Light/Camera variable references resolve to
+     * `undefined`.  This method restores the original `{id, name, className}`
+     * descriptor from the serialized JSON so that `_rebindContextUserVariables`
+     * can resolve them later when the preview scene loads.
+     * @param parsedGraph - the parsed flow graph with potentially unresolved variables
+     * @param serializationObject - the original JSON with the full descriptors
+     */
+    public static PreserveUnresolvedVariables(parsedGraph: FlowGraph, serializationObject: any): void {
+        const serializedContexts: any[] = serializationObject.executionContexts;
+        if (!serializedContexts) {
+            return;
+        }
+        for (let i = 0; i < serializedContexts.length; i++) {
+            const serializedCtx = serializedContexts[i];
+            const parsedCtx = parsedGraph.getContext(i);
+            if (!parsedCtx || !serializedCtx?._userVariables) {
+                continue;
+            }
+            for (const key in serializedCtx._userVariables) {
+                const desc = serializedCtx._userVariables[key];
+                // Only patch back object descriptors (className present) when the
+                // parsed value is falsy (undefined/null — i.e. not resolved).
+                if (desc && typeof desc === "object" && desc.className && !parsedCtx.userVariables[key]) {
+                    parsedCtx.setVariable(key, desc);
                 }
             }
         }
