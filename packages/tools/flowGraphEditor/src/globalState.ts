@@ -757,6 +757,14 @@ export class GlobalState {
     private _savedConnectionValues: { [key: string]: any } | null = null;
 
     /**
+     * Serialized snapshots of ALL execution contexts, taken before stop()/setScene()
+     * clears them.  Used by SerializationTools.Serialize() to include context data
+     * (user variables, variable types, connection values) in the saved JSON even
+     * when the graph is stopped and has no live contexts.
+     */
+    private _savedContextSnapshots: any[] | null = null;
+
+    /**
      * Gets the current flow graph
      */
     public get flowGraph(): FlowGraph {
@@ -867,6 +875,21 @@ export class GlobalState {
                     ctx._setConnectionValueByKey(key, this._savedConnectionValues[key]);
                 }
                 this._savedConnectionValues = null;
+            }
+            // Restore variable types from context snapshots
+            if (this._savedContextSnapshots && this._savedContextSnapshots.length > 0) {
+                // Use the snapshot matching this context's index, or the first one
+                const ctxIndex = flowGraph.contextCount - 1;
+                const snapshot = this._savedContextSnapshots[ctxIndex] ?? this._savedContextSnapshots[0];
+                if (snapshot?._variableTypes) {
+                    for (const key in snapshot._variableTypes) {
+                        ctx.setVariableType(key, snapshot._variableTypes[key]);
+                    }
+                }
+                // Restore the context name from the snapshot
+                if (snapshot?.name) {
+                    ctx.name = snapshot.name;
+                }
             }
             // Resolve raw descriptor objects (e.g. {className:"Mesh",id:"x"})
             // into actual scene objects.  _rebindContextUserVariables only
@@ -1186,6 +1209,7 @@ export class GlobalState {
 
     /**
      * Snapshot all user variables from the first execution context of a flow graph.
+     * Also serializes ALL execution contexts so they survive stop()/setScene().
      * Called just before stop/setScene clears contexts so variables can be restored later.
      * @param graph - the flow graph to snapshot from (defaults to current graph)
      */
@@ -1208,6 +1232,18 @@ export class GlobalState {
         if (connVals && Object.keys(connVals).length > 0) {
             this._savedConnectionValues = { ...connVals };
         }
+
+        // Serialize ALL contexts so they survive stop()/setScene() for
+        // serialization purposes (user variables, variable types, connection values).
+        if (fg.contextCount > 0) {
+            this._savedContextSnapshots = [];
+            for (let i = 0; i < fg.contextCount; i++) {
+                const context = fg.getContext(i);
+                const serialized: any = {};
+                context.serialize(serialized);
+                this._savedContextSnapshots.push(serialized);
+            }
+        }
     }
 
     /**
@@ -1223,6 +1259,16 @@ export class GlobalState {
      */
     public snapshotUserVariables(): void {
         this._snapshotUserVariablesFrom();
+    }
+
+    /**
+     * Returns the last serialized context snapshots (taken before stop()/setScene()).
+     * Used by SerializationTools to inject context data into the serialized output
+     * when the graph is stopped and has no live execution contexts.
+     * @returns array of serialized context objects, or null if none saved
+     */
+    public get savedContextSnapshots(): any[] | null {
+        return this._savedContextSnapshots;
     }
 
     /**

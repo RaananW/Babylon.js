@@ -58,8 +58,26 @@ export class SerializationTools {
     public static Serialize(flowGraph: FlowGraph, globalState: GlobalState, frame?: Nullable<GraphFrame>) {
         this.UpdateLocations(flowGraph, globalState, frame);
 
+        // Snapshot live contexts before serialization so we capture the latest
+        // user variables, variable types, and connection values.  This is
+        // important because the graph may be stopped (contexts cleared) when
+        // the user clicks Save.
+        globalState.snapshotUserVariables();
+
         const serializationObject: any = {};
         flowGraph.serialize(serializationObject);
+
+        // When the graph is stopped, _executionContexts is empty so
+        // flowGraph.serialize() produces executionContexts: [].  Inject the
+        // editor's saved context snapshots to preserve user variables,
+        // variable type annotations, and connection values.
+        if (
+            (!serializationObject.executionContexts || serializationObject.executionContexts.length === 0) &&
+            globalState.savedContextSnapshots &&
+            globalState.savedContextSnapshots.length > 0
+        ) {
+            serializationObject.executionContexts = globalState.savedContextSnapshots;
+        }
 
         // Include editor layout data (block positions, frames, zoom) so the
         // graph looks the same when loaded back
@@ -227,10 +245,15 @@ export class SerializationTools {
      */
     public static async ExportGlbAsync(flowGraph: FlowGraph, globalState: GlobalState, scene: Nullable<Scene>): Promise<void> {
         this.UpdateLocations(flowGraph, globalState);
+        globalState.snapshotUserVariables();
 
         // Serialize the flow graph to JSON
         const fgSerialized: any = {};
         flowGraph.serialize(fgSerialized);
+        // Inject saved context snapshots when the graph has no live contexts
+        if ((!fgSerialized.executionContexts || fgSerialized.executionContexts.length === 0) && globalState.savedContextSnapshots && globalState.savedContextSnapshots.length > 0) {
+            fgSerialized.executionContexts = globalState.savedContextSnapshots;
+        }
         fgSerialized.editorData = (flowGraph as any)._editorData;
         if (globalState.snippetId) {
             fgSerialized.sceneSnippetId = globalState.snippetId;

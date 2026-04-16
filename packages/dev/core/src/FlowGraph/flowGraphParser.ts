@@ -281,6 +281,17 @@ export function ParseFlowGraphBlockWithClassType(
         const dataInput = obj.getDataInput(serializationObject.dataInputs[i].name);
         if (dataInput) {
             dataInput.deserialize(serializationObject.dataInputs[i]);
+            // Restore _defaultValue if it was serialized.  Without this, the
+            // user-set inline value (e.g. "2" on an Add input, or "position"
+            // on a GetProperty's propertyName) is lost during round-trips.
+            if (serializationObject.dataInputs[i].defaultValue !== undefined) {
+                (dataInput as any)._defaultValue = valueParseFunction(
+                    "defaultValue",
+                    serializationObject.dataInputs[i],
+                    parseOptions.assetsContainer || parseOptions.scene,
+                    parseOptions.scene
+                );
+            }
         } else {
             throw new Error("Could not find data input with name " + serializationObject.dataInputs[i].name + " in block " + serializationObject.className);
         }

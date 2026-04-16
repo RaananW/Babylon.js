@@ -125,6 +125,11 @@ export interface ISerializedFlowGraphConnection {
      * The id of the connection that this is connected to
      */
     connectedPointIds: string[];
+    /**
+     * The serialized default value of a data connection (set by the user for
+     * unconnected inputs).  Only present on data connections.
+     */
+    defaultValue?: any;
 }
 
 /**
