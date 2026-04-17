@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { type Engine, NullEngine } from "core/Engines";
 import { type FlowGraph, type FlowGraphContext, FlowGraphCoordinator, FlowGraphGetVariableBlock } from "core/FlowGraph";
 import { FlowGraphSetVariableBlock } from "core/FlowGraph/Blocks/Execution/flowGraphSetVariableBlock";
 import { Scene } from "core/scene";
-import { GatherVariables, GatherVariableNames, RenameVariable, DeleteVariable, FormatVariableValue, FilterSuggestions, type IVariableEntry } from "flow-graph-editor/variableUtils";
+import { GatherVariables, GatherVariableNames, RenameVariable, DeleteVariable, FormatVariableValue, FilterSuggestions } from "flow-graph-editor/variableUtils";
 import { CONSTRUCTOR_CONFIG } from "flow-graph-editor/graphSystem/properties/constructorConfigRegistry";
 
 describe("Flow Graph Variable Utils", () => {

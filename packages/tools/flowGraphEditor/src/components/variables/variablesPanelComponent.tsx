@@ -163,7 +163,7 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
     }
 
     /**
-     * Add a new variable by creating a GetVariable block with a default name.
+     * Add a new variable with a default name and register it on context 0.
      */
     private _addVariable() {
         // Find a unique name
@@ -174,7 +174,6 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             name = `newVariable${idx++}`;
         }
 
-        // Add a SetVariable block referencing this name so the variable is registered
         const fg = this.props.globalState.flowGraph;
         if (!fg) {
             return;
