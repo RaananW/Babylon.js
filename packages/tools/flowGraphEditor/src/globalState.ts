@@ -885,16 +885,15 @@ export class GlobalState {
             // connection values, and names for ALL contexts (not just the first).
             if (this._savedContextRuntimeData && this._savedContextRuntimeData.length > 0) {
                 const ctxIndex = flowGraph.contextCount - 1;
-                const runtimeData = this._savedContextRuntimeData[ctxIndex] ?? this._savedContextRuntimeData[0];
+                // Only restore from the exact matching index — do not fall back
+                // to snapshot[0] to avoid silently restoring the wrong data
+                // when contexts are removed or reordered.
+                const runtimeData = this._savedContextRuntimeData[ctxIndex];
                 if (runtimeData) {
                     for (const key in runtimeData.userVariables) {
                         ctx.setVariable(key, runtimeData.userVariables[key]);
                     }
-                    // For variables whose runtime value is undefined/null (e.g. Mesh
-                    // references that couldn't be resolved against the host scene during
-                    // parsing), fall back to the serialized descriptor object so that
-                    // _rebindContextUserVariables can resolve them against the preview scene.
-                    const serializedSnapshot = this._savedContextSnapshots?.[ctxIndex] ?? this._savedContextSnapshots?.[0];
+                    const serializedSnapshot = this._savedContextSnapshots?.[ctxIndex];
                     if (serializedSnapshot?._userVariables) {
                         for (const key in serializedSnapshot._userVariables) {
                             const serializedVal = serializedSnapshot._userVariables[key];

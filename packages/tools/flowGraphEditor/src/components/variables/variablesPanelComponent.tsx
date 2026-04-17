@@ -343,6 +343,9 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
 
     // --- Scene object helpers ---
 
+    /** Cache: sceneUid → typeName → { lengths, options } */
+    private _sceneObjectCache = new Map<string, Map<string, { lengths: number[]; options: { name: string; uniqueId: number }[] }>>();
+
     private _getSceneObjectsForType(typeName: VariableTypeName): { name: string; uniqueId: number }[] {
         const fg = this.props.globalState.flowGraph;
         if (!fg) {
@@ -353,19 +356,54 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             return [];
         }
         const scene = ctx.getScene();
+        const sceneUid = scene.uid ?? "0";
+
+        // Get or create per-scene cache
+        let typeCache = this._sceneObjectCache.get(sceneUid);
+        if (!typeCache) {
+            typeCache = new Map();
+            this._sceneObjectCache.set(sceneUid, typeCache);
+        }
+
+        // Determine source collections and current lengths for cache invalidation
+        const sources = this._getSceneCollections(scene, typeName);
+        const currentLengths = sources.map((s) => s.length);
+        const cached = typeCache.get(typeName);
+        if (cached && cached.lengths.length === currentLengths.length && cached.lengths.every((len, i) => len === currentLengths[i])) {
+            return cached.options;
+        }
+
+        // Rebuild
+        let options: { name: string; uniqueId: number }[];
+        if (typeName === "TransformNode") {
+            options = [...scene.transformNodes, ...scene.meshes].map((n) => ({ name: n.name, uniqueId: n.uniqueId }));
+        } else if (sources.length > 0) {
+            options = sources[0].map((item) => ({ name: item.name, uniqueId: item.uniqueId }));
+        } else {
+            options = [];
+        }
+
+        typeCache.set(typeName, { lengths: currentLengths, options });
+        return options;
+    }
+
+    private _getSceneCollections(
+        scene: { meshes: any[]; transformNodes: any[]; cameras: any[]; lights: any[]; materials: any[]; animationGroups: any[] },
+        typeName: VariableTypeName
+    ): any[][] {
         switch (typeName) {
             case "Mesh":
-                return scene.meshes.map((m) => ({ name: m.name, uniqueId: m.uniqueId }));
+                return [scene.meshes];
             case "TransformNode":
-                return [...scene.transformNodes, ...scene.meshes].map((n) => ({ name: n.name, uniqueId: n.uniqueId }));
+                return [scene.transformNodes, scene.meshes];
             case "Camera":
-                return scene.cameras.map((c) => ({ name: c.name, uniqueId: c.uniqueId }));
+                return [scene.cameras];
             case "Light":
-                return scene.lights.map((l) => ({ name: l.name, uniqueId: l.uniqueId }));
+                return [scene.lights];
             case "Material":
-                return scene.materials.map((m) => ({ name: m.name, uniqueId: m.uniqueId }));
+                return [scene.materials];
             case "AnimationGroup":
-                return scene.animationGroups.map((ag) => ({ name: ag.name, uniqueId: ag.uniqueId }));
+                return [scene.animationGroups];
             default:
                 return [];
         }
