@@ -27,11 +27,11 @@ interface IAutoCompleteInputState {
  * A text input with autocomplete suggestions dropdown.
  * Users can type freely or pick from a filtered list of existing values.
  */
-let _uniqueIdSeed = 0;
+let _UniqueIdSeed = 0;
 
 export class AutoCompleteInputComponent extends React.Component<IAutoCompleteInputProps, IAutoCompleteInputState> {
     private _inputRef = React.createRef<HTMLInputElement>();
-    private readonly _uniqueId = _uniqueIdSeed++;
+    private readonly _uniqueId = _UniqueIdSeed++;
 
     constructor(props: IAutoCompleteInputProps) {
         super(props);
