@@ -51,10 +51,13 @@ export class AutoCompleteInputComponent extends React.Component<IAutoCompleteInp
 
     private _commit(value: string) {
         const trimmed = value.trim();
-        this.setState({ text: trimmed, showSuggestions: false, highlightIndex: -1 });
+        this.setState({ showSuggestions: false, highlightIndex: -1 });
         if (trimmed !== this.props.value) {
             this.props.onChange(trimmed);
         }
+        // Always reset the text to the prop value so the input clears after
+        // an action (e.g. adding a variable) when props.value stays constant.
+        this.setState({ text: this.props.value });
     }
 
     private _onKeyDown = (e: React.KeyboardEvent) => {
@@ -85,17 +88,27 @@ export class AutoCompleteInputComponent extends React.Component<IAutoCompleteInp
 
     override render() {
         const { label } = this.props;
-        const { text, showSuggestions } = this.state;
+        const { text, showSuggestions, highlightIndex } = this.state;
         const suggestions = showSuggestions ? this._getFilteredSuggestions() : [];
+        const listboxId = `fge-autocomplete-listbox-${label.replace(/\s+/g, "-")}`;
+        const activeDescendant = highlightIndex >= 0 ? `${listboxId}-option-${highlightIndex}` : undefined;
 
         return (
             <div className="fge-autocomplete" style={{ position: "relative" }}>
                 <div className="fge-autocomplete-row">
-                    <span className="fge-autocomplete-label">{label}</span>
+                    <label className="fge-autocomplete-label" id={`${listboxId}-label`}>
+                        {label}
+                    </label>
                     <input
                         ref={this._inputRef}
                         className="fge-autocomplete-input"
                         value={text}
+                        role="combobox"
+                        aria-autocomplete="list"
+                        aria-expanded={suggestions.length > 0}
+                        aria-controls={listboxId}
+                        aria-activedescendant={activeDescendant}
+                        aria-labelledby={`${listboxId}-label`}
                         onChange={(e) => this.setState({ text: e.target.value, showSuggestions: true, highlightIndex: -1 })}
                         onFocus={() => {
                             if (this.props.lockObject) {
@@ -117,11 +130,14 @@ export class AutoCompleteInputComponent extends React.Component<IAutoCompleteInp
                     />
                 </div>
                 {suggestions.length > 0 && (
-                    <div className="fge-autocomplete-dropdown">
+                    <div className="fge-autocomplete-dropdown" role="listbox" id={listboxId}>
                         {suggestions.map((s, i) => (
                             <div
                                 key={s}
-                                className={`fge-autocomplete-option${i === this.state.highlightIndex ? " fge-autocomplete-option-active" : ""}`}
+                                id={`${listboxId}-option-${i}`}
+                                role="option"
+                                aria-selected={i === highlightIndex}
+                                className={`fge-autocomplete-option${i === highlightIndex ? " fge-autocomplete-option-active" : ""}`}
                                 onMouseDown={(e) => {
                                     e.preventDefault();
                                     this._commit(s);
