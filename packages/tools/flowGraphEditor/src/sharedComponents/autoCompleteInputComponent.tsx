@@ -27,8 +27,11 @@ interface IAutoCompleteInputState {
  * A text input with autocomplete suggestions dropdown.
  * Users can type freely or pick from a filtered list of existing values.
  */
+let _uniqueIdSeed = 0;
+
 export class AutoCompleteInputComponent extends React.Component<IAutoCompleteInputProps, IAutoCompleteInputState> {
     private _inputRef = React.createRef<HTMLInputElement>();
+    private readonly _uniqueId = _uniqueIdSeed++;
 
     constructor(props: IAutoCompleteInputProps) {
         super(props);
@@ -51,13 +54,12 @@ export class AutoCompleteInputComponent extends React.Component<IAutoCompleteInp
 
     private _commit(value: string) {
         const trimmed = value.trim();
-        this.setState({ showSuggestions: false, highlightIndex: -1 });
         if (trimmed !== this.props.value) {
             this.props.onChange(trimmed);
         }
-        // Always reset the text to the prop value so the input clears after
-        // an action (e.g. adding a variable) when props.value stays constant.
-        this.setState({ text: this.props.value });
+        // Reset the text to the prop value so the input clears after an
+        // action (e.g. adding a variable) when props.value stays constant.
+        this.setState({ showSuggestions: false, highlightIndex: -1, text: this.props.value });
     }
 
     private _onKeyDown = (e: React.KeyboardEvent) => {
@@ -90,23 +92,25 @@ export class AutoCompleteInputComponent extends React.Component<IAutoCompleteInp
         const { label } = this.props;
         const { text, showSuggestions, highlightIndex } = this.state;
         const suggestions = showSuggestions ? this._getFilteredSuggestions() : [];
-        const listboxId = `fge-autocomplete-listbox-${label.replace(/\s+/g, "-")}`;
+        const listboxId = `fge-autocomplete-listbox-${this._uniqueId}`;
+        const inputId = `fge-autocomplete-input-${this._uniqueId}`;
         const activeDescendant = highlightIndex >= 0 ? `${listboxId}-option-${highlightIndex}` : undefined;
 
         return (
             <div className="fge-autocomplete" style={{ position: "relative" }}>
                 <div className="fge-autocomplete-row">
-                    <label className="fge-autocomplete-label" id={`${listboxId}-label`}>
+                    <label className="fge-autocomplete-label" id={`${listboxId}-label`} htmlFor={inputId}>
                         {label}
                     </label>
                     <input
                         ref={this._inputRef}
+                        id={inputId}
                         className="fge-autocomplete-input"
                         value={text}
                         role="combobox"
                         aria-autocomplete="list"
                         aria-expanded={suggestions.length > 0}
-                        aria-controls={listboxId}
+                        aria-controls={suggestions.length > 0 ? listboxId : undefined}
                         aria-activedescendant={activeDescendant}
                         aria-labelledby={`${listboxId}-label`}
                         onChange={(e) => this.setState({ text: e.target.value, showSuggestions: true, highlightIndex: -1 })}
