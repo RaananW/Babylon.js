@@ -289,7 +289,7 @@ export class GraphControlsComponent extends React.Component<IGraphControlsProps,
                     className="fge-context-dropdown"
                     value={selectedContextIndex}
                     onChange={(e) => {
-                        this.props.globalState.selectedContextIndex = parseInt(e.target.value);
+                        this.props.globalState.selectedContextIndex = parseInt(e.target.value, 10);
                     }}
                 >
                     {contextList.map((ctx) => (

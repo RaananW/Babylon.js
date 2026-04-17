@@ -1251,7 +1251,8 @@ export class GlobalState {
     }
 
     /**
-     * Snapshot all user variables from the first execution context of a flow graph.
+     * Snapshot user variables and connection values from the selected execution context of a flow graph,
+     * falling back to the first execution context when the selected one is unavailable.
      * Also serializes ALL execution contexts so they survive stop()/setScene().
      * Called just before stop/setScene clears contexts so variables can be restored later.
      * @param graph - the flow graph to snapshot from (defaults to current graph)
@@ -1293,7 +1294,7 @@ export class GlobalState {
                 this._savedContextRuntimeData.push({
                     userVariables: { ...context.userVariables },
                     connectionValues: { ...(context as any)._connectionValues },
-                    variableTypes: { ...(context as any)._variableTypes },
+                    variableTypes: { ...context.variableTypes },
                     name: context.name,
                     uniqueId: context.uniqueId,
                 });

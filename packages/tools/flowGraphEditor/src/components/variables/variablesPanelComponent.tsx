@@ -76,6 +76,7 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             this._refreshVariables();
         });
         this._contextChangedObserver = this.props.globalState.onSelectedContextChanged.add(() => {
+            this._refreshVariables();
             this._pollRuntimeValues();
         });
         this._subscribeToFlowGraph();
@@ -188,6 +189,19 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         }
 
         RenameVariable(fg, oldName, newName);
+
+        // Migrate variable type annotations across all contexts
+        for (let i = 0; i < fg.contextCount; i++) {
+            const ctx = fg.getContext(i);
+            if (ctx) {
+                const oldType = ctx.getVariableType(oldName);
+                if (oldType) {
+                    ctx.setVariableType(newName, oldType);
+                    delete ctx.variableTypes[oldName];
+                }
+            }
+        }
+
         this.props.globalState.stateManager.onRebuildRequiredObservable.notifyObservers();
         this._refreshVariables();
     }
@@ -199,6 +213,15 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         }
 
         DeleteVariable(fg, name);
+
+        // Remove stored type annotations so deleted variables don't reappear after reload
+        for (let i = 0; i < fg.contextCount; i++) {
+            const ctx = fg.getContext(i);
+            if (ctx) {
+                delete ctx.variableTypes[name];
+            }
+        }
+
         this.props.globalState.stateManager.onRebuildRequiredObservable.notifyObservers();
         this._refreshVariables();
     }
