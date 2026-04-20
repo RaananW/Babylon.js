@@ -15,8 +15,7 @@ import { DumpDataAsync } from "../Misc/dumpTools";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
 import { type RenderTargetWrapper } from "../Engines/renderTargetWrapper";
-import { type Engine } from "core/Engines/engine";
-import { type WebGPUEngine } from "core/Engines/webgpuEngine";
+import { type Engine, type WebGPUEngine } from "core/Engines";
 
 import "../Materials/Textures/baseTexture.polynomial";
 import { GetBlobBufferSource } from "../Buffers/bufferUtils";

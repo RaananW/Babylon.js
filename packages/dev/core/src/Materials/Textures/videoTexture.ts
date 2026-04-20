@@ -6,7 +6,7 @@ import { type Scene } from "../../scene";
 import { Texture } from "../../Materials/Textures/texture";
 import { Constants } from "../../Engines/constants";
 import { type ExternalTexture } from "./externalTexture";
-import { type WebGPUEngine } from "core/Engines/webgpuEngine";
+import { type WebGPUEngine } from "core/Engines";
 
 import "../../Engines/Extensions/engine.videoTexture";
 import "../../Engines/Extensions/engine.dynamicTexture";

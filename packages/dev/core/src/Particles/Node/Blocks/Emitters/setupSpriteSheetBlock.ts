@@ -4,7 +4,7 @@ import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleB
 import { NodeParticleBlock } from "../../nodeParticleBlock";
 import { type NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint";
 import { type NodeParticleBuildState } from "../../nodeParticleBuildState";
-import { type ParticleSystem } from "core/Particles/particleSystem";
+import { type ParticleSystem } from "core/Particles";
 /**
  * Block used as configure the sprite sheet for particles
  */

@@ -15,7 +15,7 @@ import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { FlowGraphBinaryOperationBlock } from "../flowGraphBinaryOperationBlock";
 import { FlowGraphUnaryOperationBlock } from "../flowGraphUnaryOperationBlock";
 import { Quaternion, Vector3, Vector4, type Matrix, type Vector2 } from "core/Maths/math.vector";
-import { type FlowGraphMatrix2D, type FlowGraphMatrix3D } from "core/FlowGraph/CustomTypes/flowGraphMatrix";
+import { type FlowGraphMatrix2D, type FlowGraphMatrix3D } from "core/FlowGraph/CustomTypes";
 import { type FlowGraphMatrix, type FlowGraphVector, _GetClassNameOf } from "core/FlowGraph/utils";
 import { type FlowGraphDataConnection } from "../../../flowGraphDataConnection";
 import { type FlowGraphContext } from "../../../flowGraphContext";

@@ -6,7 +6,7 @@ import { type NodeParticleConnectionPoint } from "../../nodeParticleBlockConnect
 import { type NodeParticleBuildState } from "../../nodeParticleBuildState";
 import { type Particle } from "core/Particles/particle";
 import { _ConnectAtTheEnd } from "core/Particles/Queue/executionQueue";
-import { type Color4 } from "core/Maths/math.color";
+import { type Color4 } from "core/Maths";
 
 /**
  * Block used to update the color of a particle

@@ -1,4 +1,4 @@
-import { type IAnimationKey } from "core/Animations/animationKey";
+import { type IAnimationKey } from "core/Animations";
 import { Animation } from "core/Animations/animation";
 import { Bone } from "core/Bones/bone";
 import { Skeleton } from "core/Bones/skeleton";

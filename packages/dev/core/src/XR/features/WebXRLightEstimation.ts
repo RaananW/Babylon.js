@@ -14,7 +14,7 @@ import { BaseTexture } from "../../Materials/Textures/baseTexture";
 import { SphericalHarmonics, SphericalPolynomial } from "../../Maths/sphericalPolynomial";
 import { LightConstants } from "../../Lights/lightConstants";
 import { HDRFiltering } from "core/Materials/Textures/Filtering/hdrFiltering";
-import { type ThinEngine } from "core/Engines/thinEngine";
+import { type ThinEngine } from "core/Engines";
 
 /**
  * Options for Light Estimation feature
