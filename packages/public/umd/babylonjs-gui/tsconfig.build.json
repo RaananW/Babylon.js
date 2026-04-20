@@ -8,9 +8,9 @@
         "declaration": false,
         "importHelpers": true,
         "paths": {
-            "core/*": ["dev/core/dist/*"],
-            "gui/*": ["dev/gui/src/*"],
-            "@lts/gui/*": ["lts/gui/src/*"]
+            "core/*": ["../../../dev/core/dist/*"],
+            "gui/*": ["../../../dev/gui/src/*"],
+            "@lts/gui/*": ["../../../lts/gui/src/*"]
         }
     },
     "include": ["./src/**/*", "../../../dev/gui/src/**/*", "../../../lts/gui/src/**/*"]

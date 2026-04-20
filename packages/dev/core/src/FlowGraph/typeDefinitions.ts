@@ -1,6 +1,6 @@
-import type { IAnimatable } from "core/Animations/animatable.interface";
-import type { Animation } from "core/Animations/animation";
-import type { FlowGraphConnectionType } from "./flowGraphConnection";
+import { type IAnimatable } from "core/Animations/animatable.interface";
+import { type Animation } from "core/Animations/animation";
+import { type FlowGraphConnectionType } from "./flowGraphConnection";
 
 /**
  * Interpolation generator
@@ -77,9 +77,18 @@ export interface ISerializedFlowGraphContext {
      */
     uniqueId: string;
     /**
+     * An optional user-facing name for the context
+     */
+    name?: string;
+    /**
      * User variables
      */
     _userVariables: { [key: string]: any };
+    /**
+     * Optional type annotations for user variables.
+     * Keys are variable names; values are type name strings.
+     */
+    _variableTypes?: { [key: string]: string };
     /**
      * Values of the connection points
      */
@@ -116,6 +125,11 @@ export interface ISerializedFlowGraphConnection {
      * The id of the connection that this is connected to
      */
     connectedPointIds: string[];
+    /**
+     * The serialized default value of a data connection (set by the user for
+     * unconnected inputs).  Only present on data connections.
+     */
+    defaultValue?: any;
 }
 
 /**

@@ -1,8 +1,6 @@
-import type { ComponentProps, ComponentType } from "react";
+import { type ComponentProps, type ComponentType, forwardRef, useMemo } from "react";
 
-import { forwardRef, useMemo } from "react";
-
-import { ErrorBoundary } from "../errorBoundary";
+import { ErrorBoundary } from "shared-ui-components/modularTool/components/errorBoundary";
 import { usePropertyChangedNotifier } from "../../contexts/propertyContext";
 import { MakePropertyHook, useProperty } from "../../hooks/compoundPropertyHooks";
 import { GetPropertyDescriptor } from "../../instrumentation/propertyInstrumentation";

@@ -1,21 +1,20 @@
 import * as React from "react";
 import { GraphNode } from "./graphNode";
 import * as dagre from "dagre";
-import type { Nullable } from "core/types";
+import { type Nullable } from "core/types";
 import { NodeLink } from "./nodeLink";
 import { NodePort } from "./nodePort";
 import { Vector2 } from "core/Maths/math.vector";
 import { DataStorage } from "core/Misc/dataStorage";
 import { GraphFrame } from "./graphFrame";
 import { GraphStickyNote } from "./graphStickyNote";
-import type { IEditorData, IFrameData } from "./interfaces/nodeLocationInfo";
+import { type IEditorData, type IFrameData } from "./interfaces/nodeLocationInfo";
 import { FrameNodePort } from "./frameNodePort";
-import type { StateManager } from "./stateManager";
-import type { FramePortData } from "./types/framePortData";
-import type { INodeData } from "./interfaces/nodeData";
-import type { IPortData } from "./interfaces/portData";
-import { PortDataDirection } from "./interfaces/portData";
-import type { INodeContainer } from "./interfaces/nodeContainer";
+import { type StateManager } from "./stateManager";
+import { type FramePortData } from "./types/framePortData";
+import { type INodeData } from "./interfaces/nodeData";
+import { type IPortData, PortDataDirection } from "./interfaces/portData";
+import { type INodeContainer } from "./interfaces/nodeContainer";
 import * as styles from "./graphCanvas.module.scss";
 import * as commonStyles from "./common.module.scss";
 
@@ -954,10 +953,11 @@ export class GraphCanvasComponent extends React.Component<IGraphCanvasComponentP
 
                 output.endpoints!.forEach((endpoint) => {
                     const sourceFrames = this._frames.filter((f) => f.nodes.indexOf(node) !== -1);
+                    const targetNode = this._nodes.find((n) => n.content.data === endpoint.ownerData);
                     const targetFrames = this._frames.filter((f) => f.nodes.some((n) => n.content.data === endpoint.ownerData));
 
                     const sourceId = sourceFrames.length > 0 ? sourceFrames[0].id : node.id;
-                    const targetId = targetFrames.length > 0 ? targetFrames[0].id : endpoint.ownerData.uniqueId;
+                    const targetId = targetFrames.length > 0 ? targetFrames[0].id : targetNode ? targetNode.id : endpoint.ownerData.uniqueId;
 
                     graph.setEdge(sourceId.toString(), targetId.toString());
                 });

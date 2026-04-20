@@ -8,8 +8,8 @@
         "declaration": false,
         "importHelpers": true,
         "paths": {
-            "core/*": ["dev/core/dist/*"],
-            "addons/*": ["dev/addons/src/*"]
+            "core/*": ["../../../dev/core/dist/*"],
+            "addons/*": ["../../../dev/addons/src/*"]
         }
     },
     "include": ["./src/**/*", "../../../dev/addons/src/**/*"]

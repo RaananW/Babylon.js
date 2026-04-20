@@ -141,7 +141,7 @@ export function nativeOverride<This, Args extends any[], Return>(
 /**
  * Decorator factory that applies the nativeOverride decorator, but determines whether to redirect to the native implementation based on a filter function that evaluates the function arguments.
  * @param predicate
- * @example @nativeOverride.filter((...[arg1]: Parameters<typeof someClass.someMethod>) => arg1.length > 20)
+ * @example @nativeOverride.filter((arg1: string) => arg1.length > 20)
  *          public someMethod(arg1: string, arg2: number): string {
  * @internal
  */

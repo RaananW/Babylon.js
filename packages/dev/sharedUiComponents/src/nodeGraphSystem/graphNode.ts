@@ -1,17 +1,17 @@
-import type { Nullable } from "core/types";
-import type { Observer } from "core/Misc/observable";
-import type { GraphCanvasComponent } from "./graphCanvas";
+import { type Nullable } from "core/types";
+import { type Observer } from "core/Misc/observable";
+import { type GraphCanvasComponent } from "./graphCanvas";
 import * as React from "react";
 import { NodePort } from "./nodePort";
-import type { GraphFrame } from "./graphFrame";
-import type { NodeLink } from "./nodeLink";
-import type { StateManager } from "./stateManager";
-import type { ISelectionChangedOptions } from "./interfaces/selectionChangedOptions";
-import type { IDisplayManager } from "./interfaces/displayManager";
+import { type GraphFrame } from "./graphFrame";
+import { type NodeLink } from "./nodeLink";
+import { type StateManager } from "./stateManager";
+import { type ISelectionChangedOptions } from "./interfaces/selectionChangedOptions";
+import { type IDisplayManager } from "./interfaces/displayManager";
 import { PropertyLedger } from "./propertyLedger";
 import { DisplayLedger } from "./displayLedger";
-import type { INodeData } from "./interfaces/nodeData";
-import type { IPortData } from "./interfaces/portData";
+import { type INodeData } from "./interfaces/nodeData";
+import { type IPortData } from "./interfaces/portData";
 import * as localStyles from "./graphNode.module.scss";
 import * as commonStyles from "./common.module.scss";
 import type { IEditablePropertyListOption, IEditablePropertyOption, IPropertyDescriptionForEdition } from "core/Decorators/nodeDecorator";
@@ -62,6 +62,11 @@ export class GraphNode {
     private _lastClick = 0.0;
 
     public _visualPropertiesRefresh: Array<() => void> = [];
+
+    /** Direct access to the execution time label element for lightweight updates */
+    public get executionTimeElement(): HTMLDivElement {
+        return this._executionTime;
+    }
 
     public addClassToVisual(className: string) {
         this._visual.classList.add(className);
@@ -705,7 +710,7 @@ export class GraphNode {
             control = PropertyLedger.DefaultControl;
         }
 
-        return React.createElement(control, { stateManager: this._stateManager, nodeData: this.content });
+        return React.createElement(control, { key: this.content.uniqueId, stateManager: this._stateManager, nodeData: this.content });
     }
 
     public _forceRebuild(source: any, propertyName: string, notifiers?: IEditablePropertyOption["notifiers"]) {

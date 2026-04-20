@@ -1,13 +1,12 @@
-import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
-import type { FlowGraphSignalConnection } from "core/FlowGraph/flowGraphSignalConnection";
+import { type FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
+import { type FlowGraphSignalConnection } from "core/FlowGraph/flowGraphSignalConnection";
 import { FlowGraphConnectionType } from "core/FlowGraph/flowGraphConnection";
 import { FlowGraphTypes } from "core/FlowGraph/flowGraphRichTypes";
 import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger";
-import type { Nullable } from "core/types";
-import type { INodeContainer } from "shared-ui-components/nodeGraphSystem/interfaces/nodeContainer";
-import type { IPortData, IPortDirectValueDefinition } from "shared-ui-components/nodeGraphSystem/interfaces/portData";
-import { PortDataDirection, PortDirectValueTypes } from "shared-ui-components/nodeGraphSystem/interfaces/portData";
-import type { GraphNode } from "shared-ui-components/nodeGraphSystem/graphNode";
+import { type Nullable } from "core/types";
+import { type INodeContainer } from "shared-ui-components/nodeGraphSystem/interfaces/nodeContainer";
+import { type IPortData, type IPortDirectValueDefinition, PortDataDirection, PortDirectValueTypes } from "shared-ui-components/nodeGraphSystem/interfaces/portData";
+import { type GraphNode } from "shared-ui-components/nodeGraphSystem/graphNode";
 
 export type FlowGraphConnectionPoint = FlowGraphDataConnection<any> | FlowGraphSignalConnection;
 
@@ -134,6 +133,20 @@ export class ConnectionPointPortData implements IPortData {
     /** Whether this port is inactive */
     public get isInactive() {
         return false;
+    }
+
+    /**
+     * Gets a rich tooltip string describing the port name, type, and direction.
+     * Used for hover tooltips on ports in the graph canvas.
+     */
+    public get tooltip(): string {
+        const direction = this.direction === PortDataDirection.Input ? "Input" : "Output";
+        if (this.connectionKind === "signal") {
+            return `${this.data.name} (Signal ${direction})`;
+        }
+        const dataConn = this.data as FlowGraphDataConnection<any>;
+        const typeName = dataConn.richType?.typeName ?? "Unknown";
+        return `${this.data.name} (${typeName} ${direction})`;
     }
 
     /** Gets the first connected port */

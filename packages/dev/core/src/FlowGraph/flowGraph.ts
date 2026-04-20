@@ -1,23 +1,20 @@
-import type { Observer } from "../Misc/observable";
-import { Observable } from "../Misc/observable";
-import type { Nullable } from "../types";
-import type { Scene } from "../scene";
-import type { FlowGraphEventBlock } from "./flowGraphEventBlock";
+import { type Observer, Observable } from "../Misc/observable";
+import { type Nullable } from "../types";
+import { type Scene } from "../scene";
+import { type FlowGraphEventBlock } from "./flowGraphEventBlock";
 import { FlowGraphContext } from "./flowGraphContext";
-import type { FlowGraphBlock } from "./flowGraphBlock";
+import { type FlowGraphBlock } from "./flowGraphBlock";
 import { FlowGraphExecutionBlock } from "./flowGraphExecutionBlock";
 import { FlowGraphAsyncExecutionBlock } from "./flowGraphAsyncExecutionBlock";
-import type { FlowGraphCoordinator } from "./flowGraphCoordinator";
-import type { IObjectAccessor } from "./typeDefinitions";
-import type { IPathToObjectConverter } from "../ObjectModel/objectModelInterfaces";
-import type { IAssetContainer } from "core/IAssetContainer";
+import { type FlowGraphCoordinator } from "./flowGraphCoordinator";
+import { type IObjectAccessor } from "./typeDefinitions";
+import { type IPathToObjectConverter } from "../ObjectModel/objectModelInterfaces";
+import { type IAssetContainer } from "core/IAssetContainer";
 import { FlowGraphEventType } from "./flowGraphEventType";
-import type { IFlowGraphEventTrigger } from "./flowGraphSceneEventCoordinator";
-import { FlowGraphSceneEventCoordinator } from "./flowGraphSceneEventCoordinator";
-import type { FlowGraphMeshPickEventBlock } from "./Blocks/Event/flowGraphMeshPickEventBlock";
+import { type IFlowGraphEventTrigger, FlowGraphSceneEventCoordinator } from "./flowGraphSceneEventCoordinator";
+import { type FlowGraphMeshPickEventBlock } from "./Blocks/Event/flowGraphMeshPickEventBlock";
 import { _IsDescendantOf } from "./utils";
-import type { IFlowGraphValidationResult } from "./flowGraphValidator";
-import { ValidateFlowGraphWithBlockList } from "./flowGraphValidator";
+import { type IFlowGraphValidationResult, ValidateFlowGraphWithBlockList } from "./flowGraphValidator";
 
 export const enum FlowGraphState {
     /**
@@ -208,6 +205,12 @@ export class FlowGraph {
         // Tear down old event coordinator
         this._detachEventObserver();
         this._sceneEventCoordinator.dispose();
+        // Clear execution contexts so start() creates fresh ones with the new scene.
+        // NOTE: This intentionally discards user variables and connection values.
+        // Callers that need to preserve them (e.g. the Flow Graph Editor) should
+        // snapshot context state BEFORE calling setScene() and restore it in a
+        // wrapped createContext() callback after start() re-creates contexts.
+        this._executionContexts.length = 0;
         // Rebuild with the new scene
         (this as { _scene: Scene })._scene = scene;
         this._scene.constantlyUpdateMeshUnderPointer = true; // ensure pointer info is always up to date for event blocks that need it
@@ -237,6 +240,28 @@ export class FlowGraph {
      */
     public getContext(index: number) {
         return this._executionContexts[index];
+    }
+
+    /**
+     * Returns the number of execution contexts currently attached to this graph.
+     */
+    public get contextCount(): number {
+        return this._executionContexts.length;
+    }
+
+    /**
+     * Remove an execution context by index. Any pending async blocks on
+     * the context are cleared before removal.
+     * @param index the index of the context to remove
+     * @returns the removed context, or undefined if the index was out of range
+     */
+    public removeContext(index: number): FlowGraphContext | undefined {
+        if (index < 0 || index >= this._executionContexts.length) {
+            return undefined;
+        }
+        const [removed] = this._executionContexts.splice(index, 1);
+        removed._clearPendingBlocks();
+        return removed;
     }
 
     /**

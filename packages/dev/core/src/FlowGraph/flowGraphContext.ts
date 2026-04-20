@@ -1,21 +1,20 @@
 import { serialize } from "../Misc/decorators";
 import { RandomGUID } from "../Misc/guid";
-import type { Scene } from "../scene";
-import type { FlowGraphAsyncExecutionBlock } from "./flowGraphAsyncExecutionBlock";
-import type { FlowGraphBlock } from "./flowGraphBlock";
-import type { FlowGraphDataConnection } from "./flowGraphDataConnection";
-import type { FlowGraph } from "./flowGraph";
+import { type Scene } from "../scene";
+import { type FlowGraphAsyncExecutionBlock } from "./flowGraphAsyncExecutionBlock";
+import { type FlowGraphBlock } from "./flowGraphBlock";
+import { type FlowGraphDataConnection } from "./flowGraphDataConnection";
+import { type FlowGraph } from "./flowGraph";
 import { defaultValueSerializationFunction } from "./serialization";
-import type { FlowGraphCoordinator } from "./flowGraphCoordinator";
+import { type FlowGraphCoordinator } from "./flowGraphCoordinator";
 import { Observable } from "../Misc/observable";
-import type { AssetType, FlowGraphAssetType } from "./flowGraphAssetsContext";
-import { GetFlowGraphAssetWithType } from "./flowGraphAssetsContext";
-import type { IAssetContainer } from "core/IAssetContainer";
-import type { Nullable } from "core/types";
+import { type AssetType, type FlowGraphAssetType, GetFlowGraphAssetWithType } from "./flowGraphAssetsContext";
+import { type IAssetContainer } from "core/IAssetContainer";
+import { type Nullable } from "core/types";
 import { FlowGraphAction, FlowGraphLogger } from "./flowGraphLogger";
-import type { IFlowGraphOnTickEventPayload } from "./Blocks/Event/flowGraphSceneTickEventBlock";
-import type { FlowGraphExecutionBlock } from "./flowGraphExecutionBlock";
-import type { FlowGraphSignalConnection } from "./flowGraphSignalConnection";
+import { type IFlowGraphOnTickEventPayload } from "./Blocks/Event/flowGraphSceneTickEventBlock";
+import { type FlowGraphExecutionBlock } from "./flowGraphExecutionBlock";
+import { type FlowGraphSignalConnection } from "./flowGraphSignalConnection";
 
 /**
  * Represents a pending signal activation that was paused by a breakpoint.
@@ -79,9 +78,22 @@ export class FlowGraphContext {
     @serialize()
     public uniqueId = RandomGUID();
     /**
+     * An optional user-facing name for the context.
+     * Defaults to an empty string; the editor may assign a label like "Context 0".
+     */
+    @serialize()
+    public name: string = "";
+    /**
      * These are the variables defined by a user.
      */
     private _userVariables: { [key: string]: any } = {};
+    /**
+     * Optional type annotations for user variables.
+     * Keys are variable names; values are type name strings (e.g. "number", "Vector3", "Mesh").
+     * This map is maintained by the editor and persisted through serialization so
+     * that a variable's declared type survives even when its value is undefined.
+     */
+    private _variableTypes: { [key: string]: string } = {};
     /**
      * These are the variables set by the blocks.
      */
@@ -255,6 +267,31 @@ export class FlowGraphContext {
      */
     public get userVariables() {
         return this._userVariables;
+    }
+
+    /**
+     * Set the declared type annotation for a user variable.
+     * @param name - the variable name
+     * @param typeName - the type name string (e.g. "number", "Vector3", "Mesh")
+     */
+    public setVariableType(name: string, typeName: string): void {
+        this._variableTypes[name] = typeName;
+    }
+
+    /**
+     * Get the declared type annotation for a user variable.
+     * @param name - the variable name
+     * @returns the type name string, or undefined if no type was declared
+     */
+    public getVariableType(name: string): string | undefined {
+        return this._variableTypes[name];
+    }
+
+    /**
+     * Gets all variable type annotations.
+     */
+    public get variableTypes(): { [key: string]: string } {
+        return this._variableTypes;
     }
 
     /**
@@ -637,9 +674,14 @@ export class FlowGraphContext {
      */
     public serialize(serializationObject: any = {}, valueSerializationFunction: (key: string, value: any, serializationObject: any) => void = defaultValueSerializationFunction) {
         serializationObject.uniqueId = this.uniqueId;
+        serializationObject.name = this.name;
         serializationObject._userVariables = {};
         for (const key in this._userVariables) {
             valueSerializationFunction(key, this._userVariables[key], serializationObject._userVariables);
+        }
+        // Persist variable type annotations (editor metadata)
+        if (Object.keys(this._variableTypes).length > 0) {
+            serializationObject._variableTypes = { ...this._variableTypes };
         }
         serializationObject._connectionValues = {};
         for (const key in this._connectionValues) {

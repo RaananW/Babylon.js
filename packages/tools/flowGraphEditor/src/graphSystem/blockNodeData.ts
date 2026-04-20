@@ -1,10 +1,10 @@
-import type { INodeContainer } from "shared-ui-components/nodeGraphSystem/interfaces/nodeContainer";
-import type { INodeData } from "shared-ui-components/nodeGraphSystem/interfaces/nodeData";
-import type { IPortData } from "shared-ui-components/nodeGraphSystem/interfaces/portData";
+import { type INodeContainer } from "shared-ui-components/nodeGraphSystem/interfaces/nodeContainer";
+import { type INodeData } from "shared-ui-components/nodeGraphSystem/interfaces/nodeData";
+import { type IPortData } from "shared-ui-components/nodeGraphSystem/interfaces/portData";
 import { ConnectionPointPortData } from "./connectionPointPortData";
 import * as styles from "./blockNodeData.module.scss";
-import type { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
-import type { FlowGraphExecutionBlock } from "core/FlowGraph/flowGraphExecutionBlock";
+import { type FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
+import { type FlowGraphExecutionBlock } from "core/FlowGraph/flowGraphExecutionBlock";
 import { FlowGraphBlockDisplayName } from "./blockDisplayUtils";
 
 /**
@@ -33,9 +33,13 @@ export class BlockNodeData implements INodeData {
      */
     public get name() {
         const raw = this.data.name;
+        const className = this.data.getClassName();
         // Only strip the boilerplate when the user hasn't chosen a custom name yet.
-        if (raw === this.data.getClassName()) {
-            return FlowGraphBlockDisplayName(raw);
+        // Also handle when raw is undefined/falsy (can happen with binary operation
+        // blocks where the base constructor runs getClassName() before the subclass
+        // parameter property is assigned).
+        if (!raw || raw === className) {
+            return FlowGraphBlockDisplayName(className);
         }
         return raw;
     }

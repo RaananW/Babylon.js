@@ -1,8 +1,8 @@
 import { BlockTools } from "../blockTools";
-import type { StateManager } from "shared-ui-components/nodeGraphSystem/stateManager";
-import type { IPortData } from "shared-ui-components/nodeGraphSystem/interfaces/portData";
-import type { ConnectionPointPortData } from "./connectionPointPortData";
-import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
+import { type StateManager } from "shared-ui-components/nodeGraphSystem/stateManager";
+import { type IPortData } from "shared-ui-components/nodeGraphSystem/interfaces/portData";
+import { type ConnectionPointPortData } from "./connectionPointPortData";
+import { type FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
 import { FlowGraphTypes } from "core/FlowGraph/flowGraphRichTypes";
 
 // ── Port icon SVGs (base64, matching the NME/NGE/NPE style) ──────────────
@@ -78,6 +78,11 @@ export const RegisterNodePortDesign = (stateManager: StateManager) => {
 
     stateManager.applyNodePortDesign = (portData: IPortData, element: HTMLElement, imgHost: HTMLImageElement, _pip: HTMLDivElement) => {
         const cpd = portData as ConnectionPointPortData;
+
+        // Apply rich tooltip on the port icon
+        if (cpd.tooltip) {
+            element.title = cpd.tooltip;
+        }
 
         if (cpd.connectionKind === "signal") {
             element.style.background = BlockTools.GetSignalColor();
