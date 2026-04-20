@@ -38,8 +38,7 @@ import {
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { GeometryGraphManager } from "./geometryGraph.js";
-import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
-import type { IDataSnippetResult } from "@tools/snippet-loader";
+import { LoadSnippet, SaveSnippet, type IDataSnippetResult } from "@tools/snippet-loader";
 
 // ─── Singleton graph manager ──────────────────────────────────────────────
 const manager = new GeometryGraphManager();
@@ -802,7 +801,7 @@ server.registerTool(
         },
     },
     async ({ geometryName, snippetId }) => {
-        return RunSnippetResponse({
+        return await RunSnippetResponse({
             snippetId,
             loadSnippet: async (requestedSnippetId: string) => (await LoadSnippet(requestedSnippetId)) as IDataSnippetResult,
             createResponse: (snippetResult: IDataSnippetResult) =>

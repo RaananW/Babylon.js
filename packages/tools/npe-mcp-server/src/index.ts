@@ -36,8 +36,7 @@ import {
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { ParticleGraphManager } from "./particleGraph.js";
-import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
-import type { IDataSnippetResult } from "@tools/snippet-loader";
+import { LoadSnippet, SaveSnippet, type IDataSnippetResult } from "@tools/snippet-loader";
 
 // ─── Singleton graph manager ──────────────────────────────────────────────
 const manager = new ParticleGraphManager();
@@ -931,7 +930,7 @@ server.registerTool(
         },
     },
     async ({ particleSystemName, snippetId }) => {
-        return RunSnippetResponse({
+        return await RunSnippetResponse({
             snippetId,
             loadSnippet: async (requestedSnippetId: string) => (await LoadSnippet(requestedSnippetId)) as IDataSnippetResult,
             createResponse: (snippetResult: IDataSnippetResult) =>

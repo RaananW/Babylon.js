@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useRef, useState, useCallback } from "react";
-import type { GlobalState } from "../../globalState";
+import { type GlobalState } from "../../globalState";
 
 import "../../scss/mcpSession.scss";
 

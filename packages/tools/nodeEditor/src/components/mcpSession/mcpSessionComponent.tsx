@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect, useCallback } from "react";
-import type { GlobalState } from "../../globalState";
+import { type GlobalState } from "../../globalState";
 import { SerializationTools } from "../../serializationTools";
 import { LogEntry } from "../log/logComponent";
 import { LineContainerComponent } from "shared-ui-components/lines/lineContainerComponent";

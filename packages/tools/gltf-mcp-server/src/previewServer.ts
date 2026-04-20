@@ -19,7 +19,7 @@
  */
 
 import * as http from "http";
-import type { GltfManager } from "./gltfManager.js";
+import { type GltfManager } from "./gltfManager.js";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  State

@@ -40,8 +40,7 @@ import {
     ParseJsonText,
     RunSnippetResponse,
 } from "../../mcp-server-core/src/index.js";
-import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
-import type { IDataSnippetResult } from "@tools/snippet-loader";
+import { LoadSnippet, SaveSnippet, type IDataSnippetResult } from "@tools/snippet-loader";
 import { startSessionServer, createSession, notifyMaterialUpdate, getSessionUrl, getSessionForMaterial, closeSessionForMaterial, stopSessionServer } from "./sessionServer.js";
 
 // ─── Singleton graph manager ──────────────────────────────────────────────
@@ -793,7 +792,7 @@ server.registerTool(
         },
     },
     async ({ materialName, snippetId }) => {
-        return RunSnippetResponse({
+        return await RunSnippetResponse({
             snippetId,
             loadSnippet: async (requestedSnippetId: string) => (await LoadSnippet(requestedSnippetId)) as IDataSnippetResult,
             createResponse: (snippetResult: IDataSnippetResult) =>

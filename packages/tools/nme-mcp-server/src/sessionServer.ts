@@ -25,7 +25,7 @@
 
 import * as http from "http";
 import * as crypto from "crypto";
-import type { MaterialGraphManager } from "./materialGraph.js";
+import { type MaterialGraphManager } from "./materialGraph.js";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Session server state

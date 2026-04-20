@@ -4,19 +4,19 @@
  * on named glTF 2.0 documents held entirely in memory.
  */
 
-import type {
-    IGltfDocument,
-    IGltfScene,
-    IGltfNode,
-    IGltfMesh,
-    IGltfMaterial,
-    IGltfTexture,
-    IGltfImage,
-    IGltfSampler,
-    IGltfAnimation,
-    IGltfSkin,
-    IGltfExtensible,
-    GltfExtensionTargetType,
+import {
+    type IGltfDocument,
+    type IGltfScene,
+    type IGltfNode,
+    type IGltfMesh,
+    type IGltfMaterial,
+    type IGltfTexture,
+    type IGltfImage,
+    type IGltfSampler,
+    type IGltfAnimation,
+    type IGltfSkin,
+    type IGltfExtensible,
+    type GltfExtensionTargetType,
 } from "./gltfTypes.js";
 
 import { GetTypeByteLength, GetFloatData, EnumerateFloatValues } from "@dev/core/Buffers/bufferUtils";

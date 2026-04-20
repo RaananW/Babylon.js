@@ -41,8 +41,7 @@ import {
 
 import { ControlRegistry, BaseControlProperties, GetControlCatalogSummary, GetControlTypeDetails } from "./catalog.js";
 import { GuiManager } from "./guiManager.js";
-import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
-import type { IDataSnippetResult } from "@tools/snippet-loader";
+import { LoadSnippet, SaveSnippet, type IDataSnippetResult } from "@tools/snippet-loader";
 
 // ─── Singleton manager ────────────────────────────────────────────────────
 const manager = new GuiManager();
@@ -868,7 +867,7 @@ server.registerTool(
         },
     },
     async ({ guiName, snippetId }) => {
-        return RunSnippetResponse({
+        return await RunSnippetResponse({
             snippetId,
             loadSnippet: async (requestedSnippetId: string) => (await LoadSnippet(requestedSnippetId)) as IDataSnippetResult,
             createResponse: (snippetResult: IDataSnippetResult) =>
