@@ -26,6 +26,7 @@ pr: none
 
 variables:
     - group: BabylonJS-CI-Infrastructure
+    - group: BabylonJS-Deployment
 
 pool:
     vmImage: ubuntu-latest
@@ -39,10 +40,10 @@ jobs:
             fetchDepth: 0
             fetchTags: true
 
-          - task: NodeTool@0
-            displayName: "Use Node 20.x"
+          - task: UseNode@1
+            displayName: "Use Node 22.x"
             inputs:
-                versionSpec: "20.x"
+                versionSpec: "22.x"
 
           - bash: |
                 git config --global user.email "$(BOT_EMAIL)"
