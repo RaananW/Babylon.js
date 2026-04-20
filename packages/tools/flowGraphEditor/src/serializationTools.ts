@@ -7,6 +7,7 @@ import { FlowGraphCoordinator } from "core/FlowGraph/flowGraphCoordinator";
 import { ParseFlowGraphAsync } from "core/FlowGraph/flowGraphParser";
 import { type Scene } from "core/scene";
 import { Logger } from "core/Misc/logger";
+import { type ISerializedFlowGraph } from "core/FlowGraph/typeDefinitions";
 
 /**
  * Provides serialization and deserialization utilities for the flow graph editor.
@@ -65,11 +66,13 @@ export class SerializationTools {
     }
 
     /**
-     * Serialize the flow graph to a JSON string.
-     * @param flowGraph - the flow graph to serialize
+     * Serialize all graphs in the coordinator to a JSON string.
+     * Produces the coordinator-level format: `{ _flowGraphs: [...], activeGraphIndex, ... }`.
+     * Falls back to serializing the single active graph if no coordinator is set.
+     * @param flowGraph - the currently active flow graph (used for single-graph fallback and UpdateLocations)
      * @param globalState - the editor's global state
      * @param frame - optional graph frame to restrict to
-     * @returns a JSON string representing the serialized graph
+     * @returns a JSON string representing the serialized coordinator
      */
     public static Serialize(flowGraph: FlowGraph, globalState: GlobalState, frame?: Nullable<GraphFrame>) {
         this.UpdateLocations(flowGraph, globalState, frame);
@@ -80,35 +83,46 @@ export class SerializationTools {
         // the user clicks Save.
         globalState.snapshotUserVariables();
 
-        const serializationObject: any = {};
-        flowGraph.serialize(serializationObject);
+        const coordinator = globalState.coordinator;
+        const graphs = coordinator ? coordinator.flowGraphs : [flowGraph];
 
-        // When the graph is stopped, _executionContexts is empty so
-        // flowGraph.serialize() produces executionContexts: [].  Inject the
-        // editor's saved context snapshots to preserve user variables,
-        // variable type annotations, and connection values.
-        SerializationTools.InjectSavedContexts(serializationObject, globalState);
+        const coordinatorObject: any = {
+            _flowGraphs: [] as any[],
+            activeGraphIndex: globalState.activeGraphIndex,
+        };
 
-        // Include editor layout data (block positions, frames, zoom) so the
-        // graph looks the same when loaded back
-        serializationObject.editorData = (flowGraph as any)._editorData;
+        for (const graph of graphs) {
+            const serializationObject: any = {};
+            graph.serialize(serializationObject);
+
+            // For the active graph, inject saved context snapshots when stopped
+            if (graph === flowGraph) {
+                SerializationTools.InjectSavedContexts(serializationObject, globalState);
+            }
+
+            // Include editor layout data (block positions, frames, zoom)
+            serializationObject.editorData = (graph as any)._editorData;
+
+            coordinatorObject._flowGraphs.push(serializationObject);
+        }
 
         // Persist the scene snippet ID so loading the graph can also restore the scene context
         if (globalState.snippetId) {
-            serializationObject.sceneSnippetId = globalState.snippetId;
+            coordinatorObject.sceneSnippetId = globalState.snippetId;
         }
 
         // Persist the flow graph snippet ID so it survives round-trips
         if (globalState.flowGraphSnippetId) {
-            serializationObject.flowGraphSnippetId = globalState.flowGraphSnippetId;
+            coordinatorObject.flowGraphSnippetId = globalState.flowGraphSnippetId;
         }
 
-        return JSON.stringify(serializationObject, undefined, 2);
+        return JSON.stringify(coordinatorObject, undefined, 2);
     }
 
     /**
-     * Deserialize a flow graph from a serialization object.
-     * Creates a new FlowGraph from the serialized data and sets it on the global state.
+     * Deserialize flow graphs from a serialization object.
+     * Supports both coordinator-level format (`{ _flowGraphs: [...] }`) and
+     * legacy single-graph format (`{ allBlocks: [...], executionContexts: [...] }`).
      * @param serializationObject - the serialized data to load
      * @param globalState - the editor's global state
      * @param scene - optional scene to use instead of globalState.scene
@@ -119,46 +133,65 @@ export class SerializationTools {
         try {
             const targetScene = scene ?? globalState.scene;
             const coordinator = new FlowGraphCoordinator({ scene: targetScene });
-            const parsedGraph = await ParseFlowGraphAsync(serializationObject, { coordinator, pathConverter });
 
-            // The graph was parsed against the editor's host scene which may not
-            // contain scene objects (meshes, animation groups, animations) that
-            // only exist in the preview scene loaded from a snippet.  Stash the
-            // serialized names so _rebind*Reference can find them later.
-            SerializationTools.PreserveUnresolvedNames(parsedGraph, serializationObject);
+            // Detect format: coordinator-level vs legacy single-graph
+            let graphDataList: ISerializedFlowGraph[];
+            let activeIndex = 0;
+            let topLevelSnippetId: string | undefined;
+            let topLevelFlowGraphSnippetId: string | undefined;
 
-            // Patch unresolved user-variable descriptors back onto parsed
-            // contexts.  When parsing runs against the editor's host scene
-            // (which has no meshes), Mesh/Light/Camera references resolve to
-            // undefined.  Restore the original {id, name, className} descriptor
-            // so _rebindContextUserVariables can resolve them later against the
-            // preview scene.
-            SerializationTools.PreserveUnresolvedVariables(parsedGraph, serializationObject);
-
-            // Sync context connection values into _defaultValue for unconnected
-            // inputs so the editor UI shows the correct value (e.g. "2" instead
-            // of "0" for a divide block's unconnected divisor).
-            SerializationTools.SyncConnectionValuesToDefaults(parsedGraph);
-
-            // Restore editor layout data (block positions, frames, zoom)
-            if (serializationObject.editorData) {
-                (parsedGraph as any)._editorData = serializationObject.editorData;
+            if (serializationObject._flowGraphs && Array.isArray(serializationObject._flowGraphs)) {
+                // Coordinator-level format
+                graphDataList = serializationObject._flowGraphs;
+                activeIndex = serializationObject.activeGraphIndex ?? 0;
+                topLevelSnippetId = serializationObject.sceneSnippetId;
+                topLevelFlowGraphSnippetId = serializationObject.flowGraphSnippetId;
+            } else {
+                // Legacy single-graph format — wrap it
+                graphDataList = [serializationObject as ISerializedFlowGraph];
+                topLevelSnippetId = serializationObject.sceneSnippetId;
+                topLevelFlowGraphSnippetId = serializationObject.flowGraphSnippetId;
             }
 
+            // Parse all graphs in parallel
+            const parsedGraphs = await Promise.all(
+                graphDataList.map(async (graphData) => {
+                    const parsedGraph = await ParseFlowGraphAsync(graphData, { coordinator, pathConverter });
+
+                    SerializationTools.PreserveUnresolvedNames(parsedGraph, graphData);
+                    SerializationTools.PreserveUnresolvedVariables(parsedGraph, graphData);
+                    SerializationTools.SyncConnectionValuesToDefaults(parsedGraph);
+
+                    if ((graphData as any).editorData) {
+                        (parsedGraph as any)._editorData = (graphData as any).editorData;
+                    }
+
+                    return parsedGraph;
+                })
+            );
+
+            // Clamp active index to valid range
+            if (activeIndex < 0 || activeIndex >= parsedGraphs.length) {
+                activeIndex = 0;
+            }
+
+            // Set the coordinator and active graph on globalState
             // eslint-disable-next-line require-atomic-updates
-            globalState.flowGraph = parsedGraph;
+            globalState.coordinator = coordinator;
+            // eslint-disable-next-line require-atomic-updates
+            globalState.activeGraphIndex = activeIndex;
 
             // Restore the scene snippet ID so the preview component can auto-load the scene
-            const snippetId = serializationObject.sceneSnippetId ?? "";
+            const snippetId = topLevelSnippetId ?? "";
             if (snippetId && snippetId !== globalState.snippetId) {
                 globalState.snippetId = snippetId;
                 globalState.onSnippetIdChanged.notifyObservers(snippetId);
             }
 
             // Restore the flow graph snippet ID
-            if (serializationObject.flowGraphSnippetId) {
+            if (topLevelFlowGraphSnippetId) {
                 // eslint-disable-next-line require-atomic-updates
-                globalState.flowGraphSnippetId = serializationObject.flowGraphSnippetId;
+                globalState.flowGraphSnippetId = topLevelFlowGraphSnippetId;
             }
         } finally {
             globalState.onIsLoadingChanged.notifyObservers(false);
