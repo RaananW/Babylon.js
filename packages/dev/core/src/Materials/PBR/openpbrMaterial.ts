@@ -713,8 +713,8 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      * Defines the amount of subsurface scattering on the surface.
      * See OpenPBR's specs for subsurface_weight
      */
-    public subsurfaceWeight: number;
-    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "subsurfaceWeight")
+    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty")
+    accessor subsurfaceWeight: number;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _subsurfaceWeight: Property<number> = new Property<number>("subsurface_weight", 0.0, "vSubsurfaceWeight", 1, 0);
 
@@ -722,8 +722,8 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      * Subsurface weight texture.
      * See OpenPBR's specs for subsurface_weight
      */
-    public subsurfaceWeightTexture: Nullable<BaseTexture>;
-    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "subsurfaceWeightTexture")
+    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty")
+    accessor subsurfaceWeightTexture: Nullable<BaseTexture>;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _subsurfaceWeightTexture: Sampler = new Sampler("subsurface_weight", "subsurfaceWeight", "SUBSURFACE_WEIGHT");
 
@@ -731,8 +731,8 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      * Defines the color of the subsurface scattering in the volume.
      * See OpenPBR's specs for subsurface_color
      */
-    public subsurfaceColor: Color3;
-    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "subsurfaceColor")
+    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty")
+    accessor subsurfaceColor: Color3;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _subsurfaceColor: Property<Color3> = new Property<Color3>("subsurface_color", new Color3(0.8, 0.8, 0.8), "vSubsurfaceColor", 3, 0);
 
@@ -740,8 +740,8 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      * Subsurface color texture.
      * See OpenPBR's specs for subsurface_color
      */
-    public subsurfaceColorTexture: Nullable<BaseTexture>;
-    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "subsurfaceColorTexture")
+    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty")
+    accessor subsurfaceColorTexture: Nullable<BaseTexture>;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _subsurfaceColorTexture: Sampler = new Sampler("subsurface_color", "subsurfaceColor", "SUBSURFACE_COLOR");
 
@@ -749,8 +749,8 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      * Defines the radius of the subsurface scattering in the volume.
      * See OpenPBR's specs for subsurface_radius
      */
-    public subsurfaceRadius: number;
-    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "subsurfaceRadius")
+    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty")
+    accessor subsurfaceRadius: number;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _subsurfaceRadius: Property<number> = new Property<number>("subsurface_radius", 1.0, "vSubsurfaceRadius", 1, 0);
 
@@ -758,8 +758,8 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      * Defines the scale factor applied to the subsurface radius.
      * See OpenPBR's specs for subsurface_radius_scale
      */
-    public subsurfaceRadiusScale: Color3;
-    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "subsurfaceRadiusScale")
+    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty")
+    accessor subsurfaceRadiusScale: Color3;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _subsurfaceRadiusScale: Property<Color3> = new Property<Color3>("subsurface_radius_scale", new Color3(1, 0.5, 0.25), "vSubsurfaceRadiusScale", 3, 0);
 
@@ -767,8 +767,8 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      * Subsurface radius scale texture.
      * See OpenPBR's specs for subsurface_radius_scale
      */
-    public subsurfaceRadiusScaleTexture: Nullable<BaseTexture>;
-    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "subsurfaceRadiusScaleTexture")
+    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty")
+    accessor subsurfaceRadiusScaleTexture: Nullable<BaseTexture>;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _subsurfaceRadiusScaleTexture: Sampler = new Sampler("subsurface_radius_scale", "subsurfaceRadiusScale", "SUBSURFACE_RADIUS_SCALE");
 
@@ -776,8 +776,8 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      * Defines the anisotropy of the subsurface scattering in the volume.
      * See OpenPBR's specs for subsurface_scatter_anisotropy
      */
-    public subsurfaceScatterAnisotropy: number;
-    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "subsurfaceScatterAnisotropy")
+    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty")
+    accessor subsurfaceScatterAnisotropy: number;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _subsurfaceScatterAnisotropy: Property<number> = new Property<number>("subsurface_scatter_anisotropy", 0.0, "vSubsurfaceScatterAnisotropy", 1, 0);
 
@@ -948,8 +948,8 @@ export class OpenPBRMaterial extends OpenPBRMaterialBase {
      * Defines whether the geometry is thin-walled (like a sheet of paper) or not.
      * See OpenPBR's specs for geometry_thin_walled
      */
-    public geometryThinWalled: number;
-    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty", "geometryThinWalled")
+    @addAccessorsForMaterialProperty("_markAllSubMeshesAsTexturesDirty")
+    accessor geometryThinWalled: number;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private _geometryThinWalled: Property<number> = new Property<number>("geometry_thin_walled", 0, "vGeometryThinWalled", 1, 0);
 
