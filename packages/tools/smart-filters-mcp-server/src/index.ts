@@ -22,7 +22,13 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { CreateInlineJsonSchema, CreateJsonFileSchema, CreateJsonImportResponse, CreateOutputFileSchema, WriteTextFileEnsuringDirectory } from "../../mcp-server-core/dist/index.js";
+import {
+    CreateInlineJsonSchema,
+    CreateJsonFileSchema,
+    CreateJsonImportResponse,
+    CreateOutputFileSchema,
+    WriteTextFileEnsuringDirectory,
+} from "../../mcp-server-core/dist/index.js";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { SmartFiltersGraphManager } from "./smartFiltersGraph.js";
