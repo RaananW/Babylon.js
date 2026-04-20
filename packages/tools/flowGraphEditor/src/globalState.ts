@@ -237,11 +237,18 @@ export class GlobalState {
         }
         const graph = graphs[index];
         this._coordinator.removeGraph(graph);
-        // Adjust active index
-        if (this._activeGraphIndex >= graphs.length) {
-            this._activeGraphIndex = graphs.length - 1;
+        // Adjust active index to keep the same graph selected when possible
+        if (index < this._activeGraphIndex) {
+            // Removed a graph before the active one — shift index down
+            this._activeGraphIndex--;
+        } else if (index === this._activeGraphIndex) {
+            // Removed the active graph — select the nearest remaining
+            if (this._activeGraphIndex >= graphs.length) {
+                this._activeGraphIndex = graphs.length - 1;
+            }
+            this._activateGraph(graphs[this._activeGraphIndex]);
         }
-        this._activateGraph(graphs[this._activeGraphIndex]);
+        // If index > _activeGraphIndex, no adjustment needed (active graph unchanged)
         this.onGraphListChanged.notifyObservers();
         return true;
     }
@@ -271,6 +278,9 @@ export class GlobalState {
     private _activateGraph(graph: FlowGraph): void {
         // Let observers (e.g. graphEditor) persist canvas state before the switch
         if (this._flowGraph) {
+            // Snapshot user variables/contexts for the outgoing graph so they
+            // survive the stop() that the flowGraph setter triggers.
+            this._snapshotUserVariablesFrom(this._flowGraph);
             this.onBeforeActiveGraphChanged.notifyObservers(this._flowGraph);
         }
         // Use the existing setter which does all the wiring
@@ -899,6 +909,12 @@ export class GlobalState {
     private _savedContextSnapshots: any[] | null = null;
 
     /**
+     * Per-graph serialized context snapshots, keyed by FlowGraph.uniqueId.
+     * Used to preserve context data for inactive graphs during multi-graph serialization.
+     */
+    private _perGraphContextSnapshots = new Map<string, any[]>();
+
+    /**
      * Runtime (non-serialized) copies of each execution context's data.
      * Unlike _savedContextSnapshots (which holds serialized/JSON-safe values for
      * injecting into saved files), these hold actual runtime objects (Vector3,
@@ -1432,6 +1448,8 @@ export class GlobalState {
                     uniqueId: context.uniqueId,
                 });
             }
+            // Store per-graph snapshots for multi-graph serialization
+            this._perGraphContextSnapshots.set(fg.uniqueId, [...this._savedContextSnapshots!]);
         }
     }
 
@@ -1458,6 +1476,16 @@ export class GlobalState {
      */
     public get savedContextSnapshots(): any[] | null {
         return this._savedContextSnapshots;
+    }
+
+    /**
+     * Returns saved context snapshots for a specific graph by uniqueId.
+     * Used by SerializationTools to inject context data for inactive graphs.
+     * @param graphUniqueId - the uniqueId of the graph
+     * @returns array of serialized context objects, or null if none saved
+     */
+    public getContextSnapshotsForGraph(graphUniqueId: string): any[] | null {
+        return this._perGraphContextSnapshots.get(graphUniqueId) ?? null;
     }
 
     /**

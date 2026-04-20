@@ -95,9 +95,16 @@ export class SerializationTools {
             const serializationObject: any = {};
             graph.serialize(serializationObject);
 
-            // For the active graph, inject saved context snapshots when stopped
+            // Inject saved context snapshots when the graph is stopped
             if (graph === flowGraph) {
+                // Active graph — use the current snapshots
                 SerializationTools.InjectSavedContexts(serializationObject, globalState);
+            } else {
+                // Inactive graph — use per-graph saved snapshots
+                const graphSnapshots = globalState.getContextSnapshotsForGraph(graph.uniqueId);
+                if ((!serializationObject.executionContexts || serializationObject.executionContexts.length === 0) && graphSnapshots && graphSnapshots.length > 0) {
+                    serializationObject.executionContexts = graphSnapshots;
+                }
             }
 
             // Include editor layout data (block positions, frames, zoom)
@@ -153,22 +160,23 @@ export class SerializationTools {
                 topLevelFlowGraphSnippetId = serializationObject.flowGraphSnippetId;
             }
 
-            // Parse all graphs in parallel
-            const parsedGraphs = await Promise.all(
-                graphDataList.map(async (graphData) => {
-                    const parsedGraph = await ParseFlowGraphAsync(graphData, { coordinator, pathConverter });
+            // Parse graphs sequentially to preserve tab order (coordinator.flowGraphs
+            // array order must match _flowGraphs serialization order).
+            const parsedGraphs: FlowGraph[] = [];
+            for (const graphData of graphDataList) {
+                // eslint-disable-next-line no-await-in-loop -- sequential order is intentional
+                const parsedGraph = await ParseFlowGraphAsync(graphData, { coordinator, pathConverter });
 
-                    SerializationTools.PreserveUnresolvedNames(parsedGraph, graphData);
-                    SerializationTools.PreserveUnresolvedVariables(parsedGraph, graphData);
-                    SerializationTools.SyncConnectionValuesToDefaults(parsedGraph);
+                SerializationTools.PreserveUnresolvedNames(parsedGraph, graphData);
+                SerializationTools.PreserveUnresolvedVariables(parsedGraph, graphData);
+                SerializationTools.SyncConnectionValuesToDefaults(parsedGraph);
 
-                    if ((graphData as any).editorData) {
-                        (parsedGraph as any)._editorData = (graphData as any).editorData;
-                    }
+                if ((graphData as any).editorData) {
+                    (parsedGraph as any)._editorData = (graphData as any).editorData;
+                }
 
-                    return parsedGraph;
-                })
-            );
+                parsedGraphs.push(parsedGraph);
+            }
 
             // Clamp active index to valid range
             if (activeIndex < 0 || activeIndex >= parsedGraphs.length) {
@@ -176,9 +184,7 @@ export class SerializationTools {
             }
 
             // Set the coordinator and active graph on globalState
-            // eslint-disable-next-line require-atomic-updates
             globalState.coordinator = coordinator;
-            // eslint-disable-next-line require-atomic-updates
             globalState.activeGraphIndex = activeIndex;
 
             // Restore the scene snippet ID so the preview component can auto-load the scene
@@ -190,7 +196,6 @@ export class SerializationTools {
 
             // Restore the flow graph snippet ID
             if (topLevelFlowGraphSnippetId) {
-                // eslint-disable-next-line require-atomic-updates
                 globalState.flowGraphSnippetId = topLevelFlowGraphSnippetId;
             }
         } finally {

@@ -115,14 +115,32 @@ export class GraphTabBarComponent extends React.Component<IGraphTabBarProps, IGr
         }
 
         return (
-            <div className="fge-graph-tab-bar">
+            <div className="fge-graph-tab-bar" role="tablist">
                 <div className="fge-tab-scroll-area" ref={this._scrollRef}>
                     {graphs.map((graph, index) => (
                         <div
                             key={graph.uniqueId}
                             className={`fge-tab${index === activeIndex ? " fge-tab-active" : ""}`}
+                            role="tab"
+                            tabIndex={index === activeIndex ? 0 : -1}
+                            aria-selected={index === activeIndex}
+                            aria-label={graph.name}
                             onClick={() => this._onTabClick(index)}
                             onDoubleClick={() => this._onTabDoubleClick(index)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    this._onTabClick(index);
+                                } else if (e.key === "ArrowRight") {
+                                    e.preventDefault();
+                                    const next = (index + 1) % graphs.length;
+                                    (e.currentTarget.parentElement?.children[next] as HTMLElement)?.focus();
+                                } else if (e.key === "ArrowLeft") {
+                                    e.preventDefault();
+                                    const prev = (index - 1 + graphs.length) % graphs.length;
+                                    (e.currentTarget.parentElement?.children[prev] as HTMLElement)?.focus();
+                                }
+                            }}
                             title={graph.name}
                         >
                             {editingIndex === index ? (

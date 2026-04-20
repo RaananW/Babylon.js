@@ -71,6 +71,8 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
     private _historyStack: HistoryStack;
     private _helpObserver: Nullable<Observer<any>> = null;
     private _howToUseObserver: Nullable<Observer<void>> = null;
+    private _beforeActiveGraphObserver: Nullable<Observer<any>> = null;
+    private _activeGraphObserver: Nullable<Observer<any>> = null;
     private _blockClassRegistry = new Map<string, typeof FlowGraphBlock>();
     /** Cache for O(1) block→GraphNode lookups (rebuilt on graph load) */
     private _blockToNodeMap = new Map<FlowGraphBlock, GraphNode>();
@@ -308,6 +310,10 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
         this._helpObserver = null;
         this._howToUseObserver?.remove();
         this._howToUseObserver = null;
+        this._beforeActiveGraphObserver?.remove();
+        this._beforeActiveGraphObserver = null;
+        this._activeGraphObserver?.remove();
+        this._activeGraphObserver = null;
 
         if (this._historyStack) {
             this._historyStack.dispose();
@@ -375,12 +381,12 @@ export class GraphEditor extends React.Component<IGraphEditorProps, IGraphEditor
 
         // Persist canvas state (zoom, pan, node positions) on the outgoing graph
         // so it is restored when the user switches back to that tab.
-        this.props.globalState.onBeforeActiveGraphChanged.add((outgoingGraph) => {
+        this._beforeActiveGraphObserver = this.props.globalState.onBeforeActiveGraphChanged.add((outgoingGraph) => {
             SerializationTools.UpdateLocations(outgoingGraph, this.props.globalState);
         });
 
         // Rebuild the canvas when the active graph changes (multi-graph tab switch)
-        this.props.globalState.onActiveGraphChanged.add(() => {
+        this._activeGraphObserver = this.props.globalState.onActiveGraphChanged.add(() => {
             this.build();
             this.props.globalState.onClearUndoStack.notifyObservers();
         });
