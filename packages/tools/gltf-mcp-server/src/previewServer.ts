@@ -432,7 +432,7 @@ export async function startPreview(manager: GltfManager, docName: string, port: 
             if (err.code === "EADDRINUSE") {
                 reject(new Error(`Port ${_port} is already in use. Try a different port.`));
             } else {
-                reject(err);
+                reject(new Error(err.message));
             }
         });
 

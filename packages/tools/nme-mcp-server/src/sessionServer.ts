@@ -177,7 +177,7 @@ export async function stopSessionServer(): Promise<void> {
         _server!.close((err) => {
             _server = null;
             if (err) {
-                reject(err);
+                reject(new Error(err.message));
             } else {
                 resolve();
             }
@@ -253,11 +253,7 @@ async function _startOnPort(port: number): Promise<void> {
     return await new Promise((resolve, reject) => {
         const srv = http.createServer(_handleRequest);
         srv.once("error", (err: NodeJS.ErrnoException) => {
-            if (err.code === "EADDRINUSE") {
-                reject(err);
-            } else {
-                reject(err);
-            }
+            reject(new Error(err.message));
         });
         srv.listen(port, () => {
             _server = srv;
