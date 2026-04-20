@@ -14,7 +14,7 @@
  *    Multiple graphs can coexist (keyed by graph name).
  */
 
-import { ValidateFlowGraphAttachmentPayload } from "../../mcp-server-core/dist/index.js";
+import { ValidateFlowGraphAttachmentPayload } from "../../mcp-server-core/src/index.js";
 
 import { FlowGraphBlockRegistry, type IFlowGraphBlockTypeInfo } from "./blockRegistry.js";
 

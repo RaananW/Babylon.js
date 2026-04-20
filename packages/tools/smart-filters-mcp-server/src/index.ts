@@ -28,7 +28,7 @@ import {
     CreateJsonImportResponse,
     CreateOutputFileSchema,
     WriteTextFileEnsuringDirectory,
-} from "../../mcp-server-core/dist/index.js";
+} from "../../mcp-server-core/src/index.js";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { SmartFiltersGraphManager } from "./smartFiltersGraph.js";

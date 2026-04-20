@@ -34,7 +34,7 @@ import {
     CreateTypedSnippetImportResponse,
     ParseJsonText,
     RunSnippetResponse,
-} from "../../mcp-server-core/dist/index.js";
+} from "../../mcp-server-core/src/index.js";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { GeometryGraphManager } from "./geometryGraph.js";
