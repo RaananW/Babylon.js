@@ -22,15 +22,11 @@
         },
         "babylonjs-node-render-graph": {
             "command": "node",
-            "args": ["./packages/tools/node-render-graph-mcp-server/dist/index.js"]
+            "args": ["./packages/tools/nrge-mcp-server/dist/index.js"]
         },
         "babylonjs-node-particle": {
             "command": "node",
             "args": ["./packages/tools/npe-mcp-server/dist/index.js"]
-        },
-        "babylonjs-playground": {
-            "command": "node",
-            "args": ["./packages/tools/playground-mcp-server/dist/index.js"]
         },
         "babylonjs-gltf": {
             "command": "node",

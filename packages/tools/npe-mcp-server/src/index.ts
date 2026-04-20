@@ -32,7 +32,7 @@ import {
     ParseJsonText,
     RunSnippetResponse,
     WriteTextFileEnsuringDirectory,
-} from "../../mcpServerCore/dist/index.js";
+} from "../../mcp-server-core/dist/index.js";
 
 import { BlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { ParticleGraphManager } from "./particleGraph.js";

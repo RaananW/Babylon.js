@@ -58,7 +58,7 @@
  *     `targetConnectionName`  – output port name on the source block
  */
 
-import { ValidateNodeRenderGraphAttachmentPayload } from "../../mcpServerCore/dist/index.js";
+import { ValidateNodeRenderGraphAttachmentPayload } from "../../mcp-server-core/dist/index.js";
 
 import { BlockRegistry } from "./blockRegistry.js";
 

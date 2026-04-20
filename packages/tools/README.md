@@ -4,17 +4,16 @@ This directory contains the Babylon.js Model Context Protocol tooling packages u
 
 ## Packages
 
-| Package                        | Purpose                                                                                                    |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------- |
-| `mcpServerCore`                | Shared internal helpers for MCP response shaping, schema fragments, validation, and file handoff behavior. |
-| `nme-mcp-server`               | Node Material graph authoring and import/export workflows.                                                 |
-| `flow-graph-mcp-server`        | Flow Graph authoring and coordinator JSON export/import workflows.                                         |
-| `gui-mcp-server`               | Babylon.js GUI authoring, layout, export/import, and snippet flows.                                        |
-| `nge-mcp-server`               | Node Geometry graph authoring and export/import workflows.                                                 |
-| `node-render-graph-mcp-server` | Node Render Graph authoring and render-pipeline export/import workflows.                                   |
-| `npe-mcp-server`               | Node Particle graph authoring and export/import workflows.                                                 |
-| `scene-mcp-server`             | Scene orchestration, integration, code export, and preview workflows.                                      |
-| `playground-mcp-server`        | Babylon.js Playground code editing and live-session workflows.                                             |
+| Package                 | Purpose                                                                                                    |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `mcp-server-core`       | Shared internal helpers for MCP response shaping, schema fragments, validation, and file handoff behavior. |
+| `nme-mcp-server`        | Node Material graph authoring and import/export workflows.                                                 |
+| `flow-graph-mcp-server` | Flow Graph authoring and coordinator JSON export/import workflows.                                         |
+| `gui-mcp-server`        | Babylon.js GUI authoring, layout, export/import, and snippet flows.                                        |
+| `nge-mcp-server`        | Node Geometry graph authoring and export/import workflows.                                                 |
+| `nrge-mcp-server`       | Node Render Graph authoring and render-pipeline export/import workflows.                                   |
+| `npe-mcp-server`        | Node Particle graph authoring and export/import workflows.                                                 |
+| `scene-mcp-server`      | Scene orchestration, integration, code export, and preview workflows.                                      |
 
 ## How The Packages Fit Together
 
@@ -31,7 +30,6 @@ Flow Graph MCP          -> Scene MCP via coordinatorJson / coordinatorJsonFile
 GUI MCP                 -> Scene MCP via guiJson / guiJsonFile
 Node Geometry MCP       -> Scene MCP via ngeJson / ngeJsonFile
 Node Render Graph MCP   -> Scene MCP via nrgJson / nrgJsonFile
-Playground MCP          -> standalone code workflow
 ```
 
 ## Typical Cross-Server Workflow
@@ -69,7 +67,7 @@ The MCP servers are built with Rollup and consume the shared helpers from `@tool
 - JSON export tools generally support `outputFile`
 - JSON import tools generally support `json` and `jsonFile`
 - snippet-enabled servers generally support `snippetId`
-- shared schema, validation, and response helpers live in `mcpServerCore`
+- shared schema, validation, and response helpers live in `mcp-server-core`
 
 ## Workspace MCP Configuration
 

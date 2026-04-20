@@ -37,7 +37,7 @@ import {
     ValidateNodeMaterialAttachmentPayload,
     ValidateNodeRenderGraphAttachmentPayload,
     ValidateSmartFilterAttachmentPayload,
-} from "../../mcpServerCore/dist/index.js";
+} from "../../mcp-server-core/dist/index.js";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Serialized types — these form the scene descriptor JSON

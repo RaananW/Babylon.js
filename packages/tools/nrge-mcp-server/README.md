@@ -1,4 +1,4 @@
-# @tools/node-render-graph-mcp-server
+# @tools/nrge-mcp-server
 
 MCP server for AI-driven Babylon.js Node Render Graph authoring.
 
@@ -27,8 +27,8 @@ babylonjs-node-render-graph
 ## Build And Run
 
 ```bash
-npm run build -w @tools/node-render-graph-mcp-server
-npm run start -w @tools/node-render-graph-mcp-server
+npm run build -w @tools/nrge-mcp-server
+npm run start -w @tools/nrge-mcp-server
 ```
 
 ## Integration

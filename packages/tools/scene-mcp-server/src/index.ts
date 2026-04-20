@@ -49,7 +49,7 @@ import {
     ResolveDefinedInput,
     ResolveInlineOrFileText,
     WriteTextFileEnsuringDirectory,
-} from "../../mcpServerCore/dist/index.js";
+} from "../../mcp-server-core/dist/index.js";
 import { join } from "node:path";
 
 import {

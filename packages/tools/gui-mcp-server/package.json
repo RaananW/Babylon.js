@@ -5,9 +5,6 @@
     "description": "MCP server for AI-driven Babylon.js GUI (2D) layout and design",
     "type": "module",
     "main": "dist/index.js",
-    "bin": {
-        "babylonjs-gui": "dist/index.js"
-    },
     "scripts": {
         "clean": "rimraf dist",
         "build": "rollup -c",

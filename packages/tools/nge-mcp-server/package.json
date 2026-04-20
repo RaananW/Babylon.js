@@ -5,9 +5,6 @@
     "description": "MCP server for AI-driven Node Geometry Editor operations in Babylon.js",
     "type": "module",
     "main": "dist/index.js",
-    "bin": {
-        "babylonjs-node-geometry": "dist/index.js"
-    },
     "scripts": {
         "clean": "rimraf dist",
         "build": "rollup -c",

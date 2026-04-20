@@ -2,10 +2,21 @@
  * GUI MCP Server – Example GUI Generation Tests
  *
  * Creates 5 example GUI layouts using the GuiManager API,
- * exports them to JSON, and validates the output.
+ * exports them to JSON, validates the output, and writes them to the
+ * examples/ directory.
  */
 
+import * as fs from "fs";
+import * as path from "path";
 import { GuiManager } from "../../src/guiManager";
+
+const EXAMPLES_DIR = path.resolve(__dirname, "../../examples");
+
+function writeExample(name: string, json: string): void {
+    fs.mkdirSync(EXAMPLES_DIR, { recursive: true });
+    const filePath = path.join(EXAMPLES_DIR, `${name}.json`);
+    fs.writeFileSync(filePath, json, "utf-8");
+}
 
 function getCtrlName(result: ReturnType<GuiManager["addControl"]>): string {
     if (typeof result === "string") {
@@ -112,9 +123,7 @@ describe("GUI MCP Server – Example GUI Generation", () => {
         const issues = mgr.validateTexture("gameHud");
         expect(issues.every((i) => !i.startsWith("ERROR"))).toBe(true);
 
-        // Write example
-        console.log("=== Example 1: Game HUD ===");
-        console.log(JSON.stringify(parsed, null, 2).substring(0, 200) + "...");
+        writeExample("GameHUD", json);
     });
 
     // ── Example 2: Settings Menu ────────────────────────────────────────
@@ -263,6 +272,8 @@ describe("GUI MCP Server – Example GUI Generation", () => {
 
         const issues = mgr.validateTexture("settings");
         expect(issues.every((i) => !i.startsWith("ERROR"))).toBe(true);
+
+        writeExample("SettingsPanel", json);
     });
 
     // ── Example 3: Grid-based Dashboard ─────────────────────────────────
@@ -364,6 +375,8 @@ describe("GUI MCP Server – Example GUI Generation", () => {
 
         const issues = mgr.validateTexture("dashboard");
         expect(issues.every((i) => !i.startsWith("ERROR"))).toBe(true);
+
+        writeExample("GridDashboard", json);
     });
 
     // ── Example 4: Login Form ───────────────────────────────────────────
@@ -500,6 +513,8 @@ describe("GUI MCP Server – Example GUI Generation", () => {
 
         const issues = mgr.validateTexture("loginForm");
         expect(issues.every((i) => !i.startsWith("ERROR"))).toBe(true);
+
+        writeExample("LoginForm", json);
     });
 
     // ── Example 5: Dialog with Confirmation ─────────────────────────────
@@ -600,5 +615,7 @@ describe("GUI MCP Server – Example GUI Generation", () => {
 
         const issues = mgr.validateTexture("dialog");
         expect(issues.every((i) => !i.startsWith("ERROR"))).toBe(true);
+
+        writeExample("ConfirmationDialog", json);
     });
 });

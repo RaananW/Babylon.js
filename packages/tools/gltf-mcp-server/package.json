@@ -5,9 +5,6 @@
     "description": "MCP server for glTF/glb asset authoring, inspection, validation, and export in Babylon.js",
     "type": "module",
     "main": "dist/index.js",
-    "bin": {
-        "babylonjs-gltf": "dist/index.js"
-    },
     "scripts": {
         "clean": "rimraf dist",
         "build": "rollup -c",

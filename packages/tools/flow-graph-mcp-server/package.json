@@ -5,9 +5,6 @@
     "description": "MCP server for AI-driven Flow Graph operations in Babylon.js",
     "type": "module",
     "main": "dist/index.js",
-    "bin": {
-        "babylonjs-flow-graph": "dist/index.js"
-    },
     "scripts": {
         "clean": "rimraf dist",
         "build": "rollup -c",

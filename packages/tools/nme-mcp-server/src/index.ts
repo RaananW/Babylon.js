@@ -39,7 +39,7 @@ import {
     CreateTypedSnippetImportResponse,
     ParseJsonText,
     RunSnippetResponse,
-} from "../../mcpServerCore/dist/index.js";
+} from "../../mcp-server-core/dist/index.js";
 import { LoadSnippet, SaveSnippet } from "@tools/snippet-loader";
 import type { IDataSnippetResult } from "@tools/snippet-loader";
 import { startSessionServer, createSession, notifyMaterialUpdate, getSessionUrl, getSessionForMaterial, closeSessionForMaterial, stopSessionServer } from "./sessionServer.js";

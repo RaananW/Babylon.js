@@ -30,7 +30,7 @@ import {
     CreateJsonImportResponse,
     CreateOutputFileSchema,
     ResolveDefinedInput,
-} from "../../mcpServerCore/dist/index.js";
+} from "../../mcp-server-core/dist/index.js";
 
 import { FlowGraphBlockRegistry, GetBlockCatalogSummary, GetBlockTypeDetails } from "./blockRegistry.js";
 import { FlowGraphManager } from "./flowGraphManager.js";

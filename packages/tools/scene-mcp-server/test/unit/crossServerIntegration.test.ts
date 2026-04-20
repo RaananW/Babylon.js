@@ -6,7 +6,7 @@ import { GltfManager } from "../../../gltf-mcp-server/src/gltfManager";
 import { GuiManager } from "../../../gui-mcp-server/src/guiManager";
 import { GeometryGraphManager } from "../../../nge-mcp-server/src/geometryGraph";
 import { MaterialGraphManager } from "../../../nme-mcp-server/src/materialGraph";
-import { RenderGraphManager } from "../../../node-render-graph-mcp-server/src/renderGraph";
+import { RenderGraphManager } from "../../../nrge-mcp-server/src/renderGraph";
 import { SmartFiltersGraphManager } from "../../../smart-filters-mcp-server/src/smartFiltersGraph";
 import { SceneManager } from "../../src/sceneManager";
 

@@ -37,7 +37,7 @@ import {
     ParseJsonText,
     RunSnippetResponse,
     ResolveDefinedInput,
-} from "../../mcpServerCore/dist/index.js";
+} from "../../mcp-server-core/dist/index.js";
 
 import { ControlRegistry, BaseControlProperties, GetControlCatalogSummary, GetControlTypeDetails } from "./catalog.js";
 import { GuiManager } from "./guiManager.js";
