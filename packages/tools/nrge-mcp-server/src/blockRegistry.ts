@@ -315,8 +315,8 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         },
     },
 
-    NodeRenderGraphCsmShadowGeneratorBlock: {
-        className: "NodeRenderGraphCsmShadowGeneratorBlock",
+    NodeRenderGraphCascadedShadowGeneratorBlock: {
+        className: "NodeRenderGraphCascadedShadowGeneratorBlock",
         category: "Rendering",
         description:
             "Generates a Cascaded Shadow Map (CSM) for a directional light. " +
@@ -400,8 +400,8 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         defaultAdditionalConstructionParameters: [{ x: 1, y: 0 }, 1],
     },
 
-    NodeRenderGraphFxaaPostProcessBlock: {
-        className: "NodeRenderGraphFxaaPostProcessBlock",
+    NodeRenderGraphFXAAPostProcessBlock: {
+        className: "NodeRenderGraphFXAAPostProcessBlock",
         category: "PostProcess",
         description: "Applies Fast Approximate Anti-Aliasing (FXAA) to reduce jagged edges on the texture.",
         inputs: [
@@ -519,8 +519,8 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         defaultAdditionalConstructionParameters: [0, false],
     },
 
-    NodeRenderGraphSsrPostProcessBlock: {
-        className: "NodeRenderGraphSsrPostProcessBlock",
+    NodeRenderGraphSSRPostProcessBlock: {
+        className: "NodeRenderGraphSSRPostProcessBlock",
         category: "PostProcess",
         description:
             "Screen-Space Reflections (SSR). " +
@@ -549,8 +549,8 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         },
     },
 
-    NodeRenderGraphSsao2PostProcessBlock: {
-        className: "NodeRenderGraphSsao2PostProcessBlock",
+    NodeRenderGraphSSAO2PostProcessBlock: {
+        className: "NodeRenderGraphSSAO2PostProcessBlock",
         category: "PostProcess",
         description:
             "Screen-Space Ambient Occlusion v2 (SSAO2). " +
@@ -576,8 +576,8 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         defaultAdditionalConstructionParameters: [0.5],
     },
 
-    NodeRenderGraphTaaPostProcessBlock: {
-        className: "NodeRenderGraphTaaPostProcessBlock",
+    NodeRenderGraphTAAPostProcessBlock: {
+        className: "NodeRenderGraphTAAPostProcessBlock",
         category: "PostProcess",
         description:
             "Temporal Anti-Aliasing (TAA). Accumulates samples across frames for smooth anti-aliasing. " +
@@ -729,6 +729,18 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         outputs: [{ name: "output", type: "BasedOnInput" }],
     },
 
+    NodeRenderGraphPassCubePostProcessBlock: {
+        className: "NodeRenderGraphPassCubePostProcessBlock",
+        category: "PostProcess",
+        description: "A no-op pass-through post process for cube textures. Similar to PassPostProcessBlock but for cube map sources.",
+        inputs: [
+            { name: "source", type: "AutoDetect" },
+            { name: "target", type: "AutoDetect", isOptional: true },
+            { name: "dependencies", type: "AutoDetect", isOptional: true },
+        ],
+        outputs: [{ name: "output", type: "BasedOnInput" }],
+    },
+
     NodeRenderGraphCircleOfConfusionPostProcessBlock: {
         className: "NodeRenderGraphCircleOfConfusionPostProcessBlock",
         category: "PostProcess",
@@ -823,6 +835,67 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
             { name: "dependencies", type: "AutoDetect", isOptional: true },
         ],
         outputs: [{ name: "output", type: "BasedOnInput" }],
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════
+    //  Compute
+    // ═══════════════════════════════════════════════════════════════════════
+
+    NodeRenderGraphComputeShaderBlock: {
+        className: "NodeRenderGraphComputeShaderBlock",
+        category: "Compute",
+        description:
+            "Executes a custom compute shader within the frame graph. " +
+            "Accepts camera, shadow light, and object list dependencies. " +
+            "Outputs a ResourceContainer for downstream ordering.",
+        inputs: [{ name: "dependencies", type: "AutoDetect", isOptional: true }],
+        outputs: [{ name: "output", type: "ResourceContainer" }],
+        properties: {
+            shaderPath: "string | IComputeShaderPath – path or inline WGSL source of the compute shader",
+            shaderOptions: "IComputeShaderOptions – binding mappings and compile options",
+        },
+        defaultAdditionalConstructionParameters: ["@compute @workgroup_size(1, 1, 1)\nfn main() {}", { bindingsMapping: {} }],
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════
+    //  IBL Shadows
+    // ═══════════════════════════════════════════════════════════════════════
+
+    NodeRenderGraphIblShadowsRendererBlock: {
+        className: "NodeRenderGraphIblShadowsRendererBlock",
+        category: "Rendering",
+        description:
+            "Computes image-based lighting (IBL) shadows using voxel tracing. " +
+            "Requires depth, normal, position, and velocity geometry textures plus a camera and object list. " +
+            "Produces a shadow texture output.",
+        inputs: [
+            { name: "depth", type: "TextureScreenDepth" },
+            { name: "normal", type: "TextureWorldNormal" },
+            { name: "position", type: "TextureWorldPosition" },
+            { name: "velocity", type: "TextureLinearVelocity" },
+            { name: "camera", type: "Camera" },
+            { name: "objects", type: "ObjectList" },
+            { name: "dependencies", type: "AutoDetect", isOptional: true },
+        ],
+        outputs: [{ name: "output", type: "Texture" }],
+        properties: {
+            sampleDirections: "number – tracing sample directions (1–16, default: varies)",
+            coloredShadows: "boolean – whether traced shadows preserve environment color",
+            voxelShadowOpacity: "number – opacity of voxel-traced shadows (0–1)",
+            ssShadowOpacity: "number – opacity of screen-space shadows (0–1)",
+            ssShadowSampleCount: "number – screen-space shadow samples (1–64)",
+            ssShadowStride: "number – screen-space shadow stride (1–32)",
+            ssShadowDistanceScale: "number – screen-space shadow distance scale",
+            ssShadowThicknessScale: "number – screen-space shadow thickness scale",
+            voxelNormalBias: "number – voxel tracing normal bias",
+            voxelDirectionBias: "number – voxel tracing direction bias",
+            envRotation: "number – environment rotation in radians",
+            shadowRemanence: "number – temporal shadow remanence (0–1)",
+            shadowOpacity: "number – final shadow opacity (0–1)",
+            resolutionExp: "number – voxelization resolution exponent (1–8, resolution = 2^value)",
+            refreshRate: "number – voxelization refresh rate (-1: manual, 0: every frame, N: skip N frames)",
+            triPlanarVoxelization: "boolean – whether to use tri-planar voxelization",
+        },
     },
 
     // ═══════════════════════════════════════════════════════════════════════
