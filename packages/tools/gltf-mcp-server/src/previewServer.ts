@@ -250,6 +250,7 @@ function getViewerHtml(serverUrl: string, sandboxUrl: string): string {
 
 /**
  * Whether the preview server is currently running.
+ * @returns True if the server is running.
  */
 export function isPreviewRunning(): boolean {
     return _server !== null && _server.listening;
@@ -257,6 +258,7 @@ export function isPreviewRunning(): boolean {
 
 /**
  * Returns the local server URL, or null if not running.
+ * @returns The server URL or null.
  */
 export function getPreviewServerUrl(): string | null {
     if (!isPreviewRunning()) {
@@ -267,6 +269,7 @@ export function getPreviewServerUrl(): string | null {
 
 /**
  * Returns the full Sandbox URL that loads the current document, or null.
+ * @returns The Sandbox URL or null.
  */
 export function getSandboxUrl(): string | null {
     const serverUrl = getPreviewServerUrl();
@@ -279,6 +282,7 @@ export function getSandboxUrl(): string | null {
 
 /**
  * Returns the document name currently being previewed.
+ * @returns The document name or null.
  */
 export function getPreviewDocName(): string | null {
     if (!isPreviewRunning()) {
@@ -446,6 +450,7 @@ export async function startPreview(manager: GltfManager, docName: string, port: 
 
 /**
  * Stop the preview server.
+ * @returns A promise that resolves when the server is stopped.
  */
 export async function stopPreview(): Promise<void> {
     return await new Promise((resolve) => {
@@ -468,6 +473,7 @@ export async function stopPreview(): Promise<void> {
 
 /**
  * Change which document is being served (without restarting).
+ * @param docName - The new document name to serve.
  */
 export function setPreviewDocument(docName: string): void {
     _docName = docName;

@@ -158,7 +158,7 @@ export class GltfManager {
      *                 relative URIs).
      * @returns A status message.
      */
-    async resolveExternalBuffers(name: string, baseDir: string): Promise<string> {
+    async resolveExternalBuffersAsync(name: string, baseDir: string): Promise<string> {
         const doc = this._getDoc(name);
         if (typeof doc === "string") {
             return doc;
@@ -553,8 +553,10 @@ export class GltfManager {
 
     /**
      * Returns the number of components for a glTF accessor type string.
+     * @param type - The glTF accessor type string.
+     * @returns The number of components.
      */
-    private static _getNumComponents(type: string): number {
+    private static _GetNumComponents(type: string): number {
         switch (type) {
             case "SCALAR":
                 return 1;
@@ -577,6 +579,9 @@ export class GltfManager {
     /**
      * Decodes the raw binary buffer for a given buffer index from its data URI.
      * Returns null if the buffer has no data URI.
+     * @param doc - The glTF document.
+     * @param bufferIndex - The buffer index.
+     * @returns The decoded bytes, or null if no data URI.
      */
     private _getBufferBytes(doc: IGltfDocument, bufferIndex: number): Uint8Array | null {
         const buf = ArrayOrEmpty(doc.buffers)[bufferIndex];
@@ -597,6 +602,9 @@ export class GltfManager {
 
     /**
      * Encodes a Uint8Array back into the buffer's data URI.
+     * @param doc - The glTF document.
+     * @param bufferIndex - The buffer index.
+     * @param bytes - The bytes to encode.
      */
     private _setBufferBytes(doc: IGltfDocument, bufferIndex: number, bytes: Uint8Array): void {
         const buf = ArrayOrEmpty(doc.buffers)[bufferIndex];
@@ -615,6 +623,9 @@ export class GltfManager {
      * Reads the data of an accessor as a flat Float32Array.
      * Handles byte stride, normalization, and component type conversion
      * using the utilities from @dev/core bufferUtils.
+     * @param name - The document name.
+     * @param accessorIndex - The accessor index.
+     * @returns The accessor data or an error string.
      */
     readAccessorData(name: string, accessorIndex: number): { data: number[]; componentCount: number; count: number } | string {
         const doc = this._getDoc(name);
@@ -629,7 +640,7 @@ export class GltfManager {
 
         if (acc.bufferView === undefined) {
             // Accessor with no bufferView — all zeros (sparse-only or placeholder)
-            const numComponents = GltfManager._getNumComponents(acc.type);
+            const numComponents = GltfManager._GetNumComponents(acc.type);
             return { data: new Array(acc.count * numComponents).fill(0), componentCount: numComponents, count: acc.count };
         }
 
@@ -644,7 +655,7 @@ export class GltfManager {
             return `Error: Cannot read buffer ${bv.buffer} — no data URI present.`;
         }
 
-        const numComponents = GltfManager._getNumComponents(acc.type);
+        const numComponents = GltfManager._GetNumComponents(acc.type);
         const componentByteLength = GetTypeByteLength(acc.componentType);
         const defaultStride = numComponents * componentByteLength;
         const byteStride = bv.byteStride ?? defaultStride;
@@ -664,6 +675,10 @@ export class GltfManager {
      * Converts from float values to the accessor's native component type,
      * handling normalization and byte stride.
      * The data array length must equal accessor.count * numComponents.
+     * @param name - The document name.
+     * @param accessorIndex - The accessor index.
+     * @param data - The float data to write.
+     * @returns An error string, or null on success.
      */
     writeAccessorData(name: string, accessorIndex: number, data: number[]): string | null {
         const doc = this._getDoc(name);
@@ -675,7 +690,7 @@ export class GltfManager {
             return `Error: Accessor index ${accessorIndex} out of range (0..${accessors.length - 1}).`;
         }
         const acc = accessors[accessorIndex];
-        const numComponents = GltfManager._getNumComponents(acc.type);
+        const numComponents = GltfManager._GetNumComponents(acc.type);
         const expectedLength = acc.count * numComponents;
 
         if (data.length !== expectedLength) {
@@ -2233,6 +2248,8 @@ export class GltfManager {
 
     /**
      * Get the raw glTF document object by name, or undefined if not found.
+     * @param name - The document name.
+     * @returns The document or undefined.
      */
     getDoc(name: string): IGltfDocument | undefined {
         return this._documents.get(name);

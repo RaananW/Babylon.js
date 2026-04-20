@@ -1,5 +1,5 @@
 // Babylonjs
-import { type SubMesh } from "core/Meshes";
+import { type SubMesh } from "core/Meshes/subMesh";
 import { Mesh } from "core/Meshes/mesh";
 import { InstancedMesh } from "core/Meshes/instancedMesh";
 import { Matrix } from "core/Maths/math";

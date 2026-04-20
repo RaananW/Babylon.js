@@ -1,8 +1,7 @@
 import { type Attractor } from "../attractor";
 import { type FlowMap } from "../flowMap";
 import { type Color4 } from "core/Maths/math.color";
-import { type ColorGradient } from "core/Misc";
-import { type FactorGradient } from "core/Misc/gradients";
+import { type ColorGradient, type FactorGradient } from "core/Misc/gradients";
 import { type Nullable } from "core/types";
 import { type BaseTexture } from "core/Materials/Textures/baseTexture";
 import { type ProceduralTexture } from "core/Materials/Textures/Procedurals/proceduralTexture";

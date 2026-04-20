@@ -36,7 +36,7 @@ export interface ICreateJsonImportResponseOptions {
 /**
  * Options for importing JSON into an in-memory manager and building a custom success summary.
  */
-export interface ICreateJsonImportSummaryResponseOptions<TImportResult> {
+export interface ICreateJsonImportSummaryResponseOptions<ImportResult> {
     /** Inline JSON text provided directly by the caller. */
     json?: string;
     /** Optional absolute path to a JSON file. */
@@ -44,9 +44,9 @@ export interface ICreateJsonImportSummaryResponseOptions<TImportResult> {
     /** Human-readable description used in file-read errors. */
     fileDescription: string;
     /** Import callback invoked with the resolved JSON text. */
-    importJson: (jsonText: string) => TImportResult;
+    importJson: (jsonText: string) => ImportResult;
     /** Builds the success text returned to the caller. */
-    createSuccessText: (result: TImportResult) => string;
+    createSuccessText: (result: ImportResult) => string;
 }
 
 /**
@@ -80,7 +80,7 @@ export interface ICreateTypedSnippetImportResponseOptions {
 /**
  * Options for importing a typed snippet and building a custom success summary.
  */
-export interface ICreateTypedSnippetImportSummaryResponseOptions<TImportResult> {
+export interface ICreateTypedSnippetImportSummaryResponseOptions<ImportResult> {
     /** Snippet identifier requested by the caller. */
     snippetId: string;
     /** Snippet payload returned by the caller's snippet loader. */
@@ -88,21 +88,21 @@ export interface ICreateTypedSnippetImportSummaryResponseOptions<TImportResult> 
     /** Expected snippet type for the current manager. */
     expectedType: string;
     /** Import callback invoked with the snippet JSON text. */
-    importJson: (jsonText: string) => TImportResult;
+    importJson: (jsonText: string) => ImportResult;
     /** Builds the success text returned to the caller. */
-    createSuccessText: (result: TImportResult) => string;
+    createSuccessText: (result: ImportResult) => string;
 }
 
 /**
  * Options for wrapping snippet-fetch boilerplate around a response factory.
  */
-export interface IRunSnippetResponseOptions<TSnippetResult = unknown> {
+export interface IRunSnippetResponseOptions<SnippetResult = unknown> {
     /** Snippet identifier requested by the caller. */
     snippetId: string;
     /** Async loader used to fetch the snippet payload. */
-    loadSnippet: (snippetId: string) => Promise<TSnippetResult>;
+    loadSnippet: (snippetId: string) => Promise<SnippetResult>;
     /** Builds the final response from the fetched snippet payload. */
-    createResponse: (snippetResult: TSnippetResult) => IMcpTextResponse;
+    createResponse: (snippetResult: SnippetResult) => IMcpTextResponse;
 }
 
 /**
@@ -160,7 +160,7 @@ export function CreateJsonImportResponse(options: ICreateJsonImportResponseOptio
  * @param options - Import callbacks and source-text options.
  * @returns A text response for the caller.
  */
-export function CreateJsonImportSummaryResponse<TImportResult>(options: ICreateJsonImportSummaryResponseOptions<TImportResult>): IMcpTextResponse {
+export function CreateJsonImportSummaryResponse<ImportResult>(options: ICreateJsonImportSummaryResponseOptions<ImportResult>): IMcpTextResponse {
     let jsonText: string;
 
     try {
@@ -209,7 +209,7 @@ export function CreateTypedSnippetImportResponse(options: ICreateTypedSnippetImp
  * @param options - Snippet payload and import callbacks.
  * @returns A text response for the caller.
  */
-export function CreateTypedSnippetImportSummaryResponse<TImportResult>(options: ICreateTypedSnippetImportSummaryResponseOptions<TImportResult>): IMcpTextResponse {
+export function CreateTypedSnippetImportSummaryResponse<ImportResult>(options: ICreateTypedSnippetImportSummaryResponseOptions<ImportResult>): IMcpTextResponse {
     if (options.snippetResult.type === "unknown") {
         return CreateErrorResponse(`Error: Snippet "${options.snippetId}" has an unrecognized format.`);
     }
@@ -230,7 +230,7 @@ export function CreateTypedSnippetImportSummaryResponse<TImportResult>(options: 
  * @param options - Snippet identifier, loader, and response factory.
  * @returns The final MCP response.
  */
-export async function RunSnippetResponse<TSnippetResult>(options: IRunSnippetResponseOptions<TSnippetResult>): Promise<IMcpTextResponse> {
+export async function RunSnippetResponse<SnippetResult>(options: IRunSnippetResponseOptions<SnippetResult>): Promise<IMcpTextResponse> {
     try {
         return options.createResponse(await options.loadSnippet(options.snippetId));
     } catch (error) {

@@ -29,7 +29,7 @@ import { PBRMaterial } from "core/Materials/PBR/pbrMaterial";
 import { SpriteManager } from "core/Sprites/spriteManager";
 import { type TargetCamera } from "core/Cameras/targetCamera";
 import { type Camera } from "core/Cameras/camera";
-import { type PostProcessRenderPipeline } from "core/PostProcesses";
+import { type PostProcessRenderPipeline } from "core/PostProcesses/RenderPipeline/postProcessRenderPipeline";
 import { NodeGeometry } from "core/Meshes/Node/nodeGeometry";
 import { NodeRenderGraph } from "core/FrameGraph/Node/nodeRenderGraph";
 

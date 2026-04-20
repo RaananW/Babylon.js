@@ -9,7 +9,7 @@ import { type ThinTexture } from "../../Materials/Textures/thinTexture";
 import { type DynamicTexture } from "../../Materials/Textures/dynamicTexture";
 import { Color4 } from "../../Maths/math.color";
 import { type LensFlareSystem } from "../../LensFlares/lensFlareSystem";
-import { type ThinEngine } from "../../Engines";
+import { type ThinEngine } from "../../Engines/thinEngine";
 
 const DefaultXRWebGLLayerInit: XRWebGLLayerInit = {};
 

@@ -103,7 +103,7 @@ Server.registerTool(
         // If loaded from a file, resolve external buffer/image URIs
         if (jsonFile && !result.content[0]?.text?.startsWith("Error")) {
             const { dirname } = await import("node:path");
-            await Manager.resolveExternalBuffers(name, dirname(jsonFile));
+            await Manager.resolveExternalBuffersAsync(name, dirname(jsonFile));
         }
 
         return result;
@@ -1149,7 +1149,7 @@ Server.registerTool(
         // If loaded from a file, resolve external buffer/image URIs
         if (jsonFile && !result.content[0]?.text?.startsWith("Error")) {
             const { dirname } = await import("node:path");
-            await Manager.resolveExternalBuffers(name, dirname(jsonFile));
+            await Manager.resolveExternalBuffersAsync(name, dirname(jsonFile));
         }
 
         return result;
@@ -1519,8 +1519,18 @@ async function Main() {
     };
 
     // Stop the preview server on process signals (restart / kill)
-    process.on("SIGINT", () => void Cleanup().then(() => process.exit(0)));
-    process.on("SIGTERM", () => void Cleanup().then(() => process.exit(0)));
+    process.on("SIGINT", () => {
+        void (async () => {
+            await Cleanup();
+            process.exit(0);
+        })();
+    });
+    process.on("SIGTERM", () => {
+        void (async () => {
+            await Cleanup();
+            process.exit(0);
+        })();
+    });
     process.on("beforeExit", () => void Cleanup());
 
     await Server.connect(transport);

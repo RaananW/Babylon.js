@@ -3,7 +3,7 @@
  * @param zodFactory - The caller's local Zod factory.
  * @returns An optional string schema with the shared output-file description.
  */
-export function CreateOutputFileSchema<TSchema>(zodFactory: { string(): { optional(): { describe(description: string): TSchema } } }): TSchema {
+export function CreateOutputFileSchema<Schema>(zodFactory: { string(): { optional(): { describe(description: string): Schema } } }): Schema {
     return zodFactory
         .string()
         .optional()
@@ -16,7 +16,7 @@ export function CreateOutputFileSchema<TSchema>(zodFactory: { string(): { option
  * @param description - Field description to apply.
  * @returns An optional string schema for inline JSON text.
  */
-export function CreateInlineJsonSchema<TSchema>(zodFactory: { string(): { optional(): { describe(description: string): TSchema } } }, description: string): TSchema {
+export function CreateInlineJsonSchema<Schema>(zodFactory: { string(): { optional(): { describe(description: string): Schema } } }, description: string): Schema {
     return zodFactory.string().optional().describe(description);
 }
 
@@ -26,7 +26,7 @@ export function CreateInlineJsonSchema<TSchema>(zodFactory: { string(): { option
  * @param description - Field description to apply.
  * @returns An optional string schema for JSON file paths.
  */
-export function CreateJsonFileSchema<TSchema>(zodFactory: { string(): { optional(): { describe(description: string): TSchema } } }, description: string): TSchema {
+export function CreateJsonFileSchema<Schema>(zodFactory: { string(): { optional(): { describe(description: string): Schema } } }, description: string): Schema {
     return zodFactory.string().optional().describe(description);
 }
 
@@ -35,7 +35,7 @@ export function CreateJsonFileSchema<TSchema>(zodFactory: { string(): { optional
  * @param zodFactory - The caller's local Zod factory.
  * @returns A required string schema with the shared snippet-ID description.
  */
-export function CreateSnippetIdSchema<TSchema>(zodFactory: { string(): { describe(description: string): TSchema } }): TSchema {
+export function CreateSnippetIdSchema<Schema>(zodFactory: { string(): { describe(description: string): Schema } }): Schema {
     return zodFactory.string().describe('Snippet ID from the Babylon.js Snippet Server (e.g. "ABC123" or "ABC123#2")');
 }
 
@@ -44,6 +44,6 @@ export function CreateSnippetIdSchema<TSchema>(zodFactory: { string(): { describ
  * @param zodFactory - The caller's local Zod factory.
  * @returns An optional boolean schema with the shared overwrite description.
  */
-export function CreateOverwriteSchema<TSchema>(zodFactory: { boolean(): { optional(): { describe(description: string): TSchema } } }): TSchema {
+export function CreateOverwriteSchema<Schema>(zodFactory: { boolean(): { optional(): { describe(description: string): Schema } } }): Schema {
     return zodFactory.boolean().optional().describe("If true, replace any existing graph with the same name. Default: false.");
 }

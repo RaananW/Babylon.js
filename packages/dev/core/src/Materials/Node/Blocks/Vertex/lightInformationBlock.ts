@@ -12,7 +12,7 @@ import { type Mesh } from "../../../../Meshes/mesh";
 import { type Light } from "../../../../Lights/light";
 import { PointLight } from "../../../../Lights/pointLight";
 import { type ShadowGenerator } from "../../../../Lights/Shadows/shadowGenerator";
-import { type ShadowLight } from "../../../../Lights";
+import { type ShadowLight } from "../../../../Lights/shadowLight";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
 /**

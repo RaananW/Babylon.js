@@ -1,4 +1,4 @@
-import { type FactorGradient } from "core/Misc";
+import { type FactorGradient } from "core/Misc/gradients";
 import { type GPUParticleSystem } from "core/Particles/gpuParticleSystem";
 import { type FunctionComponent, useCallback } from "react";
 

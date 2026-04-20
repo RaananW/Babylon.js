@@ -6,7 +6,7 @@ import { Constants } from "../../Engines/constants";
 import { WebGLHardwareTexture } from "../../Engines/WebGL/webGLHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { BaseTexture } from "../../Materials/Textures/baseTexture";
-import { type ThinEngine } from "../../Engines";
+import { type ThinEngine } from "../../Engines/thinEngine";
 
 /**
  * Options for raw camera access
