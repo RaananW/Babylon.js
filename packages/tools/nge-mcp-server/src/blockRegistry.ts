@@ -361,6 +361,22 @@ export const BlockRegistry: Record<string, IBlockTypeInfo> = {
         defaultSerializedProperties: { evaluateContext: true },
     },
 
+    ExtrudeGeometryBlock: {
+        className: "ExtrudeGeometryBlock",
+        category: "Geometry",
+        description: "Extrudes a geometry along its average face normal by a given depth. Supports configurable cap modes (no cap, start, end, or both).",
+        inputs: [
+            { name: "geometry", type: "Geometry" },
+            { name: "depth", type: "Float", isOptional: true },
+        ],
+        outputs: [{ name: "output", type: "Geometry" }],
+        properties: {
+            evaluateContext: "boolean — re-evaluate per context/vertex (default: false)",
+            cap: "ExtrudeGeometryCap — NoCap (0), CapStart (1), CapEnd (2), CapAll (3). Default: CapAll (3)",
+        },
+        defaultSerializedProperties: { evaluateContext: false, cap: 3 },
+    },
+
     SubdivideBlock: {
         className: "SubdivideBlock",
         category: "Geometry",

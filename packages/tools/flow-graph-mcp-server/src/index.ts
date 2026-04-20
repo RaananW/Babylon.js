@@ -8,7 +8,7 @@
  * Flow Graphs programmatically. An AI agent (or any MCP client) can:
  *
  *   • Create / manage flow graph instances
- *   • Add blocks from the full Flow Graph block catalog (~140 block types)
+ *   • Add blocks from the full Flow Graph block catalog (~165 block types)
  *   • Connect blocks with signal connections (execution flow) and data connections
  *   • Set block configuration
  *   • Set context variables

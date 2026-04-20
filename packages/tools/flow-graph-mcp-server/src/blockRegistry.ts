@@ -154,9 +154,99 @@ export const FlowGraphBlockRegistry: Record<string, IFlowGraphBlockTypeInfo> = {
         config: { stopPropagation: "boolean", targetMesh: "AbstractMesh reference" },
     },
 
-    // NOTE: PointerEvent, PointerDownEvent, PointerUpEvent, and PointerMoveEvent
-    // are defined in FlowGraphBlockNames but NOT yet implemented in core.
-    // Use MeshPickEvent (with pointerType filter) for click/pick interactions.
+    // NOTE: PointerEvent is defined in FlowGraphBlockNames but has no standalone implementation;
+    // use MeshPickEvent or the specific pointer event blocks below.
+
+    PointerDownEvent: {
+        className: "FlowGraphPointerDownEventBlock",
+        category: "Event",
+        description: "Triggers when a pointer button is pressed down on a mesh.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [
+            { name: "out", description: "Fires once at graph startup (initialization)" },
+            { name: "done", description: "Fires each time the pointer is pressed. USE THIS for press logic." },
+            { name: "error" },
+        ],
+        dataInputs: [{ name: "targetMesh", type: "any", description: "The mesh to watch", isOptional: true }],
+        dataOutputs: [
+            { name: "pointerId", type: "number" },
+            { name: "pickedMesh", type: "any", description: "The mesh that was pressed" },
+            { name: "pickedPoint", type: "any", description: "The 3D point where the press occurred" },
+        ],
+        config: { stopPropagation: "boolean", targetMesh: "AbstractMesh reference" },
+    },
+
+    PointerUpEvent: {
+        className: "FlowGraphPointerUpEventBlock",
+        category: "Event",
+        description: "Triggers when a pointer button is released on a mesh.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [
+            { name: "out", description: "Fires once at graph startup (initialization)" },
+            { name: "done", description: "Fires each time the pointer is released. USE THIS for release logic." },
+            { name: "error" },
+        ],
+        dataInputs: [{ name: "targetMesh", type: "any", description: "The mesh to watch", isOptional: true }],
+        dataOutputs: [
+            { name: "pointerId", type: "number" },
+            { name: "pickedMesh", type: "any", description: "The mesh that was released" },
+            { name: "pickedPoint", type: "any", description: "The 3D point where the release occurred" },
+        ],
+        config: { stopPropagation: "boolean", targetMesh: "AbstractMesh reference" },
+    },
+
+    PointerMoveEvent: {
+        className: "FlowGraphPointerMoveEventBlock",
+        category: "Event",
+        description: "Triggers when the pointer moves over a mesh.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [
+            { name: "out", description: "Fires once at graph startup (initialization)" },
+            { name: "done", description: "Fires each time the pointer moves. USE THIS for move logic." },
+            { name: "error" },
+        ],
+        dataInputs: [{ name: "targetMesh", type: "any", description: "The mesh to watch", isOptional: true }],
+        dataOutputs: [
+            { name: "pointerId", type: "number" },
+            { name: "meshUnderPointer", type: "any", description: "The mesh under the pointer" },
+            { name: "pickedPoint", type: "any", description: "The 3D point under the pointer" },
+        ],
+        config: { stopPropagation: "boolean", targetMesh: "AbstractMesh reference" },
+    },
+
+    PhysicsCollisionEvent: {
+        className: "FlowGraphPhysicsCollisionEventBlock",
+        category: "Event",
+        description: "Triggers when a physics body collides with another body.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [
+            { name: "out", description: "Fires once at graph startup (initialization)" },
+            { name: "done", description: "Fires each time a collision occurs. USE THIS for collision logic." },
+            { name: "error" },
+        ],
+        dataInputs: [{ name: "body", type: "any", description: "The PhysicsBody to watch for collisions" }],
+        dataOutputs: [
+            { name: "otherBody", type: "any", description: "The other body in the collision" },
+            { name: "point", type: "Vector3", description: "Collision contact point" },
+            { name: "normal", type: "Vector3", description: "Collision normal" },
+            { name: "impulse", type: "number", description: "Collision impulse magnitude" },
+            { name: "distance", type: "number", description: "Penetration distance" },
+        ],
+    },
+
+    AudioSoundEndedEvent: {
+        className: "FlowGraphSoundEndedEventBlock",
+        category: "Event",
+        description: "Triggers when a sound finishes playing.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [
+            { name: "out", description: "Fires once at graph startup (initialization)" },
+            { name: "done", description: "Fires each time the sound ends. USE THIS for sound-ended logic." },
+            { name: "error" },
+        ],
+        dataInputs: [{ name: "sound", type: "any", description: "The sound to watch" }],
+        dataOutputs: [],
+    },
 
     SendCustomEvent: {
         className: "FlowGraphSendCustomEventBlock",
@@ -1228,8 +1318,41 @@ export const FlowGraphBlockRegistry: Record<string, IFlowGraphBlockTypeInfo> = {
         config: { inputIsColumnMajor: "boolean — whether inputs are in column-major order" },
     },
 
-    // NOTE: CombineMatrix2D and CombineMatrix3D are defined in FlowGraphBlockNames
-    // but NOT yet implemented in core.
+    CombineMatrix2D: {
+        className: "FlowGraphCombineMatrix2DBlock",
+        category: "Combine",
+        description: "Combines 4 float values into a 2x2 Matrix2D.",
+        signalInputs: [],
+        signalOutputs: [],
+        dataInputs: Array.from({ length: 4 }, (_, i) => ({
+            name: `input_${i}`,
+            type: "number",
+            description: `Matrix element ${i}`,
+        })),
+        dataOutputs: [
+            { name: "value", type: "Matrix2D" },
+            { name: "isValid", type: "boolean" },
+        ],
+        config: { inputIsColumnMajor: "boolean — whether inputs are in column-major order" },
+    },
+
+    CombineMatrix3D: {
+        className: "FlowGraphCombineMatrix3DBlock",
+        category: "Combine",
+        description: "Combines 9 float values into a 3x3 Matrix3D.",
+        signalInputs: [],
+        signalOutputs: [],
+        dataInputs: Array.from({ length: 9 }, (_, i) => ({
+            name: `input_${i}`,
+            type: "number",
+            description: `Matrix element [${Math.floor(i / 3)}][${i % 3}]`,
+        })),
+        dataOutputs: [
+            { name: "value", type: "Matrix3D" },
+            { name: "isValid", type: "boolean" },
+        ],
+        config: { inputIsColumnMajor: "boolean — whether inputs are in column-major order" },
+    },
 
     // ═══════════════════════════════════════════════════════════════════
     //  EXTRACT BLOCKS
@@ -1291,8 +1414,33 @@ export const FlowGraphBlockRegistry: Record<string, IFlowGraphBlockTypeInfo> = {
         })),
     },
 
-    // NOTE: ExtractMatrix2D and ExtractMatrix3D are defined in FlowGraphBlockNames
-    // but NOT yet implemented in core.
+    ExtractMatrix2D: {
+        className: "FlowGraphExtractMatrix2DBlock",
+        category: "Extract",
+        description: "Extracts all 4 elements from a 2x2 Matrix2D.",
+        signalInputs: [],
+        signalOutputs: [],
+        dataInputs: [{ name: "input", type: "Matrix2D" }],
+        dataOutputs: Array.from({ length: 4 }, (_, i) => ({
+            name: `output_${i}`,
+            type: "number",
+            description: `Matrix element ${i}`,
+        })),
+    },
+
+    ExtractMatrix3D: {
+        className: "FlowGraphExtractMatrix3DBlock",
+        category: "Extract",
+        description: "Extracts all 9 elements from a 3x3 Matrix3D.",
+        signalInputs: [],
+        signalOutputs: [],
+        dataInputs: [{ name: "input", type: "Matrix3D" }],
+        dataOutputs: Array.from({ length: 9 }, (_, i) => ({
+            name: `output_${i}`,
+            type: "number",
+            description: `Matrix element [${Math.floor(i / 3)}][${i % 3}]`,
+        })),
+    },
 
     // ═══════════════════════════════════════════════════════════════════
     //  TYPE CONVERSION BLOCKS
@@ -1375,6 +1523,217 @@ export const FlowGraphBlockRegistry: Record<string, IFlowGraphBlockTypeInfo> = {
             { name: "isValid", type: "boolean" },
         ],
         config: { roundingMode: '"floor" | "ceil" | "round" — how to round the float value' },
+    },
+
+    // ═══════════════════════════════════════════════════════════════════
+    //  PHYSICS — EXECUTION BLOCKS
+    // ═══════════════════════════════════════════════════════════════════
+
+    PhysicsApplyForce: {
+        className: "FlowGraphApplyForceBlock",
+        category: "Execution",
+        description: "Applies a force to a physics body at a given location.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [{ name: "out" }, { name: "error" }],
+        dataInputs: [
+            { name: "body", type: "any", description: "The PhysicsBody to apply force to" },
+            { name: "force", type: "Vector3", description: "Force vector" },
+            { name: "location", type: "Vector3", description: "World-space location to apply force at" },
+        ],
+        dataOutputs: [],
+    },
+
+    PhysicsApplyImpulse: {
+        className: "FlowGraphApplyImpulseBlock",
+        category: "Execution",
+        description: "Applies an impulse to a physics body at a given location.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [{ name: "out" }, { name: "error" }],
+        dataInputs: [
+            { name: "body", type: "any", description: "The PhysicsBody to apply impulse to" },
+            { name: "impulse", type: "Vector3", description: "Impulse vector" },
+            { name: "location", type: "Vector3", description: "World-space location to apply impulse at" },
+        ],
+        dataOutputs: [],
+    },
+
+    PhysicsSetLinearVelocity: {
+        className: "FlowGraphSetLinearVelocityBlock",
+        category: "Execution",
+        description: "Sets the linear velocity of a physics body.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [{ name: "out" }, { name: "error" }],
+        dataInputs: [
+            { name: "body", type: "any", description: "The PhysicsBody" },
+            { name: "velocity", type: "Vector3", description: "New linear velocity" },
+        ],
+        dataOutputs: [],
+    },
+
+    PhysicsSetAngularVelocity: {
+        className: "FlowGraphSetAngularVelocityBlock",
+        category: "Execution",
+        description: "Sets the angular velocity of a physics body.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [{ name: "out" }, { name: "error" }],
+        dataInputs: [
+            { name: "body", type: "any", description: "The PhysicsBody" },
+            { name: "velocity", type: "Vector3", description: "New angular velocity" },
+        ],
+        dataOutputs: [],
+    },
+
+    PhysicsSetMotionType: {
+        className: "FlowGraphSetPhysicsMotionTypeBlock",
+        category: "Execution",
+        description: "Sets the motion type of a physics body (Static=0, Animated=1, Dynamic=2).",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [{ name: "out" }, { name: "error" }],
+        dataInputs: [
+            { name: "body", type: "any", description: "The PhysicsBody" },
+            { name: "motionType", type: "number", description: "Motion type: Static (0), Animated (1), Dynamic (2)" },
+        ],
+        dataOutputs: [],
+    },
+
+    // ═══════════════════════════════════════════════════════════════════
+    //  PHYSICS — DATA BLOCKS
+    // ═══════════════════════════════════════════════════════════════════
+
+    PhysicsGetLinearVelocity: {
+        className: "FlowGraphGetLinearVelocityBlock",
+        category: "Data",
+        description: "Gets the linear velocity of a physics body.",
+        signalInputs: [],
+        signalOutputs: [],
+        dataInputs: [{ name: "body", type: "any", description: "The PhysicsBody" }],
+        dataOutputs: [
+            { name: "value", type: "Vector3" },
+            { name: "isValid", type: "boolean" },
+        ],
+    },
+
+    PhysicsGetAngularVelocity: {
+        className: "FlowGraphGetAngularVelocityBlock",
+        category: "Data",
+        description: "Gets the angular velocity of a physics body.",
+        signalInputs: [],
+        signalOutputs: [],
+        dataInputs: [{ name: "body", type: "any", description: "The PhysicsBody" }],
+        dataOutputs: [
+            { name: "value", type: "Vector3" },
+            { name: "isValid", type: "boolean" },
+        ],
+    },
+
+    PhysicsGetMassProperties: {
+        className: "FlowGraphGetPhysicsMassPropertiesBlock",
+        category: "Data",
+        description: "Gets mass, center of mass, and inertia of a physics body.",
+        signalInputs: [],
+        signalOutputs: [],
+        dataInputs: [{ name: "body", type: "any", description: "The PhysicsBody" }],
+        dataOutputs: [
+            { name: "mass", type: "number" },
+            { name: "centerOfMass", type: "Vector3" },
+            { name: "inertia", type: "Vector3" },
+        ],
+    },
+
+    // ═══════════════════════════════════════════════════════════════════
+    //  AUDIO — EXECUTION BLOCKS
+    // ═══════════════════════════════════════════════════════════════════
+
+    AudioPlaySound: {
+        className: "FlowGraphPlaySoundBlock",
+        category: "Execution",
+        description: "Plays a sound with optional volume, offset, and loop control.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [{ name: "out" }, { name: "error" }],
+        dataInputs: [
+            { name: "sound", type: "any", description: "The sound to play" },
+            { name: "volume", type: "number", description: "Playback volume (default: 1)" },
+            { name: "startOffset", type: "number", description: "Start offset in seconds (default: 0)" },
+            { name: "loop", type: "boolean", description: "Whether to loop (default: false)" },
+        ],
+        dataOutputs: [],
+    },
+
+    AudioStopSound: {
+        className: "FlowGraphStopSoundBlock",
+        category: "Execution",
+        description: "Stops a currently playing sound.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [{ name: "out" }, { name: "error" }],
+        dataInputs: [{ name: "sound", type: "any", description: "The sound to stop" }],
+        dataOutputs: [],
+    },
+
+    AudioPauseSound: {
+        className: "FlowGraphPauseSoundBlock",
+        category: "Execution",
+        description: "Pauses a currently playing sound.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [{ name: "out" }, { name: "error" }],
+        dataInputs: [{ name: "sound", type: "any", description: "The sound to pause" }],
+        dataOutputs: [],
+    },
+
+    AudioSetVolume: {
+        className: "FlowGraphSetSoundVolumeBlock",
+        category: "Execution",
+        description: "Sets the volume of a sound.",
+        signalInputs: [{ name: "in" }],
+        signalOutputs: [{ name: "out" }, { name: "error" }],
+        dataInputs: [
+            { name: "sound", type: "any", description: "The sound" },
+            { name: "volume", type: "number", description: "Volume level (default: 1)" },
+        ],
+        dataOutputs: [],
+    },
+
+    // ═══════════════════════════════════════════════════════════════════
+    //  AUDIO — DATA BLOCKS
+    // ═══════════════════════════════════════════════════════════════════
+
+    AudioGetVolume: {
+        className: "FlowGraphGetSoundVolumeBlock",
+        category: "Data",
+        description: "Gets the current volume of a sound.",
+        signalInputs: [],
+        signalOutputs: [],
+        dataInputs: [{ name: "sound", type: "any", description: "The sound" }],
+        dataOutputs: [
+            { name: "value", type: "number" },
+            { name: "isValid", type: "boolean" },
+        ],
+    },
+
+    AudioIsSoundPlaying: {
+        className: "FlowGraphIsSoundPlayingBlock",
+        category: "Data",
+        description: "Returns whether a sound is currently playing.",
+        signalInputs: [],
+        signalOutputs: [],
+        dataInputs: [{ name: "sound", type: "any", description: "The sound" }],
+        dataOutputs: [
+            { name: "value", type: "boolean" },
+            { name: "isValid", type: "boolean" },
+        ],
+    },
+
+    // ═══════════════════════════════════════════════════════════════════
+    //  UTILITY / DEBUG
+    // ═══════════════════════════════════════════════════════════════════
+
+    DebugBlock: {
+        className: "FlowGraphDebugBlock",
+        category: "Utility",
+        description: "Pass-through block that logs its input value for debugging. Output equals input.",
+        signalInputs: [],
+        signalOutputs: [],
+        dataInputs: [{ name: "input", type: "any" }],
+        dataOutputs: [{ name: "output", type: "any" }],
     },
 };
 
