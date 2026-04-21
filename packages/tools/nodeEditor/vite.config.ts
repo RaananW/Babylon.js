@@ -8,9 +8,11 @@ export default defineConfig(
         aliases: {
             "shared-ui-components": path.resolve("../../dev/sharedUiComponents/src"),
             core: path.resolve("../../dev/core/dist"),
+            loaders: path.resolve("../../dev/loaders/dist"),
         },
         productionExternals: {
             babylonjs: "BABYLON",
+            "babylonjs-loaders": "BABYLON",
         },
     })
 );

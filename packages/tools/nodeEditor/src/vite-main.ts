@@ -15,6 +15,8 @@ import { NodeMaterial } from "core/Materials/Node/nodeMaterial";
 import { NodeMaterialModes } from "core/Materials/Node/Enums/nodeMaterialModes";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { NodeEditor } from "./index";
+// Register GLTF/GLB loader — the editor preview panel loads meshes from assets.babylonjs.com
+import "loaders/glTF/glTFFileLoader";
 
 const snippetUrl = "https://snippet.babylonjs.com";
 
