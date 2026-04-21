@@ -20,7 +20,8 @@
         "serve:dev": "webpack serve --env mode=development --env watch=all",
         "test:e2e": "playwright test -c ../../../playwright.config.ts --project=flowGraphEditor",
         "test:e2e:ui": "playwright test -c ../../../playwright.config.ts --project=flowGraphEditor --ui",
-        "clean": "rimraf dist && rimraf *.tsbuildinfo -g"
+        "clean": "rimraf dist && rimraf *.tsbuildinfo -g",
+        "serve:vite": "vite"
     },
     "dependencies": {
         "react": "^18.2.0",

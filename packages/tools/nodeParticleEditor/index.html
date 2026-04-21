@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Babylon.js Node Particle Editor (Vite Dev)</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
+        <style>
+            html, body {
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+            }
+            #host-element {
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="host-element"></div>
+        <!--
+          Vite entry point. All babylon dependencies are resolved from the
+          monorepo dist/ directories via vite.config.ts aliases.
+          No CDN server needed for this dev workflow.
+
+          For production CDN deployments use:
+            npm run build:deployment -w @tools/nodeParticleEditor
+        -->
+        <script type="module" src="/src/vite-main.ts"></script>
+    </body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Babylon.js GUI Editor (Vite Dev)</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
+        <link rel="shortcut icon" href="https://www.babylonjs.com/favicon.ico" />
+        <link rel="stylesheet" href="https://use.typekit.net/xfi0rwe.css" />
+        <style>
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+            }
+            #host-element {
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="host-element"></div>
+        <!--
+          Vite entry: resolves all imports (including babylon core/gui) from the
+          monorepo dist/ directories. No CDN server or public/index.js needed.
+
+          For production CDN deployments (babylon loaded from CDN):
+            npm run build:deployment -w @tools/gui-editor
+          and the public/index.html remains the production entry point.
+        -->
+        <script type="module" src="/src/vite-main.ts"></script>
+    </body>
+</html>
