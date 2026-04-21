@@ -15,8 +15,10 @@ import { NodeMaterial } from "core/Materials/Node/nodeMaterial";
 import { NodeMaterialModes } from "core/Materials/Node/Enums/nodeMaterialModes";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { NodeEditor } from "./index";
-// Register GLTF/GLB loader — the editor preview panel loads meshes from assets.babylonjs.com
-import "loaders/glTF/glTFFileLoader";
+// Register GLTF/GLB loader — the editor preview panel loads meshes from assets.babylonjs.com.
+// Must import the index (not just glTFFileLoader) so the GLTF 2.0 sub-loader is also imported,
+// which assigns GLTFFileLoader._CreateGLTF2Loader required to parse GLB v2 files.
+import "loaders/glTF/index";
 
 const snippetUrl = "https://snippet.babylonjs.com";
 
