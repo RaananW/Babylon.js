@@ -7,13 +7,13 @@ export default defineConfig(
         port: parseInt(process.env.NGE_PORT ?? "1343"),
         aliases: {
             "shared-ui-components": path.resolve("../../dev/sharedUiComponents/src"),
-            "core": path.resolve("../../dev/core/dist"),
-            "loaders": path.resolve("../../dev/loaders/dist"),
-            "materials": path.resolve("../../dev/materials/dist"),
-            "serializers": path.resolve("../../dev/serializers/dist"),
+            core: path.resolve("../../dev/core/dist"),
+            loaders: path.resolve("../../dev/loaders/dist"),
+            materials: path.resolve("../../dev/materials/dist"),
+            serializers: path.resolve("../../dev/serializers/dist"),
         },
         productionExternals: {
-            "babylonjs": "BABYLON",
+            babylonjs: "BABYLON",
             "babylonjs-loaders": "BABYLON",
             "babylonjs-materials": "BABYLON",
             "babylonjs-serializers": "BABYLON",
