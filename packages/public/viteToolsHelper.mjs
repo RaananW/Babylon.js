@@ -14,6 +14,47 @@ import react from "@vitejs/plugin-react";
 import { resolve, join } from "path";
 
 // ---------------------------------------------------------------------------
+// CSS module namespace interop
+// ---------------------------------------------------------------------------
+
+/**
+ * Vite plugin that restores webpack-compatible CSS module namespace import behaviour.
+ *
+ * webpack transforms `import * as styles from "*.module.scss"` to CJS require(),
+ * giving the class-map object directly (e.g. styles["graph-canvas"] works).
+ *
+ * Vite emits CSS modules as ES modules with `export default { "class": "hashed" }`.
+ * A namespace import (`import * as styles`) therefore returns the module namespace
+ * rather than the class map, making `styles["graph-canvas"]` return undefined.
+ *
+ * This plugin rewrites CSS-module namespace imports to default imports before
+ * Vite processes them, so the class map is accessed directly and bracket notation
+ * continues to work without changing any source code in the tools or sharedUi.
+ *
+ *   import * as styles from "./foo.module.scss"
+ *   → import styles from "./foo.module.scss"
+ */
+function cssModuleNamespaceInteropPlugin() {
+    // Matches: import * as NAME from "...module.scss/css/less/sass"
+    const IMPORT_NS_RE = /\bimport\s+\*\s+as\s+(\w+)\s+from\s+(["'][^"']+\.module\.(?:scss|css|less|sass)["'])/g;
+
+    return {
+        name: "css-module-namespace-interop",
+        enforce: "pre",
+        transform(code, id) {
+            // Only process TypeScript/JavaScript source files
+            if (!/\.[tj]sx?$/.test(id)) return null;
+            // Quick bail-out if no CSS module imports present
+            if (!code.includes(".module.")) return null;
+
+            const newCode = code.replace(IMPORT_NS_RE, (_match, name, path) => `import ${name} from ${path}`);
+
+            return newCode !== code ? { code: newCode, map: null } : null;
+        },
+    };
+}
+
+// ---------------------------------------------------------------------------
 // Externals → globals mapping (same as umdGlobals in rollupUMDHelper.mjs)
 // Used for production build.rollupOptions only.
 // ---------------------------------------------------------------------------
@@ -126,7 +167,7 @@ export function commonDevViteConfiguration(options) {
     const resolvedAliases = Object.fromEntries(Object.entries(aliases).map(([key, value]) => [key, resolve(value)]));
 
     return {
-        plugins: [react()],
+        plugins: [react(), cssModuleNamespaceInteropPlugin()],
 
         resolve: {
             alias: resolvedAliases,
