@@ -7,6 +7,8 @@
 import { Engine } from "core/Engines/engine";
 import { Scene } from "core/scene";
 import { FlowGraph } from "core/FlowGraph/flowGraph";
+// Register GLTF/GLB loader — the flow graph editor preview allows dropping .glb/.gltf files.
+import "loaders/glTF/index";
 import { FlowGraphEditor } from "./index";
 
 async function main() {

@@ -6,6 +6,8 @@
 import { Engine } from "core/Engines/engine";
 import { Scene } from "core/scene";
 import { NodeParticleSystemSet } from "core/Particles/Node/nodeParticleSystemSet";
+// Register GLTF/GLB loader — mesh shape property tab lets users load .glb files.
+import "loaders/glTF/index";
 import { NodeParticleEditor } from "./index";
 
 async function main() {

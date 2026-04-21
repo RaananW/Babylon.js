@@ -9,6 +9,8 @@
 import { Engine } from "core/Engines/engine";
 import { Scene } from "core/scene";
 import { NodeRenderGraph } from "core/FrameGraph/Node/nodeRenderGraph";
+// Register GLTF/GLB loader — preview panel loads .glb meshes from assets.babylonjs.com.
+import "loaders/glTF/index";
 import { NodeRenderGraphEditor } from "./index";
 
 async function main() {

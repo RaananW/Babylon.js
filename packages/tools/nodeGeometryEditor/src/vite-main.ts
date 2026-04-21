@@ -7,6 +7,8 @@
 import { Engine } from "core/Engines/engine";
 import { Scene } from "core/scene";
 import { NodeGeometry } from "core/Meshes/Node/nodeGeometry";
+// Register GLTF/GLB loader — mesh node property tab lets users load .glb files.
+import "loaders/glTF/index";
 import { NodeGeometryEditor } from "./index";
 
 const snippetUrl = "https://snippet.babylonjs.com";
