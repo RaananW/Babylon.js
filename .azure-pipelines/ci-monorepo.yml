@@ -567,21 +567,19 @@ jobs:
 
           - script: |
                 npm install
-                #npx playwright install
-                #npx playwright install --force chrome
             displayName: "npm install"
             retryCountOnTaskFailure: 1
             env:
                 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
                 PUPPETEER_SKIP_DOWNLOAD: "true"
 
-          - script: npm run test:playwright -w @tools/tests -- --project=webgl2
+          - script: npx browserstack-node-sdk playwright test --config ./playwright.browserstack.config.ts
             displayName: "WebGL2 BStack"
             env:
                 CDN_BASE_URL: "$(SNAPSHOT_CDN_URL)/$(BuildName)"
                 CI: "true"
                 EXCLUDE_REGEX_ARRAY: "Procedural textures playground"
-                BROWSER: "BrowserStack"
+                BSTACK_TEST_TYPE: "webgl2"
                 TIMEOUT: "27500"
                 BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
                 BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
@@ -645,21 +643,20 @@ jobs:
 
           - script: |
                 npm install
-                #npx playwright install --force chrome
             displayName: "npm install"
             retryCountOnTaskFailure: 1
             env:
                 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
                 PUPPETEER_SKIP_DOWNLOAD: "true"
 
-          - script: npm run test:playwright -w @tools/tests -- --project=webgpu
+          - script: npx browserstack-node-sdk playwright test --config ./playwright.browserstack.config.ts
             displayName: "WebGPU BStack"
             retryCountOnTaskFailure: 1
             env:
                 CDN_BASE_URL: "$(SNAPSHOT_CDN_URL)/$(BuildName)"
                 CI: "true"
                 EXCLUDE_REGEX_ARRAY: "Sample depth texture,Render to 3D RT,apply-all-post-processes"
-                BROWSER: "BrowserStack"
+                BSTACK_TEST_TYPE: "webgpu"
                 TIMEOUT: "27500"
                 BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
                 BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
