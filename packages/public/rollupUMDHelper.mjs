@@ -14,6 +14,8 @@ import typescript from "@rollup/plugin-typescript";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import terser from "@rollup/plugin-terser";
+import postcss from "rollup-plugin-postcss";
+import url from "@rollup/plugin-url";
 import { copyFileSync, existsSync } from "fs";
 import { resolve, join } from "path";
 
@@ -263,6 +265,11 @@ export function commonUMDRollupConfiguration(options) {
     const plugins = [
         babylonUMDExternalsPlugin([devPackageName, ...optionalExternalFunctionSkip]),
         aliasPlugin({ entries: aliasEntries }),
+        // Inline SVG/PNG/image assets imported from dist/ files as data URIs.
+        url({ include: ["**/*.svg", "**/*.png", "**/*.jpg", "**/*.gif"], limit: Infinity }),
+        // Handle SCSS/CSS imports from compiled dist/ files (tool packages).
+        // Extracts styles to a companion .css file alongside the UMD bundle.
+        postcss({ extract: true, minimize: production, use: ["sass"] }),
         typescript({
             tsconfig: "tsconfig.build.json",
             declaration: false,
@@ -309,6 +316,8 @@ export function commonUMDRollupConfiguration(options) {
             const perEntryPlugins = [
                 babylonUMDExternalsPlugin([devPackageName, ...optionalExternalFunctionSkip]),
                 aliasPlugin({ entries: aliasEntries }),
+                url({ include: ["**/*.svg", "**/*.png", "**/*.jpg", "**/*.gif"], limit: Infinity }),
+                postcss({ extract: true, minimize: production, use: ["sass"] }),
                 typescript({
                     tsconfig: "tsconfig.build.json",
                     declaration: false,
