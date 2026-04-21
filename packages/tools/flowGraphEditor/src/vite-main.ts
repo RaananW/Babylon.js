@@ -8,10 +8,10 @@ import { Engine } from "core/Engines/engine";
 import { Scene } from "core/scene";
 import { FlowGraph } from "core/FlowGraph/flowGraph";
 // Register GLTF/GLB loader — the flow graph editor preview allows dropping .glb/.gltf files.
-import "loaders/glTF/index";
-import { FlowGraphEditor } from "./index";
+import "loaders/glTF/2.0/glTFLoader";
+import { FlowGraphEditor } from "./flowGraphEditor";
 
-async function main() {
+void (async () => {
     const hostElement = document.getElementById("host-element") as HTMLElement;
 
     const canvas = document.createElement("canvas");
@@ -32,6 +32,4 @@ async function main() {
         hostScene: scene,
         hostElement,
     });
-}
-
-main().catch(console.error);
+})();

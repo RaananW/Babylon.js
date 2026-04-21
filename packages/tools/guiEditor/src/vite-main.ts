@@ -9,24 +9,25 @@
  *   npm run build:deployment -w @tools/gui-editor
  * which uses webpack and the public/index.js CDN loader.
  */
-import { GUIEditor } from "./index";
+import { GUIEditor } from "./guiEditor";
 
-const hostElement = document.getElementById("host-element") as HTMLElement;
+const HostElement = document.getElementById("host-element") as HTMLElement;
 
 // Load snippet token from the URL hash (same convention as public/index.js)
-const hashToken = location.hash?.replace(/^#/, "") || undefined;
+const HashToken = location.hash?.replace(/^#/, "") || undefined;
 
-GUIEditor.Show({
-    hostElement,
-    currentSnippetToken: hashToken,
+void GUIEditor.Show({
+    hostElement: HostElement,
+    currentSnippetToken: HashToken,
     customSave: {
         label: "Save to snippet server",
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         action: async (data: string) => {
             const snippetUrl = "https://snippet.babylonjs.com";
             const dataToSend = { payload: JSON.stringify({ gui: data }), name: "", description: "", tags: "" };
-            const response = await fetch(snippetUrl + (hashToken ? "/" + hashToken : ""), {
+            const response = await fetch(snippetUrl + (HashToken ? "/" + HashToken : ""), {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { ["Content-Type"]: "application/json" },
                 body: JSON.stringify(dataToSend),
             });
             const result = await response.json();
@@ -37,6 +38,7 @@ GUIEditor.Show({
     },
     customLoad: {
         label: "Load from snippet server",
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         action: async (data: string) => {
             const snippetUrl = "https://snippet.babylonjs.com";
             const response = await fetch(`${snippetUrl}/${data}`);

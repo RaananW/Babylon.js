@@ -10,10 +10,10 @@ import { Engine } from "core/Engines/engine";
 import { Scene } from "core/scene";
 import { NodeRenderGraph } from "core/FrameGraph/Node/nodeRenderGraph";
 // Register GLTF/GLB loader — preview panel loads .glb meshes from assets.babylonjs.com.
-import "loaders/glTF/index";
-import { NodeRenderGraphEditor } from "./index";
+import "loaders/glTF/2.0/glTFLoader";
+import { NodeRenderGraphEditor } from "./nodeRenderGraphEditor";
 
-async function main() {
+void (async () => {
     const hostElement = document.getElementById("host-element") as HTMLElement;
 
     const canvas = document.createElement("canvas");
@@ -37,6 +37,4 @@ async function main() {
         nodeRenderGraph,
         hostElement,
     });
-}
-
-main().catch(console.error);
+})();

@@ -14,15 +14,14 @@ import { HemisphericLight } from "core/Lights/hemisphericLight";
 import { NodeMaterial } from "core/Materials/Node/nodeMaterial";
 import { NodeMaterialModes } from "core/Materials/Node/Enums/nodeMaterialModes";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
-import { NodeEditor } from "./index";
+import { NodeEditor } from "./nodeEditor";
 // Register GLTF/GLB loader — the editor preview panel loads meshes from assets.babylonjs.com.
-// Must import the index (not just glTFFileLoader) so the GLTF 2.0 sub-loader is also imported,
-// which assigns GLTFFileLoader._CreateGLTF2Loader required to parse GLB v2 files.
-import "loaders/glTF/index";
+// Importing 2.0/glTFLoader (not just glTFFileLoader) assigns GLTFFileLoader._CreateGLTF2Loader
+// required to parse GLB v2 files.
+import "loaders/glTF/2.0/glTFLoader";
 
-const snippetUrl = "https://snippet.babylonjs.com";
-
-async function main() {
+void (async () => {
+    const snippetUrl = "https://snippet.babylonjs.com";
     const hostElement = document.getElementById("host-element") as HTMLElement;
     const hash = location.hash?.replace(/^#/, "");
     const urlParams = new URLSearchParams(location.search);
@@ -52,7 +51,7 @@ async function main() {
             const response = await fetch(`${snippetUrl}/${hash.replace("#", "/")}`);
             const snippet = await response.json();
             const serialization = JSON.parse(snippet.nodeMaterial);
-            await nodeMaterial.loadFromSerialization(serialization);
+            nodeMaterial.loadFromSerialization(serialization);
             nodeMaterial.build(true);
         } catch {
             nodeMaterial.setToDefault();
@@ -82,11 +81,12 @@ async function main() {
         hostElement,
         customSave: {
             label: "Save as unique URL",
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             action: async (data: string) => {
                 const body = { payload: JSON.stringify({ nodeMaterial: data }), name: "", description: "", tags: "" };
                 const response = await fetch(snippetUrl + (currentSnippetToken ? "/" + currentSnippetToken : ""), {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { ["Content-Type"]: "application/json" },
                     body: JSON.stringify(body),
                 });
                 const result = await response.json();
@@ -96,6 +96,4 @@ async function main() {
             },
         },
     });
-}
-
-main().catch(console.error);
+})();

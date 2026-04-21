@@ -8,12 +8,11 @@ import { Engine } from "core/Engines/engine";
 import { Scene } from "core/scene";
 import { NodeGeometry } from "core/Meshes/Node/nodeGeometry";
 // Register GLTF/GLB loader — mesh node property tab lets users load .glb files.
-import "loaders/glTF/index";
-import { NodeGeometryEditor } from "./index";
+import "loaders/glTF/2.0/glTFLoader";
+import { NodeGeometryEditor } from "./nodeGeometryEditor";
 
-const snippetUrl = "https://snippet.babylonjs.com";
-
-async function main() {
+void (async () => {
+    const snippetUrl = "https://snippet.babylonjs.com";
     const hostElement = document.getElementById("host-element") as HTMLElement;
     const hash = location.hash?.replace(/^#/, "");
 
@@ -54,11 +53,12 @@ async function main() {
         hostElement,
         customSave: {
             label: "Save as unique URL",
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             action: async (data: string) => {
                 const body = { payload: JSON.stringify({ nodeGeometry: data }), name: "", description: "", tags: "" };
                 const response = await fetch(snippetUrl + (currentSnippetToken ? "/" + currentSnippetToken : ""), {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { ["Content-Type"]: "application/json" },
                     body: JSON.stringify(body),
                 });
                 const result = await response.json();
@@ -68,6 +68,4 @@ async function main() {
             },
         },
     });
-}
-
-main().catch(console.error);
+})();

@@ -3,8 +3,8 @@
  *
  * For production CDN deployments use: npm run build:deployment -w @tools/vsm
  */
-import { VSM } from "./index";
+import { VSM } from "./vsm";
 
-const hostElement = document.getElementById("host-element") as HTMLElement;
+const HostElement = document.getElementById("host-element") as HTMLElement;
 
-VSM.Show({ hostElement });
+void VSM.Show({ hostElement: HostElement });
