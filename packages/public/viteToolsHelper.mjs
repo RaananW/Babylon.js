@@ -135,13 +135,9 @@ export function commonDevViteConfiguration(options) {
 
         css: {
             // Vite handles SCSS, CSS modules, and plain CSS natively (requires `sass` package).
-            modules: {
-                // Mirror webpack's localIdentName for dev vs prod
-                generateScopedName: (name, filename) => {
-                    const isProduction = process.env.NODE_ENV === "production";
-                    return isProduction ? `_${name}_hash` : `${filename.replace(/.*[/\\]/, "").replace(/\.module\.\w+$/, "")}__${name}`;
-                },
-            },
+            // Use Vite's default hash-based scoped names — guaranteed valid and consistent.
+            // A custom generateScopedName can break if Vite passes filenames with query
+            // strings (e.g. ?used&lang.module.scss), producing invalid CSS selectors.
         },
 
         server: {
