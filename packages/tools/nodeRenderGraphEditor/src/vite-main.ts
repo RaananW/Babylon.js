@@ -27,9 +27,9 @@ async function main() {
     const scene = new Scene(engine);
 
     // Create a minimal NodeRenderGraph for the editor to open with
-    const nodeRenderGraph = new NodeRenderGraph("nodeRenderGraph", scene, engine.frameGraph);
+    const nodeRenderGraph = new NodeRenderGraph("nodeRenderGraph", scene);
     nodeRenderGraph.setToDefault();
-    nodeRenderGraph.build();
+    await nodeRenderGraph.buildAsync();
 
     NodeRenderGraphEditor.Show({
         nodeRenderGraph,

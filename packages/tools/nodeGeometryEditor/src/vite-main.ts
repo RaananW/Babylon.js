@@ -33,7 +33,7 @@ async function main() {
             const response = await fetch(`${snippetUrl}/${hash.replace("#", "/")}`);
             const snippet = await response.json();
             const serialization = JSON.parse(snippet.nodeGeometry);
-            nodeGeometry.loadFromSerialization(serialization);
+            nodeGeometry.parseSerializedObject(serialization);
             nodeGeometry.build();
         } catch {
             nodeGeometry.setToDefault();

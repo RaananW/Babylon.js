@@ -276,22 +276,22 @@ export function commonUMDRollupConfiguration(options) {
         ...(minToMax && production ? [copyMinToMaxPlugin(resolve(outputPath), primaryFilename, chunkNames)] : []),
     ];
 
-    const input = entryPoints ?? "./src/index.ts";
-
-    return {
-        input,
+    /**
+     * Builds a single Rollup config object for one entry point.
+     * UMD format does not support code-splitting (multiple inputs), so we emit
+     * one config per entry and return an array when entryPoints is provided.
+     */
+    const makeSingleConfig = (inputFile, chunkName) => ({
+        input: inputFile,
         output: {
-            dir: resolve(outputPath),
+            file: resolve(outputPath, primaryFilename(chunkName)),
             format: "umd",
             name: outputName,
             globals: umdGlobals,
-            entryFileNames: (chunkInfo) => primaryFilename(chunkInfo.name),
             exports: "named",
             sourcemap: true,
-            // Prevent code-splitting: each entry should produce a single self-contained file.
-            // Matches webpack's chunkFormat: false behaviour.
-            chunkFileNames: "_chunk.[name].js",
-            manualChunks: () => null,
+            // Inline any dynamic imports so UMD format (which forbids code-splitting) is happy.
+            inlineDynamicImports: true,
         },
         plugins,
         // Suppress noisy circular-dependency warnings from the large Babylon packages.
@@ -299,5 +299,48 @@ export function commonUMDRollupConfiguration(options) {
             if (warning.code === "CIRCULAR_DEPENDENCY") return;
             warn(warning);
         },
-    };
+    });
+
+    if (entryPoints) {
+        // Return an array of single-input configs (one per entry).
+        // The copyMinToMaxPlugin is only attached to the first config to avoid
+        // copying the same files multiple times.
+        return Object.entries(entryPoints).map(([chunkName, inputFile], i) => {
+            const perEntryPlugins = [
+                babylonUMDExternalsPlugin([devPackageName, ...optionalExternalFunctionSkip]),
+                aliasPlugin({ entries: aliasEntries }),
+                typescript({
+                    tsconfig: "tsconfig.build.json",
+                    declaration: false,
+                    declarationMap: false,
+                    sourceMap: true,
+                    inlineSources: false,
+                }),
+                nodeResolve({ mainFields: ["browser", "module", "main"], browser: true }),
+                commonjs(),
+                ...(production ? [terser()] : []),
+                ...(minToMax && production && i === 0 ? [copyMinToMaxPlugin(resolve(outputPath), primaryFilename, chunkNames)] : []),
+            ];
+            return {
+                input: inputFile,
+                output: {
+                    file: resolve(outputPath, primaryFilename(chunkName)),
+                    format: "umd",
+                    name: outputName,
+                    globals: umdGlobals,
+                    exports: "named",
+                    sourcemap: true,
+                    // Inline any dynamic imports so UMD format (which forbids code-splitting) is happy.
+                    inlineDynamicImports: true,
+                },
+                plugins: perEntryPlugins,
+                onwarn(warning, warn) {
+                    if (warning.code === "CIRCULAR_DEPENDENCY") return;
+                    warn(warning);
+                },
+            };
+        });
+    }
+
+    return makeSingleConfig("./src/index.ts", devPackageName);
 }

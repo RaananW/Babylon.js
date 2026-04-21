@@ -22,7 +22,7 @@ async function main() {
 
     const engine = new Engine(canvas, false);
     const scene = new Scene(engine);
-    const nodeParticleSet = new NodeParticleSystemSet();
+    const nodeParticleSet = new NodeParticleSystemSet("nodeParticleSystemSet");
     nodeParticleSet.setToDefault();
 
     NodeParticleEditor.Show({
