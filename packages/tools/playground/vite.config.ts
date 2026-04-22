@@ -88,9 +88,18 @@ export default defineConfig({
     },
     optimizeDeps: {
         ...base.optimizeDeps,
-        // babylonjs-gltf2interface is a types-only package with no JS entry; esbuild
-        // cannot pre-bundle it. Exclude it so Vite skips it during dep optimization.
-        exclude: [...(base.optimizeDeps?.exclude ?? []), "monaco-editor", "babylonjs-gltf2interface"],
+        exclude: [
+            // Workspace packages are served as individual files so all aliases
+            // resolve to the same module instances (required for correct module
+            // identity — e.g. AddAnimationExtensions must patch the same Scene
+            // class that window.BABYLON.Scene refers to).
+            ...(base.optimizeDeps?.exclude ?? []),
+            // Monaco must be excluded: pre-bundling it bundles the worker entry
+            // points into the main thread chunk, breaking web worker isolation.
+            "monaco-editor",
+            // Types-only package with no JS entry.
+            "babylonjs-gltf2interface",
+        ],
     },
     server: {
         ...base.server,
@@ -99,6 +108,13 @@ export default defineConfig({
             // which lives in node_modules/monaco-editor at the workspace root, not under
             // the playground package root).
             allow: [path.resolve(__dirname, "../../..")],
+        },
+        // Pre-transform the main entry and its top-level imports on server start.
+        // This fills Vite's transform cache before the browser makes its first
+        // request, so the initial page load is served from cache rather than
+        // triggering on-demand compilation for every file.
+        warmup: {
+            clientFiles: ["./src/vite-main.ts", "./src/playground.tsx", "./src/globalState.ts"],
         },
     },
 });
