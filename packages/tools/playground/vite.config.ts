@@ -13,11 +13,10 @@ const base = commonDevViteConfiguration({
     aliases: {
         // shared-ui-components is used by React components in this package (source-level).
         "shared-ui-components": path.resolve("../../dev/sharedUiComponents/src"),
-        // core alias is needed so TypeScript can resolve `import { type X } from "core/..."`.
-        // These are type-only imports erased at compile time — they generate NO runtime
-        // requests. Babylon itself is loaded as a pre-built UMD bundle from babylonServer
-        // (localhost:1337) by public/index.js, not as ESM from the monorepo.
-        core: path.resolve("../../dev/core/dist"),
+        // No `core` alias here — all `import { type X } from "core/..."` in this package
+        // are type-only and are erased at compile time. TypeScript resolves them via the
+        // root tsconfig.json paths mapping. Adding a Vite alias would cause Vite to crawl
+        // core/dist (2266 files) at startup, generating 4000+ unnecessary requests.
     },
     productionExternals: {
         babylonjs: "BABYLON",
