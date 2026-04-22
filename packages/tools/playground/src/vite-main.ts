@@ -10,8 +10,16 @@
  */
 // Set up MonacoEnvironment BEFORE monaco imports so workers resolve correctly.
 import "./monacoWorkerSetup";
+import * as BABYLON from "@dev/core";
 import { Playground } from "./playground";
 import { RuntimeMode } from "./globalState";
+
+// Expose the Babylon namespace globally so that legacy playground code
+// (e.g. `var scene = new BABYLON.Scene(engine)`) works in the runner.
+// In CDN mode this is done by babylon.js UMD bundle; in Vite dev mode
+// we do it here from the ES module import.
+// eslint-disable-next-line @typescript-eslint/naming-convention
+(window as unknown as Record<string, unknown>)["BABYLON"] = BABYLON;
 
 const HostElement = document.getElementById("host-element") as HTMLElement;
 
