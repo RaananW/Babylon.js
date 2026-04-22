@@ -1,40 +1,42 @@
 /**
  * Vite dev server entry point for the Babylon.js Playground.
  *
- * Detects RuntimeMode from the page URL (same logic as public/index.js)
- * and calls Playground.Show directly, importing Babylon from the monorepo
- * instead of from the CDN.
+ * Architecture: this file is the Vite-served ES module counterpart to the
+ * webpack-built babylon.playground.js UMD bundle. It does NOT import Babylon
+ * directly — Babylon (babylon.js, loaders, inspector, etc.) is loaded as
+ * pre-built UMD bundles from the babylonServer CDN clone (localhost:1337),
+ * exactly as in production. public/index.js handles that bootstrap.
  *
- * For production CDN deployments use:
- *   npm run build:deployment -w @tools/playground
+ * Vite serves: the React playground UI (Monaco, toolbar, panels).
+ * babylonServer serves: babylon.js, babylon.gui, inspector, loaders, etc.
+ *
+ * The shim served by the Vite dev server at /babylon.playground.js intercepts
+ * the CDN bootstrap's final BABYLON.Playground.Show() call and emits a
+ * CustomEvent. This module listens for it and invokes the real Playground.Show.
  */
-// Set up MonacoEnvironment BEFORE monaco imports so workers resolve correctly.
 import "./monacoWorkerSetup";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import * as BABYLONNs from "core";
-import { AttachInspectorGlobals } from "inspector/legacy/legacy";
 import { Playground } from "./playground";
-import { RuntimeMode } from "./globalState";
 
-// Expose Babylon globally so that legacy playground code (e.g. `new BABYLON.Scene(engine)`)
-// works in the runner. In CDN mode window.BABYLON is set by the UMD babylon.js bundle.
-// In Vite dev mode we import the ES module — but ES module namespace objects are
-// non-extensible, so the CDN inspector bundle (UMD) fails when it tries to assign
-// BABYLON.Inspector to it. We copy all exports into a plain mutable object first.
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const BABYLON = Object.assign(Object.create(null) as Record<string, unknown>, BABYLONNs as unknown as Record<string, unknown>);
-(window as unknown as Record<string, unknown>)["BABYLON"] = BABYLON;
+type ShowArgs = Parameters<typeof Playground.Show>;
 
-// Attach Inspector v2 globals (sets window.INSPECTOR and window.BABYLON.Inspector).
-// In CDN mode the UMD inspector bundle does this; in Vite dev mode we import the
-// ESM inspector-v2 package directly and wire it up via its legacy compatibility shim.
-AttachInspectorGlobals();
+function startPlayground(args: ShowArgs) {
+    Playground.Show(...args);
+}
 
-const HostElement = document.getElementById("host-element") as HTMLElement;
-
-// Detect runtime mode from the page filename — mirrors public/index.js behaviour.
-// RuntimeMode.Editor = 0 (default), Full = 1, Frame = 2
-// eslint-disable-next-line prettier/prettier
-const CurrentMode = window.location.href.includes("full.html") ? RuntimeMode.Full : window.location.href.includes("frame.html") ? RuntimeMode.Frame : RuntimeMode.Editor;
-
-Playground.Show(HostElement, CurrentMode, "dev", []);
+// The CDN bootstrap (public/index.js) calls BABYLON.Playground.Show after
+// loading all babylon bundles from babylonServer. The /babylon.playground.js
+// shim captures those args in window.__vitePlaygroundArgs and dispatches
+// a "babylonPlaygroundReady" event. As a deferred module, vite-main.ts may
+// run before or after that shim — handle both orderings.
+const w = window as unknown as Record<string, unknown>;
+if (Array.isArray(w["__vitePlaygroundArgs"])) {
+    startPlayground(w["__vitePlaygroundArgs"] as ShowArgs);
+} else {
+    window.addEventListener(
+        "babylonPlaygroundReady",
+        (e: Event) => {
+            startPlayground((e as CustomEvent<{ args: ShowArgs }>).detail.args);
+        },
+        { once: true }
+    );
+}
