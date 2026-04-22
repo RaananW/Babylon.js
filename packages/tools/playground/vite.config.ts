@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import fs from "fs";
 import path from "path";
-import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import { commonDevViteConfiguration } from "../../public/viteToolsHelper.mjs";
 
@@ -26,7 +25,10 @@ const base = commonDevViteConfiguration({
 export default defineConfig({
     ...base,
     plugins: [
-        react(),
+        // Spread base plugins first — this includes react() and the cssModuleNamespaceInteropPlugin
+        // that rewrites `import * as styles from "*.module.scss"` to `import styles from "*.module.scss"`
+        // (needed because Vite CSS modules emit a default export, not a namespace).
+        ...(base.plugins ?? []),
         // exportAsDefault + include: vite-plugin-svgr v5 changed its default include
         // pattern to '**/*.svg?react'. Playground imports SVGs as plain default imports
         // (e.g. `import Icon from "./icon.svg"`), so we must explicitly include '**/*.svg'
