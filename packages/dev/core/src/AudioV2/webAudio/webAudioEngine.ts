@@ -432,12 +432,12 @@ export class _WebAudioEngine extends AudioEngineV2 {
             return;
         }
 
-        const hasActiveSounds = this.sounds.some((s) => s.state === SoundState.Started);
+        const hasActiveSounds = this.sounds.some((s) => s.state === SoundState.Started || s.state === SoundState.Starting || s.state === SoundState.Stopping);
 
         if (hasActiveSounds && this._silentHtmlAudio.paused) {
             // Resume silent audio for iOS ringer switch workaround while sounds are playing.
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            this._silentHtmlAudio.play();
+            // eslint-disable-next-line github/no-then
+            void this._silentHtmlAudio.play().catch(() => {});
         } else if (!hasActiveSounds && !this._silentHtmlAudio.paused) {
             // Pause silent audio when no sounds are playing to avoid triggering iOS Safari's
             // audio playback detection, which causes FPS throttling and shows a blue audio icon.
@@ -512,7 +512,7 @@ export class _WebAudioEngine extends AudioEngineV2 {
             audio.src = "data:audio/wav;base64,UklGRjAAAABXQVZFZm10IBAAAAABAAEAgLsAAAB3AQACABAAZGF0YQwAAAAAAAEA/v8CAP//AQA=";
 
             // Play briefly to activate the element, then immediately pause.
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises, github/no-then
+            // eslint-disable-next-line github/no-then
             audio.play().then(
                 () => audio.pause(),
                 () => {}
