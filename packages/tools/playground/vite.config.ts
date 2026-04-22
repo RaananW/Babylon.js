@@ -79,6 +79,11 @@ export default defineConfig({
     },
     optimizeDeps: {
         ...base.optimizeDeps,
+        // Vite auto-excludes workspace-symlinked packages from pre-bundling.
+        // @dev/core is a symlink → packages/dev/core → dist/index (2266 barrel-re-export files).
+        // Without this include, every file gets served individually = ~4000 requests.
+        // Explicitly including it forces a single pre-bundled chunk.
+        include: [...(base.optimizeDeps?.include ?? []), "@dev/core"],
         exclude: [...(base.optimizeDeps?.exclude ?? []), "monaco-editor", "babylonjs-gltf2interface"],
     },
     server: {
