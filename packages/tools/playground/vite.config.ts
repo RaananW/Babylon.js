@@ -14,7 +14,16 @@ const base = commonDevViteConfiguration({
     aliases: {
         "shared-ui-components": path.resolve("../../dev/sharedUiComponents/src"),
         core: path.resolve("../../dev/core/dist"),
-        inspector: path.resolve("../../dev/inspector/dist"),
+        // inspector-v2 is the modern inspector (package name @dev/inspector, folder inspector-v2).
+        // The legacy inspector folder (packages/dev/inspector) is @dev/inspector-legacy.
+        inspector: path.resolve("../../dev/inspector-v2/dist"),
+        // Inspector v2 imports from these packages sub-paths.
+        loaders: path.resolve("../../dev/loaders/dist"),
+        materials: path.resolve("../../dev/materials/dist"),
+        addons: path.resolve("../../dev/addons/dist"),
+        gui: path.resolve("../../dev/gui/dist"),
+        serializers: path.resolve("../../dev/serializers/dist"),
+        "gui-editor": path.resolve("../guiEditor/dist"),
     },
     productionExternals: {
         babylonjs: "BABYLON",
@@ -79,7 +88,9 @@ export default defineConfig({
     },
     optimizeDeps: {
         ...base.optimizeDeps,
-        exclude: [...(base.optimizeDeps?.exclude ?? []), "monaco-editor"],
+        // babylonjs-gltf2interface is a types-only package with no JS entry; esbuild
+        // cannot pre-bundle it. Exclude it so Vite skips it during dep optimization.
+        exclude: [...(base.optimizeDeps?.exclude ?? []), "monaco-editor", "babylonjs-gltf2interface"],
     },
     server: {
         ...base.server,

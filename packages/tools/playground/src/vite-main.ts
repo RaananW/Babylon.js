@@ -10,7 +10,9 @@
  */
 // Set up MonacoEnvironment BEFORE monaco imports so workers resolve correctly.
 import "./monacoWorkerSetup";
-import * as BABYLONNs from "@dev/core";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import * as BABYLONNs from "core";
+import { AttachInspectorGlobals } from "inspector/legacy/legacy";
 import { Playground } from "./playground";
 import { RuntimeMode } from "./globalState";
 
@@ -22,6 +24,11 @@ import { RuntimeMode } from "./globalState";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const BABYLON = Object.assign(Object.create(null) as Record<string, unknown>, BABYLONNs as unknown as Record<string, unknown>);
 (window as unknown as Record<string, unknown>)["BABYLON"] = BABYLON;
+
+// Attach Inspector v2 globals (sets window.INSPECTOR and window.BABYLON.Inspector).
+// In CDN mode the UMD inspector bundle does this; in Vite dev mode we import the
+// ESM inspector-v2 package directly and wire it up via its legacy compatibility shim.
+AttachInspectorGlobals();
 
 const HostElement = document.getElementById("host-element") as HTMLElement;
 
