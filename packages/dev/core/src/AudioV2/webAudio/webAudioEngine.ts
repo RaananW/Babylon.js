@@ -436,6 +436,8 @@ export class _WebAudioEngine extends AudioEngineV2 {
 
         if (hasActiveSounds && this._silentHtmlAudio.paused) {
             // Resume silent audio for iOS ringer switch workaround while sounds are playing.
+            // Errors are safe to ignore — the silent audio element is a workaround, not a
+            // user-facing sound, so a rejected play (e.g. missing user gesture) is harmless.
             // eslint-disable-next-line github/no-then
             void this._silentHtmlAudio.play().catch(() => {});
         } else if (!hasActiveSounds && !this._silentHtmlAudio.paused) {
@@ -512,6 +514,10 @@ export class _WebAudioEngine extends AudioEngineV2 {
             audio.src = "data:audio/wav;base64,UklGRjAAAABXQVZFZm10IBAAAAABAAEAgLsAAAB3AQACABAAZGF0YQwAAAAAAAEA/v8CAP//AQA=";
 
             // Play briefly to activate the element, then immediately pause.
+            // The rejection handler is intentionally empty — play() can reject if the
+            // browser requires a more specific user gesture; this is non-fatal since
+            // the audio context unlock is the primary goal, and the silent element is
+            // only a supplementary iOS ringer-switch workaround.
             // eslint-disable-next-line github/no-then
             audio.play().then(
                 () => audio.pause(),
