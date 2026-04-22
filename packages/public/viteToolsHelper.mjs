@@ -85,49 +85,76 @@ export const babylonGlobals = {
  *   E.g. `{ core: "BABYLON", gui: "BABYLON.GUI" }`
  */
 export function babylonDevExternalsPlugin(externals) {
-    const VIRTUAL_PREFIX = "\0babylon-ext:";
+    const pkgPrefixes = Object.keys(externals);
+
+    function makeGlobalChain(globalPath) {
+        return globalPath
+            .split(".")
+            .reduce((acc, key) => `${acc}["${key}"]`, `(typeof globalThis !== "undefined" ? globalThis : window)`);
+    }
 
     return {
         name: "babylon-dev-externals",
+        // Run before Vite's built-in TypeScript transform so we see the original
+        // import statements and can remove them before esbuild tries to resolve them.
+        enforce: "pre",
 
-        resolveId(source) {
-            // Handle gltf2interface
-            if (source.includes("babylonjs-gltf2interface")) {
-                return `${VIRTUAL_PREFIX}babylonjs-gltf2interface:BABYLON.GLTF2`;
+        // Transform-based approach (dev + build): rewrite import statements that
+        // reference external packages into direct property accesses on the global.
+        // This is the exact equivalent of webpack's `externals: { "@dev/core": "BABYLON" }`.
+        //
+        // import { Logger } from "@dev/core"              → const { Logger } = BABYLON ?? {};
+        // import { Color3 as C3 } from "core/Maths/..."   → const { Color3: C3 } = BABYLON ?? {};
+        // import * as ns from "@dev/core"                 → const ns = BABYLON ?? {};
+        // import type { ... } from "@dev/core"            → (removed)
+        transform(code, id) {
+            if (!/\.[tj]sx?$/.test(id)) return null;
+            if (!pkgPrefixes.some((p) => code.includes(`"${p}`) || code.includes(`'${p}`))) return null;
+
+            let result = code;
+
+            for (const [pkg, globalPath] of Object.entries(externals)) {
+                const globalChain = makeGlobalChain(globalPath);
+                const escapedPkg = pkg.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+                // Matches `import [type] <specifier> from "pkg[/sub/path]"[;]`
+                // {[^}]+} handles multi-line named imports; [^\n{'"…]+ handles default/namespace
+                const importRe = new RegExp(
+                    `import\\s+(type\\s+)?({[^}]+}|[^\\n{'"]+)\\s+from\\s+["']${escapedPkg}(?:/[^"']*)?["'][ \\t]*;?`,
+                    "gm"
+                );
+
+                result = result.replace(importRe, (match, isTypeOnly, specifierPart) => {
+                    // `import type { … }` — erase entirely
+                    if (isTypeOnly) return "";
+
+                    const spec = specifierPart.trim();
+
+                    // `import * as ns from "…"` → `const ns = GLOBAL ?? {};`
+                    if (spec.startsWith("*")) {
+                        const ns = spec.replace(/^\*\s+as\s+/, "").trim();
+                        return `const ${ns} = ${globalChain} ?? {};`;
+                    }
+
+                    // `import { X, type Y, Z as W } from "…"` → `const { X, Z: W } = GLOBAL ?? {};`
+                    if (spec.startsWith("{")) {
+                        const inner = spec.slice(1, spec.lastIndexOf("}"));
+                        const names = inner
+                            .split(",")
+                            .map((n) => n.trim())
+                            .filter((n) => n && !/^\s*$/.test(n) && !n.startsWith("type "))
+                            // TypeScript `X as Y` → JS destructuring `X: Y`
+                            .map((n) => n.replace(/\s+as\s+(\w+)/, ": $1"));
+                        if (names.length === 0) return ""; // all names were type-only
+                        return `const { ${names.join(", ")} } = ${globalChain} ?? {};`;
+                    }
+
+                    // `import X from "…"` → `const X = GLOBAL ?? {};`
+                    return `const ${spec} = ${globalChain} ?? {};`;
+                });
             }
-            const pkg = source.split("/")[0];
-            const globalVar = externals[pkg];
-            if (globalVar !== undefined) {
-                return `${VIRTUAL_PREFIX}${source}:${globalVar}`;
-            }
-            return null;
-        },
 
-        load(id) {
-            if (!id.startsWith(VIRTUAL_PREFIX)) return null;
-
-            // Extract global path (e.g. "BABYLON.GUI")
-            const globalVar = id.slice(id.lastIndexOf(":") + 1);
-
-            // Build a chain of property accesses from a safe global root:
-            // "BABYLON.GUI" → (globalThis ?? window)["BABYLON"]["GUI"]
-            const parts = globalVar.split(".");
-            const root = `(typeof globalThis !== "undefined" ? globalThis : window)`;
-            const chain = parts.reduce((acc, key) => `${acc}["${key}"]`, root);
-
-            return [
-                `const __g__ = ${chain};`,
-                `export default __g__;`,
-                // Re-export all enumerable own properties as named exports so that
-                // "import { Engine } from 'core/...'" picks up Engine from BABYLON.
-                `if (__g__ && typeof __g__ === "object") {`,
-                `  for (const __k__ of Object.getOwnPropertyNames(__g__)) {`,
-                `    if (__k__ !== "default" && /^[A-Za-z_$]/.test(__k__)) {`,
-                `      Object.defineProperty(__babel_reexports__ = __babel_reexports__ || {}, __k__, { get: () => __g__[__k__] });`,
-                `    }`,
-                `  }`,
-                `}`,
-            ].join("\n");
+            return result !== code ? { code: result, map: null } : null;
         },
     };
 }

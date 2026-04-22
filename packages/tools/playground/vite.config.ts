@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import path from "path";
 import svgr from "vite-plugin-svgr";
-import { commonDevViteConfiguration } from "../../public/viteToolsHelper.mjs";
+import { commonDevViteConfiguration, babylonDevExternalsPlugin } from "../../public/viteToolsHelper.mjs";
 
 // The defaultDocumentColorsComputer in Monaco core uses negative lookbehind regexes
 // unsupported in older Safari. Redirect to our compat shim (same approach as webpack's
@@ -12,11 +12,10 @@ const base = commonDevViteConfiguration({
     port: parseInt(process.env.PLAYGROUND_PORT ?? "1338"),
     aliases: {
         // shared-ui-components is used by React components in this package (source-level).
+        // Babylon packages (core/*, @dev/core) are NOT aliased here — they are handled by
+        // babylonDevExternalsPlugin below, which rewrites all their imports to globalThis.BABYLON
+        // accesses, exactly as webpack's `externals: { "@dev/core": "BABYLON" }` did.
         "shared-ui-components": path.resolve("../../dev/sharedUiComponents/src"),
-        // No `core` alias here — all `import { type X } from "core/..."` in this package
-        // are type-only and are erased at compile time. TypeScript resolves them via the
-        // root tsconfig.json paths mapping. Adding a Vite alias would cause Vite to crawl
-        // core/dist (2266 files) at startup, generating 4000+ unnecessary requests.
     },
     productionExternals: {
         babylonjs: "BABYLON",
@@ -29,6 +28,11 @@ export default defineConfig({
     plugins: [
         // Spread base plugins first — includes react() and cssModuleNamespaceInteropPlugin.
         ...(base.plugins ?? []),
+        // Replicate webpack `externals: { "@dev/core": "BABYLON" }` for Vite.
+        // Rewrites all `import { X } from "@dev/core"` and `import { X } from "core/..."` to
+        // `const { X } = globalThis.BABYLON ?? {}` so no ESM requests are made for those
+        // packages. sharedUiComponents/src also imports from "core/..." so both must be mapped.
+        babylonDevExternalsPlugin({ "@dev/core": "BABYLON", core: "BABYLON" }),
         svgr({ include: "**/*.svg", exportAsDefault: true }),
         {
             // Serves /babylon.playground.js — a shim replacing the webpack-built UMD bundle.
@@ -79,11 +83,6 @@ export default defineConfig({
     },
     optimizeDeps: {
         ...base.optimizeDeps,
-        // Vite auto-excludes workspace-symlinked packages from pre-bundling.
-        // @dev/core is a symlink → packages/dev/core → dist/index (2266 barrel-re-export files).
-        // Without this include, every file gets served individually = ~4000 requests.
-        // Explicitly including it forces a single pre-bundled chunk.
-        include: [...(base.optimizeDeps?.include ?? []), "@dev/core"],
         exclude: [...(base.optimizeDeps?.exclude ?? []), "monaco-editor", "babylonjs-gltf2interface"],
     },
     server: {
