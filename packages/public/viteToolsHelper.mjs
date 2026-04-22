@@ -88,9 +88,7 @@ export function babylonDevExternalsPlugin(externals) {
     const pkgPrefixes = Object.keys(externals);
 
     function makeGlobalChain(globalPath) {
-        return globalPath
-            .split(".")
-            .reduce((acc, key) => `${acc}["${key}"]`, `(typeof globalThis !== "undefined" ? globalThis : window)`);
+        return globalPath.split(".").reduce((acc, key) => `${acc}["${key}"]`, `(typeof globalThis !== "undefined" ? globalThis : window)`);
     }
 
     return {
@@ -119,10 +117,7 @@ export function babylonDevExternalsPlugin(externals) {
 
                 // Matches `import [type] <specifier> from "pkg[/sub/path]"[;]`
                 // {[^}]+} handles multi-line named imports; [^\n{'"…]+ handles default/namespace
-                const importRe = new RegExp(
-                    `import\\s+(type\\s+)?({[^}]+}|[^\\n{'"]+)\\s+from\\s+["']${escapedPkg}(?:/[^"']*)?["'][ \\t]*;?`,
-                    "gm"
-                );
+                const importRe = new RegExp(`import\\s+(type\\s+)?({[^}]+}|[^\\n{'"]+)\\s+from\\s+["']${escapedPkg}(?:/[^"']*)?["'][ \\t]*;?`, "gm");
 
                 result = result.replace(importRe, (match, isTypeOnly, specifierPart) => {
                     // `import type { … }` — erase entirely
