@@ -2,6 +2,7 @@ import { Observable } from "../../Misc/observable";
 import { type Nullable } from "../../types";
 import { type AbstractNamedAudioNode } from "../abstractAudio/abstractAudioNode";
 import { type AbstractSound } from "../abstractAudio/abstractSound";
+import { SoundState } from "../soundState";
 import { type AbstractSoundSource, type ISoundSourceOptions } from "../abstractAudio/abstractSoundSource";
 import { type AudioBus, type IAudioBusOptions } from "../abstractAudio/audioBus";
 import { type AudioEngineV2State, type IAudioEngineV2Options, AudioEngineV2 } from "../abstractAudio/audioEngineV2";
@@ -426,6 +427,25 @@ export class _WebAudioEngine extends AudioEngineV2 {
     }
 
     /** @internal */
+    public override _onSoundPlaybackStateChanged(): void {
+        if (!this._silentHtmlAudio) {
+            return;
+        }
+
+        const hasActiveSounds = this.sounds.some((s) => s.state === SoundState.Started);
+
+        if (hasActiveSounds && this._silentHtmlAudio.paused) {
+            // Resume silent audio for iOS ringer switch workaround while sounds are playing.
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            this._silentHtmlAudio.play();
+        } else if (!hasActiveSounds && !this._silentHtmlAudio.paused) {
+            // Pause silent audio when no sounds are playing to avoid triggering iOS Safari's
+            // audio playback detection, which causes FPS throttling and shows a blue audio icon.
+            this._silentHtmlAudio.pause();
+        }
+    }
+
+    /** @internal */
     public _addUpdateObserver(callback: () => void): void {
         if (!this._updateObservable) {
             this._updateObservable = new Observable<void>();
@@ -477,6 +497,9 @@ export class _WebAudioEngine extends AudioEngineV2 {
 
         // On iOS the ringer switch must be turned on for WebAudio to play.
         // This gets WebAudio to play with the ringer switch turned off by playing an HTMLAudioElement.
+        // The element is activated during a user gesture so it can be played/paused programmatically
+        // later. It is immediately paused to avoid triggering iOS Safari's "now playing" detection,
+        // which throttles the page to 30 FPS.
         if (!this._silentHtmlAudio) {
             this._silentHtmlAudio = document.createElement("audio");
 
@@ -488,8 +511,12 @@ export class _WebAudioEngine extends AudioEngineV2 {
             // Wave data for 0.0001 seconds of silence.
             audio.src = "data:audio/wav;base64,UklGRjAAAABXQVZFZm10IBAAAAABAAEAgLsAAAB3AQACABAAZGF0YQwAAAAAAAEA/v8CAP//AQA=";
 
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            audio.play();
+            // Play briefly to activate the element, then immediately pause.
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises, github/no-then
+            audio.play().then(
+                () => audio.pause(),
+                () => {}
+            );
         }
 
         this.userGestureObservable.notifyObservers();

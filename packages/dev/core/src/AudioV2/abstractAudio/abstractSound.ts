@@ -169,6 +169,7 @@ export abstract class AbstractSound extends AbstractSoundSource {
         }
 
         this._state = SoundState.Paused;
+        this.engine._onSoundPlaybackStateChanged();
     }
 
     /**
@@ -185,6 +186,7 @@ export abstract class AbstractSound extends AbstractSoundSource {
         }
 
         this._state = SoundState.Started;
+        this.engine._onSoundPlaybackStateChanged();
     }
 
     /**
@@ -206,6 +208,7 @@ export abstract class AbstractSound extends AbstractSoundSource {
 
     protected _afterPlay(instance: _AbstractSoundInstance): void {
         this._state = instance.state;
+        this.engine._onSoundPlaybackStateChanged();
     }
 
     protected _getNewestInstance(): Nullable<_AbstractSoundInstance> {
@@ -253,5 +256,7 @@ export abstract class AbstractSound extends AbstractSoundSource {
         }
 
         instance.dispose();
+
+        this.engine._onSoundPlaybackStateChanged();
     };
 }
