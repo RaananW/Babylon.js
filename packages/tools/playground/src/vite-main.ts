@@ -10,15 +10,17 @@
  */
 // Set up MonacoEnvironment BEFORE monaco imports so workers resolve correctly.
 import "./monacoWorkerSetup";
-import * as BABYLON from "@dev/core";
+import * as BABYLONNs from "@dev/core";
 import { Playground } from "./playground";
 import { RuntimeMode } from "./globalState";
 
-// Expose the Babylon namespace globally so that legacy playground code
-// (e.g. `var scene = new BABYLON.Scene(engine)`) works in the runner.
-// In CDN mode this is done by babylon.js UMD bundle; in Vite dev mode
-// we do it here from the ES module import.
+// Expose Babylon globally so that legacy playground code (e.g. `new BABYLON.Scene(engine)`)
+// works in the runner. In CDN mode window.BABYLON is set by the UMD babylon.js bundle.
+// In Vite dev mode we import the ES module — but ES module namespace objects are
+// non-extensible, so the CDN inspector bundle (UMD) fails when it tries to assign
+// BABYLON.Inspector to it. We copy all exports into a plain mutable object first.
 // eslint-disable-next-line @typescript-eslint/naming-convention
+const BABYLON = Object.assign(Object.create(null) as Record<string, unknown>, BABYLONNs as unknown as Record<string, unknown>);
 (window as unknown as Record<string, unknown>)["BABYLON"] = BABYLON;
 
 const HostElement = document.getElementById("host-element") as HTMLElement;
