@@ -5,7 +5,7 @@
     "scripts": {
         "build": "webpack",
         "build:declaration": "build-tools -c pud --config ./config.json",
-        "build:deployment": "npm run clean && webpack --env mode=production",
+        "build:deployment": "npm run clean && vite build",
         "typecheck": "tsc -p tsconfig.build.json --noEmit",
         "serve": "vite",
         "serve:prod": "webpack serve --env mode=production",

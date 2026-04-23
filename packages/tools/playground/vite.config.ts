@@ -125,6 +125,23 @@ export default defineConfig({
                 if (id !== VIRTUAL_MONACO_ID) return null;
                 return getMonacoMainBundle();
             },
+            // During production build, Rollup/Vite's vite:worker-import-meta-url plugin
+            // intercepts `new Worker(new URL("*.worker.js", import.meta.url))` and tries
+            // to resolve the worker entry module relative to the virtual module — which
+            // fails because the virtual module has no real filesystem path.
+            //
+            // Replace each such instantiation with a no-op stub object so Rollup never sees
+            // the import.meta.url worker pattern. Monaco degrades gracefully (no background
+            // language services) but basic editing and syntax highlighting continue to work.
+            transform(code: string, id: string) {
+                if (id !== VIRTUAL_MONACO_ID) return null;
+                const noopWorker = `new (class { postMessage() {} addEventListener() {} removeEventListener() {} terminate() {} onmessage = null; })()`;
+                const stubbed = code.replace(
+                    /new Worker\s*\(\s*new URL\s*\([^)]+,\s*import\.meta\.url\s*\)[^)]*\)/g,
+                    noopWorker
+                );
+                return stubbed !== code ? { code: stubbed, map: null } : null;
+            },
         },
         {
             // Bundles Monaco workers into single IIFEs using esbuild (Vite's own bundler).

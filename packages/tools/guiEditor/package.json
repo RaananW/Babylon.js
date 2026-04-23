@@ -11,7 +11,7 @@
     "scripts": {
         "build": "npm run clean && npm run compile",
         "build:declaration": "build-tools -c pud --config ./config.json",
-        "build:deployment": "npm run clean && webpack --env mode=production",
+        "build:deployment": "npm run clean && vite build",
         "compile": "tsc -b tsconfig.build.json --verbose",
         "postcompile": "build-tools -c pa",
         "serve": "vite",
