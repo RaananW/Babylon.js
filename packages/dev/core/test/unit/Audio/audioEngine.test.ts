@@ -97,4 +97,27 @@ describe("AudioEngine", () => {
 
         expect((audioEngine._v2 as any)._unmuteUI._button.style.display).toBe("none");
     });
+
+    it("resumeAsync clears cached promise on failure so subsequent calls can retry", async () => {
+        const audioEngine = createAudioEngine("running");
+        const audioContextMock = audioEngine._v2._audioContext as unknown as AudioContextMock;
+
+        // First call to resumeAsync rejects with InvalidStateError.
+        const error = new DOMException("Failed to start the audio device", "InvalidStateError");
+        audioContextMock.resume.mockImplementationOnce(() => Promise.reject(error));
+
+        await expect(audioEngine._v2.resumeAsync()).rejects.toThrow("Failed to start the audio device");
+
+        // The cached promise should be cleared so the next call retries.
+        expect((audioEngine._v2 as any)._resumePromise).toBeNull();
+
+        // Second call succeeds.
+        audioContextMock.resume.mockImplementationOnce(() => {
+            audioContextMock.state = "running";
+            return Promise.resolve();
+        });
+
+        await expect(audioEngine._v2.resumeAsync()).resolves.toBeUndefined();
+        expect(audioContextMock.resume).toHaveBeenCalledTimes(2);
+    });
 });

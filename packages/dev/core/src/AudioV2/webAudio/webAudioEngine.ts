@@ -382,10 +382,12 @@ export class _WebAudioEngine extends AudioEngineV2 {
 
         // On iOS Safari, resume() can throw InvalidStateError if the system interrupted or
         // closed the audio context while the page was in the background. Clear the cached
-        // promise on failure so subsequent attempts (e.g. on next user gesture) can retry.
+        // promise on failure so subsequent attempts (e.g. on next user gesture) can retry,
+        // and rethrow so callers know the resume did not succeed.
         // eslint-disable-next-line github/no-then
-        this._resumePromise = this._audioContext.resume().catch(() => {
+        this._resumePromise = this._audioContext.resume().catch((error) => {
             this._resumePromise = null;
+            throw error;
         });
 
         this.stateChangedObservable.notifyObservers(this.state);
@@ -489,8 +491,8 @@ export class _WebAudioEngine extends AudioEngineV2 {
                 clearInterval(this._resumeOnPauseTimerId);
 
                 this._resumeOnPauseTimerId = setInterval(() => {
-                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    this.resumeAsync();
+                    // eslint-disable-next-line github/no-then
+                    void this.resumeAsync().catch(() => {});
                 }, this._resumeOnPauseRetryInterval);
             }
         }
