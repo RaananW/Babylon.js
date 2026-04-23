@@ -19,7 +19,7 @@ import { Playground } from "./playground";
 
 type ShowArgs = Parameters<typeof Playground.Show>;
 
-function startPlayground(args: ShowArgs) {
+function StartPlayground(args: ShowArgs) {
     Playground.Show(...args);
 }
 
@@ -28,14 +28,14 @@ function startPlayground(args: ShowArgs) {
 // shim captures those args in window.__vitePlaygroundArgs and dispatches
 // a "babylonPlaygroundReady" event. As a deferred module, main.ts may
 // run before or after that shim — handle both orderings.
-const w = window as unknown as Record<string, unknown>;
-if (Array.isArray(w["__vitePlaygroundArgs"])) {
-    startPlayground(w["__vitePlaygroundArgs"] as ShowArgs);
+const Win = window as unknown as Record<string, unknown>;
+if (Array.isArray(Win["__vitePlaygroundArgs"])) {
+    StartPlayground(Win["__vitePlaygroundArgs"] as ShowArgs);
 } else {
     window.addEventListener(
         "babylonPlaygroundReady",
         (e: Event) => {
-            startPlayground((e as CustomEvent<{ args: ShowArgs }>).detail.args);
+            StartPlayground((e as CustomEvent<{ args: ShowArgs }>).detail.args);
         },
         { once: true }
     );

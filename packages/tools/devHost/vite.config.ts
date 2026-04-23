@@ -29,7 +29,14 @@ function stubOptionalPeerDepsPlugin(): Plugin {
     function stubNamed(bindings: string) {
         return bindings
             .split(",")
-            .map((s) => s.trim().replace(/^type\s+/, "").split(/\s+as\s+/).pop()!.trim())
+            .map((s) =>
+                s
+                    .trim()
+                    .replace(/^type\s+/, "")
+                    .split(/\s+as\s+/)
+                    .pop()!
+                    .trim()
+            )
             .filter(Boolean)
             .map((n) => `const ${n} = undefined;`)
             .join(" ");

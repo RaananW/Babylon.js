@@ -6,19 +6,19 @@
  */
 type ShowArgs = Parameters<(typeof import("./nodeGeometryEditor"))["NodeGeometryEditor"]["Show"]>;
 
-async function startEditor(args: ShowArgs) {
+async function StartEditor(args: ShowArgs) {
     const { NodeGeometryEditor } = await import("./nodeGeometryEditor");
     NodeGeometryEditor.Show(...args);
 }
 
-const w = window as unknown as Record<string, unknown>;
-if (Array.isArray(w["__viteNodeGeometryEditorArgs"])) {
-    void startEditor(w["__viteNodeGeometryEditorArgs"] as ShowArgs);
+const Win = window as unknown as Record<string, unknown>;
+if (Array.isArray(Win["__viteNodeGeometryEditorArgs"])) {
+    void StartEditor(Win["__viteNodeGeometryEditorArgs"] as ShowArgs);
 } else {
     window.addEventListener(
         "babylonNodeGeometryEditorReady",
         (e: Event) => {
-            void startEditor((e as CustomEvent<{ args: ShowArgs }>).detail.args);
+            void StartEditor((e as CustomEvent<{ args: ShowArgs }>).detail.args);
         },
         { once: true }
     );

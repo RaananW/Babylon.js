@@ -6,19 +6,19 @@
  */
 type ShowArgs = Parameters<(typeof import("./flowGraphEditor"))["FlowGraphEditor"]["Show"]>;
 
-async function startEditor(args: ShowArgs) {
+async function StartEditor(args: ShowArgs) {
     const { FlowGraphEditor } = await import("./flowGraphEditor");
     FlowGraphEditor.Show(...args);
 }
 
-const w = window as unknown as Record<string, unknown>;
-if (Array.isArray(w["__viteFlowGraphEditorArgs"])) {
-    void startEditor(w["__viteFlowGraphEditorArgs"] as ShowArgs);
+const Win = window as unknown as Record<string, unknown>;
+if (Array.isArray(Win["__viteFlowGraphEditorArgs"])) {
+    void StartEditor(Win["__viteFlowGraphEditorArgs"] as ShowArgs);
 } else {
     window.addEventListener(
         "babylonFlowGraphEditorReady",
         (e: Event) => {
-            void startEditor((e as CustomEvent<{ args: ShowArgs }>).detail.args);
+            void StartEditor((e as CustomEvent<{ args: ShowArgs }>).detail.args);
         },
         { once: true }
     );

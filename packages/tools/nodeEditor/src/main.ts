@@ -16,19 +16,19 @@
  */
 type ShowArgs = Parameters<(typeof import("./nodeEditor"))["NodeEditor"]["Show"]>;
 
-async function startEditor(args: ShowArgs) {
+async function StartEditor(args: ShowArgs) {
     const { NodeEditor } = await import("./nodeEditor");
     NodeEditor.Show(...args);
 }
 
-const w = window as unknown as Record<string, unknown>;
-if (Array.isArray(w["__viteNodeEditorArgs"])) {
-    void startEditor(w["__viteNodeEditorArgs"] as ShowArgs);
+const Win = window as unknown as Record<string, unknown>;
+if (Array.isArray(Win["__viteNodeEditorArgs"])) {
+    void StartEditor(Win["__viteNodeEditorArgs"] as ShowArgs);
 } else {
     window.addEventListener(
         "babylonNodeEditorReady",
         (e: Event) => {
-            void startEditor((e as CustomEvent<{ args: ShowArgs }>).detail.args);
+            void StartEditor((e as CustomEvent<{ args: ShowArgs }>).detail.args);
         },
         { once: true }
     );
