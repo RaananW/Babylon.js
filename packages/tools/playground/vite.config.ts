@@ -217,6 +217,23 @@ export default defineConfig({
                 frame: path.resolve(__dirname, "frame.html"),
                 full: path.resolve(__dirname, "full.html"),
             },
+            output: {
+                ...((base.build?.rollupOptions?.output as object) ?? {}),
+                // Put the Monaco virtual module into its own chunk so that the
+                // browser's ESM loader guarantees Monaco is fully initialized
+                // before the app chunk that uses it.
+                //
+                // Without this, Rollup inlines the esbuild-built Monaco bundle into
+                // the main chunk. The esbuild output uses a k()-based lazy-init
+                // system; when inlined, Rollup's module ordering can place code that
+                // extends Monaco classes before Monaco's own var assignments run,
+                // causing "X is not a constructor" TDZ errors at runtime.
+                manualChunks(id: string) {
+                    if (id === "\0virtual:monaco-main") {
+                        return "monaco";
+                    }
+                },
+            },
         },
     },
     optimizeDeps: {
