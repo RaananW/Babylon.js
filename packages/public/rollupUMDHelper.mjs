@@ -29,6 +29,12 @@ const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 // Package name mappings
 // ---------------------------------------------------------------------------
 
+/**
+ * Private packages are always bundled, never externalized as UMD externals.
+ * Mirrors the `privatePackages` list in `@dev/build-tools/src/packageMapping.ts`.
+ */
+const privatePackages = ["shared-ui-components"];
+
 /** Maps dev package names (from source imports) to their UMD module IDs. */
 const devNameToUMDId = {
     core: "babylonjs",
@@ -126,6 +132,10 @@ export function babylonUMDExternalsPlugin(excludePackages = []) {
             const pkg = source.split("/")[0];
             if (excludePackages.includes(pkg)) {
                 return null; // let alias / node resolution handle it
+            }
+            // Private packages are always bundled, never externalized.
+            if (privatePackages.includes(pkg)) {
+                return null;
             }
             const umdId = devNameToUMDId[pkg];
             if (umdId) {
