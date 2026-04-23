@@ -6,7 +6,7 @@ const mode = process.env.ROLLUP_MODE === "production" ? "production" : "developm
 export default commonUMDRollupConfiguration({
     mode,
     devPackageName: "node-particle-editor",
-    devPackageAliasPath: "../../../tools/nodeParticleEditor/dist",
+    devPackageAliasPath: "../../../tools/nodeParticleEditor/src",
     namespace: "NODEPARTICLEEDITOR",
     outputPath: path.resolve("."),
     maxMode: true,

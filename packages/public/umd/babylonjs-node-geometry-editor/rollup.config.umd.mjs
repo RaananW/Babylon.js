@@ -6,7 +6,7 @@ const mode = process.env.ROLLUP_MODE === "production" ? "production" : "developm
 export default commonUMDRollupConfiguration({
     mode,
     devPackageName: "node-geometry-editor",
-    devPackageAliasPath: "../../../tools/nodeGeometryEditor/dist",
+    devPackageAliasPath: "../../../tools/nodeGeometryEditor/src",
     namespace: "NODEGEOMETRYEDITOR",
     outputPath: path.resolve("."),
     maxMode: true,

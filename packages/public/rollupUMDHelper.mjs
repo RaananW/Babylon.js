@@ -17,7 +17,13 @@ import terser from "@rollup/plugin-terser";
 import postcss from "rollup-plugin-postcss";
 import url from "@rollup/plugin-url";
 import { copyFileSync, existsSync } from "fs";
-import { resolve, join } from "path";
+import { resolve, join, dirname } from "path";
+import { fileURLToPath } from "url";
+
+// Repo root — used as the filterRoot for @rollup/plugin-typescript so that
+// `**/*.ts` patterns are matched against repo-relative paths (which never start
+// with "..") regardless of where in the monorepo the file being compiled lives.
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
 // ---------------------------------------------------------------------------
 // Package name mappings
@@ -126,6 +132,70 @@ export function babylonUMDExternalsPlugin(excludePackages = []) {
                 return { id: umdId, external: true };
             }
             return null;
+        },
+    };
+}
+
+/**
+ * Rollup renderChunk plugin that replaces any dynamic `import("umdId")` calls
+ * that survive inlineDynamicImports (i.e. imports of external packages) with
+ * `Promise.resolve(GLOBAL)` so the output remains ES5/ES6-compatible.
+ *
+ * This is needed because Rollup cannot inline dynamic imports of external
+ * modules — it leaves `import("babylonjs")` etc. in the UMD output, which is
+ * ES2020 syntax that fails the `es-check es6` gate.
+ */
+function rewriteDynamicExternalImportsPlugin() {
+    return {
+        name: "rewrite-dynamic-external-imports",
+        renderChunk(code) {
+            let result = code;
+            // Replace process.env.NODE_ENV so React (and other libs) bundle in production
+            // mode and don't reference the Node.js `process` global in browsers.
+            result = result.replaceAll("process.env.NODE_ENV", '"production"');
+            for (const [umdId, globalVar] of Object.entries(umdGlobals)) {
+                // Match import("umdId") or import('umdId') — dynamic import of an external.
+                const re = new RegExp(`import\\((['"])${umdId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\1\\)`, "g");
+                result = result.replace(re, `Promise.resolve(${globalVar})`);
+            }
+            return result !== code ? { code: result, map: null } : null;
+        },
+    };
+}
+
+/**
+ * Fallback plugin that transpiles TypeScript files that @rollup/plugin-typescript
+ * cannot compile because they are outside the tsconfig rootDir (e.g. aliased
+ * sources from other packages in the monorepo).
+ *
+ * Uses ts.transpileModule for single-file transpilation without type checking.
+ */
+function transpileExternalTsPlugin() {
+    // Import typescript lazily so the plugin doesn't error in pure-JS contexts.
+    let ts;
+    return {
+        name: "transpile-external-ts",
+        async transform(code, id) {
+            // Only handle .ts/.tsx files.
+            if (!id.endsWith(".ts") && !id.endsWith(".tsx")) return null;
+            // Skip files inside this package's own src (handled by @rollup/plugin-typescript).
+            if (id.startsWith(resolve("src"))) return null;
+            if (!ts) {
+                ts = (await import("typescript")).default;
+            }
+            const isTsx = id.endsWith(".tsx");
+            const result = ts.transpileModule(code, {
+                fileName: id,
+                compilerOptions: {
+                    module: ts.ModuleKind.ESNext,
+                    target: ts.ScriptTarget.ES2020,
+                    jsx: isTsx ? ts.JsxEmit.React : ts.JsxEmit.Preserve,
+                    esModuleInterop: true,
+                    allowSyntheticDefaultImports: true,
+                    experimentalDecorators: true,
+                },
+            });
+            return { code: result.outputText, map: result.sourceMapText || null };
         },
     };
 }
@@ -276,9 +346,17 @@ export function commonUMDRollupConfiguration(options) {
             declarationMap: false,
             sourceMap: true,
             inlineSources: false,
+            // filterRoot set to the repo root so **/*.ts patterns match files from
+            // any package (including aliased cross-package tool sources).
+            filterRoot: REPO_ROOT,
+            include: ["**/*.ts", "**/*.tsx"],
         }),
-        nodeResolve({ mainFields: ["browser", "module", "main"], browser: true }),
+        // Fallback: transpile .ts files that are outside the tsconfig rootDir
+        // (e.g. aliased tool sources) which @rollup/plugin-typescript skips.
+        transpileExternalTsPlugin(),
+        nodeResolve({ mainFields: ["browser", "module", "main"], browser: true, extensions: [".ts", ".tsx", ".js", ".jsx"] }),
         commonjs(),
+        rewriteDynamicExternalImportsPlugin(),
         ...(production ? [terser()] : []),
         ...(minToMax && production ? [copyMinToMaxPlugin(resolve(outputPath), primaryFilename, chunkNames)] : []),
     ];
@@ -297,6 +375,10 @@ export function commonUMDRollupConfiguration(options) {
             globals: umdGlobals,
             exports: "named",
             sourcemap: true,
+            // extend:true makes Rollup emit `global.BABYLON = global.BABYLON || {}`
+            // instead of `global.BABYLON = {}`, so each bundle merges into the shared
+            // namespace rather than overwriting the previous bundle's exports.
+            extend: true,
             // Inline any dynamic imports so UMD format (which forbids code-splitting) is happy.
             inlineDynamicImports: true,
         },
@@ -324,9 +406,13 @@ export function commonUMDRollupConfiguration(options) {
                     declarationMap: false,
                     sourceMap: true,
                     inlineSources: false,
+                    filterRoot: REPO_ROOT,
+                    include: ["**/*.ts", "**/*.tsx"],
                 }),
-                nodeResolve({ mainFields: ["browser", "module", "main"], browser: true }),
+                transpileExternalTsPlugin(),
+                nodeResolve({ mainFields: ["browser", "module", "main"], browser: true, extensions: [".ts", ".tsx", ".js", ".jsx"] }),
                 commonjs(),
+                rewriteDynamicExternalImportsPlugin(),
                 ...(production ? [terser()] : []),
                 ...(minToMax && production && i === 0 ? [copyMinToMaxPlugin(resolve(outputPath), primaryFilename, chunkNames)] : []),
             ];
@@ -339,6 +425,7 @@ export function commonUMDRollupConfiguration(options) {
                     globals: umdGlobals,
                     exports: "named",
                     sourcemap: true,
+                    extend: true,
                     // Inline any dynamic imports so UMD format (which forbids code-splitting) is happy.
                     inlineDynamicImports: true,
                 },

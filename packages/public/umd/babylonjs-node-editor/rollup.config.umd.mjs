@@ -6,7 +6,7 @@ const mode = process.env.ROLLUP_MODE === "production" ? "production" : "developm
 export default commonUMDRollupConfiguration({
     mode,
     devPackageName: "node-editor",
-    devPackageAliasPath: "../../../tools/nodeEditor/dist",
+    devPackageAliasPath: "../../../tools/nodeEditor/src",
     namespace: "NODEEDITOR",
     outputPath: path.resolve("."),
     maxMode: true,

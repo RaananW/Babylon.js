@@ -6,7 +6,7 @@ const mode = process.env.ROLLUP_MODE === "production" ? "production" : "developm
 export default commonUMDRollupConfiguration({
     mode,
     devPackageName: "inspector",
-    devPackageAliasPath: "../../../dev/inspector-v2/dist",
+    devPackageAliasPath: "../../../dev/inspector-v2/src",
     namespace: "INSPECTOR",
     outputPath: path.resolve("."),
     maxMode: true,

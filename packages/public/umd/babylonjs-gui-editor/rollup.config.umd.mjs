@@ -6,7 +6,7 @@ const mode = process.env.ROLLUP_MODE === "production" ? "production" : "developm
 export default commonUMDRollupConfiguration({
     mode,
     devPackageName: "gui-editor",
-    devPackageAliasPath: "../../../tools/guiEditor/dist",
+    devPackageAliasPath: "../../../tools/guiEditor/src",
     namespace: "GUIEDITOR",
     outputPath: path.resolve("."),
     maxMode: true,
