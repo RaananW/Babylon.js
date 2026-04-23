@@ -136,10 +136,7 @@ export default defineConfig({
             transform(code: string, id: string) {
                 if (id !== VIRTUAL_MONACO_ID) return null;
                 const noopWorker = `new (class { postMessage() {} addEventListener() {} removeEventListener() {} terminate() {} onmessage = null; })()`;
-                const stubbed = code.replace(
-                    /new Worker\s*\(\s*new URL\s*\([^)]+,\s*import\.meta\.url\s*\)[^)]*\)/g,
-                    noopWorker
-                );
+                const stubbed = code.replace(/new Worker\s*\(\s*new URL\s*\([^)]+,\s*import\.meta\.url\s*\)[^)]*\)/g, noopWorker);
                 return stubbed !== code ? { code: stubbed, map: null } : null;
             },
         },
