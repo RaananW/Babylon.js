@@ -8,6 +8,78 @@ import { commonDevViteConfiguration, babylonDevExternalsPlugin } from "../../pub
 // NormalModuleReplacementPlugin in the old webpack.config.js).
 const monacoColorComputerShim = path.resolve(__dirname, "src/tools/monaco/compat/defaultDocumentColorsComputer.ts");
 
+// ---------------------------------------------------------------------------
+// Monaco main-thread bundle
+// ---------------------------------------------------------------------------
+// Monaco editor has ~1100 individual ESM files. `optimizeDeps.include` can't
+// help here because the dep optimizer also scans @dev/core dist files which
+// contain bare `core/...` specifiers the optimizer can't resolve.
+//
+// Instead: intercept ALL `monaco-editor/*` imports via resolveId and return
+// a single pre-built ESM virtual module. The module is built once by esbuild
+// (the same bundler used for the Monaco worker shims) and cached for the
+// lifetime of the dev server.
+//
+// editor.main.js (not editor.api.js) is used because it registers language
+// support — including `typescript` which source files import via:
+//   import { typescript } from "monaco-editor"
+// Color/HSLA are Monaco-internal utilities needed by defaultDocumentColorsComputer.
+const VIRTUAL_MONACO_ID = "\0virtual:monaco-main";
+let _monacoMainPromise: Promise<string> | null = null;
+
+function getMonacoMainBundle(): Promise<string> {
+    if (!_monacoMainPromise) {
+        _monacoMainPromise = import("esbuild").then(({ build }) =>
+            build({
+                stdin: {
+                    contents: ['export * from "monaco-editor/esm/vs/editor/editor.main.js";', 'export { Color, HSLA } from "monaco-editor/esm/vs/base/common/color.js";'].join(
+                        "\n"
+                    ),
+                    resolveDir: process.cwd(),
+                    loader: "js",
+                },
+                bundle: true,
+                write: false,
+                format: "esm",
+                platform: "browser",
+                minify: false,
+                // Monaco imports many CSS files from JS. Inject each one as a <style> tag
+                // so Monaco's editor layout, cursors, and decorations render correctly.
+                // (Passing CSS through esbuild without write:true/outdir would discard it.)
+                plugins: [
+                    {
+                        name: "inject-monaco-css",
+                        setup(build) {
+                            build.onResolve({ filter: /\.css$/ }, (args) => ({
+                                path: path.resolve(args.resolveDir, args.path),
+                                namespace: "inject-css",
+                            }));
+                            build.onLoad({ filter: /.*/, namespace: "inject-css" }, async (args) => {
+                                const { readFile } = await import("fs/promises");
+                                let css = await readFile(args.path, "utf-8");
+                                // Rewrite relative url() references so they resolve correctly when
+                                // the CSS is injected as a <style> tag (the browser would otherwise
+                                // resolve them against the page root, not the CSS file's directory).
+                                const cssDir = path.dirname(args.path);
+                                css = css.replace(/url\(\s*(['"]?)(?!data:|https?:|\/)(.*?)\1\s*\)/g, (_match, quote, ref) => {
+                                    const abs = path.resolve(cssDir, ref);
+                                    return `url(${quote}/@fs${abs}${quote})`;
+                                });
+                                return {
+                                    contents: `const __s=document.createElement('style');__s.textContent=${JSON.stringify(css)};document.head.appendChild(__s);`,
+                                    loader: "js",
+                                };
+                            });
+                        },
+                    },
+                ],
+            }).then((r) => r.outputFiles[0].text)
+        );
+    }
+    return _monacoMainPromise;
+}
+// ---------------------------------------------------------------------------
+
 const base = commonDevViteConfiguration({
     port: parseInt(process.env.PLAYGROUND_PORT ?? "1338"),
     aliases: {
@@ -35,6 +107,62 @@ export default defineConfig({
         babylonDevExternalsPlugin({ "@dev/core": "BABYLON", core: "BABYLON" }),
         svgr({ include: "**/*.svg", exportAsDefault: true }),
         {
+            // Bundles the Monaco main-thread library into a single ESM virtual module.
+            // Without this, Vite serves each of the ~1100 monaco-editor/esm/* files
+            // individually via /@fs/ requests.
+            //
+            // resolveId intercepts every `monaco-editor` / `monaco-editor/…` import from
+            // source files and redirects it to the same virtual module ID. load() builds
+            // the bundle once with esbuild, then serves the cached result for all callers.
+            name: "monaco-esm-bundle",
+            enforce: "pre",
+            resolveId(id: string) {
+                if (id === "monaco-editor" || id.startsWith("monaco-editor/")) {
+                    return VIRTUAL_MONACO_ID;
+                }
+            },
+            async load(id: string) {
+                if (id !== VIRTUAL_MONACO_ID) return null;
+                return getMonacoMainBundle();
+            },
+        },
+        {
+            // Bundles Monaco workers into single IIFEs using esbuild (Vite's own bundler).
+            // `?worker` imports in Vite DEV mode create module workers that still crawl every
+            // monaco-editor/esm/* file, causing 1000+ requests. This middleware builds each
+            // worker once, caches it, and serves it as a pre-bundled classic Worker script.
+            name: "monaco-worker-bundle",
+            async configureServer(server) {
+                const { build } = await import("esbuild");
+                const cache: Record<string, string> = {};
+                const entries: Record<string, string> = {
+                    editor: "monaco-editor/esm/vs/editor/editor.worker.js",
+                    ts: "monaco-editor/esm/vs/language/typescript/ts.worker.js",
+                };
+                server.middlewares.use(async (req: any, res: any, next: any) => {
+                    const match = req.url?.match(/^\/__monaco-worker-(editor|ts)\.js$/);
+                    if (!match) {
+                        next();
+                        return;
+                    }
+                    const name = match[1] as "editor" | "ts";
+                    if (!cache[name]) {
+                        const result = await build({
+                            entryPoints: [entries[name]],
+                            bundle: true,
+                            write: false,
+                            format: "iife",
+                            platform: "browser",
+                            minify: false,
+                        });
+                        cache[name] = result.outputFiles[0].text;
+                    }
+                    res.setHeader("Content-Type", "application/javascript; charset=utf-8");
+                    res.end(cache[name]);
+                });
+            },
+        },
+        {
             // Serves /babylon.playground.js — a shim replacing the webpack-built UMD bundle.
             //
             // Architecture: public/index.js (full CDN bootstrap) auto-detects localhost and
@@ -42,7 +170,7 @@ export default defineConfig({
             // fetches /babylon.playground.js then calls BABYLON.Playground.Show(). In webpack
             // mode that file is the compiled bundle registering Playground on window.BABYLON.
             // In Vite dev mode the React app is served as ES modules; this shim captures the
-            // Show() call and relays it to vite-main.ts via a CustomEvent.
+            // Show() call and relays it to main.ts via a CustomEvent.
             name: "playground-dev-shims",
             configureServer(server) {
                 server.middlewares.use("/babylon.playground.js", (_req, res) => {
@@ -64,10 +192,6 @@ export default defineConfig({
     ],
     resolve: {
         ...base.resolve,
-        alias: {
-            ...base.resolve?.alias,
-            "monaco-editor/esm/vs/editor/common/modes/supports/defaultDocumentColorsComputer.js": monacoColorComputerShim,
-        },
     },
     build: {
         ...base.build,
@@ -91,7 +215,7 @@ export default defineConfig({
             allow: [path.resolve(__dirname, "../../..")],
         },
         warmup: {
-            clientFiles: ["./src/vite-main.ts", "./src/playground.tsx", "./src/globalState.ts"],
+            clientFiles: ["./src/main.ts", "./src/playground.tsx", "./src/globalState.ts"],
         },
     },
 });

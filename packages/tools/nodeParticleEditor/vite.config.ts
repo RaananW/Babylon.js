@@ -2,19 +2,47 @@ import { defineConfig } from "vite";
 import path from "path";
 import { commonDevViteConfiguration } from "../../public/viteToolsHelper.mjs";
 
-export default defineConfig(
-    commonDevViteConfiguration({
+export default defineConfig((_env) => {
+    const base = commonDevViteConfiguration({
         port: parseInt(process.env.NPE_PORT ?? "1345"),
         aliases: {
             "shared-ui-components": path.resolve("../../dev/sharedUiComponents/src"),
-            core: path.resolve("../../dev/core/dist"),
-            loaders: path.resolve("../../dev/loaders/dist"),
-            materials: path.resolve("../../dev/materials/dist"),
+        },
+        cdnExternals: {
+            "@dev/core": "BABYLON",
+            core: "BABYLON",
+            loaders: "BABYLON",
+            materials: "BABYLON",
         },
         productionExternals: {
             babylonjs: "BABYLON",
             "babylonjs-loaders": "BABYLON",
             "babylonjs-materials": "BABYLON",
         },
-    })
-);
+    });
+
+    return {
+        ...base,
+        plugins: [
+            ...(base.plugins ?? []),
+            {
+                name: "node-particle-editor-dev-shim",
+                configureServer(server) {
+                    server.middlewares.use("/babylon.nodeParticleEditor.js", (_req, res) => {
+                        res.setHeader("Content-Type", "application/javascript; charset=utf-8");
+                        res.end(`(function () {
+    var BABYLON = window.BABYLON;
+    if (!BABYLON) return;
+    BABYLON.NodeParticleEditor = BABYLON.NodeParticleEditor || {};
+    BABYLON.NodeParticleEditor.Show = function () {
+        var args = Array.prototype.slice.call(arguments);
+        window.__viteNodeParticleEditorArgs = args;
+        window.dispatchEvent(new CustomEvent("babylonNodeParticleEditorReady", { detail: { args: args } }));
+    };
+})();`);
+                    });
+                },
+            },
+        ],
+    };
+});

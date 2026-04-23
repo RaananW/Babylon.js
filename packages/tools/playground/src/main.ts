@@ -26,7 +26,7 @@ function startPlayground(args: ShowArgs) {
 // The CDN bootstrap (public/index.js) calls BABYLON.Playground.Show after
 // loading all babylon bundles from babylonServer. The /babylon.playground.js
 // shim captures those args in window.__vitePlaygroundArgs and dispatches
-// a "babylonPlaygroundReady" event. As a deferred module, vite-main.ts may
+// a "babylonPlaygroundReady" event. As a deferred module, main.ts may
 // run before or after that shim — handle both orderings.
 const w = window as unknown as Record<string, unknown>;
 if (Array.isArray(w["__vitePlaygroundArgs"])) {

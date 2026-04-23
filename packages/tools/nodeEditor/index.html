@@ -27,14 +27,10 @@
 
     <body>
         <div id="host-element"></div>
-        <!--
-          Vite entry: resolves all imports (including babylon core) from the
-          monorepo dist/ directories. No CDN server or public/index.js needed.
-
-          For production CDN deployments (babylon loaded from CDN):
-            npm run build:deployment -w @tools/node-editor
-          and the public/index.html remains the production entry point.
-        -->
-        <script type="module" src="/src/vite-main.ts"></script>
+        <!-- CDN bootstrap: loads babylon.js from babylonServer (port 1337), then calls
+             BABYLON.NodeEditor.Show(). The shim at /babylon.nodeEditor.js (served by Vite
+             middleware) captures those args and emits a CustomEvent for main.ts. -->
+        <script src="/index.js"></script>
+        <script type="module" src="/src/main.ts"></script>
     </body>
 </html>

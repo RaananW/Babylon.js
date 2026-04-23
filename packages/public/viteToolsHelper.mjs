@@ -115,6 +115,11 @@ export function babylonDevExternalsPlugin(externals) {
                 const globalChain = makeGlobalChain(globalPath);
                 const escapedPkg = pkg.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+                // `import "pkg[/sub/path]"` — side-effect-only import. The CDN bundle already
+                // registers all these modules on the global, so we can safely drop the import.
+                const sideEffectRe = new RegExp(`import\\s+["']${escapedPkg}(?:/[^"']*)?["'][ \\t]*;?`, "gm");
+                result = result.replace(sideEffectRe, "");
+
                 // Matches `import [type] <specifier> from "pkg[/sub/path]"[;]`
                 // {[^}]+} handles multi-line named imports; [^\n{'"…]+ handles default/namespace
                 const importRe = new RegExp(`import\\s+(type\\s+)?({[^}]+}|[^\\n{'"]+)\\s+from\\s+["']${escapedPkg}(?:/[^"']*)?["'][ \\t]*;?`, "gm");
@@ -180,16 +185,27 @@ export function babylonDevExternalsPlugin(externals) {
  * @param {Record<string,string>} [options.productionExternals]
  *   Externals for `vite build`: map from module ID to global variable.
  *   E.g. `{ babylonjs: "BABYLON", "babylonjs-gui": "BABYLON.GUI" }`
+ * @param {Record<string,string>} [options.cdnExternals]
+ *   When set, activates CDN-bootstrap mode: these dev-package imports (e.g.
+ *   `{ core: "BABYLON", gui: "BABYLON.GUI" }`) are rewritten at transform time
+ *   to `globalThis.BABYLON` accesses via babylonDevExternalsPlugin, matching
+ *   the architecture where Babylon is loaded from babylonServer (port 1337).
+ *   Side-effect imports (`import "core/..."`) are also dropped automatically.
  * @param {string} [options.outDir]            Production build output dir (default: "dist").
  */
 export function commonDevViteConfiguration(options) {
-    const { port, aliases = {}, staticDirs = ["public"], enableHttps = false, enableHmr = true, productionExternals = {}, outDir = "dist" } = options;
+    const { port, aliases = {}, staticDirs = ["public"], enableHttps = false, enableHmr = true, productionExternals = {}, cdnExternals = null, outDir = "dist" } = options;
 
     // Resolve all alias values to absolute paths
     const resolvedAliases = Object.fromEntries(Object.entries(aliases).map(([key, value]) => [key, resolve(value)]));
 
+    const plugins = [react(), cssModuleNamespaceInteropPlugin()];
+    if (cdnExternals && Object.keys(cdnExternals).length > 0) {
+        plugins.push(babylonDevExternalsPlugin(cdnExternals));
+    }
+
     return {
-        plugins: [react(), cssModuleNamespaceInteropPlugin()],
+        plugins,
 
         resolve: {
             alias: resolvedAliases,
