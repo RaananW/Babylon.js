@@ -120,6 +120,12 @@ export function babylonDevExternalsPlugin(externals) {
                 const sideEffectRe = new RegExp(`import\\s+["']${escapedPkg}(?:/[^"']*)?["'][ \\t]*;?`, "gm");
                 result = result.replace(sideEffectRe, "");
 
+                // `import("pkg[/sub/path]")` — dynamic import expression.
+                // Rewrite to `Promise.resolve(GLOBAL ?? {})` so the await-destructure
+                // pattern `const { X } = await import("pkg/sub")` still works at runtime.
+                const dynamicRe = new RegExp(`import\\(\\s*["']${escapedPkg}(?:/[^"']*)?["']\\s*\\)`, "gm");
+                result = result.replace(dynamicRe, `Promise.resolve(${globalChain} ?? {})`);
+
                 // Matches `import [type] <specifier> from "pkg[/sub/path]"[;]`
                 // {[^}]+} handles multi-line named imports; [^\n{'"…]+ handles default/namespace
                 const importRe = new RegExp(`import\\s+(type\\s+)?({[^}]+}|[^\\n{'"]+)\\s+from\\s+["']${escapedPkg}(?:/[^"']*)?["'][ \\t]*;?`, "gm");
