@@ -14,12 +14,11 @@
         "build:deployment": "npm run clean && webpack --env mode=production",
         "compile": "tsc -b tsconfig.build.json",
         "postcompile": "build-tools -c pa",
-        "serve": "webpack serve",
+        "serve": "vite",
         "serve:prod": "webpack serve --env mode=production",
         "serve:https": "webpack serve --env mode=development --server-type https --host ::",
         "serve:dev": "webpack serve --env mode=development --env watch=all",
-        "clean": "rimraf dist",
-        "serve:vite": "vite"
+        "clean": "rimraf dist"
     },
     "dependencies": {
         "react": "^18.2.0",
