@@ -81,6 +81,7 @@ export class _WebAudioEngine extends AudioEngineV2 {
     private readonly _listenerMinUpdateTime: number = 0;
     private _mainOut: _WebAudioMainOut;
     private _pauseCalled = false;
+    private _pausedSounds: AbstractSound[] = [];
     private _resumeOnInteraction = true;
     private _resumeOnPause = true;
     private _resumeOnPauseRetryInterval = 1000;
@@ -368,6 +369,17 @@ export class _WebAudioEngine extends AudioEngineV2 {
 
     /** @internal */
     public override async pauseAsync(): Promise<void> {
+        // Pause all active sounds so their instances are protected from iOS Safari's
+        // ended event during backgrounding, and so streaming sounds' media elements
+        // can be properly restarted on resume.
+        this._pausedSounds.length = 0;
+        for (const sound of this.sounds) {
+            if (sound.state === SoundState.Started || sound.state === SoundState.Starting) {
+                sound.pause();
+                this._pausedSounds.push(sound);
+            }
+        }
+
         await this._audioContext.suspend();
 
         this._pauseCalled = true;
@@ -518,8 +530,17 @@ export class _WebAudioEngine extends AudioEngineV2 {
     private _onAudioContextStateChange = () => {
         if (this.state === "running") {
             clearInterval(this._resumeOnPauseTimerId);
+            this._resumeOnPauseTimerId = null;
             this._audioContextStarted = true;
             this._resumePromise = null;
+
+            // Resume sounds that were paused by pauseAsync().
+            if (this._pausedSounds.length > 0) {
+                const sounds = this._pausedSounds.splice(0);
+                for (const sound of sounds) {
+                    sound.resume();
+                }
+            }
 
             // Resolve the deferred resumeAsync promise now that the context is running.
             // This handles the iOS Safari case where resume() from visibilitychange hangs
