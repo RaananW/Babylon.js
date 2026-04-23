@@ -394,8 +394,11 @@ export class _WebAudioEngine extends AudioEngineV2 {
             return this._resumePromise;
         }
 
-        // If already running, nothing to do.
+        // If already running, resume any sounds that were paused by pauseAsync() and return.
+        // This handles the iOS Safari home screen case where the context auto-resumes
+        // before our visibilitychange handler runs.
         if (this.state === "running") {
+            this._resumePausedSounds();
             return Promise.resolve();
         }
 
@@ -518,6 +521,15 @@ export class _WebAudioEngine extends AudioEngineV2 {
         }
     }
 
+    private _resumePausedSounds(): void {
+        if (this._pausedSounds.length > 0) {
+            const sounds = this._pausedSounds.splice(0);
+            for (const sound of sounds) {
+                sound.resume();
+            }
+        }
+    }
+
     private _initAudioContextAsync: () => Promise<void> = async () => {
         this._audioContext.addEventListener("statechange", this._onAudioContextStateChange);
 
@@ -535,12 +547,7 @@ export class _WebAudioEngine extends AudioEngineV2 {
             this._resumePromise = null;
 
             // Resume sounds that were paused by pauseAsync().
-            if (this._pausedSounds.length > 0) {
-                const sounds = this._pausedSounds.splice(0);
-                for (const sound of sounds) {
-                    sound.resume();
-                }
-            }
+            this._resumePausedSounds();
 
             // Resolve the deferred resumeAsync promise now that the context is running.
             // This handles the iOS Safari case where resume() from visibilitychange hangs
