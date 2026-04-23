@@ -411,6 +411,19 @@ export class _WebAudioEngine extends AudioEngineV2 {
             }
         });
 
+        // Set up the resumeOnPause retry timer. This is needed for the case where
+        // pauseAsync() was called explicitly (setting _pauseCalled = true), which prevents
+        // the statechange handler from setting up the timer. When resumeAsync() is then
+        // called (e.g. from visibilitychange on iOS Safari), the initial resume() may hang
+        // because it's not a user gesture. The retry timer ensures we keep trying until a
+        // user gesture allows resume() to succeed.
+        if (this._resumeOnPause && !this._resumeOnPauseTimerId) {
+            this._resumeOnPauseTimerId = setInterval(() => {
+                // eslint-disable-next-line github/no-then
+                void this.resumeAsync().catch(() => {});
+            }, this._resumeOnPauseRetryInterval);
+        }
+
         this.stateChangedObservable.notifyObservers(this.state);
 
         return this._resumePromise;
