@@ -415,12 +415,13 @@ export class _WebAudioEngine extends AudioEngineV2 {
         // pauseAsync() was called explicitly (setting _pauseCalled = true), which prevents
         // the statechange handler from setting up the timer. When resumeAsync() is then
         // called (e.g. from visibilitychange on iOS Safari), the initial resume() may hang
-        // because it's not a user gesture. The retry timer ensures we keep trying until a
-        // user gesture allows resume() to succeed.
+        // because it's not a user gesture. The retry timer calls _audioContext.resume()
+        // directly (not resumeAsync()) so each retry is a fresh attempt — resumeAsync()
+        // would just return the cached deferred promise without calling resume() again.
         if (this._resumeOnPause && !this._resumeOnPauseTimerId) {
             this._resumeOnPauseTimerId = setInterval(() => {
                 // eslint-disable-next-line github/no-then
-                void this.resumeAsync().catch(() => {});
+                void this._audioContext.resume().catch(() => {});
             }, this._resumeOnPauseRetryInterval);
         }
 
@@ -536,7 +537,7 @@ export class _WebAudioEngine extends AudioEngineV2 {
 
                 this._resumeOnPauseTimerId = setInterval(() => {
                     // eslint-disable-next-line github/no-then
-                    void this.resumeAsync().catch(() => {});
+                    void this._audioContext.resume().catch(() => {});
                 }, this._resumeOnPauseRetryInterval);
             }
         }
