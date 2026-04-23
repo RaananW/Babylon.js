@@ -86,6 +86,8 @@ export class _WebAudioEngine extends AudioEngineV2 {
     private _resumeOnPauseRetryInterval = 1000;
     private _resumeOnPauseTimerId: any = null;
     private _resumePromise: Nullable<Promise<void>> = null;
+    private _resumeReject: Nullable<(error: unknown) => void> = null;
+    private _resumeResolve: Nullable<() => void> = null;
     private _silentHtmlAudio: Nullable<HTMLAudioElement> = null;
     private _unmuteUI: Nullable<_WebAudioUnmuteUI> = null;
     private _updateObservable: Nullable<Observable<void>> = null;
@@ -380,14 +382,33 @@ export class _WebAudioEngine extends AudioEngineV2 {
             return this._resumePromise;
         }
 
-        // On iOS Safari, resume() can throw InvalidStateError if the system interrupted or
-        // closed the audio context while the page was in the background. Clear the cached
-        // promise on failure so subsequent attempts (e.g. on next user gesture) can retry,
-        // and rethrow so callers know the resume did not succeed.
+        // If already running, nothing to do.
+        if (this.state === "running") {
+            return Promise.resolve();
+        }
+
+        // Use a deferred promise that resolves when the audio context reaches "running"
+        // state, rather than returning the raw _audioContext.resume() promise. On iOS
+        // Safari, resume() called outside a user gesture (e.g. from visibilitychange)
+        // returns a promise that hangs forever. The deferred promise will be resolved by
+        // _onAudioContextStateChange when a subsequent user gesture successfully resumes
+        // the context.
+        this._resumePromise = new Promise<void>((resolve, reject) => {
+            this._resumeResolve = resolve;
+            this._resumeReject = reject;
+        });
+
         // eslint-disable-next-line github/no-then
-        this._resumePromise = this._audioContext.resume().catch((error) => {
+        this._audioContext.resume().catch((error: unknown) => {
+            // On iOS Safari, resume() can throw InvalidStateError if the system closed
+            // the audio context. Clear the cached promise so subsequent attempts can retry.
             this._resumePromise = null;
-            throw error;
+            if (this._resumeReject) {
+                const reject = this._resumeReject;
+                this._resumeResolve = null;
+                this._resumeReject = null;
+                reject(error);
+            }
         });
 
         this.stateChangedObservable.notifyObservers(this.state);
@@ -485,6 +506,16 @@ export class _WebAudioEngine extends AudioEngineV2 {
             clearInterval(this._resumeOnPauseTimerId);
             this._audioContextStarted = true;
             this._resumePromise = null;
+
+            // Resolve the deferred resumeAsync promise now that the context is running.
+            // This handles the iOS Safari case where resume() from visibilitychange hangs
+            // but a subsequent user gesture successfully resumes the context.
+            if (this._resumeResolve) {
+                const resolve = this._resumeResolve;
+                this._resumeResolve = null;
+                this._resumeReject = null;
+                resolve();
+            }
         }
         if (this.state === "suspended" || this.state === "interrupted") {
             if (this._audioContextStarted && this._resumeOnPause && !this._pauseCalled) {

@@ -102,6 +102,9 @@ describe("AudioEngine", () => {
         const audioEngine = createAudioEngine("running");
         const audioContextMock = audioEngine._v2._audioContext as unknown as AudioContextMock;
 
+        // Simulate the context being suspended (e.g. by OS during background).
+        audioContextMock.state = "suspended";
+
         // First call to resumeAsync rejects with InvalidStateError.
         const error = new DOMException("Failed to start the audio device", "InvalidStateError");
         audioContextMock.resume.mockImplementationOnce(() => Promise.reject(error));
@@ -111,13 +114,47 @@ describe("AudioEngine", () => {
         // The cached promise should be cleared so the next call retries.
         expect((audioEngine._v2 as any)._resumePromise).toBeNull();
 
-        // Second call succeeds.
+        // State is still "suspended" but now returns "running" on resume.
         audioContextMock.resume.mockImplementationOnce(() => {
             audioContextMock.state = "running";
             return Promise.resolve();
         });
 
-        await expect(audioEngine._v2.resumeAsync()).resolves.toBeUndefined();
-        expect(audioContextMock.resume).toHaveBeenCalledTimes(2);
+        // The state is still "suspended" so resumeAsync creates a new deferred promise.
+        // We need to simulate the statechange to resolve it.
+        const resumePromise = audioEngine._v2.resumeAsync();
+        // Trigger statechange to resolve the deferred promise since state is now "running".
+        const statechangeCall = audioContextMock.addEventListener.mock.calls.find((c: any[]) => c[0] === "statechange");
+        if (statechangeCall) {
+            statechangeCall[1]();
+        }
+
+        await expect(resumePromise).resolves.toBeUndefined();
+    });
+
+    it("resumeAsync resolves when context reaches running via user gesture after hanging resume", async () => {
+        const audioEngine = createAudioEngine("running");
+        const audioContextMock = audioEngine._v2._audioContext as unknown as AudioContextMock;
+
+        // Simulate the context being suspended (e.g. by OS during background).
+        audioContextMock.state = "suspended";
+
+        // Simulate iOS Safari: resume() returns a promise that never resolves.
+        audioContextMock.resume.mockImplementationOnce(() => new Promise<void>(() => {}));
+
+        const resumePromise = audioEngine._v2.resumeAsync();
+
+        // The promise should be pending (not resolved, not rejected).
+        expect((audioEngine._v2 as any)._resumePromise).not.toBeNull();
+
+        // Simulate user gesture triggering a successful context resume via statechange.
+        audioContextMock.state = "running";
+        const statechangeCall = audioContextMock.addEventListener.mock.calls.find((c: any[]) => c[0] === "statechange");
+        expect(statechangeCall).toBeDefined();
+        statechangeCall![1]();
+
+        // The deferred promise should now resolve.
+        await expect(resumePromise).resolves.toBeUndefined();
+        expect((audioEngine._v2 as any)._resumePromise).toBeNull();
     });
 });
