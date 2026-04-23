@@ -213,6 +213,12 @@ export function commonDevViteConfiguration(options) {
     return {
         plugins,
 
+        // Use relative base so that built HTML asset references (script/link) are relative
+        // to the HTML file's location rather than absolute from the domain root.
+        // This allows deployment at arbitrary sub-paths (e.g. /PLAYGROUND/refs/pull/N/merge/)
+        // without assets 404-ing at the root (/assets/... instead of /PLAYGROUND/.../assets/...).
+        base: "./",
+
         resolve: {
             alias: resolvedAliases,
             extensions: [".ts", ".tsx", ".js", ".jsx", ".mjs", ".scss", ".css"],
