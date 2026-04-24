@@ -112,15 +112,67 @@ const umdPackageMeta = {
 // ---------------------------------------------------------------------------
 
 /**
+ * Sub-path namespace resolution for dev package imports, mirroring the
+ * `namespace` mapping in `@dev/build-tools/src/packageMapping.ts`.
+ *
+ * Some Babylon dev packages expose different browser globals depending on
+ * the sub-path imported.  For example `loaders/glTF/2.0/someModule` maps
+ * to `BABYLON.GLTF2` rather than `BABYLON`.  Webpack's externals handled
+ * this via a function-valued namespace; rollup needs explicit logic here.
+ *
+ * @param {string} source  Full import specifier (e.g. "loaders/glTF/2.0/glTFLoaderExtensionRegistry").
+ * @param {string} pkg     Leading package segment (e.g. "loaders").
+ * @returns {string|null}  The browser global path if it differs from the default, or null.
+ */
+function resolveSubPathNamespace(source, pkg) {
+    const normalized = source.replaceAll("\\", "/");
+
+    if (pkg === "core") {
+        if (
+            normalized.includes("/Debug/axesViewer") ||
+            normalized.includes("/Debug/boneAxesViewer") ||
+            normalized.includes("/Debug/physicsViewer") ||
+            normalized.includes("/Debug/skeletonViewer")
+        ) {
+            return "BABYLON.Debug";
+        }
+        return null; // default "BABYLON"
+    }
+
+    if (pkg === "loaders") {
+        if (normalized.includes("/glTF/1.0")) {
+            return "BABYLON.GLTF1";
+        } else if (normalized.includes("/glTF/2.0/Extensions")) {
+            return "BABYLON.GLTF2.Loader.Extensions";
+        } else if (normalized.includes("/glTF/2.0/glTFLoaderInterfaces")) {
+            return "BABYLON.GLTF2.Loader";
+        } else if (normalized.includes("/glTF/2.0")) {
+            return "BABYLON.GLTF2";
+        }
+        return null; // default "BABYLON"
+    }
+
+    return null;
+}
+
+/**
  * Rollup plugin that intercepts imports from Babylon.js dev packages and marks
  * them as external, rewriting to their UMD module IDs.
  *
  * Packages listed in excludePackages are NOT externalized – they will be
  * bundled (this is the package being built).
  *
+ * When a sub-path import resolves to a different browser global (e.g.
+ * `loaders/glTF/2.0/…` → `BABYLON.GLTF2`), the plugin emits a synthetic
+ * external ID (e.g. `babylonjs-loaders::BABYLON.GLTF2`) and registers the
+ * corresponding global so the UMD output receives the correct namespace.
+ *
  * @param {string[]} excludePackages Dev package names to bundle rather than externalize.
  */
 export function babylonUMDExternalsPlugin(excludePackages = []) {
+    /** Extra globals discovered via sub-path namespace resolution. */
+    const extraGlobals = {};
+
     return {
         name: "babylon-umd-externals",
         resolveId(source) {
@@ -139,9 +191,24 @@ export function babylonUMDExternalsPlugin(excludePackages = []) {
             }
             const umdId = devNameToUMDId[pkg];
             if (umdId) {
+                // Check if this sub-path needs a different browser global.
+                const subNs = resolveSubPathNamespace(source, pkg);
+                if (subNs) {
+                    // Use a synthetic external ID that encodes the target global.
+                    // The `::` separator is not valid in package names, so it won't
+                    // collide with real UMD IDs.
+                    const syntheticId = `${umdId}::${subNs}`;
+                    extraGlobals[syntheticId] = subNs;
+                    return { id: syntheticId, external: true };
+                }
                 return { id: umdId, external: true };
             }
             return null;
+        },
+
+        /** Expose discovered extra globals so the output config can include them. */
+        get globals() {
+            return extraGlobals;
         },
     };
 }
@@ -342,8 +409,16 @@ export function commonUMDRollupConfiguration(options) {
 
     const chunkNames = entryPoints ? Object.keys(entryPoints) : [devPackageName];
 
+    const externalsPlugin = babylonUMDExternalsPlugin([devPackageName, ...optionalExternalFunctionSkip]);
+
+    /**
+     * Globals resolver used as Rollup's `output.globals` option.
+     * Checks extra sub-path globals first, then falls back to the static map.
+     */
+    const resolveGlobal = (id) => externalsPlugin.globals[id] ?? umdGlobals[id] ?? id;
+
     const plugins = [
-        babylonUMDExternalsPlugin([devPackageName, ...optionalExternalFunctionSkip]),
+        externalsPlugin,
         aliasPlugin({ entries: aliasEntries }),
         // Inline SVG/PNG/image assets imported from dist/ files as data URIs.
         url({ include: ["**/*.svg", "**/*.png", "**/*.jpg", "**/*.gif"], limit: Infinity }),
@@ -382,7 +457,7 @@ export function commonUMDRollupConfiguration(options) {
             file: resolve(outputPath, primaryFilename(chunkName)),
             format: "umd",
             name: outputName,
-            globals: umdGlobals,
+            globals: resolveGlobal,
             exports: "named",
             sourcemap: true,
             // extend:true makes Rollup emit `global.BABYLON = global.BABYLON || {}`
@@ -405,8 +480,10 @@ export function commonUMDRollupConfiguration(options) {
         // The copyMinToMaxPlugin is only attached to the first config to avoid
         // copying the same files multiple times.
         return Object.entries(entryPoints).map(([chunkName, inputFile], i) => {
+            const perEntryExternals = babylonUMDExternalsPlugin([devPackageName, ...optionalExternalFunctionSkip]);
+            const perEntryResolveGlobal = (id) => perEntryExternals.globals[id] ?? umdGlobals[id] ?? id;
             const perEntryPlugins = [
-                babylonUMDExternalsPlugin([devPackageName, ...optionalExternalFunctionSkip]),
+                perEntryExternals,
                 aliasPlugin({ entries: aliasEntries }),
                 url({ include: ["**/*.svg", "**/*.png", "**/*.jpg", "**/*.gif"], limit: Infinity }),
                 postcss({ extract: true, minimize: production, use: ["sass"] }),
@@ -432,7 +509,7 @@ export function commonUMDRollupConfiguration(options) {
                     file: resolve(outputPath, primaryFilename(chunkName)),
                     format: "umd",
                     name: outputName,
-                    globals: umdGlobals,
+                    globals: perEntryResolveGlobal,
                     exports: "named",
                     sourcemap: true,
                     extend: true,
