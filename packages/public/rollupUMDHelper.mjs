@@ -266,7 +266,7 @@ function transpileExternalTsPlugin() {
                 compilerOptions: {
                     module: ts.ModuleKind.ESNext,
                     target: ts.ScriptTarget.ES2020,
-                    jsx: isTsx ? ts.JsxEmit.React : ts.JsxEmit.Preserve,
+                    jsx: isTsx ? ts.JsxEmit.ReactJSX : ts.JsxEmit.Preserve,
                     esModuleInterop: true,
                     allowSyntheticDefaultImports: true,
                     experimentalDecorators: true,
