@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import path from "path";
-import { commonDevViteConfiguration } from "../../public/viteToolsHelper.mjs";
+import { commonDevViteConfiguration, babylonDevExternalsPlugin } from "../../public/viteToolsHelper.mjs";
 
 const base = commonDevViteConfiguration({
     port: parseInt(process.env.SANDBOX_PORT ?? "1339"),
@@ -27,6 +27,21 @@ export default defineConfig({
     ...base,
     plugins: [
         ...(base.plugins ?? []),
+        // Rewrite dev-package imports (core/*, gui/*, …) to globalThis.BABYLON accesses
+        // during production builds. In dev mode the resolve.alias entries handle resolution;
+        // in build mode this plugin (enforce: "pre") rewrites the imports before Rollup
+        // resolves them through aliases, keeping the bundle small and deferring to CDN UMDs.
+        {
+            ...babylonDevExternalsPlugin({
+                core: "BABYLON",
+                gui: "BABYLON.GUI",
+                loaders: "BABYLON",
+                serializers: "BABYLON",
+                materials: "BABYLON",
+                addons: "ADDONS",
+            }),
+            apply: "build" as const,
+        },
         {
             // Generates `babylon.sandbox.js` at build time.
             //

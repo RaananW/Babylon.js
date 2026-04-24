@@ -120,7 +120,20 @@ export function babylonDevExternalsPlugin(externals) {
                 const sideEffectRe = new RegExp(`import\\s+["']${escapedPkg}(?:/[^"']*)?["'][ \\t]*;?`, "gm");
                 result = result.replace(sideEffectRe, "");
 
-                // `import("pkg[/sub/path]")` — dynamic import expression.
+                // --- TypeScript type-level import() expressions ---
+                // These appear in type annotation positions (after `:`, `typeof`, `<`, etc.)
+                // and must be handled BEFORE the runtime dynamic import rewrite.
+                //
+                // `typeof import("pkg/…")` → `any`
+                const typeofImportRe = new RegExp(`typeof\\s+import\\(\\s*["']${escapedPkg}(?:/[^"']*)?["']\\s*\\)`, "gm");
+                result = result.replace(typeofImportRe, `any`);
+                //
+                // `import("pkg/…").SomeType` in type annotations → `any`
+                // Matches `import("pkg/...")` followed by `.Identifier` (member type access).
+                const typeMemberImportRe = new RegExp(`import\\(\\s*["']${escapedPkg}(?:/[^"']*)?["']\\s*\\)\\.\\w+`, "gm");
+                result = result.replace(typeMemberImportRe, `any`);
+
+                // `import("pkg[/sub/path]")` — runtime dynamic import expression.
                 // Rewrite to `Promise.resolve(GLOBAL ?? {})` so the await-destructure
                 // pattern `const { X } = await import("pkg/sub")` still works at runtime.
                 const dynamicRe = new RegExp(`import\\(\\s*["']${escapedPkg}(?:/[^"']*)?["']\\s*\\)`, "gm");
