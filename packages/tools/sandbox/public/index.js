@@ -133,10 +133,13 @@ let checkBabylonVersionAsync = function () {
 
     let versions = Versions[activeVersion] || Versions["dist"];
     if (snapshot && activeVersion === "dist") {
-        versions = versions.map((v) => ({
-            url: v.url.replace("https://preview.babylonjs.com", "https://snapshots-cvgtc2eugrd3cgfd.z01.azurefd.net/" + snapshot),
-            instantResolve: v.instantResolve,
-        }));
+        versions = versions
+            // Snapshots are always the latest version, so exclude scripts limited to old versions (maxVersion).
+            .filter((v) => !v.maxVersion)
+            .map((v) => ({
+                url: v.url.replace("https://preview.babylonjs.com", "https://snapshots-cvgtc2eugrd3cgfd.z01.azurefd.net/" + snapshot),
+                instantResolve: v.instantResolve,
+            }));
     } else if (version && activeVersion === "dist") {
         versions = versions
             .filter((v) => (!v.minVersion || isVersionGreaterOrEqual(version, v.minVersion)) && (!v.maxVersion || isVersionGreaterOrEqual(v.maxVersion, version)))
