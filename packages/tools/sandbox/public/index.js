@@ -51,10 +51,10 @@ const Versions = {
         { url: "https://preview.babylonjs.com/gui/babylon.gui.min.js", instantResolve: true },
         // Allow an "inspectorv1" query param to force loading Inspector v1.
         ...(window.location.search.toLocaleLowerCase().includes("inspectorv1")
-            ? [{ url: "https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js", instantResolve: true }]
+            ? [{ url: "https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js", instantResolve: false }]
             : [
-                  { url: "https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js", instantResolve: true, maxVersion: "8.40.0" },
-                  { url: "https://preview.babylonjs.com/inspector/babylon.inspector-v2.bundle.js", instantResolve: true, minVersion: "8.40.1" },
+                  { url: "https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js", instantResolve: false, maxVersion: "8.40.0" },
+                  { url: "https://preview.babylonjs.com/inspector/babylon.inspector-v2.bundle.js", instantResolve: false, minVersion: "8.40.1" },
               ]),
     ],
     local: [
