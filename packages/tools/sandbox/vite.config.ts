@@ -34,10 +34,14 @@ export default defineConfig({
             // loads `babylon.sandbox.js` then calls BABYLON.Sandbox.Show().
             // In the webpack era this file was the compiled bundle. With Vite the
             // bundle is ES modules in assets/. This plugin generates a shim that:
-            //   1. Injects <script type="module"> and <link rel="stylesheet"> tags
-            //      for the Vite-built chunks (with correct hashed filenames).
+            //   1. Injects <style> tags with inlined CSS and a <script type="module">
+            //      tag for the Vite-built entry chunk (with correct hashed filename).
             //   2. Registers a BABYLON.Sandbox.Show stub that captures args and
             //      dispatches an event picked up by main.ts.
+            //
+            // CSS is inlined as <style> (not loaded via <link>) so it is applied
+            // synchronously — matching the old webpack style-loader behavior and
+            // preventing Playwright screenshots from capturing an unstyled page.
             name: "generate-sandbox-shim",
             apply: "build" as const,
             generateBundle(_options, bundle) {
@@ -45,12 +49,18 @@ export default defineConfig({
                 const cssAssets = Object.values(bundle).filter((a) => a.type === "asset" && a.fileName.endsWith(".css"));
 
                 const moduleSrc = entryChunk ? `./${entryChunk.fileName}` : "./assets/index.js";
+                // Inline CSS content into <style> tags so styles are applied synchronously.
                 const cssInjections = cssAssets
-                    .map((a) => `var l=document.createElement("link");l.rel="stylesheet";l.href="${`./${a.fileName}`}";document.head.appendChild(l);`)
+                    .map((a) => {
+                        const cssContent = "source" in a ? String(a.source) : "";
+                        // Escape backticks and backslashes for template literal safety
+                        const escaped = cssContent.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$/g, "\\$");
+                        return `var st=document.createElement("style");st.textContent=\`${escaped}\`;document.head.appendChild(st);`;
+                    })
                     .join("\n    ");
 
                 const shimCode = `(function () {
-    // Inject Vite-built CSS
+    // Inject Vite-built CSS inline (synchronous — no FOUC)
     ${cssInjections}
     // Load Vite-built ES module entry
     var s = document.createElement("script");

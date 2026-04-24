@@ -55,14 +55,48 @@ function getMonacoMainBundle(): Promise<string> {
                                 namespace: "inject-css",
                             }));
                             build.onLoad({ filter: /.*/, namespace: "inject-css" }, async (args) => {
-                                const { readFile } = await import("fs/promises");
-                                let css = await readFile(args.path, "utf-8");
+                                const fs = await import("fs/promises");
+                                let css = await fs.readFile(args.path, "utf-8");
                                 // Rewrite relative url() references so they resolve correctly when
                                 // the CSS is injected as a <style> tag (the browser would otherwise
                                 // resolve them against the page root, not the CSS file's directory).
                                 const cssDir = path.dirname(args.path);
+                                const isProduction = process.env.NODE_ENV === "production" || process.argv.includes("build");
+                                // In production, pre-read referenced assets for data URI inlining
+                                // (/@fs/ paths only work with the Vite dev server).
+                                const assetCache: Record<string, string> = {};
+                                if (isProduction) {
+                                    const urlRefs = [...css.matchAll(/url\(\s*['"]?(?!data:|https?:|\/)([^'")]+)['"]?\s*\)/g)];
+                                    for (const m of urlRefs) {
+                                        const abs = path.resolve(cssDir, m[1]);
+                                        if (!assetCache[abs]) {
+                                            try {
+                                                const data = await fs.readFile(abs);
+                                                const ext = path.extname(abs).toLowerCase();
+                                                const mime =
+                                                    ext === ".ttf"
+                                                        ? "font/ttf"
+                                                        : ext === ".woff"
+                                                          ? "font/woff"
+                                                          : ext === ".woff2"
+                                                            ? "font/woff2"
+                                                            : ext === ".svg"
+                                                              ? "image/svg+xml"
+                                                              : ext === ".png"
+                                                                ? "image/png"
+                                                                : "application/octet-stream";
+                                                assetCache[abs] = `data:${mime};base64,${data.toString("base64")}`;
+                                            } catch {
+                                                // Fall through to dev-mode path
+                                            }
+                                        }
+                                    }
+                                }
                                 css = css.replace(/url\(\s*(['"]?)(?!data:|https?:|\/)(.*?)\1\s*\)/g, (_match, quote, ref) => {
                                     const abs = path.resolve(cssDir, ref);
+                                    if (assetCache[abs]) {
+                                        return `url(${quote}${assetCache[abs]}${quote})`;
+                                    }
                                     return `url(${quote}/@fs${abs}${quote})`;
                                 });
                                 return {
@@ -174,6 +208,35 @@ export default defineConfig({
                     res.setHeader("Content-Type", "application/javascript; charset=utf-8");
                     res.end(cache[name]);
                 });
+            },
+        },
+        {
+            // Builds Monaco workers as separate IIFE bundles and emits them into dist/
+            // so the production build has working language services (autocomplete, etc.).
+            // monacoWorkerSetup.ts points MonacoEnvironment.getWorkerUrl to these files.
+            name: "monaco-worker-production",
+            apply: "build" as const,
+            async generateBundle() {
+                const { build } = await import("esbuild");
+                const entries: Record<string, string> = {
+                    "editor.worker": "monaco-editor/esm/vs/editor/editor.worker.js",
+                    "ts.worker": "monaco-editor/esm/vs/language/typescript/ts.worker.js",
+                };
+                for (const [name, entry] of Object.entries(entries)) {
+                    const result = await build({
+                        entryPoints: [entry],
+                        bundle: true,
+                        write: false,
+                        format: "iife",
+                        platform: "browser",
+                        minify: true,
+                    });
+                    this.emitFile({
+                        type: "asset",
+                        fileName: `${name}.js`,
+                        source: result.outputFiles[0].text,
+                    });
+                }
             },
         },
         {
