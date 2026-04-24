@@ -20,7 +20,7 @@
  */
 import "./monacoWorkerSetup";
 
-(async () => {
+void (async () => {
     // Wait for CDN scripts to populate globalThis.BABYLON.
     // In dev mode BABYLON usually loads fast enough, but in production builds
     // the bundled ES module can evaluate before the dynamic CDN scripts finish.
@@ -37,21 +37,21 @@ import "./monacoWorkerSetup";
     const { Playground } = await import("./playground");
     type ShowArgs = Parameters<typeof Playground.Show>;
 
-    function StartPlayground(args: ShowArgs) {
+    function startPlayground(args: ShowArgs) {
         Playground.Show(...args);
     }
 
     // The CDN bootstrap (public/index.js) calls BABYLON.Playground.Show after
     // loading all babylon bundles. The /babylon.playground.js shim captures those
     // args in window.__vitePlaygroundArgs and dispatches "babylonPlaygroundReady".
-    const Win = window as unknown as Record<string, unknown>;
-    if (Array.isArray(Win["__vitePlaygroundArgs"])) {
-        StartPlayground(Win["__vitePlaygroundArgs"] as ShowArgs);
+    const win = window as unknown as Record<string, unknown>;
+    if (Array.isArray(win["__vitePlaygroundArgs"])) {
+        startPlayground(win["__vitePlaygroundArgs"] as ShowArgs);
     } else {
         window.addEventListener(
             "babylonPlaygroundReady",
             (e: Event) => {
-                StartPlayground((e as CustomEvent<{ args: ShowArgs }>).detail.args);
+                startPlayground((e as CustomEvent<{ args: ShowArgs }>).detail.args);
             },
             { once: true }
         );

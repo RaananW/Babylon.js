@@ -20,11 +20,11 @@ if (import.meta.env.DEV) {
     Sandbox.Show(HostElement, { version: "dev", bundles: [] });
 } else {
     // Production — CDN bootstrap calls BABYLON.Sandbox.Show which stores args
-    const Win = window as unknown as Record<string, unknown>;
-    if (Array.isArray(Win["__viteSandboxArgs"])) {
+    const win = window as unknown as Record<string, unknown>;
+    if (Array.isArray(win["__viteSandboxArgs"])) {
         Sandbox.Show(
-            (Win["__viteSandboxArgs"] as [HTMLElement, { version: string; bundles: string[] }])[0],
-            (Win["__viteSandboxArgs"] as [HTMLElement, { version: string; bundles: string[] }])[1]
+            (win["__viteSandboxArgs"] as [HTMLElement, { version: string; bundles: string[] }])[0],
+            (win["__viteSandboxArgs"] as [HTMLElement, { version: string; bundles: string[] }])[1]
         );
     } else {
         window.addEventListener(
