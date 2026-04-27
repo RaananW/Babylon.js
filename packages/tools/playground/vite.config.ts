@@ -139,7 +139,16 @@ export default defineConfig({
         // `const { X } = globalThis.BABYLON ?? {}` so no ESM requests are made for those
         // packages. sharedUiComponents/src also imports from "core/..." so both must be mapped.
         babylonDevExternalsPlugin({ "@dev/core": "BABYLON", core: "BABYLON" }),
-        svgr({ include: "**/*.svg", exportAsDefault: true }),
+        svgr({
+            include: "**/*.svg",
+            exportAsDefault: true,
+            svgrOptions: {
+                plugins: ["@svgr/plugin-svgo", "@svgr/plugin-jsx"],
+                svgoConfig: {
+                    plugins: [{ name: "prefixIds" }],
+                },
+            },
+        }),
         {
             // Bundles the Monaco main-thread library into a single ESM virtual module.
             // Without this, Vite serves each of the ~1100 monaco-editor/esm/* files
@@ -151,6 +160,12 @@ export default defineConfig({
             name: "monaco-esm-bundle",
             enforce: "pre",
             resolveId(id: string) {
+                // Let typescriptServices resolve normally — it exports the
+                // full TS compiler (including transpileModule) which the
+                // snippetLoader needs at runtime for TS playground compilation.
+                if (id.includes("typescriptServices")) {
+                    return null;
+                }
                 if (id === "monaco-editor" || id.startsWith("monaco-editor/")) {
                     return VIRTUAL_MONACO_ID;
                 }
