@@ -442,7 +442,14 @@ export function commonUMDRollupConfiguration(options) {
         nodeResolve({ mainFields: ["browser", "module", "main"], browser: true, extensions: [".ts", ".tsx", ".js", ".jsx"] }),
         commonjs(),
         rewriteDynamicExternalImportsPlugin(),
-        ...(production ? [terser()] : []),
+        ...(production
+            ? [
+                  terser({
+                      compress: { passes: 2, dead_code: true },
+                      format: { comments: false },
+                  }),
+              ]
+            : []),
         ...(minToMax && production ? [copyMinToMaxPlugin(resolve(outputPath), primaryFilename, chunkNames)] : []),
     ];
 
@@ -466,6 +473,7 @@ export function commonUMDRollupConfiguration(options) {
             extend: true,
             // Inline any dynamic imports so UMD format (which forbids code-splitting) is happy.
             inlineDynamicImports: true,
+            freeze: false,
         },
         plugins,
         // Suppress noisy circular-dependency warnings from the large Babylon packages.
@@ -500,7 +508,14 @@ export function commonUMDRollupConfiguration(options) {
                 nodeResolve({ mainFields: ["browser", "module", "main"], browser: true, extensions: [".ts", ".tsx", ".js", ".jsx"] }),
                 commonjs(),
                 rewriteDynamicExternalImportsPlugin(),
-                ...(production ? [terser()] : []),
+                ...(production
+                    ? [
+                          terser({
+                              compress: { passes: 2, dead_code: true },
+                              format: { comments: false },
+                          }),
+                      ]
+                    : []),
                 ...(minToMax && production && i === 0 ? [copyMinToMaxPlugin(resolve(outputPath), primaryFilename, chunkNames)] : []),
             ];
             return {
@@ -515,6 +530,7 @@ export function commonUMDRollupConfiguration(options) {
                     extend: true,
                     // Inline any dynamic imports so UMD format (which forbids code-splitting) is happy.
                     inlineDynamicImports: true,
+                    freeze: false,
                 },
                 plugins: perEntryPlugins,
                 onwarn(warning, warn) {
