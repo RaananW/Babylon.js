@@ -596,7 +596,7 @@ jobs:
                 curl "$(DEPLOYMENT_SERVER)/$(DEPLOY_ENDPOINT_DELETE)?path=$(BuildName)/testResults/webgl2playwright" -X POST -H "Authorization: $(BASIC_AUTH)"
             displayName: "Delete test results"
             continueOnError: true
-            condition: eq(variables['SNAPSHOTEXISTS'], 'true')
+            condition: and(eq(variables['SNAPSHOTEXISTS'], 'true'), ne(variables['AFFECTED_TAGS'], 'NONE'))
 
           - template: templates/upload-test-results.yml
             parameters:
@@ -604,10 +604,11 @@ jobs:
                 fallbackReportDir: "playwright-report"
                 deployPath: "$(BuildName)/testResults/webgl2playwright"
                 continueOnError: true
+                condition: ne(variables['AFFECTED_TAGS'], 'NONE')
 
           - task: GitHubComment@0
             displayName: "GitHub WebGL2 comment"
-            condition: eq(variables['SNAPSHOTEXISTS'], 'false')
+            condition: and(eq(variables['SNAPSHOTEXISTS'], 'false'), ne(variables['AFFECTED_TAGS'], 'NONE'))
             inputs:
                 gitHubConnection: "$(GITHUB_SERVICE_CONNECTION)"
                 repositoryName: "$(Build.Repository.Name)"
@@ -618,7 +619,7 @@ jobs:
 
           - task: PublishTestResults@2
             displayName: "Publish webgl2 test results"
-            condition: succeededOrFailed()
+            condition: and(succeededOrFailed(), ne(variables['AFFECTED_TAGS'], 'NONE'))
             inputs:
                 testResultsFormat: JUnit
                 testResultsFiles: "./packages/tools/tests/junit.xml"
@@ -679,7 +680,7 @@ jobs:
                 curl "$(DEPLOYMENT_SERVER)/$(DEPLOY_ENDPOINT_DELETE)?path=$(BuildName)/testResults/webgpuplaywright" -X POST -H "Authorization: $(BASIC_AUTH)"
             displayName: "Delete test results"
             continueOnError: true
-            condition: eq(variables['SNAPSHOTEXISTS'], 'true')
+            condition: and(eq(variables['SNAPSHOTEXISTS'], 'true'), ne(variables['AFFECTED_TAGS'], 'NONE'))
 
           - template: templates/upload-test-results.yml
             parameters:
@@ -687,11 +688,12 @@ jobs:
                 fallbackReportDir: "playwright-report"
                 deployPath: "$(BuildName)/testResults/webgpuplaywright"
                 continueOnError: true
+                condition: ne(variables['AFFECTED_TAGS'], 'NONE')
 
           - task: GitHubComment@0
             displayName: "Writing GitHub comment"
             continueOnError: true
-            condition: eq(variables['SNAPSHOTEXISTS'], 'false')
+            condition: and(eq(variables['SNAPSHOTEXISTS'], 'false'), ne(variables['AFFECTED_TAGS'], 'NONE'))
             inputs:
                 gitHubConnection: "$(GITHUB_SERVICE_CONNECTION)"
                 repositoryName: "$(Build.Repository.Name)"
@@ -702,7 +704,7 @@ jobs:
 
           - task: PublishTestResults@2
             displayName: "Publish webgpu test results"
-            condition: succeededOrFailed()
+            condition: and(succeededOrFailed(), ne(variables['AFFECTED_TAGS'], 'NONE'))
             inputs:
                 testResultsFormat: JUnit
                 testResultsFiles: "./packages/tools/tests/junit.xml"
