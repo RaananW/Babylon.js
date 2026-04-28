@@ -2,37 +2,37 @@
 
 export * from "./mesh.types";
 
-import { type Observer } from "../Misc/observable"
+import { type Observer } from "../Misc/observable";
 import { Observable } from "../Misc/observable";
 import { AsyncLoop, ToolsLoadImage, ToolsLoadFile } from "../Misc/tools.pure";
-import { type IAnimatable } from "../Animations/animatable.interface"
+import { type IAnimatable } from "../Animations/animatable.interface";
 import { DeepCopierDeepCopy } from "../Misc/deepCopier.pure";
 import { Tags, TagsHasTags, TagsGetTags, TagsAddTagsTo } from "../Misc/tags.pure";
-import { type Coroutine } from "../Misc/coroutine"
+import { type Coroutine } from "../Misc/coroutine";
 import { runCoroutineSync, runCoroutineAsync, createYieldingScheduler } from "../Misc/coroutine";
-import { type Nullable, type FloatArray, type IndicesArray, type DeepImmutable } from "../types"
+import { type Nullable, type FloatArray, type IndicesArray, type DeepImmutable } from "../types";
 import { Camera } from "../Cameras/camera";
-import { type Scene } from "../scene"
+import { type Scene } from "../scene";
 import { ScenePerformancePriority } from "../scene.pure";
-import { type Vector4 } from "../Maths/math.vector"
+import { type Vector4 } from "../Maths/math.vector";
 import { Quaternion, Matrix, Vector3, Vector2 } from "../Maths/math.vector.pure";
-import { type Color4 } from "../Maths/math.color"
+import { type Color4 } from "../Maths/math.color";
 import { Color3FromArray } from "../Maths/math.color.pure";
-import { type Node } from "../node.pure"
+import { type Node } from "../node.pure";
 import { NodeParseAnimationRanges } from "../node.pure";
 import { VertexBuffer, Buffer } from "../Buffers/buffer.pure";
-import { type IGetSetVerticesData } from "./mesh.vertexData"
+import { type IGetSetVerticesData } from "./mesh.vertexData";
 import { VertexData, VertexDataComputeNormals } from "./mesh.vertexData.pure";
 import { Geometry } from "./geometry";
-import { type IMeshDataOptions } from "./abstractMesh"
+import { type IMeshDataOptions } from "./abstractMesh";
 import { AbstractMesh } from "./abstractMesh.pure";
 import { SubMesh } from "./subMesh";
-import { type BoundingSphere } from "../Culling/boundingSphere"
-import { type Effect } from "../Materials/effect"
+import { type BoundingSphere } from "../Culling/boundingSphere";
+import { type Effect } from "../Materials/effect";
 import { Material } from "../Materials/material";
 import { MultiMaterial } from "../Materials/multiMaterial.pure";
 import { SceneLoaderFlags } from "../Loading/sceneLoaderFlags";
-import { type Skeleton } from "../Bones/skeleton"
+import { type Skeleton } from "../Bones/skeleton";
 import { Constants } from "../Engines/constants";
 import { SerializationHelperAppendSerializedAnimations } from "../Misc/decorators.serialization.pure";
 import { Logger } from "../Misc/logger";
@@ -40,19 +40,19 @@ import { GetClass } from "../Misc/typeStore";
 import { _WarnImport } from "../Misc/devTools";
 import { SceneComponentConstants } from "../sceneComponent";
 import { MeshLODLevel } from "./meshLODLevel";
-import { type Path3D } from "../Maths/math.path"
-import { type Plane } from "../Maths/math.plane"
-import { type TransformNode } from "./transformNode"
-import { type DrawWrapper } from "../Materials/drawWrapper"
-import { type PhysicsEngine as PhysicsEngineV1 } from "../Physics/v1/physicsEngine"
-import { type GoldbergMesh } from "./goldbergMesh"
-import { type InstancedMesh } from "./instancedMesh"
-import { type IPhysicsEnabledObject, type PhysicsImpostor } from "../Physics/v1/physicsImpostor"
-import { type ICreateCapsuleOptions } from "./Builders/capsuleBuilder"
-import { type LinesMesh } from "./linesMesh"
-import { type GroundMesh } from "./groundMesh"
-import { type DataBuffer } from "core/Buffers/dataBuffer"
-import { type AbstractEngine } from "core/Engines/abstractEngine"
+import { type Path3D } from "../Maths/math.path";
+import { type Plane } from "../Maths/math.plane";
+import { type TransformNode } from "./transformNode";
+import { type DrawWrapper } from "../Materials/drawWrapper";
+import { type PhysicsEngine as PhysicsEngineV1 } from "../Physics/v1/physicsEngine";
+import { type GoldbergMesh } from "./goldbergMesh";
+import { type InstancedMesh } from "./instancedMesh";
+import { type IPhysicsEnabledObject, type PhysicsImpostor } from "../Physics/v1/physicsImpostor";
+import { type ICreateCapsuleOptions } from "./Builders/capsuleBuilder";
+import { type LinesMesh } from "./linesMesh";
+import { type GroundMesh } from "./groundMesh";
+import { type DataBuffer } from "core/Buffers/dataBuffer";
+import { type AbstractEngine } from "core/Engines/abstractEngine";
 import { RegisterClass } from "../Misc/typeStore";
 
 /* eslint-disable jsdoc/require-returns-check */
@@ -6064,7 +6064,11 @@ if (!Object.getOwnPropertyDescriptor(Mesh.prototype, "thinInstanceEnablePicking"
     Object.defineProperty(Mesh.prototype, "thinInstanceEnablePicking", _MissingSideEffectProperty("Mesh", "thinInstanceEnablePicking"));
 }
 if (!Object.getOwnPropertyDescriptor(Mesh.prototype, "thinInstanceAllowAutomaticStaticBufferRecreation")) {
-    Object.defineProperty(Mesh.prototype, "thinInstanceAllowAutomaticStaticBufferRecreation", _MissingSideEffectProperty("Mesh", "thinInstanceAllowAutomaticStaticBufferRecreation"));
+    Object.defineProperty(
+        Mesh.prototype,
+        "thinInstanceAllowAutomaticStaticBufferRecreation",
+        _MissingSideEffectProperty("Mesh", "thinInstanceAllowAutomaticStaticBufferRecreation")
+    );
 }
 if (!Object.getOwnPropertyDescriptor(Mesh.prototype, "thinInstanceCount")) {
     Object.defineProperty(Mesh.prototype, "thinInstanceCount", _MissingSideEffectProperty("Mesh", "thinInstanceCount"));

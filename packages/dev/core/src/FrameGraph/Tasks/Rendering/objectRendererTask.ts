@@ -1,4 +1,23 @@
-import { type FrameGraph, type FrameGraphTextureHandle, type Scene, type Camera, type FrameGraphObjectList, type FrameGraphRenderContext, type ObjectRendererOptions, type Light, type Nullable, type Observer, type FrameGraphShadowGeneratorTask, type FrameGraphRenderPass, type AbstractEngine, type BoundingBoxRenderer, type ShadowLight, type SmartArray, type SubMesh, type RenderingGroup } from "core/index"
+import {
+    type FrameGraph,
+    type FrameGraphTextureHandle,
+    type Scene,
+    type Camera,
+    type FrameGraphObjectList,
+    type FrameGraphRenderContext,
+    type ObjectRendererOptions,
+    type Light,
+    type Nullable,
+    type Observer,
+    type FrameGraphShadowGeneratorTask,
+    type FrameGraphRenderPass,
+    type AbstractEngine,
+    type BoundingBoxRenderer,
+    type ShadowLight,
+    type SmartArray,
+    type SubMesh,
+    type RenderingGroup,
+} from "core/index";
 import { backbufferColorTextureHandle, backbufferDepthStencilTextureHandle } from "../../frameGraphTypes";
 import { FrameGraphTaskMultiRenderTarget } from "../../frameGraphTaskMultiRenderTarget";
 import { ObjectRenderer } from "../../../Rendering/objectRenderer";

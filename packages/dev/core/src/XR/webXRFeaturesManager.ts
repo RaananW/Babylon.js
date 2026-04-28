@@ -1,29 +1,29 @@
-import { type Observable } from "core/Misc/observable"
+import { type Observable } from "core/Misc/observable";
 import { Tools } from "../Misc/tools";
-import { type IDisposable } from "../scene"
-import { type IWebXRAnchorSystemOptions, type WebXRAnchorSystem } from "./features/WebXRAnchorSystem"
-import { type IWebXRBackgroundRemoverOptions, type WebXRBackgroundRemover } from "./features/WebXRBackgroundRemover"
-import { type IWebXRControllerMovementOptions, type WebXRControllerMovement } from "./features/WebXRControllerMovement"
-import { type IWebXRControllerPhysicsOptions, type WebXRControllerPhysics } from "./features/WebXRControllerPhysics"
-import { type IWebXRControllerPointerSelectionOptions, type WebXRControllerPointerSelection } from "./features/WebXRControllerPointerSelection"
-import { type IWebXRTeleportationOptions, type WebXRMotionControllerTeleportation } from "./features/WebXRControllerTeleportation"
-import { type IWebXRDepthSensingOptions, type WebXRDepthSensing } from "./features/WebXRDepthSensing"
-import { type IWebXRDomOverlayOptions, type WebXRDomOverlay } from "./features/WebXRDOMOverlay"
-import { type WebXREyeTracking } from "./features/WebXREyeTracking"
-import { type WebXRFeaturePointSystem } from "./features/WebXRFeaturePointSystem"
-import { type IWebXRHandTrackingOptions, type WebXRHandTracking } from "./features/WebXRHandTracking"
-import { type IWebXRHitTestOptions, type WebXRHitTest } from "./features/WebXRHitTest"
-import { type IWebXRImageTrackingOptions, type WebXRImageTracking } from "./features/WebXRImageTracking"
-import { type IWebXRLayersOptions, type WebXRLayers } from "./features/WebXRLayers"
-import { type IWebXRLightEstimationOptions, type WebXRLightEstimation } from "./features/WebXRLightEstimation"
-import { type IWebXRMeshDetectorOptions, type WebXRMeshDetector } from "./features/WebXRMeshDetector"
-import { type IWebXRNearInteractionOptions, type WebXRNearInteraction } from "./features/WebXRNearInteraction"
-import { type IWebXRPlaneDetectorOptions, type WebXRPlaneDetector } from "./features/WebXRPlaneDetector"
-import { type IWebXRRawCameraAccessOptions, type WebXRRawCameraAccess } from "./features/WebXRRawCameraAccess"
-import { type WebXRSpaceWarp } from "./features/WebXRSpaceWarp"
-import { type IWebXRWalkingLocomotionOptions, type WebXRWalkingLocomotion } from "./features/WebXRWalkingLocomotion"
-import { type IWebXRBodyTrackingOptions, type WebXRBodyTracking } from "./features/WebXRBodyTracking"
-import { type WebXRSessionManager } from "./webXRSessionManager"
+import { type IDisposable } from "../scene";
+import { type IWebXRAnchorSystemOptions, type WebXRAnchorSystem } from "./features/WebXRAnchorSystem";
+import { type IWebXRBackgroundRemoverOptions, type WebXRBackgroundRemover } from "./features/WebXRBackgroundRemover";
+import { type IWebXRControllerMovementOptions, type WebXRControllerMovement } from "./features/WebXRControllerMovement";
+import { type IWebXRControllerPhysicsOptions, type WebXRControllerPhysics } from "./features/WebXRControllerPhysics";
+import { type IWebXRControllerPointerSelectionOptions, type WebXRControllerPointerSelection } from "./features/WebXRControllerPointerSelection";
+import { type IWebXRTeleportationOptions, type WebXRMotionControllerTeleportation } from "./features/WebXRControllerTeleportation";
+import { type IWebXRDepthSensingOptions, type WebXRDepthSensing } from "./features/WebXRDepthSensing";
+import { type IWebXRDomOverlayOptions, type WebXRDomOverlay } from "./features/WebXRDOMOverlay";
+import { type WebXREyeTracking } from "./features/WebXREyeTracking";
+import { type WebXRFeaturePointSystem } from "./features/WebXRFeaturePointSystem";
+import { type IWebXRHandTrackingOptions, type WebXRHandTracking } from "./features/WebXRHandTracking";
+import { type IWebXRHitTestOptions, type WebXRHitTest } from "./features/WebXRHitTest";
+import { type IWebXRImageTrackingOptions, type WebXRImageTracking } from "./features/WebXRImageTracking";
+import { type IWebXRLayersOptions, type WebXRLayers } from "./features/WebXRLayers";
+import { type IWebXRLightEstimationOptions, type WebXRLightEstimation } from "./features/WebXRLightEstimation";
+import { type IWebXRMeshDetectorOptions, type WebXRMeshDetector } from "./features/WebXRMeshDetector";
+import { type IWebXRNearInteractionOptions, type WebXRNearInteraction } from "./features/WebXRNearInteraction";
+import { type IWebXRPlaneDetectorOptions, type WebXRPlaneDetector } from "./features/WebXRPlaneDetector";
+import { type IWebXRRawCameraAccessOptions, type WebXRRawCameraAccess } from "./features/WebXRRawCameraAccess";
+import { type WebXRSpaceWarp } from "./features/WebXRSpaceWarp";
+import { type IWebXRWalkingLocomotionOptions, type WebXRWalkingLocomotion } from "./features/WebXRWalkingLocomotion";
+import { type IWebXRBodyTrackingOptions, type WebXRBodyTracking } from "./features/WebXRBodyTracking";
+import { type WebXRSessionManager } from "./webXRSessionManager";
 /**
  * Defining the interface required for a (webxr) feature
  */

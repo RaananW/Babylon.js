@@ -1,8 +1,8 @@
-import { type Scene } from "core/scene"
-import { type DeepImmutable, type Nullable } from "core/types"
-import { type BaseTexture } from "core/Materials/Textures/baseTexture"
+import { type Scene } from "core/scene";
+import { type DeepImmutable, type Nullable } from "core/types";
+import { type BaseTexture } from "core/Materials/Textures/baseTexture";
 import { SubMesh } from "../subMesh";
-import { type AbstractMesh } from "../abstractMesh"
+import { type AbstractMesh } from "../abstractMesh";
 import { Mesh } from "../mesh.pure";
 import { VertexData } from "../mesh.vertexData.pure";
 import { Matrix, TmpVectors, Vector2, Vector3 } from "core/Maths/math.vector.pure";
@@ -11,16 +11,16 @@ import { Logger } from "core/Misc/logger";
 import { GaussianSplattingMaterial, GetGaussianSplattingMaxPartCount } from "core/Materials/GaussianSplatting/gaussianSplattingMaterial.pure";
 import { RawTexture } from "core/Materials/Textures/rawTexture.pure";
 import { Constants } from "core/Engines/constants";
-import { type ThinEngine } from "core/Engines/thinEngine"
+import { type ThinEngine } from "core/Engines/thinEngine";
 import { ToHalfFloat } from "core/Misc/textureTools";
-import { type Material } from "core/Materials/material"
+import { type Material } from "core/Materials/material";
 import { Scalar } from "core/Maths/math.scalar";
-import { type Coroutine } from "core/Misc/coroutine"
+import { type Coroutine } from "core/Misc/coroutine";
 import { runCoroutineSync, runCoroutineAsync, createYieldingScheduler } from "core/Misc/coroutine";
 import { EngineStore } from "core/Engines/engineStore";
-import { type Camera } from "core/Cameras/camera"
+import { type Camera } from "core/Cameras/camera";
 import { ImportMeshAsync } from "core/Loading/sceneLoader";
-import { type INative } from "core/Engines/Native/nativeInterfaces"
+import { type INative } from "core/Engines/Native/nativeInterfaces";
 import { GaussianSplattingPartProxyMesh } from "./gaussianSplattingPartProxyMesh";
 import { DecodeBase64ToBinary } from "core/Misc/stringTools";
 

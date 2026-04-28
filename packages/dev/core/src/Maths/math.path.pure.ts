@@ -2,10 +2,10 @@
 
 export * from "./math.path.types";
 
-import { type DeepImmutable, type Nullable } from "../types"
+import { type DeepImmutable, type Nullable } from "../types";
 import { Clamp, WithinEpsilon } from "./math.scalar.functions";
 import { Vector2, Vector3, Quaternion, Matrix } from "./math.vector.pure";
-import { type Vector4 } from "./math.vector"
+import { type Vector4 } from "./math.vector";
 import { Epsilon } from "./math.constants";
 
 /**

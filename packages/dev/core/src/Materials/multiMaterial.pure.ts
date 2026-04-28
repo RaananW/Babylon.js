@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
-import { type Nullable } from "../types"
-import { type Scene } from "../scene"
-import { type AbstractMesh } from "../Meshes/abstractMesh"
-import { type SubMesh } from "../Meshes/subMesh"
-import { type BaseTexture } from "../Materials/Textures/baseTexture"
+import { type Nullable } from "../types";
+import { type Scene } from "../scene";
+import { type AbstractMesh } from "../Meshes/abstractMesh";
+import { type SubMesh } from "../Meshes/subMesh";
+import { type BaseTexture } from "../Materials/Textures/baseTexture";
 import { Material } from "../Materials/material";
 import { Tags, TagsGetTags, TagsAddTagsTo } from "../Misc/tags.pure";
 import { RegisterClass } from "../Misc/typeStore";

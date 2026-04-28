@@ -2,20 +2,20 @@
 
 export * from "./edgesRenderer.types";
 
-import { type Immutable, type Nullable } from "../types"
+import { type Immutable, type Nullable } from "../types";
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import { AbstractMesh } from "../Meshes/abstractMesh.pure";
-import { type Mesh } from "../Meshes/mesh"
-import { type Matrix } from "../Maths/math.vector"
+import { type Mesh } from "../Meshes/mesh";
+import { type Matrix } from "../Maths/math.vector";
 import { Vector3, TmpVectors } from "../Maths/math.vector.pure";
-import { type IDisposable, type Scene } from "../scene"
-import { type Observer } from "../Misc/observable"
+import { type IDisposable, type Scene } from "../scene";
+import { type Observer } from "../Misc/observable";
 import { Material } from "../Materials/material";
 import { ShaderMaterial } from "../Materials/shaderMaterial.pure";
 import { Camera } from "../Cameras/camera";
 import { Constants } from "../Engines/constants";
-import { type Node } from "../node"
-import { type DataBuffer } from "../Buffers/dataBuffer"
+import { type Node } from "../node";
+import { type DataBuffer } from "../Buffers/dataBuffer";
 import { SmartArray } from "../Misc/smartArray";
 import { DrawWrapper } from "../Materials/drawWrapper";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
