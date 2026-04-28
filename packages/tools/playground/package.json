@@ -3,14 +3,14 @@
     "private": true,
     "version": "1.0.0",
     "scripts": {
-        "build": "webpack",
+        "build": "vite build",
         "build:declaration": "build-tools -c pud --config ./config.json",
         "build:deployment": "npm run clean && vite build",
         "typecheck": "tsc -p tsconfig.build.json --noEmit",
         "serve": "vite",
-        "serve:prod": "webpack serve --env mode=production",
-        "serve:https": "webpack serve --env mode=development --server-type https --host ::",
-        "serve:dev": "webpack serve --env mode=development --env watch=all",
+        "serve:prod": "vite build && vite preview",
+        "serve:https": "vite --host :: --https",
+        "serve:dev": "vite",
         "clean": "rimraf dist"
     },
     "devDependencies": {
@@ -38,7 +38,6 @@
         "sass-loader": "^16.0.0",
         "style-loader": "^3.3.0",
         "url-loader": "^4.1.1",
-        "vite-plugin-monaco-editor": "^1.1.0",
         "vite-plugin-svgr": "^5.2.0",
         "webpack": "^5.103.0",
         "webpack-cli": "6.0.1",

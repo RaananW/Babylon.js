@@ -198,7 +198,7 @@ export function babylonDevExternalsPlugin(externals) {
  * @param {Record<string,string>} options.aliases
  *   Alias entries: key = bare module prefix, value = absolute path to resolve.
  *   E.g. `{ "shared-ui-components": path.resolve("../../dev/sharedUiComponents/src") }`
- * @param {string[]} [options.staticDirs]      Extra static file directories.
+ * @param {string} [options.publicDir]          Static file directory (Vite publicDir).
  * @param {boolean} [options.enableHttps]      Enable HTTPS for the dev server.
  * @param {boolean} [options.enableHmr]        Enable HMR (defaults true).
  * @param {Record<string,string>} [options.productionExternals]
@@ -213,7 +213,7 @@ export function babylonDevExternalsPlugin(externals) {
  * @param {string} [options.outDir]            Production build output dir (default: "dist").
  */
 export function commonDevViteConfiguration(options) {
-    const { port, aliases = {}, staticDirs = ["public"], enableHttps = false, enableHmr = true, productionExternals = {}, cdnExternals = null, outDir = "dist" } = options;
+    const { port, aliases = {}, publicDir = "public", enableHttps = false, enableHmr = true, productionExternals = {}, cdnExternals = null, outDir = "dist" } = options;
 
     // Resolve all alias values to absolute paths
     const resolvedAliases = Object.fromEntries(Object.entries(aliases).map(([key, value]) => [key, resolve(value)]));
@@ -260,7 +260,7 @@ export function commonDevViteConfiguration(options) {
         },
 
         // Tell Vite where to find static assets (mirrors webpack devServer.static)
-        publicDir: staticDirs[0] ?? "public",
+        publicDir,
 
         build: {
             outDir,

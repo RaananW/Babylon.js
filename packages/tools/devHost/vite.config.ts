@@ -17,8 +17,10 @@ import { commonDevViteConfiguration } from "../../public/viteToolsHelper.mjs";
 function stubOptionalPeerDepsPlugin(): Plugin {
     const optionals = ["draco3dgltf", "ammo.js", "cannon", "oimo", "recast", "havok", "basis_transcoder"];
     const q = optionals.map((p) => p.replace(".", "\\.")).join("|");
-    // Handle: import [type] { A, B } from "pkg"   (single or multi-line braces)
-    const namedRe = new RegExp(`import\\s+(?:type\\s+)?\\{([^}]*)\\}\\s+from\\s+['"](?:${q})['"];?`, "g");
+    // Handle: import type { A, B } from "pkg"  — erase entirely (type-only)
+    const typeNamedRe = new RegExp(`import\\s+type\\s+\\{[^}]*\\}\\s+from\\s+['"](?:${q})['"];?`, "g");
+    // Handle: import { A, B } from "pkg"   (single or multi-line braces, runtime)
+    const namedRe = new RegExp(`import\\s+\\{([^}]*)\\}\\s+from\\s+['"](?:${q})['"];?`, "g");
     // Handle: import * as ns from "pkg"
     const starRe = new RegExp(`import\\s+(?:type\\s+)?\\*\\s+as\\s+(\\w+)\\s+from\\s+['"](?:${q})['"];?`, "g");
     // Handle: import Default from "pkg"
@@ -32,12 +34,11 @@ function stubOptionalPeerDepsPlugin(): Plugin {
             .map((s) =>
                 s
                     .trim()
-                    .replace(/^type\s+/, "")
                     .split(/\s+as\s+/)
                     .pop()!
                     .trim()
             )
-            .filter(Boolean)
+            .filter((n) => Boolean(n) && !n.startsWith("type "))
             .map((n) => `const ${n} = undefined;`)
             .join(" ");
     }
@@ -51,6 +52,7 @@ function stubOptionalPeerDepsPlugin(): Plugin {
 
             return {
                 code: code
+                    .replace(typeNamedRe, "")
                     .replace(namedRe, (_m, bindings: string) => stubNamed(bindings))
                     .replace(starRe, (_m, ns: string) => `const ${ns} = {};`)
                     .replace(defaultRe, (_m, def: string) => `const ${def} = undefined;`)
