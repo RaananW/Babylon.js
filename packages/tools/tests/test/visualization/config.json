@@ -1,4 +1,4 @@
-﻿{
+{
     "root": "https://cdn.babylonjs.com",
     "tests": [
         {
@@ -3224,6 +3224,21 @@
             "excludedEngines": ["webgl1"]
         },
         {
+            "title": "OpenPBR IBL Furnace Test for Thin Film Transparency",
+            "playgroundId": "#GRQHVV#320",
+            "excludedEngines": ["webgl1"]
+        },
+        {
+            "title": "OpenPBR IBL Furnace Test for Metal Energy Compensation",
+            "playgroundId": "#KQYNYS#62",
+            "excludedEngines": ["webgl1"]
+        },
+        {
+            "title": "OpenPBR IBL Furnace Test for Dielectric Energy Compensation",
+            "playgroundId": "#KQYNYS#61",
+            "excludedEngines": ["webgl1"]
+        },
+        {
             "title": "OpenPBR IBL Specular IOR vs Coat IOR",
             "playgroundId": "#GRQHVV#39",
             "excludedEngines": ["webgl1"]
@@ -3479,6 +3494,12 @@
             "excludedEngines": ["webgl1"]
         },
         {
+            "title": "OpenPBR Transmission Roughness glTF - Combination Lights",
+            "playgroundId": "#GRQHVV#314",
+            "excludedEngines": ["webgl1"],
+            "dependsOn": ["Lights", "Loaders", "PBR", "Textures", "glTF"]
+        },
+        {
             "title": "OpenPBR Transmission Roughness vs IOR - Analytic Lights",
             "playgroundId": "#GRQHVV#134",
             "excludedEngines": ["webgl1"]
@@ -3644,6 +3665,14 @@
         },
         {
             "title": "OpenPBR Thin Walled Anisotropic Transmission - IBL",
+            "playgroundId": "#GRQHVV#315",
+            "excludedEngines": ["webgl1"],
+            "renderCount": 5,
+            "excludeFromAutomaticTesting": true,
+            "dependsOn": ["LibMaterials", "Lights", "Loaders", "Materials", "PBR", "Textures", "glTF"]
+        },
+        {
+            "title": "OpenPBR Thin Walled Anisotropic Transmission - IBL",
             "playgroundId": "#GRQHVV#247",
             "excludedEngines": ["webgl1"],
             "renderCount": 5,
@@ -3653,6 +3682,20 @@
             "title": "OpenPBR Thin Walled Anisotropic Transmission - Analytic Lights",
             "playgroundId": "#GRQHVV#244",
             "excludedEngines": ["webgl1"]
+        },
+        {
+            "title": "OpenPBR Thin Walled Subsurface Anisotropy - Realtime IBL",
+            "playgroundId": "#GRQHVV#318",
+            "excludedEngines": ["webgl1"],
+            "renderCount": 5,
+            "dependsOn": ["LibMaterials", "Lights", "Loaders", "Materials", "PBR", "Textures", "glTF"]
+        },
+        {
+            "title": "OpenPBR Thin Walled Subsurface Anisotropy - IBL",
+            "playgroundId": "#GRQHVV#316",
+            "excludedEngines": ["webgl1"],
+            "renderCount": 5,
+            "dependsOn": ["LibMaterials", "Lights", "Loaders", "Materials", "PBR", "Textures", "glTF"]
         },
         {
             "title": "OpenPBR Thin Walled Subsurface Anisotropy - IBL",
@@ -3670,6 +3713,24 @@
             "playgroundId": "#GRQHVV#313",
             "excludedEngines": ["webgl1"],
             "renderCount": 5
+        },
+        {
+            "title": "OpenPBR Subsurface SSS Frame Graph - Shadows - Combination Lights",
+            "playgroundId": "#PJ5JXH#116",
+            "excludedEngines": ["webgl1"],
+            "dependsOn": ["CSG", "FrameGraph", "GUI", "Layers", "LibMaterials", "Lights", "Loaders", "Materials", "Meshes", "PBR", "Particles", "Shadows", "Textures", "glTF"]
+        },
+        {
+            "title": "OpenPBR Subsurface SSS Frame Graph - Analytic Lights",
+            "playgroundId": "#PJ5JXH#117",
+            "excludedEngines": ["webgl1"],
+            "dependsOn": ["CSG", "FrameGraph", "GUI", "Layers", "LibMaterials", "Lights", "Loaders", "Materials", "Meshes", "PBR", "Particles", "Shadows", "Textures", "glTF"]
+        },
+        {
+            "title": "OpenPBR Subsurface SSS Frame Graph - Shadows - IBL",
+            "playgroundId": "#PJ5JXH#115",
+            "excludedEngines": ["webgl1"],
+            "dependsOn": ["CSG", "FrameGraph", "GUI", "Layers", "LibMaterials", "Lights", "Loaders", "Materials", "Meshes", "PBR", "Particles", "Shadows", "Textures", "glTF"]
         },
         {
             "title": "Background material blur",
@@ -3690,6 +3751,252 @@
             "playgroundId": "#RA18GJ#17",
             "renderCount": 120,
             "excludeFromPerformance": true
+        },
+        {
+            "title": "Particles - Emitters - Custom",
+            "playgroundId": "#13APF0#0",
+            "referenceImage": "particles-emitters-custom.png",
+            "dependsOn": ["Particles"]
+        },
+        {
+            "title": "Particles - Emitters - Mesh",
+            "playgroundId": "#5IZ478#0",
+            "referenceImage": "particles-emitters-mesh.png",
+            "dependsOn": ["Animations", "Lights", "Materials", "Particles"]
+        },
+        {
+            "title": "Particles - Emitters - Directed Cone",
+            "playgroundId": "#HK6WY4#0",
+            "referenceImage": "particles-emitters-directed-cone.png",
+            "dependsOn": ["Animations", "Lights", "Materials", "Particles"]
+        },
+        {
+            "title": "Particles - Emitters - Cone",
+            "playgroundId": "#MRGGML#0",
+            "referenceImage": "particles-emitters-cone.png",
+            "dependsOn": ["Animations", "Lights", "Materials", "Particles"]
+        },
+        {
+            "title": "Particles - Emitters - Directed Cylinder",
+            "playgroundId": "#016HKF#0",
+            "referenceImage": "particles-emitters-directed-cylinder.png",
+            "dependsOn": ["Animations", "Lights", "Materials", "Particles"]
+        },
+        {
+            "title": "Particles - Emitters - Cylinder",
+            "playgroundId": "#96154U#0",
+            "referenceImage": "particles-emitters-cylinder.png",
+            "dependsOn": ["Animations", "Lights", "Materials", "Particles"]
+        },
+        {
+            "title": "Particles - Emitters - Hemisphere",
+            "playgroundId": "#A5E9M8#0",
+            "referenceImage": "particles-emitters-hemisphere.png",
+            "dependsOn": ["Lights", "Particles"]
+        },
+        {
+            "title": "Particles - Emitters - Directed Sphere",
+            "playgroundId": "#0OQGK1#0",
+            "referenceImage": "particles-emitters-directed-sphere.png",
+            "dependsOn": ["Animations", "Lights", "Materials", "Particles"]
+        },
+        {
+            "title": "Particles - Emitters - Sphere",
+            "playgroundId": "#O9966G#0",
+            "referenceImage": "particles-emitters-sphere.png",
+            "dependsOn": ["Animations", "Lights", "Materials", "Particles"]
+        },
+        {
+            "title": "Particles - Emitters - Box",
+            "playgroundId": "#ZVMMSX#0",
+            "referenceImage": "particles-emitters-box.png",
+            "dependsOn": ["Animations", "Lights", "Materials", "Particles"]
+        },
+        {
+            "title": "Particles - Emitters - Point",
+            "playgroundId": "#EW4JJ9#0",
+            "referenceImage": "particles-emitters-point.png",
+            "dependsOn": ["Animations", "LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Start Size",
+            "playgroundId": "#OYHJGJ#0",
+            "referenceImage": "particles-basic-change-start-size.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Lifetime 2",
+            "playgroundId": "#24X4MW#0",
+            "referenceImage": "particles-basic-change-lifetime-2.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Lifetime",
+            "playgroundId": "#LGZQU3#0",
+            "referenceImage": "particles-basic-change-lifetime.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Emit Rate 2",
+            "playgroundId": "#JW6JI4#0",
+            "referenceImage": "particles-basic-change-emit-rate-2.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Emit Rate",
+            "playgroundId": "#28UTI5#0",
+            "referenceImage": "particles-basic-change-emit-rate.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Drag 2",
+            "playgroundId": "#C4ISYX#0",
+            "referenceImage": "particles-basic-change-drag-2.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Drag",
+            "playgroundId": "#H5J2I5#0",
+            "referenceImage": "particles-basic-change-drag.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Angular Speed 2",
+            "playgroundId": "#Y37E4A#0",
+            "referenceImage": "particles-basic-change-angular-speed-2.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Angular Speed",
+            "playgroundId": "#NBQ82W#0",
+            "referenceImage": "particles-basic-change-angular-speed.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Speed Limit",
+            "playgroundId": "#ZAE8XN#0",
+            "referenceImage": "particles-basic-change-speed-limit.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Speed 2",
+            "playgroundId": "#Z0P403#0",
+            "referenceImage": "particles-basic-change-speed-2.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Speed",
+            "playgroundId": "#WJPDMN#0",
+            "referenceImage": "particles-basic-change-speed.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Color 2",
+            "playgroundId": "#HBTZXK#0",
+            "referenceImage": "particles-basic-change-color-2.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Color",
+            "playgroundId": "#AUPMMB#0",
+            "referenceImage": "particles-basic-change-color.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Size 2",
+            "playgroundId": "#H4K2HM#0",
+            "referenceImage": "particles-basic-change-size-2.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Change - Size",
+            "playgroundId": "#L90MXS#0",
+            "referenceImage": "particles-basic-change-size.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Lifetime - Long",
+            "playgroundId": "#WAABDN#0",
+            "referenceImage": "particles-basic-lifetime-long.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Lifetime - Short",
+            "playgroundId": "#HH34PQ#0",
+            "referenceImage": "particles-basic-lifetime-short.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Emission Limits",
+            "playgroundId": "#T9YQQX#0",
+            "referenceImage": "particles-basic-emission-limits.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Emit Rate - Fast",
+            "playgroundId": "#0FU68O#0",
+            "referenceImage": "particles-basic-emit-rate-fast.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Emit Rate - Slow",
+            "playgroundId": "#Z1YF6Y#0",
+            "referenceImage": "particles-basic-emit-rate-slow.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Direction - Gravity",
+            "playgroundId": "#7R44LG#0",
+            "referenceImage": "particles-basic-direction-gravity.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Direction",
+            "playgroundId": "#9A7FUC#0",
+            "referenceImage": "particles-basic-direction.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Translation Pivot",
+            "playgroundId": "#SGRK8U#0",
+            "referenceImage": "particles-basic-translation-pivot.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Angular Speed - Rotation",
+            "playgroundId": "#K7QQS5#0",
+            "referenceImage": "particles-basic-angular-speed-rotation.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Angular Speed",
+            "playgroundId": "#SW2MU1#0",
+            "referenceImage": "particles-basic-angular-speed.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Speed",
+            "playgroundId": "#9EBA6C#0",
+            "referenceImage": "particles-basic-speed.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Color",
+            "playgroundId": "#MDSA3P#0",
+            "referenceImage": "particles-basic-color.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Scale",
+            "playgroundId": "#D4J35U#0",
+            "referenceImage": "particles-basic-scale.png",
+            "dependsOn": ["LibMaterials", "Particles"]
+        },
+        {
+            "title": "Particles - Basic Properties - Size",
+            "playgroundId": "#MP4MLC#0",
+            "referenceImage": "particles-basic-size.png",
+            "dependsOn": ["LibMaterials", "Particles"]
         },
         {
             "title": "Particles - Basic Properties - Size",
