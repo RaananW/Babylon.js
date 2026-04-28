@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import type { Nullable, Tuple } from "../types";
-
+import { type Nullable, type Tuple } from "../types"
 /**
  * Returns an array of the given size filled with elements built from the given constructor and the parameters.
  * @param size the number of element to construct and put in the array.

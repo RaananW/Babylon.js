@@ -4,18 +4,18 @@ export * from "./boundingBoxRenderer.types";
 
 import { Scene } from "../scene.pure";
 import { Buffer, VertexBuffer } from "../Buffers/buffer.pure";
-import type { SubMesh } from "../Meshes/subMesh";
+import { type SubMesh } from "../Meshes/subMesh"
 import { AbstractMesh } from "../Meshes/abstractMesh.pure";
 import { Matrix, Vector3 } from "../Maths/math.vector.pure";
 import { SmartArray } from "../Misc/smartArray";
-import type { Nullable, FloatArray, IndicesArray } from "../types";
-import type { ISceneComponent } from "../sceneComponent";
+import { type Nullable, type FloatArray, type IndicesArray } from "../types"
+import { type ISceneComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
 import { BoundingBox } from "../Culling/boundingBox.pure";
-import type { Effect } from "../Materials/effect";
+import { type Effect } from "../Materials/effect"
 import { Material } from "../Materials/material";
 import { ShaderMaterial } from "../Materials/shaderMaterial.pure";
-import type { DataBuffer } from "../Buffers/dataBuffer";
+import { type DataBuffer } from "../Buffers/dataBuffer"
 import { Color3 } from "../Maths/math.color.pure";
 import { Observable } from "../Misc/observable";
 import { DrawWrapper } from "../Materials/drawWrapper";

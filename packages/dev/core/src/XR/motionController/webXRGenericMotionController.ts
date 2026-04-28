@@ -1,7 +1,7 @@
-import type { IMinimalMotionControllerObject, MotionControllerHandedness, IMotionControllerLayoutMap } from "./webXRAbstractMotionController";
+import { type IMinimalMotionControllerObject, type MotionControllerHandedness, type IMotionControllerLayoutMap } from "./webXRAbstractMotionController"
 import { WebXRAbstractMotionController } from "./webXRAbstractMotionController";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
-import type { Scene } from "../../scene";
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
+import { type Scene } from "../../scene"
 import { Mesh } from "../../Meshes/mesh";
 import { Quaternion } from "../../Maths/math.vector";
 

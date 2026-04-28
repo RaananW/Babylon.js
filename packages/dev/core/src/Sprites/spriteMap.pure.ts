@@ -1,13 +1,13 @@
-import type { IDisposable, Scene } from "../scene";
-import type { Nullable } from "../types";
+import { type IDisposable, type Scene } from "../scene"
+import { type Nullable } from "../types"
 import { Vector2, Vector3 } from "../Maths/math.vector.pure";
 import { Texture } from "../Materials/Textures/texture.pure";
-import type { RawTexture } from "../Materials/Textures/rawTexture.pure";
+import { type RawTexture } from "../Materials/Textures/rawTexture.pure"
 import { RawTextureCreateRGBATexture } from "../Materials/Textures/rawTexture.pure";
 import { ShaderMaterial } from "../Materials/shaderMaterial.pure";
-import type { Mesh } from "../Meshes/mesh";
-import type { PickingInfo } from "../Collisions/pickingInfo";
-import type { ISpriteJSONSprite, ISpriteJSONAtlas } from "./ISprites";
+import { type Mesh } from "../Meshes/mesh"
+import { type PickingInfo } from "../Collisions/pickingInfo"
+import { type ISpriteJSONSprite, type ISpriteJSONAtlas } from "./ISprites"
 import { Effect } from "../Materials/effect";
 
 import { CreatePlane } from "../Meshes/Builders/planeBuilder.pure";

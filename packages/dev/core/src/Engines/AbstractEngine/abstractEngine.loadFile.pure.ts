@@ -1,6 +1,6 @@
 export * from "./abstractEngine.loadFile.types";
 
-import type { IOfflineProvider } from "../../Offline/IOfflineProvider";
+import { type IOfflineProvider } from "../../Offline/IOfflineProvider"
 import { AbstractEngine } from "../../Engines/abstractEngine";
 
 let _registered = false;

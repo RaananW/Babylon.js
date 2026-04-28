@@ -1,14 +1,14 @@
 /** This file must only contain pure code and pure imports */
 
-import type { EasingFunction } from "core/Animations/easing";
+import { type EasingFunction } from "core/Animations/easing"
 import { Constants } from "core/Engines/constants";
 import { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
-import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
-import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
-import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
-import type { FlowGraphTypes } from "core/FlowGraph/flowGraphRichTypes";
+import { type IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock"
+import { type FlowGraphContext } from "core/FlowGraph/flowGraphContext"
+import { type FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection"
+import { type FlowGraphTypes } from "core/FlowGraph/flowGraphRichTypes"
 import { getRichTypeByAnimationType, getRichTypeByFlowGraphType, RichTypeAny, RichTypeNumber } from "core/FlowGraph/flowGraphRichTypes.pure";
-import type { Animation } from "core/Animations/animation.pure";
+import { type Animation } from "core/Animations/animation.pure"
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { AnimationCreateAnimation } from "../../../../Animations/animation.pure";
 import { RegisterClass } from "core/Misc/typeStore";

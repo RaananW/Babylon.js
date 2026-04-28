@@ -3,10 +3,10 @@
 export * from "./depthPeelingSceneComponent.types";
 
 import { Scene } from "../scene.pure";
-import type { ISceneComponent } from "../sceneComponent";
+import { type ISceneComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
 import { DepthPeelingRenderer } from "./depthPeelingRenderer";
-import type { ThinDepthPeelingRenderer } from "./thinDepthPeelingRenderer";
+import { type ThinDepthPeelingRenderer } from "./thinDepthPeelingRenderer"
 import { Constants } from "../Engines/constants";
 
 /**

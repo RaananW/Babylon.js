@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Effect } from "../../../effect";
+import { type Effect } from "../../../effect"
 import { ImageSourceBlock } from "./imageSourceBlock.pure";
-import type { Nullable } from "../../../../types";
-import type { Texture } from "../../../Textures/texture";
-import type { NodeMaterial } from "../../nodeMaterial";
+import { type Nullable } from "../../../../types"
+import { type Texture } from "../../../Textures/texture"
+import { type NodeMaterial } from "../../nodeMaterial"
 import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**

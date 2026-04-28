@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
+import { type NodeMaterialBuildState } from "../nodeMaterialBuildState"
 import { TriPlanarBlock } from "./triPlanarBlock.pure";
 import { NodeMaterialBlockConnectionPointTypes } from "../Enums/nodeMaterialBlockConnectionPointTypes";
 import { ShaderLanguage } from "../../../Materials/shaderLanguage";

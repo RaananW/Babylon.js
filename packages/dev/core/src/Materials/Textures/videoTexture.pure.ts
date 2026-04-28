@@ -3,12 +3,12 @@
 import { Observable } from "../../Misc/observable";
 import { Tools, ToolsSetCorsBehavior } from "../../Misc/tools.pure";
 import { Logger } from "../../Misc/logger";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
+import { type Nullable } from "../../types"
+import { type Scene } from "../../scene"
 import { Texture } from "../../Materials/Textures/texture.pure";
 import { Constants } from "../../Engines/constants";
-import type { ExternalTexture } from "./externalTexture";
-import type { WebGPUEngine } from "core/Engines";
+import { type ExternalTexture } from "./externalTexture"
+import { type WebGPUEngine } from "core/Engines"
 import { serialize } from "core/Misc/decorators";
 import { RegisterClass } from "core/Misc/typeStore";
 

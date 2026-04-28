@@ -1,10 +1,10 @@
-import type { AbstractEngine } from "../Engines/abstractEngine";
-import type { Scene } from "../scene";
-import type { ISceneLoaderProgressEvent } from "../Loading/sceneLoader";
+import { type AbstractEngine } from "../Engines/abstractEngine"
+import { type Scene } from "../scene"
+import { type ISceneLoaderProgressEvent } from "../Loading/sceneLoader"
 import { SceneLoader } from "../Loading/sceneLoader";
 import { Logger } from "../Misc/logger";
 import { FilesInputStore } from "./filesInputStore";
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { SceneLoaderFlags } from "core/Loading/sceneLoaderFlags";
 
 /**

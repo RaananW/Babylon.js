@@ -1,6 +1,5 @@
-import type { FluidRenderer } from "./fluidRenderer.pure";
-import type { Nullable } from "core/types";
-
+import { type FluidRenderer } from "./fluidRenderer.pure"
+import { type Nullable } from "core/types"
 declare module "../../scene" {
     /**
      *

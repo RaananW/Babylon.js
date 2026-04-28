@@ -1,5 +1,4 @@
-import type { BoundingBoxRenderer } from "./boundingBoxRenderer.pure";
-
+import { type BoundingBoxRenderer } from "./boundingBoxRenderer.pure"
 declare module "../scene" {
     /**
      *

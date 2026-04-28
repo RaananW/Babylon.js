@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
 import { FreeCamera } from "./freeCamera.pure";
-import type { FreeCameraTouchInput } from "../Cameras/Inputs/freeCameraTouchInput";
-import type { FreeCameraMouseInput } from "../Cameras/Inputs/freeCameraMouseInput";
-import type { Scene } from "../scene";
+import { type FreeCameraTouchInput } from "../Cameras/Inputs/freeCameraTouchInput"
+import { type FreeCameraMouseInput } from "../Cameras/Inputs/freeCameraMouseInput"
+import { type Scene } from "../scene"
 import { Node } from "../node";
 import { Vector3 } from "../Maths/math.vector.pure";
 

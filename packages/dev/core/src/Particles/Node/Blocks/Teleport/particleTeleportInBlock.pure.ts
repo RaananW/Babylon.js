@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
-import type { ParticleTeleportOutBlock } from "./particleTeleportOutBlock";
+import { type ParticleTeleportOutBlock } from "./particleTeleportOutBlock"
 import { NodeParticleBlock } from "../../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
-import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint";
+import { type NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint"
 import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**

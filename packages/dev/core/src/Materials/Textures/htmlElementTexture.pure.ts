@@ -1,14 +1,12 @@
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { BaseTexture } from "../../Materials/Textures/baseTexture.pure";
 import { Constants } from "../../Engines/constants";
 import { Matrix } from "../../Maths/math.vector.pure";
 import { Observable } from "../../Misc/observable";
-import type { ExternalTexture } from "./externalTexture";
-
-import type { AbstractEngine } from "../../Engines/abstractEngine";
-import type { Scene } from "../../scene";
-import type { WebGPUEngine } from "core/Engines/webgpuEngine";
-
+import { type ExternalTexture } from "./externalTexture"
+import { type AbstractEngine } from "../../Engines/abstractEngine"
+import { type Scene } from "../../scene"
+import { type WebGPUEngine } from "core/Engines/webgpuEngine"
 /**
  * Defines the options related to the creation of an HtmlElementTexture
  */

@@ -4,18 +4,18 @@ export * from "./selectionOutlineLayer.types";
 
 import { serialize, serializeAsColor3 } from "../Misc/decorators";
 import { Scene } from "../scene.pure";
-import type { SubMesh } from "../Meshes/subMesh";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-import type { Mesh } from "../Meshes/mesh";
-import type { Effect } from "../Materials/effect";
-import type { Material } from "../Materials/material";
+import { type SubMesh } from "../Meshes/subMesh"
+import { type AbstractMesh } from "../Meshes/abstractMesh"
+import { type Mesh } from "../Meshes/mesh"
+import { type Effect } from "../Materials/effect"
+import { type Material } from "../Materials/material"
 import { EffectLayer } from "./effectLayer";
 import { Constants } from "../Engines/constants";
 import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/decorators.serialization.pure";
-import type { IThinSelectionOutlineLayerOptions } from "./thinSelectionOutlineLayer";
+import { type IThinSelectionOutlineLayerOptions } from "./thinSelectionOutlineLayer"
 import { ThinSelectionOutlineLayer } from "./thinSelectionOutlineLayer";
-import type { Color3 } from "../Maths/math.color";
-import type { Nullable } from "../types";
+import { type Color3 } from "../Maths/math.color"
+import { type Nullable } from "../types"
 import { RegisterClass } from "../Misc/typeStore";
 
 /**

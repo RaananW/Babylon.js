@@ -1,5 +1,4 @@
-import type { IDisposable } from "../scene";
-
+import { type IDisposable } from "../scene"
 interface IWorkerInfo {
     workerPromise: Promise<Worker>;
     idle: boolean;

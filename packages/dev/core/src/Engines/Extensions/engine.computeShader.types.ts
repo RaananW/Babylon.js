@@ -1,11 +1,10 @@
-import type { ComputeBindingList, ComputeBindingMapping, ComputeCompilationMessages } from "./engine.computeShader.pure";
-import type { ComputeEffect, IComputeEffectCreationOptions, IComputeShaderPath } from "../../Compute/computeEffect";
-import type { IComputeContext } from "../../Compute/IComputeContext";
-import type { IComputePipelineContext } from "../../Compute/IComputePipelineContext";
-import type { Nullable } from "../../types";
-import type { DataBuffer } from "../../Buffers/dataBuffer";
-import type { WebGPUPerfCounter } from "../WebGPU/webgpuPerfCounter";
-
+import { type ComputeBindingList, type ComputeBindingMapping, type ComputeCompilationMessages } from "./engine.computeShader.pure"
+import { type ComputeEffect, type IComputeEffectCreationOptions, type IComputeShaderPath } from "../../Compute/computeEffect"
+import { type IComputeContext } from "../../Compute/IComputeContext"
+import { type IComputePipelineContext } from "../../Compute/IComputePipelineContext"
+import { type Nullable } from "../../types"
+import { type DataBuffer } from "../../Buffers/dataBuffer"
+import { type WebGPUPerfCounter } from "../WebGPU/webgpuPerfCounter"
 declare module "../../Engines/abstractEngine" {
     /**
      *

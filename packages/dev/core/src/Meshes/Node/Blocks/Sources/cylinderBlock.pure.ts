@@ -2,12 +2,12 @@
 
 import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
-import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
+import { type NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint"
+import { type NodeGeometryBuildState } from "../../nodeGeometryBuildState"
 import { GeometryInputBlock } from "../geometryInputBlock.pure";
-import type { Vector4 } from "../../../../Maths/math.vector";
+import { type Vector4 } from "../../../../Maths/math.vector"
 import { CreateCylinderVertexData } from "core/Meshes/Builders/cylinderBuilder.pure";
-import type { Color4 } from "../../../../Maths/math.color";
+import { type Color4 } from "../../../../Maths/math.color"
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
 import { RegisterClass } from "../../../../Misc/typeStore";
 

@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
-import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
+import { type IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock"
 import {
     RichTypeVector3,
     FlowGraphTypes,
@@ -17,13 +17,13 @@ import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { FlowGraphBinaryOperationBlock } from "../flowGraphBinaryOperationBlock";
 import { FlowGraphUnaryOperationBlock } from "../flowGraphUnaryOperationBlock";
 import { Quaternion, Vector3, Vector4 } from "core/Maths/math.vector.pure";
-import type { Matrix, Vector2 } from "core/Maths/math.vector";
-import type { FlowGraphMatrix2D, FlowGraphMatrix3D } from "core/FlowGraph/CustomTypes";
-import type { FlowGraphMatrix, FlowGraphVector } from "core/FlowGraph/utils";
+import { type Matrix, type Vector2 } from "core/Maths/math.vector"
+import { type FlowGraphMatrix2D, type FlowGraphMatrix3D } from "core/FlowGraph/CustomTypes"
+import { type FlowGraphMatrix, type FlowGraphVector } from "core/FlowGraph/utils"
 import { _GetClassNameOf } from "core/FlowGraph/utils";
-import type { FlowGraphDataConnection } from "../../../flowGraphDataConnection";
-import type { FlowGraphContext } from "../../../flowGraphContext";
-import type { Nullable } from "../../../../types";
+import { type FlowGraphDataConnection } from "../../../flowGraphDataConnection"
+import { type FlowGraphContext } from "../../../flowGraphContext"
+import { type Nullable } from "../../../../types"
 import { GetAngleBetweenQuaternions, GetQuaternionFromDirections } from "core/FlowGraph/flowGraphMath";
 import { RegisterClass } from "core/Misc/typeStore";
 

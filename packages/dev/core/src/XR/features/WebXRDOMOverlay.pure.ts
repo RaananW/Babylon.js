@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
 import { ToolsWarn } from "../../Misc/tools.pure";
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { WebXRFeatureName } from "../webXRFeaturesManager";
-import type { WebXRSessionManager } from "../webXRSessionManager";
+import { type WebXRSessionManager } from "../webXRSessionManager"
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 

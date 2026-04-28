@@ -1,5 +1,4 @@
-import type { OutlineRenderer } from "./outlineRenderer.pure";
-
+import { type OutlineRenderer } from "./outlineRenderer.pure"
 declare module "../scene" {
     /**
      *

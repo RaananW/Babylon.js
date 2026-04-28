@@ -1,10 +1,9 @@
-import type { ComputeEffect } from "../../../Compute/computeEffect";
-import type { IComputeContext } from "../../../Compute/IComputeContext";
-import type { Nullable } from "../../../types";
-import type { ComputeBindingList, ComputeBindingMapping } from "../../Extensions/engine.computeShader";
-import type { WebGPUPerfCounter } from "../webgpuPerfCounter";
-import type { DataBuffer } from "../../../Buffers/dataBuffer";
-
+import { type ComputeEffect } from "../../../Compute/computeEffect"
+import { type IComputeContext } from "../../../Compute/IComputeContext"
+import { type Nullable } from "../../../types"
+import { type ComputeBindingList, type ComputeBindingMapping } from "../../Extensions/engine.computeShader"
+import { type WebGPUPerfCounter } from "../webgpuPerfCounter"
+import { type DataBuffer } from "../../../Buffers/dataBuffer"
 declare module "../../webgpuEngine" {
     /**
      *

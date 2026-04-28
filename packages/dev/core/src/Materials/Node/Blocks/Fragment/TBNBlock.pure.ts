@@ -2,15 +2,15 @@
 
 import { NodeMaterialBlock } from "../../nodeMaterialBlock";
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
-import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
+import { type NodeMaterialBuildState } from "../../nodeMaterialBuildState"
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
-import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
+import { type NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint"
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
-import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
+import { type NodeMaterial, type NodeMaterialDefines } from "../../nodeMaterial"
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
 import { InputBlock } from "../Input/inputBlock.pure";
-import type { AbstractMesh } from "../../../../Meshes/abstractMesh";
+import { type AbstractMesh } from "../../../../Meshes/abstractMesh"
 import { ShaderLanguage } from "../../../../Materials/shaderLanguage";
 import { RegisterClass } from "../../../../Misc/typeStore";
 

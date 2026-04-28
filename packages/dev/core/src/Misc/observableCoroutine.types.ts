@@ -1,5 +1,4 @@
-import type { AsyncCoroutine, CoroutineScheduler } from "./coroutine";
-
+import { type AsyncCoroutine, type CoroutineScheduler } from "./coroutine"
 declare module "./observable" {
     /**
      *

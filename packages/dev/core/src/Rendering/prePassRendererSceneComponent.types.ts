@@ -1,7 +1,6 @@
-import type { Nullable } from "../types";
-import type { PrePassRenderer } from "./prePassRenderer";
-import type { PrePassRenderTarget } from "../Materials/Textures/prePassRenderTarget";
-
+import { type Nullable } from "../types"
+import { type PrePassRenderer } from "./prePassRenderer"
+import { type PrePassRenderTarget } from "../Materials/Textures/prePassRenderTarget"
 declare module "../scene" {
     /**
      *

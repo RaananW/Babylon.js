@@ -3,7 +3,7 @@
 export * from "./abstractEngine.query.types";
 
 import { AbstractMesh } from "core/Meshes/abstractMesh.pure";
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { AbstractEngine } from "../abstractEngine";
 
 /** @internal */

@@ -3,9 +3,9 @@
 export * from "./subSurfaceSceneComponent.types";
 
 import { Scene } from "../scene.pure";
-import type { ISceneSerializableComponent } from "../sceneComponent";
+import { type ISceneSerializableComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { SubSurfaceConfiguration } from "./subSurfaceConfiguration";
 import { Color3 } from "../Maths/math.color";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";

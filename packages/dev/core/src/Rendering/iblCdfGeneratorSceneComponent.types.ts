@@ -1,6 +1,5 @@
-import type { Nullable } from "../types";
-import type { IblCdfGenerator } from "./iblCdfGenerator";
-
+import { type Nullable } from "../types"
+import { type IblCdfGenerator } from "./iblCdfGenerator"
 declare module "../scene" {
     /**
      *

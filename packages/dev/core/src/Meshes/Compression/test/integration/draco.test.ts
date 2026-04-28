@@ -1,5 +1,5 @@
 import { DracoDecoder } from "../../dracoDecoder";
-import type { IDracoCodecConfiguration } from "../../dracoCodec";
+import { type IDracoCodecConfiguration } from "../../dracoCodec"
 import { DracoCompression } from "../../dracoCompression";
 
 describe("Draco Mesh Compression tests", () => {

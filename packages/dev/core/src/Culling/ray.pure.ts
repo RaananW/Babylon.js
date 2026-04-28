@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
 export * from "./ray.types";
-import type { Nullable } from "../types";
-import type { Matrix } from "../Maths/math.vector";
-import type { PickingInfo } from "../Collisions/pickingInfo";
+import { type Nullable } from "../types"
+import { type Matrix } from "../Maths/math.vector"
+import { type PickingInfo } from "../Collisions/pickingInfo"
 import { Scene } from "../scene";
 import { Camera } from "../Cameras/camera";
 import {
@@ -24,8 +24,7 @@ import {
     RayTransform,
     RayTransformToRef,
 } from "./ray.core";
-import type { MeshPredicate, TrianglePickingPredicate } from "./ray.core";
-
+import { type MeshPredicate, type TrianglePickingPredicate } from "./ray.core"
 export * from "./ray.core";
 
 export {};

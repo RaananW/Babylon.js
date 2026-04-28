@@ -2,10 +2,10 @@
 
 import { serialize, serializeAsColor3, expandToProperty, serializeAsTexture } from "../../Misc/decorators";
 import { GetEnvironmentBRDFTexture } from "../../Misc/brdfTextureTools";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
+import { type Nullable } from "../../types"
+import { type Scene } from "../../scene"
 import { Color3, Color3White } from "../../Maths/math.color.pure";
-import type { BaseTexture } from "../../Materials/Textures/baseTexture";
+import { type BaseTexture } from "../../Materials/Textures/baseTexture"
 import { PBRBaseMaterial } from "./pbrBaseMaterial.pure";
 import { Material } from "../material";
 import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";

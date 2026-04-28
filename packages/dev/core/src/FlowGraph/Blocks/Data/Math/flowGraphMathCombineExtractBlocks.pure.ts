@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
-import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
+import { type FlowGraphContext } from "core/FlowGraph/flowGraphContext"
 import { FlowGraphCachedOperationBlock } from "../flowGraphCachedOperationBlock";
 import { RichTypeMatrix, RichTypeMatrix2D, RichTypeMatrix3D, RichTypeNumber, RichTypeVector2, RichTypeVector3, RichTypeVector4 } from "core/FlowGraph/flowGraphRichTypes.pure";
-import type { RichType } from "core/FlowGraph/flowGraphRichTypes";
+import { type RichType } from "core/FlowGraph/flowGraphRichTypes"
 import { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
-import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
+import { type IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock"
 import { Matrix, Vector2, Vector3, Vector4 } from "core/Maths/math.vector.pure";
-import type { Nullable } from "core/types";
+import { type Nullable } from "core/types"
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { FlowGraphMatrix2D, FlowGraphMatrix3D } from "core/FlowGraph/CustomTypes/flowGraphMatrix";
 import { RegisterClass } from "core/Misc/typeStore";

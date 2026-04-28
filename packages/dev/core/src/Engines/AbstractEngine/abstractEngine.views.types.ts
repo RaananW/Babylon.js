@@ -1,8 +1,7 @@
-import type { EngineView } from "./abstractEngine.views.pure";
-import type { Camera } from "../../Cameras/camera";
-import type { Nullable } from "../../types";
-import type { Observable } from "../../Misc/observable";
-
+import { type EngineView } from "./abstractEngine.views.pure"
+import { type Camera } from "../../Cameras/camera"
+import { type Nullable } from "../../types"
+import { type Observable } from "../../Misc/observable"
 declare module "../../Engines/abstractEngine" {
     /**
      *

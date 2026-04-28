@@ -1,6 +1,5 @@
-import type { IndicesArray } from "../types";
-import type { Vector3 } from "../Maths/math.vector";
-
+import { type IndicesArray } from "../types"
+import { type Vector3 } from "../Maths/math.vector"
 declare module "./subMesh" {
     /** @internal */
     // eslint-disable-next-line @typescript-eslint/naming-convention

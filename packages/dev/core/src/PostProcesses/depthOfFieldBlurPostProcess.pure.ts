@@ -1,15 +1,15 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../types";
-import type { Vector2 } from "../Maths/math.vector";
-import type { Camera } from "../Cameras/camera";
-import type { Effect } from "../Materials/effect";
+import { type Nullable } from "../types"
+import { type Vector2 } from "../Maths/math.vector"
+import { type Camera } from "../Cameras/camera"
+import { type Effect } from "../Materials/effect"
 import { Texture } from "../Materials/Textures/texture.pure";
-import type { PostProcess, PostProcessOptions } from "./postProcess";
+import { type PostProcess, type PostProcessOptions } from "./postProcess"
 import { BlurPostProcess } from "./blurPostProcess.pure";
-import type { Scene } from "../scene";
+import { type Scene } from "../scene"
 import { Constants } from "../Engines/constants";
-import type { AbstractEngine } from "core/Engines/abstractEngine";
+import { type AbstractEngine } from "core/Engines/abstractEngine"
 import { ThinDepthOfFieldBlurPostProcess } from "./thinDepthOfFieldBlurPostProcess";
 import { RegisterClass } from "../Misc/typeStore";
 

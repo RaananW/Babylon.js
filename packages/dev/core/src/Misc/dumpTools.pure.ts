@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { ThinEngine } from "../Engines/thinEngine";
+import { type ThinEngine } from "../Engines/thinEngine"
 import { Constants } from "../Engines/constants";
 import { EffectRenderer, EffectWrapper } from "../Materials/effectRenderer.pure";
 import { Tools } from "./tools.pure";
 import { Clamp } from "../Maths/math.scalar.functions";
-import type { AbstractEngine } from "../Engines/abstractEngine";
+import { type AbstractEngine } from "../Engines/abstractEngine"
 import { EngineStore } from "../Engines/engineStore";
 import { Logger } from "./logger";
 import { EncodeArrayBufferToBase64 } from "./stringTools";

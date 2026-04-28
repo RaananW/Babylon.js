@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
 import { WebXRFeatureName } from "../webXRFeaturesManager";
-import type { WebXRSessionManager } from "../webXRSessionManager";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
+import { type WebXRSessionManager } from "../webXRSessionManager"
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
 import { Observable } from "../../Misc/observable";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";

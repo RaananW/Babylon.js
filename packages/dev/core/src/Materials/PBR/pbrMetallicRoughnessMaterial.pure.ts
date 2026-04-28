@@ -2,11 +2,11 @@
 
 import { serialize, serializeAsColor3, expandToProperty, serializeAsTexture } from "../../Misc/decorators";
 import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
-import type { Scene } from "../../scene";
-import type { Color3 } from "../../Maths/math.color";
-import type { BaseTexture } from "../../Materials/Textures/baseTexture";
+import { type Scene } from "../../scene"
+import { type Color3 } from "../../Maths/math.color"
+import { type BaseTexture } from "../../Materials/Textures/baseTexture"
 import { PBRBaseSimpleMaterial } from "./pbrBaseSimpleMaterial";
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { RegisterClass } from "../../Misc/typeStore";
 
 /**

@@ -2,37 +2,37 @@
 
 export * from "./mesh.types";
 
-import type { Observer } from "../Misc/observable";
+import { type Observer } from "../Misc/observable"
 import { Observable } from "../Misc/observable";
 import { AsyncLoop, ToolsLoadImage, ToolsLoadFile } from "../Misc/tools.pure";
-import type { IAnimatable } from "../Animations/animatable.interface";
+import { type IAnimatable } from "../Animations/animatable.interface"
 import { DeepCopierDeepCopy } from "../Misc/deepCopier.pure";
 import { Tags, TagsHasTags, TagsGetTags, TagsAddTagsTo } from "../Misc/tags.pure";
-import type { Coroutine } from "../Misc/coroutine";
+import { type Coroutine } from "../Misc/coroutine"
 import { runCoroutineSync, runCoroutineAsync, createYieldingScheduler } from "../Misc/coroutine";
-import type { Nullable, FloatArray, IndicesArray, DeepImmutable } from "../types";
+import { type Nullable, type FloatArray, type IndicesArray, type DeepImmutable } from "../types"
 import { Camera } from "../Cameras/camera";
-import type { Scene } from "../scene";
+import { type Scene } from "../scene"
 import { ScenePerformancePriority } from "../scene.pure";
-import type { Vector4 } from "../Maths/math.vector";
+import { type Vector4 } from "../Maths/math.vector"
 import { Quaternion, Matrix, Vector3, Vector2 } from "../Maths/math.vector.pure";
-import type { Color4 } from "../Maths/math.color";
+import { type Color4 } from "../Maths/math.color"
 import { Color3FromArray } from "../Maths/math.color.pure";
-import type { Node } from "../node.pure";
+import { type Node } from "../node.pure"
 import { NodeParseAnimationRanges } from "../node.pure";
 import { VertexBuffer, Buffer } from "../Buffers/buffer.pure";
-import type { IGetSetVerticesData } from "./mesh.vertexData";
+import { type IGetSetVerticesData } from "./mesh.vertexData"
 import { VertexData, VertexDataComputeNormals } from "./mesh.vertexData.pure";
 import { Geometry } from "./geometry";
-import type { IMeshDataOptions } from "./abstractMesh";
+import { type IMeshDataOptions } from "./abstractMesh"
 import { AbstractMesh } from "./abstractMesh.pure";
 import { SubMesh } from "./subMesh";
-import type { BoundingSphere } from "../Culling/boundingSphere";
-import type { Effect } from "../Materials/effect";
+import { type BoundingSphere } from "../Culling/boundingSphere"
+import { type Effect } from "../Materials/effect"
 import { Material } from "../Materials/material";
 import { MultiMaterial } from "../Materials/multiMaterial.pure";
 import { SceneLoaderFlags } from "../Loading/sceneLoaderFlags";
-import type { Skeleton } from "../Bones/skeleton";
+import { type Skeleton } from "../Bones/skeleton"
 import { Constants } from "../Engines/constants";
 import { SerializationHelperAppendSerializedAnimations } from "../Misc/decorators.serialization.pure";
 import { Logger } from "../Misc/logger";
@@ -40,19 +40,19 @@ import { GetClass } from "../Misc/typeStore";
 import { _WarnImport } from "../Misc/devTools";
 import { SceneComponentConstants } from "../sceneComponent";
 import { MeshLODLevel } from "./meshLODLevel";
-import type { Path3D } from "../Maths/math.path";
-import type { Plane } from "../Maths/math.plane";
-import type { TransformNode } from "./transformNode";
-import type { DrawWrapper } from "../Materials/drawWrapper";
-import type { PhysicsEngine as PhysicsEngineV1 } from "../Physics/v1/physicsEngine";
-import type { GoldbergMesh } from "./goldbergMesh";
-import type { InstancedMesh } from "./instancedMesh";
-import type { IPhysicsEnabledObject, PhysicsImpostor } from "../Physics/v1/physicsImpostor";
-import type { ICreateCapsuleOptions } from "./Builders/capsuleBuilder";
-import type { LinesMesh } from "./linesMesh";
-import type { GroundMesh } from "./groundMesh";
-import type { DataBuffer } from "core/Buffers/dataBuffer";
-import type { AbstractEngine } from "core/Engines/abstractEngine";
+import { type Path3D } from "../Maths/math.path"
+import { type Plane } from "../Maths/math.plane"
+import { type TransformNode } from "./transformNode"
+import { type DrawWrapper } from "../Materials/drawWrapper"
+import { type PhysicsEngine as PhysicsEngineV1 } from "../Physics/v1/physicsEngine"
+import { type GoldbergMesh } from "./goldbergMesh"
+import { type InstancedMesh } from "./instancedMesh"
+import { type IPhysicsEnabledObject, type PhysicsImpostor } from "../Physics/v1/physicsImpostor"
+import { type ICreateCapsuleOptions } from "./Builders/capsuleBuilder"
+import { type LinesMesh } from "./linesMesh"
+import { type GroundMesh } from "./groundMesh"
+import { type DataBuffer } from "core/Buffers/dataBuffer"
+import { type AbstractEngine } from "core/Engines/abstractEngine"
 import { RegisterClass } from "../Misc/typeStore";
 
 /* eslint-disable jsdoc/require-returns-check */
@@ -4444,6 +4444,33 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
     };
 
     /**
+     * Holder function for GaussianSplattingMesh Parser, should be GaussianSplattingMesh.Parse after imported
+     * @internal
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public static _GaussianSplattingMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
+        throw _WarnImport("GaussianSplattingMesh");
+    };
+
+    /**
+     * Holder function for GaussianSplattingPartProxyMesh Parser, should be GaussianSplattingPartProxyMesh.Parse after imported
+     * @internal
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public static _GaussianSplattingPartProxyMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
+        throw _WarnImport("GaussianSplattingPartProxyMesh");
+    };
+
+    /**
+     * Holder function for GaussianSplattingCompoundMesh Parser, should be GaussianSplattingCompoundMesh.Parse after imported
+     * @internal
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public static _GaussianSplattingCompoundMeshParser = (parsedMesh: any, scene: Scene): Mesh => {
+        throw _WarnImport("GaussianSplattingCompoundMesh");
+    };
+
+    /**
      * Returns a new Mesh object parsed from the source provided.
      * @param parsedMesh is the source
      * @param scene defines the hosting scene
@@ -4452,6 +4479,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
      */
     public static override Parse(parsedMesh: any, scene: Scene, rootUrl: string): Mesh {
         let mesh: Mesh;
+        let skipImportGeometry = false;
 
         if (parsedMesh.type && parsedMesh.type === "LinesMesh") {
             mesh = Mesh._LinesMeshParser(parsedMesh, scene);
@@ -4463,6 +4491,16 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
             mesh = Mesh._GreasedLineMeshParser(parsedMesh, scene);
         } else if (parsedMesh.type && parsedMesh.type === "TrailMesh") {
             mesh = Mesh._TrailMeshParser(parsedMesh, scene);
+        } else if (parsedMesh.type && parsedMesh.type === "GaussianSplattingMesh") {
+            if (parsedMesh._isCompound) {
+                mesh = Mesh._GaussianSplattingCompoundMeshParser(parsedMesh, scene);
+            } else {
+                mesh = Mesh._GaussianSplattingMeshParser(parsedMesh, scene);
+            }
+            skipImportGeometry = true;
+        } else if (parsedMesh.type && parsedMesh.type === "GaussianSplattingPartProxyMesh") {
+            mesh = Mesh._GaussianSplattingPartProxyMeshParser(parsedMesh, scene);
+            skipImportGeometry = true;
         } else {
             mesh = new Mesh(parsedMesh.name, scene);
         }
@@ -4636,7 +4674,7 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
             if (SceneLoaderFlags.ForceFullSceneLoadingForIncremental) {
                 mesh._checkDelayState();
             }
-        } else {
+        } else if (!skipImportGeometry) {
             Geometry._ImportGeometry(parsedMesh, mesh);
         }
 

@@ -1,14 +1,14 @@
 /** This file must only contain pure code and pure imports */
 
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
+import { type NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint"
 import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryConnectionPointTypes";
-import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
-import type { INodeGeometryExecutionContext } from "../../Interfaces/nodeGeometryExecutionContext";
-import type { VertexData } from "../../../../Meshes/mesh.vertexData";
-import type { Vector3 } from "../../../../Maths/math.vector";
+import { type NodeGeometryBuildState } from "../../nodeGeometryBuildState"
+import { type INodeGeometryExecutionContext } from "../../Interfaces/nodeGeometryExecutionContext"
+import { type VertexData } from "../../../../Meshes/mesh.vertexData"
+import { type Vector3 } from "../../../../Maths/math.vector"
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
-import type { FloatArray } from "core/types";
+import { type FloatArray } from "core/types"
 import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**

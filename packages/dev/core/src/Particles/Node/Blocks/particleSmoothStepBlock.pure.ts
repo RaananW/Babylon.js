@@ -3,7 +3,7 @@
 import { Vector2, Vector3, Vector4 } from "core/Maths/math.vector.pure";
 import { NodeParticleBlock } from "../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
-import type { NodeParticleConnectionPoint } from "../nodeParticleBlockConnectionPoint";
+import { type NodeParticleConnectionPoint } from "../nodeParticleBlockConnectionPoint"
 import { RegisterClass } from "../../../Misc/typeStore";
 
 /**

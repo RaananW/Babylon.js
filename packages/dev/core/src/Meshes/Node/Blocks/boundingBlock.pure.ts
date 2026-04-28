@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { type NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint"
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { extractMinAndMax } from "../../../Maths/math.functions";
 import { RegisterClass } from "../../../Misc/typeStore";

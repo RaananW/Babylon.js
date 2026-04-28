@@ -2,10 +2,10 @@
 
 export * from "./math.path.types";
 
-import type { DeepImmutable, Nullable } from "../types";
+import { type DeepImmutable, type Nullable } from "../types"
 import { Clamp, WithinEpsilon } from "./math.scalar.functions";
 import { Vector2, Vector3, Quaternion, Matrix } from "./math.vector.pure";
-import type { Vector4 } from "./math.vector";
+import { type Vector4 } from "./math.vector"
 import { Epsilon } from "./math.constants";
 
 /**
@@ -1123,7 +1123,7 @@ export function Curve3CreateCatmullRomSpline(points: DeepImmutable<Vector3[]>, n
     } else {
         const totalPoints: Vector3[] = [];
         totalPoints.push(points[0].clone());
-        Array.prototype.push.apply(totalPoints, points);
+        totalPoints.push(...points);
         totalPoints.push(points[points.length - 1].clone());
         let i = 0;
         for (; i < totalPoints.length - 3; i++) {

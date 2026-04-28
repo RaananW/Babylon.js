@@ -2,12 +2,12 @@ import { InternalTexture, InternalTextureSource } from "../../Materials/Textures
 import { Logger } from "../../Misc/logger";
 import { Constants } from "../constants";
 import { ThinEngine } from "../thinEngine";
-import type { IMultiRenderTargetOptions } from "../../Materials/Textures/multiRenderTarget";
-import type { Nullable } from "../../types";
-import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
-import type { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
-import type { TextureSize } from "../../Materials/Textures/textureCreationOptions";
+import { type IMultiRenderTargetOptions } from "../../Materials/Textures/multiRenderTarget"
+import { type Nullable } from "../../types"
+import { type RenderTargetWrapper } from "../renderTargetWrapper"
+import { type WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper"
+import { type WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture"
+import { type TextureSize } from "../../Materials/Textures/textureCreationOptions"
 /** This file must only contain pure code and pure imports */
 
 export {};

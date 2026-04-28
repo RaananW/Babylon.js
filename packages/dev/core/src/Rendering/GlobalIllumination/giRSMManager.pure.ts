@@ -1,27 +1,27 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "core/scene";
-import type { GIRSM } from "./giRSM";
-import type { Material } from "core/Materials/material";
+import { type Scene } from "core/scene"
+import { type GIRSM } from "./giRSM"
+import { type Material } from "core/Materials/material"
 import { RawTexture } from "core/Materials/Textures/rawTexture.pure";
-import type { Nullable } from "core/types";
+import { type Nullable } from "core/types"
 import { RenderTargetTexture } from "core/Materials/Textures/renderTargetTexture.pure";
 import { PostProcess } from "core/PostProcesses/postProcess.pure";
-import type { Observer } from "core/Misc/observable";
+import { type Observer } from "core/Misc/observable"
 import { Observable } from "core/Misc/observable";
 import { Layer } from "core/Layers/layer";
 import { Matrix } from "core/Maths/math.vector.pure";
 import { Constants } from "core/Engines/constants";
-import type { RenderTargetWrapper } from "core/Engines/renderTargetWrapper";
+import { type RenderTargetWrapper } from "core/Engines/renderTargetWrapper"
 import { MaterialPluginBase } from "core/Materials/materialPluginBase.pure";
-import type { InternalTexture } from "core/Materials/Textures/internalTexture";
-import type { StandardMaterial } from "core/Materials/standardMaterial";
+import { type InternalTexture } from "core/Materials/Textures/internalTexture"
+import { type StandardMaterial } from "core/Materials/standardMaterial"
 import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial.pure";
-import type { UniformBuffer } from "core/Materials/uniformBuffer";
-import type { AbstractEngine } from "core/Engines/abstractEngine";
+import { type UniformBuffer } from "core/Materials/uniformBuffer"
+import { type AbstractEngine } from "core/Engines/abstractEngine"
 import { GeometryBufferRenderer } from "../geometryBufferRenderer.pure";
 import { BaseTexture } from "core/Materials/Textures/baseTexture.pure";
-import type { WebGPURenderTargetWrapper } from "core/Engines/WebGPU/webgpuRenderTargetWrapper";
+import { type WebGPURenderTargetWrapper } from "core/Engines/WebGPU/webgpuRenderTargetWrapper"
 import { expandToProperty, serialize } from "core/Misc/decorators";
 import { MaterialDefines } from "core/Materials/materialDefines";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";

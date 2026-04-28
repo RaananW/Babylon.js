@@ -1,16 +1,16 @@
 /** This file must only contain pure code and pure imports */
 
 import { NodeMaterialBlock } from "../../nodeMaterialBlock";
-import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
+import { type NodeMaterialBuildState } from "../../nodeMaterialBuildState"
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
-import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
-import type { BaseTexture } from "../../../Textures/baseTexture";
-import type { NodeMaterialDefines } from "../../nodeMaterial";
+import { type NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint"
+import { type BaseTexture } from "../../../Textures/baseTexture"
+import { type NodeMaterialDefines } from "../../nodeMaterial"
 import { NodeMaterial } from "../../nodeMaterial.pure";
-import type { Effect } from "../../../effect";
-import type { Mesh } from "../../../../Meshes/mesh";
-import type { Nullable } from "../../../../types";
-import type { Scene } from "../../../../scene";
+import { type Effect } from "../../../effect"
+import { type Mesh } from "../../../../Meshes/mesh"
+import { type Nullable } from "../../../../types"
+import { type Scene } from "../../../../scene"
 import { InputBlock } from "../Input/inputBlock.pure";
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
 import { Constants } from "../../../../Engines/constants";
@@ -18,7 +18,7 @@ import { CubeTexture } from "../../../Textures/cubeTexture.pure";
 import { Texture } from "../../../Textures/texture.pure";
 import { EngineStore } from "../../../../Engines/engineStore";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
-import type { SubMesh } from "../../../..//Meshes/subMesh";
+import { type SubMesh } from "../../../..//Meshes/subMesh"
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { RegisterClass } from "../../../../Misc/typeStore";

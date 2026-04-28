@@ -1,27 +1,26 @@
-import type { Observer } from "../Misc/observable";
+import { type Observer } from "../Misc/observable"
 import { Observable } from "../Misc/observable";
-import type { Nullable } from "../types";
-import type { PointerInfo } from "../Events/pointerEvents";
+import { type Nullable } from "../types"
+import { type PointerInfo } from "../Events/pointerEvents"
 import { PointerEventTypes } from "../Events/pointerEvents";
-import type { Scene, IDisposable } from "../scene";
-import type { Node } from "../node";
+import { type Scene, type IDisposable } from "../scene"
+import { type Node } from "../node"
 import { AbstractMesh } from "../Meshes/abstractMesh";
-import type { Mesh } from "../Meshes/mesh";
+import { type Mesh } from "../Meshes/mesh"
 import { UtilityLayerRenderer } from "../Rendering/utilityLayerRenderer";
 import { Color3 } from "../Maths/math.color";
 import { SixDofDragBehavior } from "../Behaviors/Meshes/sixDofDragBehavior";
-import type { GizmoAxisCache, IGizmo } from "./gizmo";
+import { type GizmoAxisCache, type IGizmo } from "./gizmo"
 import { Gizmo, GizmoCoordinatesMode } from "./gizmo";
-import type { IRotationGizmo } from "./rotationGizmo";
+import { type IRotationGizmo } from "./rotationGizmo"
 import { RotationGizmo } from "./rotationGizmo";
-import type { IPositionGizmo } from "./positionGizmo";
+import { type IPositionGizmo } from "./positionGizmo"
 import { PositionGizmo } from "./positionGizmo";
-import type { IScaleGizmo } from "./scaleGizmo";
+import { type IScaleGizmo } from "./scaleGizmo"
 import { ScaleGizmo } from "./scaleGizmo";
-import type { IBoundingBoxGizmo } from "./boundingBoxGizmo";
+import { type IBoundingBoxGizmo } from "./boundingBoxGizmo"
 import { BoundingBoxGizmo } from "./boundingBoxGizmo";
-import type { TransformNode } from "../Meshes/transformNode";
-
+import { type TransformNode } from "../Meshes/transformNode"
 /**
  * Helps set up gizmos in the scene to rotate/scale/position nodes
  */

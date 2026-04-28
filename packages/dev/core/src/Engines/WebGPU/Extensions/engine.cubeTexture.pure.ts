@@ -1,9 +1,9 @@
 export * from "./engine.cubeTexture.types";
 
-import type { Nullable } from "../../../types";
-import type { DepthTextureCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-import type { Scene } from "../../../scene";
+import { type Nullable } from "../../../types"
+import { type DepthTextureCreationOptions } from "../../../Materials/Textures/textureCreationOptions"
+import { type WebGPUHardwareTexture } from "../webgpuHardwareTexture"
+import { type Scene } from "../../../scene"
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Constants } from "../../constants";
 import { WebGPUTextureHelper } from "../webgpuTextureHelper";

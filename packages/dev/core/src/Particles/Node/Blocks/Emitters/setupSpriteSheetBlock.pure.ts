@@ -3,9 +3,9 @@
 import { editableInPropertyPage, PropertyTypeForEdition } from "core/Decorators/nodeDecorator";
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "../../nodeParticleBlock";
-import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint";
-import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
-import type { ParticleSystem } from "core/Particles";
+import { type NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint"
+import { type NodeParticleBuildState } from "../../nodeParticleBuildState"
+import { type ParticleSystem } from "core/Particles"
 import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**

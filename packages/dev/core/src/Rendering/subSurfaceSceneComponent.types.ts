@@ -1,6 +1,5 @@
-import type { Nullable } from "../types";
-import type { SubSurfaceConfiguration } from "./subSurfaceConfiguration";
-
+import { type Nullable } from "../types"
+import { type SubSurfaceConfiguration } from "./subSurfaceConfiguration"
 declare module "../scene" {
     /**
      *

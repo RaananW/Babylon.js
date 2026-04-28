@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { type NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint"
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
-import type { NodeGeometryBuildState } from "../nodeGeometryBuildState";
+import { type NodeGeometryBuildState } from "../nodeGeometryBuildState"
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
 import { Vector2, Vector3 } from "../../../Maths/math.vector.pure";
 import { RegisterClass } from "../../../Misc/typeStore";

@@ -3,22 +3,22 @@ import { Engine } from "../../Engines/engine";
 import { ShaderMaterial } from "../../Materials/shaderMaterial";
 import { MultiRenderTarget } from "../../Materials/Textures/multiRenderTarget";
 import { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
-import type { RenderTargetTextureOptions } from "../../Materials/Textures/renderTargetTexture";
-import type { TextureSize } from "../../Materials/Textures/textureCreationOptions";
+import { type RenderTargetTextureOptions } from "../../Materials/Textures/renderTargetTexture"
+import { type TextureSize } from "../../Materials/Textures/textureCreationOptions"
 import { Color4 } from "../../Maths/math.color";
 import { Matrix, Vector3, Vector4 } from "../../Maths/math.vector";
-import type { Mesh } from "../../Meshes/mesh";
-import type { Scene } from "../../scene";
+import { type Mesh } from "../../Meshes/mesh"
+import { type Scene } from "../../scene"
 import { Texture } from "../../Materials/Textures/texture";
 import { Logger } from "../../Misc/logger";
 import { Observable } from "../../Misc/observable";
 import { PostProcess } from "../../PostProcesses/postProcess";
-import type { PostProcessOptions } from "../../PostProcesses/postProcess";
+import { type PostProcessOptions } from "../../PostProcesses/postProcess"
 import { ProceduralTexture } from "../../Materials/Textures/Procedurals/proceduralTexture";
-import type { IProceduralTextureCreationOptions } from "../../Materials/Textures/Procedurals/proceduralTexture";
+import { type IProceduralTextureCreationOptions } from "../../Materials/Textures/Procedurals/proceduralTexture"
 import { EffectRenderer, EffectWrapper } from "../../Materials/effectRenderer";
-import type { IblShadowsRenderPipeline } from "./iblShadowsRenderPipeline";
-import type { RenderTargetWrapper } from "core/Engines";
+import { type IblShadowsRenderPipeline } from "./iblShadowsRenderPipeline"
+import { type RenderTargetWrapper } from "core/Engines"
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
 /**
@@ -61,6 +61,27 @@ export class _IblShadowsVoxelRenderer {
         } else {
             return this._voxelGridZaxis;
         }
+    }
+
+    /**
+     * Return the render target used by the voxel renderer.
+     * @returns The render target texture.
+     */
+    public getRT(): ProceduralTexture | RenderTargetTexture {
+        if (this._engine.isWebGPU) {
+            return this._voxelGridRT;
+        } else if (this._triPlanarVoxelization) {
+            return this._combinedVoxelGridPT;
+        } else {
+            return this._voxelGridZaxis;
+        }
+    }
+
+    /**
+     * Process the voxelization rendering step.
+     */
+    public processVoxelization(): void {
+        this._renderVoxelGrid();
     }
 
     /**
@@ -644,8 +665,9 @@ export class _IblShadowsVoxelRenderer {
     /**
      * Renders voxel grid of scene for IBL shadows
      * @param includedMeshes
+     * @param registerAfterRenderObservable
      */
-    public updateVoxelGrid(includedMeshes: Mesh[]) {
+    public updateVoxelGrid(includedMeshes: Mesh[], registerAfterRenderObservable: boolean = true) {
         if (this._voxelizationInProgress) {
             return;
         }

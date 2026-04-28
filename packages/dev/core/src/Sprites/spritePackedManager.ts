@@ -1,6 +1,6 @@
-import type { SpriteManagerOptions } from "./spriteManager";
+import { type SpriteManagerOptions } from "./spriteManager"
 import { SpriteManager } from "./spriteManager";
-import type { Scene } from "../scene";
+import { type Scene } from "../scene"
 import { Texture } from "../Materials/Textures/texture";
 
 /**

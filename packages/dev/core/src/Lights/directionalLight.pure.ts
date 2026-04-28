@@ -1,14 +1,14 @@
 /** This file must only contain pure code and pure imports */
 
 import { serialize } from "../Misc/decorators";
-import type { Camera } from "../Cameras/camera";
-import type { Scene } from "../scene";
+import { type Camera } from "../Cameras/camera"
+import { type Scene } from "../scene"
 import { Matrix, Vector3 } from "../Maths/math.vector.pure";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
+import { type AbstractMesh } from "../Meshes/abstractMesh"
 import { Light } from "./light";
 import { ShadowLight } from "./shadowLight";
-import type { Effect } from "../Materials/effect";
-import type { Nullable } from "../types";
+import { type Effect } from "../Materials/effect"
+import { type Nullable } from "../types"
 import { Constants } from "core/Engines/constants";
 import { Node } from "../node";
 import { RegisterClass } from "../Misc/typeStore";

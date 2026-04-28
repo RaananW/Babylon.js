@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { Action } from "./action.pure";
-import type { ActionManager } from "./actionManager";
+import { type ActionManager } from "./actionManager"
 import { RegisterClass } from "../Misc/typeStore";
 
 /**

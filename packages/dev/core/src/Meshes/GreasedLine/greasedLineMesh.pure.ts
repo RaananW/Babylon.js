@@ -1,19 +1,19 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "../../scene";
-import type { Matrix } from "../../Maths/math.vector";
+import { type Scene } from "../../scene"
+import { type Matrix } from "../../Maths/math.vector"
 import { Vector3 } from "../../Maths/math.vector.pure";
 
-import type { Ray, TrianglePickingPredicate } from "../../Culling/ray";
+import { type Ray, type TrianglePickingPredicate } from "../../Culling/ray"
 import { Buffer, VertexBuffer } from "../../Buffers/buffer.pure";
 import { PickingInfo } from "../../Collisions/pickingInfo";
-import type { Nullable, FloatArray } from "../../types";
-import type { Node } from "../../node";
+import { type Nullable, type FloatArray } from "../../types"
+import { type Node } from "../../node"
 import { DeepCopierDeepCopy } from "../../Misc/deepCopier.pure";
 import { GreasedLineToolsConvertPoints, GreasedLineToolsGetLineLengthArray } from "../../Misc/greasedLineTools.pure";
-import type { GreasedLineMeshOptions } from "./greasedLineBaseMesh";
+import { type GreasedLineMeshOptions } from "./greasedLineBaseMesh"
 import { GreasedLineBaseMesh } from "./greasedLineBaseMesh";
-import type { VertexData } from "../mesh.vertexData";
+import { type VertexData } from "../mesh.vertexData"
 import { Mesh } from "../mesh.pure";
 
 /**

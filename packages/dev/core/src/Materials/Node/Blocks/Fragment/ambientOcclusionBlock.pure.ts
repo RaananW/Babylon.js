@@ -2,21 +2,21 @@
 
 import { NodeMaterialBlock } from "../../nodeMaterialBlock";
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
-import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
+import { type NodeMaterialBuildState } from "../../nodeMaterialBuildState"
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
-import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
+import { type NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint"
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { RandomRange } from "../../../../Maths/math.scalar.functions";
 import { RawTextureCreateRGBATexture } from "../../../Textures/rawTexture.pure";
 import { Constants } from "../../../../Engines/constants";
 import { Texture } from "../../../Textures/texture.pure";
-import type { Effect } from "../../../effect";
-import type { AbstractEngine } from "../../../../Engines/abstractEngine";
+import { type Effect } from "../../../effect"
+import { type AbstractEngine } from "../../../../Engines/abstractEngine"
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { ImageSourceBlock } from "../Dual/imageSourceBlock.pure";
-import type { DepthSourceBlock } from "../Dual/depthSourceBlock";
+import { type DepthSourceBlock } from "../Dual/depthSourceBlock"
 import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**

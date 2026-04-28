@@ -3,7 +3,7 @@
 export * from "./gamepadSceneComponent.types";
 
 import { Scene } from "../scene.pure";
-import type { ISceneComponent } from "../sceneComponent";
+import { type ISceneComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
 import { GamepadManager } from "./gamepadManager";
 import { FreeCameraInputsManager } from "../Cameras/freeCameraInputsManager";

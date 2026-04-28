@@ -1,11 +1,10 @@
-import type { Scene } from "../scene";
+import { type Scene } from "../scene"
 import { ReflectionProbe } from "../Probes/reflectionProbe.pure";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
+import { type AbstractMesh } from "../Meshes/abstractMesh"
 import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture.pure";
 import { CustomProceduralTexture } from "../Materials/Textures/Procedurals/customProceduralTexture";
 import { DumpData } from "./dumpTools.pure";
-import type { Vector3 } from "../Maths/math.vector";
-
+import { type Vector3 } from "../Maths/math.vector"
 /**
  * Interface containing options related to equirectangular capture of the current scene
  */

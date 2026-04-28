@@ -2,32 +2,32 @@
 
 export * from "./postProcess.types";
 
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { SmartArray } from "../Misc/smartArray";
-import type { Observer } from "../Misc/observable";
+import { type Observer } from "../Misc/observable"
 import { Observable } from "../Misc/observable";
 import { Vector2 } from "../Maths/math.vector.pure";
-import type { Camera } from "../Cameras/camera";
+import { type Camera } from "../Cameras/camera"
 import { Effect } from "../Materials/effect";
 import { Constants } from "../Engines/constants";
-import type { RenderTargetCreationOptions } from "../Materials/Textures/textureCreationOptions";
-import type { IInspectable } from "../Misc/iInspectable";
-import type { Color4 } from "../Maths/math.color";
-import type { NodeMaterial } from "../Materials/Node/nodeMaterial";
+import { type RenderTargetCreationOptions } from "../Materials/Textures/textureCreationOptions"
+import { type IInspectable } from "../Misc/iInspectable"
+import { type Color4 } from "../Maths/math.color"
+import { type NodeMaterial } from "../Materials/Node/nodeMaterial"
 import { serialize, serializeAsColor4 } from "../Misc/decorators";
 import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import { GetClass } from "../Misc/typeStore";
-import type { RenderTargetWrapper } from "../Engines/renderTargetWrapper";
+import { type RenderTargetWrapper } from "../Engines/renderTargetWrapper"
 import { ShaderLanguage } from "../Materials/shaderLanguage";
-import type { Scene } from "../scene";
-import type { InternalTexture } from "../Materials/Textures/internalTexture";
-import type { Animation } from "../Animations/animation";
-import type { PrePassRenderer } from "../Rendering/prePassRenderer";
-import type { PrePassEffectConfiguration } from "../Rendering/prePassEffectConfiguration";
+import { type Scene } from "../scene"
+import { type InternalTexture } from "../Materials/Textures/internalTexture"
+import { type Animation } from "../Animations/animation"
+import { type PrePassRenderer } from "../Rendering/prePassRenderer"
+import { type PrePassEffectConfiguration } from "../Rendering/prePassEffectConfiguration"
 import { AbstractEngine } from "../Engines/abstractEngine";
 import { GetExponentOfTwo } from "../Misc/tools.functions";
-import type { IAssetContainer } from "core/IAssetContainer";
-import type { EffectWrapperCustomShaderCodeProcessing, EffectWrapperCreationOptions } from "../Materials/effectRenderer";
+import { type IAssetContainer } from "core/IAssetContainer"
+import { type EffectWrapperCustomShaderCodeProcessing, type EffectWrapperCreationOptions } from "../Materials/effectRenderer"
 import { EffectWrapper } from "../Materials/effectRenderer.pure";
 import { RegisterClass } from "../Misc/typeStore";
 

@@ -1,9 +1,9 @@
 export * from "./engine.rawTexture.types";
 
-import type { IWebRequest } from "../../../Misc/interfaces/iWebRequest";
-import type { Nullable } from "../../../types";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-import type { Scene } from "../../../scene";
+import { type IWebRequest } from "../../../Misc/interfaces/iWebRequest"
+import { type Nullable } from "../../../types"
+import { type WebGPUHardwareTexture } from "../webgpuHardwareTexture"
+import { type Scene } from "../../../scene"
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Constants } from "../../constants";
 import { Logger } from "../../../Misc/logger";

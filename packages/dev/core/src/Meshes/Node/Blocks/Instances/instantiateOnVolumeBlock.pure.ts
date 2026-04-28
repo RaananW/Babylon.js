@@ -1,17 +1,17 @@
 /** This file must only contain pure code and pure imports */
 
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
+import { type NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint"
 import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryConnectionPointTypes";
-import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
-import type { INodeGeometryExecutionContext } from "../../Interfaces/nodeGeometryExecutionContext";
-import type { VertexData } from "../../../mesh.vertexData";
+import { type NodeGeometryBuildState } from "../../nodeGeometryBuildState"
+import { type INodeGeometryExecutionContext } from "../../Interfaces/nodeGeometryExecutionContext"
+import { type VertexData } from "../../../mesh.vertexData"
 import { Vector3 } from "../../../../Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";
-import type { Nullable } from "../../../../types";
+import { type Nullable } from "../../../../types"
 import { Ray } from "../../../../Culling/ray.pure";
 import { extractMinAndMax } from "../../../../Maths/math.functions";
-import type { INodeGeometryInstancingContext } from "../../Interfaces/nodeGeometryInstancingContext";
+import { type INodeGeometryInstancingContext } from "../../Interfaces/nodeGeometryInstancingContext"
 import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**

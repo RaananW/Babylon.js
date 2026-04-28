@@ -1,26 +1,25 @@
-import type { Observer } from "../Misc/observable";
+import { type Observer } from "../Misc/observable"
 import { Observable } from "../Misc/observable";
-import type { Nullable } from "../types";
-import type { PointerInfo } from "../Events/pointerEvents";
+import { type Nullable } from "../types"
+import { type PointerInfo } from "../Events/pointerEvents"
 import { Quaternion, Matrix, Vector3, TmpVectors } from "../Maths/math.vector.pure";
 import { Color3, Color3Yellow, Color3Gray } from "../Maths/math.color.pure";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
+import { type AbstractMesh } from "../Meshes/abstractMesh"
 import { Mesh } from "../Meshes/mesh.pure";
-import type { Node } from "../node";
+import { type Node } from "../node"
 import { PointerDragBehavior } from "../Behaviors/Meshes/pointerDragBehavior";
-import type { GizmoAxisCache, IGizmo } from "./gizmo";
+import { type GizmoAxisCache, type IGizmo } from "./gizmo"
 import { Gizmo } from "./gizmo";
 import { UtilityLayerRenderer } from "../Rendering/utilityLayerRenderer";
 import { StandardMaterial } from "../Materials/standardMaterial.pure";
-import type { RotationGizmo } from "./rotationGizmo";
+import { type RotationGizmo } from "./rotationGizmo"
 import { ShaderMaterial } from "../Materials/shaderMaterial.pure";
 import { Effect } from "../Materials/effect";
 import { CreatePlane } from "../Meshes/Builders/planeBuilder.pure";
 import { CreateTorus } from "../Meshes/Builders/torusBuilder.pure";
 import { Epsilon } from "../Maths/math.constants";
 import { Logger } from "../Misc/logger";
-import type { TransformNode } from "../Meshes/transformNode";
-
+import { type TransformNode } from "../Meshes/transformNode"
 /**
  * Interface for plane rotation gizmo
  */

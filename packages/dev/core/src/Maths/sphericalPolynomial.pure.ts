@@ -2,8 +2,8 @@
 
 export * from "./sphericalPolynomial.types";
 import { Vector3 } from "../Maths/math.vector.pure";
-import type { Nullable } from "../types";
-import type { Color3 } from "../Maths/math.color";
+import { type Nullable } from "../types"
+import { type Color3 } from "../Maths/math.color"
 import { TmpVectors } from "./math.pure";
 
 // https://dickyjim.wordpress.com/2013/09/04/spherical-harmonics-for-beginners/

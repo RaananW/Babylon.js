@@ -1,19 +1,19 @@
-import type { Observer } from "../Misc/observable";
+import { type Observer } from "../Misc/observable"
 import { Observable } from "../Misc/observable";
-import type { Nullable } from "../types";
-import type { Scene } from "../scene";
-import type { FlowGraphEventBlock } from "./flowGraphEventBlock";
+import { type Nullable } from "../types"
+import { type Scene } from "../scene"
+import { type FlowGraphEventBlock } from "./flowGraphEventBlock"
 import { FlowGraphContext } from "./flowGraphContext";
-import type { FlowGraphBlock } from "./flowGraphBlock";
+import { type FlowGraphBlock } from "./flowGraphBlock"
 import { FlowGraphExecutionBlock } from "./flowGraphExecutionBlock";
-import type { FlowGraphCoordinator } from "./flowGraphCoordinator";
-import type { IObjectAccessor } from "./typeDefinitions";
-import type { IPathToObjectConverter } from "../ObjectModel/objectModelInterfaces";
-import type { IAssetContainer } from "core/IAssetContainer";
+import { type FlowGraphCoordinator } from "./flowGraphCoordinator"
+import { type IObjectAccessor } from "./typeDefinitions"
+import { type IPathToObjectConverter } from "../ObjectModel/objectModelInterfaces"
+import { type IAssetContainer } from "core/IAssetContainer"
 import { FlowGraphEventType } from "./flowGraphEventType";
-import type { IFlowGraphEventTrigger } from "./flowGraphSceneEventCoordinator";
+import { type IFlowGraphEventTrigger } from "./flowGraphSceneEventCoordinator"
 import { FlowGraphSceneEventCoordinator } from "./flowGraphSceneEventCoordinator";
-import type { FlowGraphMeshPickEventBlock } from "./Blocks/Event/flowGraphMeshPickEventBlock";
+import { type FlowGraphMeshPickEventBlock } from "./Blocks/Event/flowGraphMeshPickEventBlock"
 import { _IsDescendantOf } from "./utils";
 
 export const enum FlowGraphState {

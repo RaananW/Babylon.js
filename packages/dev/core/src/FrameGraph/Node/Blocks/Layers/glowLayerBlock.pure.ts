@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene, NodeRenderGraphBuildState, FrameGraph, FrameGraphTextureHandle, NodeRenderGraphConnectionPoint, FrameGraphObjectRendererTask } from "core/index";
+import { type Scene, type NodeRenderGraphBuildState, type FrameGraph, type FrameGraphTextureHandle, type NodeRenderGraphConnectionPoint, type FrameGraphObjectRendererTask } from "core/index"
 import { NodeRenderGraphBlock } from "../../nodeRenderGraphBlock";
 import { NodeRenderGraphBlockConnectionPointTypes, NodeRenderGraphConnectionPointDirection } from "../../Types/nodeRenderGraphTypes";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";

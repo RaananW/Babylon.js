@@ -2,8 +2,7 @@ export * from "./observableCoroutine.types";
 
 import { Observable } from "./observable";
 import { inlineScheduler, runCoroutineAsync } from "./coroutine";
-import type { AsyncCoroutine, CoroutineStep, CoroutineScheduler } from "./coroutine";
-
+import { type AsyncCoroutine, type CoroutineStep, type CoroutineScheduler } from "./coroutine"
 let _registered = false;
 
 /**

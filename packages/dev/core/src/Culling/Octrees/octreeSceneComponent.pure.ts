@@ -2,15 +2,15 @@
 
 export * from "./octreeSceneComponent.types";
 
-import type { ISmartArrayLike } from "../../Misc/smartArray";
+import { type ISmartArrayLike } from "../../Misc/smartArray"
 import { Scene } from "../../scene.pure";
 import { Vector3 } from "../../Maths/math.vector.pure";
-import type { SubMesh } from "../../Meshes/subMesh";
+import { type SubMesh } from "../../Meshes/subMesh"
 import { AbstractMesh } from "../../Meshes/abstractMesh.pure";
 import { Ray } from "../../Culling/ray.pure";
 import { SceneComponentConstants } from "../../sceneComponent";
 import { EngineStore } from "../../Engines/engineStore";
-import type { Collider } from "../../Collisions/collider";
+import { type Collider } from "../../Collisions/collider"
 import { RayTransformToRef } from "../ray.core";
 import { Octree } from "./octree";
 

@@ -1,6 +1,6 @@
 import { Tools } from "../../../Misc/tools";
-import type { Scene } from "../../../scene";
-import type { ISceneComponent } from "../../../sceneComponent";
+import { type Scene } from "../../../scene"
+import { type ISceneComponent } from "../../../sceneComponent"
 import { SceneComponentConstants } from "../../../sceneComponent";
 
 /**

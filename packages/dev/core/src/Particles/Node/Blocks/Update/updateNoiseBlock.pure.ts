@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "core/types";
-import type { ISize } from "core/Maths/math.size";
-import type { ProceduralTexture } from "core/Materials/Textures/Procedurals/proceduralTexture";
-import type { Particle } from "core/Particles/particle";
-import type { ThinParticleSystem } from "core/Particles/thinParticleSystem";
-import type { NodeParticleConnectionPoint } from "core/Particles/Node/nodeParticleBlockConnectionPoint";
-import type { NodeParticleBuildState } from "core/Particles/Node/nodeParticleBuildState";
-import type { ParticleTextureSourceBlock } from "core/Particles/Node/Blocks/particleSourceTextureBlock";
+import { type Nullable } from "core/types"
+import { type ISize } from "core/Maths/math.size"
+import { type ProceduralTexture } from "core/Materials/Textures/Procedurals/proceduralTexture"
+import { type Particle } from "core/Particles/particle"
+import { type ThinParticleSystem } from "core/Particles/thinParticleSystem"
+import { type NodeParticleConnectionPoint } from "core/Particles/Node/nodeParticleBlockConnectionPoint"
+import { type NodeParticleBuildState } from "core/Particles/Node/nodeParticleBuildState"
+import { type ParticleTextureSourceBlock } from "core/Particles/Node/Blocks/particleSourceTextureBlock"
 import { TmpVectors, Vector3 } from "core/Maths/math.vector.pure";
 import { NodeParticleBlock } from "core/Particles/Node/nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "core/Particles/Node/Enums/nodeParticleBlockConnectionPointTypes";

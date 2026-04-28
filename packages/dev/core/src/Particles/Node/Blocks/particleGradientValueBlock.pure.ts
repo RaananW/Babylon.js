@@ -2,7 +2,7 @@
 
 import { NodeParticleBlock } from "../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../Enums/nodeParticleBlockConnectionPointTypes";
-import type { NodeParticleConnectionPoint } from "../nodeParticleBlockConnectionPoint";
+import { type NodeParticleConnectionPoint } from "../nodeParticleBlockConnectionPoint"
 import { editableInPropertyPage, PropertyTypeForEdition } from "core/Decorators/nodeDecorator";
 import { RegisterClass } from "../../../Misc/typeStore";
 

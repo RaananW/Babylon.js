@@ -2,20 +2,20 @@
 
 import { serialize } from "../../../Misc/decorators";
 import { SerializationHelperSerialize, SerializationHelperParse } from "../../../Misc/decorators.serialization.pure";
-import type { Camera } from "../../../Cameras/camera";
-import type { Effect } from "../../../Materials/effect";
+import { type Camera } from "../../../Cameras/camera"
+import { type Effect } from "../../../Materials/effect"
 import { PostProcess } from "../../postProcess.pure";
 import { PostProcessRenderPipeline } from "../postProcessRenderPipeline";
 import { PostProcessRenderEffect } from "../postProcessRenderEffect";
-import type { Scene } from "../../../scene";
+import { type Scene } from "../../../scene"
 import { ScreenSpaceReflections2Configuration } from "../../../Rendering/screenSpaceReflections2Configuration";
-import type { PrePassRenderer } from "../../../Rendering/prePassRenderer";
+import { type PrePassRenderer } from "../../../Rendering/prePassRenderer"
 import { GeometryBufferRenderer } from "../../../Rendering/geometryBufferRenderer.pure";
 import { Constants } from "../../../Engines/constants";
-import type { Nullable } from "../../../types";
-import type { CubeTexture } from "../../../Materials/Textures/cubeTexture";
+import { type Nullable } from "../../../types"
+import { type CubeTexture } from "../../../Materials/Textures/cubeTexture"
 import { DepthRenderer } from "../../../Rendering/depthRenderer.pure";
-import type { ISize } from "../../../Maths/math.size";
+import { type ISize } from "../../../Maths/math.size"
 import { ThinSSRRenderingPipeline } from "./thinSSRRenderingPipeline";
 import { ThinSSRPostProcess } from "core/PostProcesses/thinSSRPostProcess";
 import { ThinSSRBlurPostProcess } from "core/PostProcesses/thinSSRBlurPostProcess";

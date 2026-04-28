@@ -1,21 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
-import type {
-    Camera,
-    DirectionalLight,
-    FrameGraph,
-    FrameGraphObjectList,
-    FrameGraphTextureHandle,
-    NodeRenderGraphBuildState,
-    NodeRenderGraphConnectionPoint,
-    Scene,
-} from "core/index";
+import { type Camera, type DirectionalLight, type FrameGraph, type FrameGraphObjectList, type FrameGraphTextureHandle, type NodeRenderGraphBuildState, type NodeRenderGraphConnectionPoint, type Scene } from "core/index"
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { NodeRenderGraphBlock } from "../../nodeRenderGraphBlock";
 import { FrameGraphVolumetricLightingTask } from "core/FrameGraph/Tasks/PostProcesses/volumetricLightingTask";
 import { NodeRenderGraphBlockConnectionPointTypes } from "../../Types/nodeRenderGraphTypes";
 import { Vector3 } from "core/Maths/math.vector.pure";
-import type { Color3 } from "core/Maths/math.color.pure";
+import { type Color3 } from "core/Maths/math.color.pure"
 import { Color3FromArray } from "../../../../Maths/math.color.pure";
 import { RegisterClass } from "../../../../Misc/typeStore";
 

@@ -1,7 +1,6 @@
-import type { OcclusionQuery } from "./abstractEngine.query.pure";
-import type { Nullable } from "../../types";
-import type { _OcclusionDataStorage } from "./abstractEngine.query.pure";
-
+import { type OcclusionQuery } from "./abstractEngine.query.pure"
+import { type Nullable } from "../../types"
+import { type _OcclusionDataStorage } from "./abstractEngine.query.pure"
 declare module "../../Engines/abstractEngine" {
     /**
      *

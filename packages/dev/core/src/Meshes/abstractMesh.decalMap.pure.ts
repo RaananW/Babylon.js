@@ -1,7 +1,7 @@
 export * from "./abstractMesh.decalMap.types";
 
-import type { Nullable } from "../types";
-import type { MeshUVSpaceRenderer } from "./meshUVSpaceRenderer";
+import { type Nullable } from "../types"
+import { type MeshUVSpaceRenderer } from "./meshUVSpaceRenderer"
 import { AbstractMesh } from "../Meshes/abstractMesh";
 
 let _registered = false;

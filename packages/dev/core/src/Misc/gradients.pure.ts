@@ -1,5 +1,5 @@
-import type { Color3 } from "../Maths/math.color";
-import type { Color4 } from "../Maths/math.color.pure";
+import { type Color3 } from "../Maths/math.color"
+import { type Color4 } from "../Maths/math.color.pure"
 import { Color4LerpToRef } from "../Maths/math.color.pure";
 
 /** Interface used by value gradients (color, factor, ...) */

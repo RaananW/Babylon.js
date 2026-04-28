@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Particle } from "core/Particles/particle";
-import type { ThinParticleSystem } from "core/Particles/thinParticleSystem";
-import type { NodeParticleConnectionPoint } from "core/Particles/Node/nodeParticleBlockConnectionPoint";
-import type { NodeParticleBuildState } from "core/Particles/Node/nodeParticleBuildState";
+import { type Particle } from "core/Particles/particle"
+import { type ThinParticleSystem } from "core/Particles/thinParticleSystem"
+import { type NodeParticleConnectionPoint } from "core/Particles/Node/nodeParticleBlockConnectionPoint"
+import { type NodeParticleBuildState } from "core/Particles/Node/nodeParticleBuildState"
 import { NodeParticleBlock } from "core/Particles/Node/nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "core/Particles/Node/Enums/nodeParticleBlockConnectionPointTypes";
 import { _ConnectAtTheEnd } from "core/Particles/Queue/executionQueue";

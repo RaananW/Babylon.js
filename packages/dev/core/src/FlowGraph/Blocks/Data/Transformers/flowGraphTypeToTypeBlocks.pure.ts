@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
+import { type IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock"
 import { FlowGraphUnaryOperationBlock } from "../flowGraphUnaryOperationBlock";
 import { RichTypeBoolean, RichTypeFlowGraphInteger, RichTypeNumber } from "core/FlowGraph/flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";

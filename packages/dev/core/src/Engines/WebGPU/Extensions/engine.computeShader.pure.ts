@@ -2,13 +2,13 @@ export * from "./engine.computeShader.types";
 
 import * as WebGPUConstants from "../webgpuConstants";
 import { ComputeEffect } from "../../../Compute/computeEffect";
-import type { IComputeEffectCreationOptions, IComputeShaderPath } from "../../../Compute/computeEffect";
-import type { IComputeContext } from "../../../Compute/IComputeContext";
-import type { IComputePipelineContext } from "../../../Compute/IComputePipelineContext";
-import type { Nullable } from "../../../types";
-import type { ComputeBindingList, ComputeBindingMapping, ComputeCompilationMessages } from "../../Extensions/engine.computeShader";
-import type { WebGPUPerfCounter } from "../webgpuPerfCounter";
-import type { DataBuffer } from "../../../Buffers/dataBuffer";
+import { type IComputeEffectCreationOptions, type IComputeShaderPath } from "../../../Compute/computeEffect"
+import { type IComputeContext } from "../../../Compute/IComputeContext"
+import { type IComputePipelineContext } from "../../../Compute/IComputePipelineContext"
+import { type Nullable } from "../../../types"
+import { type ComputeBindingList, type ComputeBindingMapping, type ComputeCompilationMessages } from "../../Extensions/engine.computeShader"
+import { type WebGPUPerfCounter } from "../webgpuPerfCounter"
+import { type DataBuffer } from "../../../Buffers/dataBuffer"
 import { Logger } from "core/Misc/logger";
 import { WebGPUEngine } from "../../webgpuEngine";
 import { WebGPUComputeContext } from "../webgpuComputeContext";

@@ -2,12 +2,12 @@
 
 export * from "./iblCdfGeneratorSceneComponent.types";
 
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { Scene } from "../scene.pure";
-import type { ISceneComponent } from "../sceneComponent";
+import { type ISceneComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
-import type { BaseTexture } from "../Materials/Textures/baseTexture";
-import type { Observer } from "../Misc/observable";
+import { type BaseTexture } from "../Materials/Textures/baseTexture"
+import { type Observer } from "../Misc/observable"
 import { IblCdfGenerator } from "./iblCdfGenerator";
 
 /**

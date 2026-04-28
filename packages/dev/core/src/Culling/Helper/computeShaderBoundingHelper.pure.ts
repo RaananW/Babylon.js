@@ -1,16 +1,15 @@
-import type { IBoundingInfoHelperPlatform } from "./IBoundingInfoHelperPlatform";
-import type { AbstractMesh } from "core/Meshes/abstractMesh";
+import { type IBoundingInfoHelperPlatform } from "./IBoundingInfoHelperPlatform"
+import { type AbstractMesh } from "core/Meshes/abstractMesh"
 import { ComputeShader } from "core/Compute/computeShader.pure";
 import { StorageBuffer } from "core/Buffers/storageBuffer";
-import type { WebGPUEngine } from "core/Engines/webgpuEngine";
-import type { AbstractEngine } from "core/Engines/abstractEngine";
-import type { Mesh } from "core/Meshes/mesh";
+import { type WebGPUEngine } from "core/Engines/webgpuEngine"
+import { type AbstractEngine } from "core/Engines/abstractEngine"
+import { type Mesh } from "core/Meshes/mesh"
 import { VertexBuffer } from "core/Buffers/buffer.pure";
 import { Vector3 } from "core/Maths/math.vector.pure";
 import { UniformBuffer } from "core/Materials/uniformBuffer";
-import type { DataBuffer } from "core/Buffers/dataBuffer";
-import type { ComputeBindingMapping } from "core/Engines/Extensions/engine.computeShader";
-
+import { type DataBuffer } from "core/Buffers/dataBuffer"
+import { type ComputeBindingMapping } from "core/Engines/Extensions/engine.computeShader"
 import { _RetryWithInterval } from "core/Misc/timingTools.pure";
 
 /** @internal */

@@ -1,6 +1,6 @@
 export * from "./abstractEngine.loadingScreen.types";
 
-import type { ILoadingScreen } from "../../Loading/loadingScreen";
+import { type ILoadingScreen } from "../../Loading/loadingScreen"
 import { IsWindowObjectExist } from "../../Misc/domManagement";
 import { AbstractEngine } from "../abstractEngine";
 

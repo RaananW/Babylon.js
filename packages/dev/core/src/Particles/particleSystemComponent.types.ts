@@ -1,8 +1,7 @@
-import type { IParticleSystem } from "./IParticleSystem";
-import type { Effect } from "../Materials/effect";
-import type { EffectFallbacks } from "../Materials/effectFallbacks";
-import type { ShaderLanguage } from "core/Materials/shaderLanguage";
-
+import { type IParticleSystem } from "./IParticleSystem"
+import { type Effect } from "../Materials/effect"
+import { type EffectFallbacks } from "../Materials/effectFallbacks"
+import { type ShaderLanguage } from "core/Materials/shaderLanguage"
 declare module "../Engines/abstractEngine" {
     /**
      *

@@ -1,9 +1,9 @@
 export * from "./physicsEngineComponent.types";
 
-import type { Nullable } from "../../types";
-import type { Vector3 } from "../../Maths/math.vector";
-import type { Mesh } from "../../Meshes/mesh";
-import type { PhysicsImpostor } from "./physicsImpostor";
+import { type Nullable } from "../../types"
+import { type Vector3 } from "../../Maths/math.vector"
+import { type Mesh } from "../../Meshes/mesh"
+import { type PhysicsImpostor } from "./physicsImpostor"
 import { AbstractMesh } from "../../Meshes/abstractMesh";
 import { PhysicsJoint } from "./physicsJoint";
 

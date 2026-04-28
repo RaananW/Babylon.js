@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene, NodeRenderGraphBuildState, FrameGraph, FrameGraphTextureHandle, NodeRenderGraphConnectionPoint, FrameGraphObjectRendererTask } from "core/index";
+import { type Scene, type NodeRenderGraphBuildState, type FrameGraph, type FrameGraphTextureHandle, type NodeRenderGraphConnectionPoint, type FrameGraphObjectRendererTask } from "core/index"
 import { NodeRenderGraphBlock } from "../../nodeRenderGraphBlock";
 import { NodeRenderGraphBlockConnectionPointTypes, NodeRenderGraphConnectionPointDirection } from "../../Types/nodeRenderGraphTypes";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
@@ -8,7 +8,7 @@ import { FrameGraphSelectionOutlineLayerTask } from "core/FrameGraph/Tasks/Layer
 import { Constants } from "core/Engines/constants";
 import { NodeRenderGraphConnectionPointCustomObject } from "../../nodeRenderGraphConnectionPointCustomObject";
 import { NodeRenderGraphBaseObjectRendererBlock } from "../Rendering/baseObjectRendererBlock";
-import type { Color3 } from "core/Maths/math.color.pure";
+import { type Color3 } from "core/Maths/math.color.pure"
 import { Color3FromArray } from "../../../../Maths/math.color.pure";
 import { RegisterClass } from "../../../../Misc/typeStore";
 

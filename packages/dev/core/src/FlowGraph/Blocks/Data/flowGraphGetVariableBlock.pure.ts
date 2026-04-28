@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
-import type { FlowGraphContext } from "../../flowGraphContext";
-import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
+import { type FlowGraphContext } from "../../flowGraphContext"
+import { type IFlowGraphBlockConfiguration } from "../../flowGraphBlock"
 import { FlowGraphBlock } from "../../flowGraphBlock";
-import type { FlowGraphDataConnection } from "../../flowGraphDataConnection";
+import { type FlowGraphDataConnection } from "../../flowGraphDataConnection"
 import { RichTypeAny } from "../../flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { RegisterClass } from "../../../Misc/typeStore";

@@ -1,6 +1,5 @@
-import type { Nullable } from "../types";
-import type { GeometryBufferRenderer } from "./geometryBufferRenderer";
-
+import { type Nullable } from "../types"
+import { type GeometryBufferRenderer } from "./geometryBufferRenderer"
 declare module "../scene" {
     /**
      *

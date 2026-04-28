@@ -2,23 +2,23 @@
 
 import { Constants } from "core/Engines/constants";
 import { MultiRenderTarget } from "core/Materials/Textures/multiRenderTarget.pure";
-import type { UniformBuffer } from "core/Materials/uniformBuffer";
+import { type UniformBuffer } from "core/Materials/uniformBuffer"
 import { Color3, Color4 } from "core/Maths/math.color.pure";
 import { Matrix, TmpVectors } from "core/Maths/math.vector.pure";
-import type { AbstractMesh } from "core/Meshes/abstractMesh";
-import type { Scene } from "core/scene";
-import type { WebGPURenderTargetWrapper } from "core/Engines/WebGPU/webgpuRenderTargetWrapper";
+import { type AbstractMesh } from "core/Meshes/abstractMesh"
+import { type Scene } from "core/scene"
+import { type WebGPURenderTargetWrapper } from "core/Engines/WebGPU/webgpuRenderTargetWrapper"
 import { MaterialPluginBase } from "core/Materials/materialPluginBase.pure";
-import type { Material } from "core/Materials/material";
-import type { StandardMaterial } from "core/Materials/standardMaterial";
+import { type Material } from "core/Materials/material"
+import { type StandardMaterial } from "core/Materials/standardMaterial"
 import { MaterialDefines } from "core/Materials/materialDefines";
-import type { SpotLight } from "core/Lights/spotLight";
+import { type SpotLight } from "core/Lights/spotLight"
 import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial.pure";
 import { expandToProperty, serialize } from "core/Misc/decorators";
 import { Light } from "core/Lights/light";
-import type { DirectionalLight } from "core/Lights/directionalLight";
+import { type DirectionalLight } from "core/Lights/directionalLight"
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
-import type { Nullable } from "core/types";
+import { type Nullable } from "core/types"
 import { RegisterClass } from "core/Misc/typeStore";
 
 /**

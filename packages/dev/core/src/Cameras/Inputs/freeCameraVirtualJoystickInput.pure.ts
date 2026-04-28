@@ -3,9 +3,9 @@
 export * from "./freeCameraVirtualJoystickInput.types";
 
 import { VirtualJoystick, JoystickAxis } from "../../Misc/virtualJoystick";
-import type { ICameraInput } from "../../Cameras/cameraInputsManager";
+import { type ICameraInput } from "../../Cameras/cameraInputsManager"
 import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
-import type { FreeCamera } from "../../Cameras/freeCamera";
+import { type FreeCamera } from "../../Cameras/freeCamera"
 import { Matrix, Vector3 } from "../../Maths/math.vector.pure";
 import { FreeCameraInputsManager } from "../../Cameras/freeCameraInputsManager";
 

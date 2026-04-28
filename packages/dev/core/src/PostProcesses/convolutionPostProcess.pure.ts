@@ -1,15 +1,15 @@
 /** This file must only contain pure code and pure imports */
 
-import type { PostProcessOptions } from "./postProcess";
+import { type PostProcessOptions } from "./postProcess"
 import { PostProcess } from "./postProcess.pure";
-import type { Nullable } from "../types";
-import type { Camera } from "../Cameras/camera";
-import type { AbstractEngine } from "../Engines/abstractEngine";
-import type { Effect } from "../Materials/effect";
+import { type Nullable } from "../types"
+import { type Camera } from "../Cameras/camera"
+import { type AbstractEngine } from "../Engines/abstractEngine"
+import { type Effect } from "../Materials/effect"
 import { Constants } from "../Engines/constants";
 import { serialize } from "../Misc/decorators";
 import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
-import type { Scene } from "../scene";
+import { type Scene } from "../scene"
 import { ThinConvolutionPostProcess } from "./thinConvolutionPostProcess";
 import { RegisterClass } from "../Misc/typeStore";
 

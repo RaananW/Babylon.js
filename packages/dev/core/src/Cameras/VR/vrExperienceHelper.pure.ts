@@ -2,36 +2,36 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { Logger } from "../../Misc/logger";
 import { Observable } from "../../Misc/observable";
-import type { Nullable } from "../../types";
-import type { Camera } from "../../Cameras/camera";
+import { type Nullable } from "../../types"
+import { type Camera } from "../../Cameras/camera"
 import { FreeCamera } from "../../Cameras/freeCamera.pure";
 import { TargetCamera } from "../../Cameras/targetCamera.pure";
 import { DeviceOrientationCamera } from "../../Cameras/deviceOrientationCamera.pure";
 import { VRDeviceOrientationFreeCamera } from "../../Cameras/VR/vrDeviceOrientationFreeCamera.pure";
 import { PointerEventTypes } from "../../Events/pointerEvents";
-import type { Scene, IDisposable } from "../../scene";
+import { type Scene, type IDisposable } from "../../scene"
 import { Quaternion, Matrix, Vector3 } from "../../Maths/math.vector.pure";
 import { Color3, Color4, Color3Black } from "../../Maths/math.color.pure";
-import type { StickValues } from "../../Gamepads/gamepad";
+import { type StickValues } from "../../Gamepads/gamepad"
 import { Gamepad } from "../../Gamepads/gamepad";
-import type { Xbox360Pad } from "../../Gamepads/xboxGamepad";
+import { type Xbox360Pad } from "../../Gamepads/xboxGamepad"
 import { Xbox360Button } from "../../Gamepads/xboxGamepad";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
-import type { PickingInfo } from "../../Collisions/pickingInfo";
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
+import { type PickingInfo } from "../../Collisions/pickingInfo"
 import { Ray } from "../../Culling/ray.pure";
 import { ImageProcessingConfiguration } from "../../Materials/imageProcessingConfiguration.pure";
 import { StandardMaterial } from "../../Materials/standardMaterial.pure";
 import { DynamicTexture } from "../../Materials/Textures/dynamicTexture.pure";
-import type { ImageProcessingPostProcess } from "../../PostProcesses/imageProcessingPostProcess";
+import { type ImageProcessingPostProcess } from "../../PostProcesses/imageProcessingPostProcess"
 import { SineEase, EasingFunction, CircleEase } from "../../Animations/easing";
 import { Animation } from "../../Animations/animation.pure";
-import type { VRCameraMetrics } from "../../Cameras/VR/vrCameraMetrics";
+import { type VRCameraMetrics } from "../../Cameras/VR/vrCameraMetrics"
 import { WebXRSessionManager } from "../../XR/webXRSessionManager";
-import type { WebXRDefaultExperience } from "../../XR/webXRDefaultExperience";
+import { type WebXRDefaultExperience } from "../../XR/webXRDefaultExperience"
 import { WebXRState } from "../../XR/webXRTypes";
 import { CreateGround } from "../../Meshes/Builders/groundBuilder.pure";
-import type { IPointerEvent } from "../../Events/deviceInputEvents";
-import type { Mesh } from "core/Meshes/mesh";
+import { type IPointerEvent } from "../../Events/deviceInputEvents"
+import { type Mesh } from "core/Meshes/mesh"
 import { CreateTorus } from "core/Meshes/Builders/torusBuilder.pure";
 
 /**

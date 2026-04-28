@@ -1,9 +1,9 @@
 export * from "./engine.videoTexture.types";
 
-import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
-import type { Nullable } from "../../../types";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
-import type { ExternalTexture } from "../../../Materials/Textures/externalTexture";
+import { type InternalTexture } from "../../../Materials/Textures/internalTexture"
+import { type Nullable } from "../../../types"
+import { type WebGPUHardwareTexture } from "../webgpuHardwareTexture"
+import { type ExternalTexture } from "../../../Materials/Textures/externalTexture"
 import { WebGPUEngine } from "../../webgpuEngine";
 
 let _registered = false;

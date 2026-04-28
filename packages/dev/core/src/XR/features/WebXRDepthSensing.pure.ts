@@ -1,29 +1,29 @@
 /** This file must only contain pure code and pure imports */
 
-import type { RawTexture } from "../../Materials/Textures/rawTexture.pure";
+import { type RawTexture } from "../../Materials/Textures/rawTexture.pure"
 import { RawTextureCreateRTexture } from "../../Materials/Textures/rawTexture.pure";
 import { WebXRFeatureName } from "../webXRFeaturesManager";
-import type { WebXRSessionManager } from "../webXRSessionManager";
+import { type WebXRSessionManager } from "../webXRSessionManager"
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { ToolsWarn, ToolsError } from "../../Misc/tools.pure";
 import { Texture } from "../../Materials/Textures/texture.pure";
-import type { Observer } from "../../Misc/observable";
+import { type Observer } from "../../Misc/observable"
 import { Observable } from "../../Misc/observable";
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { Constants } from "../../Engines/constants";
 import { WebGLHardwareTexture } from "../../Engines/WebGL/webGLHardwareTexture";
-import type { InternalTexture } from "../../Materials/Textures/internalTexture";
-import type { ThinEngine } from "../../Engines/thinEngine";
+import { type InternalTexture } from "../../Materials/Textures/internalTexture"
+import { type ThinEngine } from "../../Engines/thinEngine"
 import { MaterialPluginBase } from "core/Materials/materialPluginBase.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
-import type { Material } from "core/Materials/material";
+import { type Material } from "core/Materials/material"
 import { MaterialDefines } from "core/Materials/materialDefines";
-import type { UniformBuffer } from "core/Materials/uniformBuffer";
+import { type UniformBuffer } from "core/Materials/uniformBuffer"
 import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial.pure";
 import { RegisterMaterialPlugin, UnregisterMaterialPlugin } from "core/Materials/materialPluginManager";
-import type { Camera } from "core/Cameras/camera";
+import { type Camera } from "core/Cameras/camera"
 import { Matrix } from "core/Maths/math.vector.pure";
-import type { Engine } from "core/Engines/engine";
+import { type Engine } from "core/Engines/engine"
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 import { RegisterClass } from "../../Misc/typeStore";
 

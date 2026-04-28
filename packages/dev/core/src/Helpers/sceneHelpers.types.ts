@@ -1,13 +1,12 @@
-import type { Nullable } from "../types";
-import type { Mesh } from "../Meshes/mesh";
-import type { BaseTexture } from "../Materials/Textures/baseTexture";
-import type { IEnvironmentHelperOptions } from "./environmentHelper";
-import type { EnvironmentHelper } from "./environmentHelper";
-import type { VRExperienceHelperOptions } from "../Cameras/VR/vrExperienceHelper";
-import type { VRExperienceHelper } from "../Cameras/VR/vrExperienceHelper";
-import type { WebXRDefaultExperienceOptions } from "../XR/webXRDefaultExperience";
-import type { WebXRDefaultExperience } from "../XR/webXRDefaultExperience";
-
+import { type Nullable } from "../types"
+import { type Mesh } from "../Meshes/mesh"
+import { type BaseTexture } from "../Materials/Textures/baseTexture"
+import { type IEnvironmentHelperOptions } from "./environmentHelper"
+import { type EnvironmentHelper } from "./environmentHelper"
+import { type VRExperienceHelperOptions } from "../Cameras/VR/vrExperienceHelper"
+import { type VRExperienceHelper } from "../Cameras/VR/vrExperienceHelper"
+import { type WebXRDefaultExperienceOptions } from "../XR/webXRDefaultExperience"
+import { type WebXRDefaultExperience } from "../XR/webXRDefaultExperience"
 declare module "../scene" {
     /**
      *

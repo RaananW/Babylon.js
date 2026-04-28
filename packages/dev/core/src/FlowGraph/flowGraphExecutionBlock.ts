@@ -1,7 +1,7 @@
-import type { IFlowGraphBlockConfiguration } from "./flowGraphBlock";
+import { type IFlowGraphBlockConfiguration } from "./flowGraphBlock"
 import { FlowGraphBlock } from "./flowGraphBlock";
 import { FlowGraphConnectionType } from "./flowGraphConnection";
-import type { FlowGraphContext } from "./flowGraphContext";
+import { type FlowGraphContext } from "./flowGraphContext"
 import { FlowGraphSignalConnection } from "./flowGraphSignalConnection";
 
 /**

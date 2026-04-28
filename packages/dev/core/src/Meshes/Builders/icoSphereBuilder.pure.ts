@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "../../scene";
-import type { Vector4 } from "../../Maths/math.vector";
+import { type Scene } from "../../scene"
+import { type Vector4 } from "../../Maths/math.vector"
 import { Vector3, Vector2 } from "../../Maths/math.vector.pure";
 import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
 /**

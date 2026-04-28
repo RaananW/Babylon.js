@@ -1,5 +1,4 @@
-import type { ReflectionProbe } from "./reflectionProbe.pure";
-
+import { type ReflectionProbe } from "./reflectionProbe.pure"
 declare module "../scene" {
     /**
      *

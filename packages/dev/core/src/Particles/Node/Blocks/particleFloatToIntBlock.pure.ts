@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "core/types";
-import type { NodeParticleConnectionPoint } from "core/Particles/Node/nodeParticleBlockConnectionPoint";
-import type { NodeParticleBuildState } from "core/Particles/Node/nodeParticleBuildState";
+import { type Nullable } from "core/types"
+import { type NodeParticleConnectionPoint } from "core/Particles/Node/nodeParticleBlockConnectionPoint"
+import { type NodeParticleBuildState } from "core/Particles/Node/nodeParticleBuildState"
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
 import { NodeParticleBlock } from "core/Particles/Node/nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "core/Particles/Node/Enums/nodeParticleBlockConnectionPointTypes";

@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { Action } from "./action.pure";
-import type { Condition } from "./condition";
+import { type Condition } from "./condition"
 import { Logger } from "../Misc/logger";
 import { Observable } from "../Misc/observable";
 import { Color3 } from "../Maths/math.color.pure";

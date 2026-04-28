@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
 import { WithinEpsilon } from "../../../../Maths/math.scalar.functions";
-import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
+import { type NodeParticleBuildState } from "../../nodeParticleBuildState"
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "../../nodeParticleBlock";
 import { editableInPropertyPage, PropertyTypeForEdition } from "core/Decorators/nodeDecorator";
-import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint";
+import { type NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint"
 import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**

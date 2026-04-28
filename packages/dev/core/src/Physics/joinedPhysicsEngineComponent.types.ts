@@ -1,10 +1,9 @@
-import type { Nullable } from "../types";
-import type { Vector3 } from "../Maths/math.vector";
-import type { IPhysicsEngine } from "./IPhysicsEngine";
-import type { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin";
-import type { IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin";
-import type { Observable } from "../Misc/observable";
-
+import { type Nullable } from "../types"
+import { type Vector3 } from "../Maths/math.vector"
+import { type IPhysicsEngine } from "./IPhysicsEngine"
+import { type IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin"
+import { type IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin"
+import { type Observable } from "../Misc/observable"
 declare module "../scene" {
     /**
      *

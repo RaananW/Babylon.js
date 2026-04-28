@@ -2,18 +2,18 @@
 
 import { serialize, expandToProperty, addAccessorsForMaterialProperty } from "../../Misc/decorators";
 import { GetEnvironmentBRDFTexture, GetEnvironmentFuzzBRDFTexture } from "../../Misc/brdfTextureTools";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-import type { Color4 } from "../../Maths/math.color";
+import { type Nullable } from "../../types"
+import { type Scene } from "../../scene"
+import { type Color4 } from "../../Maths/math.color"
 import { Color3, Color3Black, Color3White } from "../../Maths/math.color.pure";
 import { ImageProcessingConfiguration } from "../imageProcessingConfiguration.pure";
-import type { BaseTexture } from "../../Materials/Textures/baseTexture";
+import { type BaseTexture } from "../../Materials/Textures/baseTexture"
 import { Texture } from "../Textures/texture.pure";
 import { Material } from "../material";
 import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
-import type { Engine } from "../../Engines/engine";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
-import type { Effect, IEffectCreationOptions } from "../../Materials/effect";
+import { type Engine } from "../../Engines/engine"
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
+import { type Effect, type IEffectCreationOptions } from "../../Materials/effect"
 import { MaterialDefines } from "../materialDefines";
 import { ImageProcessingDefinesMixin } from "../imageProcessingConfiguration.defines";
 import { EffectFallbacks } from "../effectFallbacks";
@@ -50,22 +50,22 @@ import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { MaterialPluginEvent } from "../materialPluginEvent";
 import { MaterialHelperGeometryRendering } from "../materialHelper.geometryrendering";
 import { PrePassConfiguration, PrePassConfigurationAddUniforms, PrePassConfigurationAddSamplers } from "../prePassConfiguration.pure";
-import type { IMaterialCompilationOptions, ICustomShaderNameResolveOptions } from "../../Materials/material";
+import { type IMaterialCompilationOptions, type ICustomShaderNameResolveOptions } from "../../Materials/material"
 import { ShaderLanguage } from "../shaderLanguage";
 import { MaterialFlags } from "../materialFlags";
-import type { SubMesh } from "../../Meshes/subMesh";
+import { type SubMesh } from "../../Meshes/subMesh"
 import { Logger } from "core/Misc/logger";
 import { UVDefinesMixin } from "../uv.defines";
 import { Vector2, Vector4, TmpVectors } from "core/Maths/math.vector.pure";
-import type { Vector3, Matrix } from "core/Maths/math.vector";
-import type { Mesh } from "../../Meshes/mesh";
+import { type Vector3, type Matrix } from "core/Maths/math.vector"
+import { type Mesh } from "../../Meshes/mesh"
 import { ImageProcessingMixin } from "../imageProcessing";
 import { PushMaterial } from "../pushMaterial";
 import { SmartArray } from "../../Misc/smartArray";
-import type { RenderTargetTexture } from "../Textures/renderTargetTexture";
-import type { IAnimatable } from "../../Animations/animatable.interface";
+import { type RenderTargetTexture } from "../Textures/renderTargetTexture"
+import { type IAnimatable } from "../../Animations/animatable.interface"
 import { Tools } from "../../Misc/tools.pure";
-import type { UniformBuffer } from "../../Materials/uniformBuffer";
+import { type UniformBuffer } from "../../Materials/uniformBuffer"
 import { RegisterClass } from "../../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */

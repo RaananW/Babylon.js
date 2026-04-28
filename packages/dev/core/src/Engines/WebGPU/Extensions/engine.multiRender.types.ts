@@ -1,8 +1,7 @@
-import type { IMultiRenderTargetOptions } from "../../../Materials/Textures/multiRenderTarget";
-import type { Nullable } from "../../../types";
-import type { TextureSize } from "../../../Materials/Textures/textureCreationOptions";
-import type { RenderTargetWrapper } from "../../renderTargetWrapper";
-
+import { type IMultiRenderTargetOptions } from "../../../Materials/Textures/multiRenderTarget"
+import { type Nullable } from "../../../types"
+import { type TextureSize } from "../../../Materials/Textures/textureCreationOptions"
+import { type RenderTargetWrapper } from "../../renderTargetWrapper"
 declare module "../../abstractEngine" {
     /**
      *

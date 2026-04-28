@@ -1,5 +1,4 @@
-import type { InternalDeviceSourceManager } from "./internalDeviceSourceManager.pure";
-
+import { type InternalDeviceSourceManager } from "./internalDeviceSourceManager.pure"
 export {};
 
 declare module "../Engines/abstractEngine" {

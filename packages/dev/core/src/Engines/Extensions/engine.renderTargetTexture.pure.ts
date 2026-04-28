@@ -1,7 +1,7 @@
 export * from "./engine.renderTargetTexture.types";
 
-import type { Nullable } from "../../types";
-import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
+import { type Nullable } from "../../types"
+import { type RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture"
 import { ThinEngine } from "../../Engines/thinEngine";
 
 let _registered = false;

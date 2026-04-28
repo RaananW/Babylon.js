@@ -1,7 +1,7 @@
 export * from "./baseTexture.polynomial.types";
 
-import type { Nullable } from "../../types";
-import type { SphericalPolynomial } from "../../Maths/sphericalPolynomial";
+import { type Nullable } from "../../types"
+import { type SphericalPolynomial } from "../../Maths/sphericalPolynomial"
 import { CubeMapToSphericalPolynomialTools } from "../../Misc/HighDynamicRange/cubemapToSphericalPolynomial";
 import { BaseTexture } from "./baseTexture";
 

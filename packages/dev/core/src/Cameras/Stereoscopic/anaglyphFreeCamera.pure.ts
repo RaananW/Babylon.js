@@ -2,8 +2,7 @@
 
 import { Camera } from "../../Cameras/camera";
 import { FreeCamera } from "../../Cameras/freeCamera.pure";
-import type { Scene } from "../../scene";
-
+import { type Scene } from "../../scene"
 import { _SetStereoscopicAnaglyphRigMode } from "../RigModes/stereoscopicAnaglyphRigMode";
 import { Node } from "../../node";
 import { Vector3 } from "../../Maths/math.vector.pure";

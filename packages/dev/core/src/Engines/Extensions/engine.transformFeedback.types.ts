@@ -1,6 +1,5 @@
-import type { Nullable } from "../../types";
-import type { DataBuffer } from "../../Buffers/dataBuffer";
-
+import { type Nullable } from "../../types"
+import { type DataBuffer } from "../../Buffers/dataBuffer"
 declare module "../../Engines/engine" {
     /**
      *

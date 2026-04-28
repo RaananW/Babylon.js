@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable, IndicesArray, FloatArray } from "../../types";
+import { type Nullable, type IndicesArray, type FloatArray } from "../../types"
 import { Vector3, Matrix, Vector2, TmpVectors } from "../../Maths/math.vector.pure";
 import { Lerp } from "../../Maths/math.scalar.functions";
 import { Mesh } from "../mesh.pure";
 import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { VertexData } from "../mesh.vertexData.pure";
-import type { AbstractMesh } from "../abstractMesh";
-import type { Camera } from "../../Cameras/camera";
+import { type AbstractMesh } from "../abstractMesh"
+import { type Camera } from "../../Cameras/camera"
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
 const XpAxis = /*#__PURE__*/ new Vector3(1, 0, 0);

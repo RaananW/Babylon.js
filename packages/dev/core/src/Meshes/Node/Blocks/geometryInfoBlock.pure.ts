@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { type NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint"
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
-import type { VertexData } from "../../mesh.vertexData";
-import type { NodeGeometryBuildState } from "../nodeGeometryBuildState";
+import { type VertexData } from "../../mesh.vertexData"
+import { type NodeGeometryBuildState } from "../nodeGeometryBuildState"
 import { RegisterClass } from "../../../Misc/typeStore";
 
 /**

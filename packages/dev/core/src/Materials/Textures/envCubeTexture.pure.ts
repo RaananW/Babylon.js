@@ -1,5 +1,5 @@
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
+import { type Nullable } from "../../types"
+import { type Scene } from "../../scene"
 import { Matrix, Vector3 } from "../../Maths/math.vector.pure";
 import { BaseTexture } from "../../Materials/Textures/baseTexture.pure";
 import { Texture } from "../../Materials/Textures/texture.pure";
@@ -8,11 +8,11 @@ import { CubeMapToSphericalPolynomialTools } from "../../Misc/HighDynamicRange/c
 import { Observable } from "../../Misc/observable";
 import { ToolsSetImmediate } from "../../Misc/tools.pure";
 import { ToGammaSpace } from "../../Maths/math.constants";
-import type { AbstractEngine } from "../../Engines/abstractEngine";
+import { type AbstractEngine } from "../../Engines/abstractEngine"
 import { HDRFiltering } from "../../Materials/Textures/Filtering/hdrFiltering";
 import { HDRIrradianceFiltering } from "../../Materials/Textures/Filtering/hdrIrradianceFiltering";
 import { ToHalfFloat } from "../../Misc/textureTools";
-import type { CubeMapInfo } from "../../Misc/HighDynamicRange/panoramaToCubemap";
+import { type CubeMapInfo } from "../../Misc/HighDynamicRange/panoramaToCubemap"
 import { SphericalPolynomial } from "../../Maths/sphericalPolynomial.pure";
 
 /**

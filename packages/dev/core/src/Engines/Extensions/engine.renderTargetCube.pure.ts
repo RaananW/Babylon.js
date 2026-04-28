@@ -1,8 +1,8 @@
 export * from "./engine.renderTargetCube.types";
 
-import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
-import type { RenderTargetCreationOptions } from "../../Materials/Textures/textureCreationOptions";
+import { type RenderTargetWrapper } from "../renderTargetWrapper"
+import { type WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper"
+import { type RenderTargetCreationOptions } from "../../Materials/Textures/textureCreationOptions"
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { Constants } from "../constants";

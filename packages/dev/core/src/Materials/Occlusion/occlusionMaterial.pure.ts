@@ -1,5 +1,5 @@
 import { Color4 } from "../../Maths/math.color.pure";
-import type { Scene } from "../../scene";
+import { type Scene } from "../../scene"
 import { ShaderMaterial } from "../shaderMaterial.pure";
 
 /**

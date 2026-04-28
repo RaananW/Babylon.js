@@ -1,6 +1,5 @@
-import type { PostProcess } from "./postProcess.pure";
-import type { Nullable } from "../types";
-
+import { type PostProcess } from "./postProcess.pure"
+import { type Nullable } from "../types"
 declare module "../Engines/abstractEngine" {
     /**
      *

@@ -2,11 +2,11 @@
 
 import { NodeMaterialBlock } from "../nodeMaterialBlock";
 import { NodeMaterialBlockConnectionPointTypes } from "../Enums/nodeMaterialBlockConnectionPointTypes";
-import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
-import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
+import { type NodeMaterialBuildState } from "../nodeMaterialBuildState"
+import { type NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint"
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import { Color3, Color3Black, Color3White } from "../../../Maths/math.color.pure";
-import type { Scene } from "../../../scene";
+import { type Scene } from "../../../scene"
 import { Observable } from "../../../Misc/observable";
 import { RegisterClass } from "../../../Misc/typeStore";
 

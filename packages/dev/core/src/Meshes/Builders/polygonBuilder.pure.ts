@@ -1,14 +1,14 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "../../scene";
-import type { Vector3 } from "../../Maths/math.vector";
+import { type Scene } from "../../scene"
+import { type Vector3 } from "../../Maths/math.vector"
 import { Vector2, Vector4 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
 
 import { Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 import { PolygonMeshBuilder } from "../polygonMesh.pure";
-import type { FloatArray, IndicesArray, Nullable } from "../../types";
+import { type FloatArray, type IndicesArray, type Nullable } from "../../types"
 import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { EngineStore } from "../../Engines/engineStore";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";

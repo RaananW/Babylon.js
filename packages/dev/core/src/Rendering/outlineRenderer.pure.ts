@@ -3,19 +3,19 @@
 export * from "./outlineRenderer.types";
 
 import { VertexBuffer } from "../Buffers/buffer.pure";
-import type { SubMesh } from "../Meshes/subMesh";
-import type { _InstancesBatch } from "../Meshes/mesh";
+import { type SubMesh } from "../Meshes/subMesh"
+import { type _InstancesBatch } from "../Meshes/mesh"
 import { Mesh } from "../Meshes/mesh.pure";
 import { Scene } from "../scene.pure";
-import type { AbstractEngine } from "../Engines/abstractEngine";
+import { type AbstractEngine } from "../Engines/abstractEngine"
 import { Constants } from "../Engines/constants";
-import type { ISceneComponent } from "../sceneComponent";
+import { type ISceneComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
 import { DrawWrapper } from "../Materials/drawWrapper";
 import { AddClipPlaneUniforms, BindClipPlane, PrepareStringDefinesForClipPlanes } from "core/Materials/clipPlaneMaterialHelper";
 import { BindBonesParameters, BindMorphTargetParameters, PrepareDefinesAndAttributesForMorphTargets, PushAttributesForInstances } from "../Materials/materialHelper.functions";
 import { EffectFallbacks } from "core/Materials/effectFallbacks";
-import type { IEffectCreationOptions } from "core/Materials/effect";
+import { type IEffectCreationOptions } from "core/Materials/effect"
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 
 /**

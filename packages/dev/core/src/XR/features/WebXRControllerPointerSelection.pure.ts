@@ -1,14 +1,14 @@
 /** This file must only contain pure code and pure imports */
 
 import { WebXRFeatureName } from "../webXRFeaturesManager";
-import type { WebXRSessionManager } from "../webXRSessionManager";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
-import type { Observer } from "../../Misc/observable";
-import type { WebXRInput } from "../webXRInput";
-import type { WebXRInputSource } from "../webXRInputSource";
-import type { Scene } from "../../scene";
-import type { WebXRControllerComponent } from "../motionController/webXRControllerComponent";
-import type { Nullable } from "../../types";
+import { type WebXRSessionManager } from "../webXRSessionManager"
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
+import { type Observer } from "../../Misc/observable"
+import { type WebXRInput } from "../webXRInput"
+import { type WebXRInputSource } from "../webXRInputSource"
+import { type Scene } from "../../scene"
+import { type WebXRControllerComponent } from "../motionController/webXRControllerComponent"
+import { type Nullable } from "../../types"
 import { Matrix, Vector3 } from "../../Maths/math.vector.pure";
 import { Color3, Color3Black } from "../../Maths/math.color.pure";
 import { Axis } from "../../Maths/math.axis";
@@ -19,11 +19,11 @@ import { Ray } from "../../Culling/ray.pure";
 import { PickingInfo } from "../../Collisions/pickingInfo";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { UtilityLayerRenderer } from "../../Rendering/utilityLayerRenderer";
-import type { WebXRAbstractMotionController } from "../motionController/webXRAbstractMotionController";
-import type { WebXRCamera } from "../webXRCamera";
-import type { Node } from "../../node";
+import { type WebXRAbstractMotionController } from "../motionController/webXRAbstractMotionController"
+import { type WebXRCamera } from "../webXRCamera"
+import { type Node } from "../../node"
 import { Viewport } from "../../Maths/math.viewport";
-import type { Mesh } from "../../Meshes/mesh";
+import { type Mesh } from "../../Meshes/mesh"
 import { ToolsWarn } from "../../Misc/tools.pure";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 

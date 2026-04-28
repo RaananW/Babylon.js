@@ -1,7 +1,7 @@
 export * from "./engine.dynamicTexture.types";
 
-import type { ImageSource, Nullable } from "../../../types";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import { type ImageSource, type Nullable } from "../../../types"
+import { type WebGPUHardwareTexture } from "../webgpuHardwareTexture"
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { WebGPUEngine } from "../../webgpuEngine";
 import { GetExponentOfTwo } from "../../../Misc/tools.functions";

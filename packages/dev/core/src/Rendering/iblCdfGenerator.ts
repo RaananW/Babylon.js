@@ -1,22 +1,21 @@
 import { Constants } from "../Engines/constants";
-import type { AbstractEngine } from "../Engines/abstractEngine";
-
-import type { Scene } from "../scene";
+import { type AbstractEngine } from "../Engines/abstractEngine"
+import { type Scene } from "../scene"
 import { Texture } from "../Materials/Textures/texture";
-import type { TextureSize } from "../Materials/Textures/textureCreationOptions";
+import { type TextureSize } from "../Materials/Textures/textureCreationOptions"
 import { ProceduralTexture } from "../Materials/Textures/Procedurals/proceduralTexture";
-import type { IProceduralTextureCreationOptions } from "../Materials/Textures/Procedurals/proceduralTexture";
+import { type IProceduralTextureCreationOptions } from "../Materials/Textures/Procedurals/proceduralTexture"
 import { PostProcess } from "../PostProcesses/postProcess";
-import type { PostProcessOptions } from "../PostProcesses/postProcess";
+import { type PostProcessOptions } from "../PostProcesses/postProcess"
 import { Vector3, Vector4 } from "../Maths/math.vector";
 import { RawTexture } from "../Materials/Textures/rawTexture";
-import type { BaseTexture } from "../Materials/Textures/baseTexture";
+import { type BaseTexture } from "../Materials/Textures/baseTexture"
 import { Observable } from "../Misc/observable";
-import type { CubeTexture } from "../Materials/Textures/cubeTexture";
+import { type CubeTexture } from "../Materials/Textures/cubeTexture"
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { Engine } from "../Engines/engine";
 import { _WarnImport } from "../Misc/devTools";
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { EngineStore } from "../Engines/engineStore";
 import { Logger } from "../Misc/logger";
 import { _RetryWithInterval } from "../Misc/timingTools";
@@ -73,13 +72,13 @@ export class IblCdfGenerator {
             if (source.isReadyOrNotBlocking()) {
                 this._recreateAssetsFromNewIbl();
             } else {
-                (source as CubeTexture).onLoadObservable.addOnce(this._recreateAssetsFromNewIbl.bind(this, source));
+                (source as CubeTexture).onLoadObservable.addOnce(this._recreateAssetsFromNewIbl.bind(this));
             }
         } else {
             if (source.isReadyOrNotBlocking()) {
                 this._recreateAssetsFromNewIbl();
             } else {
-                (source as Texture).onLoadObservable.addOnce(this._recreateAssetsFromNewIbl.bind(this, source));
+                (source as Texture).onLoadObservable.addOnce(this._recreateAssetsFromNewIbl.bind(this));
             }
         }
     }
@@ -180,6 +179,13 @@ export class IblCdfGenerator {
      * Observable that triggers when the CDF renderer is ready
      */
     public onGeneratedObservable: Observable<void> = new Observable<void>();
+
+    /**
+     * Observable that triggers when CDF texture references change.
+     * It is raised after disposing textures (so fallback ICDF can be used)
+     * and after creating new textures (so consumers can rebind immediately).
+     */
+    public onTextureChangedObservable: Observable<void> = new Observable<void>();
 
     private _createTextures() {
         const size: TextureSize = this._iblSource ? { width: this._iblSource.getSize().width, height: this._iblSource.getSize().height } : { width: 1, height: 1 };

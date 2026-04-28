@@ -3,7 +3,7 @@
 import { Vector2, Vector3, Vector4 } from "../../../Maths/math.vector.pure";
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { type NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint"
 import { RegisterClass } from "../../../Misc/typeStore";
 
 /**

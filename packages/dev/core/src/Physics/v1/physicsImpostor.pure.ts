@@ -1,17 +1,17 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable, IndicesArray, FloatArray } from "../../types";
+import { type Nullable, type IndicesArray, type FloatArray } from "../../types"
 import { Logger } from "../../Misc/logger";
 import { BuildArray } from "../../Misc/arrayTools";
-import type { Matrix } from "../../Maths/math.vector";
+import { type Matrix } from "../../Maths/math.vector"
 import { Vector3, Quaternion } from "../../Maths/math.vector.pure";
-import type { TransformNode } from "../../Meshes/transformNode";
+import { type TransformNode } from "../../Meshes/transformNode"
 import { AbstractMesh } from "../../Meshes/abstractMesh.pure";
-import type { Scene } from "../../scene";
-import type { Bone } from "../../Bones/bone";
-import type { BoundingInfo } from "../../Culling/boundingInfo";
-import type { PhysicsEngine as PhysicsEngineV1 } from "./physicsEngine";
-import type { PhysicsJointData } from "./physicsJoint";
+import { type Scene } from "../../scene"
+import { type Bone } from "../../Bones/bone"
+import { type BoundingInfo } from "../../Culling/boundingInfo"
+import { type PhysicsEngine as PhysicsEngineV1 } from "./physicsEngine"
+import { type PhysicsJointData } from "./physicsJoint"
 import { PhysicsJoint } from "./physicsJoint";
 import { Space } from "../../Maths/math.axis";
 import { Mesh } from "../../Meshes/mesh";

@@ -1,16 +1,16 @@
 /** This file must only contain pure code and pure imports */
 
-import type { AssetType, FlowGraphAssetType } from "core/FlowGraph/flowGraphAssetsContext";
+import { type AssetType, type FlowGraphAssetType } from "core/FlowGraph/flowGraphAssetsContext"
 import { GetFlowGraphAssetWithType } from "core/FlowGraph/flowGraphAssetsContext";
-import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
+import { type IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock"
 import { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
-import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
-import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
+import { type FlowGraphContext } from "core/FlowGraph/flowGraphContext"
+import { type FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection"
 import { RichTypeAny } from "core/FlowGraph/flowGraphRichTypes.pure";
-import type { Nullable } from "core/types";
+import { type Nullable } from "core/types"
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pure";
-import type { FlowGraphNumber } from "core/FlowGraph/utils";
+import { type FlowGraphNumber } from "core/FlowGraph/utils"
 import { getNumericValue } from "core/FlowGraph/utils";
 import { RegisterClass } from "core/Misc/typeStore";
 

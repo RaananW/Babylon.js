@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
 import { StorageBuffer } from "core/Buffers/storageBuffer";
-import type { Camera } from "core/Cameras/camera";
-import type { AbstractEngine } from "core/Engines/abstractEngine";
+import { type Camera } from "core/Cameras/camera"
+import { type AbstractEngine } from "core/Engines/abstractEngine"
 import { Constants } from "core/Engines/constants";
-import type { WebGPUEngine } from "core/Engines/webgpuEngine";
-import type { Effect } from "core/Materials/effect";
+import { type WebGPUEngine } from "core/Engines/webgpuEngine"
+import { type Effect } from "core/Materials/effect"
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { ShaderMaterial } from "core/Materials/shaderMaterial.pure";
 import { RawTexture } from "core/Materials/Textures/rawTexture.pure";
@@ -14,17 +14,17 @@ import { UniformBuffer } from "core/Materials/uniformBuffer";
 import { TmpColors } from "core/Maths/math.color.pure";
 import { TmpVectors, Vector3 } from "core/Maths/math.vector.pure";
 import { CreatePlane } from "core/Meshes/Builders/planeBuilder.pure";
-import type { Mesh } from "core/Meshes/mesh";
+import { type Mesh } from "core/Meshes/mesh"
 import { serialize } from "core/Misc/decorators";
 import { _WarnImport } from "core/Misc/devTools";
 import { Logger } from "core/Misc/logger";
-import type { Scene } from "core/scene";
-import type { Nullable } from "core/types";
+import { type Scene } from "core/scene"
+import { type Nullable } from "core/types"
 import { Light } from "../light";
 import { LightConstants } from "../lightConstants";
-import type { PointLight } from "../pointLight";
-import type { SpotLight } from "../spotLight";
-import type { RenderTargetWrapper } from "../../Engines/renderTargetWrapper";
+import { type PointLight } from "../pointLight"
+import { type SpotLight } from "../spotLight"
+import { type RenderTargetWrapper } from "../../Engines/renderTargetWrapper"
 import { RegisterClass } from "core/Misc/typeStore";
 import { Node } from "core/node";
 

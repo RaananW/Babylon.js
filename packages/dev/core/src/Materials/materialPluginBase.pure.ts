@@ -1,21 +1,21 @@
 /** This file must only contain pure code and pure imports */
 
 import { serialize } from "../Misc/decorators";
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { MaterialPluginManager } from "./materialPluginManager";
-import type { SmartArray } from "../Misc/smartArray";
+import { type SmartArray } from "../Misc/smartArray"
 import { Constants } from "../Engines/constants";
-import type { AbstractEngine } from "../Engines/abstractEngine";
-import type { Scene } from "../scene";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-import type { SubMesh } from "../Meshes/subMesh";
-import type { IAnimatable } from "../Animations/animatable.interface";
-import type { UniformBuffer } from "./uniformBuffer";
-import type { EffectFallbacks } from "./effectFallbacks";
-import type { MaterialDefines } from "./materialDefines";
-import type { Material } from "./material";
-import type { BaseTexture } from "./Textures/baseTexture";
-import type { RenderTargetTexture } from "./Textures/renderTargetTexture";
+import { type AbstractEngine } from "../Engines/abstractEngine"
+import { type Scene } from "../scene"
+import { type AbstractMesh } from "../Meshes/abstractMesh"
+import { type SubMesh } from "../Meshes/subMesh"
+import { type IAnimatable } from "../Animations/animatable.interface"
+import { type UniformBuffer } from "./uniformBuffer"
+import { type EffectFallbacks } from "./effectFallbacks"
+import { type MaterialDefines } from "./materialDefines"
+import { type Material } from "./material"
+import { type BaseTexture } from "./Textures/baseTexture"
+import { type RenderTargetTexture } from "./Textures/renderTargetTexture"
 import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../Misc/decorators.serialization.pure";
 import { ShaderLanguage } from "./shaderLanguage";
 import { RegisterClass } from "../Misc/typeStore";

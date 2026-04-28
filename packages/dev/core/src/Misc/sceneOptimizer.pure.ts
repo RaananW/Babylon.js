@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 export * from "./sceneOptimizer.types";
-import type { Scene, IDisposable } from "../scene";
+import { type Scene, type IDisposable } from "../scene"
 import { EngineStore } from "../Engines/engineStore";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
+import { type AbstractMesh } from "../Meshes/abstractMesh"
 import { Mesh } from "../Meshes/mesh.pure";
-import type { Nullable } from "../types";
-import type { Observer } from "./observable";
+import { type Nullable } from "../types"
+import { type Observer } from "./observable"
 import { Observable } from "./observable";
 
 /**

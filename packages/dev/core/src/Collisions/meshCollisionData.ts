@@ -1,10 +1,8 @@
-import type { Collider } from "./collider";
+import { type Collider } from "./collider"
 import { Vector3 } from "../Maths/math.vector";
-import type { Nullable } from "../types";
-import type { Observer } from "../Misc/observable";
-
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-
+import { type Nullable } from "../types"
+import { type Observer } from "../Misc/observable"
+import { type AbstractMesh } from "../Meshes/abstractMesh"
 /**
  * @internal
  */

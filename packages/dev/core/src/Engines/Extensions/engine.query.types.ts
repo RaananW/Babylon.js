@@ -1,8 +1,7 @@
-import type { Nullable, int } from "../../types";
-import type { Observer } from "../../Misc/observable";
-import type { _TimeToken } from "../../Instrumentation/timeToken";
-import type { AbstractEngine } from "../abstractEngine";
-
+import { type Nullable, type int } from "../../types"
+import { type Observer } from "../../Misc/observable"
+import { type _TimeToken } from "../../Instrumentation/timeToken"
+import { type AbstractEngine } from "../abstractEngine"
 declare module "../../Engines/thinEngine" {
     /**
      *

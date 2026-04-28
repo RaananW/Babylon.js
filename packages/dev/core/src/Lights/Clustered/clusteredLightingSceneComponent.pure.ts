@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "core/scene";
-import type { RenderTargetsStageAction, ISceneComponent } from "core/sceneComponent";
+import { type Scene } from "core/scene"
+import { type RenderTargetsStageAction, type ISceneComponent } from "core/sceneComponent"
 import { SceneComponentConstants } from "core/sceneComponent";
 
 import { LightConstants } from "../lightConstants";

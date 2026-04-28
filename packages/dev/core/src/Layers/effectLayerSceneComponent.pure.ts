@@ -1,18 +1,17 @@
 /** This file must only contain pure code and pure imports */
 
 import { Camera } from "../Cameras/camera";
-import type { Scene } from "../scene";
-import type { AbstractEngine } from "../Engines/abstractEngine";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
-import type { ISceneSerializableComponent } from "../sceneComponent";
+import { type Scene } from "../scene"
+import { type AbstractEngine } from "../Engines/abstractEngine"
+import { type AbstractMesh } from "../Meshes/abstractMesh"
+import { type RenderTargetTexture } from "../Materials/Textures/renderTargetTexture"
+import { type ISceneSerializableComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
 import { EngineStore } from "../Engines/engineStore";
-import type { IAssetContainer } from "core/IAssetContainer";
+import { type IAssetContainer } from "core/IAssetContainer"
 import { EffectLayer } from "./effectLayer";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
-import type { AssetContainer } from "../assetContainer";
-
+import { type AssetContainer } from "../assetContainer"
 /**
  * Defines the layer scene component responsible to manage any effect layers
  * in a given scene.

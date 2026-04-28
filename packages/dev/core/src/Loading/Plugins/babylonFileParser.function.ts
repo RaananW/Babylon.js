@@ -1,7 +1,6 @@
-import type { AssetContainer } from "core/assetContainer";
-import type { Scene } from "core/scene";
-import type { Nullable } from "core/types";
-
+import { type AssetContainer } from "core/assetContainer"
+import { type Scene } from "core/scene"
+import { type Nullable } from "core/types"
 /**
  * Defines how the parser contract is defined.
  * These parsers are used to parse a list of specific assets (like particle systems, etc..)

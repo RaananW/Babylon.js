@@ -1,6 +1,5 @@
-import type { Nullable } from "../../types";
-import type { IViewportOwnerLike } from "./abstractEngine.dom.pure";
-
+import { type Nullable } from "../../types"
+import { type IViewportOwnerLike } from "./abstractEngine.dom.pure"
 declare module "../../Engines/abstractEngine" {
     /**
      *

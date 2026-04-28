@@ -1,12 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "../../scene";
-import type { Vector4 } from "../../Maths/math.vector";
+import { type Scene } from "../../scene"
+import { type Vector4 } from "../../Maths/math.vector"
 import { Vector3 } from "../../Maths/math.vector.pure";
 import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { CreateRibbon } from "./ribbonBuilder.pure";
-import type { Nullable } from "../../types";
-
+import { type Nullable } from "../../types"
 /**
  * Creates lathe mesh.
  * The lathe is a shape with a symmetry axis : a 2D model shape is rotated around this axis to design the lathe

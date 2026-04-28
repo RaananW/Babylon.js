@@ -3,18 +3,18 @@
 export * from "./fluidRenderer.types";
 
 import { Scene } from "core/scene.pure";
-import type { AbstractEngine } from "core/Engines/abstractEngine";
-import type { FloatArray, Nullable } from "core/types";
-import type { Observer } from "core/Misc/observable";
-import type { Camera } from "core/Cameras/camera";
-import type { IParticleSystem } from "core/Particles/IParticleSystem";
-import type { ISceneComponent } from "core/sceneComponent";
+import { type AbstractEngine } from "core/Engines/abstractEngine"
+import { type FloatArray, type Nullable } from "core/types"
+import { type Observer } from "core/Misc/observable"
+import { type Camera } from "core/Cameras/camera"
+import { type IParticleSystem } from "core/Particles/IParticleSystem"
+import { type ISceneComponent } from "core/sceneComponent"
 import { SceneComponentConstants } from "core/sceneComponent";
-import type { SmartArrayNoDuplicate } from "core/Misc/smartArray";
-import type { RenderTargetTexture } from "core/Materials/Textures/renderTargetTexture";
+import { type SmartArrayNoDuplicate } from "core/Misc/smartArray"
+import { type RenderTargetTexture } from "core/Materials/Textures/renderTargetTexture"
 import { Constants } from "core/Engines/constants";
-import type { Buffer } from "core/Buffers/buffer";
-import type { FluidRenderingObject } from "./fluidRenderingObject";
+import { type Buffer } from "core/Buffers/buffer"
+import { type FluidRenderingObject } from "./fluidRenderingObject"
 import { FluidRenderingObjectParticleSystem } from "./fluidRenderingObjectParticleSystem";
 import { FluidRenderingTargetRenderer } from "./fluidRenderingTargetRenderer";
 import { FluidRenderingObjectCustomParticles } from "./fluidRenderingObjectCustomParticles";

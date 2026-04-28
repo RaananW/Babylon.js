@@ -1,6 +1,5 @@
-import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { RenderTargetCreationOptions } from "../../Materials/Textures/textureCreationOptions";
-
+import { type RenderTargetWrapper } from "../renderTargetWrapper"
+import { type RenderTargetCreationOptions } from "../../Materials/Textures/textureCreationOptions"
 declare module "../../Engines/abstractEngine" {
     /**
      *

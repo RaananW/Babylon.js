@@ -1,13 +1,4 @@
-import type {
-    FrameGraph,
-    FrameGraphRenderPass,
-    FrameGraphObjectRendererTask,
-    FrameGraphTextureCreationOptions,
-    Observer,
-    ObjectRenderer,
-    FrameGraphTextureHandle,
-    Scene,
-} from "core/index";
+import { type FrameGraph, type FrameGraphRenderPass, type FrameGraphObjectRendererTask, type FrameGraphTextureCreationOptions, type Observer, type ObjectRenderer, type FrameGraphTextureHandle, type Scene } from "core/index"
 import { ThinTAAPostProcess } from "core/PostProcesses/thinTAAPostProcess";
 import { FrameGraphPostProcessTask } from "./postProcessTask";
 import { Constants } from "core/Engines/constants";

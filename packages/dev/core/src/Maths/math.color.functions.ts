@@ -1,5 +1,5 @@
-import type { DeepImmutable } from "../types";
-import type { IColor3Like, IColor4Like } from "./math.like";
+import { type DeepImmutable } from "../types"
+import { type IColor3Like, type IColor4Like } from "./math.like"
 import { ToGammaSpace, ToLinearSpace } from "./math.constants";
 
 export { Color3LerpToRef, Color3HSVtoRGBToRef, Color4LerpToRef } from "./math.color.pure";

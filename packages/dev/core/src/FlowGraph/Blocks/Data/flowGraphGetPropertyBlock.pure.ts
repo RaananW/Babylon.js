@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
-import type { AssetType, FlowGraphAssetType } from "core/FlowGraph/flowGraphAssetsContext";
-import type { IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock";
-import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
-import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
+import { type AssetType, type FlowGraphAssetType } from "core/FlowGraph/flowGraphAssetsContext"
+import { type IFlowGraphBlockConfiguration } from "core/FlowGraph/flowGraphBlock"
+import { type FlowGraphContext } from "core/FlowGraph/flowGraphContext"
+import { type FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection"
 import { RichTypeAny } from "core/FlowGraph/flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { FlowGraphCachedOperationBlock } from "./flowGraphCachedOperationBlock";

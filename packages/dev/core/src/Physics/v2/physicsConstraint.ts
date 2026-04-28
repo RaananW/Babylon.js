@@ -1,7 +1,7 @@
-import type { Scene } from "../../scene";
-import type { Vector3 } from "../../Maths/math.vector";
-import type { Nullable } from "../../types";
-import type { IPhysicsEnginePluginV2, PhysicsConstraintParameters, PhysicsConstraintAxisLimitMode, PhysicsConstraintMotorType, ConstrainedBodyPair } from "./IPhysicsEnginePlugin";
+import { type Scene } from "../../scene"
+import { type Vector3 } from "../../Maths/math.vector"
+import { type Nullable } from "../../types"
+import { type IPhysicsEnginePluginV2, type PhysicsConstraintParameters, type PhysicsConstraintAxisLimitMode, type PhysicsConstraintMotorType, type ConstrainedBodyPair } from "./IPhysicsEnginePlugin"
 import { PhysicsConstraintAxis, PhysicsConstraintType } from "./IPhysicsEnginePlugin";
 
 /**

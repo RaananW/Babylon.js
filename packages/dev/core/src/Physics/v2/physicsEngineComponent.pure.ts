@@ -1,8 +1,8 @@
 export * from "./physicsEngineComponent.types";
 
-import type { Nullable } from "../../types";
-import type { Vector3 } from "../../Maths/math.vector";
-import type { PhysicsBody } from "./physicsBody";
+import { type Nullable } from "../../types"
+import { type Vector3 } from "../../Maths/math.vector"
+import { type PhysicsBody } from "./physicsBody"
 import { TransformNode } from "../../Meshes/transformNode";
 
 let _registered = false;

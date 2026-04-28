@@ -1,15 +1,15 @@
 /** This file must only contain pure code and pure imports */
 
 export * from "./particleHelper.types";
-import type { Nullable } from "../types";
-import type { Scene } from "../scene";
+import { type Nullable } from "../types"
+import { type Scene } from "../scene"
 import { Tools, ToolsLoadFile } from "../Misc/tools.pure";
-import type { Vector3 } from "../Maths/math.vector";
+import { type Vector3 } from "../Maths/math.vector"
 import { Color4 } from "../Maths/math.color.pure";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
+import { type AbstractMesh } from "../Meshes/abstractMesh"
 import { Texture } from "../Materials/Textures/texture.pure";
 import { EngineStore } from "../Engines/engineStore";
-import type { IParticleSystem } from "./IParticleSystem";
+import { type IParticleSystem } from "./IParticleSystem"
 import { GPUParticleSystem } from "./gpuParticleSystem.pure";
 import { ParticleSystemSet } from "./particleSystemSet";
 import { ParticleSystem } from "./particleSystem.pure";

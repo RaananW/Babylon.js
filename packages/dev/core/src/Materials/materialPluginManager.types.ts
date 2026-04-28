@@ -1,5 +1,4 @@
-import type { MaterialPluginManager } from "./materialPluginManager.pure";
-
+import { type MaterialPluginManager } from "./materialPluginManager.pure"
 declare module "./material" {
     /**
      *

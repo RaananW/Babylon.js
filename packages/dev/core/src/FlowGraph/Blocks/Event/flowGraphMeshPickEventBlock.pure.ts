@@ -1,16 +1,16 @@
 /** This file must only contain pure code and pure imports */
 
-import type { AbstractMesh } from "../../../Meshes/abstractMesh";
+import { type AbstractMesh } from "../../../Meshes/abstractMesh"
 import { FlowGraphEventBlock } from "../../flowGraphEventBlock";
-import type { PointerInfo } from "../../../Events/pointerEvents";
+import { type PointerInfo } from "../../../Events/pointerEvents"
 import { PointerEventTypes } from "../../../Events/pointerEvents";
-import type { FlowGraphContext } from "../../flowGraphContext";
-import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
+import { type FlowGraphContext } from "../../flowGraphContext"
+import { type IFlowGraphBlockConfiguration } from "../../flowGraphBlock"
 import { _IsDescendantOf } from "../../utils";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
-import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
+import { type FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection"
 import { RichTypeAny, RichTypeNumber, RichTypeVector3 } from "core/FlowGraph/flowGraphRichTypes.pure";
-import type { Vector3 } from "core/Maths/math.vector";
+import { type Vector3 } from "core/Maths/math.vector"
 import { FlowGraphEventType } from "core/FlowGraph/flowGraphEventType";
 import { RegisterClass } from "../../../Misc/typeStore";
 

@@ -1,7 +1,6 @@
-import type { DepthTextureCreationOptions, TextureSize } from "../../Materials/Textures/textureCreationOptions";
-import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { InternalTexture } from "../../Materials/Textures/internalTexture";
-
+import { type DepthTextureCreationOptions, type TextureSize } from "../../Materials/Textures/textureCreationOptions"
+import { type RenderTargetWrapper } from "../renderTargetWrapper"
+import { type InternalTexture } from "../../Materials/Textures/internalTexture"
 declare module "../../Engines/abstractEngine" {
     /**
      *

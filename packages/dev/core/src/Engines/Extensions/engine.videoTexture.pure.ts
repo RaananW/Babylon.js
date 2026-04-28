@@ -1,7 +1,7 @@
 export * from "./engine.videoTexture.types";
 
-import type { InternalTexture } from "../../Materials/Textures/internalTexture";
-import type { Nullable } from "../../types";
+import { type InternalTexture } from "../../Materials/Textures/internalTexture"
+import { type Nullable } from "../../types"
 import { ThinEngine } from "../../Engines/thinEngine";
 import { Constants } from "../constants";
 

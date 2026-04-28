@@ -1,11 +1,11 @@
-import type { IAssetContainer } from "core/IAssetContainer";
+import { type IAssetContainer } from "core/IAssetContainer"
 import { Color3, Color4 } from "../Maths/math.color";
 import { Matrix, Quaternion, Vector2, Vector3, Vector4 } from "../Maths/math.vector";
-import type { Scene } from "../scene";
+import { type Scene } from "../scene"
 import { FlowGraphBlockNames } from "./Blocks/flowGraphBlockNames";
 import { FlowGraphInteger } from "./CustomTypes/flowGraphInteger";
 import { FlowGraphTypes, getRichTypeByFlowGraphType } from "./flowGraphRichTypes";
-import type { TransformNode } from "core/Meshes/transformNode";
+import { type TransformNode } from "core/Meshes/transformNode"
 import { FlowGraphMatrix2D, FlowGraphMatrix3D } from "./CustomTypes/flowGraphMatrix";
 
 function IsMeshClassName(className: string) {

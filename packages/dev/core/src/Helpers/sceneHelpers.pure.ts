@@ -1,16 +1,16 @@
 /** This file must only contain pure code and pure imports */
 
 export * from "./sceneHelpers.types";
-import type { Nullable } from "../types";
-import type { Mesh } from "../Meshes/mesh";
-import type { BaseTexture } from "../Materials/Textures/baseTexture";
+import { type Nullable } from "../types"
+import { type Mesh } from "../Meshes/mesh"
+import { type BaseTexture } from "../Materials/Textures/baseTexture"
 import { EnvironmentHelper } from "./environmentHelper";
-import type { IEnvironmentHelperOptions } from "./environmentHelper";
-import type { TargetCamera } from "../Cameras/targetCamera";
+import { type IEnvironmentHelperOptions } from "./environmentHelper"
+import { type TargetCamera } from "../Cameras/targetCamera"
 import { VRExperienceHelper } from "../Cameras/VR/vrExperienceHelper";
-import type { VRExperienceHelperOptions } from "../Cameras/VR/vrExperienceHelper";
+import { type VRExperienceHelperOptions } from "../Cameras/VR/vrExperienceHelper"
 import { WebXRDefaultExperience } from "../XR/webXRDefaultExperience";
-import type { WebXRDefaultExperienceOptions } from "../XR/webXRDefaultExperience";
+import { type WebXRDefaultExperienceOptions } from "../XR/webXRDefaultExperience"
 import { Logger } from "../Misc/logger";
 import { Scene } from "../scene";
 import { Vector3 } from "../Maths/math.vector";

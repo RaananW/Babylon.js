@@ -1,20 +1,4 @@
-import type {
-    FrameGraph,
-    FrameGraphTextureHandle,
-    Scene,
-    FrameGraphTextureCreationOptions,
-    Effect,
-    ThinBlurPostProcess,
-    AbstractEngine,
-    Nullable,
-    Observer,
-    RenderingGroupInfo,
-    ThinEffectLayer,
-    FrameGraphRenderPass,
-    FrameGraphRenderContext,
-    FrameGraphPass,
-    FrameGraphContext,
-} from "core/index";
+import { type FrameGraph, type FrameGraphTextureHandle, type Scene, type FrameGraphTextureCreationOptions, type Effect, type ThinBlurPostProcess, type AbstractEngine, type Nullable, type Observer, type RenderingGroupInfo, type ThinEffectLayer, type FrameGraphRenderPass, type FrameGraphRenderContext, type FrameGraphPass, type FrameGraphContext } from "core/index"
 import { FrameGraphTask } from "../../frameGraphTask";
 import { FrameGraphObjectRendererTask } from "../Rendering/objectRendererTask";
 import { FrameGraphClearTextureTask } from "../Texture/clearTextureTask";

@@ -1,8 +1,8 @@
-import type { Scene } from "core/scene";
-import type { DeepImmutable, Nullable } from "core/types";
-import type { BaseTexture } from "core/Materials/Textures/baseTexture";
+import { type Scene } from "core/scene"
+import { type DeepImmutable, type Nullable } from "core/types"
+import { type BaseTexture } from "core/Materials/Textures/baseTexture"
 import { SubMesh } from "../subMesh";
-import type { AbstractMesh } from "../abstractMesh";
+import { type AbstractMesh } from "../abstractMesh"
 import { Mesh } from "../mesh.pure";
 import { VertexData } from "../mesh.vertexData.pure";
 import { Matrix, TmpVectors, Vector2, Vector3 } from "core/Maths/math.vector.pure";
@@ -11,17 +11,18 @@ import { Logger } from "core/Misc/logger";
 import { GaussianSplattingMaterial, GetGaussianSplattingMaxPartCount } from "core/Materials/GaussianSplatting/gaussianSplattingMaterial.pure";
 import { RawTexture } from "core/Materials/Textures/rawTexture.pure";
 import { Constants } from "core/Engines/constants";
-import type { ThinEngine } from "core/Engines/thinEngine";
+import { type ThinEngine } from "core/Engines/thinEngine"
 import { ToHalfFloat } from "core/Misc/textureTools";
-import type { Material } from "core/Materials/material";
+import { type Material } from "core/Materials/material"
 import { Scalar } from "core/Maths/math.scalar";
-import type { Coroutine } from "core/Misc/coroutine";
+import { type Coroutine } from "core/Misc/coroutine"
 import { runCoroutineSync, runCoroutineAsync, createYieldingScheduler } from "core/Misc/coroutine";
 import { EngineStore } from "core/Engines/engineStore";
-import type { Camera } from "core/Cameras/camera";
+import { type Camera } from "core/Cameras/camera"
 import { ImportMeshAsync } from "core/Loading/sceneLoader";
-import type { INative } from "core/Engines/Native/nativeInterfaces";
+import { type INative } from "core/Engines/Native/nativeInterfaces"
 import { GaussianSplattingPartProxyMesh } from "./gaussianSplattingPartProxyMesh";
+import { DecodeBase64ToBinary } from "core/Misc/stringTools";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 declare const _native: INative;
@@ -749,7 +750,7 @@ export class GaussianSplattingMesh extends Mesh {
 
         // geometry used for shadows, bind the first found in the camera view infos
         if (!this._geometry && this._cameraViewInfos.size) {
-            this._geometry = this._cameraViewInfos.values().next().value.mesh.geometry;
+            this._geometry = this._cameraViewInfos.values().next().value!.mesh.geometry;
         }
 
         const cameraId = this._scene.activeCamera!.uniqueId;
@@ -2238,7 +2239,7 @@ export class GaussianSplattingMesh extends Mesh {
      * @param disposeOther - Whether to dispose the other mesh after adding it to the current mesh.
      * @returns a placeholder mesh that can be used to manipulate the part transform
      */
-    public addPart(other: GaussianSplattingMesh, disposeOther: boolean = true): Mesh {
+    public addPart(other: GaussianSplattingMesh, disposeOther: boolean = true): GaussianSplattingPartProxyMesh {
         const maxPartCount = GetGaussianSplattingMaxPartCount(this._scene.getEngine());
         if (this.partCount >= maxPartCount) {
             throw new Error(`Cannot add part, as the maximum part count (${maxPartCount}) has been reached`);
@@ -2339,6 +2340,23 @@ export class GaussianSplattingMesh extends Mesh {
         this._partProxies.set(newPartIndex, proxyMesh);
 
         return proxyMesh;
+    }
+
+    /**
+     * Add multiple meshes as new parts in a single operation.
+     * @param others - Source meshes to append (must each be non-compound and fully loaded)
+     * @param disposeOthers - Dispose source meshes after appending
+     * @returns Proxy meshes and their assigned part indices
+     */
+    protected _addPartsInternal(others: GaussianSplattingMesh[], disposeOthers: boolean): { proxyMeshes: GaussianSplattingPartProxyMesh[]; assignedPartIndices: number[] } {
+        const proxyMeshes: GaussianSplattingPartProxyMesh[] = [];
+        const assignedPartIndices: number[] = [];
+        for (const other of others) {
+            const proxy = this.addPart(other, disposeOthers) as GaussianSplattingPartProxyMesh;
+            proxyMeshes.push(proxy);
+            assignedPartIndices.push(proxy.partIndex);
+        }
+        return { proxyMeshes, assignedPartIndices };
     }
 
     /**
@@ -2446,6 +2464,90 @@ export class GaussianSplattingMesh extends Mesh {
             proxy.updatePartIndex(oldIndex - 1);
             this._partProxies.set(oldIndex - 1, proxy);
         }
+    }
+
+    /**
+     * Serialize current GaussianSplattingMesh
+     * @param serializationObject defines the object which will receive the serialization data
+     * @param _encoding the encoding of binary data, defaults to base64 for json serialize,
+     * kept for future internal use like cloning where base64 encoding wastes cycles and memory
+     * @returns the serialized object
+     */
+    public override serialize(serializationObject: any = {}, _encoding: string = "base64"): any {
+        serializationObject = super.serialize(serializationObject);
+        serializationObject.type = this.getClassName();
+        serializationObject.keepInRam = this._keepInRam;
+        serializationObject.disableDepthSort = this._disableDepthSort;
+        serializationObject.viewUpdateThreshold = this.viewUpdateThreshold;
+        return serializationObject;
+    }
+
+    /**
+     * Internal static method for parsing a serialized GaussianSplattingMesh or GaussianSplattingCompoundMesh
+     * @param parsedMesh the serialized mesh
+     * @param scene the scene to create the mesh in
+     * @param ctor the constructor of the mesh to create
+     * @returns the created mesh
+     * @internal
+     */
+    public static _ParseInternal<T extends GaussianSplattingMesh>(
+        parsedMesh: any,
+        scene: Scene,
+        ctor: new (name: string, url: Nullable<string>, scene: Nullable<Scene>, keepInRam: boolean) => T
+    ): T {
+        const mesh = new ctor(parsedMesh.name, null, scene, parsedMesh.keepInRam);
+
+        mesh.disableDepthSort = parsedMesh.disableDepthSort ?? false;
+        mesh.viewUpdateThreshold = parsedMesh.viewUpdateThreshold ?? GaussianSplattingMesh._DefaultViewUpdateThreshold;
+
+        let splatsData: ArrayBuffer | string | undefined = parsedMesh.splatsData;
+        if (typeof splatsData === "string") {
+            splatsData = DecodeBase64ToBinary(splatsData);
+        }
+
+        const shData: string[] | Uint8Array[] | undefined = parsedMesh.shData;
+        let parsedShData: Uint8Array[] | undefined;
+        if (Array.isArray(shData) && shData.length) {
+            const newData: Uint8Array[] = [];
+            for (let i = 0, length = shData.length; i < length; i++) {
+                const data = shData[i];
+                if (typeof data === "string") {
+                    newData[i] = new Uint8Array(DecodeBase64ToBinary(data));
+                } else {
+                    newData[i] = data;
+                }
+            }
+            parsedShData = newData;
+        }
+
+        if (splatsData) {
+            const flipY = parsedMesh._flipY ?? false;
+            mesh.updateData(splatsData, parsedShData, { flipY });
+        }
+
+        if (parsedMesh.partProxies) {
+            for (const serializedPart of parsedMesh.partProxies) {
+                const part = Object.assign({}, serializedPart);
+                part.compoundSplatMesh = mesh;
+                const proxyMesh = Mesh.Parse(part, scene, "") as GaussianSplattingPartProxyMesh;
+                const newPartIndex = proxyMesh.partIndex;
+                mesh._partProxies.set(newPartIndex, proxyMesh);
+                mesh.setWorldMatrixForPart(newPartIndex, proxyMesh.getWorldMatrix());
+                mesh.setPartVisibility(newPartIndex, proxyMesh.visibility);
+            }
+        }
+
+        return mesh;
+    }
+
+    /**
+     * Parses a serialized GaussianSplattingMesh
+     * @param parsedMesh the serialized mesh
+     * @param scene the scene to create the GaussianSplattingMesh in
+     * @returns the created GaussianSplattingMesh
+     */
+    public static override Parse(parsedMesh: any, scene: Scene): GaussianSplattingMesh {
+        return GaussianSplattingMesh._ParseInternal(parsedMesh, scene, GaussianSplattingMesh);
     }
 
     /**

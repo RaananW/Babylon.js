@@ -1,6 +1,6 @@
 export * from "./engine.dynamicTexture.types";
 
-import type { ImageSource, Nullable } from "../../types";
+import { type ImageSource, type Nullable } from "../../types"
 import { GetExponentOfTwo } from "core/Misc/tools.functions";
 import { ThinEngine } from "../../Engines/thinEngine";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";

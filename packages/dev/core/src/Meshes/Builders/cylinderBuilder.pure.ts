@@ -5,7 +5,7 @@ import { Color4 } from "../../Maths/math.color.pure";
 import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexData, VertexData_ComputeSides } from "../mesh.vertexData.pure";
 
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { Axis } from "../../Maths/math.axis";
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 import { Scene } from "../../scene.pure";

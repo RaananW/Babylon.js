@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
-import type { RichType } from "core/FlowGraph/flowGraphRichTypes";
+import { type RichType } from "core/FlowGraph/flowGraphRichTypes"
 import { FlowGraphExecutionBlockWithOutSignal } from "../../flowGraphExecutionBlockWithOutSignal";
-import type { FlowGraphContext } from "../../flowGraphContext";
-import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
+import { type FlowGraphContext } from "../../flowGraphContext"
+import { type IFlowGraphBlockConfiguration } from "../../flowGraphBlock"
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { RegisterClass } from "../../../Misc/typeStore";
 

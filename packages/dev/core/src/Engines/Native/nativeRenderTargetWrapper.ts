@@ -1,9 +1,8 @@
-import type { Nullable } from "../../types";
-import type { TextureSize } from "../../Materials/Textures/textureCreationOptions";
+import { type Nullable } from "../../types"
+import { type TextureSize } from "../../Materials/Textures/textureCreationOptions"
 import { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { NativeFramebuffer } from "./nativeInterfaces";
-import type { ThinNativeEngine } from "../thinNativeEngine";
-
+import { type NativeFramebuffer } from "./nativeInterfaces"
+import { type ThinNativeEngine } from "../thinNativeEngine"
 /**
  *
  */

@@ -1,7 +1,6 @@
-import type { ImageSource, Nullable } from "../../../types";
-import type { ICanvas } from "../../../Engines/ICanvas";
-import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
-
+import { type ImageSource, type Nullable } from "../../../types"
+import { type ICanvas } from "../../../Engines/ICanvas"
+import { type InternalTexture } from "../../../Materials/Textures/internalTexture"
 declare module "../../abstractEngine" {
     /**
      *

@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
 import { Vector4 } from "core/Maths/math.vector.pure";
-import type { Vector2 } from "core/Maths/math.vector";
+import { type Vector2 } from "core/Maths/math.vector"
 import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryConnectionPointTypes";
-import type { INodeGeometryTextureData } from "../../Interfaces/nodeGeometryTextureData";
+import { type INodeGeometryTextureData } from "../../Interfaces/nodeGeometryTextureData"
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
+import { type NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint"
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
-import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
+import { type NodeGeometryBuildState } from "../../nodeGeometryBuildState"
 import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**

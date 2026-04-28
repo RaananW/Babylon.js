@@ -2,10 +2,10 @@
 
 import { NodeMaterialBlock } from "../../nodeMaterialBlock";
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
-import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
+import { type NodeMaterialBuildState } from "../../nodeMaterialBuildState"
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
-import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
-import type { NodeMaterial } from "../../nodeMaterial";
+import { type NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint"
+import { type NodeMaterial } from "../../nodeMaterial"
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
 import { InputBlock } from "../Input/inputBlock.pure";
 import { RegisterClass } from "../../../../Misc/typeStore";

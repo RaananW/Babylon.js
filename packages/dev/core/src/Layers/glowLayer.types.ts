@@ -1,6 +1,5 @@
-import type { GlowLayer } from "./glowLayer.pure";
-import type { Nullable } from "../types";
-
+import { type GlowLayer } from "./glowLayer.pure"
+import { type Nullable } from "../types"
 declare module "../scene" {
     /**
      *

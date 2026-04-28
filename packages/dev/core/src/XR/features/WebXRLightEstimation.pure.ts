@@ -4,9 +4,9 @@ import { WebGLHardwareTexture } from "../../Engines/WebGL/webGLHardwareTexture";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Observable } from "../../Misc/observable";
 import { ToolsWarn } from "../../Misc/tools.pure";
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { WebXRFeatureName } from "../webXRFeaturesManager";
-import type { WebXRSessionManager } from "../webXRSessionManager";
+import { type WebXRSessionManager } from "../webXRSessionManager"
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { Constants } from "../../Engines/constants";
 import { Color3, Color3White } from "../../Maths/math.color.pure";
@@ -16,7 +16,7 @@ import { BaseTexture } from "../../Materials/Textures/baseTexture.pure";
 import { SphericalHarmonics, SphericalPolynomial } from "../../Maths/sphericalPolynomial.pure";
 import { LightConstants } from "../../Lights/lightConstants";
 import { HDRFiltering } from "core/Materials/Textures/Filtering/hdrFiltering";
-import type { ThinEngine } from "core/Engines";
+import { type ThinEngine } from "core/Engines"
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**

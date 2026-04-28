@@ -2,7 +2,7 @@
 
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { type NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint"
 import { VertexDataComputeNormals } from "../../mesh.vertexData.pure";
 import { RegisterClass } from "../../../Misc/typeStore";
 

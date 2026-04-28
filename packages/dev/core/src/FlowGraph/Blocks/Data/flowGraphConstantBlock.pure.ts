@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
 import { FlowGraphBlock } from "core/FlowGraph/flowGraphBlock";
-import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
-import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
+import { type FlowGraphContext } from "core/FlowGraph/flowGraphContext"
+import { type FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection"
 import { getRichTypeFromValue } from "core/FlowGraph/flowGraphRichTypes.pure";
-import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
+import { type IFlowGraphBlockConfiguration } from "../../flowGraphBlock"
 import { defaultValueSerializationFunction } from "core/FlowGraph/serialization";
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { RegisterClass } from "../../../Misc/typeStore";

@@ -1,6 +1,5 @@
-import type { SelectionOutlineLayer } from "./selectionOutlineLayer.pure";
-import type { Nullable } from "../types";
-
+import { type SelectionOutlineLayer } from "./selectionOutlineLayer.pure"
+import { type Nullable } from "../types"
 declare module "../scene" {
     /**
      *

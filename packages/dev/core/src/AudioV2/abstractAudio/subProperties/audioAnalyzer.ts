@@ -1,8 +1,8 @@
 import { Logger } from "../../../Misc/logger";
-import type { Nullable } from "../../../types";
-import type { AudioAnalyzerFFTSizeType } from "../../abstractAudio/subProperties/abstractAudioAnalyzer";
+import { type Nullable } from "../../../types"
+import { type AudioAnalyzerFFTSizeType } from "../../abstractAudio/subProperties/abstractAudioAnalyzer"
 import { _AudioAnalyzerDefaults, AbstractAudioAnalyzer } from "../../abstractAudio/subProperties/abstractAudioAnalyzer";
-import type { _AbstractAudioSubGraph } from "../subNodes/abstractAudioSubGraph";
+import { type _AbstractAudioSubGraph } from "../subNodes/abstractAudioSubGraph"
 import { _GetAudioAnalyzerSubNode, _SetAudioAnalyzerProperty } from "../subNodes/audioAnalyzerSubNode";
 import { AudioSubNode } from "../subNodes/audioSubNode";
 

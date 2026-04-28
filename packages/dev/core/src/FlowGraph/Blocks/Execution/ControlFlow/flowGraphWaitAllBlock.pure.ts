@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
-import type { FlowGraphContext } from "../../../flowGraphContext";
-import type { FlowGraphSignalConnection } from "../../../flowGraphSignalConnection";
+import { type FlowGraphContext } from "../../../flowGraphContext"
+import { type FlowGraphSignalConnection } from "../../../flowGraphSignalConnection"
 import { FlowGraphExecutionBlockWithOutSignal } from "../../../flowGraphExecutionBlockWithOutSignal";
-import type { IFlowGraphBlockConfiguration } from "../../../flowGraphBlock";
-import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
+import { type IFlowGraphBlockConfiguration } from "../../../flowGraphBlock"
+import { type FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection"
 import { RichTypeFlowGraphInteger } from "core/FlowGraph/flowGraphRichTypes.pure";
 import { FlowGraphBlockNames } from "../../flowGraphBlockNames";
 import { FlowGraphInteger } from "core/FlowGraph/CustomTypes/flowGraphInteger.pure";

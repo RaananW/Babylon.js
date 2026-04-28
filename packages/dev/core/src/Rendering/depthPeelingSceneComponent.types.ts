@@ -1,6 +1,5 @@
-import type { ThinDepthPeelingRenderer } from "./thinDepthPeelingRenderer";
-import type { Nullable } from "../types";
-
+import { type ThinDepthPeelingRenderer } from "./thinDepthPeelingRenderer"
+import { type Nullable } from "../types"
 declare module "../scene" {
     /**
      *

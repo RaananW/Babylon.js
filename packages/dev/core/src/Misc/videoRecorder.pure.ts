@@ -2,10 +2,9 @@
 
 export * from "./videoRecorder.types";
 /* eslint-disable no-var */
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { ToolsDownload } from "./tools.pure";
-import type { AbstractEngine } from "../Engines/abstractEngine";
-
+import { type AbstractEngine } from "../Engines/abstractEngine"
 interface MediaRecorder {
     /** Starts recording */
     start(timeSlice: number): void;

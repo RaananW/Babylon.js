@@ -1,5 +1,4 @@
-import type { DebugLayer } from "./debugLayer.pure";
-
+import { type DebugLayer } from "./debugLayer.pure"
 declare module "../scene" {
     /**
      *

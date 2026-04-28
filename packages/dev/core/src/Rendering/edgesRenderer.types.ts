@@ -1,8 +1,7 @@
-import type { Nullable } from "../types";
-import type { ShaderMaterial } from "../Materials/shaderMaterial.pure";
-import type { EdgesRenderer } from "./edgesRenderer.pure";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-
+import { type Nullable } from "../types"
+import { type ShaderMaterial } from "../Materials/shaderMaterial.pure"
+import { type EdgesRenderer } from "./edgesRenderer.pure"
+import { type AbstractMesh } from "../Meshes/abstractMesh"
 declare module "../scene" {
     /**
      *

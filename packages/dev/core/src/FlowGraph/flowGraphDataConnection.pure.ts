@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "core/types";
-import type { FlowGraphBlock } from "./flowGraphBlock";
+import { type Nullable } from "core/types"
+import { type FlowGraphBlock } from "./flowGraphBlock"
 import { FlowGraphConnection, FlowGraphConnectionType } from "./flowGraphConnection";
-import type { FlowGraphContext } from "./flowGraphContext";
-import type { RichType } from "./flowGraphRichTypes";
+import { type FlowGraphContext } from "./flowGraphContext"
+import { type RichType } from "./flowGraphRichTypes"
 import { Observable } from "core/Misc/observable";
 import { defaultValueSerializationFunction } from "./serialization";
 import { RegisterClass } from "../Misc/typeStore";

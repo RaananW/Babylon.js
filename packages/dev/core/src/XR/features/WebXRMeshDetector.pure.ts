@@ -2,8 +2,8 @@
 
 import { WebXRFeatureName } from "../webXRFeaturesManager";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
-import type { WebXRSessionManager } from "../webXRSessionManager";
-import type { TransformNode } from "../../Meshes/transformNode";
+import { type WebXRSessionManager } from "../webXRSessionManager"
+import { type TransformNode } from "../../Meshes/transformNode"
 import { Matrix, Quaternion } from "../../Maths/math.pure";
 import { Observable } from "../../Misc/observable";
 import { Mesh } from "../../Meshes/mesh.pure";

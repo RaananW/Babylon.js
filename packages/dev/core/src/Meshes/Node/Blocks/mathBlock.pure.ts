@@ -1,12 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { type NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint"
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
-import type { NodeGeometryBuildState } from "../nodeGeometryBuildState";
+import { type NodeGeometryBuildState } from "../nodeGeometryBuildState"
 import { Vector2, Vector3, Vector4 } from "core/Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
-import type { Observer } from "core/Misc/observable";
+import { type Observer } from "core/Misc/observable"
 import { RegisterClass } from "../../../Misc/typeStore";
 
 /**

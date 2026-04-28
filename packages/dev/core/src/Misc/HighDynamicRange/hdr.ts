@@ -1,4 +1,4 @@
-import type { CubeMapInfo } from "./panoramaToCubemap";
+import { type CubeMapInfo } from "./panoramaToCubemap"
 import { PanoramaToCubeMapTools } from "./panoramaToCubemap";
 
 /**

@@ -3,12 +3,12 @@
 export * from "./depthRendererSceneComponent.types";
 
 import { Scene } from "../scene.pure";
-import type { SmartArrayNoDuplicate } from "../Misc/smartArray";
-import type { ISceneComponent } from "../sceneComponent";
+import { type SmartArrayNoDuplicate } from "../Misc/smartArray"
+import { type ISceneComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
-import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
-import type { Nullable } from "../types";
-import type { Camera } from "../Cameras/camera";
+import { type RenderTargetTexture } from "../Materials/Textures/renderTargetTexture"
+import { type Nullable } from "../types"
+import { type Camera } from "../Cameras/camera"
 import { DepthRenderer } from "./depthRenderer";
 import { Constants } from "../Engines/constants";
 

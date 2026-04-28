@@ -1,5 +1,4 @@
-import type { _IProcessingOptions } from "./shaderProcessingOptions";
-
+import { type _IProcessingOptions } from "./shaderProcessingOptions"
 const DefaultAttributeKeywordName = "attribute";
 const DefaultVaryingKeywordName = "varying";
 

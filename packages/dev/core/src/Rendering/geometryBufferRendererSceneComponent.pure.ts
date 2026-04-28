@@ -3,11 +3,11 @@
 export * from "./geometryBufferRendererSceneComponent.types";
 
 import { Scene } from "../scene.pure";
-import type { ISceneComponent } from "../sceneComponent";
+import { type ISceneComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
-import type { SmartArrayNoDuplicate } from "../Misc/smartArray";
-import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
-import type { Nullable } from "../types";
+import { type SmartArrayNoDuplicate } from "../Misc/smartArray"
+import { type RenderTargetTexture } from "../Materials/Textures/renderTargetTexture"
+import { type Nullable } from "../types"
 import { GeometryBufferRenderer } from "./geometryBufferRenderer";
 import { Constants } from "../Engines/constants";
 

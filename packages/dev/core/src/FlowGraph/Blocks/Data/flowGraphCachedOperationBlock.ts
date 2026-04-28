@@ -1,9 +1,9 @@
-import type { Nullable } from "../../../types";
-import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
+import { type Nullable } from "../../../types"
+import { type IFlowGraphBlockConfiguration } from "../../flowGraphBlock"
 import { FlowGraphBlock } from "../../flowGraphBlock";
-import type { FlowGraphContext } from "../../flowGraphContext";
-import type { FlowGraphDataConnection } from "../../flowGraphDataConnection";
-import type { RichType } from "../../flowGraphRichTypes";
+import { type FlowGraphContext } from "../../flowGraphContext"
+import { type FlowGraphDataConnection } from "../../flowGraphDataConnection"
+import { type RichType } from "../../flowGraphRichTypes"
 import { RichTypeBoolean } from "../../flowGraphRichTypes";
 
 const CacheName = "cachedOperationValue";

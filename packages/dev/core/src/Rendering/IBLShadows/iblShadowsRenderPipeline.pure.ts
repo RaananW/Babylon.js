@@ -1,20 +1,20 @@
 import { Constants } from "../../Engines/constants";
 import { EngineStore } from "../../Engines/engineStore";
 import { Matrix, Vector3, Vector4, Quaternion } from "../../Maths/math.vector.pure";
-import type { Mesh } from "../../Meshes/mesh";
-import type { Scene } from "../../scene";
+import { type Mesh } from "../../Meshes/mesh"
+import { type Scene } from "../../scene"
 import { Texture } from "../../Materials/Textures/texture.pure";
 import { Logger } from "../../Misc/logger";
 import { _IblShadowsVoxelRenderer } from "./iblShadowsVoxelRenderer";
 import { _IblShadowsVoxelTracingPass } from "./iblShadowsVoxelTracingPass";
-import type { WebGPUEngine } from "../../Engines/webgpuEngine";
+import { type WebGPUEngine } from "../../Engines/webgpuEngine"
 import { PostProcess } from "../../PostProcesses/postProcess.pure";
-import type { PostProcessOptions } from "../../PostProcesses/postProcess";
+import { type PostProcessOptions } from "../../PostProcesses/postProcess"
 import { _IblShadowsSpatialBlurPass } from "./iblShadowsSpatialBlurPass";
 import { _IblShadowsAccumulationPass } from "./iblShadowsAccumulationPass";
 import { PostProcessRenderPipeline } from "../../PostProcesses/RenderPipeline/postProcessRenderPipeline";
 import { PostProcessRenderEffect } from "core/PostProcesses/RenderPipeline/postProcessRenderEffect";
-import type { Camera } from "core/Cameras/camera";
+import { type Camera } from "core/Cameras/camera"
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { GeometryBufferRenderer } from "core/Rendering/geometryBufferRenderer.pure";
 import { RawTexture } from "core/Materials/Textures/rawTexture.pure";
@@ -23,7 +23,7 @@ import { Engine } from "core/Engines/engine.pure";
 import { IBLShadowsPluginMaterial } from "./iblShadowsPluginMaterial.pure";
 import { PBRBaseMaterial } from "core/Materials/PBR/pbrBaseMaterial.pure";
 import { StandardMaterial } from "core/Materials/standardMaterial.pure";
-import type { Material } from "core/Materials/material";
+import { type Material } from "core/Materials/material"
 import { Observable } from "core/Misc/observable";
 import { OpenPBRMaterial } from "core/Materials/PBR/openpbrMaterial.pure";
 import { Tools } from "../../Misc/tools.pure";

@@ -1,18 +1,4 @@
-import type {
-    Scene,
-    AbstractEngine,
-    TextureSize,
-    Nullable,
-    FrameGraphTextureCreationOptions,
-    FrameGraphTextureHandle,
-    InternalTextureCreationOptions,
-    InternalTexture,
-    FrameGraphTextureOptions,
-    FrameGraphTextureDescription,
-    RenderTargetWrapper,
-    FrameGraphTask,
-    IFrameGraphPass,
-} from "core/index";
+import { type Scene, type AbstractEngine, type TextureSize, type Nullable, type FrameGraphTextureCreationOptions, type FrameGraphTextureHandle, type InternalTextureCreationOptions, type InternalTexture, type FrameGraphTextureOptions, type FrameGraphTextureDescription, type RenderTargetWrapper, type FrameGraphTask, type IFrameGraphPass } from "core/index"
 import { getDimensionsFromTextureSize, textureSizeIsObject } from "../Materials/Textures/textureCreationOptions";
 import { Texture } from "../Materials/Textures/texture.pure";
 import { backbufferColorTextureHandle, backbufferDepthStencilTextureHandle } from "./frameGraphTypes";

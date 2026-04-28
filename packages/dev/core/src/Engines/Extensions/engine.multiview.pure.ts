@@ -1,10 +1,10 @@
 export * from "./engine.multiview.types";
 
 import { Scene } from "../../scene";
-import type { ICreateSceneUboOptions } from "../../scene";
-import type { WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper";
-import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { AbstractEngine } from "../abstractEngine";
+import { type ICreateSceneUboOptions } from "../../scene"
+import { type WebGLRenderTargetWrapper } from "../WebGL/webGLRenderTargetWrapper"
+import { type RenderTargetWrapper } from "../renderTargetWrapper"
+import { type AbstractEngine } from "../abstractEngine"
 import { Camera } from "../../Cameras/camera";
 import { Engine } from "../../Engines/engine";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
@@ -152,7 +152,11 @@ export function registerEngineMultiview(): void {
             const trackUBOsInFrame = typeof trackUBOsInFrameOrOptions === "boolean" ? trackUBOsInFrameOrOptions : trackUBOsInFrameOrOptions?.trackUBOsInFrame;
             return CreateMultiviewUbo(this.getEngine(), name, trackUBOsInFrame);
         }
-        return CurrentCreateSceneUniformBuffer.bind(this)(name, trackUBOsInFrameOrOptions);
+        return (CurrentCreateSceneUniformBuffer as (this: Scene, name?: string, trackUBOsInFrameOrOptions?: boolean | ICreateSceneUboOptions) => UniformBuffer).call(
+            this,
+            name,
+            trackUBOsInFrameOrOptions
+        );
     };
 
     Scene.prototype._updateMultiviewUbo = function (viewR?: Matrix, projectionR?: Matrix) {

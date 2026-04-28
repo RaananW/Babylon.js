@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Vector4 } from "../../Maths/math.vector";
+import { type Vector4 } from "../../Maths/math.vector"
 import { Vector3 } from "../../Maths/math.vector.pure";
 import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";
 import { VertexData, VertexDataComputeNormals, VertexData_ComputeSides } from "../mesh.vertexData.pure";
-import type { Scene } from "../../scene";
+import { type Scene } from "../../scene"
 import { useOpenGLOrientationForUV } from "../../Compat/compatibilityOptions";
 
 // based on http://code.google.com/p/away3d/source/browse/trunk/fp10/Away3D/src/away3d/primitives/TorusKnot.as?spec=svn2473&r=2473

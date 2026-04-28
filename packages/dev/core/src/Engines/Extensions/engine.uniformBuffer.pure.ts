@@ -1,9 +1,9 @@
 export * from "./engine.uniformBuffer.types";
 
-import type { FloatArray, Nullable } from "../../types";
-import type { DataBuffer } from "../../Buffers/dataBuffer";
-import type { IPipelineContext } from "../IPipelineContext";
-import type { WebGLPipelineContext } from "../WebGL/webGLPipelineContext";
+import { type FloatArray, type Nullable } from "../../types"
+import { type DataBuffer } from "../../Buffers/dataBuffer"
+import { type IPipelineContext } from "../IPipelineContext"
+import { type WebGLPipelineContext } from "../WebGL/webGLPipelineContext"
 import { ThinEngine } from "../../Engines/thinEngine";
 import { WebGLDataBuffer } from "../../Meshes/WebGL/webGLDataBuffer";
 

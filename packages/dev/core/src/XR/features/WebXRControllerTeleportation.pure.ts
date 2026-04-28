@@ -1,19 +1,19 @@
 /** This file must only contain pure code and pure imports */
 
-import type { IWebXRFeature } from "../webXRFeaturesManager";
+import { type IWebXRFeature } from "../webXRFeaturesManager"
 import { WebXRFeatureName } from "../webXRFeaturesManager";
-import type { Observer } from "../../Misc/observable";
+import { type Observer } from "../../Misc/observable"
 import { Observable } from "../../Misc/observable";
-import type { WebXRSessionManager } from "../webXRSessionManager";
-import type { Nullable } from "../../types";
-import type { WebXRInput } from "../webXRInput";
-import type { WebXRInputSource } from "../webXRInputSource";
-import type { IWebXRMotionControllerAxesValue } from "../motionController/webXRControllerComponent";
+import { type WebXRSessionManager } from "../webXRSessionManager"
+import { type Nullable } from "../../types"
+import { type WebXRInput } from "../webXRInput"
+import { type WebXRInputSource } from "../webXRInputSource"
+import { type IWebXRMotionControllerAxesValue } from "../motionController/webXRControllerComponent"
 import { WebXRControllerComponent } from "../motionController/webXRControllerComponent";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
 import { Vector3, Quaternion } from "../../Maths/math.vector.pure";
 import { Ray } from "../../Culling/ray.pure";
-import type { Material } from "../../Materials/material";
+import { type Material } from "../../Materials/material"
 import { DynamicTexture } from "../../Materials/Textures/dynamicTexture.pure";
 import { CreateCylinder } from "../../Meshes/Builders/cylinderBuilder.pure";
 import { SineEase, EasingFunction } from "../../Animations/easing";
@@ -22,16 +22,16 @@ import { Axis } from "../../Maths/math.axis";
 import { StandardMaterial } from "../../Materials/standardMaterial.pure";
 import { CreateGround } from "../../Meshes/Builders/groundBuilder.pure";
 import { CreateTorus } from "../../Meshes/Builders/torusBuilder.pure";
-import type { PickingInfo } from "../../Collisions/pickingInfo";
+import { type PickingInfo } from "../../Collisions/pickingInfo"
 import { Curve3CreateQuadraticBezier } from "../../Maths/math.path.pure";
 import { CreateLines } from "../../Meshes/Builders/linesBuilder.pure";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { Color3, Color4 } from "../../Maths/math.color.pure";
-import type { Scene } from "../../scene";
+import { type Scene } from "../../scene"
 import { UtilityLayerRenderer } from "../../Rendering/utilityLayerRenderer";
 import { PointerEventTypes } from "../../Events/pointerEvents";
 import { setAndStartTimer } from "../../Misc/timer";
-import type { LinesMesh } from "../../Meshes/linesMesh";
+import { type LinesMesh } from "../../Meshes/linesMesh"
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**

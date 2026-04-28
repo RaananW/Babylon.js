@@ -1,20 +1,20 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../../../types";
+import { type Nullable } from "../../../types"
 import { serialize } from "../../../Misc/decorators";
 import { SerializationHelperSerialize, SerializationHelperParse } from "../../../Misc/decorators.serialization.pure";
-import type { Observer } from "../../../Misc/observable";
+import { type Observer } from "../../../Misc/observable"
 import { Observable } from "../../../Misc/observable";
-import type { IAnimatable } from "../../../Animations/animatable.interface";
+import { type IAnimatable } from "../../../Animations/animatable.interface"
 import { Logger } from "../../../Misc/logger";
-import type { Camera } from "../../../Cameras/camera";
-import type { ImageProcessingConfiguration } from "../../../Materials/imageProcessingConfiguration";
+import { type Camera } from "../../../Cameras/camera"
+import { type ImageProcessingConfiguration } from "../../../Materials/imageProcessingConfiguration"
 import { Texture } from "../../../Materials/Textures/texture.pure";
-import type { AbstractEngine } from "../../../Engines/abstractEngine";
+import { type AbstractEngine } from "../../../Engines/abstractEngine"
 import { Constants } from "../../../Engines/constants";
-import type { IDisposable, Scene } from "../../../scene";
+import { type IDisposable, type Scene } from "../../../scene"
 import { GlowLayer } from "../../../Layers/glowLayer.pure";
-import type { PostProcess } from "../../../PostProcesses/postProcess";
+import { type PostProcess } from "../../../PostProcesses/postProcess"
 import { SharpenPostProcess } from "../../../PostProcesses/sharpenPostProcess.pure";
 import { ImageProcessingPostProcess } from "../../../PostProcesses/imageProcessingPostProcess";
 import { ChromaticAberrationPostProcess } from "../../../PostProcesses/chromaticAberrationPostProcess.pure";
@@ -25,7 +25,7 @@ import { PostProcessRenderEffect } from "../../../PostProcesses/RenderPipeline/p
 import { DepthOfFieldEffect, DepthOfFieldEffectBlurLevel } from "../../../PostProcesses/depthOfFieldEffect";
 import { BloomEffect } from "../../../PostProcesses/bloomEffect";
 import { EngineStore } from "../../../Engines/engineStore";
-import type { Animation } from "../../../Animations/animation";
+import { type Animation } from "../../../Animations/animation"
 import { ToolsSetImmediate } from "../../../Misc/tools.pure";
 import { RegisterClass } from "../../../Misc/typeStore";
 

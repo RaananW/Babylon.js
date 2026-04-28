@@ -1,9 +1,9 @@
 export * from "./engine.renderTarget.types";
 
-import type { RenderTargetCreationOptions, DepthTextureCreationOptions, TextureSize } from "../../../Materials/Textures/textureCreationOptions";
-import type { Nullable } from "../../../types";
-import type { RenderTargetWrapper } from "../../renderTargetWrapper";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import { type RenderTargetCreationOptions, type DepthTextureCreationOptions, type TextureSize } from "../../../Materials/Textures/textureCreationOptions"
+import { type Nullable } from "../../../types"
+import { type RenderTargetWrapper } from "../../renderTargetWrapper"
+import { type WebGPUHardwareTexture } from "../webgpuHardwareTexture"
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Constants } from "../../constants";
 import { WebGPURenderTargetWrapper } from "../webgpuRenderTargetWrapper";

@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { Mesh } from "../mesh.pure";
-import type { Scene } from "../../scene";
+import { type Scene } from "../../scene"
 import { CreateSphere } from "../Builders/sphereBuilder.pure";
 import { CreateDisc } from "./discBuilder.pure";
 

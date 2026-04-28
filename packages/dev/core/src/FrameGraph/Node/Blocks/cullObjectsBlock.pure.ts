@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { NodeRenderGraphConnectionPoint, Scene, NodeRenderGraphBuildState, FrameGraph } from "core/index";
+import { type NodeRenderGraphConnectionPoint, type Scene, type NodeRenderGraphBuildState, type FrameGraph } from "core/index"
 import { NodeRenderGraphBlock } from "../nodeRenderGraphBlock";
 import { NodeRenderGraphBlockConnectionPointTypes } from "../Types/nodeRenderGraphTypes";
 import { FrameGraphCullObjectsTask } from "../../Tasks/Misc/cullObjectsTask";
-import type { Camera } from "../../../Cameras/camera";
-import type { FrameGraphObjectList } from "core/FrameGraph/frameGraphObjectList";
+import { type Camera } from "../../../Cameras/camera"
+import { type FrameGraphObjectList } from "core/FrameGraph/frameGraphObjectList"
 import { RegisterClass } from "../../../Misc/typeStore";
 
 /**

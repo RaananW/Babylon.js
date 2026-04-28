@@ -1,5 +1,4 @@
-import type { ILTCTextures } from "core/Lights/LTC/ltcTextureTool";
-
+import { type ILTCTextures } from "core/Lights/LTC/ltcTextureTool"
 declare module "../scene" {
     /**
      *

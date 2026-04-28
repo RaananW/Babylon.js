@@ -1,10 +1,10 @@
 export * from "./particleSystemComponent.types";
 
-import type { IParticleSystem } from "./IParticleSystem";
-import type { Effect } from "../Materials/effect";
-import type { Scene } from "../scene";
-import type { AssetContainer } from "../assetContainer";
-import type { EffectFallbacks } from "../Materials/effectFallbacks";
+import { type IParticleSystem } from "./IParticleSystem"
+import { type Effect } from "../Materials/effect"
+import { type Scene } from "../scene"
+import { type AssetContainer } from "../assetContainer"
+import { type EffectFallbacks } from "../Materials/effectFallbacks"
 import { Mesh } from "../Meshes/mesh";
 import { GPUParticleSystem } from "./gpuParticleSystem";
 import { ParticleSystem } from "./particleSystem";

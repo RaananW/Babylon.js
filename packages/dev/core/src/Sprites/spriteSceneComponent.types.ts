@@ -1,12 +1,11 @@
-import type { Nullable } from "../types";
-import type { Observable } from "../Misc/observable";
-import type { Sprite } from "./sprite";
-import type { ISpriteManager } from "./spriteManager";
-import type { Ray } from "../Culling/ray.core";
-import type { Camera } from "../Cameras/camera";
-import type { PickingInfo } from "../Collisions/pickingInfo";
-import type { IReadonlyObservable } from "../Misc/observable";
-
+import { type Nullable } from "../types"
+import { type Observable } from "../Misc/observable"
+import { type Sprite } from "./sprite"
+import { type ISpriteManager } from "./spriteManager"
+import { type Ray } from "../Culling/ray.core"
+import { type Camera } from "../Cameras/camera"
+import { type PickingInfo } from "../Collisions/pickingInfo"
+import { type IReadonlyObservable } from "../Misc/observable"
 declare module "../scene" {
     /**
      *

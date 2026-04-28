@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
 import { serialize, serializeAsVector3, serializeAsMeshReference } from "../Misc/decorators";
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { Camera } from "./camera";
-import type { Scene } from "../scene";
+import { type Scene } from "../scene"
 import { Quaternion, Matrix, Vector3, Vector2, TmpVectors } from "../Maths/math.vector.pure";
 import { Epsilon } from "../Maths/math.constants";
 import { Axis } from "../Maths/math.axis";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
+import { type AbstractMesh } from "../Meshes/abstractMesh"
 import { Node } from "../node";
 
 // Temporary cache variables to avoid allocations.

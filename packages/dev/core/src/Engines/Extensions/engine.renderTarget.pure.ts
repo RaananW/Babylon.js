@@ -2,11 +2,11 @@
 
 export * from "./engine.renderTarget.types";
 
-import type { TextureSize } from "../../Materials/Textures/textureCreationOptions";
-import type { RenderTargetCreationOptions, DepthTextureCreationOptions } from "../../Materials/Textures/textureCreationOptions";
-import type { Nullable } from "../../types";
-import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture";
+import { type TextureSize } from "../../Materials/Textures/textureCreationOptions"
+import { type RenderTargetCreationOptions, type DepthTextureCreationOptions } from "../../Materials/Textures/textureCreationOptions"
+import { type Nullable } from "../../types"
+import { type RenderTargetWrapper } from "../renderTargetWrapper"
+import { type WebGLHardwareTexture } from "../WebGL/webGLHardwareTexture"
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { ThinEngine } from "../thinEngine";

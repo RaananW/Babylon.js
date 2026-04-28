@@ -2,15 +2,15 @@
 
 import { NodeMaterialBlock } from "../../nodeMaterialBlock";
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
-import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
-import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
+import { type NodeMaterialBuildState } from "../../nodeMaterialBuildState"
+import { type NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint"
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import { InputBlock } from "../Input/inputBlock.pure";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
-import type { NodeMaterialDefines } from "../../nodeMaterial";
-import type { ReflectionBlock } from "./reflectionBlock";
-import type { Nullable } from "../../../../types";
+import { type NodeMaterialDefines } from "../../nodeMaterial"
+import { type ReflectionBlock } from "./reflectionBlock"
+import { type Nullable } from "../../../../types"
 import { RefractionBlock } from "./refractionBlock.pure";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";

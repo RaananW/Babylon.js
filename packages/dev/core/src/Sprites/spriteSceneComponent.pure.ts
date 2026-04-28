@@ -2,19 +2,19 @@
 
 export * from "./spriteSceneComponent.types";
 
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { Observable } from "../Misc/observable";
 import { Scene } from "../scene.pure";
-import type { Sprite } from "./sprite";
-import type { ISpriteManager } from "./spriteManager";
+import { type Sprite } from "./sprite"
+import { type ISpriteManager } from "./spriteManager"
 import { Ray, RayZero } from "../Culling/ray.core";
-import type { Camera } from "../Cameras/camera";
+import { type Camera } from "../Cameras/camera"
 import { PickingInfo } from "../Collisions/pickingInfo";
-import type { ISceneComponent } from "../sceneComponent";
+import { type ISceneComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
 import { ActionEventCreateNewFromSprite } from "../Actions/actionEvent.pure";
 import { Constants } from "../Engines/constants";
-import type { IPointerEvent } from "../Events/deviceInputEvents";
+import { type IPointerEvent } from "../Events/deviceInputEvents"
 import { CreatePickingRayInCameraSpace, CreatePickingRayInCameraSpaceToRef } from "../Culling/ray.core";
 import { ActionEvent } from "../Actions/actionEvent";
 

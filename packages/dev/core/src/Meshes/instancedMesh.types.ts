@@ -1,6 +1,5 @@
-import type { Nullable } from "../types";
-import type { VertexBuffer } from "../Buffers/buffer";
-
+import { type Nullable } from "../types"
+import { type VertexBuffer } from "../Buffers/buffer"
 declare module "./mesh" {
     /** @internal */
     // eslint-disable-next-line @typescript-eslint/naming-convention

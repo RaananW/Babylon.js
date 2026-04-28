@@ -2,8 +2,8 @@
 
 import { NodeMaterialBlock } from "../../nodeMaterialBlock";
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
-import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
-import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
+import { type NodeMaterialBuildState } from "../../nodeMaterialBuildState"
+import { type NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint"
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
 import { InputBlock } from "../Input/inputBlock.pure";
 import { Vector2 } from "../../../../Maths/math.vector.pure";

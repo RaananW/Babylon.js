@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
 export * from "./engine.computeShader.types";
-import type { ComputeEffect, IComputeEffectCreationOptions, IComputeShaderPath } from "../../Compute/computeEffect";
-import type { IComputeContext } from "../../Compute/IComputeContext";
-import type { IComputePipelineContext } from "../../Compute/IComputePipelineContext";
-import type { Nullable } from "../../types";
-import type { DataBuffer } from "../../Buffers/dataBuffer";
+import { type ComputeEffect, type IComputeEffectCreationOptions, type IComputeShaderPath } from "../../Compute/computeEffect"
+import { type IComputeContext } from "../../Compute/IComputeContext"
+import { type IComputePipelineContext } from "../../Compute/IComputePipelineContext"
+import { type Nullable } from "../../types"
+import { type DataBuffer } from "../../Buffers/dataBuffer"
 import { ThinEngine } from "../../Engines/thinEngine";
 import { AbstractEngine } from "../abstractEngine";
 

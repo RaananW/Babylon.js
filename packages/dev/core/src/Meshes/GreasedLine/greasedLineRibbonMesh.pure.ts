@@ -1,16 +1,16 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene } from "../../scene";
+import { type Scene } from "../../scene"
 import { Quaternion, TmpVectors, Vector3 } from "../../Maths/math.vector.pure";
 
 import { Buffer } from "../../Buffers/buffer.pure";
-import type { Nullable } from "../../types";
-import type { Node } from "../../node";
+import { type Nullable } from "../../types"
+import { type Node } from "../../node"
 import { DeepCopierDeepCopy } from "../../Misc/deepCopier.pure";
 import { GreasedLineToolsConvertPoints, GreasedLineToolsToVector3Array } from "../../Misc/greasedLineTools.pure";
-import type { GreasedLineMeshOptions, GreasedLineRibbonOptions } from "./greasedLineBaseMesh";
+import { type GreasedLineMeshOptions, type GreasedLineRibbonOptions } from "./greasedLineBaseMesh"
 import { GreasedLineBaseMesh, GreasedLineRibbonAutoDirectionMode, GreasedLineRibbonFacesMode, GreasedLineRibbonPointsMode } from "./greasedLineBaseMesh";
-import type { VertexData } from "../mesh.vertexData";
+import { type VertexData } from "../mesh.vertexData"
 import { Mesh } from "../mesh.pure";
 
 /**

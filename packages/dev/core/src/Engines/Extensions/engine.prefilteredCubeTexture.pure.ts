@@ -1,8 +1,8 @@
 export * from "./engine.prefilteredCubeTexture.types";
 
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-import type { DDSInfo } from "core/Misc/dds";
+import { type Nullable } from "../../types"
+import { type Scene } from "../../scene"
+import { type DDSInfo } from "core/Misc/dds"
 import { ThinEngine } from "../../Engines/thinEngine";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";

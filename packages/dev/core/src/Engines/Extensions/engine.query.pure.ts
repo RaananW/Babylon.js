@@ -1,7 +1,7 @@
 export * from "./engine.query.types";
 
-import type { Nullable, int } from "../../types";
-import type { OcclusionQuery } from "../AbstractEngine/abstractEngine.query";
+import { type Nullable, type int } from "../../types"
+import { type OcclusionQuery } from "../AbstractEngine/abstractEngine.query"
 import { ThinEngine } from "../../Engines/thinEngine";
 import { AbstractMesh } from "../../Meshes/abstractMesh";
 import { _TimeToken } from "../../Instrumentation/timeToken";

@@ -1,14 +1,14 @@
 import { Curve3CreateQuadraticBezier } from "../Maths/math.path.pure";
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import { TmpVectors, Vector3 } from "../Maths/math.vector.pure";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-import type { IFontData } from "../Meshes/Builders/textBuilder";
+import { type AbstractMesh } from "../Meshes/abstractMesh"
+import { type IFontData } from "../Meshes/Builders/textBuilder"
 import { CreateTextShapePaths } from "../Meshes/Builders/textBuilder";
-import type { FloatArray, IndicesArray } from "../types";
-import type { GreasedLinePoints, GreasedLinePointsOptions } from "../Meshes/GreasedLine/greasedLineBaseMesh";
-import type { Color3 } from "../Maths/math.color";
+import { type FloatArray, type IndicesArray } from "../types"
+import { type GreasedLinePoints, type GreasedLinePointsOptions } from "../Meshes/GreasedLine/greasedLineBaseMesh"
+import { type Color3 } from "../Maths/math.color"
 import { RawTexture } from "../Materials/Textures/rawTexture.pure";
-import type { Scene } from "../scene";
+import { type Scene } from "../scene"
 import { Engine } from "../Engines/engine.pure";
 import { GreasedLineMaterialDefaults } from "../Materials/GreasedLine/greasedLineMaterialDefaults";
 

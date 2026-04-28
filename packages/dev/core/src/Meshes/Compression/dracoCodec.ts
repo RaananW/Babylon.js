@@ -1,7 +1,7 @@
 import { Tools } from "../../Misc/tools";
 import { AutoReleaseWorkerPool } from "../../Misc/workerPool";
-import type { WorkerPool } from "../../Misc/workerPool";
-import type { IDisposable } from "../../scene";
+import { type WorkerPool } from "../../Misc/workerPool"
+import { type IDisposable } from "../../scene"
 import { initializeWebWorker } from "./dracoCompressionWorker";
 
 /**

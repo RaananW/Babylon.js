@@ -1,10 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "core/types";
+import { type Nullable } from "core/types"
 import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
-import type { TeleportOutBlock } from "./teleportOutBlock";
+import { type NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint"
+import { type TeleportOutBlock } from "./teleportOutBlock"
 import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**

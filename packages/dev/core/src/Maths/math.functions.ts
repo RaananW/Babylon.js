@@ -1,5 +1,5 @@
-import type { FloatArray, Nullable, IndicesArray } from "../types";
-import type { Vector2 } from "./math.vector";
+import { type FloatArray, type Nullable, type IndicesArray } from "../types"
+import { type Vector2 } from "./math.vector"
 import { Vector3 } from "./math.vector";
 import { nativeOverride } from "../Misc/decorators";
 

@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
 import { FlowGraphEventBlock } from "../../flowGraphEventBlock";
-import type { FlowGraphContext } from "core/FlowGraph/flowGraphContext";
+import { type FlowGraphContext } from "core/FlowGraph/flowGraphContext"
 import { RichTypeNumber } from "core/FlowGraph/flowGraphRichTypes.pure";
-import type { FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection";
+import { type FlowGraphDataConnection } from "core/FlowGraph/flowGraphDataConnection"
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { FlowGraphEventType } from "core/FlowGraph/flowGraphEventType";
 import { RegisterClass } from "../../../Misc/typeStore";

@@ -1,27 +1,27 @@
-import type { Nullable } from "../types";
-import type { Scene } from "../scene";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
+import { type Nullable } from "../types"
+import { type Scene } from "../scene"
+import { type AbstractMesh } from "../Meshes/abstractMesh"
 import { Mesh } from "../Meshes/mesh.pure";
 import { CreateBox } from "../Meshes/Builders/boxBuilder.pure";
 import { CreateSphere } from "../Meshes/Builders/sphereBuilder.pure";
 import { Matrix, Quaternion, TmpVectors, Vector3 } from "../Maths/math.vector.pure";
 import { Color4, Color3Red, Color3Green, Color3Blue, Color3White } from "../Maths/math.color.pure";
-import type { Material } from "../Materials/material";
+import { type Material } from "../Materials/material"
 import { EngineStore } from "../Engines/engineStore";
 import { StandardMaterial } from "../Materials/standardMaterial.pure";
-import type { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "../Physics/v1/IPhysicsEnginePlugin";
+import { type IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "../Physics/v1/IPhysicsEnginePlugin"
 import { PhysicsConstraintAxis, PhysicsConstraintAxisLimitMode } from "../Physics/v2/IPhysicsEnginePlugin";
-import type { IPhysicsEnginePluginV2, PhysicsMassProperties } from "../Physics/v2/IPhysicsEnginePlugin";
+import { type IPhysicsEnginePluginV2, type PhysicsMassProperties } from "../Physics/v2/IPhysicsEnginePlugin"
 import { PhysicsImpostor } from "../Physics/v1/physicsImpostor.pure";
 import { UtilityLayerRenderer } from "../Rendering/utilityLayerRenderer";
 import { CreateCylinder } from "../Meshes/Builders/cylinderBuilder.pure";
-import type { ICreateCapsuleOptions } from "../Meshes/Builders/capsuleBuilder";
+import { type ICreateCapsuleOptions } from "../Meshes/Builders/capsuleBuilder"
 import { CreateCapsule } from "../Meshes/Builders/capsuleBuilder.pure";
 import { Logger } from "../Misc/logger";
-import type { PhysicsBody } from "../Physics/v2/physicsBody";
+import { type PhysicsBody } from "../Physics/v2/physicsBody"
 import { VertexData } from "../Meshes/mesh.vertexData.pure";
 import { MeshBuilder } from "../Meshes/meshBuilder";
-import type { PhysicsConstraint } from "../Physics/v2/physicsConstraint";
+import { type PhysicsConstraint } from "../Physics/v2/physicsConstraint"
 import { AxesViewer } from "./axesViewer";
 import { TransformNode } from "../Meshes/transformNode";
 import { Epsilon } from "../Maths/math.constants";

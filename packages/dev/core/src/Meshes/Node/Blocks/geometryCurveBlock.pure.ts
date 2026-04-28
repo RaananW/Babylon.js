@@ -2,8 +2,8 @@
 
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
-import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
-import type { float } from "core/types";
+import { type NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint"
+import { type float } from "core/types"
 import { Vector2, Vector3, Vector4 } from "core/Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
 import { RegisterClass } from "../../../Misc/typeStore";

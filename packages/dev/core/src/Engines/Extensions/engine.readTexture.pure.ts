@@ -3,8 +3,8 @@
 export * from "./engine.readTexture.types";
 
 import { allocateAndCopyTypedBuffer } from "../../Engines/abstractEngine.functions";
-import type { InternalTexture } from "../../Materials/Textures/internalTexture";
-import type { Nullable } from "../../types";
+import { type InternalTexture } from "../../Materials/Textures/internalTexture"
+import { type Nullable } from "../../types"
 import { ThinEngine } from "../../Engines/thinEngine";
 
 // back-compat

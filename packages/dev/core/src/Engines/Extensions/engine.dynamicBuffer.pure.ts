@@ -1,7 +1,7 @@
 export * from "./engine.dynamicBuffer.types";
 
-import type { DataBuffer } from "../../Buffers/dataBuffer";
-import type { IndicesArray, DataArray } from "../../types";
+import { type DataBuffer } from "../../Buffers/dataBuffer"
+import { type IndicesArray, type DataArray } from "../../types"
 import { ThinEngine } from "../../Engines/thinEngine";
 
 let _registered = false;

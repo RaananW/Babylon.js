@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
+import { type NodeMaterialBuildState } from "../nodeMaterialBuildState"
 import { BaseMathBlock } from "./baseMathBlock";
 import { RegisterClass } from "../../../Misc/typeStore";
 

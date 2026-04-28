@@ -2,11 +2,11 @@
 
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
-import type { NodeGeometryBuildState } from "../nodeGeometryBuildState";
+import { type NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint"
+import { type NodeGeometryBuildState } from "../nodeGeometryBuildState"
 import { Vector2, Vector3, Vector4 } from "../../../Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../Decorators/nodeDecorator";
-import type { EasingFunction } from "core/Animations/easing";
+import { type EasingFunction } from "core/Animations/easing"
 import { BackEase, CircleEase, CubicEase, ElasticEase, ExponentialEase, QuadraticEase, QuarticEase, QuinticEase, SineEase } from "core/Animations/easing";
 import { RegisterClass } from "../../../Misc/typeStore";
 

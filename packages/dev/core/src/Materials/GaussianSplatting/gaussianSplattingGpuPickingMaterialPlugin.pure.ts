@@ -1,15 +1,15 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-import type { AbstractEngine } from "../../Engines/abstractEngine";
-import type { SubMesh } from "../../Meshes/subMesh";
-import type { UniformBuffer } from "../uniformBuffer";
-import type { MaterialDefines } from "../materialDefines";
+import { type Nullable } from "../../types"
+import { type Scene } from "../../scene"
+import { type AbstractEngine } from "../../Engines/abstractEngine"
+import { type SubMesh } from "../../Meshes/subMesh"
+import { type UniformBuffer } from "../uniformBuffer"
+import { type MaterialDefines } from "../materialDefines"
 import { MaterialPluginBase } from "../materialPluginBase.pure";
 import { ShaderLanguage } from "../shaderLanguage";
 import { GetGaussianSplattingMaxPartCount } from "./gaussianSplattingMaterial.pure";
-import type { GaussianSplattingMaterial } from "./gaussianSplattingMaterial";
+import { type GaussianSplattingMaterial } from "./gaussianSplattingMaterial"
 import { RegisterClass } from "../../Misc/typeStore";
 
 /**

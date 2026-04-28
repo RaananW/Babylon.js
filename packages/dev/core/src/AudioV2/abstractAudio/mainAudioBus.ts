@@ -1,7 +1,6 @@
 import { AbstractAudioBus } from "./abstractAudioBus";
-import type { AudioEngineV2 } from "./audioEngineV2";
-import type { IAbstractAudioBusOptions } from "./abstractAudioBus";
-
+import { type AudioEngineV2 } from "./audioEngineV2"
+import { type IAbstractAudioBusOptions } from "./abstractAudioBus"
 /**
  * Options for creating a main audio bus.
  */

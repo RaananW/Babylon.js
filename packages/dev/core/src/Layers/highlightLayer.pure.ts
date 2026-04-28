@@ -4,31 +4,31 @@ export * from "./highlightLayer.types";
 
 import { serialize } from "../Misc/decorators";
 import { Observable } from "../Misc/observable";
-import type { Nullable } from "../types";
-import type { Camera } from "../Cameras/camera";
+import { type Nullable } from "../types"
+import { type Camera } from "../Cameras/camera"
 import { Scene } from "../scene.pure";
 import { Vector2 } from "../Maths/math.vector.pure";
-import type { AbstractEngine } from "../Engines/abstractEngine";
-import type { SubMesh } from "../Meshes/subMesh";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-import type { Mesh } from "../Meshes/mesh";
-import type { Effect } from "../Materials/effect";
-import type { Material } from "../Materials/material";
+import { type AbstractEngine } from "../Engines/abstractEngine"
+import { type SubMesh } from "../Meshes/subMesh"
+import { type AbstractMesh } from "../Meshes/abstractMesh"
+import { type Mesh } from "../Meshes/mesh"
+import { type Effect } from "../Materials/effect"
+import { type Material } from "../Materials/material"
 import { Texture } from "../Materials/Textures/texture.pure";
 import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture.pure";
-import type { PostProcessOptions } from "../PostProcesses/postProcess";
+import { type PostProcessOptions } from "../PostProcesses/postProcess"
 import { PostProcess } from "../PostProcesses/postProcess.pure";
 import { PassPostProcess } from "../PostProcesses/passPostProcess.pure";
 import { BlurPostProcess } from "../PostProcesses/blurPostProcess.pure";
 import { EffectLayer } from "./effectLayer";
 import { Constants } from "../Engines/constants";
 import { Logger } from "../Misc/logger";
-import type { Color4 } from "../Maths/math.color";
-import type { Color3 } from "../Maths/math.color.pure";
+import { type Color4 } from "../Maths/math.color"
+import { type Color3 } from "../Maths/math.color.pure"
 import { Color3FromArray } from "../Maths/math.color.pure";
-import type { ThinPassPostProcess } from "core/PostProcesses/thinPassPostProcess";
-import type { ThinBlurPostProcess } from "core/PostProcesses/thinBlurPostProcess";
-import type { IThinHighlightLayerOptions } from "./thinHighlightLayer";
+import { type ThinPassPostProcess } from "core/PostProcesses/thinPassPostProcess"
+import { type ThinBlurPostProcess } from "core/PostProcesses/thinBlurPostProcess"
+import { type IThinHighlightLayerOptions } from "./thinHighlightLayer"
 import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import { GetExponentOfTwo } from "../Misc/tools.functions";
 import { ThinHighlightLayer } from "./thinHighlightLayer";

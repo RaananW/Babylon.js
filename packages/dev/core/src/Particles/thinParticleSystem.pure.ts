@@ -1,38 +1,36 @@
-import type { Immutable, Nullable } from "../types";
+import { type Immutable, type Nullable } from "../types"
 import { FactorGradient, ColorGradient, Color3Gradient } from "../Misc/gradients.pure";
-import type { Observer } from "../Misc/observable";
+import { type Observer } from "../Misc/observable"
 import { Observable } from "../Misc/observable";
 import { Vector3, Matrix, TmpVectors } from "../Maths/math.vector.pure";
 import { VertexBuffer, Buffer } from "../Buffers/buffer.pure";
 
-import type { Effect } from "../Materials/effect";
-import type { RawTexture } from "../Materials/Textures/rawTexture.pure";
+import { type Effect } from "../Materials/effect"
+import { type RawTexture } from "../Materials/Textures/rawTexture.pure"
 import { RawTextureCreateRGBATexture } from "../Materials/Textures/rawTexture.pure";
 import { EngineStore } from "../Engines/engineStore";
-import type { IDisposable, Scene } from "../scene";
-
-import type { IParticleSystem } from "./IParticleSystem";
+import { type IDisposable, type Scene } from "../scene"
+import { type IParticleSystem } from "./IParticleSystem"
 import { BaseParticleSystem } from "./baseParticleSystem.pure";
 import { Particle } from "./particle";
 import { Constants } from "../Engines/constants";
-import type { IAnimatable } from "../Animations/animatable.interface";
+import { type IAnimatable } from "../Animations/animatable.interface"
 import { DrawWrapper } from "../Materials/drawWrapper";
 
-import type { DataBuffer } from "../Buffers/dataBuffer";
-import type { Color3 } from "../Maths/math.color.pure";
+import { type DataBuffer } from "../Buffers/dataBuffer"
+import { type Color3 } from "../Maths/math.color.pure"
 import { Color4, TmpColors, Color3LerpToRef } from "../Maths/math.color.pure";
-import type { ISize } from "../Maths/math.size";
-import type { AbstractEngine } from "../Engines/abstractEngine";
-
+import { type ISize } from "../Maths/math.size"
+import { type AbstractEngine } from "../Engines/abstractEngine"
 import { AddClipPlaneUniforms, PrepareStringDefinesForClipPlanes, BindClipPlane } from "../Materials/clipPlaneMaterialHelper";
 
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-import type { ProceduralTexture } from "../Materials/Textures/Procedurals/proceduralTexture";
+import { type AbstractMesh } from "../Meshes/abstractMesh"
+import { type ProceduralTexture } from "../Materials/Textures/Procedurals/proceduralTexture"
 import { BindFogParameters, BindLogDepth } from "../Materials/materialHelper.functions";
 import { BoxParticleEmitter } from "./EmitterTypes/boxParticleEmitter";
 import { Lerp } from "../Maths/math.scalar.functions";
 import { PrepareSamplersForImageProcessing, PrepareUniformsForImageProcessing } from "../Materials/imageProcessingConfiguration.functions";
-import type { ThinEngine } from "../Engines/thinEngine";
+import { type ThinEngine } from "../Engines/thinEngine"
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import {
     _CreateAngleData,
@@ -71,7 +69,7 @@ import {
     _ProcessSizeGradients,
     _ProcessVelocityGradients,
 } from "./thinParticleSystem.function";
-import type { _IExecutionQueueItem } from "./Queue/executionQueue";
+import { type _IExecutionQueueItem } from "./Queue/executionQueue"
 import { _ConnectAfter, _ConnectBefore, _RemoveFromQueue } from "./Queue/executionQueue";
 import { GradientHelperGetCurrentGradient } from "../Misc/gradients.pure";
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Vector2, TmpVectors } from "../../../Maths/math.vector.pure";
-import type { Camera } from "../../../Cameras/camera";
-import type { Effect } from "../../../Materials/effect";
+import { type Camera } from "../../../Cameras/camera"
+import { type Effect } from "../../../Materials/effect"
 import { Texture } from "../../../Materials/Textures/texture.pure";
 import { PostProcess } from "../../../PostProcesses/postProcess.pure";
 import { PostProcessRenderPipeline } from "../../../PostProcesses/RenderPipeline/postProcessRenderPipeline";
@@ -10,7 +10,7 @@ import { PassPostProcess } from "../../../PostProcesses/passPostProcess.pure";
 import { BlurPostProcess } from "../../../PostProcesses/blurPostProcess.pure";
 import { Constants } from "../../../Engines/constants";
 import { serialize } from "../../../Misc/decorators";
-import type { Scene } from "../../../scene";
+import { type Scene } from "../../../scene"
 import { RawTextureCreateRGBATexture } from "../../../Materials/Textures/rawTexture.pure";
 import { RandomRange } from "../../../Maths/math.scalar.functions";
 

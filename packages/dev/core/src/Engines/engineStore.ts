@@ -1,9 +1,7 @@
 import { Observable } from "../Misc/observable";
-import type { Nullable } from "../types";
-
-import type { AbstractEngine } from "./abstractEngine";
-import type { Scene } from "../scene";
-
+import { type Nullable } from "../types"
+import { type AbstractEngine } from "./abstractEngine"
+import { type Scene } from "../scene"
 /**
  * The engine store class is responsible to hold all the instances of Engine and Scene created
  * during the life time of the application.

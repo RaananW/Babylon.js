@@ -2,22 +2,22 @@
 
 export * from "./mesh.vertexData.types";
 
-import type { Nullable, FloatArray, IndicesArray, DeepImmutable } from "../types";
-import type { Matrix, Vector2 } from "../Maths/math.vector";
+import { type Nullable, type FloatArray, type IndicesArray, type DeepImmutable } from "../types"
+import { type Matrix, type Vector2 } from "../Maths/math.vector"
 import { Vector3, Vector4, TmpVectors } from "../Maths/math.vector.pure";
 import { VertexBuffer, VertexBufferDeduceStride } from "../Buffers/buffer.pure";
 import { _WarnImport } from "../Misc/devTools";
-import type { Color3 } from "../Maths/math.color";
-import type { Color4 } from "../Maths/math.color.pure";
+import { type Color3 } from "../Maths/math.color"
+import { type Color4 } from "../Maths/math.color.pure"
 import { Color4CheckColors4 } from "../Maths/math.color.pure";
 import { Logger } from "../Misc/logger";
 import { nativeOverride } from "../Misc/decorators";
-import type { Coroutine } from "../Misc/coroutine";
+import { type Coroutine } from "../Misc/coroutine"
 import { makeSyncFunction, runCoroutineSync } from "../Misc/coroutine";
-import type { ICreateCapsuleOptions } from "./Builders/capsuleBuilder";
+import { type ICreateCapsuleOptions } from "./Builders/capsuleBuilder"
 import { RuntimeError, ErrorCodes } from "../Misc/error";
-import type { Geometry } from "../Meshes/geometry";
-import type { Mesh } from "../Meshes/mesh";
+import { type Geometry } from "../Meshes/geometry"
+import { type Mesh } from "../Meshes/mesh"
 import { SubMesh } from "./subMesh";
 
 /* eslint-disable jsdoc/require-returns-check */

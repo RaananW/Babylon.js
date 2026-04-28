@@ -1,10 +1,9 @@
-import type { Camera } from "../Cameras/camera";
-import type { Effect } from "../Materials/effect";
+import { type Camera } from "../Cameras/camera"
+import { type Effect } from "../Materials/effect"
 import { Texture } from "../Materials/Textures/texture.pure";
 import { PostProcess } from "./postProcess.pure";
 
-import type { Nullable } from "../types";
-
+import { type Nullable } from "../types"
 /**
  * VRMultiviewToSingleview used to convert multiview texture arrays to standard textures for scenarios such as webVR
  * This will not be used for webXR as it supports displaying texture arrays directly

@@ -1,15 +1,14 @@
-import type { ICameraInput } from "../../Cameras/cameraInputsManager";
+import { type ICameraInput } from "../../Cameras/cameraInputsManager"
 import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
-import type { FollowCamera } from "../../Cameras/followCamera";
+import { type FollowCamera } from "../../Cameras/followCamera"
 import { serialize } from "../../Misc/decorators";
-import type { Nullable } from "../../types";
-import type { Observer } from "../../Misc/observable";
-import type { KeyboardInfo } from "../../Events/keyboardEvents";
+import { type Nullable } from "../../types"
+import { type Observer } from "../../Misc/observable"
+import { type KeyboardInfo } from "../../Events/keyboardEvents"
 import { KeyboardEventTypes } from "../../Events/keyboardEvents";
-import type { Scene } from "../../scene";
+import { type Scene } from "../../scene"
 import { Tools } from "../../Misc/tools";
-import type { AbstractEngine } from "../../Engines/abstractEngine";
-
+import { type AbstractEngine } from "../../Engines/abstractEngine"
 /**
  * Manage the keyboard inputs to control the movement of a follow camera.
  * @see https://doc.babylonjs.com/features/featuresDeepDive/cameras/customizingCameraInputs

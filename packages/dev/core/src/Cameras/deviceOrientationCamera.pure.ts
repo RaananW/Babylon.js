@@ -1,11 +1,10 @@
 /** This file must only contain pure code and pure imports */
 
 import { FreeCamera } from "./freeCamera.pure";
-import type { Scene } from "../scene";
-
+import { type Scene } from "../scene"
 import { Quaternion } from "../Maths/math.vector.pure";
 import { Axis } from "../Maths/math.axis";
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { Node } from "../node";
 import { Vector3 } from "../Maths/math.vector.pure";
 

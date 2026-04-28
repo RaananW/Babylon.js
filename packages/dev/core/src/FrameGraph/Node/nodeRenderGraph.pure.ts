@@ -1,18 +1,4 @@
-import type {
-    Observer,
-    Nullable,
-    NodeRenderGraphBlock,
-    NodeRenderGraphTeleportOutBlock,
-    NodeRenderGraphTeleportInBlock,
-    AbstractEngine,
-    INodeRenderGraphCreateOptions,
-    INodeRenderGraphEditorOptions,
-    Scene,
-    WritableObject,
-    IShadowLight,
-    INodeRenderGraphCustomBlockDescription,
-    Immutable,
-} from "core/index";
+import { type Observer, type Nullable, type NodeRenderGraphBlock, type NodeRenderGraphTeleportOutBlock, type NodeRenderGraphTeleportInBlock, type AbstractEngine, type INodeRenderGraphCreateOptions, type INodeRenderGraphEditorOptions, type Scene, type WritableObject, type IShadowLight, type INodeRenderGraphCustomBlockDescription, type Immutable } from "core/index"
 import { Observable } from "../../Misc/observable";
 import { NodeRenderGraphOutputBlock } from "./Blocks/outputBlock.pure";
 import { FrameGraph } from "../frameGraph";

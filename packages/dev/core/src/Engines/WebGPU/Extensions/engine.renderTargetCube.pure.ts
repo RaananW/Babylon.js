@@ -1,7 +1,7 @@
 export * from "./engine.renderTargetCube.types";
 
-import type { RenderTargetCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
-import type { RenderTargetWrapper } from "../../renderTargetWrapper";
+import { type RenderTargetCreationOptions } from "../../../Materials/Textures/textureCreationOptions"
+import { type RenderTargetWrapper } from "../../renderTargetWrapper"
 import { ThinWebGPUEngine } from "core/Engines/thinWebGPUEngine";
 import { InternalTexture, InternalTextureSource } from "../../../Materials/Textures/internalTexture";
 import { Constants } from "../../constants";

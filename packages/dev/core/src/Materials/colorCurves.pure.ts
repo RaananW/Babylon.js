@@ -2,7 +2,7 @@
 
 import { serialize } from "../Misc/decorators";
 import { Color4 } from "../Maths/math.color.pure";
-import type { Effect } from "../Materials/effect";
+import { type Effect } from "../Materials/effect"
 import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../Misc/decorators.serialization.pure";
 import { PrepareUniformsForColorCurves } from "./colorCurves.functions";
 import { SerializationHelper } from "../Misc/decorators.serialization.pure";

@@ -1,9 +1,9 @@
 import { serialize } from "core/Misc/decorators";
 import { ParticleSystemSet } from "../particleSystemSet";
 import { SystemBlock } from "./Blocks/systemBlock.pure";
-import type { Scene } from "core/scene";
+import { type Scene } from "core/scene"
 import { NodeParticleBuildState } from "./nodeParticleBuildState";
-import type { NodeParticleBlock } from "./nodeParticleBlock";
+import { type NodeParticleBlock } from "./nodeParticleBlock"
 import { Observable } from "core/Misc/observable";
 import { GetClass } from "core/Misc/typeStore";
 import { WebRequest } from "core/Misc/webRequest";
@@ -15,12 +15,12 @@ import { ParticleTextureSourceBlock } from "./Blocks/particleSourceTextureBlock.
 import { NodeParticleContextualSources } from "./Enums/nodeParticleContextualSources";
 import { UpdatePositionBlock } from "./Blocks/Update/updatePositionBlock.pure";
 import { ParticleMathBlock, ParticleMathBlockOperations } from "./Blocks/particleMathBlock.pure";
-import type { ParticleTeleportOutBlock } from "./Blocks/Teleport/particleTeleportOutBlock";
-import type { ParticleTeleportInBlock } from "./Blocks/Teleport/particleTeleportInBlock";
+import { type ParticleTeleportOutBlock } from "./Blocks/Teleport/particleTeleportOutBlock"
+import { type ParticleTeleportInBlock } from "./Blocks/Teleport/particleTeleportInBlock"
 import { BoxShapeBlock } from "./Blocks/Emitters/boxShapeBlock.pure";
 import { CreateParticleBlock } from "./Blocks/Emitters/createParticleBlock.pure";
-import type { Color4 } from "core/Maths/math.color";
-import type { Nullable } from "../../types";
+import { type Color4 } from "core/Maths/math.color"
+import { type Nullable } from "../../types"
 import { SerializationHelperSerialize, SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 import { ToolsWarn } from "../../Misc/tools.pure";
 

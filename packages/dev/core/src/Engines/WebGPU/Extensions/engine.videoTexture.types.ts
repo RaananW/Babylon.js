@@ -1,7 +1,6 @@
-import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
-import type { Nullable } from "../../../types";
-import type { ExternalTexture } from "../../../Materials/Textures/externalTexture";
-
+import { type InternalTexture } from "../../../Materials/Textures/internalTexture"
+import { type Nullable } from "../../../types"
+import { type ExternalTexture } from "../../../Materials/Textures/externalTexture"
 declare module "../../abstractEngine" {
     /**
      *

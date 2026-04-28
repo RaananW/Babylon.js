@@ -1,8 +1,8 @@
 export * from "./abstractEngine.cubeTexture.types";
 
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-import type { IWebRequest } from "../../Misc/interfaces/iWebRequest";
+import { type Nullable } from "../../types"
+import { type Scene } from "../../scene"
+import { type IWebRequest } from "../../Misc/interfaces/iWebRequest"
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";
 import { LoadImage } from "../../Misc/fileTools";

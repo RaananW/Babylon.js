@@ -3,10 +3,10 @@
 import { NodeMaterialBlock } from "../nodeMaterialBlock";
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
 import { NodeMaterialBlockConnectionPointTypes } from "../Enums/nodeMaterialBlockConnectionPointTypes";
-import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
-import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
+import { type NodeMaterialBuildState } from "../nodeMaterialBuildState"
+import { type NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint"
 import { InputBlock } from "./Input/inputBlock.pure";
-import type { NodeMaterial } from "../nodeMaterial";
+import { type NodeMaterial } from "../nodeMaterial"
 import { ViewDirectionBlock } from "./viewDirectionBlock.pure";
 import { RegisterClass } from "../../../Misc/typeStore";
 

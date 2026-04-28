@@ -1,28 +1,28 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../../../types";
+import { type Nullable } from "../../../types"
 import { serialize, serializeAsTexture } from "../../../Misc/decorators";
 import { SerializationHelperSerialize, SerializationHelperParse } from "../../../Misc/decorators.serialization.pure";
-import type { IAnimatable } from "../../../Animations/animatable.interface";
+import { type IAnimatable } from "../../../Animations/animatable.interface"
 import { Logger } from "../../../Misc/logger";
 import { Vector2, Vector3, Matrix, Vector4 } from "../../../Maths/math.vector.pure";
 import { Clamp } from "../../../Maths/math.scalar.functions";
-import type { Camera } from "../../../Cameras/camera";
-import type { Effect } from "../../../Materials/effect";
+import { type Camera } from "../../../Cameras/camera"
+import { type Effect } from "../../../Materials/effect"
 import { Texture } from "../../../Materials/Textures/texture.pure";
 import { PostProcess } from "../../../PostProcesses/postProcess.pure";
 import { PostProcessRenderPipeline } from "../../../PostProcesses/RenderPipeline/postProcessRenderPipeline";
 import { PostProcessRenderEffect } from "../../../PostProcesses/RenderPipeline/postProcessRenderEffect";
 import { BlurPostProcess } from "../../../PostProcesses/blurPostProcess.pure";
 import { FxaaPostProcess } from "../../../PostProcesses/fxaaPostProcess.pure";
-import type { IDisposable, Scene } from "../../../scene";
-import type { SpotLight } from "../../../Lights/spotLight";
-import type { DirectionalLight } from "../../../Lights/directionalLight";
-import type { GeometryBufferRenderer } from "../../../Rendering/geometryBufferRenderer";
+import { type IDisposable, type Scene } from "../../../scene"
+import { type SpotLight } from "../../../Lights/spotLight"
+import { type DirectionalLight } from "../../../Lights/directionalLight"
+import { type GeometryBufferRenderer } from "../../../Rendering/geometryBufferRenderer"
 import { Constants } from "../../../Engines/constants";
 import { MotionBlurPostProcess } from "../../motionBlurPostProcess.pure";
 import { ScreenSpaceReflectionPostProcess } from "../../screenSpaceReflectionPostProcess.pure";
-import type { Animation } from "../../../Animations/animation";
+import { type Animation } from "../../../Animations/animation"
 import { RegisterClass } from "../../../Misc/typeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */

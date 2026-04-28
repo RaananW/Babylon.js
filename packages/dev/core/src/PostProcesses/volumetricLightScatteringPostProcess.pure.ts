@@ -1,28 +1,28 @@
 /** This file must only contain pure code and pure imports */
 
 import { serializeAsVector3, serialize, serializeAsMeshReference } from "../Misc/decorators";
-import type { SmartArray } from "../Misc/smartArray";
+import { type SmartArray } from "../Misc/smartArray"
 import { Logger } from "../Misc/logger";
 import { Vector2, Vector3, Matrix } from "../Maths/math.vector.pure";
 import { VertexBuffer } from "../Buffers/buffer.pure";
 import { AbstractMesh } from "../Meshes/abstractMesh.pure";
-import type { SubMesh } from "../Meshes/subMesh";
-import type { Mesh } from "../Meshes/mesh";
-import type { Camera } from "../Cameras/camera";
-import type { Effect, IEffectCreationOptions } from "../Materials/effect";
+import { type SubMesh } from "../Meshes/subMesh"
+import { type Mesh } from "../Meshes/mesh"
+import { type Camera } from "../Cameras/camera"
+import { type Effect, type IEffectCreationOptions } from "../Materials/effect"
 import { Material } from "../Materials/material";
 import { StandardMaterial } from "../Materials/standardMaterial.pure";
 import { Texture } from "../Materials/Textures/texture.pure";
 import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture.pure";
 import { PostProcess } from "./postProcess.pure";
 import { Constants } from "../Engines/constants";
-import type { Scene } from "../scene";
+import { type Scene } from "../scene"
 import { CreatePlane } from "../Meshes/Builders/planeBuilder.pure";
 import { Color4, Color3 } from "../Maths/math.color.pure";
 import { Viewport } from "../Maths/math.viewport";
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { BindBonesParameters, BindMorphTargetParameters, PrepareDefinesAndAttributesForMorphTargets, PushAttributesForInstances } from "../Materials/materialHelper.functions";
-import type { AbstractEngine } from "../Engines/abstractEngine";
+import { type AbstractEngine } from "../Engines/abstractEngine"
 import { EffectFallbacks } from "core/Materials/effectFallbacks";
 import { RegisterClass } from "../Misc/typeStore";
 

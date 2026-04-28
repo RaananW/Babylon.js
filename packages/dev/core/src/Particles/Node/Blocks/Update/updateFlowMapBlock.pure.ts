@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "core/types";
-import type { ThinParticleSystem } from "core/Particles/thinParticleSystem";
-import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint";
-import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
-import type { Particle } from "core/Particles/particle";
-import type { INodeParticleTextureData, ParticleTextureSourceBlock } from "../particleSourceTextureBlock";
+import { type Nullable } from "core/types"
+import { type ThinParticleSystem } from "core/Particles/thinParticleSystem"
+import { type NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint"
+import { type NodeParticleBuildState } from "../../nodeParticleBuildState"
+import { type Particle } from "core/Particles/particle"
+import { type INodeParticleTextureData, type ParticleTextureSourceBlock } from "../particleSourceTextureBlock"
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "../../nodeParticleBlock";
 import { _ConnectAtTheEnd } from "core/Particles/Queue/executionQueue";

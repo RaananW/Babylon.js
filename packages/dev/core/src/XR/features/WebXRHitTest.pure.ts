@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
 import { WebXRFeatureName } from "../webXRFeaturesManager";
-import type { WebXRSessionManager } from "../webXRSessionManager";
+import { type WebXRSessionManager } from "../webXRSessionManager"
 import { Observable } from "../../Misc/observable";
 import { Vector3, Matrix, Quaternion } from "../../Maths/math.vector.pure";
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
-import type { IWebXRLegacyHitTestOptions, IWebXRLegacyHitResult, IWebXRHitTestFeature } from "./WebXRHitTestLegacy";
+import { type IWebXRLegacyHitTestOptions, type IWebXRLegacyHitResult, type IWebXRHitTestFeature } from "./WebXRHitTestLegacy"
 import { ToolsWarn } from "../../Misc/tools.pure";
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**

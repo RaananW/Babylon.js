@@ -1,8 +1,8 @@
-import type { Nullable, AbstractEngine, EffectWrapperCreationOptions, Observer, NonNullableFields, Scene, ColorCurves, BaseTexture, Color4 } from "core/index";
+import { type Nullable, type AbstractEngine, type EffectWrapperCreationOptions, type Observer, type NonNullableFields, type Scene, type ColorCurves, type BaseTexture, type Color4 } from "core/index"
 import { EffectWrapper } from "../Materials/effectRenderer";
 import { Engine } from "../Engines/engine";
 import { EngineStore } from "../Engines/engineStore";
-import type { IImageProcessingConfigurationDefines } from "../Materials/imageProcessingConfiguration.defines";
+import { type IImageProcessingConfigurationDefines } from "../Materials/imageProcessingConfiguration.defines"
 import { ImageProcessingConfiguration } from "../Materials/imageProcessingConfiguration";
 
 /**

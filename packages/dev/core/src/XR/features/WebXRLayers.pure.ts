@@ -1,17 +1,17 @@
 /** This file must only contain pure code and pure imports */
 
 import { WebXRFeatureName } from "../webXRFeaturesManager";
-import type { WebXRSessionManager } from "../webXRSessionManager";
+import { type WebXRSessionManager } from "../webXRSessionManager"
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
-import type { WebXRLayerWrapper } from "../webXRLayerWrapper";
+import { type WebXRLayerWrapper } from "../webXRLayerWrapper"
 import { WebXRWebGLLayerWrapper } from "../webXRWebGLLayer";
 import { WebXRProjectionLayerWrapper, DefaultXRProjectionLayerInit } from "./Layers/WebXRProjectionLayer";
 import { WebXRCompositionLayerRenderTargetTextureProvider, WebXRCompositionLayerWrapper } from "./Layers/WebXRCompositionLayer";
-import type { ThinTexture } from "../../Materials/Textures/thinTexture";
-import type { DynamicTexture } from "../../Materials/Textures/dynamicTexture";
+import { type ThinTexture } from "../../Materials/Textures/thinTexture"
+import { type DynamicTexture } from "../../Materials/Textures/dynamicTexture"
 import { Color4 } from "../../Maths/math.color.pure";
-import type { LensFlareSystem } from "../../LensFlares/lensFlareSystem";
-import type { ThinEngine } from "../../Engines";
+import { type LensFlareSystem } from "../../LensFlares/lensFlareSystem"
+import { type ThinEngine } from "../../Engines"
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 const DefaultXRWebGLLayerInit: XRWebGLLayerInit = {};

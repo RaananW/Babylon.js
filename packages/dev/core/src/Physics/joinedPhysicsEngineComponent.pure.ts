@@ -3,17 +3,17 @@
 export * from "./joinedPhysicsEngineComponent.types";
 
 import { Observable } from "../Misc/observable";
-import type { ISceneComponent } from "../sceneComponent";
+import { type ISceneComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
 import { Logger } from "../Misc/logger";
 import { PhysicsEngine as PhysicsEngineV1 } from "./v1/physicsEngine";
 import { PhysicsEngine as PhysicsEngineV2 } from "./v2/physicsEngine";
-import type { Nullable } from "../types";
-import type { Vector3 } from "../Maths/math.vector";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-import type { IPhysicsEngine } from "./IPhysicsEngine";
-import type { IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin";
-import type { IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin";
+import { type Nullable } from "../types"
+import { type Vector3 } from "../Maths/math.vector"
+import { type AbstractMesh } from "../Meshes/abstractMesh"
+import { type IPhysicsEngine } from "./IPhysicsEngine"
+import { type IPhysicsEnginePlugin as IPhysicsEnginePluginV1 } from "./v1/IPhysicsEnginePlugin"
+import { type IPhysicsEnginePluginV2 } from "./v2/IPhysicsEnginePlugin"
 import { Scene } from "../scene.pure";
 
 /**

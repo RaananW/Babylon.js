@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
-import type { SubMesh } from "../../Meshes/subMesh";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
-import type { Mesh } from "../../Meshes/mesh";
-import type { Effect, IEffectCreationOptions } from "../../Materials/effect";
-import type { Scene } from "../../scene";
-import type { Matrix } from "../../Maths/math.vector";
-import type { GaussianSplattingMesh } from "../../Meshes/GaussianSplatting/gaussianSplattingMesh";
-import type { AbstractEngine } from "../../Engines/abstractEngine";
+import { type SubMesh } from "../../Meshes/subMesh"
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
+import { type Mesh } from "../../Meshes/mesh"
+import { type Effect, type IEffectCreationOptions } from "../../Materials/effect"
+import { type Scene } from "../../scene"
+import { type Matrix } from "../../Maths/math.vector"
+import { type GaussianSplattingMesh } from "../../Meshes/GaussianSplatting/gaussianSplattingMesh"
+import { type AbstractEngine } from "../../Engines/abstractEngine"
 import { SerializationHelperParse, SerializationHelperClone } from "../../Misc/decorators.serialization.pure";
 import { VertexBuffer } from "../../Buffers/buffer.pure";
 import { MaterialDefines } from "../../Materials/materialDefines";

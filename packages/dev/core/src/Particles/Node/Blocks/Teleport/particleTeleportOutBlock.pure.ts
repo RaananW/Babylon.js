@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../../../../types";
+import { type Nullable } from "../../../../types"
 import { NodeParticleBlock } from "../../nodeParticleBlock";
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
-import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint";
-import type { ParticleTeleportInBlock } from "./particleTeleportInBlock";
-import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
+import { type NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint"
+import { type ParticleTeleportInBlock } from "./particleTeleportInBlock"
+import { type NodeParticleBuildState } from "../../nodeParticleBuildState"
 import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**

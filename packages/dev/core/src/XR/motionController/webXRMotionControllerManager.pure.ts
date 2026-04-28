@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { WebXRAbstractMotionController, IMotionControllerProfile } from "./webXRAbstractMotionController";
-import type { Scene } from "../../scene";
+import { type WebXRAbstractMotionController, type IMotionControllerProfile } from "./webXRAbstractMotionController"
+import { type Scene } from "../../scene"
 import { ToolsLoadFileAsync } from "../../Misc/tools.pure";
 import { WebXRProfiledMotionController } from "./webXRProfiledMotionController";
-import type { Nullable } from "../../types";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
+import { type Nullable } from "../../types"
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
 import { WebXRGenericTriggerMotionController } from "./webXRGenericMotionController";
 
 /**

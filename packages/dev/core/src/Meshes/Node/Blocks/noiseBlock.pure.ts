@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { NodeGeometryBlock } from "../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint";
+import { type NodeGeometryConnectionPoint } from "../nodeGeometryBlockConnectionPoint"
 import { NodeGeometryBlockConnectionPointTypes } from "../Enums/nodeGeometryConnectionPointTypes";
 import { Vector3 } from "../../../Maths/math.vector.pure";
 import { Clamp } from "../../../Maths/math.scalar.functions";

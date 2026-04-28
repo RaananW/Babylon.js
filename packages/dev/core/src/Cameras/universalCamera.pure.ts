@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
 import { TouchCamera } from "./touchCamera.pure";
-import type { FreeCameraGamepadInput } from "../Cameras/Inputs/freeCameraGamepadInput";
-import type { Scene } from "../scene";
+import { type FreeCameraGamepadInput } from "../Cameras/Inputs/freeCameraGamepadInput"
+import { type Scene } from "../scene"
 import { Node } from "../node";
 import { Camera } from "./camera";
 import { Vector3 } from "../Maths/math.vector.pure";

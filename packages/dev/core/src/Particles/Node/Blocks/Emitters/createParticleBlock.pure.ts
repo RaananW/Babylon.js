@@ -2,11 +2,11 @@
 
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "../../nodeParticleBlock";
-import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint";
+import { type NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint"
 import { ParticleSystem } from "core/Particles/particleSystem.pure";
-import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
-import type { Particle } from "core/Particles/particle";
-import type { ThinParticleSystem } from "core/Particles/thinParticleSystem";
+import { type NodeParticleBuildState } from "../../nodeParticleBuildState"
+import { type Particle } from "core/Particles/particle"
+import { type ThinParticleSystem } from "core/Particles/thinParticleSystem"
 import { Color4 } from "core/Maths/math.color.pure";
 import { Vector2 } from "core/Maths/math.vector.pure";
 import { PointParticleEmitter } from "core/Particles/EmitterTypes/pointParticleEmitter";

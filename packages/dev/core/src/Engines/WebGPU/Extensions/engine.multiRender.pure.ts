@@ -2,12 +2,12 @@ import { InternalTexture, InternalTextureSource } from "../../../Materials/Textu
 import { Logger } from "../../../Misc/logger";
 import { Constants } from "../../constants";
 import { WebGPUEngine } from "../../webgpuEngine";
-import type { IMultiRenderTargetOptions } from "../../../Materials/Textures/multiRenderTarget";
-import type { Nullable } from "../../../types";
-import type { TextureSize } from "../../../Materials/Textures/textureCreationOptions";
-import type { RenderTargetWrapper } from "../../renderTargetWrapper";
-import type { WebGPURenderTargetWrapper } from "../webgpuRenderTargetWrapper";
-import type { WebGPUHardwareTexture } from "../webgpuHardwareTexture";
+import { type IMultiRenderTargetOptions } from "../../../Materials/Textures/multiRenderTarget"
+import { type Nullable } from "../../../types"
+import { type TextureSize } from "../../../Materials/Textures/textureCreationOptions"
+import { type RenderTargetWrapper } from "../../renderTargetWrapper"
+import { type WebGPURenderTargetWrapper } from "../webgpuRenderTargetWrapper"
+import { type WebGPUHardwareTexture } from "../webgpuHardwareTexture"
 /** This file must only contain pure code and pure imports */
 
 export {};

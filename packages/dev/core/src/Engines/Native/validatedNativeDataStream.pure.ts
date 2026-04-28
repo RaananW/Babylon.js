@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import type { NativeData } from "./nativeDataStream";
+import { type NativeData } from "./nativeDataStream"
 import { NativeDataStream } from "./nativeDataStream";
-import type { INative } from "./nativeInterfaces";
+import { type INative } from "./nativeInterfaces"
 import { ThinNativeEngine } from "../thinNativeEngine";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention

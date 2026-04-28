@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Scene, FrameGraph } from "core/index";
+import { type Scene, type FrameGraph } from "core/index"
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { FrameGraphImageProcessingTask } from "core/FrameGraph/Tasks/PostProcesses/imageProcessingTask";
 import { ThinImageProcessingPostProcess } from "core/PostProcesses/thinImageProcessingPostProcess";
 import { ImageProcessingConfiguration } from "core/Materials/imageProcessingConfiguration.pure";
-import type { Color4 } from "../../../../Maths/math.color.pure";
+import { type Color4 } from "../../../../Maths/math.color.pure"
 import { Color4FromArray } from "../../../../Maths/math.color.pure";
 import { NodeRenderGraphBaseWithPropertiesPostProcessBlock } from "./baseWithPropertiesPostProcessBlock";
 import { RegisterClass } from "../../../../Misc/typeStore";

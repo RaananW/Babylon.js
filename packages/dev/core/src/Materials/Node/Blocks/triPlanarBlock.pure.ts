@@ -2,16 +2,16 @@
 
 import { NodeMaterialBlock } from "../nodeMaterialBlock";
 import { NodeMaterialBlockConnectionPointTypes } from "../Enums/nodeMaterialBlockConnectionPointTypes";
-import type { NodeMaterialBuildState } from "../nodeMaterialBuildState";
+import { type NodeMaterialBuildState } from "../nodeMaterialBuildState"
 import { NodeMaterialBlockTargets } from "../Enums/nodeMaterialBlockTargets";
-import type { NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint";
+import { type NodeMaterialConnectionPoint } from "../nodeMaterialBlockConnectionPoint"
 import { NodeMaterialConnectionPointDirection } from "../nodeMaterialBlockConnectionPoint";
-import type { NodeMaterialDefines } from "../nodeMaterial";
+import { type NodeMaterialDefines } from "../nodeMaterial"
 import { NodeMaterial } from "../nodeMaterial.pure";
-import type { Effect } from "../../effect";
-import type { Nullable } from "../../../types";
+import { type Effect } from "../../effect"
+import { type Nullable } from "../../../types"
 import { Texture } from "../../Textures/texture.pure";
-import type { Scene } from "../../../scene";
+import { type Scene } from "../../../scene"
 import { Constants } from "../../../Engines/constants";
 import { ImageSourceBlock } from "./Dual/imageSourceBlock.pure";
 import { NodeMaterialConnectionPointCustomObject } from "../nodeMaterialConnectionPointCustomObject";

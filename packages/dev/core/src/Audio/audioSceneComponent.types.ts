@@ -1,8 +1,7 @@
-import type { Sound } from "./sound";
-import type { SoundTrack } from "./soundTrack";
-import type { Nullable } from "../types";
-import type { Vector3 } from "../Maths/math.vector";
-
+import { type Sound } from "./sound"
+import { type SoundTrack } from "./soundTrack"
+import { type Nullable } from "../types"
+import { type Vector3 } from "../Maths/math.vector"
 declare module "../scene" {
     /**
      *

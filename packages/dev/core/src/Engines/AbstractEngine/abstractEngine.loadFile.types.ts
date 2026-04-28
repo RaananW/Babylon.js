@@ -1,5 +1,4 @@
-import type { IOfflineProvider } from "../../Offline/IOfflineProvider";
-
+import { type IOfflineProvider } from "../../Offline/IOfflineProvider"
 declare module "../abstractEngine" {
     /**
      *

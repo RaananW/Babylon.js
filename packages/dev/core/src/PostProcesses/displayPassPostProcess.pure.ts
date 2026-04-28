@@ -1,12 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../types";
-import type { Camera } from "../Cameras/camera";
-import type { PostProcessOptions } from "./postProcess";
+import { type Nullable } from "../types"
+import { type Camera } from "../Cameras/camera"
+import { type PostProcessOptions } from "./postProcess"
 import { PostProcess } from "./postProcess.pure";
-import type { AbstractEngine } from "../Engines/abstractEngine";
+import { type AbstractEngine } from "../Engines/abstractEngine"
 import { SerializationHelperParse } from "../Misc/decorators.serialization.pure";
-import type { Scene } from "../scene";
+import { type Scene } from "../scene"
 import { RegisterClass } from "../Misc/typeStore";
 
 /**

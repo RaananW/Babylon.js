@@ -1,11 +1,10 @@
-import type { Scene } from "../../scene";
-import type { Engine } from "../../Engines/engine";
+import { type Scene } from "../../scene"
+import { type Engine } from "../../Engines/engine"
 import { Texture } from "../../Materials/Textures/texture.pure";
 import { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture.pure";
 import { Constants } from "../../Engines/constants";
 
-import type { InternalTexture } from "./internalTexture";
-
+import { type InternalTexture } from "./internalTexture"
 /**
  * Creation options of the multi render target texture.
  */

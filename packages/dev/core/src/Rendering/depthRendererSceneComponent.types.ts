@@ -1,8 +1,7 @@
-import type { Nullable } from "../types";
-import type { Camera } from "../Cameras/camera";
-import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
-import type { DepthRenderer } from "./depthRenderer";
-
+import { type Nullable } from "../types"
+import { type Camera } from "../Cameras/camera"
+import { type RenderTargetTexture } from "../Materials/Textures/renderTargetTexture"
+import { type DepthRenderer } from "./depthRenderer"
 declare module "../scene" {
     /**
      *

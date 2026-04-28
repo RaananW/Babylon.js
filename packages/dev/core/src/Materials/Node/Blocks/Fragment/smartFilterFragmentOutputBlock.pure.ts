@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
 import { FragmentOutputBlock } from "./fragmentOutputBlock.pure";
-import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
+import { type NodeMaterialBuildState } from "../../nodeMaterialBuildState"
 import { NodeMaterialModes } from "../../Enums/nodeMaterialModes";
 import { InputBlock } from "../Input/inputBlock.pure";
 import { ScreenSizeBlock } from "../Fragment/screenSizeBlock.pure";

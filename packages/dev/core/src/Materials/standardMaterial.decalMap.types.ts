@@ -1,6 +1,5 @@
-import type { DecalMapConfiguration } from "./material.decalMapConfiguration";
-import type { Nullable } from "core/types";
-
+import { type DecalMapConfiguration } from "./material.decalMapConfiguration"
+import { type Nullable } from "core/types"
 declare module "./standardMaterial" {
     /**
      *

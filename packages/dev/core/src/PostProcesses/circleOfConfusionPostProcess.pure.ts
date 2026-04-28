@@ -1,16 +1,16 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../types";
-import type { PostProcessOptions } from "./postProcess";
+import { type Nullable } from "../types"
+import { type PostProcessOptions } from "./postProcess"
 import { PostProcess } from "./postProcess.pure";
-import type { Effect } from "../Materials/effect";
-import type { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture";
-import type { Camera } from "../Cameras/camera";
+import { type Effect } from "../Materials/effect"
+import { type RenderTargetTexture } from "../Materials/Textures/renderTargetTexture"
+import { type Camera } from "../Cameras/camera"
 import { Logger } from "../Misc/logger";
 import { Constants } from "../Engines/constants";
 import { serialize } from "../Misc/decorators";
-import type { AbstractEngine } from "core/Engines/abstractEngine";
-import type { ThinCircleOfConfusionPostProcessOptions } from "./thinCircleOfConfusionPostProcess";
+import { type AbstractEngine } from "core/Engines/abstractEngine"
+import { type ThinCircleOfConfusionPostProcessOptions } from "./thinCircleOfConfusionPostProcess"
 import { ThinCircleOfConfusionPostProcess } from "./thinCircleOfConfusionPostProcess";
 import { RegisterClass } from "../Misc/typeStore";
 

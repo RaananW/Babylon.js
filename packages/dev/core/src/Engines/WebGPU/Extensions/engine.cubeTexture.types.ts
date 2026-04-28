@@ -1,8 +1,7 @@
-import type { Nullable } from "../../../types";
-import type { DepthTextureCreationOptions } from "../../../Materials/Textures/textureCreationOptions";
-import type { Scene } from "../../../scene";
-import type { InternalTexture } from "../../../Materials/Textures/internalTexture";
-
+import { type Nullable } from "../../../types"
+import { type DepthTextureCreationOptions } from "../../../Materials/Textures/textureCreationOptions"
+import { type Scene } from "../../../scene"
+import { type InternalTexture } from "../../../Materials/Textures/internalTexture"
 declare module "../../abstractEngine" {
     /**
      *

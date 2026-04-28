@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { Nullable } from "core/types";
+import { type Nullable } from "core/types"
 import { Tools } from "./tools";
-import type { BasisFileInfo, BasisTranscodeConfiguration } from "./basis";
-
+import { type BasisFileInfo, type BasisTranscodeConfiguration } from "./basis"
 // WorkerGlobalScope
 declare function importScripts(...urls: string[]): void;
 declare function postMessage(message: any, transfer?: any[]): void;

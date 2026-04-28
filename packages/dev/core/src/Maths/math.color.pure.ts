@@ -3,11 +3,11 @@
 export * from "./math.color.types";
 
 import { BuildArray } from "../Misc/arrayTools";
-import type { DeepImmutable, FloatArray, Tuple } from "../types";
+import { type DeepImmutable, type FloatArray, type Tuple } from "../types"
 import { Epsilon, ToGammaSpace, ToLinearSpace } from "./math.constants";
-import type { IColor3Like, IColor4Like } from "./math.like";
+import { type IColor3Like, type IColor4Like } from "./math.like"
 import { Clamp, ToHex, WithinEpsilon } from "./math.scalar.functions";
-import type { Tensor } from "./tensor";
+import { type Tensor } from "./tensor"
 import { RegisterClass } from "../Misc/typeStore";
 
 function ColorChannelToLinearSpace(color: number): number {

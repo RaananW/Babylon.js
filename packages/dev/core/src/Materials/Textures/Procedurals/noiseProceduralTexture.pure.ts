@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../../../types";
-import type { Scene } from "../../../scene";
+import { type Nullable } from "../../../types"
+import { type Scene } from "../../../scene"
 import { EngineStore } from "../../../Engines/engineStore";
-import type { Texture } from "../../../Materials/Textures/texture";
+import { type Texture } from "../../../Materials/Textures/texture"
 import { ProceduralTexture } from "./proceduralTexture.pure";
 import { RegisterClass } from "../../../Misc/typeStore";
 

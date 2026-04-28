@@ -1,9 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../types";
-
+import { type Nullable } from "../types"
 import { EngineStore } from "../Engines/engineStore";
-import type { Observer } from "../Misc/observable";
+import { type Observer } from "../Misc/observable"
 import { AbstractEngine } from "../Engines/abstractEngine";
 
 /**

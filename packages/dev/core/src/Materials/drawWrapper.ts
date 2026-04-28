@@ -1,10 +1,9 @@
-import type { IDrawContext } from "../Engines/IDrawContext";
-import type { IMaterialContext } from "../Engines/IMaterialContext";
-import type { Nullable } from "../types";
-
-import type { AbstractEngine } from "../Engines/abstractEngine";
-import type { Effect } from "./effect";
-import type { MaterialDefines } from "./materialDefines";
+import { type IDrawContext } from "../Engines/IDrawContext"
+import { type IMaterialContext } from "../Engines/IMaterialContext"
+import { type Nullable } from "../types"
+import { type AbstractEngine } from "../Engines/abstractEngine"
+import { type Effect } from "./effect"
+import { type MaterialDefines } from "./materialDefines"
 import { TimingTools } from "core/Misc/timingTools";
 
 /**

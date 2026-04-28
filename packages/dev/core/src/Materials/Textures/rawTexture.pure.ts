@@ -3,11 +3,9 @@
 export * from "./rawTexture.types";
 import { Texture } from "./texture.pure";
 import { Constants } from "../../Engines/constants";
-import type { Nullable } from "../../types";
-import type { AbstractEngine } from "../../Engines/abstractEngine";
-
-import type { Scene } from "../../scene";
-
+import { type Nullable } from "../../types"
+import { type AbstractEngine } from "../../Engines/abstractEngine"
+import { type Scene } from "../../scene"
 /**
  * Raw texture can help creating a texture directly from an array of data.
  * This can be super useful if you either get the data from an uncompressed source or

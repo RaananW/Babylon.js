@@ -1,5 +1,4 @@
-import type { PostProcessRenderPipelineManager } from "./postProcessRenderPipelineManager";
-
+import { type PostProcessRenderPipelineManager } from "./postProcessRenderPipelineManager"
 declare module "../../scene" {
     /**
      *

@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
 import { Action } from "./action.pure";
-import type { Condition } from "./condition";
-import type { Sound } from "../Audio/sound";
+import { type Condition } from "./condition"
+import { type Sound } from "../Audio/sound"
 import { RegisterClass } from "../Misc/typeStore";
 
 /**

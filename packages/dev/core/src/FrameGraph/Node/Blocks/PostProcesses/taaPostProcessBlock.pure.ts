@@ -1,6 +1,6 @@
 /** This file must only contain pure code and pure imports */
 
-import type { NodeRenderGraphConnectionPoint, Scene, NodeRenderGraphBuildState, FrameGraph, FrameGraphObjectRendererTask, FrameGraphTextureHandle } from "core/index";
+import { type NodeRenderGraphConnectionPoint, type Scene, type NodeRenderGraphBuildState, type FrameGraph, type FrameGraphObjectRendererTask, type FrameGraphTextureHandle } from "core/index"
 import { NodeRenderGraphBlockConnectionPointTypes, NodeRenderGraphConnectionPointDirection } from "../../Types/nodeRenderGraphTypes";
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
 import { FrameGraphTAATask } from "core/FrameGraph/Tasks/PostProcesses/taaTask";

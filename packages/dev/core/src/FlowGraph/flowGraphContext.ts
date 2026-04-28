@@ -1,20 +1,19 @@
 import { serialize } from "../Misc/decorators";
 import { RandomGUID } from "../Misc/guid";
-import type { Scene } from "../scene";
-import type { FlowGraphAsyncExecutionBlock } from "./flowGraphAsyncExecutionBlock";
-import type { FlowGraphBlock } from "./flowGraphBlock";
-import type { FlowGraphDataConnection } from "./flowGraphDataConnection";
-import type { FlowGraph } from "./flowGraph";
+import { type Scene } from "../scene"
+import { type FlowGraphAsyncExecutionBlock } from "./flowGraphAsyncExecutionBlock"
+import { type FlowGraphBlock } from "./flowGraphBlock"
+import { type FlowGraphDataConnection } from "./flowGraphDataConnection"
+import { type FlowGraph } from "./flowGraph"
 import { defaultValueSerializationFunction } from "./serialization";
-import type { FlowGraphCoordinator } from "./flowGraphCoordinator";
+import { type FlowGraphCoordinator } from "./flowGraphCoordinator"
 import { Observable } from "../Misc/observable";
-import type { AssetType, FlowGraphAssetType } from "./flowGraphAssetsContext";
+import { type AssetType, type FlowGraphAssetType } from "./flowGraphAssetsContext"
 import { GetFlowGraphAssetWithType } from "./flowGraphAssetsContext";
-import type { IAssetContainer } from "core/IAssetContainer";
-import type { Nullable } from "core/types";
+import { type IAssetContainer } from "core/IAssetContainer"
+import { type Nullable } from "core/types"
 import { FlowGraphAction, FlowGraphLogger } from "./flowGraphLogger";
-import type { IFlowGraphOnTickEventPayload } from "./Blocks/Event/flowGraphSceneTickEventBlock";
-
+import { type IFlowGraphOnTickEventPayload } from "./Blocks/Event/flowGraphSceneTickEventBlock"
 /**
  * Construction parameters for the context.
  */

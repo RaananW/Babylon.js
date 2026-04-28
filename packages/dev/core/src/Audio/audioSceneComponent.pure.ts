@@ -4,16 +4,16 @@ export * from "./audioSceneComponent.types";
 
 import { Sound } from "./sound.pure";
 import { SoundTrack } from "./soundTrack";
-import type { Nullable } from "../types";
+import { type Nullable } from "../types"
 import { Matrix, Vector3 } from "../Maths/math.vector.pure";
-import type { ISceneSerializableComponent } from "../sceneComponent";
+import { type ISceneSerializableComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
 import { Scene } from "../scene.pure";
 import { PrecisionDate } from "../Misc/precisionDate";
 import { EngineStore } from "../Engines/engineStore";
 import { AbstractEngine } from "core/Engines/abstractEngine";
-import type { IAssetContainer } from "core/IAssetContainer";
-import type { AssetContainer } from "../assetContainer";
+import { type IAssetContainer } from "core/IAssetContainer"
+import { type AssetContainer } from "../assetContainer"
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
 
 /**

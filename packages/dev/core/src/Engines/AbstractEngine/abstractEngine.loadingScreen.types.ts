@@ -1,5 +1,4 @@
-import type { ILoadingScreen } from "../../Loading/loadingScreen";
-
+import { type ILoadingScreen } from "../../Loading/loadingScreen"
 declare module "../../Engines/abstractEngine" {
     /**
      *

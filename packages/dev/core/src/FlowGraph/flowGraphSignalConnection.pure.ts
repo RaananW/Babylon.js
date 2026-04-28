@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
-import type { FlowGraphExecutionBlock } from "./flowGraphExecutionBlock";
+import { type FlowGraphExecutionBlock } from "./flowGraphExecutionBlock"
 import { FlowGraphConnection, FlowGraphConnectionType } from "./flowGraphConnection";
-import type { FlowGraphContext } from "./flowGraphContext";
+import { type FlowGraphContext } from "./flowGraphContext"
 import { FlowGraphAction } from "./flowGraphLogger";
 import { RegisterClass } from "../Misc/typeStore";
 

@@ -1,12 +1,11 @@
 import { Logger } from "../../Misc/logger";
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-import type { ISize } from "../../Maths/math.size";
-import type { ITextureCreationOptions } from "../../Materials/Textures/texture";
+import { type Nullable } from "../../types"
+import { type Scene } from "../../scene"
+import { type ISize } from "../../Maths/math.size"
+import { type ITextureCreationOptions } from "../../Materials/Textures/texture"
 import { Texture } from "../../Materials/Textures/texture.pure";
 import { Constants } from "../../Engines/constants";
-import type { ICanvas, ICanvasRenderingContext } from "../../Engines/ICanvas";
-
+import { type ICanvas, type ICanvasRenderingContext } from "../../Engines/ICanvas"
 /**
  * Interface defining options used to create a dynamic texture
  */

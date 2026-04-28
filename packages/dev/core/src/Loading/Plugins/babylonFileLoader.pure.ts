@@ -1,13 +1,13 @@
 /** This file must only contain pure code and pure imports */
 
 import { Logger } from "../../Misc/logger";
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { Camera } from "../../Cameras/camera";
-import type { Scene } from "../../scene";
+import { type Scene } from "../../scene"
 import { Mesh } from "../../Meshes/mesh.pure";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
 import { Geometry } from "../../Meshes/geometry";
-import type { Node } from "../../node";
+import { type Node } from "../../node"
 import { TransformNode } from "../../Meshes/transformNode";
 import { Material } from "../../Materials/material";
 import { MultiMaterial } from "../../Materials/multiMaterial.pure";
@@ -27,7 +27,7 @@ import { ToolsWarn } from "../../Misc/tools.pure";
 import { PostProcess } from "../../PostProcesses/postProcess.pure";
 import { Parse } from "./babylonFileParser.function";
 import { Observable } from "../../Misc/observable";
-import type { MorphTarget } from "../../Morph/morphTarget";
+import { type MorphTarget } from "../../Morph/morphTarget"
 import { SpriteManagerParse } from "../../Sprites/spriteManager.pure";
 import { GetIndividualParser } from "./babylonFileParser.function";
 import { Vector3 } from "../../Maths/math.vector";
@@ -37,8 +37,7 @@ import { RegisterSceneLoaderPlugin } from "../../Loading/sceneLoader";
 import { CannonJSPlugin } from "../../Physics/v1/Plugins/cannonJSPlugin";
 import { OimoJSPlugin } from "../../Physics/v1/Plugins/oimoJSPlugin";
 import { AmmoJSPlugin } from "../../Physics/v1/Plugins/ammoJSPlugin";
-import type { IParticleSystem } from "../../Particles/IParticleSystem";
-
+import { type IParticleSystem } from "../../Particles/IParticleSystem"
 /** @internal */
 // eslint-disable-next-line no-var
 export var _BabylonLoaderRegistered = true;

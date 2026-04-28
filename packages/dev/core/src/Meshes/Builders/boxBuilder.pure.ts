@@ -1,7 +1,7 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
+import { type Nullable } from "../../types"
+import { type Scene } from "../../scene"
 import { Matrix, Vector4 } from "../../Maths/math.vector.pure";
 import { Color4 } from "../../Maths/math.color.pure";
 import { Mesh, Mesh_GetDefaultSideOrientation } from "../mesh.pure";

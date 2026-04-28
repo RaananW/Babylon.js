@@ -1,6 +1,5 @@
-import type { PerfCounter } from "../../Misc/perfCounter";
-import type { Nullable } from "../../types";
-
+import { type PerfCounter } from "../../Misc/perfCounter"
+import { type Nullable } from "../../types"
 declare module "../../Engines/abstractEngine" {
     /**
      *

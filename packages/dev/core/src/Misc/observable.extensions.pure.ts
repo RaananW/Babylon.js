@@ -2,8 +2,8 @@
 
 export * from "./observable.extensions.types";
 
-import type { Nullable } from "../types";
-import type { Observer, EventState } from "./observable";
+import { type Nullable } from "../types"
+import { type Observer, type EventState } from "./observable"
 import { Observable } from "./observable";
 
 /**

@@ -1,24 +1,24 @@
 {
   "stats": {
-    "totalFiles": 3185,
-    "filesWithSideEffects": 1463,
-    "filesWithoutSideEffects": 1722,
+    "totalFiles": 3227,
+    "filesWithSideEffects": 1490,
+    "filesWithoutSideEffects": 1737,
     "byType": {
-      "top-level-call": 649,
-      "declare-module": 159,
-      "bare-import": 137,
-      "static-property-assignment": 1,
-      "prototype-assignment": 14,
-      "RegisterClass": 2,
+      "top-level-call": 653,
+      "declare-module": 160,
+      "bare-import": 139,
+      "static-property-assignment": 2,
+      "prototype-assignment": 16,
+      "RegisterClass": 23,
       "shader-store-write": 623
     },
     "filesByType": {
-      "top-level-call": 645,
-      "declare-module": 141,
-      "bare-import": 48,
-      "static-property-assignment": 1,
-      "prototype-assignment": 4,
-      "RegisterClass": 2,
+      "top-level-call": 648,
+      "declare-module": 142,
+      "bare-import": 50,
+      "static-property-assignment": 2,
+      "prototype-assignment": 5,
+      "RegisterClass": 23,
       "shader-store-write": 623
     }
   },
@@ -108,12 +108,12 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 7,
+          "line": 6,
           "text": "declare module \"../scene\" {"
         },
         {
           "type": "declare-module",
-          "line": 183,
+          "line": 182,
           "text": "declare module \"../Bones/bone\" {"
         }
       ]
@@ -173,7 +173,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -203,7 +203,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"./buffer.pure\" {"
         }
       ]
@@ -343,7 +343,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../Cameras/freeCameraInputsManager\" {"
         }
       ]
@@ -633,12 +633,12 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../scene\" {"
         },
         {
           "type": "declare-module",
-          "line": 33,
+          "line": 32,
           "text": "declare module \"../../Meshes/abstractMesh\" {"
         }
       ]
@@ -678,7 +678,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -698,7 +698,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../Engines/abstractEngine\" {"
         }
       ]
@@ -738,7 +738,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -758,7 +758,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -778,7 +778,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"../abstractEngine\" {"
         }
       ]
@@ -798,7 +798,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -818,12 +818,12 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         },
         {
           "type": "declare-module",
-          "line": 50,
+          "line": 49,
           "text": "declare module \"../../Meshes/abstractMesh\" {"
         }
       ]
@@ -863,7 +863,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -903,7 +903,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -915,6 +915,36 @@
           "type": "static-property-assignment",
           "line": 4,
           "text": "AbstractEngine.GetCompatibleTextureLoader = _GetCompatibleTextureLoader;"
+        }
+      ]
+    },
+    {
+      "file": "Engines/AbstractEngine/abstractEngine.textureSelector.ts",
+      "sideEffects": [
+        {
+          "type": "declare-module",
+          "line": 4,
+          "text": "declare module \"../abstractEngine\" {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 71,
+          "text": "Object.defineProperty(AbstractEngine.prototype, \"texturesSupported\", {"
+        },
+        {
+          "type": "top-level-call",
+          "line": 100,
+          "text": "Object.defineProperty(AbstractEngine.prototype, \"textureFormatInUse\", {"
+        },
+        {
+          "type": "prototype-assignment",
+          "line": 108,
+          "text": "AbstractEngine.prototype.setCompressedTextureExclusions = function (skippedFiles: Array<string>): void {"
+        },
+        {
+          "type": "prototype-assignment",
+          "line": 112,
+          "text": "AbstractEngine.prototype.setTextureFormatToUse = function (formatsAvailable: Array<string>): Nullable<string> {"
         }
       ]
     },
@@ -933,7 +963,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -953,7 +983,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1088,7 +1118,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 9,
+          "line": 8,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1108,7 +1138,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1148,7 +1178,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1168,7 +1198,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1188,7 +1218,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1208,17 +1238,17 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 8,
+          "line": 7,
           "text": "declare module \"../../Engines/engine\" {"
         },
         {
           "type": "declare-module",
-          "line": 35,
+          "line": 34,
           "text": "declare module \"../../Cameras/camera\" {"
         },
         {
           "type": "declare-module",
-          "line": 67,
+          "line": 66,
           "text": "declare module \"../../scene\" {"
         }
       ]
@@ -1238,7 +1268,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1258,7 +1288,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../../Engines/thinEngine\" {"
         }
       ]
@@ -1278,7 +1308,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../abstractEngine\" {"
         }
       ]
@@ -1298,7 +1328,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1318,7 +1348,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1338,7 +1368,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1358,7 +1388,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1378,7 +1408,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"../../Engines/engine\" {"
         }
       ]
@@ -1398,7 +1428,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../Engines/engine\" {"
         }
       ]
@@ -1418,7 +1448,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../Engines/thinEngine\" {"
         }
       ]
@@ -1438,7 +1468,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../Engines/abstractEngine\" {"
         }
       ]
@@ -1468,7 +1498,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../../Engines/thinNativeEngine\" {"
         }
       ]
@@ -1573,7 +1603,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 8,
+          "line": 7,
           "text": "declare module \"../../webgpuEngine\" {"
         }
       ]
@@ -1593,7 +1623,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../../abstractEngine\" {"
         }
       ]
@@ -1633,7 +1663,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../abstractEngine\" {"
         }
       ]
@@ -1653,7 +1683,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../../abstractEngine\" {"
         }
       ]
@@ -1663,47 +1693,47 @@
       "sideEffects": [
         {
           "type": "bare-import",
-          "line": 7,
+          "line": 6,
           "text": "import \"../../../Engines/AbstractEngine/abstractEngine.query\";"
         },
         {
           "type": "prototype-assignment",
-          "line": 9,
+          "line": 8,
           "text": "ThinWebGPUEngine.prototype.getGPUFrameTimeCounter = function (): PerfCounter {"
         },
         {
           "type": "prototype-assignment",
-          "line": 13,
+          "line": 12,
           "text": "ThinWebGPUEngine.prototype.captureGPUFrameTime = function (value: boolean) {"
         },
         {
           "type": "prototype-assignment",
-          "line": 17,
+          "line": 16,
           "text": "ThinWebGPUEngine.prototype.createQuery = function (): OcclusionQuery {"
         },
         {
           "type": "prototype-assignment",
-          "line": 21,
+          "line": 20,
           "text": "ThinWebGPUEngine.prototype.deleteQuery = function (query: OcclusionQuery): ThinWebGPUEngine {"
         },
         {
           "type": "prototype-assignment",
-          "line": 27,
+          "line": 26,
           "text": "ThinWebGPUEngine.prototype.isQueryResultAvailable = function (query: OcclusionQuery): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 31,
+          "line": 30,
           "text": "ThinWebGPUEngine.prototype.getQueryResult = function (query: OcclusionQuery): number {"
         },
         {
           "type": "prototype-assignment",
-          "line": 35,
+          "line": 34,
           "text": "ThinWebGPUEngine.prototype.beginOcclusionQuery = function (algorithmType: number, query: OcclusionQuery): boolean {"
         },
         {
           "type": "prototype-assignment",
-          "line": 49,
+          "line": 48,
           "text": "ThinWebGPUEngine.prototype.endOcclusionQuery = function (): ThinWebGPUEngine {"
         }
       ]
@@ -1723,7 +1753,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../abstractEngine\" {"
         }
       ]
@@ -1743,7 +1773,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../abstractEngine\" {"
         }
       ]
@@ -1763,7 +1793,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../../abstractEngine\" {"
         }
       ]
@@ -1783,7 +1813,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../abstractEngine\" {"
         }
       ]
@@ -1803,7 +1833,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../abstractEngine\" {"
         }
       ]
@@ -1823,7 +1853,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../../abstractEngine\" {"
         }
       ]
@@ -2074,6 +2104,26 @@
       ]
     },
     {
+      "file": "FlowGraph/Blocks/Data/Audio/flowGraphGetSoundVolumeBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 47,
+          "text": "RegisterClass(FlowGraphBlockNames.AudioGetVolume, FlowGraphGetSoundVolumeBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Data/Audio/flowGraphIsSoundPlayingBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 48,
+          "text": "RegisterClass(FlowGraphBlockNames.AudioIsSoundPlaying, FlowGraphIsSoundPlayingBlock);"
+        }
+      ]
+    },
+    {
       "file": "FlowGraph/Blocks/Data/flowGraphConditionalDataBlock.ts",
       "sideEffects": [
         {
@@ -2100,6 +2150,16 @@
           "type": "top-level-call",
           "line": 8,
           "text": "registerFlowGraphDataSwitchBlock();"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Data/flowGraphDebugBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 118,
+          "text": "RegisterClass(FlowGraphBlockNames.DebugBlock, FlowGraphDebugBlock);"
         }
       ]
     },
@@ -2184,6 +2244,36 @@
       ]
     },
     {
+      "file": "FlowGraph/Blocks/Data/Physics/flowGraphGetAngularVelocityBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 54,
+          "text": "RegisterClass(FlowGraphBlockNames.PhysicsGetAngularVelocity, FlowGraphGetAngularVelocityBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Data/Physics/flowGraphGetLinearVelocityBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 54,
+          "text": "RegisterClass(FlowGraphBlockNames.PhysicsGetLinearVelocity, FlowGraphGetLinearVelocityBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Data/Physics/flowGraphGetPhysicsMassPropertiesBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 75,
+          "text": "RegisterClass(FlowGraphBlockNames.PhysicsGetMassProperties, FlowGraphGetPhysicsMassPropertiesBlock);"
+        }
+      ]
+    },
+    {
       "file": "FlowGraph/Blocks/Data/Transformers/flowGraphJsonPointerParserBlock.ts",
       "sideEffects": [
         {
@@ -2254,6 +2344,36 @@
       ]
     },
     {
+      "file": "FlowGraph/Blocks/Event/flowGraphPhysicsCollisionEventBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 145,
+          "text": "RegisterClass(FlowGraphBlockNames.PhysicsCollisionEvent, FlowGraphPhysicsCollisionEventBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Event/flowGraphPointerDownEventBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 108,
+          "text": "RegisterClass(FlowGraphBlockNames.PointerDownEvent, FlowGraphPointerDownEventBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Event/flowGraphPointerMoveEventBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 108,
+          "text": "RegisterClass(FlowGraphBlockNames.PointerMoveEvent, FlowGraphPointerMoveEventBlock);"
+        }
+      ]
+    },
+    {
       "file": "FlowGraph/Blocks/Event/flowGraphPointerOutEventBlock.ts",
       "sideEffects": [
         {
@@ -2270,6 +2390,16 @@
           "type": "top-level-call",
           "line": 8,
           "text": "registerFlowGraphPointerOverEventBlock();"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Event/flowGraphPointerUpEventBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 108,
+          "text": "RegisterClass(FlowGraphBlockNames.PointerUpEvent, FlowGraphPointerUpEventBlock);"
         }
       ]
     },
@@ -2310,6 +2440,16 @@
           "type": "top-level-call",
           "line": 8,
           "text": "registerFlowGraphSendCustomEventBlock();"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Event/flowGraphSoundEndedEventBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 81,
+          "text": "RegisterClass(FlowGraphBlockNames.AudioSoundEndedEvent, FlowGraphSoundEndedEventBlock);"
         }
       ]
     },
@@ -2370,6 +2510,46 @@
           "type": "top-level-call",
           "line": 8,
           "text": "registerFlowGraphStopAnimationBlock();"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Execution/Audio/flowGraphPauseSoundBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 56,
+          "text": "RegisterClass(FlowGraphBlockNames.AudioPauseSound, FlowGraphPauseSoundBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Execution/Audio/flowGraphPlaySoundBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 72,
+          "text": "RegisterClass(FlowGraphBlockNames.AudioPlaySound, FlowGraphPlaySoundBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Execution/Audio/flowGraphSetSoundVolumeBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 58,
+          "text": "RegisterClass(FlowGraphBlockNames.AudioSetVolume, FlowGraphSetSoundVolumeBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Execution/Audio/flowGraphStopSoundBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 51,
+          "text": "RegisterClass(FlowGraphBlockNames.AudioStopSound, FlowGraphStopSoundBlock);"
         }
       ]
     },
@@ -2540,6 +2720,56 @@
           "type": "top-level-call",
           "line": 8,
           "text": "registerFlowGraphSetVariableBlock();"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Execution/Physics/flowGraphApplyForceBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 66,
+          "text": "RegisterClass(FlowGraphBlockNames.PhysicsApplyForce, FlowGraphApplyForceBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Execution/Physics/flowGraphApplyImpulseBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 68,
+          "text": "RegisterClass(FlowGraphBlockNames.PhysicsApplyImpulse, FlowGraphApplyImpulseBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Execution/Physics/flowGraphSetAngularVelocityBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 58,
+          "text": "RegisterClass(FlowGraphBlockNames.PhysicsSetAngularVelocity, FlowGraphSetAngularVelocityBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Execution/Physics/flowGraphSetLinearVelocityBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 58,
+          "text": "RegisterClass(FlowGraphBlockNames.PhysicsSetLinearVelocity, FlowGraphSetLinearVelocityBlock);"
+        }
+      ]
+    },
+    {
+      "file": "FlowGraph/Blocks/Execution/Physics/flowGraphSetPhysicsMotionTypeBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 63,
+          "text": "RegisterClass(FlowGraphBlockNames.PhysicsSetMotionType, FlowGraphSetPhysicsMotionTypeBlock);"
         }
       ]
     },
@@ -2954,6 +3184,16 @@
       ]
     },
     {
+      "file": "FrameGraph/Node/Blocks/Rendering/iblShadowsRendererBlock.ts",
+      "sideEffects": [
+        {
+          "type": "RegisterClass",
+          "line": 351,
+          "text": "RegisterClass(\"BABYLON.NodeRenderGraphIblShadowsRendererBlock\", NodeRenderGraphIblShadowsRendererBlock);"
+        }
+      ]
+    },
+    {
       "file": "FrameGraph/Node/Blocks/Rendering/objectRendererBlock.ts",
       "sideEffects": [
         {
@@ -3144,6 +3384,16 @@
       ]
     },
     {
+      "file": "FrameGraph/Tasks/Rendering/iblShadowsRendererTask.ts",
+      "sideEffects": [
+        {
+          "type": "bare-import",
+          "line": 18,
+          "text": "import \"../../../Rendering/iblCdfGeneratorSceneComponent\";"
+        }
+      ]
+    },
+    {
       "file": "Gamepads/gamepadSceneComponent.ts",
       "sideEffects": [
         {
@@ -3158,17 +3408,17 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../scene\" {"
         },
         {
           "type": "declare-module",
-          "line": 20,
+          "line": 19,
           "text": "declare module \"../Cameras/freeCameraInputsManager\" {"
         },
         {
           "type": "declare-module",
-          "line": 34,
+          "line": 33,
           "text": "declare module \"../Cameras/arcRotateCameraInputsManager\" {"
         }
       ]
@@ -3198,7 +3448,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 11,
+          "line": 10,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -3238,7 +3488,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -3258,7 +3508,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -3278,7 +3528,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -3298,7 +3548,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -3308,7 +3558,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -3613,7 +3863,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"./material\" {"
         }
       ]
@@ -4848,7 +5098,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"./pbrBaseMaterial\" {"
         }
       ]
@@ -4928,7 +5178,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"./standardMaterial\" {"
         }
       ]
@@ -4958,7 +5208,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"./baseTexture\" {"
         }
       ]
@@ -5123,7 +5373,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../effect\" {"
         }
       ]
@@ -5343,7 +5593,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"./abstractMesh\" {"
         }
       ]
@@ -5569,11 +5819,31 @@
       ]
     },
     {
+      "file": "Meshes/GaussianSplatting/gaussianSplattingCompoundMesh.ts",
+      "sideEffects": [
+        {
+          "type": "static-property-assignment",
+          "line": 90,
+          "text": "Mesh._GaussianSplattingCompoundMeshParser = GaussianSplattingCompoundMesh.Parse;"
+        }
+      ]
+    },
+    {
       "file": "Meshes/GaussianSplatting/gaussianSplattingMesh.ts",
       "sideEffects": [
         {
           "type": "bare-import",
           "line": 3,
+          "text": "import \"core/Meshes/thinInstanceMesh\";"
+        }
+      ]
+    },
+    {
+      "file": "Meshes/GaussianSplatting/gaussianSplattingMeshBase.ts",
+      "sideEffects": [
+        {
+          "type": "bare-import",
+          "line": 15,
           "text": "import \"core/Meshes/thinInstanceMesh\";"
         }
       ]
@@ -5648,12 +5918,12 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"./mesh\" {"
         },
         {
           "type": "declare-module",
-          "line": 46,
+          "line": 45,
           "text": "declare module \"./abstractMesh\" {"
         }
       ]
@@ -5723,12 +5993,12 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../scene\" {"
         },
         {
           "type": "declare-module",
-          "line": 19,
+          "line": 18,
           "text": "declare module \"../Meshes/mesh\" {"
         }
       ]
@@ -5738,7 +6008,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -6608,7 +6878,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"./subMesh\" {"
         }
       ]
@@ -6628,7 +6898,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"./mesh\" {"
         }
       ]
@@ -6903,7 +7173,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"./observable\" {"
         }
       ]
@@ -7753,12 +8023,12 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../Engines/abstractEngine\" {"
         },
         {
           "type": "declare-module",
-          "line": 42,
+          "line": 41,
           "text": "declare module \"../Meshes/mesh\" {"
         }
       ]
@@ -7798,7 +8068,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 8,
+          "line": 7,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -7838,7 +8108,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 8,
+          "line": 7,
           "text": "declare module \"../../Meshes/abstractMesh\" {"
         }
       ]
@@ -7878,7 +8148,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 7,
+          "line": 6,
           "text": "declare module \"../../Meshes/transformNode\" {"
         }
       ]
@@ -8058,12 +8328,12 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../Engines/abstractEngine\" {"
         },
         {
           "type": "declare-module",
-          "line": 27,
+          "line": 26,
           "text": "declare module \"../Materials/effect\" {"
         }
       ]
@@ -8223,7 +8493,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"../../scene\" {"
         }
       ]
@@ -8353,12 +8623,12 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"../scene\" {"
         },
         {
           "type": "declare-module",
-          "line": 29,
+          "line": 28,
           "text": "declare module \"./reflectionProbe.pure\" {"
         }
       ]
@@ -8378,12 +8648,12 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"../scene\" {"
         },
         {
           "type": "declare-module",
-          "line": 27,
+          "line": 26,
           "text": "declare module \"../Meshes/abstractMesh\" {"
         }
       ]
@@ -8403,7 +8673,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -8438,7 +8708,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -8458,22 +8728,22 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 6,
+          "line": 5,
           "text": "declare module \"../scene\" {"
         },
         {
           "type": "declare-module",
-          "line": 16,
+          "line": 15,
           "text": "declare module \"../Meshes/abstractMesh\" {"
         },
         {
           "type": "declare-module",
-          "line": 28,
+          "line": 27,
           "text": "declare module \"../Meshes/linesMesh\" {"
         },
         {
           "type": "declare-module",
-          "line": 45,
+          "line": 44,
           "text": "declare module \"../Meshes/linesMesh\" {"
         }
       ]
@@ -8493,7 +8763,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../../scene\" {"
         }
       ]
@@ -8523,7 +8793,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -8553,7 +8823,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -8598,12 +8868,12 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 3,
+          "line": 2,
           "text": "declare module \"../scene\" {"
         },
         {
           "type": "declare-module",
-          "line": 19,
+          "line": 18,
           "text": "declare module \"../Meshes/abstractMesh\" {"
         }
       ]
@@ -8638,12 +8908,12 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 5,
+          "line": 4,
           "text": "declare module \"../scene\" {"
         },
         {
           "type": "declare-module",
-          "line": 31,
+          "line": 30,
           "text": "declare module \"../Materials/Textures/renderTargetTexture\" {"
         }
       ]
@@ -8673,7 +8943,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 4,
+          "line": 3,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -10533,7 +10803,7 @@
       "sideEffects": [
         {
           "type": "shader-store-write",
-          "line": 117,
+          "line": 119,
           "text": "if (!ShaderStore.IncludesShadersStore[name]) {"
         }
       ]
@@ -13693,7 +13963,7 @@
       "sideEffects": [
         {
           "type": "shader-store-write",
-          "line": 85,
+          "line": 87,
           "text": "if (!ShaderStore.IncludesShadersStoreWGSL[name]) {"
         }
       ]
@@ -14978,7 +15248,7 @@
       "sideEffects": [
         {
           "type": "declare-module",
-          "line": 10,
+          "line": 9,
           "text": "declare module \"../scene\" {"
         }
       ]
@@ -15000,6 +15270,16 @@
           "type": "top-level-call",
           "line": 8,
           "text": "registerWebXRBackgroundRemover();"
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRBodyTracking.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 2617,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
         }
       ]
     },
@@ -15100,6 +15380,16 @@
           "type": "top-level-call",
           "line": 8,
           "text": "registerWebXRHitTest();"
+        }
+      ]
+    },
+    {
+      "file": "XR/features/WebXRHitTestLegacy.ts",
+      "sideEffects": [
+        {
+          "type": "top-level-call",
+          "line": 224,
+          "text": "WebXRFeaturesManager.AddWebXRFeature("
         }
       ]
     },

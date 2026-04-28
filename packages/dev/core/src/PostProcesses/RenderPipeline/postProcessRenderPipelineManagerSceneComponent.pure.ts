@@ -2,7 +2,7 @@
 
 export * from "./postProcessRenderPipelineManagerSceneComponent.types";
 
-import type { ISceneComponent } from "../../sceneComponent";
+import { type ISceneComponent } from "../../sceneComponent"
 import { SceneComponentConstants } from "../../sceneComponent";
 import { Scene } from "../../scene.pure";
 import { PostProcessRenderPipelineManager } from "./postProcessRenderPipelineManager";

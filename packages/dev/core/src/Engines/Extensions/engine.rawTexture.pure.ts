@@ -1,11 +1,11 @@
 export * from "./engine.rawTexture.types";
 
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
-import type { Scene } from "../../scene";
+import { type Scene } from "../../scene"
 import { Constants } from "../constants";
 import { ThinEngine } from "../thinEngine";
-import type { IWebRequest } from "../../Misc/interfaces/iWebRequest";
+import { type IWebRequest } from "../../Misc/interfaces/iWebRequest"
 import { Logger } from "../../Misc/logger";
 import { IsExponentOfTwo } from "../../Misc/tools.functions";
 

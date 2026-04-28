@@ -1,13 +1,13 @@
-import type { Observer } from "../Misc/observable";
-import type { Nullable } from "../types";
-import type { Scene } from "../scene";
-import type { SubMesh } from "../Meshes/subMesh";
-import type { Material } from "./material";
-import type { IEffectCreationOptions } from "./effect";
+import { type Observer } from "../Misc/observable"
+import { type Nullable } from "../types"
+import { type Scene } from "../scene"
+import { type SubMesh } from "../Meshes/subMesh"
+import { type Material } from "./material"
+import { type IEffectCreationOptions } from "./effect"
 import { Effect } from "./effect";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-import type { Node } from "../node";
-import type { ShadowGenerator } from "../Lights/Shadows/shadowGenerator";
+import { type AbstractMesh } from "../Meshes/abstractMesh"
+import { type Node } from "../node"
+import { type ShadowGenerator } from "../Lights/Shadows/shadowGenerator"
 import { RandomGUID } from "../Misc/guid";
 import { DrawWrapper } from "./drawWrapper";
 import { EngineStore } from "../Engines/engineStore";

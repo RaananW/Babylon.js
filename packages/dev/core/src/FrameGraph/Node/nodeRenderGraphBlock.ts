@@ -1,14 +1,4 @@
-import type {
-    NodeRenderGraphBuildState,
-    Nullable,
-    NodeRenderGraphInputBlock,
-    AbstractEngine,
-    Scene,
-    FrameGraphTask,
-    FrameGraph,
-    NodeRenderGraphResourceContainerBlock,
-    FrameGraphTextureHandle,
-} from "core/index";
+import { type NodeRenderGraphBuildState, type Nullable, type NodeRenderGraphInputBlock, type AbstractEngine, type Scene, type FrameGraphTask, type FrameGraph, type NodeRenderGraphResourceContainerBlock, type FrameGraphTextureHandle } from "core/index"
 import { GetClass } from "../../Misc/typeStore";
 import { serialize } from "../../Misc/decorators";
 import { UniqueIdGenerator } from "../../Misc/uniqueIdGenerator";

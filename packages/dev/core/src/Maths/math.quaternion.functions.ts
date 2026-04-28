@@ -1,6 +1,5 @@
-import type { DeepImmutable } from "../types";
-import type { IQuaternionLike, IVector3Like } from "./math.like";
-
+import { type DeepImmutable } from "../types"
+import { type IQuaternionLike, type IVector3Like } from "./math.like"
 // ── Quaternion free functions ───────────────────────────────────────────────
 
 /**

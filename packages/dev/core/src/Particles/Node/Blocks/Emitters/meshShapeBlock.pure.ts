@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { FloatArray, IndicesArray, Nullable } from "core/types";
-import type { Mesh } from "core/Meshes/mesh";
-import type { NodeParticleBuildState } from "core/Particles/Node/nodeParticleBuildState";
-import type { NodeParticleConnectionPoint } from "core/Particles/Node/nodeParticleBlockConnectionPoint";
-import type { Particle } from "core/Particles/particle";
-import type { IShapeBlock } from "./IShapeBlock";
+import { type FloatArray, type IndicesArray, type Nullable } from "core/types"
+import { type Mesh } from "core/Meshes/mesh"
+import { type NodeParticleBuildState } from "core/Particles/Node/nodeParticleBuildState"
+import { type NodeParticleConnectionPoint } from "core/Particles/Node/nodeParticleBlockConnectionPoint"
+import { type Particle } from "core/Particles/particle"
+import { type IShapeBlock } from "./IShapeBlock"
 import { VertexData } from "core/Meshes/mesh.vertexData.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "core/Decorators/nodeDecorator";
 import { NodeParticleBlock } from "core/Particles/Node/nodeParticleBlock";

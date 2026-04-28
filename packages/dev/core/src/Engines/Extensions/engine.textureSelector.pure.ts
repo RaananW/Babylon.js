@@ -1,6 +1,6 @@
 export * from "./engine.textureSelector.types";
 
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { Engine } from "../engine";
 
 let _registered = false;

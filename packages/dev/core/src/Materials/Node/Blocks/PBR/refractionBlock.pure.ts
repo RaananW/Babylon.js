@@ -1,19 +1,19 @@
 /** This file must only contain pure code and pure imports */
 
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
-import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
-import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
+import { type NodeMaterialBuildState } from "../../nodeMaterialBuildState"
+import { type NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint"
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
-import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
+import { type NodeMaterial, type NodeMaterialDefines } from "../../nodeMaterial"
 import { InputBlock } from "../Input/inputBlock.pure";
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
-import type { Nullable } from "../../../../types";
-import type { BaseTexture } from "../../../Textures/baseTexture";
-import type { Mesh } from "../../../../Meshes/mesh";
-import type { Effect } from "../../../effect";
+import { type Nullable } from "../../../../types"
+import { type BaseTexture } from "../../../Textures/baseTexture"
+import { type Mesh } from "../../../../Meshes/mesh"
+import { type Effect } from "../../../effect"
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
-import type { Scene } from "../../../../scene";
+import { type Scene } from "../../../../scene"
 import { NodeMaterialBlock } from "../../nodeMaterialBlock";
 import { CubeTexture } from "../../../Textures/cubeTexture.pure";
 import { Texture } from "../../../Textures/texture.pure";

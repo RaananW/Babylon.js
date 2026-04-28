@@ -1,9 +1,9 @@
 /** This file must only contain pure code and pure imports */
 
-import type { IStaticSoundOptions, IStaticSoundPlayOptions, IStaticSoundStopOptions } from "../AudioV2/abstractAudio/staticSound";
-import type { IStreamingSoundOptions } from "../AudioV2/abstractAudio/streamingSound";
+import { type IStaticSoundOptions, type IStaticSoundPlayOptions, type IStaticSoundStopOptions } from "../AudioV2/abstractAudio/staticSound"
+import { type IStreamingSoundOptions } from "../AudioV2/abstractAudio/streamingSound"
 import { _HasSpatialAudioOptions, _SpatialAudioDefaults } from "../AudioV2/abstractAudio/subProperties/abstractSpatialAudio";
-import type { IAudioParameterRampOptions } from "../AudioV2/audioParameter";
+import { type IAudioParameterRampOptions } from "../AudioV2/audioParameter"
 import { AudioParameterRampShape } from "../AudioV2/audioParameter";
 import { SoundState } from "../AudioV2/soundState";
 import { _WebAudioSoundSource } from "../AudioV2/webAudio/webAudioSoundSource";
@@ -12,16 +12,16 @@ import { _WebAudioStreamingSound } from "../AudioV2/webAudio/webAudioStreamingSo
 import { AbstractEngine } from "../Engines/abstractEngine";
 import { EngineStore } from "../Engines/engineStore";
 import { Vector3 } from "../Maths/math.vector.pure";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-import type { TransformNode } from "../Meshes/transformNode";
+import { type AbstractMesh } from "../Meshes/abstractMesh"
+import { type TransformNode } from "../Meshes/transformNode"
 import { _WarnImport } from "../Misc/devTools";
 import { Logger } from "../Misc/logger";
 import { Observable } from "../Misc/observable";
 import { _RetryWithInterval } from "../Misc/timingTools.pure";
-import type { Scene } from "../scene";
-import type { Nullable } from "../types";
-import type { AudioEngine } from "./audioEngine";
-import type { ISoundOptions } from "./Interfaces/ISoundOptions";
+import { type Scene } from "../scene"
+import { type Nullable } from "../types"
+import { type AudioEngine } from "./audioEngine"
+import { type ISoundOptions } from "./Interfaces/ISoundOptions"
 import { RegisterClass } from "../Misc/typeStore";
 
 const TmpRampOptions: IAudioParameterRampOptions = {

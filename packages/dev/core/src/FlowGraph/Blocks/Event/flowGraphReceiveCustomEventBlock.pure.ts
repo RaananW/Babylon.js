@@ -1,12 +1,12 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Observer } from "../../../Misc/observable";
-import type { FlowGraphContext } from "../../flowGraphContext";
+import { type Observer } from "../../../Misc/observable"
+import { type FlowGraphContext } from "../../flowGraphContext"
 import { FlowGraphEventBlock } from "../../flowGraphEventBlock";
-import type { Nullable } from "../../../types";
+import { type Nullable } from "../../../types"
 import { ToolsWarn } from "../../../Misc/tools.pure";
-import type { RichType } from "../../flowGraphRichTypes";
-import type { IFlowGraphBlockConfiguration } from "../../flowGraphBlock";
+import { type RichType } from "../../flowGraphRichTypes"
+import { type IFlowGraphBlockConfiguration } from "../../flowGraphBlock"
 import { FlowGraphBlockNames } from "../flowGraphBlockNames";
 import { FlowGraphCoordinator } from "core/FlowGraph/flowGraphCoordinator";
 import { RegisterClass } from "../../../Misc/typeStore";

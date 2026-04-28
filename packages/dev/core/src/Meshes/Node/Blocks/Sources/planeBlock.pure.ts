@@ -2,8 +2,8 @@
 
 import { NodeGeometryBlockConnectionPointTypes } from "../../Enums/nodeGeometryConnectionPointTypes";
 import { NodeGeometryBlock } from "../../nodeGeometryBlock";
-import type { NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint";
-import type { NodeGeometryBuildState } from "../../nodeGeometryBuildState";
+import { type NodeGeometryConnectionPoint } from "../../nodeGeometryBlockConnectionPoint"
+import { type NodeGeometryBuildState } from "../../nodeGeometryBuildState"
 import { GeometryInputBlock } from "../geometryInputBlock.pure";
 import { Matrix } from "../../../../Maths/math.vector.pure";
 import { PropertyTypeForEdition, editableInPropertyPage } from "../../../../Decorators/nodeDecorator";

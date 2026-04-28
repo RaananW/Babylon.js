@@ -1,7 +1,6 @@
-import type { FloatArray, Nullable } from "../../types";
-import type { DataBuffer } from "../../Buffers/dataBuffer";
-import type { IPipelineContext } from "../IPipelineContext";
-
+import { type FloatArray, type Nullable } from "../../types"
+import { type DataBuffer } from "../../Buffers/dataBuffer"
+import { type IPipelineContext } from "../IPipelineContext"
 declare module "../../Engines/thinEngine" {
     /**
      *

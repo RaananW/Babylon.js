@@ -1,6 +1,5 @@
-import type { RenderTargetTexture } from "./renderTargetTexture.pure";
-import type { Nullable } from "../../types";
-
+import { type RenderTargetTexture } from "./renderTargetTexture.pure"
+import { type Nullable } from "../../types"
 declare module "../effect" {
     /**
      *

@@ -2,8 +2,8 @@
 
 export * from "./arcRotateCameraVRDeviceOrientationInput.types";
 
-import type { ArcRotateCamera } from "../../Cameras/arcRotateCamera";
-import type { ICameraInput } from "../../Cameras/cameraInputsManager";
+import { type ArcRotateCamera } from "../../Cameras/arcRotateCamera"
+import { type ICameraInput } from "../../Cameras/cameraInputsManager"
 import { CameraInputTypes } from "../../Cameras/cameraInputsManager";
 import { ToolsBackCompatCameraNoPreventDefault, ToolsWarn, ToolsError } from "../../Misc/tools.pure";
 import { ArcRotateCameraInputsManager } from "../../Cameras/arcRotateCameraInputsManager";

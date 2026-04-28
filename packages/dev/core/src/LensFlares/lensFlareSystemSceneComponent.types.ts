@@ -1,6 +1,5 @@
-import type { Nullable } from "../types";
-import type { LensFlareSystem } from "./lensFlareSystem";
-
+import { type Nullable } from "../types"
+import { type LensFlareSystem } from "./lensFlareSystem"
 declare module "../scene" {
     /**
      *

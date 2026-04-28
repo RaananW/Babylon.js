@@ -3,9 +3,9 @@
 import { Logger } from "../Misc/logger";
 import { Vector3 } from "../Maths/math.vector.pure";
 import { Action } from "./action.pure";
-import type { Condition } from "./condition";
+import { type Condition } from "./condition"
 import { Constants } from "../Engines/constants";
-import type { ActionEvent } from "./actionEvent";
+import { type ActionEvent } from "./actionEvent"
 import { RegisterClass } from "../Misc/typeStore";
 
 /**

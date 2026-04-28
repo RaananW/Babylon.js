@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
+import { type Nullable } from "../../types"
+import { type Scene } from "../../scene"
 import { EnvCubeTexture } from "./envCubeTexture.pure";
-import type { AbstractEngine } from "../../Engines/abstractEngine";
+import { type AbstractEngine } from "../../Engines/abstractEngine"
 import { PanoramaToCubeMapTools } from "../../Misc/HighDynamicRange/panoramaToCubemap";
-import type { CubeMapInfo } from "../../Misc/HighDynamicRange/panoramaToCubemap";
+import { type CubeMapInfo } from "../../Misc/HighDynamicRange/panoramaToCubemap"
 import { ReadExrDataAsync } from "./Loaders/exrTextureLoader";
 import { RegisterClass } from "../../Misc/typeStore";
 

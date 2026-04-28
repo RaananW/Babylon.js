@@ -3,13 +3,13 @@
 export * from "./lensFlareSystemSceneComponent.types";
 
 import { Tools } from "../Misc/tools.pure";
-import type { Camera } from "../Cameras/camera";
+import { type Camera } from "../Cameras/camera"
 import { Scene } from "../scene.pure";
-import type { ISceneSerializableComponent } from "../sceneComponent";
+import { type ISceneSerializableComponent } from "../sceneComponent"
 import { SceneComponentConstants } from "../sceneComponent";
-import type { IAssetContainer } from "core/IAssetContainer";
-import type { Nullable } from "../types";
-import type { AssetContainer } from "../assetContainer";
+import { type IAssetContainer } from "core/IAssetContainer"
+import { type Nullable } from "../types"
+import { type AssetContainer } from "../assetContainer"
 import { LensFlareSystem } from "./lensFlareSystem";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";
 

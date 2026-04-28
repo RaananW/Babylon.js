@@ -2,17 +2,17 @@
 
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
 import { Vector3, Quaternion } from "../../Maths/math.vector.pure";
-import type { WebXRInputSource } from "../webXRInputSource";
+import { type WebXRInputSource } from "../webXRInputSource"
 import { PhysicsImpostor } from "../../Physics/v1/physicsImpostor.pure";
-import type { WebXRInput } from "../webXRInput";
-import type { WebXRSessionManager } from "../webXRSessionManager";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
+import { type WebXRInput } from "../webXRInput"
+import { type WebXRSessionManager } from "../webXRSessionManager"
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
 import { CreateSphere } from "../../Meshes/Builders/sphereBuilder.pure";
 import { WebXRFeatureName } from "../webXRFeaturesManager";
 import { Logger } from "../../Misc/logger";
-import type { Nullable } from "../../types";
+import { type Nullable } from "../../types"
 import { PhysicsAggregate } from "../../Physics/v2/physicsAggregate";
-import type { PhysicsBody } from "../../Physics/v2/physicsBody";
+import { type PhysicsBody } from "../../Physics/v2/physicsBody"
 import { PhysicsMotionType, PhysicsShapeType } from "../../Physics/v2/IPhysicsEnginePlugin";
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 

@@ -1,6 +1,5 @@
-import type { Nullable } from "core/types";
-import type { DataBuffer } from "./dataBuffer";
-
+import { type Nullable } from "core/types"
+import { type DataBuffer } from "./dataBuffer"
 declare module "./buffer.pure" {
     /**
      *

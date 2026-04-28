@@ -1,14 +1,14 @@
 /** This file must only contain pure code and pure imports */
 
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
-import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
+import { type NodeMaterialBuildState } from "../../nodeMaterialBuildState"
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
-import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
-import type { NodeMaterial } from "../../nodeMaterial";
+import { type NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint"
+import { type NodeMaterial } from "../../nodeMaterial"
 import { InputBlock } from "../Input/inputBlock.pure";
 import { NodeMaterialSystemValues } from "../../Enums/nodeMaterialSystemValues";
 import { ReflectionTextureBaseBlock } from "./reflectionTextureBaseBlock.pure";
-import type { NodeMaterialBlock } from "../../nodeMaterialBlock";
+import { type NodeMaterialBlock } from "../../nodeMaterialBlock"
 import { Logger } from "core/Misc/logger";
 import { RegisterClass } from "../../../../Misc/typeStore";
 

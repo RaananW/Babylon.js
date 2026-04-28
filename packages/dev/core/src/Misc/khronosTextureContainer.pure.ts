@@ -2,8 +2,7 @@
 
 export * from "./khronosTextureContainer.types";
 import { Logger } from "../Misc/logger";
-import type { InternalTexture } from "../Materials/Textures/internalTexture";
-
+import { type InternalTexture } from "../Materials/Textures/internalTexture"
 /**
  * for description see https://www.khronos.org/opengles/sdk/tools/KTX/
  * for file layout see https://www.khronos.org/opengles/sdk/tools/KTX/file_format_spec/

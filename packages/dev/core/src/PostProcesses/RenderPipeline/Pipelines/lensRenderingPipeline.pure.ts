@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { Camera } from "../../../Cameras/camera";
-import type { Effect } from "../../../Materials/effect";
+import { type Camera } from "../../../Cameras/camera"
+import { type Effect } from "../../../Materials/effect"
 import { Texture } from "../../../Materials/Textures/texture.pure";
-import type { RenderTargetTexture } from "../../../Materials/Textures/renderTargetTexture";
+import { type RenderTargetTexture } from "../../../Materials/Textures/renderTargetTexture"
 import { PostProcess } from "../../../PostProcesses/postProcess.pure";
 import { PostProcessRenderPipeline } from "../../../PostProcesses/RenderPipeline/postProcessRenderPipeline";
 import { PostProcessRenderEffect } from "../../../PostProcesses/RenderPipeline/postProcessRenderEffect";
-import type { Scene } from "../../../scene";
+import { type Scene } from "../../../scene"
 import { RawTextureCreateRGBATexture } from "../../../Materials/Textures/rawTexture.pure";
 import { Constants } from "../../../Engines/constants";
 

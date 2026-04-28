@@ -1,7 +1,6 @@
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
-import type { Octree } from "./octree";
-import type { SubMesh } from "../../Meshes/subMesh";
-
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
+import { type Octree } from "./octree"
+import { type SubMesh } from "../../Meshes/subMesh"
 declare module "../../scene" {
     /**
      *

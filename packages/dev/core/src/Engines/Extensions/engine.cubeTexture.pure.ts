@@ -1,8 +1,8 @@
 export * from "./engine.cubeTexture.types";
 
-import type { Nullable } from "../../types";
-import type { Scene } from "../../scene";
-import type { DepthTextureCreationOptions } from "../../Materials/Textures/textureCreationOptions";
+import { type Nullable } from "../../types"
+import { type Scene } from "../../scene"
+import { type DepthTextureCreationOptions } from "../../Materials/Textures/textureCreationOptions"
 import { ThinEngine } from "../../Engines/thinEngine";
 import { InternalTexture, InternalTextureSource } from "../../Materials/Textures/internalTexture";
 import { Logger } from "../../Misc/logger";

@@ -2,26 +2,26 @@
 
 import { Matrix } from "../Maths/math.vector.pure";
 import { VertexBuffer } from "../Buffers/buffer.pure";
-import type { SubMesh } from "../Meshes/subMesh";
+import { type SubMesh } from "../Meshes/subMesh"
 import { Constants } from "../Engines/constants";
-import type { SmartArray } from "../Misc/smartArray";
+import { type SmartArray } from "../Misc/smartArray"
 import { Texture } from "../Materials/Textures/texture.pure";
-import type { InternalTexture } from "../Materials/Textures/internalTexture";
+import { type InternalTexture } from "../Materials/Textures/internalTexture"
 import { MultiRenderTarget } from "../Materials/Textures/multiRenderTarget.pure";
-import type { PrePassRenderer } from "../Rendering/prePassRenderer";
-import type { Scene } from "../scene";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
+import { type PrePassRenderer } from "../Rendering/prePassRenderer"
+import { type Scene } from "../scene"
+import { type AbstractMesh } from "../Meshes/abstractMesh"
 import { Color4 } from "../Maths/math.color.pure";
 import { _WarnImport } from "../Misc/devTools";
-import type { Observer } from "../Misc/observable";
-import type { AbstractEngine } from "../Engines/abstractEngine";
-import type { Nullable } from "../types";
+import { type Observer } from "../Misc/observable"
+import { type AbstractEngine } from "../Engines/abstractEngine"
+import { type Nullable } from "../types"
 import { Material } from "../Materials/material";
 import { MaterialFlags } from "../Materials/materialFlags";
 import { BindClipPlane, PrepareStringDefinesForClipPlanes } from "../Materials/clipPlaneMaterialHelper";
 import { BindMorphTargetParameters, BindSceneUniformBuffer, PrepareDefinesAndAttributesForMorphTargets, PushAttributesForInstances } from "../Materials/materialHelper.functions";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
-import type { OpenPBRMaterial } from "../Materials/PBR/openpbrMaterial";
+import { type OpenPBRMaterial } from "../Materials/PBR/openpbrMaterial"
 import { AddClipPlaneUniforms } from "../Materials/clipPlaneMaterialHelper";
 
 /** @internal */

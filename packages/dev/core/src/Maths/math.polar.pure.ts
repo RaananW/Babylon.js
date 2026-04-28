@@ -2,7 +2,7 @@
 
 export * from "./math.polar.types";
 
-import type { DeepImmutable } from "../types";
+import { type DeepImmutable } from "../types"
 import { Vector2, Vector3 } from "./math.vector.pure";
 
 /**

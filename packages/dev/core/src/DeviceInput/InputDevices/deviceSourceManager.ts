@@ -1,14 +1,13 @@
 import { DeviceType } from "./deviceEnums";
-import type { Nullable } from "../../types";
-import type { Observer } from "../../Misc/observable";
+import { type Nullable } from "../../types"
+import { type Observer } from "../../Misc/observable"
 import { Observable } from "../../Misc/observable";
-import type { DeviceSource } from "./deviceSource";
-import type { IObservableManager, DeviceSourceType } from "../internalDeviceSourceManager";
+import { type DeviceSource } from "./deviceSource"
+import { type IObservableManager, type DeviceSourceType } from "../internalDeviceSourceManager"
 import { InternalDeviceSourceManager } from "../internalDeviceSourceManager";
-import type { IDisposable } from "../../scene";
-import type { AbstractEngine } from "../../Engines/abstractEngine";
-import type { IKeyboardEvent, IPointerEvent, IUIEvent, IWheelEvent } from "../../Events/deviceInputEvents";
-
+import { type IDisposable } from "../../scene"
+import { type AbstractEngine } from "../../Engines/abstractEngine"
+import { type IKeyboardEvent, type IPointerEvent, type IUIEvent, type IWheelEvent } from "../../Events/deviceInputEvents"
 /**
  * Class to keep track of devices
  */

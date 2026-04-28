@@ -1,9 +1,8 @@
-import type { Animatable } from "./animatable.core";
-import type { Animation } from "./animation";
-import type { Node } from "../node";
-import type { Nullable } from "../types";
-import type { Vector3 } from "../Maths/math.vector";
-
+import { type Animatable } from "./animatable.core"
+import { type Animation } from "./animation"
+import { type Node } from "../node"
+import { type Nullable } from "../types"
+import { type Vector3 } from "../Maths/math.vector"
 declare module "../scene" {
     /**
      *

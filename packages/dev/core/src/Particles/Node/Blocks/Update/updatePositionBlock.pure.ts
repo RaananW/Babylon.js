@@ -2,12 +2,12 @@
 
 import { NodeParticleBlockConnectionPointTypes } from "../../Enums/nodeParticleBlockConnectionPointTypes";
 import { NodeParticleBlock } from "../../nodeParticleBlock";
-import type { NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint";
-import type { NodeParticleBuildState } from "../../nodeParticleBuildState";
-import type { ThinParticleSystem } from "core/Particles/thinParticleSystem";
-import type { Particle } from "core/Particles/particle";
+import { type NodeParticleConnectionPoint } from "../../nodeParticleBlockConnectionPoint"
+import { type NodeParticleBuildState } from "../../nodeParticleBuildState"
+import { type ThinParticleSystem } from "core/Particles/thinParticleSystem"
+import { type Particle } from "core/Particles/particle"
 import { _ConnectAtTheEnd } from "core/Particles/Queue/executionQueue";
-import type { Vector3 } from "core/Maths/math.vector";
+import { type Vector3 } from "core/Maths/math.vector"
 import { RegisterClass } from "../../../../Misc/typeStore";
 
 /**

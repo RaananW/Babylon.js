@@ -1,7 +1,6 @@
-import type { Nullable, DeepImmutableObject } from "../types";
-import type { VertexBuffer, Buffer } from "../Buffers/buffer";
-import type { Matrix } from "../Maths/math.vector";
-
+import { type Nullable, type DeepImmutableObject } from "../types"
+import { type VertexBuffer, type Buffer } from "../Buffers/buffer"
+import { type Matrix } from "../Maths/math.vector"
 declare module "./mesh" {
     /** @internal */
     // eslint-disable-next-line @typescript-eslint/naming-convention

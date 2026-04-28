@@ -1,22 +1,22 @@
 /** This file must only contain pure code and pure imports */
 
-import type { Engine } from "../../Engines/engine";
-import type { WebGLRenderTargetWrapper } from "../../Engines/WebGL/webGLRenderTargetWrapper";
+import { type Engine } from "../../Engines/engine"
+import { type WebGLRenderTargetWrapper } from "../../Engines/WebGL/webGLRenderTargetWrapper"
 import { WebXRFeatureName } from "../webXRFeaturesManager";
-import type { WebXRSessionManager } from "../webXRSessionManager";
+import { type WebXRSessionManager } from "../webXRSessionManager"
 import { WebXRAbstractFeature } from "./WebXRAbstractFeature";
-import type { Nullable } from "../../types";
-import type { IWebXRRenderTargetTextureProvider } from "../webXRRenderTargetTextureProvider";
-import type { Viewport } from "../../Maths/math.viewport";
-import type { Scene } from "../../scene";
+import { type Nullable } from "../../types"
+import { type IWebXRRenderTargetTextureProvider } from "../webXRRenderTargetTextureProvider"
+import { type Viewport } from "../../Maths/math.viewport"
+import { type Scene } from "../../scene"
 import { Matrix } from "../../Maths/math.vector.pure";
 import { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture.pure";
 import { Constants } from "../../Engines/constants";
 import { ShaderMaterial } from "../../Materials/shaderMaterial.pure";
-import type { AbstractMesh } from "../../Meshes/abstractMesh";
-import type { Material } from "../../Materials/material";
-import type { Observer } from "../../Misc/observable";
-import type { ThinEngine } from "../../Engines/thinEngine";
+import { type AbstractMesh } from "../../Meshes/abstractMesh"
+import { type Material } from "../../Materials/material"
+import { type Observer } from "../../Misc/observable"
+import { type ThinEngine } from "../../Engines/thinEngine"
 import { WebXRFeaturesManager } from "../webXRFeaturesManager";
 
 /**

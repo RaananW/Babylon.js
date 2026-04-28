@@ -5,3 +5,5 @@ export * from "./ControlFlow/pure";
 export * from "./Animation/pure";
 export * from "./flowGraphSetPropertyBlock.pure";
 export * from "./flowGraphSetVariableBlock.pure";
+export * from "./Audio/pure";
+export * from "./Physics/pure";

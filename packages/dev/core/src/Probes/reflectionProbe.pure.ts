@@ -6,12 +6,12 @@ import { serializeAsMeshReference, serializeAsVector3 } from "../Misc/decorators
 import { SerializationHelperSerialize, SerializationHelperParse } from "../Misc/decorators.serialization.pure";
 import { RenderTargetTexture } from "../Materials/Textures/renderTargetTexture.pure";
 import { Matrix, Vector3 } from "../Maths/math.vector.pure";
-import type { AbstractMesh } from "../Meshes/abstractMesh";
-import type { Nullable } from "../types";
+import { type AbstractMesh } from "../Meshes/abstractMesh"
+import { type Nullable } from "../types"
 import { Scene } from "../scene.pure";
 import { Constants } from "../Engines/constants";
-import type { UniformBuffer } from "../Materials/uniformBuffer";
-import type { IAssetContainer } from "core/IAssetContainer";
+import { type UniformBuffer } from "../Materials/uniformBuffer"
+import { type IAssetContainer } from "core/IAssetContainer"
 /**
  * Class used to generate realtime reflection / refraction cube textures
  * @see https://doc.babylonjs.com/features/featuresDeepDive/environment/reflectionProbes

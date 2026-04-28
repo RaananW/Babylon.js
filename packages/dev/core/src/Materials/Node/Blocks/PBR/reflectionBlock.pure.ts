@@ -1,21 +1,21 @@
 /** This file must only contain pure code and pure imports */
 
 import { NodeMaterialBlockConnectionPointTypes } from "../../Enums/nodeMaterialBlockConnectionPointTypes";
-import type { NodeMaterialBuildState } from "../../nodeMaterialBuildState";
-import type { NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint";
+import { type NodeMaterialBuildState } from "../../nodeMaterialBuildState"
+import { type NodeMaterialConnectionPoint } from "../../nodeMaterialBlockConnectionPoint"
 import { NodeMaterialConnectionPointDirection } from "../../nodeMaterialBlockConnectionPoint";
 import { NodeMaterialBlockTargets } from "../../Enums/nodeMaterialBlockTargets";
-import type { NodeMaterial, NodeMaterialDefines } from "../../nodeMaterial";
+import { type NodeMaterial, type NodeMaterialDefines } from "../../nodeMaterial"
 import { NodeMaterialConnectionPointCustomObject } from "../../nodeMaterialConnectionPointCustomObject";
 import { ReflectionTextureBaseBlock } from "../Dual/reflectionTextureBaseBlock.pure";
-import type { Nullable } from "../../../../types";
+import { type Nullable } from "../../../../types"
 import { Texture } from "../../../Textures/texture.pure";
-import type { BaseTexture } from "../../../Textures/baseTexture";
-import type { Mesh } from "../../../../Meshes/mesh";
-import type { SubMesh } from "../../../../Meshes/subMesh";
-import type { Effect } from "../../../effect";
+import { type BaseTexture } from "../../../Textures/baseTexture"
+import { type Mesh } from "../../../../Meshes/mesh"
+import { type SubMesh } from "../../../../Meshes/subMesh"
+import { type Effect } from "../../../effect"
 import { editableInPropertyPage, PropertyTypeForEdition } from "../../../../Decorators/nodeDecorator";
-import type { Scene } from "../../../../scene";
+import { type Scene } from "../../../../scene"
 import { Logger } from "core/Misc/logger";
 import { ShaderLanguage } from "core/Materials/shaderLanguage";
 import { RegisterClass } from "../../../../Misc/typeStore";

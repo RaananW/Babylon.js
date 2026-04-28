@@ -1,6 +1,5 @@
-import type { Nullable } from "../../types";
-import type { SphericalPolynomial } from "../../Maths/sphericalPolynomial";
-
+import { type Nullable } from "../../types"
+import { type SphericalPolynomial } from "../../Maths/sphericalPolynomial"
 declare module "./baseTexture" {
     /**
      *

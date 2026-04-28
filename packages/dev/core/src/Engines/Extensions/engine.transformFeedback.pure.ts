@@ -1,8 +1,8 @@
 /** This file must only contain pure code and pure imports */
 
 export * from "./engine.transformFeedback.types";
-import type { Nullable } from "../../types";
-import type { DataBuffer } from "../../Buffers/dataBuffer";
+import { type Nullable } from "../../types"
+import { type DataBuffer } from "../../Buffers/dataBuffer"
 import { Engine } from "../../Engines/engine";
 
 /** @internal */

@@ -1,11 +1,11 @@
 /** This file must only contain pure code and pure imports */
 
-import type { SmartArrayNoDuplicate } from "../../Misc/smartArray";
-import type { Scene } from "../../scene";
-import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
-import type { ISceneSerializableComponent } from "../../sceneComponent";
+import { type SmartArrayNoDuplicate } from "../../Misc/smartArray"
+import { type Scene } from "../../scene"
+import { type RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture"
+import { type ISceneSerializableComponent } from "../../sceneComponent"
 import { SceneComponentConstants } from "../../sceneComponent";
-import type { IAssetContainer } from "core/IAssetContainer";
+import { type IAssetContainer } from "core/IAssetContainer"
 import { ShadowGenerator } from "./shadowGenerator";
 import { CascadedShadowGenerator } from "./cascadedShadowGenerator";
 import { AddParser } from "core/Loading/Plugins/babylonFileParser.function";

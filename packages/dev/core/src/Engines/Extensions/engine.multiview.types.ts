@@ -1,10 +1,9 @@
-import type { RenderTargetWrapper } from "../renderTargetWrapper";
-import type { Nullable } from "../../types";
-import type { RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture";
-import type { Camera } from "../../Cameras/camera";
-import type { Matrix } from "../../Maths/math.vector";
-import type { UniformBuffer } from "../../Materials/uniformBuffer";
-
+import { type RenderTargetWrapper } from "../renderTargetWrapper"
+import { type Nullable } from "../../types"
+import { type RenderTargetTexture } from "../../Materials/Textures/renderTargetTexture"
+import { type Camera } from "../../Cameras/camera"
+import { type Matrix } from "../../Maths/math.vector"
+import { type UniformBuffer } from "../../Materials/uniformBuffer"
 declare module "../../Engines/engine" {
     /**
      *

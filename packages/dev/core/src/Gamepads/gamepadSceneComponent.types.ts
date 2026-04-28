@@ -1,6 +1,5 @@
-import type { GamepadManager } from "./gamepadManager";
-import type { Nullable } from "../types";
-
+import { type GamepadManager } from "./gamepadManager"
+import { type Nullable } from "../types"
 declare module "../scene" {
     /**
      *
