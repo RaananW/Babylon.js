@@ -41441,5 +41441,90 @@
     "additions": 44,
     "deletions": 70,
     "changedFiles": 1
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzODE3MDI=",
+      "is_bot": false,
+      "login": "RaananW",
+      "name": "Raanan Weber"
+    },
+    "baseRefName": "master",
+    "closedAt": null,
+    "createdAt": "2026-04-16T18:24:16Z",
+    "headRefName": "docs/flow-graph-editor-docs",
+    "isDraft": true,
+    "labels": [],
+    "mergedAt": null,
+    "mergedBy": null,
+    "number": 1564,
+    "reviewDecision": "REVIEW_REQUIRED",
+    "state": "OPEN",
+    "title": "Add Flow Graph Editor documentation",
+    "updatedAt": "2026-04-21T17:03:58Z",
+    "url": "https://github.com/BabylonJS/Documentation/pull/1564",
+    "additions": 2389,
+    "deletions": 2,
+    "changedFiles": 27
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzODE3MDI=",
+      "is_bot": false,
+      "login": "RaananW",
+      "name": "Raanan Weber"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-23T12:35:49Z",
+    "createdAt": "2026-04-22T14:38:33Z",
+    "headRefName": "docs/webxr-body-tracking",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-23T12:35:48Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzODE3MDI=",
+      "is_bot": false,
+      "login": "RaananW",
+      "name": "Raanan Weber"
+    },
+    "number": 1565,
+    "reviewDecision": "APPROVED",
+    "state": "MERGED",
+    "title": "docs: add WebXR body tracking documentation",
+    "updatedAt": "2026-04-23T12:35:49Z",
+    "url": "https://github.com/BabylonJS/Documentation/pull/1565",
+    "additions": 248,
+    "deletions": 0,
+    "changedFiles": 2
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzODE3MDI=",
+      "is_bot": false,
+      "login": "RaananW",
+      "name": "Raanan Weber"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-23T12:35:13Z",
+    "createdAt": "2026-04-22T15:09:52Z",
+    "headRefName": "docs/create-babylonjs-scaffolder",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-23T12:35:13Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzODE3MDI=",
+      "is_bot": false,
+      "login": "RaananW",
+      "name": "Raanan Weber"
+    },
+    "number": 1566,
+    "reviewDecision": "APPROVED",
+    "state": "MERGED",
+    "title": "docs: add create-babylonjs scaffolder documentation",
+    "updatedAt": "2026-04-23T12:35:13Z",
+    "url": "https://github.com/BabylonJS/Documentation/pull/1566",
+    "additions": 166,
+    "deletions": 0,
+    "changedFiles": 2
   }
 ]

@@ -1,6 +1,6 @@
 [
   {
-    "additions": 253,
+    "additions": 336,
     "author": {
       "id": "MDQ6VXNlcjEzMDYwNTY=",
       "is_bot": false,
@@ -8,86 +8,26 @@
       "name": "David Catuhe"
     },
     "baseRefName": "master",
-    "changedFiles": 18,
-    "closedAt": "2026-04-13T18:10:56Z",
-    "createdAt": "2026-04-13T16:58:22Z",
-    "deletions": 174,
-    "headRefName": "scenenode-hierarchy-refactor",
+    "changedFiles": 22,
+    "closedAt": "2026-04-13T00:23:03Z",
+    "createdAt": "2026-04-12T23:08:54Z",
+    "deletions": 31,
+    "headRefName": "fix/camera-dirty-tracking",
     "isDraft": false,
     "labels": [],
-    "mergedAt": "2026-04-13T18:10:56Z",
+    "mergedAt": "2026-04-13T00:23:03Z",
     "mergedBy": {
       "id": "MDQ6VXNlcjEzMDYwNTY=",
       "is_bot": false,
       "login": "deltakosh",
       "name": "David Catuhe"
     },
-    "number": 5,
+    "number": 1,
     "reviewDecision": "",
     "state": "MERGED",
-    "title": "refactor: unify scene hierarchy with SceneNode base and bidirectional EulerProxy",
-    "updatedAt": "2026-04-13T18:10:58Z",
-    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/5"
-  },
-  {
-    "additions": 0,
-    "author": {
-      "id": "MDQ6VXNlcjEzMDYwNTY=",
-      "is_bot": false,
-      "login": "deltakosh",
-      "name": "David Catuhe"
-    },
-    "baseRefName": "master",
-    "changedFiles": 0,
-    "closedAt": "2026-04-13T01:00:51Z",
-    "createdAt": "2026-04-13T00:46:25Z",
-    "deletions": 0,
-    "headRefName": "test/bundle-size-verify",
-    "isDraft": false,
-    "labels": [],
-    "mergedAt": "2026-04-13T01:00:51Z",
-    "mergedBy": {
-      "id": "MDQ6VXNlcjEzMDYwNTY=",
-      "is_bot": false,
-      "login": "deltakosh",
-      "name": "David Catuhe"
-    },
-    "number": 4,
-    "reviewDecision": "",
-    "state": "MERGED",
-    "title": "ci: verify bundle-size captures all JS files",
-    "updatedAt": "2026-04-13T01:00:53Z",
-    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/4"
-  },
-  {
-    "additions": 8,
-    "author": {
-      "id": "MDQ6VXNlcjEzMDYwNTY=",
-      "is_bot": false,
-      "login": "deltakosh",
-      "name": "David Catuhe"
-    },
-    "baseRefName": "master",
-    "changedFiles": 5,
-    "closedAt": "2026-04-13T00:43:28Z",
-    "createdAt": "2026-04-13T00:38:40Z",
-    "deletions": 46,
-    "headRefName": "test/swiftshader-plumbing",
-    "isDraft": false,
-    "labels": [],
-    "mergedAt": "2026-04-13T00:43:28Z",
-    "mergedBy": {
-      "id": "MDQ6VXNlcjEzMDYwNTY=",
-      "is_bot": false,
-      "login": "deltakosh",
-      "name": "David Catuhe"
-    },
-    "number": 3,
-    "reviewDecision": "",
-    "state": "MERGED",
-    "title": "test: remove WebGPU skip guards — test SwiftShader in CI",
-    "updatedAt": "2026-04-13T00:43:30Z",
-    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/3"
+    "title": "fix: camera dirty tracking — bump worldVersion in markLocalDirty()",
+    "updatedAt": "2026-04-13T00:23:17Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/1"
   },
   {
     "additions": 263,
@@ -120,7 +60,7 @@
     "url": "https://github.com/BabylonJS/Babylon-Lite/pull/2"
   },
   {
-    "additions": 336,
+    "additions": 8,
     "author": {
       "id": "MDQ6VXNlcjEzMDYwNTY=",
       "is_bot": false,
@@ -128,25 +68,1187 @@
       "name": "David Catuhe"
     },
     "baseRefName": "master",
-    "changedFiles": 22,
-    "closedAt": "2026-04-13T00:23:03Z",
-    "createdAt": "2026-04-12T23:08:54Z",
-    "deletions": 31,
-    "headRefName": "fix/camera-dirty-tracking",
+    "changedFiles": 5,
+    "closedAt": "2026-04-13T00:43:28Z",
+    "createdAt": "2026-04-13T00:38:40Z",
+    "deletions": 46,
+    "headRefName": "test/swiftshader-plumbing",
     "isDraft": false,
     "labels": [],
-    "mergedAt": "2026-04-13T00:23:03Z",
+    "mergedAt": "2026-04-13T00:43:28Z",
     "mergedBy": {
       "id": "MDQ6VXNlcjEzMDYwNTY=",
       "is_bot": false,
       "login": "deltakosh",
       "name": "David Catuhe"
     },
-    "number": 1,
+    "number": 3,
     "reviewDecision": "",
     "state": "MERGED",
-    "title": "fix: camera dirty tracking — bump worldVersion in markLocalDirty()",
-    "updatedAt": "2026-04-13T00:23:17Z",
-    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/1"
+    "title": "test: remove WebGPU skip guards — test SwiftShader in CI",
+    "updatedAt": "2026-04-13T00:43:30Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/3"
+  },
+  {
+    "additions": 0,
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "changedFiles": 0,
+    "closedAt": "2026-04-13T01:00:51Z",
+    "createdAt": "2026-04-13T00:46:25Z",
+    "deletions": 0,
+    "headRefName": "test/bundle-size-verify",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-13T01:00:51Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 4,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "ci: verify bundle-size captures all JS files",
+    "updatedAt": "2026-04-13T01:00:53Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/4"
+  },
+  {
+    "additions": 253,
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "changedFiles": 18,
+    "closedAt": "2026-04-13T18:10:56Z",
+    "createdAt": "2026-04-13T16:58:22Z",
+    "deletions": 174,
+    "headRefName": "scenenode-hierarchy-refactor",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-13T18:10:56Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 5,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "refactor: unify scene hierarchy with SceneNode base and bidirectional EulerProxy",
+    "updatedAt": "2026-04-13T18:10:58Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/5"
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjMyMDcyODkx",
+      "is_bot": false,
+      "login": "thomlucc",
+      "name": "Thomas Lucchini"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-15T23:27:47Z",
+    "createdAt": "2026-04-15T23:01:56Z",
+    "headRefName": "feature/lab-report-tab",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": null,
+    "mergedBy": null,
+    "number": 21,
+    "reviewDecision": "",
+    "state": "CLOSED",
+    "title": "feat(lab): add Report tab with live subproject progress",
+    "updatedAt": "2026-04-15T23:28:03Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/21",
+    "additions": 342,
+    "deletions": 1,
+    "changedFiles": 2
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-16T01:11:46Z",
+    "createdAt": "2026-04-16T01:07:25Z",
+    "headRefName": "khr_mat",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-16T01:11:46Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 22,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "feat: KHR_materials_variants support + Scene 27",
+    "updatedAt": "2026-04-16T01:11:48Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/22",
+    "additions": 573,
+    "deletions": 148,
+    "changedFiles": 14
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzODE3MDI=",
+      "is_bot": false,
+      "login": "RaananW",
+      "name": "Raanan Weber"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-16T20:07:00Z",
+    "createdAt": "2026-04-16T15:25:49Z",
+    "headRefName": "ci/azure-pipeline-setup",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-16T20:07:00Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 23,
+    "reviewDecision": "APPROVED",
+    "state": "MERGED",
+    "title": "ci: Azure Pipelines CI with perf regression, parity cloud, and bundle size checks",
+    "updatedAt": "2026-04-16T20:07:02Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/23",
+    "additions": 5246,
+    "deletions": 257,
+    "changedFiles": 51
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-17T02:21:38Z",
+    "createdAt": "2026-04-16T20:43:09Z",
+    "headRefName": "fix/scene25-bjs-ktx-loader",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-17T02:21:38Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 24,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "fix(parity): force BJS KTX1 loader registration in scene 25 reference (+ WIP scene 26)",
+    "updatedAt": "2026-04-17T02:26:46Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/24",
+    "additions": 3123,
+    "deletions": 794,
+    "changedFiles": 86
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-18T00:00:49Z",
+    "createdAt": "2026-04-17T23:13:20Z",
+    "headRefName": "reuse-code",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-18T00:00:48Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 26,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "Extract shared helpers; inline thin wrappers (code-reuse pass)",
+    "updatedAt": "2026-04-18T00:00:50Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/26",
+    "additions": 283,
+    "deletions": 386,
+    "changedFiles": 38
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-18T02:23:49Z",
+    "createdAt": "2026-04-18T02:23:42Z",
+    "headRefName": "feat/gltf-sheen",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-18T02:23:49Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 27,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "Feat/gltf sheen",
+    "updatedAt": "2026-04-18T02:23:51Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/27",
+    "additions": 869,
+    "deletions": 494,
+    "changedFiles": 24
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-18T17:24:56Z",
+    "createdAt": "2026-04-18T03:03:50Z",
+    "headRefName": "pbrext",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-18T17:24:56Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 28,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "PbrExt: unified extension interface (reflectance + clearcoat POC)",
+    "updatedAt": "2026-04-18T17:24:57Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/28",
+    "additions": 1492,
+    "deletions": 1125,
+    "changedFiles": 58
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-19T01:28:54Z",
+    "createdAt": "2026-04-19T01:27:56Z",
+    "headRefName": "feat/gltf-refraction-pr2",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-19T01:28:54Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 29,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "Feat/gltf refraction pr2",
+    "updatedAt": "2026-04-19T02:06:32Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/29",
+    "additions": 1087,
+    "deletions": 100,
+    "changedFiles": 30
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-20T15:10:09Z",
+    "createdAt": "2026-04-20T00:15:32Z",
+    "headRefName": "perf/bundle-shrink-extensions",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-20T15:10:09Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 30,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "perf(bundle): shadow factory, sorted-ext cache, table-driven .babylon textures, shared shadow BG",
+    "updatedAt": "2026-04-20T15:10:12Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/30",
+    "additions": 674,
+    "deletions": 550,
+    "changedFiles": 23
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMTI5Njg=",
+      "is_bot": false,
+      "login": "CedricGuillemet",
+      "name": "Cedric Guillemet"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-20T08:59:29Z",
+    "createdAt": "2026-04-20T08:54:28Z",
+    "headRefName": "Physics",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": null,
+    "mergedBy": null,
+    "number": 31,
+    "reviewDecision": "",
+    "state": "CLOSED",
+    "title": "Add Havok Physics V2 API + Scene 40 — Physics",
+    "updatedAt": "2026-04-20T08:59:40Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/31",
+    "additions": 756,
+    "deletions": 4,
+    "changedFiles": 18
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMTI5Njg=",
+      "is_bot": false,
+      "login": "CedricGuillemet",
+      "name": "Cedric Guillemet"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-20T15:11:39Z",
+    "createdAt": "2026-04-20T09:00:41Z",
+    "headRefName": "Physics",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-20T15:11:39Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 32,
+    "reviewDecision": "APPROVED",
+    "state": "MERGED",
+    "title": "Physics",
+    "updatedAt": "2026-04-20T15:11:39Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/32",
+    "additions": 772,
+    "deletions": 16,
+    "changedFiles": 22
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzODE3MDI=",
+      "is_bot": false,
+      "login": "RaananW",
+      "name": "Raanan Weber"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-20T17:24:57Z",
+    "createdAt": "2026-04-20T10:49:40Z",
+    "headRefName": "chore/remove-bundle-delta",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-20T17:24:57Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 33,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "chore: remove bundle-size delta baseline tests",
+    "updatedAt": "2026-04-20T17:24:58Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/33",
+    "additions": 272,
+    "deletions": 408,
+    "changedFiles": 45
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-20T18:52:07Z",
+    "createdAt": "2026-04-20T18:16:23Z",
+    "headRefName": "feat/scene31-emissive-strength",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-20T18:52:07Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 34,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "feat(scene31): add KHR_materials_emissive_strength support",
+    "updatedAt": "2026-04-20T18:52:09Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/34",
+    "additions": 233,
+    "deletions": 0,
+    "changedFiles": 12
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-20T19:54:48Z",
+    "createdAt": "2026-04-20T18:37:12Z",
+    "headRefName": "feat/scene32-unlit",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-20T19:54:48Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 35,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "feat(scene32): add KHR_materials_unlit support",
+    "updatedAt": "2026-04-20T19:54:50Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/35",
+    "additions": 288,
+    "deletions": 1,
+    "changedFiles": 15
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzODE3MDI=",
+      "is_bot": false,
+      "login": "RaananW",
+      "name": "Raanan Weber"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-20T19:15:01Z",
+    "createdAt": "2026-04-20T18:39:02Z",
+    "headRefName": "fix/skip-perf-no-baseline",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-20T19:15:01Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 36,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "fix: skip perf test for scenes without a baseline bundle",
+    "updatedAt": "2026-04-20T19:15:03Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/36",
+    "additions": 7,
+    "deletions": 0,
+    "changedFiles": 1
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-20T20:41:12Z",
+    "createdAt": "2026-04-20T19:53:40Z",
+    "headRefName": "feat/scene33-lights-punctual",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-20T20:41:12Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 37,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "feat(scene33): KHR_lights_punctual + runtime MAX_LIGHTS",
+    "updatedAt": "2026-04-20T20:41:14Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/37",
+    "additions": 387,
+    "deletions": 38,
+    "changedFiles": 20
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-20T22:06:10Z",
+    "createdAt": "2026-04-20T21:45:09Z",
+    "headRefName": "scene34-node-visibility",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-20T22:06:10Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 38,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "feat(scene34): add KHR_node_visibility + KHR_animation_pointer (CubeVisibility)",
+    "updatedAt": "2026-04-20T22:06:12Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/38",
+    "additions": 621,
+    "deletions": 29,
+    "changedFiles": 25
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-20T22:52:37Z",
+    "createdAt": "2026-04-20T22:35:25Z",
+    "headRefName": "feat/scene35-gltf-instancing",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-20T22:52:37Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 39,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "feat(scene35): EXT_mesh_gpu_instancing glTF extension",
+    "updatedAt": "2026-04-20T22:52:39Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/39",
+    "additions": 406,
+    "deletions": 13,
+    "changedFiles": 12
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-20T23:11:33Z",
+    "createdAt": "2026-04-20T22:43:22Z",
+    "headRefName": "reduce-scene1-bundle-size",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-20T23:11:33Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 40,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "Reduce scene1 bundle size by 1.2 KB",
+    "updatedAt": "2026-04-20T23:11:34Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/40",
+    "additions": 6807,
+    "deletions": 1014,
+    "changedFiles": 5
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-21T00:11:12Z",
+    "createdAt": "2026-04-20T23:58:00Z",
+    "headRefName": "feat/multi-scene-register",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-21T00:11:12Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 41,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "feat(engine): decouple engine from scene; multi-scene rendering via RenderingContext",
+    "updatedAt": "2026-04-21T00:11:14Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/41",
+    "additions": 341,
+    "deletions": 483,
+    "changedFiles": 46
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-22T17:03:05Z",
+    "createdAt": "2026-04-21T17:07:54Z",
+    "headRefName": "scene36-basis-texture",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-22T17:03:05Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 42,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "Add scene 36: Basis Universal texture support",
+    "updatedAt": "2026-04-22T17:03:07Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/42",
+    "additions": 529,
+    "deletions": 16,
+    "changedFiles": 18
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-22T22:55:47Z",
+    "createdAt": "2026-04-22T17:03:34Z",
+    "headRefName": "scene37-sheen-sofa",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-22T22:55:47Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 44,
+    "reviewDecision": "APPROVED",
+    "state": "MERGED",
+    "title": "Scene37 sheen sofa",
+    "updatedAt": "2026-04-22T23:00:48Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/44",
+    "additions": 1518,
+    "deletions": 847,
+    "changedFiles": 51
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-22T23:14:33Z",
+    "createdAt": "2026-04-22T23:14:03Z",
+    "headRefName": "bump-bjs",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-22T23:14:33Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 45,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "chore(lab): bump @babylonjs/* to 9.3.4",
+    "updatedAt": "2026-04-22T23:28:08Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/45",
+    "additions": 23,
+    "deletions": 19,
+    "changedFiles": 2
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-22T23:14:48Z",
+    "createdAt": "2026-04-22T23:14:09Z",
+    "headRefName": "lazy-registries",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-22T23:14:48Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 46,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "refactor(material): lazy-init PBR/Standard extension registries",
+    "updatedAt": "2026-04-22T23:25:24Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/46",
+    "additions": 16,
+    "deletions": 8,
+    "changedFiles": 2
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-22T23:14:57Z",
+    "createdAt": "2026-04-22T23:14:16Z",
+    "headRefName": "pbr-decompose-1",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-22T23:14:57Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 47,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "refactor(pbr): extract feature detection + descriptor-driven ext imports",
+    "updatedAt": "2026-04-22T23:29:48Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/47",
+    "additions": 114,
+    "deletions": 92,
+    "changedFiles": 2
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-23T00:25:42Z",
+    "createdAt": "2026-04-22T23:42:16Z",
+    "headRefName": "pbr-decompose-2",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-23T00:25:42Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 48,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "Pbr decompose 2",
+    "updatedAt": "2026-04-23T00:30:39Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/48",
+    "additions": 310,
+    "deletions": 262,
+    "changedFiles": 5
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-22T23:55:39Z",
+    "createdAt": "2026-04-22T23:48:07Z",
+    "headRefName": "feat/mesh-builders-cylinder-plane-disc-polyhedron-ribbon-tube-extrude",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-22T23:55:39Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 49,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "feat(mesh): add cylinder, plane, disc, polyhedron, ribbon, tube, extrude builders",
+    "updatedAt": "2026-04-23T00:05:25Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/49",
+    "additions": 2096,
+    "deletions": 19,
+    "changedFiles": 23
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-23T21:12:25Z",
+    "createdAt": "2026-04-23T15:03:20Z",
+    "headRefName": "scene1-parity-push",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-23T21:12:25Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 50,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "scene1 <90KB: inline background/skybox tiny chunks",
+    "updatedAt": "2026-04-23T21:12:27Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/50",
+    "additions": 193,
+    "deletions": 143,
+    "changedFiles": 8
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-23T17:07:09Z",
+    "createdAt": "2026-04-23T17:06:53Z",
+    "headRefName": "lab-compact-hide-bundle-details",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-23T17:07:09Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 51,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "lab: add compact card mode and hide/restore for scenes",
+    "updatedAt": "2026-04-23T17:12:58Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/51",
+    "additions": 232,
+    "deletions": 4,
+    "changedFiles": 1
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjE3MjQxNjA=",
+      "is_bot": false,
+      "login": "VicenteCartas",
+      "name": "Vicente Cartas"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-27T20:53:10Z",
+    "createdAt": "2026-04-23T23:23:55Z",
+    "headRefName": "lite-2d-v2",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-27T20:53:10Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 56,
+    "reviewDecision": "APPROVED",
+    "state": "MERGED",
+    "title": "PR 1: Pure 2D Sprites — WebGPU sprite renderer with parity oracles",
+    "updatedAt": "2026-04-27T20:53:12Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/56",
+    "additions": 6215,
+    "deletions": 539,
+    "changedFiles": 36
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-27T15:31:11Z",
+    "createdAt": "2026-04-24T14:45:45Z",
+    "headRefName": "feature/nme-phase1",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-27T15:31:11Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 57,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "fix(nme): scene66 full NME parity — MAD 18.9 → 0.004",
+    "updatedAt": "2026-04-27T15:31:13Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/57",
+    "additions": 7608,
+    "deletions": 38,
+    "changedFiles": 115
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzODE3MDI=",
+      "is_bot": false,
+      "login": "RaananW",
+      "name": "Raanan Weber"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-27T15:30:56Z",
+    "createdAt": "2026-04-24T18:39:56Z",
+    "headRefName": "fix/skip-perf-no-baseline",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-27T15:30:56Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 58,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "fix(perf): skip (not fail) when baseline or current scene fails to load",
+    "updatedAt": "2026-04-27T15:30:59Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/58",
+    "additions": 91,
+    "deletions": 32,
+    "changedFiles": 3
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-28T16:48:56Z",
+    "createdAt": "2026-04-28T16:09:20Z",
+    "headRefName": "feature/nme-pbr-blocks",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-28T16:48:56Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 59,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "Localize NME scenes and update bundle sizing",
+    "updatedAt": "2026-04-28T16:48:59Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/59",
+    "additions": 5472,
+    "deletions": 190,
+    "changedFiles": 93
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjUwODQ2NDM=",
+      "is_bot": false,
+      "login": "ryantrem",
+      "name": "Ryan Tremblay"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-28T21:14:24Z",
+    "createdAt": "2026-04-28T20:39:56Z",
+    "headRefName": "more-dist",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-28T21:14:24Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjUwODQ2NDM=",
+      "is_bot": false,
+      "login": "ryantrem",
+      "name": "Ryan Tremblay"
+    },
+    "number": 62,
+    "reviewDecision": "APPROVED",
+    "state": "MERGED",
+    "title": "dist package.json and rolled up d.ts",
+    "updatedAt": "2026-04-29T15:21:10Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/62",
+    "additions": 597,
+    "deletions": 50,
+    "changedFiles": 4
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjQxNTIyNDc=",
+      "is_bot": false,
+      "login": "Popov72",
+      "name": ""
+    },
+    "baseRefName": "master",
+    "closedAt": null,
+    "createdAt": "2026-04-29T19:38:35Z",
+    "headRefName": "session-snapshot",
+    "isDraft": false,
+    "labels": [
+      {
+        "id": "LA_kwDOR3cu188AAAACdvSW5w",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      }
+    ],
+    "mergedAt": null,
+    "mergedBy": null,
+    "number": 63,
+    "reviewDecision": "",
+    "state": "OPEN",
+    "title": "Add frame graph rendering support",
+    "updatedAt": "2026-04-30T10:18:13Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/63",
+    "additions": 2932,
+    "deletions": 2650,
+    "changedFiles": 106
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-30T00:18:47Z",
+    "createdAt": "2026-04-29T21:12:13Z",
+    "headRefName": "feature/scene73-wheel-nme-viewport",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-30T00:18:47Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 64,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "Add scene73 wheel NME viewport parity",
+    "updatedAt": "2026-04-30T00:18:49Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/64",
+    "additions": 640,
+    "deletions": 169,
+    "changedFiles": 40
+  },
+  {
+    "author": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "baseRefName": "master",
+    "closedAt": "2026-04-30T00:19:38Z",
+    "createdAt": "2026-04-29T22:15:14Z",
+    "headRefName": "copilot/lab-gallery-ui-controls",
+    "isDraft": false,
+    "labels": [],
+    "mergedAt": "2026-04-30T00:19:38Z",
+    "mergedBy": {
+      "id": "MDQ6VXNlcjEzMDYwNTY=",
+      "is_bot": false,
+      "login": "deltakosh",
+      "name": "David Catuhe"
+    },
+    "number": 65,
+    "reviewDecision": "",
+    "state": "MERGED",
+    "title": "Improve lab gallery UI controls",
+    "updatedAt": "2026-04-30T00:19:40Z",
+    "url": "https://github.com/BabylonJS/Babylon-Lite/pull/65",
+    "additions": 577,
+    "deletions": 124,
+    "changedFiles": 5
   }
 ]

@@ -2,60 +2,60 @@ SUMMARY REPORT
 ═══════════════════════════════════════════════════════════
 
 OVERALL
-  Total PRs:       12821
+  Total PRs:       12981
   Total repos:     4
-  Date range:      2019-03-14T09:42:30Z → 2026-04-14T08:16:37Z
+  Date range:      2019-03-14T09:42:30Z → 2026-04-30T09:24:59Z
 
 BY STATE
-  Merged:          12020
-  Closed:          759
-  Open:            42
+  Merged:          12152
+  Closed:          771
+  Open:            58
 
 CODE CHANGES (all PRs)
-  Total additions: 38683015
-  Total deletions: 22443811
-  Total files:     203557
+  Total additions: 38916541
+  Total deletions: 22513588
+  Total files:     206731
 
 PER-REPO BREAKDOWN
   Babylon-Lite:
-    PRs: 5  |  Merged: 5  |  Closed: 0  |  Open: 0
-    Additions: 860  |  Deletions: 251  |  Files changed: 46
+    PRs: 42  |  Merged: 39  |  Closed: 2  |  Open: 1
+    Additions: 54602  |  Deletions: 11314  |  Files changed: 1107
   Babylon.js:
-    PRs: 10373  |  Merged: 9802  |  Closed: 545  |  Open: 26
-    Additions: 36148036  |  Deletions: 20864982  |  Files changed: 183948
+    PRs: 10466  |  Merged: 9880  |  Closed: 552  |  Open: 34
+    Additions: 36307150  |  Deletions: 20916515  |  Files changed: 184946
   BabylonNative:
-    PRs: 1079  |  Merged: 901  |  Closed: 163  |  Open: 15
-    Additions: 2104050  |  Deletions: 1354494  |  Files changed: 8818
+    PRs: 1106  |  Merged: 919  |  Closed: 166  |  Open: 21
+    Additions: 2121917  |  Deletions: 1361673  |  Files changed: 9902
   Documentation:
-    PRs: 1364  |  Merged: 1312  |  Closed: 51  |  Open: 1
-    Additions: 430069  |  Deletions: 224084  |  Files changed: 10745
+    PRs: 1367  |  Merged: 1314  |  Closed: 51  |  Open: 2
+    Additions: 432872  |  Deletions: 224086  |  Files changed: 10776
 
 TOP 20 CONTRIBUTORS (by PR count)
-  deltakosh: 1673 PRs
-  Popov72: 1619 PRs
+  deltakosh: 1700 PRs
+  Popov72: 1638 PRs
+  RaananW: 1367 PRs
   sebavan: 1341 PRs
-  RaananW: 1330 PRs
-  CedricGuillemet: 781 PRs
-  bghgary: 528 PRs
-  ryantrem: 482 PRs
+  CedricGuillemet: 789 PRs
+  bghgary: 541 PRs
+  ryantrem: 491 PRs
   carolhmj: 421 PRs
-  georginahalpern: 182 PRs
+  VicenteCartas: 185 PRs
+  georginahalpern: 183 PRs
   docEdub: 180 PRs
   PolygonalSun: 173 PRs
   msDestiny14: 170 PRs
-  VicenteCartas: 163 PRs
   alexchuber: 156 PRs
   syntheticmagus: 127 PRs
   RolandCsibrei: 121 PRs
   MackeyK24: 117 PRs
   darraghjburke: 115 PRs
-  AmoebaChant: 110 PRs
-  PirateJC: 97 PRs
+  AmoebaChant: 112 PRs
+  MiiBond: 99 PRs
 
 REVIEW DECISIONS
-  APPROVED: 8675
-  REVIEW_REQUIRED: 2729
-  : 1293
+  APPROVED: 8782
+  REVIEW_REQUIRED: 2750
+  : 1325
   CHANGES_REQUESTED: 124
 
 YEARLY BREAKDOWN
@@ -66,7 +66,7 @@ YEARLY BREAKDOWN
   2023: 1426 total (1319 merged, 107 closed, 0 open)
   2024: 1471 total (1377 merged, 94 closed, 0 open)
   2025: 1815 total (1695 merged, 117 closed, 3 open)
-  2026: 853 total (746 merged, 68 closed, 39 open)
+  2026: 1013 total (878 merged, 80 closed, 55 open)
 
 MONTHLY PR CREATION (last 24 months, for trend analysis)
   2024-05: 123
@@ -92,32 +92,32 @@ MONTHLY PR CREATION (last 24 months, for trend analysis)
   2026-01: 220
   2026-02: 255
   2026-03: 277
-  2026-04: 101
+  2026-04: 261
 
 MERGE TIME DISTRIBUTION (merged PRs only)
   Median:  0.1 days
   P90:     3 days
-  P99:     27.2 days
+  P99:     27 days
   Max:     467.5 days
-  < 1 day: 9591 PRs
-  1-7 d:   1902 PRs
-  7-30 d:  424 PRs
+  < 1 day: 9697 PRs
+  1-7 d:   1927 PRs
+  7-30 d:  425 PRs
   30+ d:   103 PRs
 
 PR SIZE DISTRIBUTION (by total lines changed = additions + deletions)
-  XS (1-10 lines):     3791
-  S  (11-100 lines):   4469
-  M  (101-500 lines):  2212
-  L  (501-1000 lines): 698
-  XL (1000+ lines):    1582
+  XS (1-10 lines):     3806
+  S  (11-100 lines):   4505
+  M  (101-500 lines):  2255
+  L  (501-1000 lines): 722
+  XL (1000+ lines):    1624
 
 DAY-OF-WEEK DISTRIBUTION (PR creation)
-  Sun: 371  Mon: 2258  Tue: 2492  Wed: 2446  Thu: 2542  Fri: 2169  Sat: 543
+  Sun: 372  Mon: 2299  Tue: 2519  Wed: 2480  Thu: 2578  Fri: 2186  Sat: 547
 
 HOUR-OF-DAY DISTRIBUTION (PR creation, UTC)
-  00h: 593  01h: 362  02h: 203  03h: 142
-  04h: 123  05h: 138  06h: 113  07h: 148
-  08h: 243  09h: 388  10h: 446  11h: 438
-  12h: 478  13h: 598  14h: 646  15h: 886
-  16h: 1051  17h: 1066  18h: 881  19h: 744
-  20h: 818  21h: 873  22h: 745  23h: 698
+  00h: 600  01h: 370  02h: 204  03h: 144
+  04h: 123  05h: 140  06h: 113  07h: 150
+  08h: 255  09h: 397  10h: 449  11h: 441
+  12h: 483  13h: 604  14h: 654  15h: 892
+  16h: 1061  17h: 1077  18h: 893  19h: 750
+  20h: 825  21h: 884  22h: 758  23h: 714
