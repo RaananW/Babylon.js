@@ -150,7 +150,7 @@ export class AnimationController {
         this._engine.setAlphaMode(ALPHA_PREMULTIPLIED);
 
         this._spritePacker = new SpritePacker(this._engine, this._isHtmlCanvas(canvas), this._atlasScale, this._variables, this._configuration);
-        this._renderingManager = new RenderingManager(this._engine, this._spritePacker.texture, this._configuration);
+        this._renderingManager = new RenderingManager(this._engine, this._configuration);
 
         this._projectionMatrix = new ThinMatrix();
         this._worldMatrix = new ThinMatrix();
@@ -160,6 +160,10 @@ export class AnimationController {
 
         // Parse the animation
         const parser = new Parser(this._spritePacker, animationData, this._configuration, this._renderingManager);
+
+        if (this._configuration.debug) {
+            parser.debug();
+        }
 
         this._animation = parser.animationInfo;
         this._frameDuration = 1000 / this._animation.frameRate;
@@ -229,7 +233,9 @@ export class AnimationController {
 
         this._engine.dispose();
         this._renderingManager.dispose();
-        this._spritePacker.texture.dispose();
+        for (const texture of this._spritePacker.textures) {
+            texture.dispose();
+        }
     }
 
     /**

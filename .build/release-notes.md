@@ -1,117 +1,73 @@
 
 ### Addons
 
-- chore: upgrade TypeScript to 6.0 and remove ts-patch - by [RaananW](https://github.com/RaananW) ([#18202](https://github.com/BabylonJS/Babylon.js/pull/18202))
+- Fix AtmospherePBRMaterialPlugin breaking PBRMaterial compile for non-irradiance-map envs - [_Bug Fix_] by [Popov72](https://github.com/Popov72) ([#18385](https://github.com/BabylonJS/Babylon.js/pull/18385))
 
 ### Core
 
-- WebGPU: Add async render pipeline pre-warming API - [_New Feature_] by [Popov72](https://github.com/Popov72) ([#18220](https://github.com/BabylonJS/Babylon.js/pull/18220))
-- Gaussian splatting GPU picker exclude inactive parts - by [spsDrop](https://github.com/spsDrop) ([#18090](https://github.com/BabylonJS/Babylon.js/pull/18090))
-- Fix issue with O(N^2) performance issue for addPart - by [spsDrop](https://github.com/spsDrop) ([#17928](https://github.com/BabylonJS/Babylon.js/pull/17928))
-- Downsampled SphericalHarmonics Creation - [_New Feature_] by [kzhsw](https://github.com/kzhsw) ([#18186](https://github.com/BabylonJS/Babylon.js/pull/18186))
-- Change GS SH degree at runtime - by [CedricGuillemet](https://github.com/CedricGuillemet) ([#18215](https://github.com/BabylonJS/Babylon.js/pull/18215))
-- chore: upgrade TypeScript to 6.0 and remove ts-patch - by [RaananW](https://github.com/RaananW) ([#18202](https://github.com/BabylonJS/Babylon.js/pull/18202))
-- Flow Graph Editor: Physics blocks (Phase 2 — PR 3) - by [RaananW](https://github.com/RaananW) ([#18212](https://github.com/BabylonJS/Babylon.js/pull/18212))
-- Fix hand pose rotation for right handed HandContraintBehaviors - by [klibertowski](https://github.com/klibertowski) ([#18193](https://github.com/BabylonJS/Babylon.js/pull/18193))
-- WebGPU: Clamp SSR value to avoid artifacts on mobile - [_Bug Fix_] by [Popov72](https://github.com/Popov72) ([#18209](https://github.com/BabylonJS/Babylon.js/pull/18209))
-- Flow Graph Editor: Audio blocks using Audio V2 (Phase 2 — PR 4) - by [RaananW](https://github.com/RaananW) ([#18213](https://github.com/BabylonJS/Babylon.js/pull/18213))
-- feat: remove packages/lts layer, wire public packages directly to dev - [_New Feature_] by [RaananW](https://github.com/RaananW) ([#18192](https://github.com/BabylonJS/Babylon.js/pull/18192))
-- WebGPU: Add vertex pulling support for Standard, PBR, and OpenPBR materials - [_New Feature_] by [Popov72](https://github.com/Popov72) ([#18201](https://github.com/BabylonJS/Babylon.js/pull/18201))
-- Fix for coord flip of irradiance - [_Bug Fix_] by [MiiBond](https://github.com/MiiBond) ([#18205](https://github.com/BabylonJS/Babylon.js/pull/18205))
-- Add metadata and update copyTo to Particle class - by [lockphase](https://github.com/lockphase) ([#18187](https://github.com/BabylonJS/Babylon.js/pull/18187))
-- Add comprehensive WebXR unit tests - by [RaananW](https://github.com/RaananW) ([#18189](https://github.com/BabylonJS/Babylon.js/pull/18189))
-- Replace unnecessary Engine imports with EngineStore and Constants - by [ryantrem](https://github.com/ryantrem) ([#18191](https://github.com/BabylonJS/Babylon.js/pull/18191))
-- Fix parabolic ray distance calculation in XR teleportation - [_Bug Fix_] by [RaananW](https://github.com/RaananW) ([#18154](https://github.com/BabylonJS/Babylon.js/pull/18154))
-- stringTools: ES2026 proposal-arraybuffer-base64 support - by [kzhsw](https://github.com/kzhsw) ([#18063](https://github.com/BabylonJS/Babylon.js/pull/18063))
-- Allow switching pointer selection controller during session - by [RaananW](https://github.com/RaananW) ([#18143](https://github.com/BabylonJS/Babylon.js/pull/18143))
-- Scene isReady: check that custom render targets are ready - [_Bug Fix_] by [Popov72](https://github.com/Popov72) ([#18167](https://github.com/BabylonJS/Babylon.js/pull/18167))
-- WebGPU: add support for read/write storage textures - by [Popov72](https://github.com/Popov72) ([#18170](https://github.com/BabylonJS/Babylon.js/pull/18170))
-- Add mirror behavior on scaling gizmo - by [tibotiber](https://github.com/tibotiber) ([#18053](https://github.com/BabylonJS/Babylon.js/pull/18053))
-- Flow Graph Editor - by [RaananW](https://github.com/RaananW) ([#18114](https://github.com/BabylonJS/Babylon.js/pull/18114))
-- Update dependencies - by [RaananW](https://github.com/RaananW) ([#18178](https://github.com/BabylonJS/Babylon.js/pull/18178))
-- Increase maximum bone count limit - by [noname0310](https://github.com/noname0310) ([#18149](https://github.com/BabylonJS/Babylon.js/pull/18149))
+- Reduce hot path allocations in core - by [RaananW](https://github.com/RaananW) ([#18397](https://github.com/BabylonJS/Babylon.js/pull/18397))
+- ray: per-instance bounding-info culling for thin-instance picking - by [kzhsw](https://github.com/kzhsw) ([#18376](https://github.com/BabylonJS/Babylon.js/pull/18376))
+- Add scene options to set default layer masks - by [tholub99](https://github.com/tholub99) ([#18382](https://github.com/BabylonJS/Babylon.js/pull/18382))
+- Fix ClusteredLightContainer.maxRange ignored for some lights - [_Bug Fix_] by [Popov72](https://github.com/Popov72) ([#18395](https://github.com/BabylonJS/Babylon.js/pull/18395))
+- fix(scene): include procedural textures in Scene.isReady() - by [VicenteCartas](https://github.com/VicenteCartas) ([#18391](https://github.com/BabylonJS/Babylon.js/pull/18391))
+- Inspector: switch picking to GPU picking - [_Bug Fix_] by [ryantrem](https://github.com/ryantrem) ([#18390](https://github.com/BabylonJS/Babylon.js/pull/18390))
+- Fix Flow Graph Editor: console log templates, mesh pick events, drag-and-drop, event block UI - by [RaananW](https://github.com/RaananW) ([#18387](https://github.com/BabylonJS/Babylon.js/pull/18387))
+- fix(depthRenderer): key Scene._depthRenderer by camera.uniqueId instead of camera.id - [_Bug Fix_] by [Popov72](https://github.com/Popov72) ([#18384](https://github.com/BabylonJS/Babylon.js/pull/18384))
+- OpenPBRMaterial energy compensation - by [MiiBond](https://github.com/MiiBond) ([#18377](https://github.com/BabylonJS/Babylon.js/pull/18377))
+- OpenPBR Thin-walled fixes - by [MiiBond](https://github.com/MiiBond) ([#18353](https://github.com/BabylonJS/Babylon.js/pull/18353))
+- fix(core): serialize freezeWorldMatrix for Mesh and TransformNode - [_Bug Fix_] by [Popov72](https://github.com/Popov72) ([#18373](https://github.com/BabylonJS/Babylon.js/pull/18373))
+- Fix WebGPU support for non-4x4 ASTC compressed textures - [_Bug Fix_] by [Popov72](https://github.com/Popov72) ([#18369](https://github.com/BabylonJS/Babylon.js/pull/18369))
+- GaussianSplatting: use view-backed retained part sources for compound rebuilds - by [kzhsw](https://github.com/kzhsw) ([#18361](https://github.com/BabylonJS/Babylon.js/pull/18361))
+- perf(OpenPBRMaterial): skip inactive SSS uniforms and remove per-frame allocations in bindForSubMesh - by [Popov72](https://github.com/Popov72) ([#18364](https://github.com/BabylonJS/Babylon.js/pull/18364))
 
 ### GUI
 
-- chore: upgrade TypeScript to 6.0 and remove ts-patch - by [RaananW](https://github.com/RaananW) ([#18202](https://github.com/BabylonJS/Babylon.js/pull/18202))
-- feat: remove packages/lts layer, wire public packages directly to dev - [_New Feature_] by [RaananW](https://github.com/RaananW) ([#18192](https://github.com/BabylonJS/Babylon.js/pull/18192))
-- Make CDN port configurable - by [VicenteCartas](https://github.com/VicenteCartas) ([#18206](https://github.com/BabylonJS/Babylon.js/pull/18206))
+- Fix InputText not calling preventDefault for printable characters - [_Bug Fix_] by [AmoebaChant](https://github.com/AmoebaChant) ([#18399](https://github.com/BabylonJS/Babylon.js/pull/18399))
+- build: migrate tool editors from webpack to Vite dev server - by [RaananW](https://github.com/RaananW) ([#18372](https://github.com/BabylonJS/Babylon.js/pull/18372))
 
 ### Inspector
 
-- Change GS SH degree at runtime - by [CedricGuillemet](https://github.com/CedricGuillemet) ([#18215](https://github.com/BabylonJS/Babylon.js/pull/18215))
-- Inspector: Add ReactContextService and move WatcherContext to Inspector.tsx - by [ryantrem](https://github.com/ryantrem) ([#18204](https://github.com/BabylonJS/Babylon.js/pull/18204))
-- Update dependencies - by [RaananW](https://github.com/RaananW) ([#18178](https://github.com/BabylonJS/Babylon.js/pull/18178))
+- Inspector: switch picking to GPU picking - [_Bug Fix_] by [ryantrem](https://github.com/ryantrem) ([#18390](https://github.com/BabylonJS/Babylon.js/pull/18390))
+- OpenPBR Thin-walled fixes - by [MiiBond](https://github.com/MiiBond) ([#18353](https://github.com/BabylonJS/Babylon.js/pull/18353))
 
 ### Loaders
 
-- chore: upgrade TypeScript to 6.0 and remove ts-patch - by [RaananW](https://github.com/RaananW) ([#18202](https://github.com/BabylonJS/Babylon.js/pull/18202))
-- feat: remove packages/lts layer, wire public packages directly to dev - [_New Feature_] by [RaananW](https://github.com/RaananW) ([#18192](https://github.com/BabylonJS/Babylon.js/pull/18192))
-- Update dependencies - by [RaananW](https://github.com/RaananW) ([#18178](https://github.com/BabylonJS/Babylon.js/pull/18178))
+- OpenPBR Thin-walled fixes - by [MiiBond](https://github.com/MiiBond) ([#18353](https://github.com/BabylonJS/Babylon.js/pull/18353))
+
+### Lottie Player
+
+- Lottie: auto-downscale oversized sprites to fit the atlas instead of clipping - [_Bug Fix_] by [VicenteCartas](https://github.com/VicenteCartas) ([#18375](https://github.com/BabylonJS/Babylon.js/pull/18375))
+- Lottie player: gradient stroke support, animated property fixes, and improved diagnostics - [_Bug Fix_] by [VicenteCartas](https://github.com/VicenteCartas) ([#18367](https://github.com/BabylonJS/Babylon.js/pull/18367))
 
 ### Materials
 
-- chore: upgrade TypeScript to 6.0 and remove ts-patch - by [RaananW](https://github.com/RaananW) ([#18202](https://github.com/BabylonJS/Babylon.js/pull/18202))
-- feat: remove packages/lts layer, wire public packages directly to dev - [_New Feature_] by [RaananW](https://github.com/RaananW) ([#18192](https://github.com/BabylonJS/Babylon.js/pull/18192))
+- Materials Library: add native WGSL shaders for all materials - by [Popov72](https://github.com/Popov72) ([#18393](https://github.com/BabylonJS/Babylon.js/pull/18393))
 
 ### Node Editor
 
-- chore: upgrade TypeScript to 6.0 and remove ts-patch - by [RaananW](https://github.com/RaananW) ([#18202](https://github.com/BabylonJS/Babylon.js/pull/18202))
-- Make CDN port configurable - by [VicenteCartas](https://github.com/VicenteCartas) ([#18206](https://github.com/BabylonJS/Babylon.js/pull/18206))
+- build: migrate tool editors from webpack to Vite dev server - by [RaananW](https://github.com/RaananW) ([#18372](https://github.com/BabylonJS/Babylon.js/pull/18372))
 
 ### Node Geometry Editor
 
-- chore: upgrade TypeScript to 6.0 and remove ts-patch - by [RaananW](https://github.com/RaananW) ([#18202](https://github.com/BabylonJS/Babylon.js/pull/18202))
-- Make CDN port configurable - by [VicenteCartas](https://github.com/VicenteCartas) ([#18206](https://github.com/BabylonJS/Babylon.js/pull/18206))
+- build: migrate tool editors from webpack to Vite dev server - by [RaananW](https://github.com/RaananW) ([#18372](https://github.com/BabylonJS/Babylon.js/pull/18372))
 
 ### Node Particle Editor
 
-- chore: upgrade TypeScript to 6.0 and remove ts-patch - by [RaananW](https://github.com/RaananW) ([#18202](https://github.com/BabylonJS/Babylon.js/pull/18202))
-- Fix alpha issue on NPE color4 block - by [VicenteCartas](https://github.com/VicenteCartas) ([#18216](https://github.com/BabylonJS/Babylon.js/pull/18216))
-- Make CDN port configurable - by [VicenteCartas](https://github.com/VicenteCartas) ([#18206](https://github.com/BabylonJS/Babylon.js/pull/18206))
+- build: migrate tool editors from webpack to Vite dev server - by [RaananW](https://github.com/RaananW) ([#18372](https://github.com/BabylonJS/Babylon.js/pull/18372))
 
 ### Node Render Graph Editor
 
-- Make CDN port configurable - by [VicenteCartas](https://github.com/VicenteCartas) ([#18206](https://github.com/BabylonJS/Babylon.js/pull/18206))
+- build: migrate tool editors from webpack to Vite dev server - by [RaananW](https://github.com/RaananW) ([#18372](https://github.com/BabylonJS/Babylon.js/pull/18372))
 
 ### Playground
 
-- Make CDN port configurable - by [VicenteCartas](https://github.com/VicenteCartas) ([#18206](https://github.com/BabylonJS/Babylon.js/pull/18206))
-- Fix playground webpack build error caused by duplicate ReactRefreshWebpackPlugin - by [VicenteCartas](https://github.com/VicenteCartas) ([#18198](https://github.com/BabylonJS/Babylon.js/pull/18198))
-- Enhance toolkit localStorage handling in CommandBar and MonacoManager - by [RaananW](https://github.com/RaananW) ([#18179](https://github.com/BabylonJS/Babylon.js/pull/18179))
-- refactor(playground): use @tools/snippet-loader for loading and saving snippets - by [RaananW](https://github.com/RaananW) ([#18156](https://github.com/BabylonJS/Babylon.js/pull/18156))
-- Playground: Log warning if string too big to be stored to local store - [_Bug Fix_] by [Popov72](https://github.com/Popov72) ([#18177](https://github.com/BabylonJS/Babylon.js/pull/18177))
-- Add version 8.56.2 with updated script URLs to Versions object - by [RaananW](https://github.com/RaananW) ([#18168](https://github.com/BabylonJS/Babylon.js/pull/18168))
-
-### Post Processes
-
-- chore: upgrade TypeScript to 6.0 and remove ts-patch - by [RaananW](https://github.com/RaananW) ([#18202](https://github.com/BabylonJS/Babylon.js/pull/18202))
-- feat: remove packages/lts layer, wire public packages directly to dev - [_New Feature_] by [RaananW](https://github.com/RaananW) ([#18192](https://github.com/BabylonJS/Babylon.js/pull/18192))
-
-### Procedural Textures
-
-- chore: upgrade TypeScript to 6.0 and remove ts-patch - by [RaananW](https://github.com/RaananW) ([#18202](https://github.com/BabylonJS/Babylon.js/pull/18202))
-- feat: remove packages/lts layer, wire public packages directly to dev - [_New Feature_] by [RaananW](https://github.com/RaananW) ([#18192](https://github.com/BabylonJS/Babylon.js/pull/18192))
+- build: migrate tool editors from webpack to Vite dev server - by [RaananW](https://github.com/RaananW) ([#18372](https://github.com/BabylonJS/Babylon.js/pull/18372))
 
 ### Sandbox
 
-- Make CDN port configurable - by [VicenteCartas](https://github.com/VicenteCartas) ([#18206](https://github.com/BabylonJS/Babylon.js/pull/18206))
+- build: migrate tool editors from webpack to Vite dev server - by [RaananW](https://github.com/RaananW) ([#18372](https://github.com/BabylonJS/Babylon.js/pull/18372))
 
 ### Serializers
 
-- chore: upgrade TypeScript to 6.0 and remove ts-patch - by [RaananW](https://github.com/RaananW) ([#18202](https://github.com/BabylonJS/Babylon.js/pull/18202))
-- feat: remove packages/lts layer, wire public packages directly to dev - [_New Feature_] by [RaananW](https://github.com/RaananW) ([#18192](https://github.com/BabylonJS/Babylon.js/pull/18192))
-
-### Smart Filters
-
-- Update dependencies - by [RaananW](https://github.com/RaananW) ([#18178](https://github.com/BabylonJS/Babylon.js/pull/18178))
-- Remove unneeded peer dependencies from smartFiltersEditorControl package.json - by [RaananW](https://github.com/RaananW) ([#18176](https://github.com/BabylonJS/Babylon.js/pull/18176))
-
-### Viewer
-
-- Make CDN port configurable - by [VicenteCartas](https://github.com/VicenteCartas) ([#18206](https://github.com/BabylonJS/Babylon.js/pull/18206))
-- Viewer: Don't enable ssao by default when all meshes are splats - by [ryantrem](https://github.com/ryantrem) ([#18203](https://github.com/BabylonJS/Babylon.js/pull/18203))
-- Viewer: Introduce Sonda for bundle analysis - by [ryantrem](https://github.com/ryantrem) ([#18190](https://github.com/BabylonJS/Babylon.js/pull/18190))
-- Viewer: Fix spz flip - [_Bug Fix_] by [ryantrem](https://github.com/ryantrem) ([#18185](https://github.com/BabylonJS/Babylon.js/pull/18185))
-- feat(viewer): updates the IBL shadow on animations - by [cournoll](https://github.com/cournoll) ([#18079](https://github.com/BabylonJS/Babylon.js/pull/18079))
-- Update dependencies - by [RaananW](https://github.com/RaananW) ([#18178](https://github.com/BabylonJS/Babylon.js/pull/18178))
+- OpenPBRMaterial energy compensation - by [MiiBond](https://github.com/MiiBond) ([#18377](https://github.com/BabylonJS/Babylon.js/pull/18377))
+- OpenPBR Thin-walled fixes - by [MiiBond](https://github.com/MiiBond) ([#18353](https://github.com/BabylonJS/Babylon.js/pull/18353))
