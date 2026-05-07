@@ -21,10 +21,16 @@ import {
     type IVariableEntry,
     type VariableTypeName,
 } from "../../variableUtils";
-import "./variables.scss";
+import { Body1, Caption1, Button, Card, Dropdown, Input, Option, OptionGroup, Switch, makeStyles, tokens } from "@fluentui/react-components";
+import { AddRegular, ChevronDownRegular, ChevronRightRegular, DismissRegular } from "@fluentui/react-icons";
+import { Collapse } from "shared-ui-components/fluent/primitives/collapse";
 
 interface IVariablesPanelProps {
     globalState: GlobalState;
+}
+
+interface IVariablesPanelInnerProps extends IVariablesPanelProps {
+    classes: ReturnType<typeof useStyles>;
 }
 
 interface IVariablesPanelState {
@@ -42,19 +48,153 @@ interface IVariablesPanelState {
     collapsed: boolean;
 }
 
+const useStyles = makeStyles({
+    strip: {
+        background: tokens.colorNeutralBackground3,
+        borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
+        flexShrink: 0,
+        fontSize: tokens.fontSizeBase200,
+        color: tokens.colorNeutralForeground1,
+    },
+    header: {
+        display: "flex",
+        alignItems: "center",
+        height: "26px",
+        padding: `0 ${tokens.spacingHorizontalS}`,
+        gap: tokens.spacingHorizontalXS,
+        background: tokens.colorNeutralBackground2,
+    },
+    title: {
+        fontSize: tokens.fontSizeBase100,
+        fontWeight: tokens.fontWeightSemibold,
+        color: tokens.colorNeutralForeground2,
+        textTransform: "uppercase",
+        letterSpacing: "0.04em",
+        userSelect: "none",
+    },
+    liveBadge: {
+        color: tokens.colorPaletteGreenForeground1,
+        fontSize: tokens.fontSizeBase100,
+        fontWeight: tokens.fontWeightSemibold,
+    },
+    addButton: { marginLeft: "auto" },
+    body: {
+        maxHeight: "120px",
+        overflowY: "auto",
+        overflowX: "hidden",
+    },
+    empty: {
+        color: tokens.colorNeutralForeground3,
+        fontStyle: "italic",
+        fontSize: tokens.fontSizeBase300,
+        padding: `${tokens.spacingVerticalXS} ${tokens.spacingHorizontalM}`,
+    },
+    table: {
+        display: "flex",
+        flexWrap: "wrap",
+        // Spacing between adjacent variable Cards on the same row and between rows.
+        columnGap: tokens.spacingHorizontalS,
+        rowGap: tokens.spacingVerticalS,
+        padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalS}`,
+    },
+    cell: {
+        // Trim the Fluent Card to fit our compact variables strip. Background, border, radius,
+        // and hover treatment all come from Card itself.
+        minWidth: "120px",
+        maxWidth: "220px",
+        padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalS}`,
+        gap: tokens.spacingVerticalXS,
+    },
+    nameRow: { display: "flex", alignItems: "center", gap: tokens.spacingHorizontalXS },
+    name: {
+        flex: 1,
+        fontFamily: tokens.fontFamilyMonospace,
+        fontSize: tokens.fontSizeBase100,
+        color: tokens.colorNeutralForeground1,
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+        cursor: "default",
+        minWidth: 0,
+    },
+    nameInput: { flex: 1, minWidth: 0 },
+    typeRow: { marginTop: "2px" },
+    typeSelect: {
+        // Compact dropdown to fit in the variables strip's small per-row layout.
+        width: "100%",
+        minWidth: "auto",
+    },
+    typeOptionGroupLabel: {
+        // The Fluent dropdown popover renders inside a portal which our `Theme`
+        // intentionally configures with `applyStylesToPortals: false`. As a result,
+        // CSS custom properties like `var(--fontFamilyBase)` aren't resolved inside the
+        // popover, and `<OptionGroup>` labels fall back to the browser default (Times New
+        // Roman). Hard-code Fluent's web font stack here, applied via OptionGroup's `label`
+        // slot, so just *our* group labels look right.
+        fontFamily: "'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif",
+    },
+    valueRow: { marginTop: "2px" },
+    value: {
+        display: "block",
+        fontFamily: tokens.fontFamilyMonospace,
+        fontSize: tokens.fontSizeBase100,
+        color: tokens.colorPaletteGreenForeground1,
+        cursor: "pointer",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+        padding: "1px 0",
+        ":hover": { color: tokens.colorPaletteGreenForeground3 },
+    },
+    components: { display: "flex", flexWrap: "wrap", gap: "2px" },
+    component: { display: "flex", alignItems: "center", gap: "2px" },
+    componentLabel: {
+        fontSize: tokens.fontSizeBase100,
+        fontWeight: tokens.fontWeightSemibold,
+        color: tokens.colorNeutralForeground3,
+        textTransform: "uppercase",
+        minWidth: "8px",
+    },
+    componentInput: { width: "60px" },
+    objectSelect: {
+        width: "100%",
+        height: "20px",
+        padding: `0 ${tokens.spacingHorizontalXXS}`,
+        fontSize: tokens.fontSizeBase100,
+        color: tokens.colorPaletteGreenForeground1,
+        background: tokens.colorNeutralBackground3,
+        border: `1px solid ${tokens.colorNeutralStroke2}`,
+        borderRadius: tokens.borderRadiusSmall,
+        cursor: "pointer",
+        outline: "none",
+        boxSizing: "border-box",
+    },
+    boolToggle: { display: "flex", alignItems: "center", gap: tokens.spacingHorizontalXS },
+});
+
 /**
  * Compact variables strip that sits between the toolbar and the canvas.
  * Shows variable names (shared across contexts) and per-context values
  * with inline editing for both.
+ *
+ * Wraps `VariablesPanelInner` (the class component containing the logic) so we can use
+ * `makeStyles` (a hook) without converting the entire stateful component to a function.
+ * @param props - The component props.
+ * @returns The rendered variables panel.
  */
-export class VariablesPanelComponent extends React.Component<IVariablesPanelProps, IVariablesPanelState> {
+export const VariablesPanelComponent: React.FunctionComponent<IVariablesPanelProps> = (props) => {
+    const classes = useStyles();
+    return <VariablesPanelInner {...props} classes={classes} />;
+};
+
+class VariablesPanelInner extends React.Component<IVariablesPanelInnerProps, IVariablesPanelState> {
     private _builtObserver: Nullable<Observer<void>> = null;
     private _stateObserver: Nullable<Observer<FlowGraphState>> = null;
     private _contextChangedObserver: Nullable<Observer<number>> = null;
     private _pollTimer: ReturnType<typeof setInterval> | null = null;
 
     /** @internal */
-    constructor(props: IVariablesPanelProps) {
+    constructor(props: IVariablesPanelInnerProps) {
         super(props);
         this.state = {
             variables: [],
@@ -464,29 +604,40 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
     }
 
     private _renderTypeSelector(varName: string, currentType: VariableTypeName) {
+        // Use raw Fluent Dropdown + OptionGroup here because the shared wrapper at
+        // `shared-ui-components/fluent/primitives/dropdown` takes a flat options array and
+        // doesn't expose grouped options. The shared wrapper's other ergonomics (ToolContext
+        // sizing, etc.) aren't critical at this density.
+        const { classes } = this.props;
+        const currentLabel = VariableTypeGroups.flatMap((g) => g.types).find((t) => t.name === currentType)?.label ?? currentType;
         return (
-            <select
-                className="fge-var-cell-type-select"
-                value={currentType}
-                onChange={(e) => {
-                    this._changeVariableType(varName, e.target.value as VariableTypeName);
+            <Dropdown
+                size="small"
+                className={classes.typeSelect}
+                value={currentLabel}
+                selectedOptions={[currentType]}
+                onOptionSelect={(_, data) => {
+                    if (data.optionValue) {
+                        this._changeVariableType(varName, data.optionValue as VariableTypeName);
+                    }
                 }}
                 title="Variable type"
             >
                 {VariableTypeGroups.map((group) => (
-                    <optgroup key={group.label} label={group.label}>
+                    <OptionGroup key={group.label} label={{ className: classes.typeOptionGroupLabel, children: group.label }}>
                         {group.types.map((t) => (
-                            <option key={t.name} value={t.name}>
+                            <Option key={t.name} value={t.name} text={t.label}>
                                 {t.label}
-                            </option>
+                            </Option>
                         ))}
-                    </optgroup>
+                    </OptionGroup>
                 ))}
-            </select>
+            </Dropdown>
         );
     }
 
     private _renderValueEditor(varName: string, typeName: VariableTypeName, idx: number) {
+        const { classes } = this.props;
         const { editingValueIndex, editingValue, runtimeValues } = this.state;
 
         // --- Boolean: toggle ---
@@ -495,16 +646,15 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             const ctx = fg?.getContext(this.props.globalState.selectedContextIndex);
             const currentVal = ctx?.userVariables[varName];
             return (
-                <label className="fge-var-cell-bool-toggle">
-                    <input
-                        type="checkbox"
+                <label className={classes.boolToggle}>
+                    <Switch
                         checked={!!currentVal}
-                        onChange={(e) => {
-                            ctx?.setVariable(varName, e.target.checked);
+                        onChange={(_, data) => {
+                            ctx?.setVariable(varName, data.checked);
                             this._pollRuntimeValues();
                         }}
                     />
-                    <span>{currentVal ? "true" : "false"}</span>
+                    <Body1>{currentVal ? "true" : "false"}</Body1>
                 </label>
             );
         }
@@ -516,19 +666,19 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             const raw = ctx?.userVariables[varName];
             const numVal = typeName === "FlowGraphInteger" ? (raw?.value ?? 0) : typeof raw === "number" ? raw : 0;
             return (
-                <input
-                    className="fge-var-cell-number-input"
+                <Input
+                    size="small"
                     type="number"
                     step={typeName === "FlowGraphInteger" ? 1 : "any"}
-                    value={numVal}
+                    value={String(numVal)}
                     onFocus={() => {
                         this.props.globalState.lockObject.lock = true;
                     }}
                     onBlur={() => {
                         this.props.globalState.lockObject.lock = false;
                     }}
-                    onChange={(e) => {
-                        const n = typeName === "FlowGraphInteger" ? Math.round(Number(e.target.value)) : Number(e.target.value);
+                    onChange={(_, data) => {
+                        const n = typeName === "FlowGraphInteger" ? Math.round(Number(data.value)) : Number(data.value);
                         if (!isNaN(n)) {
                             if (typeName === "FlowGraphInteger") {
                                 ctx?.setVariable(varName, new FlowGraphInteger(n));
@@ -551,23 +701,24 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             const components = GetComponents(current, typeName);
             const labels = GetComponentLabels(typeName);
             return (
-                <div className="fge-var-cell-components">
+                <div className={classes.components}>
                     {labels.map((label, ci) => (
-                        <div key={label} className="fge-var-cell-component">
-                            <span className="fge-var-cell-component-label">{label}</span>
-                            <input
-                                className="fge-var-cell-component-input"
+                        <div key={label} className={classes.component}>
+                            <Caption1 className={classes.componentLabel}>{label}</Caption1>
+                            <Input
+                                className={classes.componentInput}
+                                size="small"
                                 type="number"
                                 step="any"
-                                value={components[ci]}
+                                value={String(components[ci])}
                                 onFocus={() => {
                                     this.props.globalState.lockObject.lock = true;
                                 }}
                                 onBlur={() => {
                                     this.props.globalState.lockObject.lock = false;
                                 }}
-                                onChange={(e) => {
-                                    const n = Number(e.target.value);
+                                onChange={(_, data) => {
+                                    const n = Number(data.value);
                                     if (!isNaN(n)) {
                                         this._setVectorComponent(varName, typeName, ci, n);
                                     }
@@ -589,7 +740,7 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             const currentUid = (current as { uniqueId?: number })?.uniqueId ?? -1;
             return (
                 <select
-                    className="fge-var-cell-object-select"
+                    className={classes.objectSelect}
                     value={currentUid}
                     onChange={(e) => {
                         const uid = Number(e.target.value);
@@ -614,10 +765,10 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
         // --- String / Any: text input ---
         if (editingValueIndex === idx) {
             return (
-                <input
-                    className="fge-var-cell-value-input"
+                <Input
+                    size="small"
                     value={editingValue}
-                    onChange={(e) => this.setState({ editingValue: e.target.value })}
+                    onChange={(_, data) => this.setState({ editingValue: data.value })}
                     onFocus={() => {
                         this.props.globalState.lockObject.lock = true;
                     }}
@@ -638,45 +789,49 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
             );
         }
         return (
-            <span className="fge-var-cell-value" onClick={() => this._startValueEditing(idx)} title="Click to edit value">
+            <Body1 className={classes.value} onClick={() => this._startValueEditing(idx)} title="Click to edit value">
                 {runtimeValues.get(varName) ?? "undefined"}
-            </span>
+            </Body1>
         );
     }
 
     /** @internal */
     override render() {
+        const { classes } = this.props;
         const { variables, editingNameIndex, editingName, variableTypes, collapsed } = this.state;
         const varCount = variables.length;
 
         return (
-            <div className="fge-variables-strip">
-                <div className="fge-variables-strip-header">
-                    <button className="fge-variables-toggle" onClick={() => this.setState({ collapsed: !collapsed })} title={collapsed ? "Expand variables" : "Collapse variables"}>
-                        {collapsed ? "▶" : "▼"}
-                    </button>
-                    <span className="fge-variables-strip-title">Variables{varCount > 0 ? ` (${varCount})` : ""}</span>
-                    {this.state.isRunning && <span className="fge-variables-live-badge">● Live</span>}
-                    <button className="fge-variables-strip-add" onClick={() => this._addVariable()} title="Add a new variable">
-                        +
-                    </button>
+            <div className={classes.strip}>
+                <div className={classes.header}>
+                    <Button
+                        size="small"
+                        appearance="subtle"
+                        icon={collapsed ? <ChevronRightRegular /> : <ChevronDownRegular />}
+                        title={collapsed ? "Expand variables" : "Collapse variables"}
+                        onClick={() => this.setState({ collapsed: !collapsed })}
+                    />
+                    <Body1 className={classes.title}>Variables{varCount > 0 ? ` (${varCount})` : ""}</Body1>
+                    {this.state.isRunning && <Caption1 className={classes.liveBadge}>● Live</Caption1>}
+                    <Button className={classes.addButton} size="small" appearance="subtle" icon={<AddRegular />} title="Add a new variable" onClick={() => this._addVariable()} />
                 </div>
-                {!collapsed && (
-                    <div className="fge-variables-strip-body">
+                <Collapse visible={!collapsed} orientation="vertical">
+                    <div className={classes.body}>
                         {variables.length === 0 ? (
-                            <div className="fge-variables-strip-empty">No variables. Click + to add one, or use GetVariable/SetVariable blocks.</div>
+                            <Body1 className={classes.empty}>No variables. Click + to add one, or use GetVariable/SetVariable blocks.</Body1>
                         ) : (
-                            <div className="fge-variables-strip-table">
+                            <div className={classes.table}>
                                 {variables.map((v, idx) => {
                                     const typeName = variableTypes.get(v.name) ?? "any";
                                     return (
-                                        <div key={v.name} className="fge-var-cell">
-                                            <div className="fge-var-cell-name-row">
+                                        <Card key={v.name} size="small" className={classes.cell}>
+                                            <div className={classes.nameRow}>
                                                 {editingNameIndex === idx ? (
-                                                    <input
-                                                        className="fge-var-cell-name-input"
+                                                    <Input
+                                                        className={classes.nameInput}
+                                                        size="small"
                                                         value={editingName}
-                                                        onChange={(e) => this.setState({ editingName: e.target.value })}
+                                                        onChange={(_, data) => this.setState({ editingName: data.value })}
                                                         onFocus={() => {
                                                             this.props.globalState.lockObject.lock = true;
                                                         }}
@@ -695,27 +850,31 @@ export class VariablesPanelComponent extends React.Component<IVariablesPanelProp
                                                         autoFocus
                                                     />
                                                 ) : (
-                                                    <span
-                                                        className="fge-var-cell-name"
+                                                    <Body1
+                                                        className={classes.name}
                                                         onDoubleClick={() => this._startNameEditing(idx)}
                                                         title={`${v.name} (${v.getCount}G/${v.setCount}S) — double-click to rename`}
                                                     >
                                                         {v.name}
-                                                    </span>
+                                                    </Body1>
                                                 )}
-                                                <button className="fge-var-cell-delete" title="Delete variable and its blocks" onClick={() => this._deleteVariable(v.name)}>
-                                                    ✕
-                                                </button>
+                                                <Button
+                                                    size="small"
+                                                    appearance="subtle"
+                                                    icon={<DismissRegular />}
+                                                    title="Delete variable and its blocks"
+                                                    onClick={() => this._deleteVariable(v.name)}
+                                                />
                                             </div>
-                                            <div className="fge-var-cell-type-row">{this._renderTypeSelector(v.name, typeName)}</div>
-                                            <div className="fge-var-cell-value-row">{this._renderValueEditor(v.name, typeName, idx)}</div>
-                                        </div>
+                                            <div className={classes.typeRow}>{this._renderTypeSelector(v.name, typeName)}</div>
+                                            <div className={classes.valueRow}>{this._renderValueEditor(v.name, typeName, idx)}</div>
+                                        </Card>
                                     );
                                 })}
                             </div>
                         )}
                     </div>
-                )}
+                </Collapse>
             </div>
         );
     }
