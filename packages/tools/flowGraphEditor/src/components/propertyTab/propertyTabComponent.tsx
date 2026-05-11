@@ -389,7 +389,6 @@ class PropertyTabInner extends React.Component<IPropertyTabInnerProps, IProperty
                             <FileUploadLine label="Load" accept=".json" onClick={(files) => this.load(files[0])} />
                             <FileUploadLine label="Load glTF" accept=".glb,.gltf" onClick={(files) => this.loadGlb(files[0])} />
                             <Button label="Save" title="Save" onClick={() => this.save()} />
-                            <Button label="Export glTF (.glb)" title="Export glTF (.glb)" onClick={() => void this.exportGlbAsync()} />
                             {this.props.globalState.customSave && (
                                 <Button
                                     label={this.props.globalState.customSave.label}
